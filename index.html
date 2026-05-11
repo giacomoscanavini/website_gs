@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Giacomo Scanavini</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Crimson+Pro:wght@300;400&family=DM+Mono:wght@300&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --black: #0d0d0d;
+      --mid: #888;
+      --light: #c8c8c8;
+      --bg: #ffffff;
+      --accent: #b5863a;
+      --rule: #e4e4e4;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: 'Crimson Pro', Georgia, serif;
+      background: var(--bg);
+      color: var(--black);
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    header {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 80px 40px 60px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 24px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s ease forwards;
+    }
+    .site-name {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: clamp(2.8rem, 6vw, 4.6rem);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+    .site-name em { font-style: italic; color: var(--accent); }
+    .header-meta {
+      text-align: right;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--mid);
+      line-height: 1.8;
+    }
+
+    .top-rule { max-width: 860px; margin: 0 auto; padding: 0 40px; }
+    .top-rule hr { border: none; border-top: 1px solid var(--black); margin-bottom: 6px; }
+    .top-rule .sub-rule { border-top: 1px solid var(--rule); }
+
+    main { max-width: 860px; margin: 0 auto; padding: 0 40px 120px; }
+
+    .category {
+      margin-top: 64px;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: fadeUp 0.6s ease forwards;
+    }
+    .category-header {
+      display: flex;
+      align-items: baseline;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+    .category-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--mid);
+      white-space: nowrap;
+    }
+    .category-line { flex: 1; height: 1px; background: var(--rule); }
+    .category-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      color: var(--light);
+    }
+
+    .article-list { list-style: none; }
+    .article-item { border-bottom: 1px solid var(--rule); }
+    .article-item:first-child { border-top: 1px solid var(--rule); }
+
+    .article-link {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+      gap: 16px;
+      padding: 18px 0;
+      text-decoration: none;
+      color: inherit;
+      transition: padding-left 0.25s ease;
+    }
+    .article-link:hover { padding-left: 10px; }
+    .article-link:hover .article-title { color: var(--accent); }
+    .article-link::after {
+      content: '↗';
+      font-size: 0.75rem;
+      color: var(--light);
+      transition: color 0.2s ease, transform 0.2s ease;
+      align-self: center;
+    }
+    .article-link:hover::after { color: var(--accent); transform: translate(2px, -2px); }
+
+    .article-left { display: flex; flex-direction: column; gap: 4px; }
+    .article-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 1.2rem;
+      font-weight: 400;
+      line-height: 1.3;
+      transition: color 0.2s ease;
+    }
+    .article-pub {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--mid);
+    }
+    .article-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.06em;
+      color: var(--light);
+      white-space: nowrap;
+    }
+
+    footer {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 40px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-name { font-family: 'Cormorant Garamond', serif; font-size: 0.95rem; font-style: italic; color: var(--light); }
+    .footer-note { font-family: 'DM Mono', monospace; font-size: 0.58rem; letter-spacing: 0.1em; color: var(--light); text-transform: uppercase; }
+
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 600px) {
+      header { padding: 52px 24px 44px; grid-template-columns: 1fr; }
+      .header-meta { text-align: left; }
+      .top-rule, main { padding-left: 24px; padding-right: 24px; }
+      footer { padding: 0 24px 48px; flex-direction: column; gap: 8px; align-items: flex-start; }
+      .article-link { grid-template-columns: 1fr; }
+      .article-date { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1 class="site-name">Giacomo<br /><em>Scanavini</em></h1>
+    <div class="header-meta">Press &amp; Media<br />In the news</div>
+  </header>
+
+  <div class="top-rule">
+    <hr />
+    <hr class="sub-rule" />
+  </div>
+
+  <main id="content"></main>
+
+  <!-- Research & Publications: loaded live from INSPIRE-HEP API -->
+  <div style="max-width:860px; margin:0 auto; padding:0 40px;">
+    <section class="category" id="publications-section" style="animation-delay:0.2s">
+      <div class="category-header">
+        <span class="category-label">Research &amp; Publications</span>
+        <div class="category-line"></div>
+        <span class="category-count" style="font-style:italic; color:#c8c8c8">loading…</span>
+      </div>
+    </section>
+  </div>
+
+  <hr style="border:none; border-top:1px solid #e4e4e4; max-width:860px; margin:0 auto; width:calc(100% - 80px);" />
+  <footer>
+    <span class="footer-name">Giacomo Scanavini</span>
+    <span class="footer-note" id="footer-year"></span>
+  </footer>
+
+  <script>
+
+    // ============================================================
+    // 1. DATA — all sourced from web search, May 2025
+    // To add an article: copy one block, fill in your details.
+    // ============================================================
+
+    const articles = [
+
+      // ── Press & News ──
+      {
+        title: "MicroBooNE 'shines a flashlight' on tricky neutrinos",
+        publication: "Yale News",
+        date: "Oct 2021",
+        url: "https://news.yale.edu/2021/10/27/microboone-shines-flashlight-tricky-neutrinos",
+        category: "Press & News",
+      },
+      {
+        title: "MicroBooNE experiment's first results show no hint of a sterile neutrino",
+        publication: "Yale Department of Physics",
+        date: "Oct 2021",
+        url: "https://physics.yale.edu/news/microboone-experiment-s-first-results-show-no-hint-sterile-neutrino",
+        category: "Press & News",
+      },
+      {
+        title: "MicroBooNE experiment's first results show no hint of a sterile neutrino",
+        publication: "Wright Laboratory",
+        date: "Oct 2021",
+        url: "https://wlab.yale.edu/news/microboone-experiments-first-results-show-no-hint-sterile-neutrino",
+        category: "Press & News",
+      },
+      {
+        title: "ArgoNeuT hits a home run with measurements of neutrinos in liquid argon",
+        publication: "Fermilab News",
+        date: "Feb 2019",
+        url: "https://news.fnal.gov/2019/02/argoneut-hits-a-home-run-with-measurements-of-neutrinos-in-liquid-argon/",
+        category: "Press & News",
+      },
+      {
+        title: "ArgoNeuT Hits a Home Run with Measurements of Neutrinos in Liquid Argon",
+        publication: "U.S. Department of Energy",
+        date: "Jan 2019",
+        url: "https://www.energy.gov/science/hep/articles/argoneut-hits-home-run-measurements-neutrinos-liquid-argon",
+        category: "Press & News",
+      },
+      {
+        title: "Fleming group installs SBND Field Cage at Fermilab",
+        publication: "Yale Department of Physics",
+        date: "Aug 2021",
+        url: "https://physics.yale.edu/news/fleming-group-installs-sbnd-field-cage-fermilab",
+        category: "Press & News",
+      },
+
+      // ── Profiles ──
+      // NOTE: Research & Publications is fetched live from INSPIRE-HEP — see section 5 below.
+      {
+        title: "Giacomo Scanavini — Postdoctoral Associate in Radiology",
+        publication: "Weill Cornell Medicine — Sudhin Shah Laboratory",
+        date: "2024",
+        url: "https://radiology.weill.cornell.edu/research/brain-health-imaging-institute-bhii/sudhin-shah-laboratory",
+        category: "Profiles",
+      },
+      {
+        title: "Giacomo Scanavini — Experimental Particle Physics",
+        publication: "Yale Department of Physics",
+        date: "2023",
+        url: "https://physics.yale.edu/people/giacomo-scanavini",
+        category: "Profiles",
+      },
+      {
+        title: "Who's Who at the Lab — Giacomo Scanavini",
+        publication: "Wright Laboratory, Yale University",
+        date: "Jul 2020",
+        url: "https://wlab.yale.edu/people/whos-who-lab/whos-who-lab-giacomo-scanavini",
+        category: "Profiles",
+      },
+
+      // ── Awards & Recognition ──
+      {
+        title: "Giacomo Scanavini successfully defends thesis on neutral-current neutral pion production",
+        publication: "Yale Department of Physics",
+        date: "Apr 2023",
+        url: "https://physics.yale.edu/news/giacomo-scanavini-successfully-defends-thesis-first-measurement-neutral-current-neutral-pion",
+        category: "Awards & Recognition",
+      },
+
+    ];
+
+
+    // ============================================================
+    // 2. LOGIC — group and sort articles by category
+    // ============================================================
+
+    // Converts a date string like "Oct 2021", "2023", "Nov 2025" into
+    // a numeric value (YYYYMM) so we can sort newest-first.
+    function parseDateValue(dateStr) {
+      const months = {
+        Jan: 1, Feb: 2, Mar: 3, Apr: 4, May: 5, Jun: 6,
+        Jul: 7, Aug: 8, Sep: 9, Oct: 10, Nov: 11, Dec: 12,
+      };
+      const parts = dateStr.trim().split(' ');
+      if (parts.length === 2) {
+        const month = months[parts[0]] || 0;
+        const year  = parseInt(parts[1], 10);
+        return year * 100 + month;         // e.g. Oct 2021 → 202110
+      }
+      return parseInt(parts[0], 10) * 100; // e.g. "2023" → 202300
+    }
+
+    function groupByCategory(articles) {
+      const groups = {};
+      for (const article of articles) {
+        if (!groups[article.category]) {
+          groups[article.category] = [];
+        }
+        groups[article.category].push(article);
+      }
+
+      // Sort each category's articles newest → oldest
+      for (const key of Object.keys(groups)) {
+        groups[key].sort(
+          (a, b) => parseDateValue(b.date) - parseDateValue(a.date)
+        );
+      }
+
+      return groups;
+    }
+
+
+    // ============================================================
+    // 3. RENDER — turn data into HTML
+    // ============================================================
+
+    function renderArticle(article) {
+      return `
+        <li class="article-item">
+          <a class="article-link" href="${article.url}" target="_blank" rel="noopener">
+            <div class="article-left">
+              <span class="article-title">${article.title}</span>
+              <span class="article-pub">${article.publication}</span>
+            </div>
+            <span class="article-date">${article.date}</span>
+          </a>
+        </li>
+      `;
+    }
+
+    function renderCategory(categoryName, articles, index) {
+      const count = String(articles.length).padStart(2, '0');
+      const articleRows = articles.map(renderArticle).join('');
+      return `
+        <section class="category" style="animation-delay: ${0.1 + index * 0.1}s">
+          <div class="category-header">
+            <span class="category-label">${categoryName}</span>
+            <div class="category-line"></div>
+            <span class="category-count">${count}</span>
+          </div>
+          <ul class="article-list">
+            ${articleRows}
+          </ul>
+        </section>
+      `;
+    }
+
+    function renderPage() {
+      const groups = groupByCategory(articles);
+      const container = document.getElementById('content');
+      const html = Object.entries(groups)
+        .map(([name, items], index) => renderCategory(name, items, index))
+        .join('');
+      container.innerHTML = html;
+    }
+
+
+    // ============================================================
+    // 4. INIT — render static categories first, then fetch publications
+    // ============================================================
+
+    renderPage();
+
+    document.getElementById('footer-year').textContent =
+      'Updated ' + new Date().getFullYear();
+
+    // Kick off the live publications fetch after the page is visible
+    fetchPublications();
+
+
+    // ============================================================
+    // 5. LIVE FETCH — Research & Publications from INSPIRE-HEP
+    //
+    // INSPIRE-HEP is the open academic database for physics.
+    // Its REST API is public and supports browser requests (CORS).
+    // We fetch all papers by Giacomo Scanavini, convert them into
+    // the same article format as the static data, then inject a
+    // new category section into the page.
+    // ============================================================
+
+    async function fetchPublications() {
+      const section = document.getElementById('publications-section');
+
+      try {
+        // Build the API URL:
+        // - q=a G.Scanavini   → author search
+        // - sort=mostrecent   → newest first
+        // - size=50           → up to 50 papers
+        // - fields=...        → only fetch what we need (faster)
+        const apiUrl =
+          'https://inspirehep.net/api/literature' +
+          '?q=a%20G.Scanavini' +
+          '&sort=mostrecent' +
+          '&size=50' +
+          '&fields=titles,publication_info,arxiv_eprints,dois,earliest_date';
+
+        const response = await fetch(apiUrl);
+
+        // If the server returned an error, throw so we hit the catch block
+        if (!response.ok) throw new Error('INSPIRE-HEP request failed');
+
+        const data = await response.json();
+
+        // data.hits.hits is an array of paper records
+        const papers = data.hits.hits;
+
+        if (!papers || papers.length === 0) {
+          section.innerHTML = renderEmptyPublications();
+          return;
+        }
+
+        // Convert each INSPIRE paper record into our article format
+        const pubArticles = papers.map(paper => {
+          const meta = paper.metadata;
+
+          // Title: take the first available title
+          const title = meta.titles?.[0]?.title || 'Untitled';
+
+          // Journal: take the first publication's journal name, or fall back to arXiv
+          const journal =
+            meta.publication_info?.[0]?.journal_title ||
+            (meta.arxiv_eprints?.[0] ? 'arXiv' : 'Preprint');
+
+          // Date: use the earliest_date field (format: "YYYY-MM-DD" or "YYYY")
+          const rawDate  = meta.earliest_date || '';
+          const year     = rawDate.slice(0, 4) || '—';
+          const monthNum = rawDate.slice(5, 7);
+          const monthNames = ['', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                              'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+          const month = monthNames[parseInt(monthNum, 10)] || '';
+          const date  = month ? `${month} ${year}` : year;
+
+          // URL: prefer DOI link, fall back to arXiv, fall back to INSPIRE
+          let url = '#';
+          if (meta.dois?.[0]?.value) {
+            url = 'https://doi.org/' + meta.dois[0].value;
+          } else if (meta.arxiv_eprints?.[0]?.value) {
+            url = 'https://arxiv.org/abs/' + meta.arxiv_eprints[0].value;
+          } else {
+            url = 'https://inspirehep.net/literature/' + paper.id;
+          }
+
+          return { title, publication: journal, date, url };
+        });
+
+        // Sort newest → oldest (same logic as static articles)
+        pubArticles.sort(
+          (a, b) => parseDateValue(b.date) - parseDateValue(a.date)
+        );
+
+        // Render the full section and replace the placeholder
+        const count = String(pubArticles.length).padStart(2, '0');
+        const rows  = pubArticles.map(renderArticle).join('');
+
+        section.outerHTML = `
+          <section class="category" style="animation-delay: 0.1s">
+            <div class="category-header">
+              <span class="category-label">Research &amp; Publications</span>
+              <div class="category-line"></div>
+              <span class="category-count">${count}</span>
+            </div>
+            <ul class="article-list">${rows}</ul>
+            <p style="
+              font-family: 'DM Mono', monospace;
+              font-size: 0.58rem;
+              letter-spacing: 0.08em;
+              color: #c8c8c8;
+              margin-top: 16px;
+            ">Live data from <a href="https://inspirehep.net" target="_blank"
+              style="color:inherit;">INSPIRE-HEP</a></p>
+          </section>
+        `;
+
+      } catch (err) {
+        // If the fetch fails (offline, API down, etc.) show a graceful message
+        section.innerHTML = `
+          <p style="
+            font-family: 'DM Mono', monospace;
+            font-size: 0.65rem;
+            color: #c8c8c8;
+            letter-spacing: 0.08em;
+            padding: 20px 0;
+          ">Could not load publications — check your connection or try again later.</p>
+        `;
+      }
+    }
+
+    function renderEmptyPublications() {
+      return `<p style="font-family:'DM Mono',monospace;font-size:0.65rem;
+        color:#c8c8c8;letter-spacing:0.08em;padding:20px 0;">
+        No publications found on INSPIRE-HEP.</p>`;
+    }
+
+  </script>
+
+</body>
+</html>
