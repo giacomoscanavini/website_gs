@@ -58,3 +58,10 @@ The anonymous pigeon message is visual/local only. It does not display or store 
 - Each page uses `body data-section="..."` to choose its accent color.
 - Section titles use `data-title`, `data-accent-start`, and `data-typing-mode` for the typing effect.
 - Navigation and layout are intentionally minimal and commented for learning.
+
+
+## Latest changes
+- About page now uses a polaroid-style portrait placeholder and logo-based roles from the uploaded CV.
+- Header typing mode is random on each cycle: clean typing or planned local typo correction.
+- Publications are grouped alphabetically by broad field on the All view, and sorted by publication year descending within each group.
+- Press/news entries are sorted chronologically descending and include the Yale defense Instagram post.
