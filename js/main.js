@@ -171,6 +171,14 @@ function setupTypingTitle() {
       "Photography": {
         wrongText: "Photograpjy",
         deleteTo: "Photograp".length
+      },
+      "Projects": {
+        wrongText: "Projexts",
+        deleteTo: "Proje".length
+      },
+      "Contact": {
+        wrongText: "Contect",
+        deleteTo: "Cont".length
       }
     };
 
@@ -561,7 +569,7 @@ const FALLBACK_DATA = {
     "url": "https://doi.org/10.1103/PhysRevD.110.092010",
     "category": "Research & Publications",
     "source": "Physical Review D",
-    "field": "neuroscience"
+    "field": "physics"
   },
   {
     "title": "Inclusive cross section measurements in final states with and without protons for charged-current νμ-Ar scattering in MicroBooNE",
@@ -841,7 +849,7 @@ const FALLBACK_DATA = {
     "url": "https://doi.org/10.1103/PhysRevD.103.052012",
     "category": "Research & Publications",
     "source": "Physical Review D",
-    "field": "neuroscience"
+    "field": "physics"
   },
   {
     "title": "Measurement of the flux-averaged inclusive charged-current electron neutrino and antineutrino cross section on argon using the NuMI beam and MicroBooNE",
@@ -857,7 +865,7 @@ const FALLBACK_DATA = {
     "url": "https://doi.org/10.1103/PhysRevD.103.092003",
     "category": "Research & Publications",
     "source": "Physical Review D",
-    "field": "neuroscience"
+    "field": "physics"
   },
   {
     "title": "Calorimetric classification of track-like signatures in liquid argon TPCs using MicroBooNE data",
@@ -921,7 +929,7 @@ const FALLBACK_DATA = {
     "url": "https://doi.org/10.3389/frai.2021.649917",
     "category": "Research & Publications",
     "source": "Frontiers in AI",
-    "field": "neuroscience"
+    "field": "physics"
   },
   {
     "title": "Measurement of the atmospheric muon rate with the MicroBooNE Liquid Argon TPC",
@@ -1041,7 +1049,7 @@ const FALLBACK_DATA = {
     "url": "https://doi.org/10.1103/PhysRevD.99.092001",
     "category": "Research & Publications",
     "source": "Physical Review D",
-    "field": "neuroscience"
+    "field": "physics"
   },
   {
     "title": "Rejecting cosmic background for exclusive charged current quasi elastic neutrino interaction studies with Liquid Argon TPCs",
@@ -1154,7 +1162,7 @@ async function setupListPage() {
     }
 
     const data = await response.json();
-    items = data.items || [];
+    items = Array.isArray(data) ? data : data.items || [];
   } catch (error) {
     console.warn("Using built-in fallback data:", error);
     items = FALLBACK_DATA[dataPath] || [];
@@ -1220,6 +1228,59 @@ async function setupListPage() {
   render();
 }
 
+
+/* =========================================================
+   ANONYMOUS PIGEON MESSAGE FORM
+   ---------------------------------------------------------
+   The anonymous form is intentionally local and theatrical:
+   - It does not display the submitted text back to the page.
+   - It does not send the text to an email address by itself.
+   - It clears the textarea, animates the pigeon, and reports only
+     the local time when the visitor clicked send.
+
+   Why this limitation exists:
+   A static website made only of HTML/CSS/JavaScript cannot securely
+   collect private messages and email them without a backend or a
+   third-party form service. The direct contact form uses FormSubmit
+   for that purpose; the anonymous form is currently a visual feature.
+========================================================= */
+function setupAnonymousPigeonForm() {
+  const form = document.querySelector("[data-anonymous-form]");
+
+  // Most pages do not have the anonymous form, so quietly exit.
+  if (!form) return;
+
+  const messageInput = document.querySelector("[data-anonymous-message]");
+  const statusElement = document.querySelector("[data-anonymous-status]");
+  const pigeon = document.querySelector("[data-pigeon]");
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const message = (messageInput?.value || "").trim();
+    if (!message) return;
+
+    const sentTime = new Date().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+
+    // Clear the content so the page never stores or shows the anonymous text.
+    messageInput.value = "";
+
+    // Restart the pigeon animation even if the visitor sends multiple notes.
+    if (pigeon) {
+      pigeon.classList.remove("is-flying");
+      void pigeon.offsetWidth; // Forces the browser to reflow, allowing the animation to restart.
+      pigeon.classList.add("is-flying");
+    }
+
+    if (statusElement) {
+      statusElement.textContent = `Anonymous note carried away at ${sentTime}.`;
+    }
+  });
+}
+
 /* =========================================================
    PAGE INITIALIZATION
    ---------------------------------------------------------
@@ -1235,4 +1296,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setupTypingTitle();
   setupListPage();
+  setupAnonymousPigeonForm();
 });

@@ -204,3 +204,173 @@ button, input { font: inherit; }
   .timeline-item, .list-card { grid-template-columns: 1fr; }
   .site-footer { display: grid; }
 }
+
+/* =========================================================
+   2026 refinement: quieter navigation, new sections, contact
+   ---------------------------------------------------------
+   These rules override earlier styles without deleting them,
+   which makes the evolution of the design easier to study.
+========================================================= */
+
+body[data-section="projects"] {
+  --accent: #c59b83;
+  --accent-soft: rgba(197, 155, 131, 0.10);
+}
+
+body[data-section="contact"] {
+  --accent: #d1a3a3;
+  --accent-soft: rgba(209, 163, 163, 0.10);
+}
+
+/* Minimal navigation: no heavy pill container, just text links and subtle underlines. */
+.site-nav {
+  top: 0;
+  margin-top: 0;
+  padding: 22px 0 12px;
+  border: 0;
+  border-radius: 0;
+  background: linear-gradient(180deg, rgba(5, 5, 5, 0.96), rgba(5, 5, 5, 0.72) 70%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.brand { padding-left: 0; }
+.brand-mark { width: 26px; height: 26px; font-size: 0.66rem; }
+.nav-links { gap: 14px; }
+.nav-link {
+  position: relative;
+  padding: 4px 0;
+  border-radius: 0;
+  font-size: 0.82rem;
+  background: transparent;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -5px;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 180ms ease;
+}
+.nav-link:hover,
+.nav-link.active { background: transparent; color: var(--text); }
+.nav-link:hover::after,
+.nav-link.active::after { transform: scaleX(1); }
+
+/* Smaller hub buttons now that there are six of them. */
+.hub-grid-wide { grid-template-columns: repeat(6, minmax(94px, 1fr)); }
+.hub-card { min-height: 44px; padding: 0 12px; }
+.hub-card-title { font-size: 0.86rem; }
+.hub-card.projects { --accent: #c59b83; --accent-soft: rgba(197, 155, 131, 0.10); }
+.hub-card.contact { --accent: #d1a3a3; --accent-soft: rgba(209, 163, 163, 0.10); }
+
+.page-bottom { padding-bottom: 80px; }
+
+.text-link {
+  display: inline-flex;
+  width: fit-content;
+  margin-top: 18px;
+  color: var(--accent);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  transition: border-color 180ms ease, color 180ms ease;
+}
+.text-link:hover { border-color: var(--accent); color: var(--text); }
+.scholar-link { font-size: 0.94rem; }
+
+.placeholder-grid { display: grid; gap: 12px; margin-top: 28px; }
+.placeholder-line {
+  height: 58px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.045), var(--accent-soft));
+}
+.placeholder-line.short { width: 72%; }
+
+/* Contact page layout. */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+.contact-card { padding: 26px; }
+.contact-note { margin-top: 16px; color: var(--muted); font-size: 0.96rem; }
+.message-form { display: grid; gap: 12px; margin-top: 22px; }
+.textarea-input {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--text);
+  outline: none;
+  resize: vertical;
+  background: #050505;
+}
+.textarea-input:focus { border-color: color-mix(in srgb, var(--accent), white 20%); }
+.form-button {
+  width: fit-content;
+  min-height: 42px;
+  padding: 0 16px;
+  border: 1px solid rgba(255,255,255,0.16);
+  border-radius: 999px;
+  color: #050505;
+  background: var(--accent);
+  font-weight: 650;
+  cursor: pointer;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+.form-button:hover { transform: translateY(-1px); filter: brightness(1.07); }
+.contact-links { display: grid; gap: 4px; margin-top: 22px; }
+
+/* Anonymous pigeon animation. The class is added by JavaScript after submission. */
+.pigeon-stage {
+  position: relative;
+  min-height: 100px;
+  margin-top: 22px;
+  overflow: hidden;
+  border: 1px dashed rgba(255,255,255,0.16);
+  border-radius: 18px;
+  background: rgba(255,255,255,0.025);
+}
+.pigeon {
+  position: absolute;
+  left: 18px;
+  bottom: 20px;
+  font-size: 2rem;
+  opacity: 0;
+  transform: translateX(0) translateY(0) rotate(0deg);
+}
+.pigeon.is-flying {
+  animation: pigeon-flight 2.5s ease-in-out forwards;
+}
+.pigeon-status {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 16px;
+  color: var(--muted);
+  font-size: 0.76rem;
+}
+@keyframes pigeon-flight {
+  0% { opacity: 0; transform: translateX(0) translateY(18px) rotate(-4deg); }
+  12% { opacity: 1; }
+  60% { opacity: 1; transform: translateX(55%) translateY(-34px) rotate(7deg); }
+  100% { opacity: 0; transform: translateX(110%) translateY(-90px) rotate(12deg); }
+}
+
+@media (max-width: 1100px) {
+  .hub-grid-wide { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .contact-grid { grid-template-columns: 1fr; }
+  .site-nav { align-items: flex-start; }
+  .nav-links { justify-content: flex-end; row-gap: 10px; }
+}
+
+@media (max-width: 700px) {
+  .hub-grid-wide { grid-template-columns: repeat(2, 1fr); }
+  .site-nav { border-radius: 0; }
+}

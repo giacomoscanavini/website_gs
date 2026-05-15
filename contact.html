@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Shared page setup. All pages use the same CSS and JavaScript files. -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Personal website of Giacomo Scanavini: research, publications, press, projects, photography, and contact." />
+  <title>Contact — Giacomo Scanavini</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/main.js" defer></script>
+</head>
+<body data-section="contact">
+  <nav class="site-nav page-shell" aria-label="Main navigation">
+    <a class="brand" href="index.html" aria-label="Go to hub page">
+      <span class="brand-mark">GS</span>
+      <span>Giacomo Scanavini</span>
+    </a>
+    <ul class="nav-links"><li><a class="nav-link " href="index.html">Home</a></li><li><a class="nav-link " href="about.html">About</a></li><li><a class="nav-link " href="press.html">Press & News</a></li><li><a class="nav-link " href="publications.html">Publications</a></li><li><a class="nav-link " href="projects.html">Projects</a></li><li><a class="nav-link " href="photography.html">Photography</a></li><li><a class="nav-link active" href="contact.html">Contact</a></li></ul>
+  </nav>
+
+  <main>
+    <section class="page-hero page-shell">
+      <div class="title-panel panel">
+        <span class="eyebrow">Contact</span>
+        <h1 class="typing-title" data-title="Contact" data-accent-start="3" data-typing-mode="normal"></h1>
+        <p class="page-subtitle">Send an anonymous note, or use the contact form for a direct message.</p>
+      </div>
+    </section>
+
+    <section class="contact-grid page-shell page-bottom">
+      <article class="contact-card panel anonymous-card">
+        <span class="eyebrow">Anonymous note</span>
+        <p class="contact-note">
+          Leave a short anonymous message. The page only displays the sending time after the pigeon leaves.
+        </p>
+
+        <form class="message-form" data-anonymous-form>
+          <label class="filter-label mono" for="anonymous-message">Message</label>
+          <textarea id="anonymous-message" class="textarea-input" rows="6" placeholder="Write something short..." required data-anonymous-message></textarea>
+          <button class="form-button" type="submit">Send with pigeon</button>
+        </form>
+
+        <div class="pigeon-stage" aria-live="polite">
+          <div class="pigeon" data-pigeon aria-hidden="true">🕊️</div>
+          <p class="pigeon-status mono" data-anonymous-status>No anonymous messages sent in this session.</p>
+        </div>
+      </article>
+
+      <article class="contact-card panel">
+        <span class="eyebrow">Direct message</span>
+        <p class="contact-note">
+          Use this form for a regular message. On a static site, email delivery requires a form service; this version uses FormSubmit and also provides direct links.
+        </p>
+
+        <form class="message-form" action="https://formsubmit.co/scanavini.giacomo@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="Message from personal website" />
+          <input type="hidden" name="_captcha" value="false" />
+
+          <label class="filter-label mono" for="contact-name">Name</label>
+          <input id="contact-name" class="search-input" type="text" name="name" placeholder="Your name" required />
+
+          <label class="filter-label mono" for="contact-email">Email</label>
+          <input id="contact-email" class="search-input" type="email" name="email" placeholder="your.email@example.com" required />
+
+          <label class="filter-label mono" for="contact-message">Message</label>
+          <textarea id="contact-message" class="textarea-input" rows="6" name="message" placeholder="Your message" required></textarea>
+
+          <button class="form-button" type="submit">Send message</button>
+        </form>
+
+        <div class="contact-links">
+          <a class="text-link" href="mailto:scanavini.giacomo@gmail.com">scanavini.giacomo@gmail.com</a>
+          <a class="text-link" href="https://hk.linkedin.com/in/giacomo-scanavini" target="_blank" rel="noopener noreferrer">LinkedIn profile ↗</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="site-footer page-shell">
+    <span>© <span id="year"></span> Giacomo Scanavini</span>
+    <span class="mono">HTML · CSS · JavaScript</span>
+  </footer>
+</body>
+</html>
