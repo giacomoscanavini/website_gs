@@ -108,13 +108,22 @@ button, input { font: inherit; }
 .typing-title {
   min-height: 1.1em;
   margin-top: 16px;
-  color: var(--accent);
-  font-size: clamp(2.8rem, 7vw, 6.2rem);
+  font-size: clamp(2.6rem, 6.4vw, 5.7rem);
   line-height: 0.96;
   letter-spacing: -0.085em;
   font-weight: 700;
 }
-.typing-cursor { color: var(--accent); animation: blink 1s step-end infinite; }
+.typing-title-main { color: var(--text); }
+.typing-title-accent { color: var(--accent); }
+.typing-cursor {
+  display: inline-block;
+  width: 1px;
+  height: 0.88em;
+  margin-left: 0.08em;
+  background: var(--accent);
+  transform: translateY(0.08em);
+  animation: blink 1s step-end infinite;
+}
 @keyframes blink { 50% { opacity: 0; } }
 .page-subtitle { max-width: 700px; margin-top: 22px; color: var(--muted); font-size: clamp(1rem, 1.6vw, 1.16rem); }
 
@@ -125,19 +134,18 @@ button, input { font: inherit; }
 .hub-title { margin-top: 18px; font-size: clamp(3.4rem, 8vw, 7rem); line-height: 0.9; letter-spacing: -0.09em; font-weight: 700; }
 .hub-title span { display: block; }
 .hub-title .last-name { color: var(--accent); }
-.hub-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 32px; }
+.hub-grid { display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 10px; margin-top: 28px; }
 .hub-card {
-  min-height: 170px; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius-md);
+  min-height: 54px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
   background: rgba(255,255,255,0.025); transition: background 180ms ease, border-color 180ms ease, transform 180ms ease;
 }
-.hub-card:hover { transform: translateY(-2px); background: var(--accent-soft); border-color: rgba(255,255,255,0.22); }
+.hub-card:hover { transform: translateY(-1px); background: var(--accent-soft); border-color: rgba(255,255,255,0.22); }
 .hub-card.about { --accent: #c7b58b; --accent-soft: rgba(199, 181, 139, 0.10); }
 .hub-card.press { --accent: #9fbe8f; --accent-soft: rgba(159, 190, 143, 0.10); }
 .hub-card.publications { --accent: #8fa9c8; --accent-soft: rgba(143, 169, 200, 0.11); }
 .hub-card.photography { --accent: #b69abf; --accent-soft: rgba(182, 154, 191, 0.10); }
-.hub-card-label { color: var(--accent); font-family: "DM Mono", monospace; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.11em; }
-.hub-card-title { margin-top: 34px; font-size: 1.35rem; letter-spacing: -0.04em; }
-.hub-card-text { margin-top: 8px; color: var(--muted); font-size: 0.9rem; }
+.hub-card-title { color: var(--accent); font-size: 0.98rem; letter-spacing: -0.025em; font-weight: 650; }
 
 /* =========================================================
    About page

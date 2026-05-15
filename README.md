@@ -9,8 +9,8 @@ This is a static multi-page website built with HTML, CSS, and JavaScript.
 - `press.html` — press and news page
 - `publications.html` — searchable publications page
 - `photography.html` — work-in-progress photography page
-- `css/styles.css` — shared styling
-- `js/main.js` — typing animation, search, filters
+- `css/styles.css` — shared styling and page-specific color hues
+- `js/main.js` — typing animation, JSON loading, search, filters, footer year
 - `data/news.json` — press/news/profile entries
 - `data/publications.json` — publication entries
 
@@ -35,12 +35,28 @@ http://localhost:8000
 Each subpage title has a line like:
 
 ```html
-<h1 class="typing-title" data-title="Press & News" data-typing-mode="typo"></h1>
+<h1
+  class="typing-title"
+  data-title="Press & News"
+  data-accent-start="8"
+  data-typing-mode="typo"
+></h1>
 ```
 
-`data-typing-mode` can be:
+The attributes mean:
 
-- `normal` — types the title normally
-- `typo` — creates a planned typo, deletes it, then types the correct title
+- `data-title` — the final title to type.
+- `data-accent-start` — the character index where the colored part begins.
+- `data-typing-mode="normal"` — type the title normally.
+- `data-typing-mode="typo"` — type a planned typo, backspace only the local mistake, and finish the correct title.
 
 The animation runs once on page load and repeats every 60 seconds.
+
+## Editing notes
+
+The JavaScript file is heavily commented. Start there if you want to understand how the typing effect, JSON loading, search, and filters work.
+
+
+## Data loading note
+
+The Press and Publications pages try to load `data/news.json` and `data/publications.json`. If your browser blocks local JSON loading when opening files directly, the JavaScript now uses built-in fallback data so the lists still display. Running a local server is still the cleanest preview method.
