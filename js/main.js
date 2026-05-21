@@ -1111,6 +1111,31 @@ function setupAnonymousPigeonForm() {
   });
 }
 
+
+function setupPortraitStyleButton() {
+  const portraitCard = document.querySelector("[data-portrait-style]");
+  const styleButton = document.querySelector("[data-style-button]");
+
+  if (!portraitCard || !styleButton) return;
+
+  let animationTimer;
+
+  styleButton.addEventListener("click", () => {
+    window.clearTimeout(animationTimer);
+    portraitCard.classList.remove("is-doodling");
+
+    // Force a reflow so a repeated click restarts the ink animation from scratch.
+    void portraitCard.offsetWidth;
+
+    portraitCard.classList.add("is-doodling");
+    styleButton.disabled = true;
+
+    animationTimer = window.setTimeout(() => {
+      styleButton.disabled = false;
+    }, 2400);
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const yearElement = document.getElementById("year");
   if (yearElement) {
@@ -1120,4 +1145,5 @@ document.addEventListener("DOMContentLoaded", () => {
   setupTypingTitle();
   setupListPage();
   setupAnonymousPigeonForm();
+  setupPortraitStyleButton();
 });

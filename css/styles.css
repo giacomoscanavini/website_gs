@@ -50,6 +50,8 @@ button, input { font: inherit; }
 .page-shell { width: min(var(--max-width), calc(100% - 40px)); margin: 0 auto; }
 .mono { font-family: "DM Mono", monospace; letter-spacing: 0.04em; }
 .panel { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
+.footer-right { font-size: 12px }
+
 
 .eyebrow {
   display: inline-flex;
@@ -698,6 +700,127 @@ body[data-section="contact"] {
   color: #716a60;
   font-size: 0.62rem;
   letter-spacing: 0.08em;
+}
+
+
+.portrait-style-card {
+  display: grid;
+  justify-items: center;
+  gap: 14px;
+}
+
+.portrait-photo-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+.portrait-photo-wrap img {
+  position: relative;
+  z-index: 1;
+}
+
+.portrait-doodle {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.doodle-path {
+  fill: none;
+  stroke: #1f6fff;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.6;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.22));
+  opacity: 0;
+  stroke-dasharray: 80;
+  stroke-dashoffset: 80;
+}
+
+.portrait-marker {
+  position: absolute;
+  left: 45%;
+  top: 34%;
+  z-index: 4;
+  width: 13px;
+  height: 46px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 8px 8px 3px 3px;
+  background: linear-gradient(180deg, #78a9ff 0 16%, #1f6fff 16% 78%, #0f357d 78% 100%);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.28);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) rotate(62deg);
+  transform-origin: 50% 92%;
+}
+
+.portrait-marker::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  width: 7px;
+  height: 12px;
+  border-radius: 0 0 7px 7px;
+  background: #1f6fff;
+  transform: translateX(-50%);
+}
+
+.portrait-style-card.is-doodling .doodle-path {
+  opacity: 1;
+  animation: drawBlueInk 620ms ease-out forwards;
+}
+
+.portrait-style-card.is-doodling .doodle-path-right { animation-delay: 480ms; }
+.portrait-style-card.is-doodling .doodle-path-goatee { animation-delay: 980ms; }
+.portrait-style-card.is-doodling .doodle-path-chin { animation-delay: 1420ms; }
+
+.portrait-style-card.is-doodling .portrait-marker {
+  animation: markerDraw 2.25s cubic-bezier(0.45, 0, 0.2, 1) forwards;
+}
+
+.style-change-button {
+  min-height: 38px;
+  padding: 0 15px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  color: #050505;
+  background: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: transform 180ms ease, filter 180ms ease, box-shadow 180ms ease;
+}
+
+.style-change-button:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+  box-shadow: 0 9px 24px rgba(0, 0, 0, 0.22);
+}
+
+.style-change-button:focus-visible {
+  outline: 2px solid #1f6fff;
+  outline-offset: 3px;
+}
+
+@keyframes drawBlueInk {
+  from { stroke-dashoffset: 80; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes markerDraw {
+  0% { opacity: 0; left: 35%; top: 49%; transform: translate(-50%, -50%) rotate(62deg) scale(0.92); }
+  8% { opacity: 1; }
+  22% { left: 47%; top: 51%; transform: translate(-50%, -50%) rotate(68deg) scale(1); }
+  42% { left: 65%; top: 50%; transform: translate(-50%, -50%) rotate(118deg) scale(1); }
+  62% { left: 50%; top: 61%; transform: translate(-50%, -50%) rotate(14deg) scale(1); }
+  82% { left: 56%; top: 67%; transform: translate(-50%, -50%) rotate(98deg) scale(1); }
+  100% { opacity: 0; left: 58%; top: 72%; transform: translate(-50%, -50%) rotate(98deg) scale(0.96); }
 }
 
 @media (max-width: 780px) {
