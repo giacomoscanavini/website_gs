@@ -1,104 +1,23 @@
-/* =========================================================
-   Shared JavaScript for Giacomo Scanavini's website
-   ---------------------------------------------------------
-   This script is loaded by every page through:
-
-     <script src="js/main.js" defer></script>
-
-   The `defer` attribute means the browser downloads this file
-   while reading the HTML, but waits to run it until the HTML has
-   been parsed. That lets this script safely look for elements that
-   already exist on the page.
-
-   Main responsibilities:
-   1. Add the current year to the footer.
-   2. Animate section titles with a typing effect.
-   3. Load JSON data for Press/News and Publications pages.
-   4. Render searchable and filterable lists.
-========================================================= */
-
-/* =========================================================
-   SMALL UTILITY: wait
-   ---------------------------------------------------------
-   JavaScript animations often need controlled pauses.
-   This helper returns a Promise that resolves after `ms`
-   milliseconds, so we can write readable async animation code:
-
-     await wait(100);
-
-   rather than deeply nested setTimeout calls.
-========================================================= */
 function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-/* =========================================================
-   TYPING TITLE ANIMATION
-   ---------------------------------------------------------
-   HTML usage example:
-
-     <h1
-       class="typing-title"
-       data-title="Press & News"
-       data-accent-start="8"
-       data-typing-mode="typo"
-     ></h1>
-
-   Data attributes:
-   - data-title:
-       The final text that should appear.
-
-   - data-accent-start:
-       Character index where the colored part begins.
-       Characters before this index are white; characters from
-       this index onward use the page accent color.
-
-       Example: "Press & News"
-                01234567890
-                accent-start="8" colors "News".
-
-   - data-typing-mode:
-       "normal" types the title cleanly.
-       "typo" always makes a planned realistic typo.
-       "random" chooses clean or typo mode each time the animation plays.
-
-   The animation plays once when the page loads and then repeats
-   every 60 seconds.
-========================================================= */
 function setupTypingTitle() {
   const titleElement = document.querySelector(".typing-title");
 
-  // Some pages, such as the main hub, do not use a typing title.
-  // In that case, do nothing.
   if (!titleElement) return;
 
   const title = titleElement.dataset.title || "";
   const configuredMode = titleElement.dataset.typingMode || "random";
 
-  // The accent boundary controls the white/accent split.
-  // If a page does not provide it, the whole title remains white.
   const accentStart = Number.parseInt(titleElement.dataset.accentStart || title.length, 10);
 
-  // Typing speeds in milliseconds. Slightly slower than the first
-  // prototype, but still quick enough not to feel theatrical.
   const typeSpeed = 92;
   const deleteSpeed = 52;
 
-  // Replay title animation once per minute.
   const repeatDelay = 60000;
 
-  /* ---------------------------------------------------------
-     renderTypedText
-     ---------------------------------------------------------
-     Writes the currently typed text into the title element.
-
-     It splits the text into two spans:
-     - .typing-title-main: normal white text
-     - .typing-title-accent: page-specific hue
-
-     The cursor is a real narrow element rather than a text "|".
-     This makes it thinner and easier to style with CSS.
-  --------------------------------------------------------- */
+  
   function renderTypedText(currentText) {
     const mainText = currentText.slice(0, accentStart);
     const accentText = currentText.slice(accentStart);
@@ -108,13 +27,7 @@ function setupTypingTitle() {
     `;
   }
 
-  /* ---------------------------------------------------------
-     typeRange
-     ---------------------------------------------------------
-     Types characters from `startLength` up to the full length of
-     `targetText`. This lets the typo animation continue from an
-     already typed prefix instead of restarting from zero.
-  --------------------------------------------------------- */
+  
   async function typeRange(targetText, startLength = 0) {
     for (let length = startLength; length <= targetText.length; length += 1) {
       renderTypedText(targetText.slice(0, length));
@@ -122,15 +35,7 @@ function setupTypingTitle() {
     }
   }
 
-  /* ---------------------------------------------------------
-     deleteToLength
-     ---------------------------------------------------------
-     Deletes characters from the end of `currentText` until the
-     visible text has exactly `targetLength` characters.
-
-     The important design choice: typo recovery deletes only a few
-     local characters, not the whole title.
-  --------------------------------------------------------- */
+  
   async function deleteToLength(currentText, targetLength) {
     for (let length = currentText.length; length >= targetLength; length -= 1) {
       renderTypedText(currentText.slice(0, length));
@@ -138,22 +43,7 @@ function setupTypingTitle() {
     }
   }
 
-  /* ---------------------------------------------------------
-     getTypoPlan
-     ---------------------------------------------------------
-     Returns a hand-written typo plan for the current title.
-     These are intentionally realistic-ish mistakes rather than a
-     random "x" dropped into the word.
-
-     Each plan has:
-     - wrongText: the text containing the typo
-     - deleteTo: how many characters should remain after backspacing
-
-     Example for "Press & News":
-     - wrongText: "Press & Newd"
-     - deleteTo: 10, leaving "Press & New"
-     - then the script types the final "s"
-  --------------------------------------------------------- */
+  
   function getTypoPlan() {
     const plans = {
       "Giacomo Scanavini": {
@@ -189,28 +79,13 @@ function setupTypingTitle() {
     return plans[title];
   }
 
-  /* ---------------------------------------------------------
-     playNormal
-     ---------------------------------------------------------
-     Clears the title and types the correct title once.
-  --------------------------------------------------------- */
+  
   async function playNormal() {
     renderTypedText("");
     await typeRange(title, 0);
   }
 
-  /* ---------------------------------------------------------
-     playTypo
-     ---------------------------------------------------------
-     Plays a planned typo sequence:
-     1. Type the planned wrong text.
-     2. Pause briefly so the typo is visible.
-     3. Backspace only the incorrect local part.
-     4. Type the correct final title.
-
-     If no typo plan exists for a title, fall back to the normal
-     animation rather than inventing a bad typo.
-  --------------------------------------------------------- */
+  
   async function playTypo() {
     const plan = getTypoPlan();
 
@@ -226,15 +101,8 @@ function setupTypingTitle() {
     await typeRange(title, plan.deleteTo);
   }
 
-  /* ---------------------------------------------------------
-     play
-     ---------------------------------------------------------
-     Chooses the animation based on the page's data-typing-mode.
-  --------------------------------------------------------- */
+  
   async function play() {
-    // Each replay can be clean or include a typo.
-    // Use data-typing-mode="normal" or "typo" for fixed behavior,
-    // or data-typing-mode="random" to choose fresh on every cycle.
     const shouldTypo = configuredMode === "random"
       ? Boolean(getTypoPlan()) && Math.random() < 0.42
       : configuredMode === "typo";
@@ -250,19 +118,6 @@ function setupTypingTitle() {
   setInterval(play, repeatDelay);
 }
 
-/* =========================================================
-   CREATE ONE LIST CARD
-   ---------------------------------------------------------
-   Press and publication entries share the same visual card.
-   The input `item` comes from one of the JSON files in /data.
-
-   Expected fields:
-   - item.title: main visible card title
-   - item.source: journal, institution, or news source
-   - item.category: optional category shown after the source
-   - item.date: year or month/year
-   - item.url: external link opened in a new tab
-========================================================= */
 function createListCard(item) {
   const category = item.category && item.category !== "Publication" ? ` · ${item.category}` : "";
 
@@ -277,21 +132,6 @@ function createListCard(item) {
   `;
 }
 
-
-/* =========================================================
-   BUILT-IN FALLBACK DATA
-   ---------------------------------------------------------
-   The site normally loads list content from files in /data using
-   fetch(). That is the cleanest structure for learning and editing.
-
-   However, many browsers block fetch() when you open an HTML file
-   directly from your computer with a file:// URL. In that case the
-   Press and Publications pages would otherwise appear empty.
-
-   To make the site more forgiving, this object stores the same data
-   directly inside JavaScript as a backup. The loading code below first
-   tries the JSON file; if that fails, it uses this fallback data.
-========================================================= */
 const FALLBACK_DATA = {
   "data/news.json": [
     {
@@ -1134,31 +974,9 @@ const FALLBACK_DATA = {
   ]
 };
 
-/* =========================================================
-   SETUP SEARCHABLE / FILTERABLE LIST PAGE
-   ---------------------------------------------------------
-   This function powers both:
-   - press.html
-   - publications.html
-
-   It looks for an element with [data-list]. Example:
-
-     <div
-       data-list
-       data-source="data/publications.json"
-     ></div>
-
-   Then it:
-   1. Reads the JSON path from data-source.
-   2. Fetches the JSON file.
-   3. Stores the loaded items.
-   4. Renders matching cards.
-   5. Re-renders when the user searches or clicks a filter button.
-========================================================= */
 async function setupListPage() {
   const listElement = document.querySelector("[data-list]");
 
-  // If the current page has no list, there is nothing to set up.
   if (!listElement) return;
 
   const dataPath = listElement.dataset.source;
@@ -1167,28 +985,12 @@ async function setupListPage() {
   const filterButtons = document.querySelectorAll("[data-filter]");
   let activeFilter = "all";
 
-  /* ---------------------------------------------------------
-     Load data from JSON, with a local fallback
-     ---------------------------------------------------------
-     Preferred path:
-       1. Load data from /data/news.json or /data/publications.json.
-
-     Backup path:
-       2. If fetch() fails, usually because the page was opened from
-          disk with a file:// URL, use the built-in FALLBACK_DATA object
-          above so the page still displays content.
-
-     This means both of these workflows work:
-       - Recommended: python3 -m http.server 8000
-       - Quick preview: double-clicking the HTML file
-  --------------------------------------------------------- */
+  
   let items = [];
 
   try {
     const response = await fetch(dataPath);
 
-    // A failed HTTP response, such as 404, does not always throw by
-    // itself. This explicit check lets us handle it cleanly.
     if (!response.ok) {
       throw new Error(`Could not load ${dataPath}: ${response.status}`);
     }
@@ -1200,12 +1002,7 @@ async function setupListPage() {
     items = FALLBACK_DATA[dataPath] || [];
   }
 
-  /* ---------------------------------------------------------
-     render
-     ---------------------------------------------------------
-     Applies search and filter settings, updates the count label,
-     and writes the matching cards into the page.
-  --------------------------------------------------------- */
+  
   function getYear(item) {
     const match = String(item.date || "").match(/\d{4}/);
     return match ? Number.parseInt(match[0], 10) : 0;
@@ -1232,7 +1029,6 @@ async function setupListPage() {
     const query = (searchInput?.value || "").trim().toLowerCase();
 
     const filteredItems = items.filter((item) => {
-      // Search across the fields that visitors are likely to use.
       const searchableText = [item.title, item.source, item.date, item.field, item.category]
         .filter(Boolean)
         .join(" ")
@@ -1263,12 +1059,10 @@ async function setupListPage() {
     listElement.innerHTML = renderSortedCards(filteredItems);
   }
 
-  // Search updates as the visitor types.
   if (searchInput) {
     searchInput.addEventListener("input", render);
   }
 
-  // Filter buttons update the active filter and visual active state.
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
       filterButtons.forEach((btn) => btn.classList.remove("active"));
@@ -1278,30 +1072,12 @@ async function setupListPage() {
     });
   });
 
-  // Initial render after data is loaded.
   render();
 }
 
-
-/* =========================================================
-   ANONYMOUS PIGEON MESSAGE FORM
-   ---------------------------------------------------------
-   The anonymous form is intentionally local and theatrical:
-   - It does not display the submitted text back to the page.
-   - It does not send the text to an email address by itself.
-   - It clears the textarea, animates the pigeon, and reports only
-     the local time when the visitor clicked send.
-
-   Why this limitation exists:
-   A static website made only of HTML/CSS/JavaScript cannot securely
-   collect private messages and email them without a backend or a
-   third-party form service. The direct contact form uses FormSubmit
-   for that purpose; the anonymous form is currently a visual feature.
-========================================================= */
 function setupAnonymousPigeonForm() {
   const form = document.querySelector("[data-anonymous-form]");
 
-  // Most pages do not have the anonymous form, so quietly exit.
   if (!form) return;
 
   const messageInput = document.querySelector("[data-anonymous-message]");
@@ -1319,10 +1095,8 @@ function setupAnonymousPigeonForm() {
       minute: "2-digit"
     });
 
-    // Clear the content so the page never stores or shows the anonymous text.
     messageInput.value = "";
 
-    // Restart the pigeon animation even if the visitor sends multiple notes.
     if (pigeon) {
       pigeon.classList.remove("is-flying");
       form.closest(".anonymous-card")?.classList.remove("pigeon-delivering");
@@ -1337,14 +1111,7 @@ function setupAnonymousPigeonForm() {
   });
 }
 
-/* =========================================================
-   PAGE INITIALIZATION
-   ---------------------------------------------------------
-   DOMContentLoaded fires when the HTML is ready. At that point
-   we safely initialize all page behaviors.
-========================================================= */
 document.addEventListener("DOMContentLoaded", () => {
-  // Footer year: keeps the copyright current automatically.
   const yearElement = document.getElementById("year");
   if (yearElement) {
     yearElement.textContent = new Date().getFullYear();

@@ -1,11 +1,3 @@
-/* =========================================================
-   Giacomo Scanavini personal website
-   Shared stylesheet for all pages.
-   ---------------------------------------------------------
-   Color is controlled with CSS variables. Each page changes
-   --accent and --accent-soft through its body data-section value.
-========================================================= */
-
 :root {
   --bg: #050505;
   --surface: #0b0b0c;
@@ -59,7 +51,6 @@ button, input { font: inherit; }
 .mono { font-family: "DM Mono", monospace; letter-spacing: 0.04em; }
 .panel { border: 1px solid var(--line); border-radius: var(--radius-lg); background: var(--surface); }
 
-/* Small page label used above major titles. */
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -72,9 +63,6 @@ button, input { font: inherit; }
 }
 .eyebrow::before { content: ""; width: 28px; height: 1px; background: var(--accent); opacity: 0.7; }
 
-/* =========================================================
-   Navigation
-========================================================= */
 .site-nav {
   position: sticky;
   top: 14px;
@@ -100,9 +88,6 @@ button, input { font: inherit; }
 .nav-link { display: inline-flex; padding: 9px 12px; border-radius: 999px; color: var(--muted); font-size: 0.88rem; transition: color 180ms ease, background 180ms ease; }
 .nav-link:hover, .nav-link.active { color: var(--text); background: rgba(255, 255, 255, 0.07); }
 
-/* =========================================================
-   Page titles and typing effect
-========================================================= */
 .page-hero { padding: 78px 0 42px; }
 .title-panel { padding: 40px; }
 .typing-title {
@@ -127,13 +112,9 @@ button, input { font: inherit; }
 @keyframes blink { 50% { opacity: 0; } }
 .page-subtitle { max-width: 700px; margin-top: 22px; color: var(--muted); font-size: clamp(1rem, 1.6vw, 1.16rem); }
 
-/* =========================================================
-   Hub page
-========================================================= */
 .hub-hero { min-height: 78vh; display: flex; align-items: center; padding: 80px 0 70px; }
 .hub-title { margin-top: 18px; font-size: clamp(3.4rem, 8vw, 7rem); line-height: 0.9; letter-spacing: -0.09em; font-weight: 700; }
 .hub-title span { display: block; }
-.hub-title .last-name { color: var(--accent); }
 .hub-grid { display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 10px; margin-top: 28px; }
 .hub-card {
   min-height: 54px; padding: 0 16px; border: 1px solid var(--line); border-radius: 999px;
@@ -147,24 +128,14 @@ button, input { font: inherit; }
 .hub-card.photography { --accent: #b69abf; --accent-soft: rgba(182, 154, 191, 0.10); }
 .hub-card-title { color: var(--accent); font-size: 0.98rem; letter-spacing: -0.025em; font-weight: 650; }
 
-/* =========================================================
-   About page
-========================================================= */
-.about-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 18px; padding-bottom: 80px; }
 .bio-card, .timeline-card { padding: 26px; }
 .bio-card p { margin-top: 16px; color: var(--muted); font-size: 1rem; }
 .link { color: rgb(10, 177, 243); text-decoration: underline;}
-.tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; list-style: none; }
-.tag { padding: 7px 10px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: rgba(255,255,255,0.03); font-size: 0.8rem; }
 .timeline { display: grid; gap: 12px; max-height: 460px; overflow: auto; padding-right: 8px; }
 .timeline-item { display: grid; grid-template-columns: 108px 1fr; gap: 16px; padding: 16px; border: 1px solid var(--line); border-radius: var(--radius-md); background: rgba(255,255,255,0.025); }
 .timeline-date { color: var(--accent); font-size: 0.76rem; }
 .timeline-title { font-weight: 620; }
-.timeline-text { margin-top: 4px; color: var(--muted); font-size: 0.9rem; }
 
-/* =========================================================
-   Searchable list pages
-========================================================= */
 .content-board { display: grid; grid-template-columns: 300px 1fr; gap: 18px; padding-bottom: 80px; }
 .filters { padding: 20px; height: fit-content; }
 .filter-label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 0.74rem; text-transform: uppercase; }
@@ -181,9 +152,6 @@ button, input { font: inherit; }
 .list-date { color: var(--accent); font-size: 0.76rem; white-space: nowrap; }
 .count-note { margin-top: 14px; color: var(--faint); font-size: 0.78rem; }
 
-/* =========================================================
-   Photography page placeholder
-========================================================= */
 .photo-panel { min-height: 360px; padding: 30px; margin-bottom: 80px; }
 .photo-placeholder { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 26px; }
 .photo-tile { aspect-ratio: 4 / 5; border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(145deg, rgba(255,255,255,0.07), rgba(255,255,255,0.015)); }
@@ -193,7 +161,7 @@ button, input { font: inherit; }
 
 @media (max-width: 950px) {
   .hub-grid { grid-template-columns: repeat(2, 1fr); }
-  .about-grid, .content-board { grid-template-columns: 1fr; }
+  .content-board { grid-template-columns: 1fr; }
 }
 @media (max-width: 700px) {
   .page-shell { width: min(100% - 24px, var(--max-width)); }
@@ -206,13 +174,6 @@ button, input { font: inherit; }
   .site-footer { display: grid; }
 }
 
-/* =========================================================
-   2026 refinement: quieter navigation, new sections, contact
-   ---------------------------------------------------------
-   These rules override earlier styles without deleting them,
-   which makes the evolution of the design easier to study.
-========================================================= */
-
 body[data-section="projects"] {
   --accent: #c59b83;
   --accent-soft: rgba(197, 155, 131, 0.10);
@@ -223,7 +184,6 @@ body[data-section="contact"] {
   --accent-soft: rgba(209, 163, 163, 0.10);
 }
 
-/* Minimal navigation: no heavy pill container, just text links and subtle underlines. */
 .site-nav {
   top: 0;
   margin-top: 0;
@@ -261,7 +221,6 @@ body[data-section="contact"] {
 .nav-link:hover::after,
 .nav-link.active::after { transform: scaleX(1); }
 
-/* Smaller hub buttons now that there are six of them. */
 .hub-grid-wide { grid-template-columns: repeat(6, minmax(94px, 1fr)); }
 .hub-card { min-height: 44px; padding: 0 12px; }
 .hub-card-title { font-size: 0.86rem; }
@@ -290,7 +249,6 @@ body[data-section="contact"] {
 }
 .placeholder-line.short { width: 72%; }
 
-/* Contact page layout. */
 .contact-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -325,7 +283,6 @@ body[data-section="contact"] {
 .form-button:hover { transform: translateY(-1px); filter: brightness(1.07); }
 .contact-links { display: grid; gap: 4px; margin-top: 22px; }
 
-/* Anonymous pigeon animation. The class is added by JavaScript after submission. */
 .pigeon-stage {
   position: relative;
   min-height: 100px;
@@ -335,17 +292,6 @@ body[data-section="contact"] {
   border-radius: 18px;
   background: rgba(255,255,255,0.025);
 }
-.pigeon {
-  position: absolute;
-  left: 18px;
-  bottom: 20px;
-  font-size: 2rem;
-  opacity: 0;
-  transform: translateX(0) translateY(0) rotate(0deg);
-}
-.pigeon.is-flying {
-  animation: pigeon-flight 2.5s ease-in-out forwards;
-}
 .pigeon-status {
   position: absolute;
   left: 18px;
@@ -354,13 +300,6 @@ body[data-section="contact"] {
   color: var(--muted);
   font-size: 0.76rem;
 }
-@keyframes pigeon-flight {
-  0% { opacity: 0; transform: translateX(0) translateY(18px) rotate(-4deg); }
-  12% { opacity: 1; }
-  60% { opacity: 1; transform: translateX(55%) translateY(-34px) rotate(7deg); }
-  100% { opacity: 0; transform: translateX(110%) translateY(-90px) rotate(12deg); }
-}
-
 @media (max-width: 1100px) {
   .hub-grid-wide { grid-template-columns: repeat(3, 1fr); }
 }
@@ -376,21 +315,10 @@ body[data-section="contact"] {
   .site-nav { border-radius: 0; }
 }
 
-
-/* =========================================================
-   Requested refinements: compact headers, portrait placeholder,
-   logo timeline, and grouped publication headings.
-========================================================= */
 .page-hero { padding: 48px 0 28px; }
 .title-panel { padding: 30px 34px; }
 .typing-title { margin-top: 0; }
 
-.about-profile-layout {
-  display: grid;
-  grid-template-columns: minmax(160px, 220px) 1fr;
-  gap: 24px;
-  align-items: start;
-}
 .polaroid-frame {
   width: 100%;
   padding: 10px 10px 16px;
@@ -432,44 +360,19 @@ body[data-section="contact"] {
   max-height: 36px;
   object-fit: contain;
 }
-.macro-heading {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  color: var(--accent);
-  background: color-mix(in srgb, var(--surface), black 10%);
-  font-family: "DM Mono", monospace;
-  font-size: 0.76rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
 .typing-cursor { width: 0.7px; }
 
 @media (max-width: 780px) {
-  .about-profile-layout { grid-template-columns: 1fr; }
   .polaroid-frame { max-width: 260px; }
   .logo-timeline .timeline-item { grid-template-columns: 48px 1fr; }
   .logo-timeline .timeline-date { grid-column: 2; }
   .role-logo-wrap { grid-row: span 2; }
 }
 
-
-/* =========================================================
-   Latest requested refinements
-   ---------------------------------------------------------
-   These overrides keep the earlier code intact while applying
-   the newest layout and interaction changes.
-========================================================= */
-
-/* Give header descriptions more horizontal room and reduce wrapping. */
 .title-panel { padding: 28px 34px; }
 .page-subtitle { max-width: 960px; }
 .page-hero { padding: 44px 0 24px; }
 
-/* The hub title now uses the same typing engine as section titles. */
 .hub-title.typing-title {
   min-height: 0.98em;
   margin-top: 18px;
@@ -479,11 +382,9 @@ body[data-section="contact"] {
 }
 .hub-title.typing-title span { display: inline; }
 
-/* Footer update line requested under the copyright. */
 .site-footer > div { display: grid; gap: 4px; }
 .footer-update { color: var(--faint); font-size: 0.74rem; }
 
-/* About page: wider bio placement and no keyword chips. */
 .about-stack {
   display: grid;
   gap: 18px;
@@ -496,15 +397,7 @@ body[data-section="contact"] {
   align-items: center;
 }
 .about-bio-copy { max-width: 760px; }
-.section-mini-title {
-  color: var(--accent);
-  font-size: 0.86rem;
-  font-weight: 650;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
 
-/* Slightly used polaroid feel: a small tilt, paper wear, and subtle tape. */
 .used-polaroid {
   position: relative;
   padding: 12px 12px 20px;
@@ -538,7 +431,6 @@ body[data-section="contact"] {
   mix-blend-mode: multiply;
 }
 
-/* Role cards: larger logos, no white logo tile, grayscale until hover. */
 .roles-card { padding: 28px; }
 .logo-timeline { max-height: none; overflow: visible; padding-right: 0; }
 .logo-timeline .timeline-item {
@@ -571,16 +463,11 @@ body[data-section="contact"] {
 }
 .logo-timeline .timeline-title { font-size: 1rem; }
 
-/* The publication list is now a single chronological list; hide old macro headings if any remain. */
-.macro-heading { display: none; }
-
-/* Contact form: clearer label/input rhythm without exposing the email address as a visible link. */
 .message-form { gap: 16px; }
 .form-field { display: grid; gap: 7px; }
 .form-field .filter-label { margin-bottom: 0; }
 .contact-links { margin-top: 20px; }
 
-/* Richer anonymous pigeon delivery animation. */
 .pigeon-stage {
   min-height: 190px;
   border-style: solid;
@@ -660,18 +547,6 @@ body[data-section="contact"] {
   .role-logo-wrap { grid-row: span 2; }
 }
 
-
-/* =========================================================
-   Final compact layout refinements
-   ---------------------------------------------------------
-   - Home name wraps as two lines: Giacomo / Scanavini.
-   - Page headers are slightly smaller and shorter.
-   - About mini labels use the same eyebrow/segment style as
-     Extra and Contact.
-   - Search labels on list pages get a small accent segment.
-========================================================= */
-
-/* Slightly smaller page headers and subtitles across subpages. */
 .page-hero { padding: 36px 0 20px; }
 .title-panel { padding: 24px 30px; }
 .typing-title {
@@ -685,7 +560,6 @@ body[data-section="contact"] {
   font-size: clamp(0.92rem, 1.2vw, 1.04rem);
 }
 
-/* Home keeps a larger title, but the family name is forced below the first name. */
 .hub-title.typing-title {
   min-height: 1.92em;
   font-size: clamp(3rem, 7.1vw, 6.2rem);
@@ -696,14 +570,13 @@ body[data-section="contact"] {
   display: block;
 }
 .hub-title.typing-title .typing-title-main {
-  /* data-accent-start includes the space after Giacomo; trim the visual gap. */
+  
   white-space: pre;
 }
 .hub-title.typing-title .typing-cursor {
   margin-left: 0.06em;
 }
 
-/* Shorter cards/boxes after the smaller headers. */
 .content-board,
 .about-stack,
 .page-bottom { padding-bottom: 62px; }
@@ -711,7 +584,6 @@ body[data-section="contact"] {
 .photo-panel { min-height: 310px; }
 .contact-card { padding: 24px; }
 
-/* About labels now use .eyebrow like the rest of the site. */
 .about-bio-copy .eyebrow,
 .roles-card > .eyebrow {
   margin-bottom: 14px;
@@ -719,10 +591,6 @@ body[data-section="contact"] {
 .about-bio-copy p:first-of-type { margin-top: 14px; }
 .roles-card .logo-timeline { margin-top: 18px !important; }
 
-/* The old .section-mini-title remains harmless for backward compatibility. */
-.section-mini-title { font-family: inherit; }
-
-/* Accent segment before Search labels only on list/filter panels. */
 .search-heading {
   display: inline-flex;
   align-items: center;
@@ -742,18 +610,6 @@ body[data-section="contact"] {
   .title-panel { padding: 22px; }
 }
 
-
-/* =========================================================
-   Final touch-ups requested after portrait upload
-   ---------------------------------------------------------
-   - Keep the Home hero box stable while the typed surname appears.
-   - Use the uploaded portrait in About.
-   - Reduce the copyright line size to match the update line,
-     while keeping the same font family.
-========================================================= */
-
-/* Stabilize the Home box so the title animation does not make the panel grow
-   once the second line (Scanavini) appears. */
 .hub-hero .title-panel {
   min-height: 31.5rem;
   display: flex;
@@ -761,17 +617,14 @@ body[data-section="contact"] {
   justify-content: flex-start;
 }
 
-/* Reserve a little more vertical room for the two-line home title itself. */
 .hub-title.typing-title {
   min-height: 2.2em;
 }
 
-/* Match the copyright line size to the line below it without changing font. */
 .site-footer > div > span:first-child {
   font-size: 0.74rem;
 }
 
-/* The portrait uses the uploaded photo inside the slightly worn polaroid. */
 .used-polaroid img {
   display: block;
   width: 100%;
@@ -789,22 +642,11 @@ body[data-section="contact"] {
   }
 }
 
-
-/* =========================================================
-   Natural portrait frame refinement
-   ---------------------------------------------------------
-   - Keep the uploaded portrait in its original file quality.
-   - Make the frame feel more natural and less artificially perfect.
-   - Reduce heavy overlays so the photo reads more clearly.
-========================================================= */
-
-/* Slightly more relaxed about layout proportions for the real portrait. */
 .about-overview-card {
   grid-template-columns: minmax(210px, 290px) minmax(0, 1fr);
   align-items: start;
 }
 
-/* More natural instant-photo frame: subtle wear, softer tape, gentler tilt. */
 .used-polaroid {
   padding: 12px 12px 20px;
   border-radius: 10px 13px 11px 12px;
@@ -837,7 +679,6 @@ body[data-section="contact"] {
   mix-blend-mode: multiply;
 }
 
-/* Keep the real portrait crisp and avoid any extra visual degradation. */
 .used-polaroid img {
   position: relative;
   z-index: 1;
@@ -865,17 +706,6 @@ body[data-section="contact"] {
   }
 }
 
-
-/* =========================================================
-   Compact portrait and search/filter controls
-   ---------------------------------------------------------
-   Requested refinements:
-   - Reduce the About portrait/frame dimensions.
-   - Make Press/Publications search boxes less visually heavy.
-   - Reduce filter-button font size and padding.
-========================================================= */
-
-/* Smaller portrait column and frame on the About page. */
 .about-overview-card {
   grid-template-columns: minmax(170px, 230px) minmax(0, 1fr);
   gap: 28px;
@@ -887,12 +717,10 @@ body[data-section="contact"] {
   justify-self: center;
 }
 
-/* Slightly reduce frame padding so the portrait takes less space overall. */
 .used-polaroid {
   padding: 10px 10px 17px;
 }
 
-/* Compact left search/filter panels on list pages. */
 .content-board {
   grid-template-columns: 250px 1fr;
   gap: 16px;
@@ -903,7 +731,6 @@ body[data-section="contact"] {
   border-radius: 18px;
 }
 
-/* Smaller search labels, fields, and helper counts. */
 .filter-label {
   font-size: 0.68rem;
 }
@@ -931,7 +758,6 @@ body[data-section="contact"] {
   font-size: 0.7rem;
 }
 
-/* Keep the Search accent segment proportional to the smaller label. */
 .search-heading {
   gap: 7px;
 }
@@ -961,31 +787,17 @@ body[data-section="contact"] {
   }
 }
 
-
-/* =========================================================
-   Home panel and typing-speed visual fix
-   ---------------------------------------------------------
-   Earlier, the Home panel used a large min-height to avoid
-   resizing during the typing animation. This made the box feel
-   too tall. The title itself now reserves the two-line space,
-   while the panel can keep a natural compact height.
-========================================================= */
-
-/* Let the Home box size naturally again. */
 .hub-hero .title-panel {
   min-height: unset;
   height: auto;
 }
 
-/* Reserve exactly enough space for Giacomo / Scanavini during typing.
-   This keeps the box from changing height as the surname appears. */
 .hub-title.typing-title {
   height: 1.92em;
   min-height: 1.92em;
   overflow: visible;
 }
 
-/* Keep the hub section vertically balanced after reducing the panel height. */
 .hub-hero {
   min-height: 70vh;
   padding: 64px 0 58px;
