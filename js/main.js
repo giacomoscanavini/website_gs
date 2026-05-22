@@ -1075,64 +1075,13 @@ async function setupListPage() {
   render();
 }
 
-function setupAnonymousPigeonForm() {
-  const form = document.querySelector("[data-anonymous-form]");
 
-  if (!form) return;
 
-  const messageInput = document.querySelector("[data-anonymous-message]");
-  const statusElement = document.querySelector("[data-anonymous-status]");
-  const pigeon = document.querySelector("[data-pigeon]");
-
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    const message = (messageInput?.value || "").trim();
-    if (!message) return;
-
-    const sentTime = new Date().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit"
+function setupComingSoonLinks() {
+  document.querySelectorAll("[data-coming-soon]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
     });
-
-    messageInput.value = "";
-
-    if (pigeon) {
-      pigeon.classList.remove("is-flying");
-      form.closest(".anonymous-card")?.classList.remove("pigeon-delivering");
-      void pigeon.offsetWidth; // Forces the browser to reflow, allowing the animation to restart.
-      pigeon.classList.add("is-flying");
-      form.closest(".anonymous-card")?.classList.add("pigeon-delivering");
-    }
-
-    if (statusElement) {
-      statusElement.textContent = `Anonymous note sealed and carried away at ${sentTime}.`;
-    }
-  });
-}
-
-
-function setupPortraitStyleButton() {
-  const portraitCard = document.querySelector("[data-portrait-style]");
-  const styleButton = document.querySelector("[data-style-button]");
-
-  if (!portraitCard || !styleButton) return;
-
-  let animationTimer;
-
-  styleButton.addEventListener("click", () => {
-    window.clearTimeout(animationTimer);
-    portraitCard.classList.remove("is-doodling");
-
-    // Force a reflow so a repeated click restarts the ink animation from scratch.
-    void portraitCard.offsetWidth;
-
-    portraitCard.classList.add("is-doodling");
-    styleButton.disabled = true;
-
-    animationTimer = window.setTimeout(() => {
-      styleButton.disabled = false;
-    }, 2400);
   });
 }
 
@@ -1144,6 +1093,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setupTypingTitle();
   setupListPage();
-  setupAnonymousPigeonForm();
-  setupPortraitStyleButton();
+  setupComingSoonLinks();
 });

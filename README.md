@@ -8,9 +8,8 @@ Static multi-page website built with HTML, CSS, and JavaScript.
 - `about.html` — biography, education, roles
 - `press.html` — press, news, profile items
 - `publications.html` — searchable publication list plus Google Scholar link
-- `projects.html` — work-in-progress projects page
 - `photography.html` — work-in-progress photography page
-- `contact.html` — anonymous pigeon note + direct contact form
+- `contact.html` — direct contact form
 
 ## Project structure
 
@@ -45,7 +44,6 @@ action="https://formsubmit.co/scanavini.giacomo@gmail.com"
 
 FormSubmit usually requires first-time email confirmation. For a production website, you may later replace this with Netlify Forms, Formspree, a custom backend, or another service.
 
-The anonymous pigeon message is visual/local only. It does not display or store the anonymous text; it only shows the time after submission.
 
 ## Editing content
 
