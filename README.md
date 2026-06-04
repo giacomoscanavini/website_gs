@@ -1,65 +1,32 @@
-# Giacomo Scanavini Personal Website
+# Giacomo Scanavini personal website
 
-Static multi-page website built with HTML, CSS, and JavaScript.
+Static personal website package.
 
-## Pages
+Open `index.html` directly or preview with a static server. The publication section does not require a build step.
 
-- `index.html` — hub page
-- `about.html` — biography, education, roles
-- `press.html` — press, news, profile items
-- `publications.html` — searchable publication list plus Google Scholar link
-- `photography.html` — work-in-progress photography page
-- `contact.html` — direct contact form
+## Structure
 
-## Project structure
+- `index.html` — About, bio, roles, and contact links.
+- `research.html` — Research snapshot, focus areas, selected papers, and full publication archive.
+- `projects.html` — Project page with the playable Zone Typer project.
+- `assets/data/publications.js` — Publication data used by the research page.
+- `js/publications.js` — Renders selected publications, archive entries, and publication metrics from the publication data file.
+- `js/navigation.js` — Page navigation controls and swipe/keyboard behavior.
+- `css/base.css` — Shared theme, layout, navigation, typography, controls, and footer.
+- `css/about.css` — About-page layout, portrait, roles, and contact cards.
+- `css/research.css` — Research metrics, focus cards, publication cards, and archive.
+- `css/projects.css` — Project cards, thumbnails, and project links.
+- `projects/zone_typer/` — Local playable Zone Typer project.
 
-```text
-css/styles.css
-js/main.js
-data/news.json
-data/publications.json
-```
+## Changes in this package
 
-## Preview locally
+- Footer content is left-aligned on all main pages.
+- Footer separator line has been removed.
+- Publications were removed from `research.html` and are rendered from `assets/data/publications.js`.
+- Unused placeholder project cards, placeholder assets, unused logos, and unused news data were removed.
+- Redundant theme setup and unused CSS blocks were removed.
 
-The site now contains fallback data for quick double-click previews, but the cleanest way to preview is still:
+## Fix in this package
 
-```bash
-python3 -m http.server 8000
-```
-
-Then open:
-
-```text
-http://localhost:8000
-```
-
-## Contact form note
-
-The direct contact form uses FormSubmit:
-
-```html
-action="https://formsubmit.co/scanavini.giacomo@gmail.com"
-```
-
-FormSubmit usually requires first-time email confirmation. For a production website, you may later replace this with Netlify Forms, Formspree, a custom backend, or another service.
-
-
-## Editing content
-
-- Add or edit news in `data/news.json`.
-- Add or edit publications in `data/publications.json`.
-- If you want double-click previews to remain fully populated without a local server, also update the `FALLBACK_DATA` object in `js/main.js`.
-
-## Design notes
-
-- Each page uses `body data-section="..."` to choose its accent color.
-- Section titles use `data-title`, `data-accent-start`, and `data-typing-mode` for the typing effect.
-- Navigation and layout are intentionally minimal and commented for learning.
-
-
-## Latest changes
-- About page now uses a polaroid-style portrait placeholder and logo-based roles from the uploaded CV.
-- Header typing mode is random on each cycle: clean typing or planned local typo correction.
-- Publications are grouped alphabetically by broad field on the All view, and sorted by publication year descending within each group.
-- Press/news entries are sorted chronologically descending and include the Yale defense Instagram post.
+- Replaced local `fetch()` loading with a plain script data file so publications render when the site is opened directly from disk.
+- Removed the unused JSON data file to keep one publication data source.
