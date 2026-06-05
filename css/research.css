@@ -49,13 +49,34 @@
 }
 
 .profile-button-row {
-  justify-content: center;
+  justify-content: flex-start;
   margin-top: 16px;
 }
 
 .profile-button-row .pill-link {
-  min-width: 126px;
+  display: inline-flex;
+  align-items: center;
   justify-content: center;
+  min-width: 86px;
+  padding: 8px 11px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: rgba(1, 5, 3, 0.42);
+  color: var(--text);
+  font-size: 0.84rem;
+  font-weight: 750;
+  transition:
+    background 0.22s ease,
+    border-color 0.22s ease,
+    transform 0.22s ease;
+}
+
+.profile-button-row .pill-link:hover,
+.profile-button-row .pill-link:focus-visible {
+  border-color: var(--border-strong);
+  background: var(--glass-bg-strong);
+  box-shadow: none;
+  transform: translateY(-2px);
 }
 
 .focus-split {
@@ -276,8 +297,65 @@
   }
 }
 
-@media (max-width: 640px) {
+
+
+.publication-groups {
+  display: grid;
+  gap: 16px;
+}
+
+.paper-authors {
+  color: var(--muted);
+}
+
+.paper-type {
+  display: inline-flex;
+  margin-bottom: 8px;
+  margin-left: 8px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 850;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.paper-type-publication {
+  border: 1px solid rgba(var(--accent-rgb), 0.28);
+  color: var(--accent-3);
+}
+
+.paper-type-preprint {
+  border: 1px solid rgba(160, 180, 216, 0.34);
+  background: rgba(87, 110, 158, 0.15);
+  color: #c8d6f0;
+}
+
+.paper-type-conference {
+  border: 1px solid rgba(220, 190, 112, 0.34);
+  background: rgba(150, 118, 35, 0.16);
+  color: #ead99b;
+}
+
+.paper-card.neuroscience {
+  border-left-color: rgba(190, 91, 62, 0.74);
+}
+
+.paper-category-neuroscience {
+  border: 1px solid rgba(190, 91, 62, 0.46);
+  background: rgba(169, 77, 48, 0.2);
+  color: #e7a083;
+}
+
+.focus-card:nth-child(2) .tag {
+  border-color: rgba(190, 91, 62, 0.36);
+  background: rgba(169, 77, 48, 0.16);
+  color: #e7a083;
+}
+
+@media (max-width: 920px) {
   .research-snapshot {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+

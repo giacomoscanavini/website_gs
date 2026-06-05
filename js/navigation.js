@@ -1,12 +1,39 @@
-const pages = ["index.html", "research.html", "projects.html"];
+const navLinks = Array.from(document.querySelectorAll("a[data-page-index]"));
+const pages = navLinks.map((link) => new URL(link.href, window.location.href));
 
-const currentFile = window.location.pathname.split("/").pop() || "index.html";
-const currentIndex = Math.max(pages.indexOf(currentFile), 0);
+function normalisePath(pathname) {
+  const path = pathname.endsWith("/") ? `${pathname}index.html` : pathname;
+  return path.replace(/\/index\.html$/, "/").replace(/\.html$/, "");
+}
+
+const currentPath = normalisePath(window.location.pathname);
+let currentIndex = pages.findIndex(
+  (page) => normalisePath(page.pathname) === currentPath,
+);
+
+if (currentIndex === -1) {
+  currentIndex = 0;
+}
+
 let navigationLocked = false;
 let touchStartX = 0;
 let touchStartY = 0;
 
 document.body.classList.add("page-enter");
+
+function setActiveNavigation() {
+  navLinks.forEach((link, index) => {
+    const isActive = index === currentIndex;
+
+    link.classList.toggle("active", isActive);
+
+    if (isActive) {
+      link.setAttribute("aria-current", "page");
+    } else {
+      link.removeAttribute("aria-current");
+    }
+  });
+}
 
 function goToPage(targetIndex) {
   if (
@@ -24,12 +51,23 @@ function goToPage(targetIndex) {
   document.body.classList.add(directionClass);
 
   window.setTimeout(() => {
-    window.location.href = pages[targetIndex];
+    window.location.href = pages[targetIndex].href;
   }, 260);
 }
 
-document.querySelectorAll("a[data-page-index]").forEach((link) => {
+navLinks.forEach((link) => {
   link.addEventListener("click", (event) => {
+    if (
+      event.defaultPrevented ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+
     const targetIndex = Number(link.dataset.pageIndex);
 
     if (Number.isNaN(targetIndex)) {
@@ -119,3 +157,5 @@ window.addEventListener(
   },
   { passive: true },
 );
+
+setActiveNavigation();
