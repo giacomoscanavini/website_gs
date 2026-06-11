@@ -61,7 +61,7 @@ window.PUBLICATIONS = [
     "publisher": "SAGE Publications Sage CA: Los Angeles, CA"
   },
   {
-    "title": "First double-differential cross section measurement of neutral-current π 0 production in neutrino-argon scattering in the MicroBooNE detector",
+    "title": "First double-differential cross section measurement of neutral-current π0 production in neutrino-argon scattering in the MicroBooNE detector",
     "year": 2025,
     "source": "Physical review letters",
     "authors": "Abratenko, P; Alterkait, O; Andrade Aldana, D; Arellano, L; Asaadi, J; Ashkenazi, A; Balasubramanian, S; Baller, B; Barnard, A; Barr, G;",
@@ -485,7 +485,7 @@ window.PUBLICATIONS = [
     "publisher": "American Physical Society"
   },
   {
-    "title": "Inclusive cross section measurements in final states with and without protons for charged-current ν μ-Ar scattering in MicroBooNE",
+    "title": "Inclusive cross section measurements in final states with and without protons for charged-current νμ-Ar scattering in MicroBooNE",
     "year": 2024,
     "source": "Physical Review D",
     "authors": "Abratenko, P; Alterkait, O; Andrade Aldana, D; Arellano, L; Asaadi, J; Ashkenazi, A; Balasubramanian, S; Baller, B; Barr, G; Barrow, D;",
@@ -700,7 +700,7 @@ window.PUBLICATIONS = [
     "publisher": "APS"
   },
   {
-    "title": "Measurement of neutral current single π 0 production on argon with the MicroBooNE detector",
+    "title": "Measurement of neutral current single π0 production on argon with the MicroBooNE detector",
     "year": 2023,
     "source": "Physical Review D",
     "authors": "Abratenko, P; Anthony, J; Arellano, L; Asaadi, J; Ashkenazi, A; Balasubramanian, S; Baller, B; Barnes, C; Barr, G; Barrow, J;",
@@ -713,7 +713,7 @@ window.PUBLICATIONS = [
     "publisher": "American Physical Society"
   },
   {
-    "title": "Multidifferential cross section measurements of ν μ-argon quasielasticlike reactions with the MicroBooNE detector",
+    "title": "Multidifferential cross section measurements of νμ-argon quasielasticlike reactions with the MicroBooNE detector",
     "year": 2023,
     "source": "Physical Review D",
     "authors": "Abratenko, P; Alterkait, O; Andrade Aldana, D; Anthony, J; Arellano, L; Asaadi, J; Ashkenazi, A; Balasubramanian, S; Baller, B; Barr, G;",
@@ -784,7 +784,7 @@ window.PUBLICATIONS = [
     "publisher": "IOP Publishing"
   },
   {
-    "title": "Differential cross section measurement of charged current ν e interactions without final-state pions in MicroBooNE",
+    "title": "Differential cross section measurement of charged current νe interactions without final-state pions in MicroBooNE",
     "year": 2022,
     "source": "Physical Review D",
     "authors": "Abratenko, P; Anthony, J; Arellano, L; Asaadi, J; Ashkenazi, A; Balasubramanian, S; Baller, B; Barnes, C; Barr, G; Barrow, J;",
@@ -862,7 +862,7 @@ window.PUBLICATIONS = [
     "publisher": "IOP Publishing"
   },
   {
-    "title": "Search for an anomalous excess of charged-current quasielastic ν e interactions with the MicroBooNE experiment using Deep-Learning-based reconstruction",
+    "title": "Search for an anomalous excess of charged-current quasielastic νe interactions with the MicroBooNE experiment using Deep-Learning-based reconstruction",
     "year": 2022,
     "source": "Physical Review D",
     "authors": "Abratenko, P; An, R; Anthony, J; Arellano, L; Asaadi, J; Ashkenazi, A; Balasubramanian, S; Baller, B; Barnes, C; Barr, G;",
@@ -875,7 +875,7 @@ window.PUBLICATIONS = [
     "publisher": "APS"
   },
   {
-    "title": "Search for an anomalous excess of charged-current ν e interactions without pions in the final state with the MicroBooNE experiment",
+    "title": "Search for an anomalous excess of charged-current νe interactions without pions in the final state with the MicroBooNE experiment",
     "year": 2022,
     "source": "Physical Review D",
     "authors": "Abratenko, P; An, R; Anthony, J; Arellano, L; Asaadi, J; Ashkenazi, A; Balasubramanian, S; Baller, B; Barnes, C; Barr, G;",
@@ -888,7 +888,7 @@ window.PUBLICATIONS = [
     "publisher": "APS"
   },
   {
-    "title": "Search for an anomalous excess of inclusive charged-current ν e interactions in the MicroBooNE experiment using Wire-Cell reconstruction",
+    "title": "Search for an anomalous excess of inclusive charged-current νe interactions in the MicroBooNE experiment using Wire-Cell reconstruction",
     "year": 2022,
     "source": "Physical Review D",
     "authors": "Abratenko, P; An, R; Anthony, J; Arellano, L; Asaadi, J; Ashkenazi, A; Balasubramanian, S; Baller, B; Barnes, C; Barr, G;",
@@ -1228,7 +1228,7 @@ window.PUBLICATIONS = [
     "pages": "P06033-P06033"
   },
   {
-    "title": "First measurement of differential charged current quasielasticlike ν μ-argon scattering cross sections with the MicroBooNE detector",
+    "title": "First measurement of differential charged current quasielasticlike νμ-argon scattering cross sections with the MicroBooNE detector",
     "year": 2020,
     "source": "Physical review letters",
     "authors": "Abratenko, P; Alrashed, M; An, R; Anthony, J; Asaadi, J; Ashkenazi, A; Balasubramanian, S; Baller, B; Barnes, C; Barr, G;",
@@ -1267,7 +1267,7 @@ window.PUBLICATIONS = [
     "publisher": "APS"
   },
   {
-    "title": "Measurement of differential cross sections for ν μ-Ar charged-current interactions with protons and no pions in the final state with the MicroBooNE detector",
+    "title": "Measurement of differential cross sections for νμ-Ar charged-current interactions with protons and no pions in the final state with the MicroBooNE detector",
     "year": 2020,
     "source": "Physical Review D",
     "authors": "Abratenko, Pe; Alrashed, M; An, R; Anthony, J; Asaadi, J; Ashkenazi, A; Balasubramanian, S; Baller, B; Barnes, C; Barr, G;",
@@ -1374,7 +1374,7 @@ window.PUBLICATIONS = [
     "publisher": "American Physical Society"
   },
   {
-    "title": "First measurement of ν μ charged-current π 0 production on argon with the MicroBooNE detector",
+    "title": "First measurement of νμ charged-current π0 production on argon with the MicroBooNE detector",
     "year": 2019,
     "source": "Physical Review D",
     "authors": "Adams, C; Alrashed, M; An, R; Anthony, J; Asaadi, J; Ashkenazi, A; Auger, M; Balasubramanian, S; Baller, B; Barnes, C;",
@@ -1419,7 +1419,7 @@ window.PUBLICATIONS = [
     "url": "https://arxiv.org/abs/1905.09694"
   },
   {
-    "title": "First measurement of the cross section for ν μ and ν¯ μ induced single charged pion production on argon using ArgoNeuT",
+    "title": "First measurement of the cross section for νμ and ν¯ μ induced single charged pion production on argon using ArgoNeuT",
     "year": 2018,
     "source": "Physical Review D",
     "authors": "Acciarri, R; Adams, C; Asaadi, J; Baller, B; Bolton, T; Bromberg, C; Cavanna, F; Church, E; Edmunds, D; Ereditato, A;",
