@@ -1,0 +1,162 @@
+<article class="article" id="LC608">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Additional problems
+  </span>
+ </div>
+ <h1>
+  608 · Tree node
+ </h1>
+ <p>
+  Classify each tree node as Root, Inner or Leaf.
+ </p>
+ <h2>
+  My submission
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="archive-608-panel-0" aria-selected="true" id="archive-608-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="archive-608-panel-1" aria-selected="false" id="archive-608-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="archive-608-tab-0" class="code-panel" id="archive-608-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    MySQL
+   </div>
+   <pre id="code-LC608-0" tabindex="0"><code class="language-sql" data-origin="archive-608-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">SELECT</span><span class="w"> </span>
+<span class="w">    </span><span class="n">id</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="k">CASE</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">p_id</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="no">NULL</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'Root'</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">p_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Tree</span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'Inner'</span>
+<span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">'Leaf'</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">type</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Tree</span></code></pre>
+  </div>
+  <div aria-labelledby="archive-608-tab-1" class="code-panel" id="archive-608-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-LC608-1" tabindex="0"><code class="language-python" data-origin="archive-608-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">tree_node</span><span class="p">(</span><span class="n">tree</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">parents</span> <span class="o">=</span> <span class="n">tree</span><span class="p">[</span><span class="s1">'p_id'</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">classify</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s1">'p_id'</span><span class="p">]):</span> <span class="k">return</span> <span class="s1">'Root'</span>
+        <span class="k">elif</span> <span class="n">x</span><span class="p">[</span><span class="s1">'id'</span><span class="p">]</span> <span class="ow">in</span> <span class="n">parents</span><span class="p">:</span> <span class="k">return</span> <span class="s1">'Inner'</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="s1">'Leaf'</span>
+ 
+    <span class="n">tree</span><span class="p">[</span><span class="s1">'type'</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">classify</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">tree</span><span class="p">[[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'type'</span><span class="p">]]</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  How the submitted approach works
+ </h2>
+ <p>
+  A missing parent marks the root. Otherwise a node that appears among parent IDs is Inner; the remaining nodes are Leaf.
+ </p>
+ <details class="reference-details">
+  <summary>
+   Source
+  </summary>
+  <div class="sources-content">
+   <p>
+    SQL.zip / 608-tree-node / submission-1.sql and submission-1.py. These are the submitted files; the summary and implementation notes describe the code, not a replacement official problem statement.
+   </p>
+   <p>
+    <a href="https://leetcode.com/problems/tree-node/" rel="noopener noreferrer" target="_blank">
+     Original problem
+    </a>
+   </p>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-in">
+     IN
+    </a>
+    <a href="#m-sql-is-null">
+     IS NULL
+    </a>
+    <a href="#m-sql-case">
+     CASE
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-filter-null">
+     Missing
+    </a>
+    <a href="#m-pd-new-column">
+     New column
+    </a>
+    <a href="#m-pd-apply">
+     apply()
+    </a>
+    <a href="#m-pd-isna">
+     Check null
+    </a>
+    <a href="#m-pd-dropna">
+     Drop null rows
+    </a>
+    <a href="#m-pd-unique">
+     unique()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#LC607">
+   <small>
+    ← Previous
+   </small>
+   607 · Sales person
+  </a>
+  <a href="#LC1158">
+   <small>
+    Next →
+   </small>
+   1158 · Market analysis I
+  </a>
+ </div>
+</article>

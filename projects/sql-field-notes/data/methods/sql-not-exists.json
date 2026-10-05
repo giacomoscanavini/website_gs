@@ -1,0 +1,45 @@
+{
+  "id": "sql-not-exists",
+  "lang": "sql",
+  "category": "Subqueries and CTEs",
+  "label": "NOT EXISTS",
+  "example": "WHERE NOT EXISTS (...)",
+  "description": "Check no row exist",
+  "source": "image-sql",
+  "related": [],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/with.html",
+  "aliases": "NOT EXISTS",
+  "uses": [
+    {
+      "page": "C20",
+      "block": "code-C20-0",
+      "line": 2,
+      "lines": [
+        2,
+        3
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT DISTINCT c.customer_id FROM Customer c\nWHERE NOT EXISTS (\n    SELECT 1 FROM Product p WHERE NOT EXISTS (\n        SELECT 1 FROM Customer bought",
+      "snippetLine": 1
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WHERE e.salary < 30000 AND e.manager_id IS NOT NULL\n  AND NOT EXISTS (SELECT 1 FROM Employees m WHERE m.employee_id = e.manager_id)\nORDER BY e.employee_id;",
+      "snippetLine": 2
+    }
+  ],
+  "pageCount": 2
+}

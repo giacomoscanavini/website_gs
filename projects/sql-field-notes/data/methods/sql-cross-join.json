@@ -1,0 +1,60 @@
+{
+  "id": "sql-cross-join",
+  "lang": "sql",
+  "category": "Joins",
+  "label": "CROSS JOIN",
+  "example": "A CROSS JOIN B",
+  "description": "Cartesian product",
+  "source": "image-sql",
+  "related": [
+    "pd-merge-cross"
+  ],
+  "note": "The SQL sheet also notes that MySQL has no native FULL OUTER JOIN. A pandas outer merge is not a MySQL syntax example.",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/join.html",
+  "aliases": "CROSS JOIN",
+  "uses": [
+    {
+      "page": "C48",
+      "block": "code-C48-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "FROM Students s\nCROSS JOIN Subjects su\nLEFT JOIN Examinations e ON s.student_id = e.student_id AND su.subject_name = e.subject_name\nGROUP BY s.student_id, s.student_name, su.subject_name",
+      "snippetLine": 2
+    },
+    {
+      "page": "C48",
+      "block": "code-C48-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Students s \nCROSS JOIN Subjects su\nLEFT JOIN Examinations e ON s.student_id = e.student_id AND su.subject_name = e.subject_name\nGROUP BY s.student_id, s.student_name, su.subject_name",
+      "snippetLine": 3
+    },
+    {
+      "page": "LC3521",
+      "block": "code-LC3521-0",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "3521 · Find product recommendation pairs",
+      "number": "3521",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        FROM ProductPurchases p1\n        CROSS JOIN ProductPurchases p2\n        WHERE p1.user_id = p2.user_id AND p1.product_id < p2.product_id\n    ), ",
+      "snippetLine": 8
+    }
+  ],
+  "pageCount": 2
+}

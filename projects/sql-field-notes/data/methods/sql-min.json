@@ -1,0 +1,174 @@
+{
+  "id": "sql-min",
+  "lang": "sql",
+  "category": "Aggregation",
+  "label": "MIN()",
+  "example": "MIN(price)",
+  "description": "Minimum",
+  "source": "image-sql",
+  "related": [
+    "pd-min"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+  "aliases": "MIN",
+  "uses": [
+    {
+      "page": "C13",
+      "block": "code-C13-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH first_login AS (\n    SELECT player_id, MIN(event_date) AS first_day FROM Activity GROUP BY player_id\n)\nSELECT ROUND(AVG(CASE WHEN EXISTS (",
+      "snippetLine": 1
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        DISTINCT player_id,\n        MIN(event_date) OVER (PARTITION BY   player_id) AS first_day\n    FROM Activity\n)",
+      "snippetLine": 3
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        DISTINCT player_id,\n        MIN(event_date) OVER (PARTITION BY player_id) AS first_day\n    FROM Activity\n)",
+      "snippetLine": 4
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT s.product_id, s.year AS first_year, s.quantity, s.price\nFROM Sales s JOIN (SELECT product_id, MIN(year) AS first_year FROM Sales GROUP BY product_id) f\nON s.product_id = f.product_id AND s.year = f.first_year;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "UNION\nSELECT employee_id, MIN(department_id) AS department_id\nFROM Employee\nGROUP BY employee_id",
+      "snippetLine": 4
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "           SUM(amount) OVER (ORDER BY visited_on RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW) AS amount,\n           MIN(visited_on) OVER () AS first_day\n    FROM daily\n)",
+      "snippetLine": 5
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-2",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        ) AS rolling_amount,\n        MIN(visited_on) OVER () AS first_date\n    FROM Customer\n)",
+      "snippetLine": 6
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-4",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        ) AS rolling_amount,\n        MIN(visited_on) OVER () AS first_date\n    FROM Customer\n)",
+      "snippetLine": 7
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-2",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    UniqueCity AS (\n        SELECT MIN(pid) AS pid\n        FROM Insurance\n        GROUP BY lat, lon",
+      "snippetLine": 8
+    },
+    {
+      "page": "squid-06",
+      "block": "code-squid-06-0",
+      "line": 30,
+      "lines": [
+        30,
+        31,
+        32
+      ],
+      "title": "Trace equipment to its first failure",
+      "number": "06",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\t\t  f.failed_equipment_id,\n\t\t  MIN(i.installation_date) AS installation_date,\n\t\t  MIN(f.failure_date) AS first_failure_date,\n\t\t  (MIN(f.failure_date) - MIN(i.installation_date)) / 365.2425 AS time_to_first_failure",
+      "snippetLine": 29
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-0",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\tc.movement_detected_time - r.last_check_time AS time_between_room_and_outside,\n\t(SELECT MAX(Camera.movement_detected_time) - MIN(Camera.movement_detected_time)\n     FROM Camera\n     WHERE Camera.guard_spotted_id IS NOT NULL) AS time_range_first_last_detection",
+      "snippetLine": 8
+    }
+  ],
+  "pageCount": 7
+}

@@ -1,0 +1,245 @@
+<article class="article" id="C48">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Problem 1280
+  </span>
+ </div>
+ <h1>
+  1280 · Students and examinations
+ </h1>
+ <p>
+  Return every student–subject combination with its exam attendance count, including zero attendance.
+ </p>
+ <p class="pattern">
+  Pattern: Cross join / grouped count / zero fill
+ </p>
+ <h2>
+  Illustrative example
+ </h2>
+ <p>
+  Ana and Bo each take Math and SQL. Ana has two Math records; Bo has one SQL record. The four output rows have counts Ana–Math 2, Ana–SQL 0, Bo–Math 0 and Bo–SQL 1.
+ </p>
+ <h2>
+  My solution
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="exercise-1280-panel-0" aria-selected="true" id="exercise-1280-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="exercise-1280-panel-1" aria-selected="false" id="exercise-1280-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="exercise-1280-tab-0" class="code-panel" id="exercise-1280-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-C48-0" tabindex="0"><code class="language-sql" data-origin="supplied-1280-sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">student_id</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">student_name</span><span class="p">,</span><span class="w"> </span><span class="n">su</span><span class="p">.</span><span class="n">subject_name</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">student_id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">attended_exams</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Students</span><span class="w"> </span><span class="n">s</span>
+<span class="k">CROSS</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Subjects</span><span class="w"> </span><span class="n">su</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Examinations</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">student_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">student_id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">su</span><span class="p">.</span><span class="n">subject_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">subject_name</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">student_id</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">student_name</span><span class="p">,</span><span class="w"> </span><span class="n">su</span><span class="p">.</span><span class="n">subject_name</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">student_id</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">student_name</span><span class="p">,</span><span class="w"> </span><span class="n">su</span><span class="p">.</span><span class="n">subject_name</span></code></pre>
+  </div>
+  <div aria-labelledby="exercise-1280-tab-1" class="code-panel" id="exercise-1280-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-C48-1" tabindex="0"><code class="language-python" data-origin="supplied-1280-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">students_and_examinations</span><span class="p">(</span><span class="n">students</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">subjects</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">examinations</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">students</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">subjects</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'cross'</span><span class="p">)</span>
+    <span class="n">exam_count</span> <span class="o">=</span> <span class="n">examinations</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">'student_id'</span><span class="p">,</span> <span class="s1">'subject_name'</span><span class="p">])</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'attended_exams'</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">exam_count</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">'student_id'</span><span class="p">,</span> <span class="s1">'subject_name'</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">'attended_exams'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'attended_exams'</span><span class="p">]</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'student_id'</span><span class="p">,</span> <span class="s1">'student_name'</span><span class="p">,</span> <span class="s1">'subject_name'</span><span class="p">,</span> <span class="s1">'attended_exams'</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">'student_id'</span><span class="p">,</span> <span class="s1">'subject_name'</span><span class="p">])</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  Why it works
+ </h2>
+ <p>
+  The cross join creates the complete student–subject grid. SQL counts matched examination student_id values, so unmatched pairs count as zero. Pandas counts exams first, merges the counts into the grid, fills missing values with zero and sorts the result.
+ </p>
+ <div class="note">
+  The cross join includes every student–subject pair. Missing exam counts are integer zeros.
+ </div>
+ <details class="reference-details">
+  <summary>
+   Source
+  </summary>
+  <div class="sources-content">
+   <p>
+    Based on the submitted SQL and pandas solutions.
+   </p>
+  </div>
+ </details>
+ <details class="original-details archive-submission">
+  <summary>
+   Uploaded submission · SQL.zip
+  </summary>
+  <p class="small">
+   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
+  </p>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="archive-1280-panel-0" aria-selected="true" id="archive-1280-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="archive-1280-panel-1" aria-selected="false" id="archive-1280-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="archive-1280-tab-0" class="code-panel" id="archive-1280-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     MySQL
+    </div>
+    <pre id="code-C48-2" tabindex="0"><code class="language-sql" data-origin="archive-1280-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">student_id</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">student_name</span><span class="p">,</span><span class="w"> </span><span class="n">su</span><span class="p">.</span><span class="n">subject_name</span><span class="p">,</span><span class="w"> </span><span class="nf">COUNT</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">student_id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">attended_exams</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Students</span><span class="w"> </span><span class="n">s</span><span class="w"> </span>
+<span class="k">CROSS</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Subjects</span><span class="w"> </span><span class="n">su</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Examinations</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">student_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">student_id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">su</span><span class="p">.</span><span class="n">subject_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">subject_name</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">student_id</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">student_name</span><span class="p">,</span><span class="w"> </span><span class="n">su</span><span class="p">.</span><span class="n">subject_name</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">student_id</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">student_name</span><span class="p">,</span><span class="w"> </span><span class="n">su</span><span class="p">.</span><span class="n">subject_name</span></code></pre>
+   </div>
+   <div aria-labelledby="archive-1280-tab-1" class="code-panel" id="archive-1280-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C48-3" tabindex="0"><code class="language-python" data-origin="archive-1280-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">students_and_examinations</span><span class="p">(</span><span class="n">students</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">subjects</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">examinations</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">students</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">subjects</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'cross'</span><span class="p">)</span>
+
+    <span class="n">exam_count</span> <span class="o">=</span> <span class="n">examinations</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">'student_id'</span><span class="p">,</span> <span class="s1">'subject_name'</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="n">attended_exams</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'subject_name'</span><span class="p">,</span> <span class="s1">'count'</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">exam_count</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">'student_id'</span><span class="p">,</span> <span class="s1">'subject_name'</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">'student_id'</span><span class="p">,</span> <span class="s1">'subject_name'</span><span class="p">])</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-and">
+     AND
+    </a>
+    <a href="#m-sql-count">
+     COUNT()
+    </a>
+    <a href="#m-sql-group-by">
+     GROUP BY
+    </a>
+    <a href="#m-sql-left-join">
+     LEFT JOIN
+    </a>
+    <a href="#m-sql-cross-join">
+     CROSS JOIN
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+    <a href="#m-sql-order-by">
+     ORDER BY
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-sort-values">
+     Sort one column
+    </a>
+    <a href="#m-pd-sort-multi">
+     Multiple columns
+    </a>
+    <a href="#m-pd-new-column">
+     New column
+    </a>
+    <a href="#m-pd-reset-index">
+     Reset index
+    </a>
+    <a href="#m-pd-fillna">
+     Fill null
+    </a>
+    <a href="#m-pd-merge-left">
+     Left merge
+    </a>
+    <a href="#m-pd-count">
+     count()
+    </a>
+    <a href="#m-pd-size">
+     size
+    </a>
+    <a href="#m-pd-groupby">
+     Basic group
+    </a>
+    <a href="#m-pd-groupby-multi">
+     Multiple groups
+    </a>
+    <a href="#m-pd-agg-named">
+     Named aggregation
+    </a>
+    <a href="#m-pd-group-size">
+     Group size
+    </a>
+    <a href="#m-pd-group-count">
+     Group count
+    </a>
+    <a href="#m-pd-merge-cross">
+     Cross merge
+    </a>
+    <a href="#m-pd-astype">
+     astype()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#C47">
+   <small>
+    ← Previous
+   </small>
+   577 · Employee bonus
+  </a>
+  <a href="#C49">
+   <small>
+    Next →
+   </small>
+   570 · Managers with at least five direct reports
+  </a>
+ </div>
+</article>

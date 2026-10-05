@@ -1,0 +1,430 @@
+<article class="article" id="C30">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Problem 1341
+  </span>
+ </div>
+ <h1>
+  1341 · Movie rating report
+ </h1>
+ <p>
+  Return the most prolific reviewer overall, then the movie with highest average rating in February 2020.
+ </p>
+ <p class="pattern">
+  Pattern: Two aggregations / tie-breaking
+ </p>
+ <h2>
+  Example
+ </h2>
+ <p>
+  Alice and Bob tie in review count → Alice. Two February movies tie in average rating → alphabetically smaller title.
+ </p>
+ <h2>
+  Study solution
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-89-panel-0" aria-selected="true" id="example-89-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="example-89-panel-1" aria-selected="false" id="example-89-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-89-tab-0" class="code-panel" id="example-89-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-C30-0" tabindex="0"><code class="language-sql" data-origin="legacy-C30-0"><span class="k">WITH</span><span class="w"> </span><span class="n">user_winner</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">MovieRating</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Users</span><span class="w"> </span><span class="n">u</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">user_id</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">DESC</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">.</span><span class="n">name</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span>
+<span class="p">),</span><span class="w"> </span><span class="n">movie_winner</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">title</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">MovieRating</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Movies</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">movie_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">movie_id</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">created_at</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">'2020-02-01'</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">created_at</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="s1">'2020-03-01'</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">movie_id</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">title</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">r</span><span class="p">.</span><span class="n">rating</span><span class="p">)</span><span class="w"> </span><span class="k">DESC</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">title</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span>
+<span class="p">),</span><span class="w"> </span><span class="n">combined</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">sequence_no</span><span class="p">,</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">user_winner</span>
+<span class="w">    </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movie_winner</span>
+<span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">combined</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">sequence_no</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-89-tab-1" class="code-panel" id="example-89-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-C30-1" tabindex="0"><code class="language-python" data-origin="legacy-C30-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">movie_rating</span><span class="p">(</span><span class="n">movies</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">users</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">movie_rating</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">movie_rating</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">created_at</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">movie_rating</span><span class="p">[</span><span class="s1">'created_at'</span><span class="p">]))</span>
+    <span class="n">users_ranked</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'user_id'</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'n_reviews'</span><span class="p">)</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">users</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'user_id'</span><span class="p">)</span>
+    <span class="n">first</span> <span class="o">=</span> <span class="n">users_ranked</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">'n_reviews'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)[[</span><span class="s1">'name'</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'name'</span><span class="p">:</span> <span class="s1">'results'</span><span class="p">})</span>
+    <span class="n">feb</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">r</span><span class="p">[</span><span class="s1">'created_at'</span><span class="p">]</span><span class="o">.</span><span class="n">ge</span><span class="p">(</span><span class="s1">'2020-02-01'</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">r</span><span class="p">[</span><span class="s1">'created_at'</span><span class="p">]</span><span class="o">.</span><span class="n">lt</span><span class="p">(</span><span class="s1">'2020-03-01'</span><span class="p">)]</span>
+    <span class="n">movies_ranked</span> <span class="o">=</span> <span class="n">feb</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'movie_id'</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">avg_rating</span><span class="o">=</span><span class="p">(</span><span class="s1">'rating'</span><span class="p">,</span> <span class="s1">'mean'</span><span class="p">))</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">movies</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'movie_id'</span><span class="p">)</span>
+    <span class="n">second</span> <span class="o">=</span> <span class="n">movies_ranked</span><span class="o">.</span><span class="n">sort_values</span><span class="p">([</span><span class="s1">'avg_rating'</span><span class="p">,</span> <span class="s1">'title'</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)[[</span><span class="s1">'title'</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'title'</span><span class="p">:</span> <span class="s1">'results'</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  Why it works
+ </h2>
+ <p>
+  Solve the two leaderboards independently, applying their different date scopes. Use ascending name/title to break ties and concatenate without deduplication.
+ </p>
+ <h2>
+  Notes
+ </h2>
+ <p>
+  User review counts use all dates. Movie averages use February 2020 only. UNION ALL preserves both result rows.
+ </p>
+ <details class="original-details">
+  <summary>
+   My approach
+  </summary>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="approach-C30-panel-0" aria-selected="true" id="approach-C30-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="approach-C30-panel-1" aria-selected="false" id="approach-C30-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="approach-C30-tab-0" class="code-panel" id="approach-C30-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     SQL
+    </div>
+    <pre id="code-C30-2" tabindex="0"><code class="language-sql" data-origin="approach-C30-sql"><span class="k">WITH</span>
+<span class="w">      </span><span class="n">ReviewPerUserID</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">nReviews</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">MovieRating</span>
+<span class="w">        </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">user_id</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">      </span><span class="n">ReviewPerUserName</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nReviews</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">name</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">ReviewPerUserID</span><span class="w">   </span><span class="n">a</span>
+<span class="w">        </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Users</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">user_id</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="n">FirstUserName</span><span class="w">   </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">AS</span><span class="w">   </span><span class="n">results</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w">   </span><span class="n">ReviewPerUserName</span>
+<span class="w">        </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">nReviews</span><span class="w"> </span><span class="k">DESC</span><span class="p">,</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">ASC</span>
+<span class="w">        </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">      </span><span class="n">MovieAvgRatingFeb</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">movie_id</span><span class="p">,</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">rating</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">avgRating</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">MovieRating</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">'2020-02-01'</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="s1">'2020-03-01'</span>
+<span class="w">        </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">movie_id</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">      </span><span class="n">MovieAvgRatingFebName</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">movie_id</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">avgRating</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">title</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w">   </span><span class="n">MovieAvgRatingFeb</span><span class="w"> </span><span class="n">a</span>
+<span class="w">        </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Movies</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">movie_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">movie_id</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">      </span><span class="n">FirstMovieName</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">results</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w">   </span><span class="n">MovieAvgRatingFebName</span>
+<span class="w">        </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">avgRating</span><span class="w"> </span><span class="k">DESC</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="k">ASC</span>
+<span class="w">        </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">results</span>
+<span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">sequence_no</span><span class="p">,</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">FirstUserName</span>
+<span class="w">    </span><span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"> </span><span class="n">results</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">FirstMovieName</span>
+<span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">combined</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">sequence_no</span><span class="p">;</span></code></pre>
+   </div>
+   <div aria-labelledby="approach-C30-tab-1" class="code-panel" id="approach-C30-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C30-3" tabindex="0"><code class="language-python" data-origin="approach-C30-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">movie_rating</span><span class="p">(</span><span class="n">movies</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">users</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">movie_rating</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">movie_rating</span> <span class="o">=</span> <span class="n">movie_rating</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">created_at</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">movie_rating</span><span class="p">[</span><span class="s1">'created_at'</span><span class="p">]))</span>
+    <span class="n">df_users</span> <span class="o">=</span>   <span class="n">movie_rating</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'user_id'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="n">nReviews</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'rating'</span><span class="p">,</span> <span class="s1">'size'</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="n">df_users</span> <span class="o">=</span>   <span class="n">df_users</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">users</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">'nReviews'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])[[</span><span class="s1">'name'</span><span class="p">,</span> <span class="s1">'nReviews'</span><span class="p">]]</span>
+    <span class="n">df_movies</span> <span class="o">=</span>   <span class="n">movie_rating</span><span class="p">[(</span><span class="n">movie_rating</span><span class="o">.</span><span class="n">created_at</span> <span class="o">&gt;=</span>   <span class="s1">'2020-02-01'</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">movie_rating</span><span class="o">.</span><span class="n">created_at</span> <span class="o">&lt;</span> <span class="s1">'2020-03-01'</span><span class="p">)]</span>
+    <span class="n">df_movies</span> <span class="o">=</span> <span class="n">df_movies</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'movie_id'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="n">avgRating</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'rating'</span><span class="p">,</span> <span class="s1">'mean'</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">df_movies</span> <span class="o">=</span>   <span class="n">df_movies</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">movies</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'movie_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">'avgRating'</span><span class="p">,</span> <span class="s1">'title'</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])[[</span><span class="s1">'title'</span><span class="p">,</span> <span class="s1">'avgRating'</span><span class="p">]]</span>
+    <span class="k">return</span>   <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_users</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)[[</span><span class="s1">'name'</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'name'</span><span class="p">:</span> <span class="s1">'results'</span><span class="p">}),</span>
+                        <span class="n">df_movies</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)[[</span><span class="s1">'title'</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'title'</span><span class="p">:</span> <span class="s1">'results'</span><span class="p">}),</span>
+                    <span class="p">])</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Sources
+  </summary>
+  <div class="sources-content">
+   <p>
+    Primary exercise basis: your uploaded Pasted markdown(3).md, exercise 1341, line 3. The exercise heading may be abbreviated in the upload; full official problem statements and schemas were not supplied.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     pandas SQL comparison
+    </a>
+    — Projection, filtering, grouping, joins and operations.
+   </p>
+  </div>
+ </details>
+ <details class="original-details archive-submission">
+  <summary>
+   Uploaded submission · SQL.zip
+  </summary>
+  <p class="small">
+   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
+  </p>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="archive-1341-panel-0" aria-selected="true" id="archive-1341-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="archive-1341-panel-1" aria-selected="false" id="archive-1341-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="archive-1341-tab-0" class="code-panel" id="archive-1341-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     MySQL
+    </div>
+    <pre id="code-C30-4" tabindex="0"><code class="language-sql" data-origin="archive-1341-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">WITH</span><span class="w"> </span>
+<span class="w">    </span><span class="n">ReviewPerUserID</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="nf">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">nReviews</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">MovieRating</span>
+<span class="w">        </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">user_id</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="n">ReviewPerUserName</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">nReviews</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="k">name</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">ReviewPerUserID</span><span class="w"> </span><span class="n">a</span>
+<span class="w">        </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Users</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">user_id</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="n">FirstUserName</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="k">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">results</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">ReviewPerUserName</span>
+<span class="w">        </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">nReviews</span><span class="w"> </span><span class="k">DESC</span><span class="p">,</span><span class="w"> </span><span class="k">name</span><span class="w"> </span><span class="k">ASC</span>
+<span class="w">        </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="n">MovieAvgRatingFeb</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">movie_id</span><span class="p">,</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">rating</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">avgRating</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">MovieRating</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="s1">'2020-02-01'</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">created_at</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="s1">'2020-03-01'</span>
+<span class="w">        </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">movie_id</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="n">MovieAvgRatingFebName</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">movie_id</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">avgRating</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">title</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">MovieAvgRatingFeb</span><span class="w"> </span><span class="n">a</span>
+<span class="w">        </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Movies</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">movie_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">movie_id</span>
+<span class="w">    </span><span class="p">),</span><span class="w"> </span>
+<span class="w">    </span><span class="n">FirstMovieName</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">results</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">MovieAvgRatingFebName</span>
+<span class="w">        </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">avgRating</span><span class="w"> </span><span class="k">DESC</span><span class="p">,</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="k">ASC</span>
+<span class="w">        </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="p">)</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="n">results</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">FirstUserName</span>
+
+<span class="k">UNION</span><span class="w"> </span><span class="k">ALL</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="n">results</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">FirstMovieName</span></code></pre>
+   </div>
+   <div aria-labelledby="archive-1341-tab-1" class="code-panel" id="archive-1341-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C30-5" tabindex="0"><code class="language-python" data-origin="archive-1341-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">movie_rating</span><span class="p">(</span><span class="n">movies</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">users</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">movie_rating</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df_users</span> <span class="o">=</span> <span class="n">movie_rating</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'user_id'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="n">nReviews</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'rating'</span><span class="p">,</span> <span class="s1">'size'</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+    <span class="n">df_users</span> <span class="o">=</span> <span class="n">df_users</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">users</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">'nReviews'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])[[</span><span class="s1">'name'</span><span class="p">,</span> <span class="s1">'nReviews'</span><span class="p">]]</span>
+
+    <span class="n">df_movies</span> <span class="o">=</span> <span class="n">movie_rating</span><span class="p">[(</span><span class="n">movie_rating</span><span class="o">.</span><span class="n">created_at</span> <span class="o">&gt;=</span> <span class="s1">'2020-02-01'</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">movie_rating</span><span class="o">.</span><span class="n">created_at</span> <span class="o">&lt;</span> <span class="s1">'2020-03-01'</span><span class="p">)]</span>
+    <span class="n">df_movies</span> <span class="o">=</span> <span class="n">df_movies</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'movie_id'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="n">avgRating</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'rating'</span><span class="p">,</span> <span class="s1">'mean'</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">df_movies</span> <span class="o">=</span> <span class="n">df_movies</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">movies</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'movie_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">'avgRating'</span><span class="p">,</span> <span class="s1">'title'</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])[[</span><span class="s1">'title'</span><span class="p">,</span> <span class="s1">'avgRating'</span><span class="p">]]</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df_users</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">]][[</span><span class="s1">'name'</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'name'</span><span class="p">:</span> <span class="s1">'results'</span><span class="p">}),</span>
+                      <span class="n">df_movies</span><span class="o">.</span><span class="n">iloc</span><span class="p">[[</span><span class="mi">0</span><span class="p">]][[</span><span class="s1">'title'</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'title'</span><span class="p">:</span> <span class="s1">'results'</span><span class="p">}),</span>
+                    <span class="p">])</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-and">
+     AND
+    </a>
+    <a href="#m-sql-count">
+     COUNT()
+    </a>
+    <a href="#m-sql-avg">
+     AVG()
+    </a>
+    <a href="#m-sql-group-by">
+     GROUP BY
+    </a>
+    <a href="#m-sql-inner-join">
+     INNER JOIN
+    </a>
+    <a href="#m-sql-left-join">
+     LEFT JOIN
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-with">
+     WITH
+    </a>
+    <a href="#m-sql-union-all">
+     UNION ALL
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+    <a href="#m-sql-order-by">
+     ORDER BY
+    </a>
+    <a href="#m-sql-limit">
+     LIMIT / OFFSET
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-loc">
+     Rows by label
+    </a>
+    <a href="#m-pd-iloc">
+     Rows by position
+    </a>
+    <a href="#m-pd-head">
+     First rows
+    </a>
+    <a href="#m-pd-filter">
+     Condition
+    </a>
+    <a href="#m-pd-and">
+     Multiple conditions
+    </a>
+    <a href="#m-pd-sort-values">
+     Sort one column
+    </a>
+    <a href="#m-pd-sort-desc">
+     Descending
+    </a>
+    <a href="#m-pd-sort-multi">
+     Multiple columns
+    </a>
+    <a href="#m-pd-assign">
+     assign()
+    </a>
+    <a href="#m-pd-rename">
+     Rename
+    </a>
+    <a href="#m-pd-reset-index">
+     Reset index
+    </a>
+    <a href="#m-pd-loc-label">
+     Access label
+    </a>
+    <a href="#m-pd-merge-inner">
+     Inner merge
+    </a>
+    <a href="#m-pd-merge-left">
+     Left merge
+    </a>
+    <a href="#m-pd-concat-rows">
+     Concatenate rows
+    </a>
+    <a href="#m-pd-mean">
+     mean()
+    </a>
+    <a href="#m-pd-size">
+     size
+    </a>
+    <a href="#m-pd-groupby">
+     Basic group
+    </a>
+    <a href="#m-pd-agg-named">
+     Named aggregation
+    </a>
+    <a href="#m-pd-group-size">
+     Group size
+    </a>
+    <a href="#m-pd-to-datetime">
+     Convert date
+    </a>
+    <a href="#m-pd-compare">
+     gt() / ge() / lt() / le()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#C29">
+   <small>
+    ← Previous
+   </small>
+   626 · Exchange seats
+  </a>
+  <a href="#C31">
+   <small>
+    Next →
+   </small>
+   1321 · Restaurant growth
+  </a>
+ </div>
+</article>

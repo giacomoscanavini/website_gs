@@ -1,0 +1,470 @@
+<section aria-labelledby="ensembles-title" class="page-view lesson-layout" id="ensembles">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     25
+    </span>
+    Part 3 · Regularization &amp; ensembles
+   </p>
+   <h1 id="ensembles-title" tabindex="-1">
+    Averaging, covariance weights, and stacking
+   </h1>
+   <p class="standfirst">
+    Understand prediction combination as a statistical problem, not simply adding models.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Regularization · PDF pp. 23–26 · §§16–19" data-page="23" data-pdf="reg" type="button">
+     Regularization · PDF pp. 23–26 · §§16–19
+    </button>
+    <button aria-label="Open source: Regularization · PDF p. 27 · §21.4" data-page="27" data-pdf="reg" type="button">
+     Regularization · PDF p. 27 · §21.4
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="average-predictions-not-explanations" href="#ensembles?section=average-predictions-not-explanations">
+     Average predictions, not explanations
+    </a>
+    <a data-section="covariance-determines-the-variance-of-the-combination" href="#ensembles?section=covariance-determines-the-variance-of-the-combination">
+     Covariance determines the variance of the combination
+    </a>
+    <a data-section="assumptions-and-practical-limitations" href="#ensembles?section=assumptions-and-practical-limitations">
+     Assumptions and practical limitations
+    </a>
+    <a data-section="stacking-learns-a-combination-function" href="#ensembles?section=stacking-learns-a-combination-function">
+     Stacking learns a combination function
+    </a>
+    <a data-section="bagging-versus-boosting" href="#ensembles?section=bagging-versus-boosting">
+     Bagging versus boosting
+    </a>
+    <a data-section="connect-to-existing-code" href="#ensembles?section=connect-to-existing-code">
+     Connect to existing code
+    </a>
+    <a data-section="implementation" href="#ensembles?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="average-predictions-not-explanations" id="ensembles--average-predictions-not-explanations">
+    Average predictions, not explanations
+   </h2>
+   <p>
+    For
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>M</mi><annotation encoding="application/x-tex">M</annotation></semantics></math>
+    component predictions, simple averaging is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>=</mo><msup><mi>M</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><msub><mo>∑</mo><mi>m</mi></msub><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>m</mi></msub></mrow><annotation encoding="application/x-tex">\hat y=M^{-1}\sum_m\hat y_m</annotation></semantics></math>
+    . Weighted averaging uses
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>=</mo><munder><mo>∑</mo><mi>m</mi></munder><msub><mi>w</mi><mi>m</mi></msub><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>m</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><munder><mo>∑</mo><mi>m</mi></munder><msub><mi>w</mi><mi>m</mi></msub><mo>=</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat y=\sum_mw_m\hat y_m,\qquad\sum_mw_m=1.</annotation></semantics></math>
+   </div>
+   <p>
+    The guide describes choosing weights on validation or out-of-fold predictions, sometimes with nonnegativity constraints to improve stability. Weights are part of model selection, not an opportunity to use the final test set for one more optimization.
+   </p>
+   <p>
+    Combining models of similar quality can help when their errors differ. Combining two nearly identical errors usually adds little. Combining a very weak predictor can also hurt, even if it is different.
+   </p>
+   <h2 data-section="covariance-determines-the-variance-of-the-combination" id="ensembles--covariance-determines-the-variance-of-the-combination">
+    Covariance determines the variance of the combination
+   </h2>
+   <p>
+    Let the prediction-error covariance matrix be
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Σ</mi><annotation encoding="application/x-tex">\Sigma</annotation></semantics></math>
+    . For unbiased estimators and weights summing to one, ensemble variance is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>e</mi><mrow><mi mathvariant="normal">e</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">s</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mi>w</mi><mi>⊤</mi></msup><mi>Σ</mi><mi>w</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(e_{\mathrm{ens}})=w^\top\Sigma w.</annotation></semantics></math>
+   </div>
+   <p>
+    To minimize that variance, form a Lagrangian for
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>min</mo><mi>w</mi></msub><msup><mi>w</mi><mi>⊤</mi></msup><mi>Σ</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">\min_w w^\top\Sigma w</annotation></semantics></math>
+    subject to
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>𝟏</mn><mi>⊤</mi></msup><mi>w</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\mathbf1^\top w=1</annotation></semantics></math>
+    . The first-order condition gives
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>Σ</mi><mi>w</mi><mo>−</mo><mi>ν</mi><mn>𝟏</mn><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">2\Sigma w-\nu\mathbf1=0</annotation></semantics></math>
+    . If
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Σ</mi><annotation encoding="application/x-tex">\Sigma</annotation></semantics></math>
+    is invertible, normalization yields the source’s result:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>w</mi><mo>*</mo></msup><mo>=</mo><mfrac><mrow><msup><mi>Σ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mn>𝟏</mn></mrow><mrow><msup><mn>𝟏</mn><mi>⊤</mi></msup><msup><mi>Σ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mn>𝟏</mn></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">w^*=\frac{\Sigma^{-1}\mathbf1}{\mathbf1^\top\Sigma^{-1}\mathbf1}.</annotation></semantics></math>
+   </div>
+   <p>
+    This formula shows why standalone accuracy is not enough. A model’s contribution depends on how its errors covary with the others.
+   </p>
+   <details class="derivation" data-derivation="optimal-weights" id="ensembles--derivation-optimal-weights">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive covariance-optimal weights and include bias in the objective
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Let model errors
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi><mo>∈</mo><msup><mi>ℝ</mi><mi>M</mi></msup></mrow><annotation encoding="application/x-tex">e\in\mathbb R^M</annotation></semantics></math>
+      be unbiased with positive-definite covariance
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Σ</mi><annotation encoding="application/x-tex">\Sigma</annotation></semantics></math>
+      . Require
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>𝟏</mn><mi>⊤</mi></msup><mi>w</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\mathbf1^\top w=1</annotation></semantics></math>
+      so a common target level is preserved. Initially allow negative weights.
+     </p>
+     <h4>
+      1 · Write the ensemble variance
+     </h4>
+     <p>
+      The combined error is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>w</mi><mi>⊤</mi></msup><mi>e</mi></mrow><annotation encoding="application/x-tex">w^\top e</annotation></semantics></math>
+      . Since
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>e</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mathbb E[e]=0</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>w</mi><mi>⊤</mi></msup><mi>e</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msup><mi>w</mi><mi>⊤</mi></msup><mi>e</mi><msup><mi>e</mi><mi>⊤</mi></msup><mi>w</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msup><mi>w</mi><mi>⊤</mi></msup><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>e</mi><msup><mi>e</mi><mi>⊤</mi></msup><mo form="postfix" stretchy="true">]</mo></mrow><mi>w</mi><mo>=</mo><msup><mi>w</mi><mi>⊤</mi></msup><mi>Σ</mi><mi>w</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[(w^\top e)^2]=\mathbb E[w^\top ee^\top w]
+=w^\top\mathbb E[ee^\top]w=w^\top\Sigma w.</annotation></semantics></math>
+     </div>
+     <h4>
+      2 · Introduce the equality constraint
+     </h4>
+     <p>
+      Use the Lagrangian
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℒ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>w</mi><mo>,</mo><mi>ν</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mi>w</mi><mi>⊤</mi></msup><mi>Σ</mi><mi>w</mi><mo>−</mo><mi>ν</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mn>𝟏</mn><mi>⊤</mi></msup><mi>w</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal L(w,\nu)=w^\top\Sigma w-\nu(\mathbf1^\top w-1).</annotation></semantics></math>
+     </div>
+     <p>
+      For symmetric
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Σ</mi><annotation encoding="application/x-tex">\Sigma</annotation></semantics></math>
+      , entrywise differentiation of
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>w</mi><mi>i</mi></msub><msub><mi>Σ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>w</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\sum_{ij}w_i\Sigma_{ij}w_j</annotation></semantics></math>
+      gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>Σ</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">2\Sigma w</annotation></semantics></math>
+      , so stationarity requires
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>Σ</mi><mi>w</mi><mo>−</mo><mi>ν</mi><mn>𝟏</mn><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">2\Sigma w-\nu\mathbf1=0</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      3 · Solve for the multiplier
+     </h4>
+     <p>
+      Because
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Σ</mi><annotation encoding="application/x-tex">\Sigma</annotation></semantics></math>
+      is invertible,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo>=</mo><mfrac><mi>ν</mi><mn>2</mn></mfrac><msup><mi>Σ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mn>𝟏</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">w=\frac\nu2\Sigma^{-1}\mathbf1.</annotation></semantics></math>
+     </div>
+     <p>
+      Substitute into
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>𝟏</mn><mi>⊤</mi></msup><mi>w</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\mathbf1^\top w=1</annotation></semantics></math>
+      :
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>ν</mi><mn>2</mn></mfrac><msup><mn>𝟏</mn><mi>⊤</mi></msup><msup><mi>Σ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mn>𝟏</mn><mo>=</mo><mn>1</mn><mspace width="1.0em"></mspace><mo>⇒</mo><mspace width="1.0em"></mspace><mfrac><mi>ν</mi><mn>2</mn></mfrac><mo>=</mo><mfrac><mn>1</mn><mrow><msup><mn>𝟏</mn><mi>⊤</mi></msup><msup><mi>Σ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mn>𝟏</mn></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac\nu2\mathbf1^\top\Sigma^{-1}\mathbf1=1
+\quad\Rightarrow\quad\frac\nu2=\frac1{\mathbf1^\top\Sigma^{-1}\mathbf1}.</annotation></semantics></math>
+     </div>
+     <p>
+      Hence
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>w</mi><mo>*</mo></msup><mo>=</mo><mfrac><mrow><msup><mi>Σ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mn>𝟏</mn></mrow><mrow><msup><mn>𝟏</mn><mi>⊤</mi></msup><msup><mi>Σ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mn>𝟏</mn></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">w^*=\frac{\Sigma^{-1}\mathbf1}{\mathbf1^\top\Sigma^{-1}\mathbf1}.</annotation></semantics></math>
+     </div>
+     <p>
+      Positive definiteness makes the quadratic strictly convex, so this feasible stationary point is the unique optimum.
+     </p>
+     <h4>
+      4 · Obtain the minimum value
+     </h4>
+     <p>
+      Put
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>=</mo><msup><mn>𝟏</mn><mi>⊤</mi></msup><msup><mi>Σ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mn>𝟏</mn></mrow><annotation encoding="application/x-tex">c=\mathbf1^\top\Sigma^{-1}\mathbf1</annotation></semantics></math>
+      . Then
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>w</mi><mrow><mi>*</mi><mi>⊤</mi></mrow></msup><mi>Σ</mi><msup><mi>w</mi><mo>*</mo></msup><mo>=</mo><mfrac><mrow><msup><mn>𝟏</mn><mi>⊤</mi></msup><msup><mi>Σ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>Σ</mi><msup><mi>Σ</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mn>𝟏</mn></mrow><msup><mi>c</mi><mn>2</mn></msup></mfrac><mo>=</mo><mfrac><mi>c</mi><msup><mi>c</mi><mn>2</mn></msup></mfrac><mo>=</mo><mfrac><mn>1</mn><mi>c</mi></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">w^{*\top}\Sigma w^*=\frac{\mathbf1^\top\Sigma^{-1}\Sigma\Sigma^{-1}\mathbf1}{c^2}=\frac c{c^2}=\frac1c.</annotation></semantics></math>
+     </div>
+     <p>
+      This quantifies why error covariance, rather than just each marginal variance, matters.
+     </p>
+     <h4>
+      5 · Identify changes that invalidate the simple formula
+     </h4>
+     <p>
+      If errors have mean vector
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>
+      , then
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>e</mi><msup><mi>e</mi><mi>⊤</mi></msup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>Σ</mi><mo>+</mo><mi>b</mi><msup><mi>b</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\mathbb E[ee^\top]=\Sigma+bb^\top</annotation></semantics></math>
+      and
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>w</mi><mi>⊤</mi></msup><mi>e</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msup><mi>w</mi><mi>⊤</mi></msup><mi>Σ</mi><mi>w</mi><mo>+</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>w</mi><mi>⊤</mi></msup><mi>b</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[(w^\top e)^2]=w^\top\Sigma w+(w^\top b)^2.</annotation></semantics></math>
+     </div>
+     <p>
+      Minimum variance is no longer identical to minimum squared error. Nonnegativity constraints
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>m</mi></msub><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">w_m\ge0</annotation></semantics></math>
+      introduce inequality constraints; singular covariance removes the inverse; estimation error can produce unstable weights. These require a modified optimization problem, regularization, or simpler weights—not blind substitution into the displayed formula.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="23" data-pdf="reg" type="button">
+       Chapter source · PDF p. 23
+      </button>
+      <a class="calculation-link" href="#ensembles?derivation=optimal-weights">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="assumptions-and-practical-limitations" id="ensembles--assumptions-and-practical-limitations">
+    Assumptions and practical limitations
+   </h2>
+   <p>
+    The expression above ignores nonnegativity constraints and assumes unbiased estimators and a usable covariance estimate. It can produce negative weights. Highly correlated predictions can make the covariance estimate ill-conditioned and the weights unstable. These limitations follow from the stated quadratic problem; the formula is not a blanket recommendation to invert an empirical covariance matrix and trust the result.
+   </p>
+   <p>
+    If the component errors have different biases, minimizing variance alone is not the same as minimizing total prediction error. A robust practical combination can therefore prefer constrained or simple weights, selected using the intended validation protocol.
+   </p>
+   <h2 data-section="stacking-learns-a-combination-function" id="ensembles--stacking-learns-a-combination-function">
+    Stacking learns a combination function
+   </h2>
+   <p>
+    Stacking trains a meta-model
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>=</mo><mi>g</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>M</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat y=g(\hat y_1,\ldots,\hat y_M).</annotation></semantics></math>
+   </div>
+   <p>
+    The base predictions act as input features. The critical data rule is that meta-model training predictions must be out-of-fold or otherwise out of sample for each base model. A base learner’s training predictions can be overly optimistic and can leak its fitted knowledge into the meta-level training process.
+   </p>
+   <p>
+    A useful expanded procedural view is: fit base models inside each training fold, predict the held-out fold, assemble those held-out predictions, and fit the meta-model on that assembled matrix. For time-dependent data, the fold design must also respect chronology. Refitting base models for deployment is a subsequent step, not a reason to replace the out-of-sample meta-training inputs with in-sample ones.
+   </p>
+   <h2 data-section="bagging-versus-boosting" id="ensembles--bagging-versus-boosting">
+    Bagging versus boosting
+   </h2>
+   <p>
+    The guide contrasts largely independent fitting plus averaging in bagging with sequential error correction in boosting. Later boosted learners focus on residual mistakes of earlier learners. This can address bias as well as variance, whereas the canonical bagging motivation is variance reduction.
+   </p>
+   <p>
+    These are different constructions. An average of independently initialized neural networks is an ensemble but not automatically classical bootstrap bagging. A meta-model over their predictions is stacking. Naming the actual source of diversity and the actual combination rule is more informative than calling all of them “ensemble learning.”
+   </p>
+   <details class="derivation" data-derivation="boosting-residual" id="ensembles--derivation-boosting-residual">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Why squared-error boosting fits residuals
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Fix training points and regard the current fitted values
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>i</mi></msub><mo>=</mo><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">F_i=F(x_i)</annotation></semantics></math>
+      as coordinates of a vector. Use empirical loss
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>F</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mo>∑</mo><mi>i</mi></msub><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mi>F</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>n</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">J(F)=\sum_i(y_i-F_i)^2/(2n)</annotation></semantics></math>
+      . A new weak learner
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
+      will provide a structured direction in this prediction space.
+     </p>
+     <h4>
+      1 · Differentiate with respect to a fitted value
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>J</mi></mrow><mrow><mi>∂</mi><msub><mi>F</mi><mi>i</mi></msub></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>n</mi></mrow></mfrac><mspace width="0.167em"></mspace><mn>2</mn><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mi>F</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><msub><mi>F</mi><mi>i</mi></msub><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub></mrow><mi>n</mi></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial J}{\partial F_i}=\frac1{2n}\,2(y_i-F_i)(-1)=\frac{F_i-y_i}{n}.</annotation></semantics></math>
+     </div>
+     <p>
+      The negative gradient is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mi>F</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">(y_i-F_i)/n</annotation></semantics></math>
+      . Apart from the shared constant
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">1/n</annotation></semantics></math>
+      , it is the residual
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>i</mi></msub><mo>=</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mi>F</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">r_i=y_i-F_i</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Approximate that direction with a learner
+     </h4>
+     <p>
+      A weak learner cannot choose arbitrary values independently at every training point. Fitting it to targets
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>r</mi><mi>i</mi></msub><annotation encoding="application/x-tex">r_i</annotation></semantics></math>
+      approximates the negative-gradient direction using its restricted function family, for example shallow trees.
+     </p>
+     <h4>
+      3 · Derive the best step along a fixed fitted learner
+     </h4>
+     <p>
+      Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>i</mi></msub><mo>=</mo><mi>h</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">h_i=h(x_i)</annotation></semantics></math>
+      and consider
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>i</mi></msub><mo>+</mo><mi>γ</mi><msub><mi>h</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">F_i+\gamma h_i</annotation></semantics></math>
+      . Then
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>γ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>n</mi></mrow></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>r</mi><mi>i</mi></msub><mo>−</mo><mi>γ</mi><msub><mi>h</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>,</mo></mrow><annotation encoding="application/x-tex">J(\gamma)=\frac1{2n}\sum_i(r_i-\gamma h_i)^2,</annotation></semantics></math>
+     </div>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>γ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mfrac><mn>1</mn><mi>n</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>h</mi><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>r</mi><mi>i</mi></msub><mo>−</mo><mi>γ</mi><msub><mi>h</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">J'(\gamma)=-\frac1n\sum_i h_i(r_i-\gamma h_i).</annotation></semantics></math>
+     </div>
+     <p>
+      Set this to zero. If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msubsup><mi>h</mi><mi>i</mi><mn>2</mn></msubsup><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sum_i h_i^2&gt;0</annotation></semantics></math>
+      , the minimizing step is
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>γ</mi><mo>*</mo></msup><mo>=</mo><mfrac><mrow><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>h</mi><mi>i</mi></msub><msub><mi>r</mi><mi>i</mi></msub></mrow><mrow><munder><mo>∑</mo><mi>i</mi></munder><msubsup><mi>h</mi><mi>i</mi><mn>2</mn></msubsup></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\gamma^*=\frac{\sum_i h_ir_i}{\sum_i h_i^2}.</annotation></semantics></math>
+     </div>
+     <p>
+      A learning-rate factor
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>η</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0&lt;\eta\le1</annotation></semantics></math>
+      may shrink this to the update
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo>←</mo><mi>F</mi><mo>+</mo><mi>η</mi><msup><mi>γ</mi><mo>*</mo></msup><mi>h</mi></mrow><annotation encoding="application/x-tex">F\leftarrow F+\eta\gamma^*h</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      4 · Separate this from bagging
+     </h4>
+     <p>
+      The new residuals depend on previous learners, so boosting is sequential. Bagging fits perturbed versions of a base problem and averages predictions instead. For other differentiable losses, the pseudo-residual is the negative derivative of that loss, not necessarily
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mi>F</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">y_i-F_i</annotation></semantics></math>
+      .
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="23" data-pdf="reg" type="button">
+       Chapter source · PDF p. 23
+      </button>
+      <a class="calculation-link" href="#ensembles?derivation=boosting-residual">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="connect-to-existing-code" id="ensembles--connect-to-existing-code">
+    Connect to existing code
+   </h2>
+   <p>
+    PyTorch’s model-ensembling tutorial shows efficient execution of multiple models with function transforms. It demonstrates the computational mechanics, not that a particular ensemble improves generalization. The scikit-learn stacking example demonstrates a trained meta-estimator and evaluates the combined predictors. Both are linked with those roles stated explicitly.
+   </p>
+   <p>
+    The source’s central advice remains: combine complementary errors under a valid evaluation scheme. Increasing model count, changing a random seed, or mixing architectures is useful only insofar as it improves the resulting prediction procedure.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="ensembles--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="ensemble">
+     <span class="resource-meta">
+      PyTorch · Vectorized ensemble example
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/intermediate/ensembling.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Model Ensembling
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Compare an explicit loop over models with a vectorized implementation. This demonstrates executing multiple models, not that those models necessarily have diverse errors or better accuracy.
+     </p>
+    </div>
+    <div class="resource" data-resource="stackingexample">
+     <span class="resource-meta">
+      scikit-learn · Official experiment + code
+     </span>
+     <a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_stack_predictors.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Combine predictors using stacking
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Inspect a complete stacked-regression example and its base estimators. Connect the construction to out-of-fold predictions and the prevention of meta-model leakage.
+     </p>
+    </div>
+   </div>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Why must stacking use out-of-fold base predictions?
+   </summary>
+   <p>
+    Predictions made on the same rows used to fit a base learner can encode its training overfit. A meta-model trained on those predictions sees an unrealistically favorable relationship. Out-of-fold or otherwise out-of-sample predictions make its training inputs closer to the base learners’ deployment behavior.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#bagging">
+    <small>
+     ← Previous
+    </small>
+    Bagging, random forests, and out-of-bag evaluation
+   </a>
+   <a href="#architecture-map">
+    <small>
+     Next →
+    </small>
+    Architectures as information flow
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="average-predictions-not-explanations" href="#ensembles?section=average-predictions-not-explanations">
+    Average predictions, not explanations
+   </a>
+   <a data-section="covariance-determines-the-variance-of-the-combination" href="#ensembles?section=covariance-determines-the-variance-of-the-combination">
+    Covariance determines the variance of the combination
+   </a>
+   <a data-section="assumptions-and-practical-limitations" href="#ensembles?section=assumptions-and-practical-limitations">
+    Assumptions and practical limitations
+   </a>
+   <a data-section="stacking-learns-a-combination-function" href="#ensembles?section=stacking-learns-a-combination-function">
+    Stacking learns a combination function
+   </a>
+   <a data-section="bagging-versus-boosting" href="#ensembles?section=bagging-versus-boosting">
+    Bagging versus boosting
+   </a>
+   <a data-section="connect-to-existing-code" href="#ensembles?section=connect-to-existing-code">
+    Connect to existing code
+   </a>
+   <a data-section="implementation" href="#ensembles?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

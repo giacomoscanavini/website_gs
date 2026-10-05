@@ -1,0 +1,1268 @@
+<section aria-labelledby="reinforcement-learning-title" class="page-view lesson-layout" id="reinforcement-learning">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     36
+    </span>
+    Part 5 · Reinforcement learning
+   </p>
+   <h1 id="reinforcement-learning-title" tabindex="-1">
+    Reinforcement learning: rewards, values, and policies
+   </h1>
+   <p class="standfirst">
+    A compact bridge from prediction to sequential decisions: MDPs, Bellman equations, Q-learning and DQN, policy gradients, and PPO.
+   </p>
+   <div class="source-bar">
+    <span>
+     Supplement · external sources
+    </span>
+    <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro.html" rel="noopener noreferrer" target="_blank">
+     RL foundations ↗
+    </a>
+    <a href="https://docs.pytorch.org/tutorials/intermediate/reinforcement_q_learning.html" rel="noopener noreferrer" target="_blank">
+     PyTorch DQN ↗
+    </a>
+    <a href="https://docs.pytorch.org/rl/stable/tutorials/coding_ppo.html" rel="noopener noreferrer" target="_blank">
+     TorchRL PPO ↗
+    </a>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="learning-from-consequences-rather-than-labels" href="#reinforcement-learning?section=learning-from-consequences-rather-than-labels">
+     Learning from consequences rather than labels
+    </a>
+    <a data-section="returns-values-and-the-bellman-equation" href="#reinforcement-learning?section=returns-values-and-the-bellman-equation">
+     Returns, values, and the Bellman equation
+    </a>
+    <a data-section="learning-values-monte-carlo-td-and-q-learning" href="#reinforcement-learning?section=learning-values-monte-carlo-td-and-q-learning">
+     Learning values: Monte Carlo, TD, and Q-learning
+    </a>
+    <a data-section="policy-gradients-advantages-and-actor-critic" href="#reinforcement-learning?section=policy-gradients-advantages-and-actor-critic">
+     Policy gradients, advantages, and actor–critic
+    </a>
+    <a data-section="practical-checks-before-trusting-a-result" href="#reinforcement-learning?section=practical-checks-before-trusting-a-result">
+     Practical checks before trusting a result
+    </a>
+    <a data-section="implementation" href="#reinforcement-learning?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <p class="rl-provenance">
+    An additional chapter based on official tutorials and primary RL references, not a chapter from the four original PDFs. The worked calculations are authored for this reader.
+   </p>
+   <h2 data-section="learning-from-consequences-rather-than-labels" id="reinforcement-learning--learning-from-consequences-rather-than-labels">
+    Learning from consequences rather than labels
+   </h2>
+   <p>
+    A supervised learner is given target answers. A reinforcement-learning
+    <strong>
+     agent
+    </strong>
+    chooses an action, receives a reward and a new observation, and learns a
+    <strong>
+     policy
+    </strong>
+    for choosing future actions. An action can change not only the next reward but also which situations the agent encounters later. The central problem is therefore
+    <strong>
+     sequential decision-making
+    </strong>
+    , not predicting a supplied correct action.
+   </p>
+   <p>
+    A robot can take a longer route to avoid a collision; a controller can accept a short-term cost to reach a more useful state. These are illustrative cases, not benchmarks. A neural network is optional: a small problem can use a table, while
+    <strong>
+     deep reinforcement learning
+    </strong>
+    uses neural networks to represent policies, value functions, or a model of the environment. A bandit is a useful simpler case where actions do not influence future decision states.
+   </p>
+   <p>
+    In a fully observed
+    <strong>
+     Markov decision process (MDP)
+    </strong>
+    , the current state and action determine the distribution of the next state and reward; earlier history contributes no additional predictive information once they are known. An observation need not be a complete state. With partial observations, history, a belief state, or a recurrent representation may be needed—the connection to the
+    <a href="#rnn">
+     RNN chapter
+    </a>
+    .
+   </p>
+   <div aria-label="Scrollable data table" class="table-scroll" role="region" tabindex="0">
+    <table>
+     <colgroup>
+      <col style="width: 50%"/>
+      <col style="width: 50%"/>
+     </colgroup>
+     <thead>
+      <tr class="header">
+       <th>
+        Quantity
+       </th>
+       <th>
+        Meaning
+       </th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr class="odd">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>t</mi></msub><mo>=</mo><mi>s</mi></mrow><annotation encoding="application/x-tex">S_t=s</annotation></semantics></math>
+       </td>
+       <td>
+        State before decision
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mi>t</mi></msub><mo>=</mo><mi>a</mi></mrow><annotation encoding="application/x-tex">A_t=a</annotation></semantics></math>
+       </td>
+       <td>
+        Action taken at that decision
+       </td>
+      </tr>
+      <tr class="odd">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">R_{t+1}</annotation></semantics></math>
+       </td>
+       <td>
+        Reward produced by that action and transition
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo>,</mo><mi>r</mi><mo>∣</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p(s',r\mid s,a)</annotation></semantics></math>
+       </td>
+       <td>
+        Environment’s next-state and reward distribution
+       </td>
+      </tr>
+      <tr class="odd">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\pi(a\mid s)</annotation></semantics></math>
+       </td>
+       <td>
+        Policy’s probability of choosing action
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
+        in state
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
+       </td>
+       <td>
+        Discount factor, which sets how future rewards enter the objective
+       </td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+   <p>
+    These definitions use
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">R_{t+1}</annotation></semantics></math>
+    for the reward
+    <strong>
+     after
+    </strong>
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>A</mi><mi>t</mi></msub><annotation encoding="application/x-tex">A_t</annotation></semantics></math>
+    ; some tutorials call the same reward
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>r</mi><mi>t</mi></msub><annotation encoding="application/x-tex">r_t</annotation></semantics></math>
+    . The indexing convention changes, not the interaction.
+    <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro.html" rel="noopener noreferrer" target="_blank">
+     Concepts and formalism ↗
+    </a>
+   </p>
+   <h2 data-section="returns-values-and-the-bellman-equation" id="reinforcement-learning--returns-values-and-the-bellman-equation">
+    Returns, values, and the Bellman equation
+   </h2>
+   <p>
+    For an episode with
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
+    actions, the return from decision
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+    is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mi>t</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>T</mi><mo>−</mo><mi>t</mi><mo>−</mo><mn>1</mn></mrow></munderover><msup><mi>γ</mi><mi>k</mi></msup><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>G</mi><mi>T</mi></msub><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">G_t=\sum_{k=0}^{T-t-1}\gamma^kR_{t+k+1},\qquad G_T=0.</annotation></semantics></math>
+   </div>
+   <p>
+    This is a
+    <strong>
+     sum of rewards
+    </strong>
+    , not the immediate reward. With bounded rewards,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><mi>γ</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0\leq\gamma&lt;1</annotation></semantics></math>
+    also makes an infinite-horizon discounted return finite. A finite episode can use
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\gamma=1</annotation></semantics></math>
+    . Discounting specifies the objective; it is not automatically a probability that the environment survives.
+   </p>
+   <p>
+    The state value
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>𝔼</mi><mi>π</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>G</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo>=</mo><mi>s</mi><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">V^\pi(s)=\mathbb E_\pi[G_t\mid S_t=s]</annotation></semantics></math>
+    asks how good a state is
+    <strong>
+     under a particular policy
+    </strong>
+    . The action value
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Q</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>𝔼</mi><mi>π</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>G</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo>=</mo><mi>s</mi><mo>,</mo><msub><mi>A</mi><mi>t</mi></msub><mo>=</mo><mi>a</mi><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">Q^\pi(s,a)=\mathbb E_\pi[G_t\mid S_t=s,A_t=a]</annotation></semantics></math>
+    asks about taking one specified action and following that policy afterward. Hence
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munder><mo>∑</mo><mi>a</mi></munder><mi>π</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><msup><mi>Q</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">V^\pi(s)=\sum_a\pi(a\mid s)Q^\pi(s,a).</annotation></semantics></math>
+   </div>
+   <p>
+    For a stationary discounted MDP, the Bellman expectation equation separates one reward from the remaining return:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munder><mo>∑</mo><mi>a</mi></munder><mi>π</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><munder><mo>∑</mo><mrow><mi>s</mi><mi>′</mi><mo>,</mo><mi>r</mi></mrow></munder><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo>,</mo><mi>r</mi><mo>∣</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">[</mo><mi>r</mi><mo>+</mo><mi>γ</mi><msup><mi>V</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">V^\pi(s)=\sum_a\pi(a\mid s)\sum_{s',r}p(s',r\mid s,a)\bigl[r+\gamma V^\pi(s')\bigr].</annotation></semantics></math>
+   </div>
+   <p>
+    Terminal states have zero
+    <strong>
+     future
+    </strong>
+    value; the reward for entering them still counts. In a finite-horizon task, value can depend on remaining time, so use
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>V</mi><mi>t</mi><mi>π</mi></msubsup><annotation encoding="application/x-tex">V_t^\pi</annotation></semantics></math>
+    or include time in the state. Averaging under
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>π</mi><annotation encoding="application/x-tex">\pi</annotation></semantics></math>
+    evaluates a policy. Replacing a future policy average by a maximum defines an optimality equation; it is a different operation.
+    <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro.html#bellman-equations" rel="noopener noreferrer" target="_blank">
+     Value functions and Bellman equations ↗
+    </a>
+   </p>
+   <details class="derivation" data-derivation="returns-bellman" id="reinforcement-learning--derivation-returns-bellman">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      From a discounted return to the Bellman equations
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      An episode takes actions
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>T</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0,\ldots,T-1</annotation></semantics></math>
+      . Its final reward is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mi>T</mi></msub><annotation encoding="application/x-tex">R_T</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mi>T</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">G_T=0</annotation></semantics></math>
+      . For the stationary Bellman form, use a stationary discounted MDP; for a finite-horizon example, include remaining time in the state. The following algebra is an authored expansion of the standard return and value definitions.
+     </p>
+     <h4 id="write-out-the-discounted-sum">
+      1 · Write out the discounted sum
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mi>t</mi></msub><mo>=</mo><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>γ</mi><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>2</mn></mrow></msub><mo>+</mo><msup><mi>γ</mi><mn>2</mn></msup><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>3</mn></mrow></msub><mo>+</mo><mi>⋯</mi><mo>+</mo><msup><mi>γ</mi><mrow><mi>T</mi><mo>−</mo><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msup><msub><mi>R</mi><mi>T</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">G_t=R_{t+1}+\gamma R_{t+2}+\gamma^2R_{t+3}+\cdots+\gamma^{T-t-1}R_T.</annotation></semantics></math>
+     </div>
+     <p>
+      The first reward has exponent zero because it is the next reward from the present decision. The next return begins one decision later:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>2</mn></mrow></msub><mo>+</mo><mi>γ</mi><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>3</mn></mrow></msub><mo>+</mo><mi>⋯</mi><mo>+</mo><msup><mi>γ</mi><mrow><mi>T</mi><mo>−</mo><mi>t</mi><mo>−</mo><mn>2</mn></mrow></msup><msub><mi>R</mi><mi>T</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">G_{t+1}=R_{t+2}+\gamma R_{t+3}+\cdots+\gamma^{T-t-2}R_T.</annotation></semantics></math>
+     </div>
+     <h4 id="factor-the-common-discount">
+      2 · Factor the common discount
+     </h4>
+     <p>
+      Every term after the first in
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>G</mi><mi>t</mi></msub><annotation encoding="application/x-tex">G_t</annotation></semantics></math>
+      contains a factor
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
+      . Factoring it leaves exactly
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>G</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">G_{t+1}</annotation></semantics></math>
+      :
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mi>t</mi></msub><mo>=</mo><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>γ</mi><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">[</mo><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>2</mn></mrow></msub><mo>+</mo><mi>γ</mi><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>3</mn></mrow></msub><mo>+</mo><mi>⋯</mi><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">]</mo><mo>=</mo><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>γ</mi><msub><mi>G</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">G_t=R_{t+1}+\gamma\bigl[R_{t+2}+\gamma R_{t+3}+\cdots\bigr]=R_{t+1}+\gamma G_{t+1}.</annotation></semantics></math>
+     </div>
+     <p>
+      At the last decision this gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mrow><mi>T</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>R</mi><mi>T</mi></msub><mo>+</mo><mi>γ</mi><mo>⋅</mo><mn>0</mn><mo>=</mo><msub><mi>R</mi><mi>T</mi></msub></mrow><annotation encoding="application/x-tex">G_{T-1}=R_T+\gamma\cdot0=R_T</annotation></semantics></math>
+      . The same identity holds for a convergent infinite discounted sum.
+     </p>
+     <h4 id="condition-on-the-present-state">
+      3 · Condition on the present state
+     </h4>
+     <p>
+      By definition and linearity of conditional expectation,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>𝔼</mi><mi>π</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>γ</mi><msub><mi>G</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo>=</mo><mi>s</mi><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">V^\pi(s)=\mathbb E_\pi[R_{t+1}+\gamma G_{t+1}\mid S_t=s].</annotation></semantics></math>
+     </div>
+     <p>
+      First condition on the action, then on the next state and reward. The action has probability
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\pi(a\mid s)</annotation></semantics></math>
+      and the transition has probability
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo>,</mo><mi>r</mi><mo>∣</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p(s',r\mid s,a)</annotation></semantics></math>
+      . The Markov property and continuation under the same policy make the expected remaining return
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">V^\pi(s')</annotation></semantics></math>
+      :
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munder><mo>∑</mo><mi>a</mi></munder><mi>π</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><munder><mo>∑</mo><mrow><mi>s</mi><mi>′</mi><mo>,</mo><mi>r</mi></mrow></munder><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo>,</mo><mi>r</mi><mo>∣</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">[</mo><mi>r</mi><mo>+</mo><mi>γ</mi><msup><mi>V</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">V^\pi(s)=\sum_a\pi(a\mid s)\sum_{s',r}p(s',r\mid s,a)\bigl[r+\gamma V^\pi(s')\bigr].</annotation></semantics></math>
+     </div>
+     <p>
+      These are sums for discrete states/rewards; continuous quantities require integrals. For a finite horizon without time in the state, replace the left value by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>V</mi><mi>t</mi><mi>π</mi></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">V_t^\pi(s)</annotation></semantics></math>
+      and the continuation by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>V</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow><mi>π</mi></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">V_{t+1}^\pi(s')</annotation></semantics></math>
+      .
+     </p>
+     <h4 id="hold-the-first-action-fixed">
+      4 · Hold the first action fixed
+     </h4>
+     <p>
+      If the first action is specified rather than sampled, remove the first policy average:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Q</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munder><mo>∑</mo><mrow><mi>s</mi><mi>′</mi><mo>,</mo><mi>r</mi></mrow></munder><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo>,</mo><mi>r</mi><mo>∣</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">[</mo><mi>r</mi><mo>+</mo><mi>γ</mi><msup><mi>V</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">Q^\pi(s,a)=\sum_{s',r}p(s',r\mid s,a)\bigl[r+\gamma V^\pi(s')\bigr].</annotation></semantics></math>
+     </div>
+     <p>
+      Under an optimal policy, the best next-state value is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>max</mo><mrow><mi>a</mi><mi>′</mi></mrow></msub><msup><mi>Q</mi><mo>*</mo></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo>,</mo><mi>a</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\max_{a'}Q^*(s',a')</annotation></semantics></math>
+      , giving
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>Q</mi><mo>*</mo></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munder><mo>∑</mo><mrow><mi>s</mi><mi>′</mi><mo>,</mo><mi>r</mi></mrow></munder><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo>,</mo><mi>r</mi><mo>∣</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">[</mo><mi>r</mi><mo>+</mo><mi>γ</mi><munder><mo>max</mo><mrow><mi>a</mi><mi>′</mi></mrow></munder><msup><mi>Q</mi><mo>*</mo></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo>,</mo><mi>a</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">Q^*(s,a)=\sum_{s',r}p(s',r\mid s,a)\bigl[r+\gamma\max_{a'}Q^*(s',a')\bigr].</annotation></semantics></math>
+     </div>
+     <p>
+      The maximum stays
+      <strong>
+       inside
+      </strong>
+      the next-state expectation because the next action is chosen after observing the next state. It is not a maximum over the environment’s random outcomes.
+     </p>
+     <h4 id="work-backward-through-a-small-choice">
+      5 · Work backward through a small choice
+     </h4>
+     <p>
+      At
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>s</mi><mn>0</mn></msub><annotation encoding="application/x-tex">s_0</annotation></semantics></math>
+      , either collect reward
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2</mn><annotation encoding="application/x-tex">2</annotation></semantics></math>
+      and stop, or wait through rewards
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>4</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(0,0,4)</annotation></semantics></math>
+      before stopping. After choosing to wait, the two remaining actions are forced. With
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">\gamma=0.9</annotation></semantics></math>
+      ,
+     </p>
+     <p>
+      <div class="math-display" tabindex="0">
+       <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>s</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>4</mn><mo>,</mo><mspace width="2.0em"></mspace><mi>V</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>s</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0</mn><mo>+</mo><mn>0.9</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>4</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>3.6</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">V(s_2)=4,\qquad V(s_1)=0+0.9(4)=3.6,</annotation></semantics></math>
+      </div>
+      <div class="math-display" tabindex="0">
+       <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>s</mi><mn>0</mn></msub><mo>,</mo><mrow><mi mathvariant="normal">w</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">t</mi></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0</mn><mo>+</mo><mn>0.9</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>3.6</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>3.24</mn><mo>,</mo><mspace width="2.0em"></mspace><mi>Q</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>s</mi><mn>0</mn></msub><mo>,</mo><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">p</mi></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>2</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">Q(s_0,\mathrm{wait})=0+0.9(3.6)=3.24,\qquad Q(s_0,\mathrm{stop})=2.</annotation></semantics></math>
+      </div>
+     </p>
+     <p>
+      If the policy waits with probability
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">p=0.5</annotation></semantics></math>
+      , its starting value is
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>s</mi><mn>0</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn><mo>+</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>4</mn><msup><mi>γ</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.5</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0.5</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>3.24</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>2.62</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">V^\pi(s_0)=(1-p)2+p(4\gamma^2)=0.5(2)+0.5(3.24)=2.62.</annotation></semantics></math>
+     </div>
+     <p>
+      The optimal action is wait when
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><msup><mi>γ</mi><mn>2</mn></msup><mo>&gt;</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">4\gamma^2&gt;2</annotation></semantics></math>
+      , so the threshold is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>&gt;</mo><msqrt><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msqrt><mo>≈</mo><mn>0.7071</mn></mrow><annotation encoding="application/x-tex">\gamma&gt;\sqrt{1/2}\approx0.7071</annotation></semantics></math>
+      . Changing
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
+      changes the preference even though neither path’s actual rewards change.
+     </p>
+     <figure aria-label="Immediate reward versus delayed return" class="rl-visual" id="rl-discount-calculation">
+      <div class="visual-heading">
+       <strong>
+        Take 2 now, or 4 two steps later?
+       </strong>
+       <button id="rl-reset" type="button">
+        Reset
+       </button>
+      </div>
+      <div class="visual-controls">
+       <div class="visual-control">
+        <label for="rl-gamma">
+         Discount γ
+        </label>
+        <input aria-describedby="rl-value-output" id="rl-gamma" max="1" min="0" step="0.01" type="range" value="0.9"/>
+        <output for="rl-gamma" id="rl-gamma-output">
+         0.90
+        </output>
+       </div>
+       <div class="visual-control">
+        <label for="rl-wait-prob">
+         Probability of waiting
+        </label>
+        <input aria-describedby="rl-value-output" id="rl-wait-prob" max="1" min="0" step="0.05" type="range" value="0.5"/>
+        <output for="rl-wait-prob" id="rl-prob-output">
+         0.50
+        </output>
+       </div>
+      </div>
+      <div aria-label="Discounted return comparison, shared scale from zero to four" class="rl-bars">
+       <div class="rl-bar-row">
+        <span>
+         Stop now
+        </span>
+        <div class="rl-track">
+         <div class="rl-bar" id="rl-stop-bar" style="width:50%">
+         </div>
+        </div>
+        <output id="rl-stop-value">
+         2.000
+        </output>
+       </div>
+       <div class="rl-bar-row">
+        <span>
+         Wait
+        </span>
+        <div class="rl-track">
+         <div class="rl-bar rl-delayed" id="rl-wait-bar" style="width:81%">
+         </div>
+        </div>
+        <output id="rl-wait-value">
+         3.240
+        </output>
+       </div>
+       <div class="rl-bar-row">
+        <span>
+         Policy value
+        </span>
+        <div class="rl-track">
+         <div class="rl-bar rl-mixture" id="rl-policy-bar" style="width:65.5%">
+         </div>
+        </div>
+        <output id="rl-policy-value">
+         2.620
+        </output>
+       </div>
+      </div>
+      <figcaption aria-live="polite" class="visual-output" id="rl-value-output">
+       At γ = 0.90, waiting returns 3.240. A policy that waits half the time has expected return 2.620. The optimal choice is wait.
+      </figcaption>
+      <p class="visual-note">
+       Authored deterministic example · γ = 1 is allowed because both paths terminate · the probability slider selects a fixed policy, not a trained agent
+      </p>
+     </figure>
+     <div class="derivation-footer">
+      <span>
+       Authored expansion · external reference
+      </span>
+      <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro.html" rel="noopener noreferrer" target="_blank">
+       OpenAI Spinning Up
+      </a>
+      <a class="calculation-link" href="#reinforcement-learning?derivation=returns-bellman">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="learning-values-monte-carlo-td-and-q-learning" id="reinforcement-learning--learning-values-monte-carlo-td-and-q-learning">
+    Learning values: Monte Carlo, TD, and Q-learning
+   </h2>
+   <p>
+    An agent often does not know
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
+    . It can learn from sampled transitions instead.
+    <strong>
+     Monte Carlo
+    </strong>
+    estimates a value using an observed return after an episode finishes.
+    <strong>
+     Temporal-difference (TD)
+    </strong>
+    learning uses an estimated future value to construct a target immediately; this is called
+    <strong>
+     bootstrapping
+    </strong>
+    . Here, bootstrapping is not the resampling procedure in the bagging chapter.
+   </p>
+   <p>
+    For estimating the value of the policy generating the data, TD(0) uses
+   </p>
+   <p>
+    <div class="math-display" tabindex="0">
+     <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mi>t</mi></msub><mo>=</mo><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>γ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>d</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>V</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>S</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>V</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\delta_t=R_{t+1}+\gamma(1-d_t)V(S_{t+1})-V(S_t),</annotation></semantics></math>
+    </div>
+    <div class="math-display" tabindex="0">
+     <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>←</mo><mi>V</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>α</mi><msub><mi>δ</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">V(S_t)\leftarrow V(S_t)+\alpha\delta_t.</annotation></semantics></math>
+    </div>
+   </p>
+   <p>
+    Here
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>t</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">d_t=1</annotation></semantics></math>
+    only for a true terminal transition and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+    is the learning rate. Monte Carlo avoids a bootstrapped target but can have high variance; TD can update sooner, while errors in its current value estimate influence its target.
+   </p>
+   <p>
+    <strong>
+     Q-learning
+    </strong>
+    instead moves toward a target containing the best estimated next action:
+   </p>
+   <p>
+    <div class="math-display" tabindex="0">
+     <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>t</mi></msub><mo>=</mo><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>γ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>d</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><munder><mo>max</mo><mrow><mi>a</mi><mi>′</mi></mrow></munder><mi>Q</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>S</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><mi>a</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">y_t=R_{t+1}+\gamma(1-d_t)\max_{a'}Q(S_{t+1},a'),</annotation></semantics></math>
+    </div>
+    <div class="math-display" tabindex="0">
+     <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>S</mi><mi>t</mi></msub><mo>,</mo><msub><mi>A</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>←</mo><mi>Q</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>S</mi><mi>t</mi></msub><mo>,</mo><msub><mi>A</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>α</mi><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">[</mo><msub><mi>y</mi><mi>t</mi></msub><mo>−</mo><mi>Q</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>S</mi><mi>t</mi></msub><mo>,</mo><msub><mi>A</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">]</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">Q(S_t,A_t)\leftarrow Q(S_t,A_t)+\alpha\bigl[y_t-Q(S_t,A_t)\bigr].</annotation></semantics></math>
+    </div>
+   </p>
+   <p>
+    It is
+    <strong>
+     off-policy
+    </strong>
+    : the behavior policy collecting experience can be exploratory even though the target uses a greedy next action. By contrast, SARSA uses the next action actually sampled under its behavior policy in the target. With
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math>
+    -greedy exploration, choose a random action with probability
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math>
+    and a greedy action otherwise. Exploitation uses what has been learned; exploration can discover better alternatives.
+   </p>
+   <details class="derivation" data-derivation="q-update" id="reinforcement-learning--derivation-q-update">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      A Q-learning target and update, one calculation at a time
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      One observed transition is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>s</mi><mi>′</mi><mo>,</mo><mi>d</mi><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(s,a,r,s',d)</annotation></semantics></math>
+      , where
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>
+      records genuine termination. Use a scalar table entry
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mi>Q</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">q=Q(s,a)</annotation></semantics></math>
+      and hold the target fixed during this update. This calculation describes a tabular Q-learning step and then its neural-network analogue; it is not a convergence proof.
+     </p>
+     <h4 id="form-the-continuation-target">
+      1 · Form the continuation target
+     </h4>
+     <p>
+      For a nonterminal transition, choose the largest estimated next-action value, then discount it and add the observed reward:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mi>r</mi><mo>+</mo><mi>γ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>d</mi><mo form="postfix" stretchy="true">)</mo></mrow><munder><mo>max</mo><mrow><mi>a</mi><mi>′</mi></mrow></munder><mi>Q</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo>,</mo><mi>a</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">y=r+\gamma(1-d)\max_{a'}Q(s',a').</annotation></semantics></math>
+     </div>
+     <p>
+      When
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">d=1</annotation></semantics></math>
+      , the future term vanishes but the immediate reward remains. A sampled target is not the same as the exact Bellman expectation.
+     </p>
+     <h4 id="measure-the-prediction-error">
+      2 · Measure the prediction error
+     </h4>
+     <p>
+      Define
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mi>y</mi><mo>−</mo><mi>q</mi></mrow><annotation encoding="application/x-tex">\delta=y-q</annotation></semantics></math>
+      . A positive
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>
+      means the target is above the current estimate. Use a half-squared loss to make the derivative simple:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>ℓ</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\ell(q)=\tfrac12(q-y)^2.</annotation></semantics></math>
+     </div>
+     <h4 id="differentiate-and-take-a-descent-step">
+      3 · Differentiate and take a descent step
+     </h4>
+     <p>
+      The derivative of the square is twice its argument. The inner derivative is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>
+      because
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
+      is fixed:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>d</mi><mo>ℓ</mo></mrow><mrow><mi>d</mi><mi>q</mi></mrow></mfrac><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><mo>⋅</mo><mn>2</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>⋅</mo><mn>1</mn><mo>=</mo><mi>q</mi><mo>−</mo><mi>y</mi><mo>=</mo><mi>−</mi><mi>δ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{d\ell}{dq}=\tfrac12\cdot2(q-y)\cdot1=q-y=-\delta.</annotation></semantics></math>
+     </div>
+     <p>
+      Gradient descent subtracts this derivative:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow></msub><mo>=</mo><mi>q</mi><mo>−</mo><mi>α</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>q</mi><mo>+</mo><mi>α</mi><mi>δ</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>q</mi><mo>+</mo><mi>α</mi><mi>y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">q_{\mathrm{new}}=q-\alpha(q-y)=q+\alpha\delta=(1-\alpha)q+\alpha y.</annotation></semantics></math>
+     </div>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><mi>α</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0\leq\alpha\leq1</annotation></semantics></math>
+      , this is a weighted average of the old estimate and the target.
+     </p>
+     <h4 id="substitute-actual-values">
+      4 · Substitute actual values
+     </h4>
+     <p>
+      Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>1.5</mn></mrow><annotation encoding="application/x-tex">q=1.5</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">r=1</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">\gamma=0.9</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>max</mo><mrow><mi>a</mi><mi>′</mi></mrow></msub><mi>Q</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>′</mi><mo>,</mo><mi>a</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">\max_{a'}Q(s',a')=3</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">d=0</annotation></semantics></math>
+      , and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">\alpha=0.2</annotation></semantics></math>
+      :
+     </p>
+     <p>
+      <div class="math-display" tabindex="0">
+       <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>1</mn><mo>+</mo><mn>0.9</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>3</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>3.7</mn><mo>,</mo><mspace width="2.0em"></mspace><mi>δ</mi><mo>=</mo><mn>3.7</mn><mo>−</mo><mn>1.5</mn><mo>=</mo><mn>2.2</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">y=1+0.9(3)=3.7,\qquad\delta=3.7-1.5=2.2,</annotation></semantics></math>
+      </div>
+      <div class="math-display" tabindex="0">
+       <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow></msub><mo>=</mo><mn>1.5</mn><mo>+</mo><mn>0.2</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>2.2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1.94</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">q_{\mathrm{new}}=1.5+0.2(2.2)=1.94.</annotation></semantics></math>
+      </div>
+     </p>
+     <p>
+      For the otherwise identical
+      <strong>
+       terminal
+      </strong>
+      transition,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">y=1</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow></msub><mo>=</mo><mn>1.5</mn><mo>+</mo><mn>0.2</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mn>1.5</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1.4</mn></mrow><annotation encoding="application/x-tex">q_{\mathrm{new}}=1.5+0.2(1-1.5)=1.4</annotation></semantics></math>
+      . Confusing an artificial time cutoff with termination would therefore change the target and update.
+     </p>
+     <h4 id="replace-the-table-entry-with-a-network-prediction">
+      5 · Replace the table entry with a network prediction
+     </h4>
+     <p>
+      For network parameters
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
+      , the chain rule gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>θ</mi></msub><mo>ℓ</mo><mo>=</mo><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">(</mo><msub><mi>Q</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>y</mi><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">)</mo><msub><mi>∇</mi><mi>θ</mi></msub><msub><mi>Q</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_\theta\ell=\bigl(Q_\theta(s,a)-y\bigr)\nabla_\theta Q_\theta(s,a).</annotation></semantics></math>
+     </div>
+     <p>
+      A target network
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Q</mi><mover><mi>θ</mi><mo accent="true">‾</mo></mover></msub><annotation encoding="application/x-tex">Q_{\bar\theta}</annotation></semantics></math>
+      forms
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
+      with fixed parameters and disabled gradient tracking. The shared network update can change many state-action predictions at once, unlike updating one table entry. DQN often replaces the squared loss with Huber/Smooth L1 loss to limit the influence of large residuals. The official tutorial shows that implementation explicitly.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Authored expansion · external reference
+      </span>
+      <a href="https://docs.pytorch.org/tutorials/intermediate/reinforcement_q_learning.html" rel="noopener noreferrer" target="_blank">
+       PyTorch
+      </a>
+      <a class="calculation-link" href="#reinforcement-learning?derivation=q-update">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h3 id="when-the-value-table-becomes-a-neural-network">
+    When the value table becomes a neural network
+   </h3>
+   <p>
+    A
+    <strong>
+     Deep Q-Network (DQN)
+    </strong>
+    predicts one action value per discrete action. It regresses the selected
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">Q_\theta(s,a)</annotation></semantics></math>
+    toward a target computed without gradient tracking. Experience replay reuses transitions and reduces the correlation within training batches; a separate, more slowly updated target network reduces target movement. These stabilize training, but do not guarantee convergence of nonlinear Q-learning. Q-values are returns, not class probabilities: no output softmax is needed.
+   </p>
+   <p>
+    The
+    <a href="https://docs.pytorch.org/tutorials/intermediate/reinforcement_q_learning.html" rel="noopener noreferrer" target="_blank">
+     official PyTorch DQN tutorial
+    </a>
+    provides the complete CartPole example and training curves. Inspect
+    <code>
+     select_action
+    </code>
+    , the replay buffer,
+    <code>
+     gather
+    </code>
+    for chosen-action values, and the
+    <code>
+     torch.no_grad()
+    </code>
+    target inside
+    <code>
+     optimize_model
+    </code>
+    rather than duplicating the whole training program here.
+   </p>
+   <h2 data-section="policy-gradients-advantages-and-actor-critic" id="reinforcement-learning--policy-gradients-advantages-and-actor-critic">
+    Policy gradients, advantages, and actor–critic
+   </h2>
+   <p>
+    Value-based methods infer an action from estimated returns.
+    <strong>
+     Policy-gradient methods
+    </strong>
+    directly adjust a differentiable policy
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mi>θ</mi></msub><annotation encoding="application/x-tex">\pi_\theta</annotation></semantics></math>
+    to increase expected return. For discrete actions, a network can produce logits for a categorical distribution; for continuous actions, it can parameterize a suitable probability density.
+   </p>
+   <p>
+    For complete finite episodes, define
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>𝔼</mi><mrow><mi>τ</mi><mo>∼</mo><msub><mi>π</mi><mi>θ</mi></msub></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>G</mi><mn>0</mn></msub><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">J(\theta)=\mathbb E_{\tau\sim\pi_\theta}[G_0]</annotation></semantics></math>
+    . A reward-to-go policy gradient is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>θ</mi></msub><mi>J</mi><mo>=</mo><mi>𝔼</mi><mspace width="-0.167em"></mspace><mrow><mo form="prefix" stretchy="true">[</mo><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>T</mi><mo>−</mo><mn>1</mn></mrow></munderover><msup><mi>γ</mi><mi>t</mi></msup><msub><mi>G</mi><mi>t</mi></msub><msub><mi>∇</mi><mi>θ</mi></msub><mo>log</mo><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>A</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_\theta J=\mathbb E\!\left[\sum_{t=0}^{T-1}\gamma^tG_t\nabla_\theta\log\pi_\theta(A_t\mid S_t)\right].</annotation></semantics></math>
+   </div>
+   <p>
+    The explicit
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>γ</mi><mi>t</mi></msup><annotation encoding="application/x-tex">\gamma^t</annotation></semantics></math>
+    matches the discounted start-state objective above. Undiscounted finite-horizon formulations set
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\gamma=1</annotation></semantics></math>
+    ; alternative sampling or weighting conventions must not be silently interchanged.
+   </p>
+   <p>
+    <strong>
+     REINFORCE
+    </strong>
+    estimates this gradient using sampled returns. It does not need to differentiate through the environment: it differentiates the probability of the sampled action sequence. An action-independent baseline
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mi>t</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">b_t(S_t)</annotation></semantics></math>
+    can be subtracted without changing the expected score-function gradient. A good value baseline often reduces variance, but an arbitrary baseline need not do so.
+   </p>
+   <p>
+    An
+    <strong>
+     actor–critic
+    </strong>
+    learns a policy (the actor) together with a value estimator (the critic). The advantage
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>A</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mi>Q</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><msup><mi>V</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">A^\pi(s,a)=Q^\pi(s,a)-V^\pi(s)</annotation></semantics></math>
+   </div>
+   <p>
+    measures an action relative to the policy’s usual performance in that state. A one-step TD residual supplies an advantage estimate: with an exact critic its conditional expectation is the advantage; an approximate critic introduces error. In the actor’s surrogate loss, treat the return/advantage weights as fixed—typically with
+    <code>
+     .detach()
+    </code>
+    —and train the critic with its own objective.
+    <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html" rel="noopener noreferrer" target="_blank">
+     Policy-gradient derivation and PyTorch example ↗
+    </a>
+   </p>
+   <details class="derivation" data-derivation="policy-gradient" id="reinforcement-learning--derivation-policy-gradient">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Why the policy gradient uses log probabilities and returns
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Consider complete episodes padded to a finite horizon
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
+      with zero rewards after termination. The initial-state law and transition/reward kernel do not depend on policy parameters
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
+      . Assume a differentiable policy with parameter-independent support and conditions permitting differentiation under the expectation. Expectations below are under the
+      <strong>
+       current
+      </strong>
+      policy. The derivation keeps the discount factors explicit.
+     </p>
+     <h4 id="write-a-trajectorys-probability">
+      1 · Write a trajectory’s probability
+     </h4>
+     <p>
+      A trajectory is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>s</mi><mn>0</mn></msub><mo>,</mo><msub><mi>a</mi><mn>0</mn></msub><mo>,</mo><msub><mi>r</mi><mn>1</mn></msub><mo>,</mo><msub><mi>s</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>a</mi><mrow><mi>T</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>r</mi><mi>T</mi></msub><mo>,</mo><msub><mi>s</mi><mi>T</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\tau=(s_0,a_0,r_1,s_1,\ldots,a_{T-1},r_T,s_T)</annotation></semantics></math>
+      . Multiplying the initial-state probability and each conditional choice/transition gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>τ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>ρ</mi><mn>0</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>s</mi><mn>0</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><munderover><mo>∏</mo><mrow><mi>t</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>T</mi><mo>−</mo><mn>1</mn></mrow></munderover><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>a</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>s</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>s</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>r</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>∣</mo><msub><mi>s</mi><mi>t</mi></msub><mo>,</mo><msub><mi>a</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">p_\theta(\tau)=\rho_0(s_0)\prod_{t=0}^{T-1}\pi_\theta(a_t\mid s_t)p(s_{t+1},r_{t+1}\mid s_t,a_t).</annotation></semantics></math>
+     </div>
+     <p>
+      Only the policy factors involve
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
+      . Continuous quantities use densities rather than point probabilities.
+     </p>
+     <h4 id="differentiate-expected-return">
+      2 · Differentiate expected return
+     </h4>
+     <p>
+      Write
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mo>∑</mo><mi>τ</mi></msub><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>τ</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>G</mi><mn>0</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>τ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">J(\theta)=\sum_\tau p_\theta(\tau)G_0(\tau)</annotation></semantics></math>
+      . For a fixed trajectory,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mn>0</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>τ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">G_0(\tau)</annotation></semantics></math>
+      is fixed. From the derivative of a logarithm,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>θ</mi></msub><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>τ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><msub><mi>∇</mi><mi>θ</mi></msub><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>τ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>τ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_\theta\log p_\theta(\tau)=\frac{\nabla_\theta p_\theta(\tau)}{p_\theta(\tau)}.</annotation></semantics></math>
+     </div>
+     <p>
+      Rearrange and substitute into the derivative of
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>
+      :
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>θ</mi></msub><mi>J</mi><mo>=</mo><munder><mo>∑</mo><mi>τ</mi></munder><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>τ</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>G</mi><mn>0</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>τ</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>∇</mi><mi>θ</mi></msub><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>τ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>G</mi><mn>0</mn></msub><msub><mi>∇</mi><mi>θ</mi></msub><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>τ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_\theta J=\sum_\tau p_\theta(\tau)G_0(\tau)\nabla_\theta\log p_\theta(\tau)
+=\mathbb E[G_0\nabla_\theta\log p_\theta(\tau)].</annotation></semantics></math>
+     </div>
+     <p>
+      This is the score-function identity. For continuous trajectories, make the same argument with integrals.
+     </p>
+     <h4 id="differentiate-the-log-of-the-product">
+      3 · Differentiate the log of the product
+     </h4>
+     <p>
+      Taking the log converts the policy product into a sum. Initial-state and environment terms differentiate to zero:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>θ</mi></msub><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>τ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>T</mi><mo>−</mo><mn>1</mn></mrow></munderover><msub><mi>∇</mi><mi>θ</mi></msub><mo>log</mo><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>A</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_\theta\log p_\theta(\tau)=\sum_{t=0}^{T-1}\nabla_\theta\log\pi_\theta(A_t\mid S_t).</annotation></semantics></math>
+     </div>
+     <p>
+      Therefore
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>θ</mi></msub><mi>J</mi><mo>=</mo><mi>𝔼</mi><mspace width="-0.167em"></mspace><mrow><mo form="prefix" stretchy="true">[</mo><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>T</mi><mo>−</mo><mn>1</mn></mrow></munderover><msub><mi>G</mi><mn>0</mn></msub><msub><mi>∇</mi><mi>θ</mi></msub><mo>log</mo><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>A</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_\theta J=\mathbb E\!\left[\sum_{t=0}^{T-1}G_0\nabla_\theta\log\pi_\theta(A_t\mid S_t)\right].</annotation></semantics></math>
+     </div>
+     <p>
+      No derivative through the environment appears. We differentiate how likely the sampled trajectory is, not how a black-box environment changes when an action changes.
+     </p>
+     <h4 id="prove-why-past-rewards-contribute-zero">
+      4 · Prove why past rewards contribute zero
+     </h4>
+     <p>
+      Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>ℋ</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\mathcal H_t</annotation></semantics></math>
+      be all history before choosing
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>A</mi><mi>t</mi></msub><annotation encoding="application/x-tex">A_t</annotation></semantics></math>
+      . Conditional on it, past rewards are fixed. The expected policy score is
+     </p>
+     <p>
+      <div class="math-display" tabindex="0">
+       <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>∇</mi><mi>θ</mi></msub><mo>log</mo><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>A</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>∣</mo><msub><mi>ℋ</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><munder><mo>∑</mo><mi>a</mi></munder><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mfrac><mrow><msub><mi>∇</mi><mi>θ</mi></msub><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac></mrow><annotation encoding="application/x-tex">\mathbb E[\nabla_\theta\log\pi_\theta(A_t\mid S_t)\mid\mathcal H_t]
+=\sum_a\pi_\theta(a\mid S_t)\frac{\nabla_\theta\pi_\theta(a\mid S_t)}{\pi_\theta(a\mid S_t)}</annotation></semantics></math>
+      </div>
+      <div class="math-display" tabindex="0">
+       <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><msub><mi>∇</mi><mi>θ</mi></msub><munder><mo>∑</mo><mi>a</mi></munder><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>∇</mi><mi>θ</mi></msub><mn>1</mn><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">=\nabla_\theta\sum_a\pi_\theta(a\mid S_t)=\nabla_\theta1=0.</annotation></semantics></math>
+      </div>
+     </p>
+     <p>
+      Multiplying by any fixed past reward and then averaging still gives zero. Thus only rewards resulting from decision
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+      or later need to weight its score.
+     </p>
+     <h4 id="keep-the-remaining-discount-factors">
+      5 · Keep the remaining discount factors
+     </h4>
+     <p>
+      Removing past rewards leaves
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mi>t</mi></mrow><mrow><mi>T</mi><mo>−</mo><mn>1</mn></mrow></msubsup><msup><mi>γ</mi><mi>k</mi></msup><msub><mi>R</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">\sum_{k=t}^{T-1}\gamma^k R_{k+1}</annotation></semantics></math>
+      . Factor out
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>γ</mi><mi>t</mi></msup><annotation encoding="application/x-tex">\gamma^t</annotation></semantics></math>
+      :
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mi>t</mi></mrow><mrow><mi>T</mi><mo>−</mo><mn>1</mn></mrow></munderover><msup><mi>γ</mi><mi>k</mi></msup><msub><mi>R</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msup><mi>γ</mi><mi>t</mi></msup><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mi>t</mi></mrow><mrow><mi>T</mi><mo>−</mo><mn>1</mn></mrow></munderover><msup><mi>γ</mi><mrow><mi>k</mi><mo>−</mo><mi>t</mi></mrow></msup><msub><mi>R</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msup><mi>γ</mi><mi>t</mi></msup><msub><mi>G</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\sum_{k=t}^{T-1}\gamma^kR_{k+1}
+=\gamma^t\sum_{k=t}^{T-1}\gamma^{k-t}R_{k+1}=\gamma^tG_t.</annotation></semantics></math>
+     </div>
+     <p>
+      Substitute this into the score expression:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>θ</mi></msub><mi>J</mi><mo>=</mo><mi>𝔼</mi><mspace width="-0.167em"></mspace><mrow><mo form="prefix" stretchy="true">[</mo><munderover><mo>∑</mo><mrow><mi>t</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>T</mi><mo>−</mo><mn>1</mn></mrow></munderover><msup><mi>γ</mi><mi>t</mi></msup><msub><mi>G</mi><mi>t</mi></msub><msub><mi>∇</mi><mi>θ</mi></msub><mo>log</mo><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>A</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_\theta J=\mathbb E\!\left[\sum_{t=0}^{T-1}\gamma^tG_t\nabla_\theta\log\pi_\theta(A_t\mid S_t)\right].</annotation></semantics></math>
+     </div>
+     <p>
+      This is the finite-horizon discounted, start-state objective’s gradient. Dropping
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>γ</mi><mi>t</mi></msup><annotation encoding="application/x-tex">\gamma^t</annotation></semantics></math>
+      while keeping discounted
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>G</mi><mi>t</mi></msub><annotation encoding="application/x-tex">G_t</annotation></semantics></math>
+      generally gives a different estimator unless the weighting/sampling convention accounts for it.
+     </p>
+     <h4 id="show-that-an-action-independent-baseline-has-zero-expectation">
+      6 · Show that an action-independent baseline has zero expectation
+     </h4>
+     <p>
+      For a fixed state/time and a baseline
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mi>t</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">b_t(s)</annotation></semantics></math>
+      treated as fixed,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mo>∑</mo><mi>a</mi></munder><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>b</mi><mi>t</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>∇</mi><mi>θ</mi></msub><mo>log</mo><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>b</mi><mi>t</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>∇</mi><mi>θ</mi></msub><munder><mo>∑</mo><mi>a</mi></munder><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>∣</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\sum_a\pi_\theta(a\mid s)b_t(s)\nabla_\theta\log\pi_\theta(a\mid s)
+=b_t(s)\nabla_\theta\sum_a\pi_\theta(a\mid s)=0.</annotation></semantics></math>
+     </div>
+     <p>
+      Consequently
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mi>t</mi></msub><mo>−</mo><msub><mi>b</mi><mi>t</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">G_t-b_t(S_t)</annotation></semantics></math>
+      can replace
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>G</mi><mi>t</mi></msub><annotation encoding="application/x-tex">G_t</annotation></semantics></math>
+      without changing the expected score gradient. The baseline must not depend on the current sampled action; when fitted from the same samples, the simple conditional proof needs extra care. A critic computed from earlier data and held fixed during the actor update is the intended construction here.
+     </p>
+     <h4 id="connect-return-weights-to-advantage">
+      7 · Connect return weights to advantage
+     </h4>
+     <p>
+      Conditioning on
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mi>t</mi></msub><mo>=</mo><mi>s</mi><mo>,</mo><msub><mi>A</mi><mi>t</mi></msub><mo>=</mo><mi>a</mi></mrow><annotation encoding="application/x-tex">S_t=s,A_t=a</annotation></semantics></math>
+      gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>G</mi><mi>t</mi></msub><mo>∣</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msup><mi>Q</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbb E[G_t\mid s,a]=Q^\pi(s,a)</annotation></semantics></math>
+      . With the exact value baseline,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>G</mi><mi>t</mi></msub><mo>−</mo><msup><mi>V</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>∣</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msup><mi>Q</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><msup><mi>V</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mi>A</mi><mi>π</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[G_t-V^\pi(S_t)\mid s,a]=Q^\pi(s,a)-V^\pi(s)=A^\pi(s,a).</annotation></semantics></math>
+     </div>
+     <p>
+      The same is true for the conditional expectation of a one-step TD residual when its critic is exact. Approximate bootstrapped critics can add bias; the equality does not make every practical advantage estimator exact.
+     </p>
+     <h4 id="convert-ascent-into-a-loss-for-automatic-differentiation">
+      8 · Convert ascent into a loss for automatic differentiation
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>
+      freshly sampled complete episodes, a local surrogate loss is
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>L</mi><mo accent="true">̂</mo></mover><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">r</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><munder><mo>∑</mo><mi>t</mi></munder><msup><mi>γ</mi><mi>t</mi></msup><mspace width="0.167em"></mspace><mo>sg</mo><mspace width="-0.167em"></mspace><mo form="prefix" maxsize="1.2" minsize="1.2" stretchy="false">(</mo><msub><mi>G</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>−</mo><msub><mi>b</mi><mi>t</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>S</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" maxsize="1.2" minsize="1.2" stretchy="false">)</mo><mo>log</mo><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>A</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>∣</mo><msub><mi>S</mi><mrow><mi>i</mi><mo>,</mo><mi>t</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\widehat L_{\mathrm{actor}}(\theta)=-\frac1N\sum_{i=1}^N\sum_t
+\gamma^t\,\operatorname{sg}\!\bigl(G_{i,t}-b_t(S_{i,t})\bigr)
+\log\pi_\theta(A_{i,t}\mid S_{i,t}).</annotation></semantics></math>
+     </div>
+     <p>
+      Here
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>sg</mo><annotation encoding="application/x-tex">\operatorname{sg}</annotation></semantics></math>
+      means stop-gradient. At the parameters that collected the data, the negative gradient is the sampled ascent estimator. The division is by episodes for the stated objective; averaging all transitions can change weighting, especially with variable episode lengths. The scalar surrogate’s absolute value is not a direct measure of policy quality, and stale off-policy data require a different estimator or correction.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Authored expansion · external reference
+      </span>
+      <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html" rel="noopener noreferrer" target="_blank">
+       OpenAI Spinning Up
+      </a>
+      <a class="calculation-link" href="#reinforcement-learning?derivation=policy-gradient">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h3 id="where-ppo-fits">
+    Where PPO fits
+   </h3>
+   <p>
+    <strong>
+     Proximal Policy Optimization (PPO-Clip)
+    </strong>
+    is an actor–critic policy-gradient method that compares the new policy with the policy used to collect the current batch. Its clipped surrogate limits the incentive to make an already-favorable probability change much larger. It is not a hard bound on every probability ratio, nor a guarantee that true return increases after an update.
+   </p>
+   <details class="derivation" data-derivation="ppo-clipping" id="reinforcement-learning--derivation-ppo-clipping">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      PPO clipping: follow the positive and negative advantage cases
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      A batch was collected with
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>π</mi><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">d</mi></mrow></msub><annotation encoding="application/x-tex">\pi_{\mathrm{old}}</annotation></semantics></math>
+      . Freeze its log probabilities and advantage estimates
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>A</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\hat A_t</annotation></semantics></math>
+      while optimizing the actor. Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>ϵ</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0&lt;\epsilon&lt;1</annotation></semantics></math>
+      . The following explains PPO-Clip’s chosen surrogate; it is not a derivation of a guaranteed improvement in the true return.
+     </p>
+     <h4 id="compare-the-new-and-old-probability-of-the-sampled-action">
+      1 · Compare the new and old probability of the sampled action
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>t</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>A</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><msub><mi>π</mi><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">d</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>A</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mo>=</mo><mo>exp</mo><mspace width="-0.167em"></mspace><mrow><mo form="prefix" stretchy="true">(</mo><mo>log</mo><msub><mi>π</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>A</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mo>log</mo><msub><mi>π</mi><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">d</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>A</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>S</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">r_t(\theta)=\frac{\pi_\theta(A_t\mid S_t)}{\pi_{\mathrm{old}}(A_t\mid S_t)}
+=\exp\!\left(\log\pi_\theta(A_t\mid S_t)-\log\pi_{\mathrm{old}}(A_t\mid S_t)\right).</annotation></semantics></math>
+     </div>
+     <p>
+      A ratio above one means that the new policy assigns greater probability to that action. This
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>r</mi><mi>t</mi></msub><annotation encoding="application/x-tex">r_t</annotation></semantics></math>
+      is a probability
+      <strong>
+       ratio
+      </strong>
+      , not the reward
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>R</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">R_{t+1}</annotation></semantics></math>
+      .
+     </p>
+     <h4 id="write-the-per-sample-clipped-objective">
+      2 · Write the per-sample clipped objective
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>ℓ</mo><mi>t</mi><mrow><mi mathvariant="normal">c</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">p</mi></mrow></msubsup><mo>=</mo><mo>min</mo><mspace width="-0.167em"></mspace><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>r</mi><mi>t</mi></msub><msub><mover><mi>A</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>,</mo><mspace width="0.222em"></mspace><mo>clip</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>r</mi><mi>t</mi></msub><mo>,</mo><mn>1</mn><mo>−</mo><mi>ϵ</mi><mo>,</mo><mn>1</mn><mo>+</mo><mi>ϵ</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mover><mi>A</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\ell_t^{\mathrm{clip}}=\min\!\left(r_t\hat A_t,\ \operatorname{clip}(r_t,1-\epsilon,1+\epsilon)\hat A_t\right).</annotation></semantics></math>
+     </div>
+     <p>
+      The actor maximizes the batch average; a minimization optimizer uses its negative. Value and entropy terms are separate additions in a complete implementation.
+     </p>
+     <h4 id="handle-the-advantage-signs-separately">
+      3 · Handle the advantage signs separately
+     </h4>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>A</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\hat A_t&gt;0</annotation></semantics></math>
+      , increasing the ratio improves the unclipped term. Comparing the two terms gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>ℓ</mo><mi>t</mi><mrow><mi mathvariant="normal">c</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">p</mi></mrow></msubsup><mo>=</mo><msub><mover><mi>A</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>min</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>r</mi><mi>t</mi></msub><mo>,</mo><mn>1</mn><mo>+</mo><mi>ϵ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\ell_t^{\mathrm{clip}}=\hat A_t\min(r_t,1+\epsilon).</annotation></semantics></math>
+     </div>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>A</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\hat A_t&lt;0</annotation></semantics></math>
+      , multiplication reverses the ordering, so
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>ℓ</mo><mi>t</mi><mrow><mi mathvariant="normal">c</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">p</mi></mrow></msubsup><mo>=</mo><msub><mover><mi>A</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>max</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>r</mi><mi>t</mi></msub><mo>,</mo><mn>1</mn><mo>−</mo><mi>ϵ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\ell_t^{\mathrm{clip}}=\hat A_t\max(r_t,1-\epsilon).</annotation></semantics></math>
+     </div>
+     <p>
+      For zero advantage both are zero. Only the incentive for an excessive
+      <strong>
+       favorable
+      </strong>
+      change is flattened: increased probability for a positive-advantage action, or decreased probability for a negative-advantage action.
+     </p>
+     <h4 id="substitute-numbers-and-interpret-the-limit">
+      4 · Substitute numbers and interpret the limit
+     </h4>
+     <p>
+      With
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">\epsilon=0.2</annotation></semantics></math>
+      , positive advantage
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>A</mi><mo accent="true">̂</mo></mover><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\hat A=2</annotation></semantics></math>
+      , and ratio
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mn>1.4</mn></mrow><annotation encoding="application/x-tex">r=1.4</annotation></semantics></math>
+      , the two terms are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2.8</mn><annotation encoding="application/x-tex">2.8</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2.4</mn><annotation encoding="application/x-tex">2.4</annotation></semantics></math>
+      , so the contribution is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2.4</mn><annotation encoding="application/x-tex">2.4</annotation></semantics></math>
+      . With
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>A</mi><mo accent="true">̂</mo></mover><mo>=</mo><mi>−</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\hat A=-2</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mn>0.6</mn></mrow><annotation encoding="application/x-tex">r=0.6</annotation></semantics></math>
+      , the two terms are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.2</mn></mrow><annotation encoding="application/x-tex">-1.2</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.6</mn></mrow><annotation encoding="application/x-tex">-1.6</annotation></semantics></math>
+      , so it is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.6</mn></mrow><annotation encoding="application/x-tex">-1.6</annotation></semantics></math>
+      .
+     </p>
+     <p>
+      The ratio can still leave the interval because parameters are shared across observations and other loss terms also update them. Clipping therefore does not enforce a global trust-region constraint. The official TorchRL implementation and original paper provide the full algorithm beyond this single-sample calculation.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Authored expansion · external reference
+      </span>
+      <a href="https://arxiv.org/abs/1707.06347" rel="noopener noreferrer" target="_blank">
+       Schulman et al.
+      </a>
+      <a class="calculation-link" href="#reinforcement-learning?derivation=ppo-clipping">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <p>
+    The
+    <a href="https://docs.pytorch.org/rl/stable/tutorials/coding_ppo.html" rel="noopener noreferrer" target="_blank">
+     TorchRL PPO tutorial
+    </a>
+    implements a stochastic actor, value network, generalized advantage estimation (GAE), the clipped objective, and evaluation plots. GAE combines TD residuals at different horizons. PPO ordinarily collects fresh on-policy batches and takes several updates on each batch; this is not unrestricted reuse of arbitrary old data as in DQN. The
+    <a href="https://arxiv.org/abs/1707.06347" rel="noopener noreferrer" target="_blank">
+     original PPO paper
+    </a>
+    gives the algorithmic rationale.
+   </p>
+   <h2 data-section="practical-checks-before-trusting-a-result" id="reinforcement-learning--practical-checks-before-trusting-a-result">
+    Practical checks before trusting a result
+   </h2>
+   <p>
+    <strong>
+     Termination is not truncation.
+    </strong>
+    A true terminal state has no continuation value. An artificial rollout/time cutoff in an otherwise continuing task normally still needs bootstrapping from the final observation. End the collection episode on
+    <code>
+     terminated or truncated
+    </code>
+    , but suppress the bootstrap on
+    <code>
+     terminated
+    </code>
+    . A genuine finite task horizon is part of the state/task definition. Never bootstrap from the next episode’s reset observation.
+    <a href="https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/" rel="noopener noreferrer" target="_blank">
+     Gymnasium’s worked explanation ↗
+    </a>
+   </p>
+   <p>
+    <strong>
+     Evaluate the behavior, not only the surrogate loss.
+    </strong>
+    Check held-out rollouts, multiple random seeds, episode returns, failure rates, and environment interactions used. A low TD or actor loss does not by itself mean a useful policy. Keep evaluation settings explicit, including whether actions are sampled or chosen deterministically. A reward is a proxy for the task: maximizing it can exploit a simulator shortcut or an unintended incentive.
+    <a href="https://spinningup.openai.com/en/latest/spinningup/spinningup.html" rel="noopener noreferrer" target="_blank">
+     Evaluation and debugging guidance ↗
+    </a>
+   </p>
+   <p>
+    This is a foundations supplement, not a complete treatment of continuous-control algorithms, offline RL, model-based planning, or reinforcement learning from human feedback. The aim is to connect familiar networks, gradients, and losses to the extra issue RL introduces:
+    <strong>
+     the learner’s decisions influence its future training experience
+    </strong>
+    .
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="reinforcement-learning--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Complete official examples already provide the training code and visualizations. Follow the relevant calculation into these implementations.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="rl-dqn">
+     <span class="resource-meta">
+      PyTorch · Complete training example + plots
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/intermediate/reinforcement_q_learning.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Reinforcement Learning (DQN) Tutorial
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Train a CartPole agent. Trace epsilon-greedy actions, replay sampling, chosen-action Q-values, the detached target, and episode-duration curves.
+     </p>
+    </div>
+    <div class="resource" data-resource="rl-policy">
+     <span class="resource-meta">
+      OpenAI Spinning Up · Derivation + PyTorch examples
+     </span>
+     <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Introduction to Policy Optimization
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Follow the probability-of-a-trajectory proof and the small categorical-policy / reward-to-go implementations. These older educational scripts use legacy environment APIs; consult current Gymnasium termination handling before adapting them.
+     </p>
+    </div>
+    <div class="resource" data-resource="rl-ppo">
+     <span class="resource-meta">
+      PyTorch / TorchRL · Complete training example + plots
+     </span>
+     <a href="https://docs.pytorch.org/rl/stable/tutorials/coding_ppo.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Reinforcement Learning (PPO) with TorchRL
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Inspect the stochastic actor, value network, GAE estimates, ClipPPOLoss, and rollout evaluation. Use the tutorial’s own dependency and environment setup; TorchRL is an additional package.
+     </p>
+    </div>
+    <div class="resource" data-resource="rl-time-limits">
+     <span class="resource-meta">
+      Farama / Gymnasium · Worked implementation caveat
+     </span>
+     <a href="https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/" rel="noopener noreferrer" target="_blank">
+      <span>
+       Handling Time Limits
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Compare termination and truncation, then inspect which flag masks the bootstrap term. A final observation is not the next episode’s reset state.
+     </p>
+    </div>
+   </div>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Why is predicting the next reward not enough?
+   </summary>
+   <p>
+    An action changes the next state and therefore later opportunities. Immediate-reward prediction omits those later consequences; a return and its value function account for them under the chosen policy and discount convention.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#graphs">
+    <small>
+     ← Previous
+    </small>
+    GNNs, graph attention, and relational bottlenecks
+   </a>
+   <a href="#sources">
+    <small>
+     Continue
+    </small>
+    Sources &amp; official examples →
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="learning-from-consequences-rather-than-labels" href="#reinforcement-learning?section=learning-from-consequences-rather-than-labels">
+    Learning from consequences rather than labels
+   </a>
+   <a data-section="returns-values-and-the-bellman-equation" href="#reinforcement-learning?section=returns-values-and-the-bellman-equation">
+    Returns, values, and the Bellman equation
+   </a>
+   <a data-section="learning-values-monte-carlo-td-and-q-learning" href="#reinforcement-learning?section=learning-values-monte-carlo-td-and-q-learning">
+    Learning values: Monte Carlo, TD, and Q-learning
+   </a>
+   <a data-section="policy-gradients-advantages-and-actor-critic" href="#reinforcement-learning?section=policy-gradients-advantages-and-actor-critic">
+    Policy gradients, advantages, and actor–critic
+   </a>
+   <a data-section="practical-checks-before-trusting-a-result" href="#reinforcement-learning?section=practical-checks-before-trusting-a-result">
+    Practical checks before trusting a result
+   </a>
+   <a data-section="implementation" href="#reinforcement-learning?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

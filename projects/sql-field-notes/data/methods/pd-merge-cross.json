@@ -1,0 +1,60 @@
+{
+  "id": "pd-merge-cross",
+  "lang": "pd",
+  "category": "Also used in these notes",
+  "label": "Cross merge",
+  "example": "a.merge(b, how='cross')",
+  "description": "Every pair of rows",
+  "source": "saved-code",
+  "related": [
+    "sql-cross-join"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "cross",
+  "uses": [
+    {
+      "page": "C48",
+      "block": "code-C48-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def students_and_examinations(students: pd.DataFrame, subjects: pd.DataFrame, examinations: pd.DataFrame) -> pd.DataFrame:\n    df = students.merge(subjects, how='cross')\n    exam_count = examinations.groupby(['student_id', 'subject_name']).size().reset_index(name='attended_exams')\n    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left')",
+      "snippetLine": 3
+    },
+    {
+      "page": "C48",
+      "block": "code-C48-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def students_and_examinations(students: pd.DataFrame, subjects: pd.DataFrame, examinations: pd.DataFrame) -> pd.DataFrame:\n    df = students.merge(subjects, how='cross')\n\n    exam_count = examinations.groupby(by=['student_id', 'subject_name']).agg(",
+      "snippetLine": 3
+    },
+    {
+      "page": "LC3521",
+      "block": "code-LC3521-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "3521 · Find product recommendation pairs",
+      "number": "3521",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def find_product_recommendation_pairs(product_purchases: pd.DataFrame, product_info: pd.DataFrame) -> pd.DataFrame:\n    df = product_purchases.merge(product_purchases, how='cross', suffixes=['_1', '_2'])\n    df = df[(df.user_id_1 == df.user_id_2) & (df.product_id_1 < df.product_id_2)]\n    df = df.rename(columns={",
+      "snippetLine": 3
+    }
+  ],
+  "pageCount": 2
+}

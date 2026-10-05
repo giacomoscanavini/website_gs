@@ -1,0 +1,47 @@
+{
+  "id": "pd-first-group",
+  "lang": "pd",
+  "category": "Very common interview / LeetCode patterns",
+  "label": "First row per group",
+  "example": "df.sort_values('date').groupby('id').first()",
+  "description": "Earliest row",
+  "source": "image-pandas",
+  "related": [
+    "sql-first-value",
+    "sql-first-row"
+  ],
+  "note": "The image labels this “first row”, but groupby.first() takes the first non-missing value in each column by default. With missing data, those values can come from different rows. Sort and use groupby.head(1) when you need an intact row.",
+  "doc": "https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.first.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-1",
+      "line": 22,
+      "lines": [
+        22
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = df.sort_values(by=['season', 'total_quantity', 'total_revenue'], ascending=[True, False, False])\n    return df.groupby(by='season').first().reset_index()\n    \n    ",
+      "snippetLine": 21
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-1",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df['rating3'] = df['rating2'].shift(-1)\n    df = df.groupby(by='employee_id').first().reset_index()\n    df = df[(df.rating > df.rating2) & (df.rating2 > df.rating3)]\n    df['improvement_score'] = df['rating'] - df['rating3']",
+      "snippetLine": 15
+    }
+  ],
+  "pageCount": 2
+}

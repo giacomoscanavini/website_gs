@@ -1,0 +1,75 @@
+{
+  "id": "pd-duplicated",
+  "lang": "pd",
+  "category": "Duplicates",
+  "label": "Find duplicates",
+  "example": "df.duplicated()",
+  "description": "Duplicate mask",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "duplicated",
+  "uses": [
+    {
+      "page": "C19",
+      "block": "code-C19-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def biggest_single_number(my_numbers: pd.DataFrame) -> pd.DataFrame:\n    s = my_numbers.loc[~my_numbers['num'].duplicated(keep=False), 'num'].dropna()\n    return pd.DataFrame({'num': [s.max() if not s.empty else None]})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-1",
+      "line": 9,
+      "lines": [
+        9,
+        10
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def find_investments(insurance: pd.DataFrame) -> pd.DataFrame:\n    shared_value = insurance['tiv_2015'].duplicated(keep=False)\n    unique_location = ~insurance[['lat', 'lon']].duplicated(keep=False)\n    total = insurance.loc[shared_value & unique_location, 'tiv_2016'].sum(min_count=1)",
+      "snippetLine": 8
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-3",
+      "line": 8,
+      "lines": [
+        8,
+        9
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def find_investments(insurance: pd.DataFrame) -> pd.DataFrame:\n    flag_nonunique_tiv = insurance['tiv_2015'].duplicated(keep=False)\n    flag_unique_city = ~insurance[['lat', 'lon']].duplicated(keep=False)\n",
+      "snippetLine": 7
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-5",
+      "line": 4,
+      "lines": [
+        4,
+        5
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def find_investments(insurance: pd.DataFrame) -> pd.DataFrame:\n    flag_nonunique_tiv = insurance['tiv_2015'].duplicated(keep=False)\n    flag_unique_city = ~insurance[['lat', 'lon']].duplicated(keep=False)\n    ",
+      "snippetLine": 3
+    }
+  ],
+  "pageCount": 2
+}

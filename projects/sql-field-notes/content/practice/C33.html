@@ -1,0 +1,343 @@
+<article class="article" id="C33">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Problem 585
+  </span>
+ </div>
+ <h1>
+  585 · Investments in 2016
+ </h1>
+ <p>
+  Sum tiv_2016 when tiv_2015 is shared and the (lat, lon) location is unique.
+ </p>
+ <p class="pattern">
+  Pattern: Window counts / duplicate masks
+ </p>
+ <h2>
+  Example
+ </h2>
+ <p>
+  Two rows share tiv_2015=10 and have distinct unique locations with tiv_2016 values 20 and 30 → sum 50.00.
+ </p>
+ <h2>
+  Study solution
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-92-panel-0" aria-selected="true" id="example-92-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="example-92-panel-1" aria-selected="false" id="example-92-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-92-tab-0" class="code-panel" id="example-92-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-C33-0" tabindex="0"><code class="language-sql" data-origin="legacy-C33-0"><span class="k">WITH</span><span class="w"> </span><span class="n">marked</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">tiv_2015</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">value_count</span><span class="p">,</span>
+<span class="w">           </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">lat</span><span class="p">,</span><span class="w"> </span><span class="n">lon</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">location_count</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Insurance</span>
+<span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">tiv_2016</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">tiv_2016</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">marked</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">value_count</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">location_count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-92-tab-1" class="code-panel" id="example-92-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-C33-1" tabindex="0"><code class="language-python" data-origin="legacy-C33-1"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">round_half_up</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">digits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">value</span><span class="p">):</span> <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">'nan'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">scaleb</span><span class="p">(</span><span class="o">-</span><span class="n">digits</span><span class="p">),</span> <span class="n">rounding</span><span class="o">=</span><span class="n">ROUND_HALF_UP</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">find_investments</span><span class="p">(</span><span class="n">insurance</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">shared_value</span> <span class="o">=</span> <span class="n">insurance</span><span class="p">[</span><span class="s1">'tiv_2015'</span><span class="p">]</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">unique_location</span> <span class="o">=</span> <span class="o">~</span><span class="n">insurance</span><span class="p">[[</span><span class="s1">'lat'</span><span class="p">,</span> <span class="s1">'lon'</span><span class="p">]]</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">insurance</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">shared_value</span> <span class="o">&amp;</span> <span class="n">unique_location</span><span class="p">,</span> <span class="s1">'tiv_2016'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">min_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'tiv_2016'</span><span class="p">:</span> <span class="p">[</span><span class="n">round_half_up</span><span class="p">(</span><span class="n">total</span><span class="p">)]})</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  Why it works
+ </h2>
+ <p>
+  Calculate both criteria on the complete input before filtering. A location is unique as a pair, not by requiring latitude and longitude each to be unique separately.
+ </p>
+ <h2>
+  Notes
+ </h2>
+ <p>
+  Criterion fields are nonmissing. When no row qualifies, return a missing total, matching SQL SUM.
+ </p>
+ <details class="original-details">
+  <summary>
+   My approach
+  </summary>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="approach-C33-panel-0" aria-selected="true" id="approach-C33-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="approach-C33-panel-1" aria-selected="false" id="approach-C33-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="approach-C33-tab-0" class="code-panel" id="approach-C33-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     SQL
+    </div>
+    <pre id="code-C33-2" tabindex="0"><code class="language-sql" data-origin="approach-C33-sql"><span class="k">WITH</span>
+<span class="w">    </span><span class="n">NonUniqueTIV</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">tiv_2015</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">Insurance</span>
+<span class="w">        </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">tiv_2015</span>
+<span class="w">        </span><span class="k">HAVING</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="n">UniqueCity</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="k">MIN</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">pid</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">Insurance</span>
+<span class="w">        </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">lat</span><span class="p">,</span><span class="w"> </span><span class="n">lon</span>
+<span class="w">        </span><span class="k">HAVING</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="p">)</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">tiv_2016</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">tiv_2016</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Insurance</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">UniqueCity</span><span class="p">)</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">tiv_2015</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">tiv_2015</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">NonUniqueTIV</span><span class="p">);</span></code></pre>
+   </div>
+   <div aria-labelledby="approach-C33-tab-1" class="code-panel" id="approach-C33-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C33-3" tabindex="0"><code class="language-python" data-origin="approach-C33-python"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">round_half_up</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">digits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">value</span><span class="p">):</span> <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">'nan'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">scaleb</span><span class="p">(</span><span class="o">-</span><span class="n">digits</span><span class="p">),</span> <span class="n">rounding</span><span class="o">=</span><span class="n">ROUND_HALF_UP</span><span class="p">))</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_investments</span><span class="p">(</span><span class="n">insurance</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">flag_nonunique_tiv</span> <span class="o">=</span> <span class="n">insurance</span><span class="p">[</span><span class="s1">'tiv_2015'</span><span class="p">]</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">flag_unique_city</span> <span class="o">=</span> <span class="o">~</span><span class="n">insurance</span><span class="p">[[</span><span class="s1">'lat'</span><span class="p">,</span> <span class="s1">'lon'</span><span class="p">]]</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="n">df</span> <span class="o">=</span>   <span class="n">insurance</span><span class="p">[</span><span class="n">flag_nonunique_tiv</span> <span class="o">&amp;</span> <span class="n">flag_unique_city</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'tiv_2016'</span><span class="p">:</span> <span class="p">[</span><span class="n">round_half_up</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'tiv_2016'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">min_count</span><span class="o">=</span><span class="mi">1</span><span class="p">))]})</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Sources
+  </summary>
+  <div class="sources-content">
+   <p>
+    Primary exercise basis: your uploaded Pasted markdown(3).md, exercise 585, line 3. The exercise heading may be abbreviated in the upload; full official problem statements and schemas were not supplied.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     pandas SQL comparison
+    </a>
+    — Projection, filtering, grouping, joins and operations.
+   </p>
+   <p>
+    <a href="https://dev.mysql.com/doc/refman/8.4/en/group-by-handling.html" rel="noopener noreferrer" target="_blank">
+     MySQL grouping
+    </a>
+    — ONLY_FULL_GROUP_BY and functional dependence.
+   </p>
+   <p>
+    <a href="https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html" rel="noopener noreferrer" target="_blank">
+     MySQL rounding
+    </a>
+    — Exact versus approximate numeric rounding.
+   </p>
+  </div>
+ </details>
+ <details class="original-details archive-submission">
+  <summary>
+   Uploaded submission · SQL.zip
+  </summary>
+  <p class="small">
+   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
+  </p>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="archive-585-panel-0" aria-selected="true" id="archive-585-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="archive-585-panel-1" aria-selected="false" id="archive-585-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="archive-585-tab-0" class="code-panel" id="archive-585-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     MySQL
+    </div>
+    <pre id="code-C33-4" tabindex="0"><code class="language-sql" data-origin="archive-585-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">WITH</span><span class="w"> </span>
+<span class="w">    </span><span class="n">NonUniqueTIV</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">tiv_2015</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">Insurance</span>
+<span class="w">        </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">tiv_2015</span>
+<span class="w">        </span><span class="k">HAVING</span><span class="w"> </span><span class="nf">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="n">UniqueCity</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">pid</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">Insurance</span>
+<span class="w">        </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">lat</span><span class="p">,</span><span class="w"> </span><span class="n">lon</span>
+<span class="w">        </span><span class="k">HAVING</span><span class="w"> </span><span class="nf">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="w">    </span>
+<span class="k">SELECT</span><span class="w"> </span><span class="nf">ROUND</span><span class="p">(</span><span class="nf">SUM</span><span class="p">(</span><span class="n">tiv_2016</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">tiv_2016</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Insurance</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">pid</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">UniqueCity</span><span class="p">)</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">tiv_2015</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">tiv_2015</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">NonUniqueTIV</span><span class="p">)</span></code></pre>
+   </div>
+   <div aria-labelledby="archive-585-tab-1" class="code-panel" id="archive-585-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C33-5" tabindex="0"><code class="language-python" data-origin="archive-585-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">find_investments</span><span class="p">(</span><span class="n">insurance</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">flag_nonunique_tiv</span> <span class="o">=</span> <span class="n">insurance</span><span class="p">[</span><span class="s1">'tiv_2015'</span><span class="p">]</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">flag_unique_city</span> <span class="o">=</span> <span class="o">~</span><span class="n">insurance</span><span class="p">[[</span><span class="s1">'lat'</span><span class="p">,</span> <span class="s1">'lon'</span><span class="p">]]</span><span class="o">.</span><span class="n">duplicated</span><span class="p">(</span><span class="n">keep</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    
+    <span class="n">df</span> <span class="o">=</span> <span class="n">insurance</span><span class="p">[</span><span class="n">flag_nonunique_tiv</span> <span class="o">&amp;</span> <span class="n">flag_unique_city</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'tiv_2016'</span><span class="p">]]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">.</span><span class="n">to_frame</span><span class="p">(</span><span class="s1">'tiv_2016'</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-and">
+     AND
+    </a>
+    <a href="#m-sql-in">
+     IN
+    </a>
+    <a href="#m-sql-count">
+     COUNT()
+    </a>
+    <a href="#m-sql-sum">
+     SUM()
+    </a>
+    <a href="#m-sql-min">
+     MIN()
+    </a>
+    <a href="#m-sql-group-by">
+     GROUP BY
+    </a>
+    <a href="#m-sql-having">
+     HAVING
+    </a>
+    <a href="#m-sql-round">
+     ROUND()
+    </a>
+    <a href="#m-sql-count-over">
+     COUNT() OVER
+    </a>
+    <a href="#m-sql-partition-by">
+     PARTITION BY
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-with">
+     WITH
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-loc">
+     Rows by label
+    </a>
+    <a href="#m-pd-filter">
+     Condition
+    </a>
+    <a href="#m-pd-and">
+     Multiple conditions
+    </a>
+    <a href="#m-pd-filter-null">
+     Missing
+    </a>
+    <a href="#m-pd-loc-label">
+     Access label
+    </a>
+    <a href="#m-pd-isna">
+     Check null
+    </a>
+    <a href="#m-pd-duplicated">
+     Find duplicates
+    </a>
+    <a href="#m-pd-sum">
+     sum()
+    </a>
+    <a href="#m-pd-round">
+     round()
+    </a>
+    <a href="#m-pd-to-frame">
+     to_frame()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#C32">
+   <small>
+    ← Previous
+   </small>
+   602 · Most accepted friends
+  </a>
+  <a href="#C34">
+   <small>
+    Next →
+   </small>
+   185 · Department top three salaries
+  </a>
+ </div>
+</article>

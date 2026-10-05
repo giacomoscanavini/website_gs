@@ -1,0 +1,892 @@
+<article class="article method-page" id="m-pd-copy">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
+   pandas · Also used in these notes
+  </a>
+ </div>
+ <h1>
+  copy()
+ </h1>
+ <p class="lead">
+  Create a separate object
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-copy"><span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+ </div>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C01?code=code-C01-1&amp;method=pd-copy&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1757 · Recyclable and low-fat products
+    </strong>
+    <small>
+     Study solution · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">    mask = products['low_fats'].eq('Y') &amp; products['recyclable'].eq('Y')
+    return products.loc[mask, ['product_id']].copy()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#murder-01?code=code-murder-01-1&amp;method=pd-copy&amp;line=6">
+   <div>
+    <span class="usage-label">
+     Murder City · pandas
+    </span>
+    <strong>
+     Retrieve the crime report
+    </strong>
+    <small>
+     Saved walkthrough · line 6
+    </small>
+   </div>
+   <pre aria-hidden="true">        &amp; crime_scene_report['date'].astype('string').eq('20180115'))
+result = crime_scene_report.loc[mask].copy()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-01?code=code-squid-01-1&amp;method=pd-copy&amp;line=6">
+   <div>
+    <span class="usage-label">
+     Squid Game · pandas
+    </span>
+    <strong>
+     Filter the player pool
+    </strong>
+    <small>
+     Saved walkthrough · line 6
+    </small>
+   </div>
+   <pre aria-hidden="true">           | (player['vice'].eq('Gambling') &amp; player['has_close_family'].eq(False))))
+result = player.loc[mask.fillna(False)].copy()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#B01?code=code-B01-1&amp;method=pd-copy&amp;line=1">
+   <div>
+    <span class="usage-label">
+     SQLBolt · pandas
+    </span>
+    <strong>
+     SELECT queries 101
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">result = movies[['title']].copy()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C02?code=code-C02-1&amp;method=pd-copy&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     584 · Find customer referee
+    </strong>
+    <small>
+     Study solution · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">    mask = customer['referee_id'].isna() | customer['referee_id'].ne(2)
+    return customer.loc[mask, ['name']].copy()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C03?code=code-C03-1&amp;method=pd-copy&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     595 · Big countries
+    </strong>
+    <small>
+     Study solution · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">    mask = world['area'].ge(3_000_000) | world['population'].ge(25_000_000)
+    return world.loc[mask, ['name', 'population', 'area']].copy()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   26 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C05?code=code-C05-1&amp;method=pd-copy&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1683 · Invalid tweets
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def invalid_tweets(tweets: pd.DataFrame) -&gt; pd.DataFrame:
+    return tweets.loc[tweets['content'].str.len().gt(15), ['tweet_id']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-1&amp;method=pd-copy&amp;line=12">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      Study solution · line 12
+     </small>
+    </div>
+    <pre aria-hidden="true">    matched = p.merge(u, on='product_id', how='inner')
+    matched = matched.loc[matched['purchase_date'].between(matched['start_date'], matched['end_date'])].copy()
+    matched['paid'] = matched['price'] * matched['units']
+    g = matched.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C20?code=code-C20-1&amp;method=pd-copy&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1045 · Customers who bought every product
+     </strong>
+     <small>
+      Study solution · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">    mask = ids['customer_id'].map(counts).fillna(0).eq(len(keys))
+    return ids.loc[mask].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C22?code=code-C22-1&amp;method=pd-copy&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1789 · Primary department per employee
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    mask = employee['primary_flag'].eq('Y') | n.eq(1)
+    return employee.loc[mask, ['employee_id', 'department_id']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C23?code=code-C23-1&amp;method=pd-copy&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      610 · Triangle judgement
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def triangle_judgement(triangle: pd.DataFrame) -&gt; pd.DataFrame:
+    t = triangle.copy()
+    valid = (t['x'] + t['y'] &gt; t['z']) &amp; (t['x'] + t['z'] &gt; t['y']) &amp; (t['y'] + t['z'] &gt; t['x'])
+    t['triangle'] = valid.map({True: 'Yes', False: 'No'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C35?code=code-C35-1&amp;method=pd-copy&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1667 · Fix names in a table
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def fix_names(users: pd.DataFrame) -&gt; pd.DataFrame:
+    result = users.copy()
+    result['name'] = result['name'].str[:1].str.upper() + result['name'].str[1:].str.lower()
+    return result.sort_values('user_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C36?code=code-C36-1&amp;method=pd-copy&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1527 · Patients with a disease
+     </strong>
+     <small>
+      Study solution · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    mask = patients['conditions'].str.contains(r'(?:^| )DIAB1', regex=True, na=False)
+    return patients.loc[mask].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C41?code=code-C41-1&amp;method=pd-copy&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1517 · Users with valid emails
+     </strong>
+     <small>
+      Study solution · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    pattern = r'[A-Za-z][A-Za-z0-9_.-]*@leetcode[.]com'
+    return users.loc[users['mail'].str.fullmatch(pattern, na=False)].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC1393?code=code-LC1393-2&amp;method=pd-copy&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1393 · Capital gain/loss
+     </strong>
+     <small>
+      Working reference variation · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def capital_gainloss(stocks: pd.DataFrame) -&gt; pd.DataFrame:
+    df = stocks.copy()
+    buy = df['operation'].eq('Buy')
+    df.loc[buy, 'price'] = -df.loc[buy, 'price']</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-03?code=code-murder-03-1&amp;method=pd-copy&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Murder City · pandas
+     </span>
+     <strong>
+      Read the witness interviews
+     </strong>
+     <small>
+      Saved walkthrough · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">                         left_on='person_id', right_on='id')
+result = joined.loc[joined['id'].isin([14887, 16371]),
+                    ['id', 'name', 'transcript']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-04?code=code-murder-04-1&amp;method=pd-copy&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Murder City · pandas
+     </span>
+     <strong>
+      Follow the gym clue
+     </strong>
+     <small>
+      Saved walkthrough · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">        &amp; joined['id'].str.startswith('48Z', na=False))
+result = joined.loc[mask, ['membership_id', 'check_in_date', 'person_id',
+                           'name', 'membership_status']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-05?code=code-murder-05-1&amp;method=pd-copy&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Murder City · pandas
+     </span>
+     <strong>
+      Cross-check the licence plate
+     </strong>
+     <small>
+      Saved walkthrough · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">mask = joined['plate_number'].str.contains('H42W', regex=False, na=False)
+result = joined.loc[mask, ['id', 'age', 'plate_number', 'car_make', 'car_model', 'name']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-07?code=code-murder-07-1&amp;method=pd-copy&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Murder City · pandas
+     </span>
+     <strong>
+      Follow the second interview
+     </strong>
+     <small>
+      Saved walkthrough · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">                                     left_on='id', right_on='person_id')
+result = joined.loc[joined['person_id'].eq(67318), ['id', 'name', 'transcript']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-09?code=code-murder-09-1&amp;method=pd-copy&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Murder City · pandas
+     </span>
+     <strong>
+      Inspect December event check-ins
+     </strong>
+     <small>
+      Saved walkthrough · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">        &amp; dates.gt(20171130) &amp; dates.lt(20180101))
+result = joined.loc[mask, ['id', 'name', 'event_name', 'date']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-02?code=code-squid-02-1&amp;method=pd-copy&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Calculate the ration threshold
+     </strong>
+     <small>
+      Saved walkthrough · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">portions = int(eligible.fillna(False).sum()) * 9 // 10
+result = rations[['amount']].copy()
+result['portions'] = portions
+insufficient = result['amount'].lt(portions).fillna(False)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-copy&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Compare hot and cold months
+     </strong>
+     <small>
+      Saved walkthrough · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">extreme = pd.concat([cold, hot], ignore_index=True).drop_duplicates()
+games = honeycomb_game.copy()
+dates = pd.to_datetime(games['date'])
+games['month_num'], games['year_num'] = dates.dt.month, dates.dt.year</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-04?code=code-squid-04-1&amp;method=pd-copy&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Rank ten-player teams
+     </strong>
+     <small>
+      Saved walkthrough · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    n_players=('id', 'size'), age_team=('age', 'mean'))
+result = teams.loc[teams['n_players'].eq(10), ['team_id', 'age_team']].copy()
+result['age_group'] = 'Grizzled'
+result.loc[result['age_team'].lt(40), 'age_group'] = 'Fit'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-05?code=code-squid-05-1&amp;method=pd-copy&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Count a player’s closest interactions
+     </strong>
+     <small>
+      Saved walkthrough · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">mask = daily_interactions['player1_id'].eq(456) | daily_interactions['player2_id'].eq(456)
+interactions = daily_interactions.loc[mask].copy()
+interactions['player_id'] = interactions['player1_id'].where(
+    interactions['player1_id'].ne(456), interactions['player2_id'])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-06?code=code-squid-06-1&amp;method=pd-copy&amp;line=12">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Trace equipment to its first failure
+     </strong>
+     <small>
+      Saved walkthrough · line 12
+     </small>
+    </div>
+    <pre aria-hidden="true">    supplier_id = in_game.groupby('supplier_id').size().sort_values(ascending=False).index[0]
+    failures = in_game.loc[in_game['supplier_id'].eq(supplier_id)].copy()
+    failures['installation_date'] = pd.to_datetime(failures['installation_date'])
+    failures['failure_date'] = pd.to_datetime(failures['failure_date'])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-copy&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Join room checks and camera sightings
+     </strong>
+     <small>
+      Saved walkthrough · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">                      left_on='guard_number', right_on='guard_spotted_id')
+joined = joined.loc[joined['isvacant'].eq(True)].copy()
+seen = pd.to_timedelta(joined['spotted_outside_room_time'].astype('string'))
+checked = pd.to_timedelta(joined['last_seen_in_room'].astype('string'))</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-08?code=code-squid-08-1&amp;method=pd-copy&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Find the longest hesitation
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">
+pushed = player.loc[player['death_description'].eq('pushed')].copy()
+result = pushed.iloc[:0][['id', 'first_name', 'last_name', 'last_moved_time_seconds']]
+if not pushed.empty:</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-copy&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Reconstruct access-log overlaps
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">
+games = game_schedule.loc[game_schedule['type'].str.lower().eq('squid game')].copy()
+games['date'] = pd.to_datetime(games['date'])
+result = pd.DataFrame(columns=['id', 'access_time'])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B02?code=code-B02-1&amp;method=pd-copy&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Numeric constraints
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.loc[movies['id'].eq(6)].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B03?code=code-B03-1&amp;method=pd-copy&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Text constraints and LIKE
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.loc[movies['title'].str.contains(r'^Toy Story', case=False, na=False)].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B07?code=code-B07-3&amp;method=pd-copy&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      OUTER JOINs
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = buildings[['building_name', 'capacity']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B15?code=code-B15-1&amp;method=pd-copy&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      DELETE rows
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">movies = movies.loc[movies['year'].isna() | movies['year'].ge(2005)].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (12)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-copy&amp;line=13">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      My approach · line 13
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = prices.merge(units_sold, on='product_id', how='left')
+    df = df[df.purchase_date.isna() | df.purchase_date.between(df.start_date, df.end_date)].copy()
+    df['paid'] = df['price'] * df['units']
+    totals = df.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B01?code=code-B01-3&amp;method=pd-copy&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      SELECT queries 101
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies[['director']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B01?code=code-B01-5&amp;method=pd-copy&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      SELECT queries 101
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies[['title', 'director']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B01?code=code-B01-7&amp;method=pd-copy&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      SELECT queries 101
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies[['title', 'year']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B01?code=code-B01-9&amp;method=pd-copy&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      SELECT queries 101
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B02?code=code-B02-3&amp;method=pd-copy&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Numeric constraints
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.loc[movies['year'].between(2000, 2010)].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B02?code=code-B02-5&amp;method=pd-copy&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Numeric constraints
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.loc[movies['year'].notna() &amp; ~movies['year'].between(2000, 2010)].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B02?code=code-B02-7&amp;method=pd-copy&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Numeric constraints
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.loc[movies['id'].between(1, 5), ['title', 'year']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B03?code=code-B03-3&amp;method=pd-copy&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Text constraints and LIKE
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.loc[movies['director'].eq('John Lasseter')].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B03?code=code-B03-5&amp;method=pd-copy&amp;line=2">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Text constraints and LIKE
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">mask = movies['director'].notna() &amp; movies['director'].ne('John Lasseter')
+result = movies.loc[mask, ['title', 'director']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B03?code=code-B03-7&amp;method=pd-copy&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Text constraints and LIKE
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.loc[movies['title'].str.fullmatch(r'WALL-.', case=False, na=False)].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B15?code=code-B15-3&amp;method=pd-copy&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      DELETE rows
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">movies = movies.loc[movies['director'].isna() | movies['director'].ne('Andrew Stanton')].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    Methods present in the supplied code, added to the image-based index · Also used in these notes. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
+   <small>
+    ← Browse
+   </small>
+   pandas · Also used in these notes
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

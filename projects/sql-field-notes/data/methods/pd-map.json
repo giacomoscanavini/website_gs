@@ -1,0 +1,213 @@
+{
+  "id": "pd-map",
+  "lang": "pd",
+  "category": "Conditional logic",
+  "label": "map()",
+  "example": "df.status.map({'A':1,'B':2})",
+  "description": "Map values",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "map",
+  "uses": [
+    {
+      "page": "C46",
+      "block": "code-C46-1",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    result = df.groupby('machine_id', as_index=False).agg(processing_time=('processing_time', 'mean'))\n    result['processing_time'] = result['processing_time'].map(lambda x: round_half_up(x, 3))\n    return result",
+      "snippetLine": 13
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-1",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    )\n    df['confirmation_rate'] = (df['positive'] / df['total']).map(round_half_up)\n    return df[['user_id', 'confirmation_rate']]",
+      "snippetLine": 14
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-1",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    g = matched.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))\n    g['average_price'] = (g['paid'] / g['units'].replace(0, float('nan'))).map(round_half_up)\n    result = p[['product_id']].drop_duplicates().merge(g[['product_id', 'average_price']], on='product_id', how='left')\n    result['average_price'] = result['average_price'].fillna(0)",
+      "snippetLine": 14
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-3",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    totals = df.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))\n    totals['average_price'] = (totals['paid'] / totals['units'].replace(0, float('nan'))).map(round_half_up)\n    result = prices[['product_id']].drop_duplicates().merge(totals[['product_id', 'average_price']], on='product_id', how='left')\n    result['average_price'] = result['average_price'].fillna(0)",
+      "snippetLine": 15
+    },
+    {
+      "page": "C08",
+      "block": "code-C08-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    g = m.groupby('project_id', as_index=False).agg(average_years=('experience_years', 'mean'))\n    g['average_years'] = g['average_years'].map(round_half_up)\n    return g",
+      "snippetLine": 10
+    },
+    {
+      "page": "C08",
+      "block": "code-C08-3",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    ).reset_index()\n    df['average_years'] =   (df['total_years'] / df['n_employees']).map(round_half_up)\n    return df[['project_id', 'average_years']]",
+      "snippetLine": 13
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-1",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    g = register.groupby('contest_id').size().reset_index(name='participants')\n    g['percentage'] = (100 * g['participants'] / len(users)).map(round_half_up)\n    return g[['contest_id', 'percentage']].sort_values(['percentage', 'contest_id'], ascending=[False, True])",
+      "snippetLine": 9
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-3",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    ).reset_index()\n    df['percentage'] = (100 * df['nUsersPerTest'] / nUsers).map(round_half_up)\n    return df[['contest_id', 'percentage']].sort_values(by=['percentage', 'contest_id'], ascending=[False, True])",
+      "snippetLine": 12
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-1",
+      "line": 11,
+      "lines": [
+        11,
+        12
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    g = q.groupby('query_name', dropna=False, as_index=False).agg(quality=('quality_ratio', 'mean'), poor_query_percentage=('poor', 'mean'))\n    g['quality'] = g['quality'].map(round_half_up)\n    g['poor_query_percentage'] = (100 * g['poor_query_percentage']).map(round_half_up)\n    return g",
+      "snippetLine": 10
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-1",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    ids = customer[['customer_id']].drop_duplicates()\n    mask = ids['customer_id'].map(counts).fillna(0).eq(len(keys))\n    return ids.loc[mask].copy()",
+      "snippetLine": 7
+    },
+    {
+      "page": "C23",
+      "block": "code-C23-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "610 · Triangle judgement",
+      "number": "610",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    valid = (t['x'] + t['y'] > t['z']) & (t['x'] + t['z'] > t['y']) & (t['y'] + t['z'] > t['x'])\n    t['triangle'] = valid.map({True: 'Yes', False: 'No'})\n    return t",
+      "snippetLine": 5
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-1",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    result = rolled.rename('amount').reset_index()\n    result['average_amount'] = (result['amount'] / 7).map(round_half_up)\n    return result",
+      "snippetLine": 15
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-3",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    result = total.rename('amount').reset_index()\n    result['average_amount'] = (result['amount'] / 7).map(round_half_up)\n    return result",
+      "snippetLine": 15
+    },
+    {
+      "page": "squid-02",
+      "block": "code-squid-02-1",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "Calculate the ration threshold",
+      "number": "02",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "insufficient = result['amount'].lt(portions).fillna(False)\nresult['amount'] = insufficient.map({True: 'False', False: 'True'})\nresult = result[['portions', 'amount']]",
+      "snippetLine": 7
+    }
+  ],
+  "pageCount": 10
+}

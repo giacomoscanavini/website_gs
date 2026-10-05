@@ -1,0 +1,216 @@
+{
+  "id": "sql-having",
+  "lang": "sql",
+  "category": "Aggregation",
+  "label": "HAVING",
+  "example": "HAVING COUNT(*) > 5",
+  "description": "Filter groups",
+  "source": "image-sql",
+  "related": [
+    "pd-group-filter"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+  "aliases": "HAVING",
+  "uses": [
+    {
+      "page": "C17",
+      "block": "code-C17-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "596 · Classes with at least five students",
+      "number": "596",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT class FROM Courses GROUP BY class HAVING COUNT(DISTINCT student) >= 5;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C19",
+      "block": "code-C19-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT MAX(num) AS num FROM (\n    SELECT num FROM MyNumbers GROUP BY num HAVING COUNT(*) = 1\n) singles;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "GROUP BY c.customer_id\nHAVING (SELECT COUNT(*) FROM Product) = COUNT(DISTINCT CASE\n    WHEN c.product_key IN (SELECT product_key FROM Product) THEN c.product_key END);",
+      "snippetLine": 3
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "GROUP BY customer_id\nHAVING (SELECT COUNT(product_key) FROM Product) = COUNT(DISTINCT product_key) ",
+      "snippetLine": 4
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-2",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    GROUP BY reports_to\n    HAVING reports_to IS NOT NULL\n)\n",
+      "snippetLine": 8
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-2",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "GROUP BY employee_id\nHAVING COUNT(employee_id) = 1;",
+      "snippetLine": 7
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-4",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "GROUP BY employee_id\nHAVING COUNT(employee_id) = 1",
+      "snippetLine": 10
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-2",
+      "line": 6,
+      "lines": [
+        6,
+        12
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        GROUP BY tiv_2015\n        HAVING COUNT(*) > 1\n    ),\n    UniqueCity AS (",
+      "snippetLine": 5
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-4",
+      "line": 7,
+      "lines": [
+        7,
+        13
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        GROUP BY tiv_2015\n        HAVING COUNT(*) > 1\n    ),\n    UniqueCity AS (",
+      "snippetLine": 6
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WHERE o.order_date >= '2020-02-01' AND o.order_date < '2020-03-01'\nGROUP BY p.product_id, p.product_name HAVING SUM(o.unit) >= 100;",
+      "snippetLine": 3
+    },
+    {
+      "page": "LC601",
+      "block": "code-LC601-0",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "601 · Human traffic of stadium",
+      "number": "601",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        GROUP BY group_num\n        HAVING COUNT(*) >= 3\n    )\n",
+      "snippetLine": 13
+    },
+    {
+      "page": "LC3521",
+      "block": "code-LC3521-0",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "3521 · Find product recommendation pairs",
+      "number": "3521",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        GROUP BY product1_id, product2_id\n        HAVING COUNT(*) >= 3\n    )\n",
+      "snippetLine": 15
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-0",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            GROUP BY employee_id\n            HAVING COUNT(*) >= 3\n        )\n    ),",
+      "snippetLine": 14
+    },
+    {
+      "page": "B11",
+      "block": "code-B11-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "WHERE versus HAVING",
+      "number": "11",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT role, SUM(years_employed) AS total_years\nFROM employees GROUP BY role HAVING role = 'Engineer';",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 11
+}

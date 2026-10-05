@@ -1,0 +1,345 @@
+{
+  "id": "pd-to-datetime",
+  "lang": "pd",
+  "category": "Dates",
+  "label": "Convert date",
+  "example": "pd.to_datetime(df['date'])",
+  "description": "Parse datetime",
+  "source": "image-pandas",
+  "related": [
+    "sql-str-to-date"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "to_datetime",
+  "uses": [
+    {
+      "page": "C45",
+      "block": "code-C45-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "197 · Rising temperature",
+      "number": "197",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def rising_temperature(weather: pd.DataFrame) -> pd.DataFrame:\n    weather = weather.assign(recordDate=pd.to_datetime(weather['recordDate']))\n    weather = weather.sort_values('recordDate')\n    df = weather[(weather.recordDate.diff().eq(pd.Timedelta(days=1))) & (weather.temperature.diff() > 0)]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-1",
+      "line": 9,
+      "lines": [
+        9,
+        10
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def average_selling_price(prices: pd.DataFrame, units_sold: pd.DataFrame) -> pd.DataFrame:\n    p = prices.assign(start_date=pd.to_datetime(prices['start_date']), end_date=pd.to_datetime(prices['end_date']))\n    u = units_sold.assign(purchase_date=pd.to_datetime(units_sold['purchase_date']))\n    matched = p.merge(u, on='product_id', how='inner')",
+      "snippetLine": 8
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-3",
+      "line": 9,
+      "lines": [
+        9,
+        10,
+        11
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def average_selling_price(prices: pd.DataFrame, units_sold: pd.DataFrame) -> pd.DataFrame:\n    prices = prices.assign(start_date=pd.to_datetime(prices['start_date']),\n                           end_date=pd.to_datetime(prices['end_date']))\n    units_sold = units_sold.assign(purchase_date=pd.to_datetime(units_sold['purchase_date']))",
+      "snippetLine": 8
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def monthly_transactions(transactions: pd.DataFrame) -> pd.DataFrame:\n    t = transactions.assign(month=pd.to_datetime(transactions['trans_date']).dt.strftime('%Y-%m'))\n    t['approved'] = t['state'].eq('approved')\n    t['approved_amount'] = t['amount'].where(t['approved'], 0)",
+      "snippetLine": 3
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    transactions['approved'] =   transactions.state == 'approved'\n    transactions['month'] =   pd.to_datetime(transactions['trans_date']).dt.strftime(\"%Y-%m\")\n    transactions['approved_amount'] =   transactions['approved'] * transactions['amount']\n    return   transactions.groupby(by=['month', 'country'], dropna=False).agg(",
+      "snippetLine": 4
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-1",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def immediate_food_delivery(delivery: pd.DataFrame) -> pd.DataFrame:\n    d = delivery.assign(order_date=pd.to_datetime(delivery['order_date']), customer_pref_delivery_date=pd.to_datetime(delivery['customer_pref_delivery_date']))\n    first = d.sort_values('order_date').drop_duplicates('customer_id', keep='first')\n    value = 100 * first['order_date'].eq(first['customer_pref_delivery_date']).mean()",
+      "snippetLine": 8
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-3",
+      "line": 9,
+      "lines": [
+        9,
+        10
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def immediate_food_delivery(delivery: pd.DataFrame) -> pd.DataFrame:\n    delivery = delivery.assign(order_date=pd.to_datetime(delivery['order_date']),\n                               customer_pref_delivery_date=pd.to_datetime(delivery['customer_pref_delivery_date'])).reset_index(drop=True)\n    delivery['immediate'] =   delivery['order_date'] == delivery['customer_pref_delivery_date']",
+      "snippetLine": 8
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-1",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def gameplay_analysis(activity: pd.DataFrame) -> pd.DataFrame:\n    a = activity.assign(event_date=pd.to_datetime(activity['event_date']))\n    first = a.groupby('player_id')['event_date'].transform('min')\n    valid = a['event_date'].eq(first + pd.Timedelta(days=1))",
+      "snippetLine": 8
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-3",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def gameplay_analysis(activity: pd.DataFrame) -> pd.DataFrame:\n    activity = activity.assign(event_date=pd.to_datetime(activity['event_date']))\n    activity['first_login'] =   activity.groupby(by='player_id')['event_date'].transform('min')\n    activity['valid'] = activity['event_date'] ==   activity['first_login'] + pd.Timedelta(days = 1)",
+      "snippetLine": 8
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def user_activity(activity: pd.DataFrame) -> pd.DataFrame:\n    a = activity.assign(activity_date=pd.to_datetime(activity['activity_date']))\n    kinds = ['open_session', 'end_session', 'scroll_down', 'send_message']\n    mask = a['activity_date'].between('2019-06-28', '2019-07-27') & a['activity_type'].isin(kinds)",
+      "snippetLine": 3
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-3",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "\n    activity['activity_date'] =   pd.to_datetime(activity['activity_date'])\n    end_date = pd.Timestamp('2019-07-27')\n    start_date = end_date - pd.Timedelta(days=29)",
+      "snippetLine": 6
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-5",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    activity['activity_date'] = pd.to_datetime(activity['activity_date'])\n    end_date = pd.Timestamp('2019-07-27')\n    start_date = end_date - pd.Timedelta(days=29)",
+      "snippetLine": 6
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def price_at_given_date(products: pd.DataFrame) -> pd.DataFrame:\n    p = products.assign(change_date=pd.to_datetime(products['change_date']))\n    valid = p.loc[p['change_date'].le(pd.Timestamp('2019-08-16'))]\n    latest = valid.sort_values('change_date').drop_duplicates('product_id', keep='last')",
+      "snippetLine": 3
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def price_at_given_date(products: pd.DataFrame) -> pd.DataFrame:\n    products = products.assign(change_date=pd.to_datetime(products['change_date']))\n    ids = set(products.product_id)\n    df = products[products['change_date'] <= '2019-08-16']",
+      "snippetLine": 3
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def movie_rating(movies: pd.DataFrame, users: pd.DataFrame, movie_rating: pd.DataFrame) -> pd.DataFrame:\n    r = movie_rating.assign(created_at=pd.to_datetime(movie_rating['created_at']))\n    users_ranked = r.groupby('user_id').size().reset_index(name='n_reviews').merge(users, on='user_id')\n    first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def movie_rating(movies: pd.DataFrame, users: pd.DataFrame, movie_rating: pd.DataFrame) -> pd.DataFrame:\n    movie_rating = movie_rating.assign(created_at=pd.to_datetime(movie_rating['created_at']))\n    df_users =   movie_rating.groupby(by='user_id').agg(\n        nReviews = ('rating', 'size')",
+      "snippetLine": 3
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-1",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def restaurant_growth(customer: pd.DataFrame) -> pd.DataFrame:\n    c = customer.assign(visited_on=pd.to_datetime(customer['visited_on']))\n    daily = c.groupby('visited_on')['amount'].sum().sort_index()\n    if daily.empty:",
+      "snippetLine": 8
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-3",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def restaurant_growth(customer: pd.DataFrame) -> pd.DataFrame:\n    customer = customer.assign(visited_on=pd.to_datetime(customer['visited_on']))\n    daily = customer.groupby('visited_on')['amount'].sum().sort_index()\n    if daily.empty:",
+      "snippetLine": 8
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def list_products(products: pd.DataFrame, orders: pd.DataFrame) -> pd.DataFrame:\n    dates = pd.to_datetime(orders['order_date'])\n    feb = orders.loc[dates.ge('2020-02-01') & dates.lt('2020-03-01')]\n    g = feb.groupby('product_id', as_index=False).agg(unit=('unit', 'sum'))",
+      "snippetLine": 3
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-3",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def list_products(products: pd.DataFrame, orders: pd.DataFrame) -> pd.DataFrame:\n    orders = orders.assign(order_date=pd.to_datetime(orders['order_date']))\n    orders =   orders[(orders.order_date >= '2020-02-01') & (orders.order_date < '2020-03-01')]\n    df =   orders.groupby(by='product_id').agg(",
+      "snippetLine": 2
+    },
+    {
+      "page": "squid-03",
+      "block": "code-squid-03-1",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "Compare hot and cold months",
+      "number": "03",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "games = honeycomb_game.copy()\ndates = pd.to_datetime(games['date'])\ngames['month_num'], games['year_num'] = dates.dt.month, dates.dt.year\njoined = games.merge(extreme[['month']], left_on='month_num', right_on='month')",
+      "snippetLine": 6
+    },
+    {
+      "page": "squid-06",
+      "block": "code-squid-06-1",
+      "line": 13,
+      "lines": [
+        13,
+        14
+      ],
+      "title": "Trace equipment to its first failure",
+      "number": "06",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    failures = in_game.loc[in_game['supplier_id'].eq(supplier_id)].copy()\n    failures['installation_date'] = pd.to_datetime(failures['installation_date'])\n    failures['failure_date'] = pd.to_datetime(failures['failure_date'])\n    first = failures.groupby('failed_equipment_id').agg(",
+      "snippetLine": 12
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "games = game_schedule.loc[game_schedule['type'].str.lower().eq('squid game')].copy()\ngames['date'] = pd.to_datetime(games['date'])\nresult = pd.DataFrame(columns=['id', 'access_time'])\nif not games.empty:",
+      "snippetLine": 3
+    }
+  ],
+  "pageCount": 13
+}

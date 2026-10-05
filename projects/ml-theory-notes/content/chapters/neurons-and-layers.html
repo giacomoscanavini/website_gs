@@ -1,0 +1,549 @@
+<section aria-labelledby="neurons-and-layers-title" class="page-view lesson-layout" id="neurons-and-layers">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     02
+    </span>
+    Part 1 · Neural-network foundations
+   </p>
+   <h1 id="neurons-and-layers-title" tabindex="-1">
+    Neurons, layers, and model capacity
+   </h1>
+   <p class="standfirst">
+    Read a network as a composition of affine maps and nonlinearities, with explicit dimensions and parameter counts.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Neural networks · PDF pp. 5–11 · §§1–10" data-page="5" data-pdf="basics" type="button">
+     Neural networks · PDF pp. 5–11 · §§1–10
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="start-with-one-neuron" href="#neurons-and-layers?section=start-with-one-neuron">
+     Start with one neuron
+    </a>
+    <a data-section="collect-neurons-into-a-matrix" href="#neurons-and-layers?section=collect-neurons-into-a-matrix">
+     Collect neurons into a matrix
+    </a>
+    <a data-section="count-parameters-not-neurons" href="#neurons-and-layers?section=count-parameters-not-neurons">
+     Count parameters, not neurons
+    </a>
+    <a data-section="why-nonlinear-composition-matters" href="#neurons-and-layers?section=why-nonlinear-composition-matters">
+     Why nonlinear composition matters
+    </a>
+    <a data-section="depth-and-width-solve-different-representational-problems" href="#neurons-and-layers?section=depth-and-width-solve-different-representational-problems">
+     Depth and width solve different representational problems
+    </a>
+    <a data-section="implementation" href="#neurons-and-layers?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="start-with-one-neuron" id="neurons-and-layers--start-with-one-neuron">
+    Start with one neuron
+   </h2>
+   <p>
+    A neuron computes a pre-activation and then transforms it:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><msup><mi>w</mi><mi>⊤</mi></msup><mi>x</mi><mo>+</mo><mi>b</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>a</mi><mo>=</mo><mi>ϕ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">z=w^\top x+b,\qquad a=\phi(z).</annotation></semantics></math>
+   </div>
+   <p>
+    The weights set the contribution of each input. The bias shifts the operating region. The activation
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>
+    determines how the weighted signal is transformed. These are three different roles; a neuron is not merely an “on/off switch.” ReLU, for example, outputs the actual positive magnitude, not the value one.
+   </p>
+   <p>
+    The supplied example uses
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo>,</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>3</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">x=(2,-1,3)^\top</annotation></semantics></math>
+    ,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.5</mn><mo>,</mo><mn>0.7</mn><mo>,</mo><mi>−</mi><mn>0.2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">w=(0.5,0.7,-0.2)^\top</annotation></semantics></math>
+    , and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">b=0.3</annotation></semantics></math>
+    . Thus
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mn>0.5</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0.7</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mn>0.2</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>3</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0.3</mn><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">z=0.5(2)+0.7(-1)-0.2(3)+0.3=0.</annotation></semantics></math>
+   </div>
+   <p>
+    ReLU returns zero. Had the pre-activation been two, it would return two. This separates the affine calculation from the activation without attributing any extra meaning to the unit.
+   </p>
+   <h2 data-section="collect-neurons-into-a-matrix" id="neurons-and-layers--collect-neurons-into-a-matrix">
+    Collect neurons into a matrix
+   </h2>
+   <p>
+    With
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+    inputs and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
+    output units, a dense layer has
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>m</mi><mo>×</mo><mi>n</mi></mrow></msup></mrow><annotation encoding="application/x-tex">W\in\mathbb R^{m\times n}</annotation></semantics></math>
+    and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>∈</mo><msup><mi>ℝ</mi><mi>m</mi></msup></mrow><annotation encoding="application/x-tex">b\in\mathbb R^m</annotation></semantics></math>
+    :
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mi>W</mi><mi>x</mi><mo>+</mo><mi>b</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>a</mi><mo>=</mo><mi>ϕ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">z=Wx+b,\qquad a=\phi(z).</annotation></semantics></math>
+   </div>
+   <p>
+    Each row of
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math>
+    contains one neuron’s incoming weights. In the PDFs, a single example is written as a column vector. PyTorch normally stores a batch with examples in rows, so the corresponding implementation is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><msup><mi>W</mi><mi>⊤</mi></msup><mo>+</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">XW^\top+b</annotation></semantics></math>
+    . The mathematical map is the same; the storage convention differs. The official Build the Neural Network tutorial shows the actual input/output shapes.
+   </p>
+   <p>
+    For
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>784</mn><mo>→</mo><mn>128</mn><mo>→</mo><mn>64</mn><mo>→</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">784\to128\to64\to10</annotation></semantics></math>
+    , the weight shapes are
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>128</mn><mo>×</mo><mn>784</mn></mrow><annotation encoding="application/x-tex">128\times784</annotation></semantics></math>
+    ,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>64</mn><mo>×</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">64\times128</annotation></semantics></math>
+    , and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>10</mn><mo>×</mo><mn>64</mn></mrow><annotation encoding="application/x-tex">10\times64</annotation></semantics></math>
+    . The intermediate activation widths are 128 and 64; the final width is ten. A batch dimension adds examples,
+    <strong>
+     not new model parameters
+    </strong>
+    .
+   </p>
+   <h2 data-section="count-parameters-not-neurons" id="neurons-and-layers--count-parameters-not-neurons">
+    Count parameters, not neurons
+   </h2>
+   <p>
+    A dense layer with a bias has
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mrow><mi mathvariant="normal">p</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">s</mi></mrow></msub><mo>=</mo><msub><mi>n</mi><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi></mrow></msub><msub><mi>n</mi><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">t</mi></mrow></msub><mo>+</mo><msub><mi>n</mi><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">t</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">n_{\mathrm{parameters}}=n_{\mathrm{in}}n_{\mathrm{out}}+n_{\mathrm{out}}.</annotation></semantics></math>
+   </div>
+   <p>
+    The source’s complete example is:
+   </p>
+   <div aria-label="Scrollable calculation table" class="table-scroll" role="region" tabindex="0">
+    <table>
+     <thead>
+      <tr class="header">
+       <th>
+        Layer
+       </th>
+       <th>
+        Weights and biases
+       </th>
+       <th style="text-align: right;">
+        Parameters
+       </th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr class="odd">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>784</mn><mo>→</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">784\to128</annotation></semantics></math>
+       </td>
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>784</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>128</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">784(128)+128</annotation></semantics></math>
+       </td>
+       <td style="text-align: right;">
+        100,480
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>128</mn><mo>→</mo><mn>64</mn></mrow><annotation encoding="application/x-tex">128\to64</annotation></semantics></math>
+       </td>
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>128</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>64</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>64</mn></mrow><annotation encoding="application/x-tex">128(64)+64</annotation></semantics></math>
+       </td>
+       <td style="text-align: right;">
+        8,256
+       </td>
+      </tr>
+      <tr class="odd">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>64</mn><mo>→</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">64\to10</annotation></semantics></math>
+       </td>
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>64</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>10</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">64(10)+10</annotation></semantics></math>
+       </td>
+       <td style="text-align: right;">
+        650
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        Total
+       </td>
+       <td>
+       </td>
+       <td style="text-align: right;">
+        <strong>
+         109,386
+        </strong>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+   <p>
+    An activation value is computed for an observation; it is not a learned coefficient. The same weights are reused across every example and every batch.
+   </p>
+   <details class="derivation" data-derivation="dense-shapes" id="neurons-and-layers--derivation-dense-shapes">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive dense-layer shapes and parameter counts
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <h4>
+      1 · Count the coefficients of one output
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+      inputs, output
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+      uses
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>j</mi></msub><mo>=</mo><msubsup><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></msubsup><msub><mi>W</mi><mrow><mi>j</mi><mi>k</mi></mrow></msub><msub><mi>x</mi><mi>k</mi></msub><mo>+</mo><msub><mi>b</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">z_j=\sum_{k=1}^nW_{jk}x_k+b_j</annotation></semantics></math>
+      . It needs
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+      weights and one bias, hence
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n+1</annotation></semantics></math>
+      trainable scalars.
+     </p>
+     <h4>
+      2 · Repeat for all outputs
+     </h4>
+     <p>
+      With
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
+      distinct outputs there are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
+      such rows:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mi>m</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>n</mi><mo>+</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>m</mi><mi>n</mi><mo>+</mo><mi>m</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">P=m(n+1)=mn+m.</annotation></semantics></math>
+     </div>
+     <p>
+      No additional parameter is introduced by evaluating an activation such as ReLU. Parametric activations are an exception and need their own count.
+     </p>
+     <h4>
+      3 · Check every layer in the supplied example
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>784</mn><mo>⋅</mo><mn>128</mn><mo>=</mo><mn>100352</mn><mo>,</mo><mspace width="2.0em"></mspace><mn>100352</mn><mo>+</mo><mn>128</mn><mo>=</mo><mn>100480</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">784\cdot128=100352,\qquad100352+128=100480,</annotation></semantics></math>
+     </div>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>128</mn><mo>⋅</mo><mn>64</mn><mo>=</mo><mn>8192</mn><mo>,</mo><mspace width="2.0em"></mspace><mn>8192</mn><mo>+</mo><mn>64</mn><mo>=</mo><mn>8256</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">128\cdot64=8192,\qquad8192+64=8256,</annotation></semantics></math>
+     </div>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>64</mn><mo>⋅</mo><mn>10</mn><mo>=</mo><mn>640</mn><mo>,</mo><mspace width="2.0em"></mspace><mn>640</mn><mo>+</mo><mn>10</mn><mo>=</mo><mn>650</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">64\cdot10=640,\qquad640+10=650.</annotation></semantics></math>
+     </div>
+     <p>
+      Adding the layer counts gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>100480</mn><mo>+</mo><mn>8256</mn><mo>+</mo><mn>650</mn><mo>=</mo><mn>109386</mn></mrow><annotation encoding="application/x-tex">100480+8256+650=109386</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      4 · Convert columns to a row-oriented batch
+     </h4>
+     <p>
+      A single column computation is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mi>W</mi><mi>x</mi><mo>+</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">z=Wx+b</annotation></semantics></math>
+      . Transposing it gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>z</mi><mi>⊤</mi></msup><mo>=</mo><msup><mi>x</mi><mi>⊤</mi></msup><msup><mi>W</mi><mi>⊤</mi></msup><mo>+</mo><msup><mi>b</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">z^\top=x^\top W^\top+b^\top</annotation></semantics></math>
+      . Stack
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>
+      input rows into
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>B</mi><mo>×</mo><mi>n</mi></mrow></msup></mrow><annotation encoding="application/x-tex">X\in\mathbb R^{B\times n}</annotation></semantics></math>
+      :
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mi>X</mi><msup><mi>W</mi><mi>⊤</mi></msup><mo>+</mo><msub><mn>𝟏</mn><mi>B</mi></msub><msup><mi>b</mi><mi>⊤</mi></msup><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>B</mi><mo>×</mo><mi>m</mi></mrow></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">Z=XW^\top+\mathbf1_Bb^\top\in\mathbb R^{B\times m}.</annotation></semantics></math>
+     </div>
+     <p>
+      The ones vector
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mn>𝟏</mn><mi>B</mi></msub><annotation encoding="application/x-tex">\mathbf1_B</annotation></semantics></math>
+      repeats the same bias row
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>
+      times. It does not create
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>
+      learned biases.
+     </p>
+     <h4>
+      5 · Separate storage from arithmetic
+     </h4>
+     <p>
+      Each of
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">Bm</annotation></semantics></math>
+      output entries forms a length-
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+      dot product, so the leading arithmetic scales as
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>B</mi><mi>m</mi><mi>n</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O(Bmn)</annotation></semantics></math>
+      . Parameter storage stays
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mi>n</mi><mo>+</mo><mi>m</mi></mrow><annotation encoding="application/x-tex">mn+m</annotation></semantics></math>
+      ; the batch activations use
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">Bm</annotation></semantics></math>
+      values. Changing batch size changes work and activation storage, not the model’s parameter count.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="5" data-pdf="basics" type="button">
+       Chapter source · PDF p. 5
+      </button>
+      <a class="calculation-link" href="#neurons-and-layers?derivation=dense-shapes">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="why-nonlinear-composition-matters" id="neurons-and-layers--why-nonlinear-composition-matters">
+    Why nonlinear composition matters
+   </h2>
+   <p>
+    Remove the activations from two successive layers:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>=</mo><msub><mi>W</mi><mn>1</mn></msub><mi>x</mi><mo>+</mo><msub><mi>b</mi><mn>1</mn></msub><mo>,</mo><mspace width="2.0em"></mspace><mi>y</mi><mo>=</mo><msub><mi>W</mi><mn>2</mn></msub><mi>h</mi><mo>+</mo><msub><mi>b</mi><mn>2</mn></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">h=W_1x+b_1,\qquad y=W_2h+b_2.</annotation></semantics></math>
+   </div>
+   <p>
+    Substitution gives
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>2</mn></msub><msub><mi>W</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>x</mi><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>2</mn></msub><msub><mi>b</mi><mn>1</mn></msub><mo>+</mo><msub><mi>b</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">y=(W_2W_1)x+(W_2b_1+b_2).</annotation></semantics></math>
+   </div>
+   <p>
+    This is still affine. Adding further affine layers repeats the same collapse. With nonlinearities between layers, the next transformation instead operates on a nonlinear representation of the inputs. This is the basic mechanism behind hierarchical representation learning.
+   </p>
+   <p>
+    The PDF sometimes calls the affine operation “linear”; the displayed bias terms make its intended convention explicit. When making the argument when explaining the result, “affine” is the precise term when a bias is present.
+   </p>
+   <details class="derivation" data-derivation="affine-composition" id="neurons-and-layers--derivation-affine-composition">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Expand a stack of affine layers
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>∈</mo><msup><mi>ℝ</mi><msub><mi>d</mi><mn>0</mn></msub></msup></mrow><annotation encoding="application/x-tex">x\in\mathbb R^{d_0}</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mn>1</mn></msub><mo>∈</mo><msup><mi>ℝ</mi><mrow><msub><mi>d</mi><mn>1</mn></msub><mo>×</mo><msub><mi>d</mi><mn>0</mn></msub></mrow></msup></mrow><annotation encoding="application/x-tex">W_1\in\mathbb R^{d_1\times d_0}</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mn>2</mn></msub><mo>∈</mo><msup><mi>ℝ</mi><mrow><msub><mi>d</mi><mn>2</mn></msub><mo>×</mo><msub><mi>d</mi><mn>1</mn></msub></mrow></msup></mrow><annotation encoding="application/x-tex">W_2\in\mathbb R^{d_2\times d_1}</annotation></semantics></math>
+      . Bias vectors have the matching output widths. There are no nonlinearities between the layers.
+     </p>
+     <h4>
+      1 · Write the first layer coordinate by coordinate
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>j</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>d</mi><mn>0</mn></msub></munderover><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>j</mi><mi>k</mi></mrow></msub><msub><mi>x</mi><mi>k</mi></msub><mo>+</mo><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>b</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>j</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">h_j=\sum_{k=1}^{d_0}(W_1)_{jk}x_k+(b_1)_j.</annotation></semantics></math>
+     </div>
+     <p>
+      The second layer gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><msub><mo>∑</mo><mi>j</mi></msub><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>h</mi><mi>j</mi></msub><mo>+</mo><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>b</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">y_i=\sum_j(W_2)_{ij}h_j+(b_2)_i</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Substitute the first expression
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>i</mi><mi>j</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><munder><mo>∑</mo><mi>k</mi></munder><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>j</mi><mi>k</mi></mrow></msub><msub><mi>x</mi><mi>k</mi></msub><mo>+</mo><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>b</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>j</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>+</mo><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>b</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>i</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">y_i=\sum_j(W_2)_{ij}\left[\sum_k(W_1)_{jk}x_k+(b_1)_j\right]+(b_2)_i.</annotation></semantics></math>
+     </div>
+     <p>
+      Distribute multiplication across addition:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><munder><mo>∑</mo><mi>k</mi></munder><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>j</mi><mi>k</mi></mrow></msub><msub><mi>x</mi><mi>k</mi></msub><mo>+</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>b</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>j</mi></msub><mo>+</mo><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>b</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>i</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">y_i=\sum_j\sum_k(W_2)_{ij}(W_1)_{jk}x_k+\sum_j(W_2)_{ij}(b_1)_j+(b_2)_i.</annotation></semantics></math>
+     </div>
+     <h4>
+      3 · Regroup the finite sums
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><munder><mo>∑</mo><mi>k</mi></munder><mrow><mo form="prefix" stretchy="true">[</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>j</mi><mi>k</mi></mrow></msub><mo form="postfix" stretchy="true">]</mo></mrow><msub><mi>x</mi><mi>k</mi></msub><mo>+</mo><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>2</mn></msub><msub><mi>b</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>i</mi></msub><mo>+</mo><msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>b</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>i</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">y_i=\sum_k\left[\sum_j(W_2)_{ij}(W_1)_{jk}\right]x_k+(W_2b_1)_i+(b_2)_i.</annotation></semantics></math>
+     </div>
+     <p>
+      The bracket is exactly the
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mi>i</mi><mo>,</mo><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(i,k)</annotation></semantics></math>
+      entry of matrix product
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mn>2</mn></msub><msub><mi>W</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">W_2W_1</annotation></semantics></math>
+      . Therefore
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><msub><mi>W</mi><mo>*</mo></msub><mi>x</mi><mo>+</mo><msub><mi>b</mi><mo>*</mo></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>W</mi><mo>*</mo></msub><mo>=</mo><msub><mi>W</mi><mn>2</mn></msub><msub><mi>W</mi><mn>1</mn></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>b</mi><mo>*</mo></msub><mo>=</mo><msub><mi>W</mi><mn>2</mn></msub><msub><mi>b</mi><mn>1</mn></msub><mo>+</mo><msub><mi>b</mi><mn>2</mn></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">y=W_*x+b_*,\qquad W_*=W_2W_1,\quad b_*=W_2b_1+b_2.</annotation></semantics></math>
+     </div>
+     <h4>
+      4 · Add a third layer
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>=</mo><msub><mi>W</mi><mn>3</mn></msub><mi>y</mi><mo>+</mo><msub><mi>b</mi><mn>3</mn></msub></mrow><annotation encoding="application/x-tex">v=W_3y+b_3</annotation></semantics></math>
+      , substitution gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>3</mn></msub><msub><mi>W</mi><mn>2</mn></msub><msub><mi>W</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>x</mi><mo>+</mo><msub><mi>W</mi><mn>3</mn></msub><msub><mi>W</mi><mn>2</mn></msub><msub><mi>b</mi><mn>1</mn></msub><mo>+</mo><msub><mi>W</mi><mn>3</mn></msub><msub><mi>b</mi><mn>2</mn></msub><mo>+</mo><msub><mi>b</mi><mn>3</mn></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">v=(W_3W_2W_1)x+W_3W_2b_1+W_3b_2+b_3.</annotation></semantics></math>
+     </div>
+     <p>
+      Every additional affine layer repeats this step. For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
+      layers, the effective weight is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>L</mi></msub><mi>⋯</mi><msub><mi>W</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">W_L\cdots W_1</annotation></semantics></math>
+      , and each bias is multiplied by all later weights before being added.
+     </p>
+     <h4>
+      5 · State what the conclusion does and does not say
+     </h4>
+     <p>
+      The function remains affine, but a narrow intermediate layer can restrict its rank:
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>rank</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>2</mn></msub><msub><mi>W</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>≤</mo><msub><mi>d</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\operatorname{rank}(W_2W_1)\le d_1</annotation></semantics></math>
+      . A deep linear parameterization may also optimize differently from one effective matrix. Inserting ReLU makes its active diagonal mask depend on
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+      , so there is generally no
+      <strong>
+       single global
+      </strong>
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mo>*</mo></msub><mo>,</mo><msub><mi>b</mi><mo>*</mo></msub></mrow><annotation encoding="application/x-tex">W_*,b_*</annotation></semantics></math>
+      covering every input.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="5" data-pdf="basics" type="button">
+       Chapter source · PDF p. 5
+      </button>
+      <a class="calculation-link" href="#neurons-and-layers?derivation=affine-composition">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="depth-and-width-solve-different-representational-problems" id="neurons-and-layers--depth-and-width-solve-different-representational-problems">
+    Depth and width solve different representational problems
+   </h2>
+   <p>
+    Width increases the number of features represented at a given stage. Depth increases how many transformations can be composed. The guide uses pixels, edges, shapes, and higher-level representations as an intuition for composition—not as a guarantee that each hidden unit has a human-readable role.
+   </p>
+   <p>
+    Neither dimension should be optimized in isolation. More capacity can introduce overfitting, difficult gradients, additional sensitivity to initialization, and greater computation. A deeper model failing where a shallower one succeeds can reflect optimization or implementation problems rather than insufficient expressive power.
+   </p>
+   <p>
+    The working question is:
+    <strong>
+     What representation does the next layer need, and can the training procedure learn it reliably?
+    </strong>
+    In an implementation, inspect dimensions and count parameters before attributing failure to a lack of depth.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="neurons-and-layers--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="build">
+     <span class="resource-meta">
+      PyTorch · Tutorial + code
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Build the Neural Network
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Inspect how Flatten, Linear, ReLU and Sequential implement a feed-forward model, and how its parameters and tensor dimensions are exposed.
+     </p>
+    </div>
+    <div class="resource" data-resource="polynomial">
+     <span class="resource-meta">
+      PyTorch · Worked regression example
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/pytorch_with_examples.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Learning PyTorch with Examples
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      An older, still useful teaching sequence: fit a polynomial while moving from explicit derivatives to autograd, modules and optimizers. Use it to compare the same mathematics across abstraction levels.
+     </p>
+    </div>
+   </div>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Why do ten linear layers not automatically create a nonlinear model?
+   </summary>
+   <p>
+    A composition of affine maps is another affine map: W₂(W₁x+b₁)+b₂=(W₂W₁)x+(W₂b₁+b₂). Nonlinear activations are what prevent this collapse. The factorized parameterization can change optimization, but not the overall affine function class.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#learning-objective">
+    <small>
+     ← Previous
+    </small>
+    What does a model learn?
+   </a>
+   <a href="#activations">
+    <small>
+     Next →
+    </small>
+    Activations and their derivatives
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="start-with-one-neuron" href="#neurons-and-layers?section=start-with-one-neuron">
+    Start with one neuron
+   </a>
+   <a data-section="collect-neurons-into-a-matrix" href="#neurons-and-layers?section=collect-neurons-into-a-matrix">
+    Collect neurons into a matrix
+   </a>
+   <a data-section="count-parameters-not-neurons" href="#neurons-and-layers?section=count-parameters-not-neurons">
+    Count parameters, not neurons
+   </a>
+   <a data-section="why-nonlinear-composition-matters" href="#neurons-and-layers?section=why-nonlinear-composition-matters">
+    Why nonlinear composition matters
+   </a>
+   <a data-section="depth-and-width-solve-different-representational-problems" href="#neurons-and-layers?section=depth-and-width-solve-different-representational-problems">
+    Depth and width solve different representational problems
+   </a>
+   <a data-section="implementation" href="#neurons-and-layers?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

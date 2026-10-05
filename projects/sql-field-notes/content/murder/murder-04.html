@@ -1,0 +1,254 @@
+<article class="article" id="murder-04">
+ <div class="breadcrumb">
+  <a href="#murder-city">
+   SQL Murder City
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Step 4
+  </span>
+ </div>
+ <h1>
+  Follow the gym clue
+ </h1>
+ <p class="lead">
+  Intersect the membership prefix, membership tier and visit date.
+ </p>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-104-panel-0" aria-selected="true" id="example-104-tab-0" role="tab" tabindex="0" type="button">
+     My SQL
+    </button>
+    <button aria-controls="example-104-panel-1" aria-selected="false" id="example-104-tab-1" role="tab" tabindex="-1" type="button">
+     pandas alternative
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-104-tab-0" class="code-panel" id="example-104-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    My SQL
+   </div>
+   <pre id="code-murder-04-0" tabindex="0"><code class="language-sql" data-origin="murder-cell-7"><span class="cm">/* Important information discovered: </span>
+<span class="cm">- Suspect seem a "man"</span>
+<span class="cm">- Probably goes to the "Get Fit Now Gym" and has a gold memebership</span>
+<span class="cm">- Bag membership number on bag starts with "48Z"</span>
+<span class="cm">- Suspect got into a car with "H42W" contained in the plate</span>
+
+<span class="cm">- The suspect has been recognized going to the same gym as Annabel</span>
+<span class="cm">- The suspect was at the gym on January 9th 2018</span>
+<span class="cm">*/</span>
+
+<span class="c1">-- Gold membership at the gym on the reported day by Annabel</span>
+<span class="k">SELECT</span><span class="w"> </span>
+<span class="w">	</span><span class="k">g</span><span class="p">.</span><span class="n">membership_id</span><span class="p">,</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">check_in_date</span><span class="p">,</span>
+<span class="w">	</span><span class="n">m</span><span class="p">.</span><span class="n">person_id</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">membership_status</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Get_fit_now_check_in</span><span class="w"> </span><span class="k">g</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Get_fit_now_member</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">membership_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span>
+<span class="w">	</span><span class="k">g</span><span class="p">.</span><span class="n">check_in_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'20180109'</span><span class="w"> </span>
+<span class="w">	</span><span class="k">AND</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">membership_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'gold'</span>
+<span class="w">	</span><span class="k">AND</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'48Z%'</span></code></pre>
+  </div>
+  <div aria-labelledby="example-104-tab-1" class="code-panel" id="example-104-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas alternative
+   </div>
+   <pre id="code-murder-04-1" tabindex="0"><code class="language-python" data-origin="murder-04-pandas"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">joined</span> <span class="o">=</span> <span class="n">get_fit_now_check_in</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">get_fit_now_member</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">,</span>
+                                   <span class="n">left_on</span><span class="o">=</span><span class="s1">'membership_id'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'id'</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">joined</span><span class="p">[</span><span class="s1">'check_in_date'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'string'</span><span class="p">)</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="s1">'20180109'</span><span class="p">)</span>
+        <span class="o">&amp;</span> <span class="n">joined</span><span class="p">[</span><span class="s1">'membership_status'</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="s1">'gold'</span><span class="p">)</span>
+        <span class="o">&amp;</span> <span class="n">joined</span><span class="p">[</span><span class="s1">'id'</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'48Z'</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">joined</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="p">[</span><span class="s1">'membership_id'</span><span class="p">,</span> <span class="s1">'check_in_date'</span><span class="p">,</span> <span class="s1">'person_id'</span><span class="p">,</span>
+                           <span class="s1">'name'</span><span class="p">,</span> <span class="s1">'membership_status'</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+   <p class="panel-note">
+    Added translation ·
+    <a href="#murder-city">
+     DataFrame assumptions
+    </a>
+   </p>
+  </div>
+ </div>
+ <h2>
+  Recorded result
+ </h2>
+ <div aria-label="Scrollable data table" class="table-scroll" role="region" tabindex="0">
+  <table>
+   <thead>
+    <tr>
+     <th>
+      membership_id
+     </th>
+     <th>
+      check_in_date
+     </th>
+     <th>
+      person_id
+     </th>
+     <th>
+      name
+     </th>
+     <th>
+      membership_status
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td>
+      48Z7A
+     </td>
+     <td>
+      20180109
+     </td>
+     <td>
+      28819
+     </td>
+     <td>
+      Joe Germuska
+     </td>
+     <td>
+      gold
+     </td>
+    </tr>
+    <tr>
+     <td>
+      48Z55
+     </td>
+     <td>
+      20180109
+     </td>
+     <td>
+      67318
+     </td>
+     <td>
+      Jeremy Bowers
+     </td>
+     <td>
+      gold
+     </td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+ <h2>
+  How it works
+ </h2>
+ <p>
+  Get_fit_now_check_in contributes attendance; Get_fit_now_member contributes the person, name and membership tier. Filtering the joined records keeps gold members with IDs beginning 48Z who checked in on 9 January 2018.
+ </p>
+ <div class="note warning">
+  <b>
+   Source-aware note.
+  </b>
+  The two rows shown below are the notebook’s saved candidate table, not a fresh database execution. The prefix alone is not the final identification.
+ </div>
+ <details class="reference-details">
+  <summary>
+   Sources and original files
+  </summary>
+  <div class="sources-content">
+   <div class="source-note">
+    <b>
+     Source:
+    </b>
+    <code>
+     sql_murder_city.ipynb
+    </code>
+    , notebook cell 8 (one-based). Original code is reproduced unchanged. Explanations and pandas panels are additions to the website edition.
+   </div>
+   <p class="small">
+    Source:
+    <a href="#murder-city">
+     original notebook and casebook overview
+    </a>
+    . Original cell 8 and recorded Markdown cell 9.
+   </p>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-and">
+     AND
+    </a>
+    <a href="#m-sql-like">
+     LIKE
+    </a>
+    <a href="#m-sql-left-join">
+     LEFT JOIN
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-loc">
+     Rows by label
+    </a>
+    <a href="#m-pd-and">
+     Multiple conditions
+    </a>
+    <a href="#m-pd-loc-label">
+     Access label
+    </a>
+    <a href="#m-pd-merge-left">
+     Left merge
+    </a>
+    <a href="#m-pd-merge-keys">
+     Different keys
+    </a>
+    <a href="#m-pd-str-startswith">
+     Starts with
+    </a>
+    <a href="#m-pd-astype">
+     astype()
+    </a>
+    <a href="#m-pd-eq">
+     eq() / ne()
+    </a>
+    <a href="#m-pd-copy">
+     copy()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#murder-03">
+   <small>
+    ← Previous
+   </small>
+   Read the witness interviews
+  </a>
+  <a href="#murder-05">
+   <small>
+    Next →
+   </small>
+   Cross-check the licence plate
+  </a>
+ </div>
+</article>

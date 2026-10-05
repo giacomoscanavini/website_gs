@@ -1,0 +1,525 @@
+<section aria-labelledby="training-diagnosis-title" class="page-view lesson-layout" id="training-diagnosis">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     16
+    </span>
+    Part 2 · Optimization
+   </p>
+   <h1 id="training-diagnosis-title" tabindex="-1">
+    Diagnosing optimization versus generalization
+   </h1>
+   <p class="standfirst">
+    Interpret symptoms before changing the model, optimizer, or regularization.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Optimization · PDF pp. 23–26 · §§19–24" data-page="23" data-pdf="optim" type="button">
+     Optimization · PDF pp. 23–26 · §§19–24
+    </button>
+    <button aria-label="Open source: Regularization · PDF pp. 26–27 · §§20–22" data-page="26" data-pdf="reg" type="button">
+     Regularization · PDF pp. 26–27 · §§20–22
+    </button>
+    <button aria-label="Open source: Neural networks · PDF p. 19 · §26" data-page="19" data-pdf="basics" type="button">
+     Neural networks · PDF p. 19 · §26
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="first-identify-which-part-of-the-learning-process-is-failing" href="#training-diagnosis?section=first-identify-which-part-of-the-learning-process-is-failing">
+     First identify which part of the learning process is failing
+    </a>
+    <a data-section="read-the-training-symptoms" href="#training-diagnosis?section=read-the-training-symptoms">
+     Read the training symptoms
+    </a>
+    <a data-section="monitor-the-update-not-only-the-loss" href="#training-diagnosis?section=monitor-the-update-not-only-the-loss">
+     Monitor the update, not only the loss
+    </a>
+    <a data-section="architecture-mistakes-can-masquerade-as-optimization-problems" href="#training-diagnosis?section=architecture-mistakes-can-masquerade-as-optimization-problems">
+     Architecture mistakes can masquerade as optimization problems
+    </a>
+    <a data-section="regularization-effects-can-accumulate" href="#training-diagnosis?section=regularization-effects-can-accumulate">
+     Regularization effects can accumulate
+    </a>
+    <a data-section="compare-complete-procedures-fairly" href="#training-diagnosis?section=compare-complete-procedures-fairly">
+     Compare complete procedures fairly
+    </a>
+    <a data-section="implementation" href="#training-diagnosis?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="first-identify-which-part-of-the-learning-process-is-failing" id="training-diagnosis--first-identify-which-part-of-the-learning-process-is-failing">
+    First identify which part of the learning process is failing
+   </h2>
+   <p>
+    The guides distinguish at least three possibilities: the model cannot represent what matters, the optimization procedure is not reaching a useful parameter region, or the fitted function fails to generalize. Similar-looking final scores can arise for different reasons.
+   </p>
+   <p>
+    For example, high errors on both training and validation can reflect underfitting, difficult optimization, inadequate inputs, or too much regularization. A tiny training error with weak validation is instead consistent with overfitting. More dropout is not a universal answer, and a more powerful optimizer is not a universal answer either.
+   </p>
+   <h2 data-section="read-the-training-symptoms" id="training-diagnosis--read-the-training-symptoms">
+    Read the training symptoms
+   </h2>
+   <div aria-label="Scrollable calculation table" class="table-scroll" role="region" tabindex="0">
+    <table>
+     <colgroup>
+      <col style="width: 33%"/>
+      <col style="width: 33%"/>
+      <col style="width: 33%"/>
+     </colgroup>
+     <thead>
+      <tr class="header">
+       <th>
+        Observation from the guides
+       </th>
+       <th>
+        Possible explanation
+       </th>
+       <th>
+        What the explanation suggests checking
+       </th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr class="odd">
+       <td>
+        Loss explodes immediately
+       </td>
+       <td>
+        Excessive rate or numerical instability
+       </td>
+       <td>
+        Initialization, finite values, gradient norms, output/loss pairing
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        Very slow improvement
+       </td>
+       <td>
+        Small rate, poor conditioning, weak gradients
+       </td>
+       <td>
+        Feature scale, derivative flow, rate and schedule
+       </td>
+      </tr>
+      <tr class="odd">
+       <td>
+        Strong oscillation
+       </td>
+       <td>
+        Large steps or a narrow valley
+       </td>
+       <td>
+        Momentum, conditioning, step-size control
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        Training improves, validation worsens
+       </td>
+       <td>
+        Generalization failure
+       </td>
+       <td>
+        Capacity, penalties, valid augmentation, stopping time
+       </td>
+      </tr>
+      <tr class="odd">
+       <td>
+        AdaGrad stalls late
+       </td>
+       <td>
+        Large permanent accumulator
+       </td>
+       <td>
+        Effective coordinate rates and recent-gradient alternatives
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        BFGS unstable with mini-batches
+       </td>
+       <td>
+        Noisy curvature differences
+       </td>
+       <td>
+        Objective consistency and deterministic/full-batch suitability
+       </td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+   <p>
+    These are hypotheses, not diagnoses guaranteed by a curve. Inspect the underlying computation before treating the pattern as proof.
+   </p>
+   <h2 data-section="monitor-the-update-not-only-the-loss" id="training-diagnosis--monitor-the-update-not-only-the-loss">
+    Monitor the update, not only the loss
+   </h2>
+   <p>
+    The optimization PDF suggests monitoring
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>J</mi><mi>t</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mo form="prefix" stretchy="false">∥</mo><msub><mi>g</mi><mi>t</mi></msub><mo form="postfix" stretchy="false">∥</mo><mo>,</mo><mspace width="2.0em"></mspace><mo form="prefix" stretchy="false">∥</mo><mi>Δ</mi><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="false">∥</mo><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><mo form="prefix" stretchy="false">∥</mo><mi>Δ</mi><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="false">∥</mo></mrow><mrow><mo form="prefix" stretchy="false">∥</mo><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="false">∥</mo><mo>+</mo><mi>ϵ</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">J_t,\qquad \lVert g_t\rVert,\qquad\lVert\Delta\theta_t\rVert,\qquad
+\frac{\lVert\Delta\theta_t\rVert}{\lVert\theta_t\rVert+\epsilon}.</annotation></semantics></math>
+   </div>
+   <p>
+    The last ratio asks whether an update is small or large relative to the existing parameter scale. A tiny gradient is not automatically harmless; it might be a symptom of saturation. A large gradient is not automatically a useful learning signal; it might be an instability. Interpret each quantity with the activation and objective scales.
+   </p>
+   <p>
+    The official TensorBoard tutorial already demonstrates graph, data, and training visualizations. Use it to inspect a real run rather than reconstruct another dashboard inside these notes.
+   </p>
+   <details class="derivation" data-derivation="clipping-projection" id="training-diagnosis--derivation-clipping-projection">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive global-norm clipping as a projection
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      A finite gradient vector
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo>∈</mo><msup><mi>ℝ</mi><mi>d</mi></msup></mrow><annotation encoding="application/x-tex">g\in\mathbb R^d</annotation></semantics></math>
+      and radius
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">c&gt;0</annotation></semantics></math>
+      . Seek the vector closest to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>g</mi><annotation encoding="application/x-tex">g</annotation></semantics></math>
+      inside the Euclidean ball:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mo>min</mo><mi>u</mi></munder><mfrac><mn>1</mn><mn>2</mn></mfrac><mo form="postfix" stretchy="false">∥</mo><mi>u</mi><mo>−</mo><mi>g</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mspace width="1.0em"></mspace><mrow><mtext mathvariant="normal">subject to </mtext><mspace width="0.333em"></mspace></mrow><mo form="postfix" stretchy="false">∥</mo><mi>u</mi><mo form="postfix" stretchy="false">∥</mo><mo>≤</mo><mi>c</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\min_u\frac12\|u-g\|^2\quad\text{subject to }\|u\|\le c.</annotation></semantics></math>
+     </div>
+     <h4>
+      1 · Check the feasible unconstrained optimum
+     </h4>
+     <p>
+      The derivative of
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><mo form="postfix" stretchy="false">∥</mo><mi>u</mi><mo>−</mo><mi>g</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\tfrac12\|u-g\|^2</annotation></semantics></math>
+      is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mo>−</mo><mi>g</mi></mrow><annotation encoding="application/x-tex">u-g</annotation></semantics></math>
+      . Its unconstrained minimum is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mo>=</mo><mi>g</mi></mrow><annotation encoding="application/x-tex">u=g</annotation></semantics></math>
+      . If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo><mo>≤</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">\|g\|\le c</annotation></semantics></math>
+      , this is feasible and already solves the constrained problem. In particular
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g=0</annotation></semantics></math>
+      stays zero; no division is required.
+     </p>
+     <h4>
+      2 · Handle a gradient outside the ball
+     </h4>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo><mo>&gt;</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">\|g\|&gt;c</annotation></semantics></math>
+      , the optimum lies on its boundary. Use the Lagrangian
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℒ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>u</mi><mo>,</mo><mi>λ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><mo form="postfix" stretchy="false">∥</mo><mi>u</mi><mo>−</mo><mi>g</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>+</mo><mfrac displaystyle="false"><mi>λ</mi><mn>2</mn></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><mo form="postfix" stretchy="false">∥</mo><mi>u</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>−</mo><msup><mi>c</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>λ</mi><mo>≥</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal L(u,\lambda)=\tfrac12\|u-g\|^2+\tfrac\lambda2(\|u\|^2-c^2),\qquad\lambda\ge0.</annotation></semantics></math>
+     </div>
+     <p>
+      Stationarity gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mo>−</mo><mi>g</mi><mo>+</mo><mi>λ</mi><mi>u</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">u-g+\lambda u=0</annotation></semantics></math>
+      , hence
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mo>=</mo><mi>g</mi><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><mi>λ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">u=g/(1+\lambda)</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      3 · Enforce the boundary radius
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>u</mi><mo form="postfix" stretchy="false">∥</mo><mo>=</mo><mfrac><mrow><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo></mrow><mrow><mn>1</mn><mo>+</mo><mi>λ</mi></mrow></mfrac><mo>=</mo><mi>c</mi><mspace width="1.0em"></mspace><mo>⇒</mo><mspace width="1.0em"></mspace><mn>1</mn><mo>+</mo><mi>λ</mi><mo>=</mo><mfrac><mrow><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo></mrow><mi>c</mi></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\|u\|=\frac{\|g\|}{1+\lambda}=c\quad\Rightarrow\quad
+1+\lambda=\frac{\|g\|}{c}.</annotation></semantics></math>
+     </div>
+     <p>
+      Substituting yields
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mo>=</mo><mi>c</mi><mi>g</mi><mi>/</mi><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo></mrow><annotation encoding="application/x-tex">u=cg/\|g\|</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      4 · Combine the two cases
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>g</mi><mo accent="true">̃</mo></mover><mo>=</mo><mrow><mo form="prefix" stretchy="true">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mi>g</mi></mtd><mtd columnalign="left" style="text-align: left"><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo><mo>≤</mo><mi>c</mi><mo>,</mo></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mi>c</mi><mi>g</mi><mi>/</mi><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo></mtd><mtd columnalign="left" style="text-align: left"><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo><mo>&gt;</mo><mi>c</mi><mi>.</mi></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\tilde g=\begin{cases}g&amp;\|g\|\le c,\\ cg/\|g\|&amp;\|g\|&gt;c.\end{cases}</annotation></semantics></math>
+     </div>
+     <p>
+      For nonzero
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>g</mi><annotation encoding="application/x-tex">g</annotation></semantics></math>
+      , this is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo>min</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mi>c</mi><mi>/</mi><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">g\min(1,c/\|g\|)</annotation></semantics></math>
+      . Norm clipping preserves direction on the clipped branch; clipping each coordinate independently does not generally do so.
+     </p>
+     <h4>
+      5 · Distinguish gradient and update bounds
+     </h4>
+     <p>
+      For basic SGD,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>θ</mi><mo>=</mo><mi>−</mi><mi>η</mi><mover><mi>g</mi><mo accent="true">̃</mo></mover></mrow><annotation encoding="application/x-tex">\Delta\theta=-\eta\tilde g</annotation></semantics></math>
+      implies
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>Δ</mi><mi>θ</mi><mo form="postfix" stretchy="false">∥</mo><mo>≤</mo><mi>η</mi><mi>c</mi></mrow><annotation encoding="application/x-tex">\|\Delta\theta\|\le\eta c</annotation></semantics></math>
+      . With momentum or adaptive state, the update also depends on previous history. Bounding the fresh gradient alone does not establish the same bound on the final parameter displacement.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="23" data-pdf="optim" type="button">
+       Chapter source · PDF p. 23
+      </button>
+      <a class="calculation-link" href="#training-diagnosis?derivation=clipping-projection">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="architecture-mistakes-can-masquerade-as-optimization-problems" id="training-diagnosis--architecture-mistakes-can-masquerade-as-optimization-problems">
+    Architecture mistakes can masquerade as optimization problems
+   </h2>
+   <p>
+    The basics guide lists missing hidden activations, inappropriate loss/output combinations, bad initialization, tensor-shape mistakes, and inadvertently detached tensors. A deeper network that fails where a simpler one succeeds should first be checked for these issues.
+   </p>
+   <p>
+    Check a small forward calculation, verify that each output has the intended meaning, and confirm that gradients connect the loss to the relevant parameters. The running
+    <a href="#backpropagation">
+     forward/backward example
+    </a>
+    provides a compact numerical reference for what a correct chain should look like.
+   </p>
+   <details class="derivation" data-derivation="finite-difference" id="training-diagnosis--derivation-finite-difference">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive a directional finite-difference gradient check
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Hold the data and all randomness fixed. Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
+      be a unit direction and assume
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>
+      is sufficiently smooth along
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi><mo>+</mo><mi>t</mi><mi>v</mi></mrow><annotation encoding="application/x-tex">\theta+tv</annotation></semantics></math>
+      . A directional check compares
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>g</mi><mi>⊤</mi></msup><mi>v</mi></mrow><annotation encoding="application/x-tex">g^\top v</annotation></semantics></math>
+      with a scalar finite difference.
+     </p>
+     <h4>
+      1 · Write both Taylor expansions
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>h</mi><mi>v</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>h</mi><msup><mi>g</mi><mi>⊤</mi></msup><mi>v</mi><mo>+</mo><mfrac><msup><mi>h</mi><mn>2</mn></msup><mn>2</mn></mfrac><msup><mi>v</mi><mi>⊤</mi></msup><mi>H</mi><mi>v</mi><mo>+</mo><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>h</mi><mn>3</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">J(\theta+hv)=J(\theta)+h g^\top v+\frac{h^2}{2}v^\top Hv+O(h^3),</annotation></semantics></math>
+     </div>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>−</mo><mi>h</mi><mi>v</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>h</mi><msup><mi>g</mi><mi>⊤</mi></msup><mi>v</mi><mo>+</mo><mfrac><msup><mi>h</mi><mn>2</mn></msup><mn>2</mn></mfrac><msup><mi>v</mi><mi>⊤</mi></msup><mi>H</mi><mi>v</mi><mo>+</mo><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>h</mi><mn>3</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">J(\theta-hv)=J(\theta)-h g^\top v+\frac{h^2}{2}v^\top Hv+O(h^3).</annotation></semantics></math>
+     </div>
+     <h4>
+      2 · Subtract to cancel the even-order terms
+     </h4>
+     <p>
+      The constant and quadratic terms cancel, leaving
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>h</mi><mi>v</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>−</mo><mi>h</mi><mi>v</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>2</mn><mi>h</mi><msup><mi>g</mi><mi>⊤</mi></msup><mi>v</mi><mo>+</mo><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>h</mi><mn>3</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">J(\theta+hv)-J(\theta-hv)=2h g^\top v+O(h^3).</annotation></semantics></math>
+     </div>
+     <p>
+      Divide by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>h</mi></mrow><annotation encoding="application/x-tex">2h</annotation></semantics></math>
+      :
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>h</mi><mi>v</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>−</mo><mi>h</mi><mi>v</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><mn>2</mn><mi>h</mi></mrow></mfrac><mo>=</mo><msup><mi>g</mi><mi>⊤</mi></msup><mi>v</mi><mo>+</mo><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>h</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{J(\theta+hv)-J(\theta-hv)}{2h}=g^\top v+O(h^2).</annotation></semantics></math>
+     </div>
+     <p>
+      The centered check has second-order truncation error.
+     </p>
+     <h4>
+      3 · Explain why a smaller step is not always better
+     </h4>
+     <p>
+      Finite-precision evaluations subtract nearly equal numbers. A rough roundoff contribution scales like
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ϵ</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">h</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">|</mo><mi>J</mi><mo form="postfix" stretchy="true">|</mo></mrow><mi>/</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">\epsilon_{\mathrm{machine}}|J|/h</annotation></semantics></math>
+      , while truncation scales like
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>h</mi><mn>2</mn></msup><annotation encoding="application/x-tex">h^2</annotation></semantics></math>
+      . Making
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
+      arbitrarily small trades one error for the other; use a range of sensible steps and double precision for a numerical check.
+     </p>
+     <h4>
+      4 · Respect nonsmooth and stochastic computations
+     </h4>
+     <p>
+      At a ReLU kink, the classical derivative may not exist, and centered differences need not match a chosen subgradient. Different stochastic masks evaluate different functions, invalidating the subtraction. Avoid kink crossings and freeze randomness before interpreting a discrepancy as a backpropagation error.
+     </p>
+     <h4>
+      5 · Use checks as evidence, not a proof
+     </h4>
+     <p>
+      A passing directional check supports correctness along that direction at that parameter point. Multiple independent directions, analytically tractable cases, and shape tests provide stronger coverage. They do not prove every possible input and branch is correct.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="23" data-pdf="optim" type="button">
+       Chapter source · PDF p. 23
+      </button>
+      <a class="calculation-link" href="#training-diagnosis?derivation=finite-difference">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="regularization-effects-can-accumulate" id="training-diagnosis--regularization-effects-can-accumulate">
+    Regularization effects can accumulate
+   </h2>
+   <p>
+    Strong weight decay, high dropout, aggressive augmentation, and early stopping all restrict the learned solution in different ways. Their combined effect can produce underfitting. The regularization PDF explicitly warns against adding more constraints when both training and validation remain weak.
+   </p>
+   <p>
+    Augmentation also needs a credible target-preservation assumption. A model trained on corrupted labels may look difficult to optimize when the real problem is that its effective training task is inconsistent.
+   </p>
+   <h2 data-section="compare-complete-procedures-fairly" id="training-diagnosis--compare-complete-procedures-fairly">
+    Compare complete procedures fairly
+   </h2>
+   <p>
+    Optimizer names alone do not define experiments. Base rate, schedule, batch size, momentum, decay, and stopping criteria all affect outcomes. BFGS and CG additionally depend heavily on line search and curvature safeguards. Tune within a validation procedure and compare computation as well as validation performance.
+   </p>
+   <p>
+    The validation set used to choose those settings is part of model selection. Repeatedly choosing settings from the test score changes the role of the test data. For temporal problems, the guides emphasize time ordering and resampling schemes that preserve the intended dependence.
+   </p>
+   <p>
+    A practical order is to establish a correct objective and derivative path, obtain reliable training behavior, and then address the gap to unseen data. Changing many components simultaneously makes that reasoning harder, because a better result no longer reveals which change addressed the failure.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="training-diagnosis--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="optimization">
+     <span class="resource-meta">
+      PyTorch · Tutorial + code
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Optimizing Model Parameters
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Follow separate training and test loops. Identify the forward calculation, loss, backward pass and optimizer update rather than treating training as one operation.
+     </p>
+    </div>
+    <div class="resource" data-resource="tensorboard">
+     <span class="resource-meta">
+      PyTorch · Tutorial + visualization
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/intermediate/tensorboard_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Visualizing Models, Data, and Training with TensorBoard
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Inspect a model graph, data and training curves in a complete example. TensorBoard is a separate visualization dependency; the theory reader does not require it.
+     </p>
+    </div>
+    <div class="resource" data-resource="transfer">
+     <span class="resource-meta">
+      PyTorch · Training example + visuals
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/transfer_learning_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Transfer Learning for Computer Vision
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Inspect augmentation, the validation phase, retention of the best validation model and visualized predictions. Best-model restoration and stopping are different operations.
+     </p>
+    </div>
+   </div>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Training loss is low but validation loss is poor. Is a faster optimizer the first remedy?
+   </summary>
+   <p>
+    Not necessarily. That pattern points toward a generalization problem rather than inability to fit the training sample. Check evaluation consistency and leakage, then consider capacity, regularization, augmentation, and early stopping. Faster training alone can fit the unstable structure sooner.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#bfgs-lbfgs">
+    <small>
+     ← Previous
+    </small>
+    BFGS, L-BFGS, and line search
+   </a>
+   <a href="#bias-variance">
+    <small>
+     Next →
+    </small>
+    Generalization and the bias–variance trade-off
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="first-identify-which-part-of-the-learning-process-is-failing" href="#training-diagnosis?section=first-identify-which-part-of-the-learning-process-is-failing">
+    First identify which part of the learning process is failing
+   </a>
+   <a data-section="read-the-training-symptoms" href="#training-diagnosis?section=read-the-training-symptoms">
+    Read the training symptoms
+   </a>
+   <a data-section="monitor-the-update-not-only-the-loss" href="#training-diagnosis?section=monitor-the-update-not-only-the-loss">
+    Monitor the update, not only the loss
+   </a>
+   <a data-section="architecture-mistakes-can-masquerade-as-optimization-problems" href="#training-diagnosis?section=architecture-mistakes-can-masquerade-as-optimization-problems">
+    Architecture mistakes can masquerade as optimization problems
+   </a>
+   <a data-section="regularization-effects-can-accumulate" href="#training-diagnosis?section=regularization-effects-can-accumulate">
+    Regularization effects can accumulate
+   </a>
+   <a data-section="compare-complete-procedures-fairly" href="#training-diagnosis?section=compare-complete-procedures-fairly">
+    Compare complete procedures fairly
+   </a>
+   <a data-section="implementation" href="#training-diagnosis?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

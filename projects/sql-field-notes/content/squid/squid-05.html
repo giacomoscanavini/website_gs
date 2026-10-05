@@ -1,0 +1,354 @@
+<article class="article" id="squid-05">
+ <div class="breadcrumb">
+  <a href="#squid-game">
+   SQL Squid Game
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Level 5
+  </span>
+ </div>
+ <h1>
+  Count a player’s closest interactions
+ </h1>
+ <p class="lead">
+  Normalize both sides of an interaction before counting counterpart players.
+ </p>
+ <h2>
+  Task
+ </h2>
+ <p>
+  For the Marbles game, the Front Man needs you to discover who Player 456's closest companion is. First, find the player who has interacted with Player 456 the most frequently in daily activities. Then, confirm this player is still alive and return a row with both players' first names, and the number of interactions they've had.
+ </p>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-112-panel-0" aria-selected="true" id="example-112-tab-0" role="tab" tabindex="0" type="button">
+     My SQL
+    </button>
+    <button aria-controls="example-112-panel-1" aria-selected="false" id="example-112-tab-1" role="tab" tabindex="-1" type="button">
+     pandas alternative
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-112-tab-0" class="code-panel" id="example-112-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    My SQL
+   </div>
+   <pre id="code-squid-05-0" tabindex="0"><code class="language-sql" data-origin="squid-query-05"><span class="k">WITH</span>
+<span class="w">	</span><span class="n">Player_interactions</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">	  </span><span class="k">SELECT</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">target_id</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">player_id</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">counts</span>
+<span class="w">	  </span><span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="w">		  </span><span class="k">SELECT</span><span class="w"> </span>
+<span class="w">			  </span><span class="mi">456</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">target_id</span><span class="p">,</span>
+<span class="w">			  </span><span class="k">CASE</span>
+<span class="w">				</span><span class="k">WHEN</span><span class="w"> </span><span class="n">player1_id</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="mi">456</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">player1_id</span>
+<span class="w">				</span><span class="k">ELSE</span><span class="w"> </span><span class="n">player2_id</span><span class="w"> </span>
+<span class="w">			  </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">player_id</span><span class="p">,</span>
+<span class="w">			  </span><span class="k">type</span><span class="p">,</span>
+<span class="w">			  </span><span class="k">EXTRACT</span><span class="p">(</span><span class="k">DAY</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="nb">date</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">day</span><span class="p">,</span>
+<span class="w">			  </span><span class="k">EXTRACT</span><span class="p">(</span><span class="k">MONTH</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="nb">date</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">month</span><span class="p">,</span>
+<span class="w">			  </span><span class="k">EXTRACT</span><span class="p">(</span><span class="k">YEAR</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="nb">date</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">year</span>
+<span class="w">		  </span><span class="k">FROM</span><span class="w"> </span><span class="n">Daily_interactions</span>
+<span class="w">		  </span><span class="k">WHERE</span><span class="w"> </span><span class="n">player1_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">456</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">player2_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">456</span>
+<span class="w">	  </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">t</span>
+<span class="w">	  </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">target_id</span><span class="p">,</span><span class="w"> </span><span class="n">t</span><span class="p">.</span><span class="n">player_id</span>
+<span class="w">	  </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">counts</span><span class="w"> </span><span class="k">DESC</span>
+<span class="w">	</span><span class="p">)</span>
+<span class="w">	</span>
+<span class="k">SELECT</span><span class="w"> </span>
+<span class="w">	</span><span class="n">pl</span><span class="p">.</span><span class="n">first_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">name_456</span><span class="p">,</span>
+<span class="w">	</span><span class="n">p</span><span class="p">.</span><span class="n">first_name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">name_other</span><span class="p">,</span>
+<span class="w">	</span><span class="n">counts</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Player_interactions</span><span class="w"> </span><span class="n">i</span>
+<span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">player</span><span class="w"> </span><span class="n">pl</span>
+<span class="w">	</span><span class="k">ON</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">target_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pl</span><span class="p">.</span><span class="n">id</span>
+<span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">player</span><span class="w"> </span><span class="n">p</span>
+<span class="w">	</span><span class="k">ON</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">player_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'alive'</span>
+<span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span></code></pre>
+  </div>
+  <div aria-labelledby="example-112-tab-1" class="code-panel" id="example-112-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas alternative
+   </div>
+   <pre id="code-squid-05-1" tabindex="0"><code class="language-python" data-origin="squid-05-pandas"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">mask</span> <span class="o">=</span> <span class="n">daily_interactions</span><span class="p">[</span><span class="s1">'player1_id'</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">456</span><span class="p">)</span> <span class="o">|</span> <span class="n">daily_interactions</span><span class="p">[</span><span class="s1">'player2_id'</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">456</span><span class="p">)</span>
+<span class="n">interactions</span> <span class="o">=</span> <span class="n">daily_interactions</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">interactions</span><span class="p">[</span><span class="s1">'player_id'</span><span class="p">]</span> <span class="o">=</span> <span class="n">interactions</span><span class="p">[</span><span class="s1">'player1_id'</span><span class="p">]</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
+    <span class="n">interactions</span><span class="p">[</span><span class="s1">'player1_id'</span><span class="p">]</span><span class="o">.</span><span class="n">ne</span><span class="p">(</span><span class="mi">456</span><span class="p">),</span> <span class="n">interactions</span><span class="p">[</span><span class="s1">'player2_id'</span><span class="p">])</span>
+<span class="n">counts</span> <span class="o">=</span> <span class="n">interactions</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'player_id'</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'size'</span><span class="p">:</span> <span class="s1">'counts'</span><span class="p">})</span>
+<span class="n">counts</span><span class="p">[</span><span class="s1">'target_id'</span><span class="p">]</span> <span class="o">=</span> <span class="mi">456</span>
+<span class="n">target</span> <span class="o">=</span> <span class="n">player</span><span class="p">[[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'first_name'</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="s1">'target_id'</span><span class="p">,</span> <span class="s1">'first_name'</span><span class="p">:</span> <span class="s1">'name_456'</span><span class="p">})</span>
+<span class="n">other</span> <span class="o">=</span> <span class="n">player</span><span class="p">[[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'first_name'</span><span class="p">,</span> <span class="s1">'status'</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="s1">'player_id'</span><span class="p">,</span> <span class="s1">'first_name'</span><span class="p">:</span> <span class="s1">'name_other'</span><span class="p">})</span>
+<span class="n">joined</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">target</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'target_id'</span><span class="p">)</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'player_id'</span><span class="p">)</span>
+<span class="c1"># Explicit final sort is an authored addition</span>
+<span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">joined</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">joined</span><span class="p">[</span><span class="s1">'status'</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="s1">'alive'</span><span class="p">)]</span>
+          <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'counts'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+          <span class="p">[[</span><span class="s1">'name_456'</span><span class="p">,</span> <span class="s1">'name_other'</span><span class="p">,</span> <span class="s1">'counts'</span><span class="p">]])</span></code></pre>
+   <p class="panel-note">
+    Added translation ·
+    <a href="#squid-game">
+     DataFrame assumptions
+    </a>
+   </p>
+  </div>
+ </div>
+ <h2>
+  How it works
+ </h2>
+ <p>
+  Each interaction involving Player 456 is converted to a counterpart ID regardless of which player column contains 456. Counts are grouped by counterpart, joined to both names, and filtered to living counterparts before LIMIT 1.
+ </p>
+ <div class="note warning">
+  <b>
+   Source-aware note.
+  </b>
+  The brief says to find the most frequent counterpart and then confirm they are alive; the saved query filters living counterparts before taking one row. It also sorts only inside the CTE, without an outer ORDER BY. The pandas translation below explicitly sorts at the final selection to express the frequency intent; that final sort is an authored addition, not an original SQL line.
+ </div>
+ <p class="small">
+  No query-result table was stored in this SQL file. Sample-schema rows below are inputs, not the answer.
+ </p>
+ <details class="reference-details">
+  <summary>
+   Sources and original files
+  </summary>
+  <div class="sources-content">
+   <div class="source-note">
+    <b>
+     Source:
+    </b>
+    <code>
+     sql_squid_game-main/level_05.sql
+    </code>
+    .
+    <a href="https://datalemur.com/sql-game/level5.html" rel="noopener noreferrer" target="_blank">
+     Original level ↗
+    </a>
+    . The brief and original SQL come from my saved file; study notes and pandas code are newly authored.
+   </div>
+   <details class="source-details">
+    <summary>
+     Original sample-schema comments · not a full dataset
+    </summary>
+    <div class="codebox">
+     <div class="codehead">
+      <span>
+       Schema and sample rows · preserved source text
+      </span>
+      <button aria-label="Copy Schema and sample rows · preserved source text" data-copy="" type="button">
+       Copy
+      </button>
+     </div>
+     <pre id="code-squid-05-2" tabindex="0"><code class="language-text">SCHEMA for `player`:
+    id	first_name	last_name	age	    status
+    1	Luigi	    Mangione	27	    alive
+    2	Seokjin	    Nam	        68	    dead
+    3	Chiho	    Dae	        54	    dead
+
+    SCHEMA for `Daily_interactions`:
+    id	player1_id	player2_id	type	        date
+    1	272	        431	        Conversation	Fri Jun 26 2020 08:00:00 GMT+0800 (Hong Kong Standard Time)
+    2	300	        417	        Eating	        Fri Jun 26 2020 08:00:00 GMT+0800 (Hong Kong Standard Time)
+    3	150	        1	        Hugging	        Thu Jun 25 2020 08:00:00 GMT+0800 (Hong Kong Standard Time)</code></pre>
+    </div>
+   </details>
+   <details class="source-details">
+    <summary>
+     Complete original file · brief, sample schema and SQL
+    </summary>
+    <div class="codebox">
+     <div class="codehead">
+      <span>
+       level_05.sql · original source
+      </span>
+      <button aria-label="Copy level_05.sql · original source" data-copy="" type="button">
+       Copy
+      </button>
+     </div>
+     <pre id="code-squid-05-3" tabindex="0"><code class="language-text" data-origin="level_05.sql">/* LEVEL 05: https://datalemur.com/sql-game/level5.html
+
+    For the Marbles game, the Front Man needs you to discover who Player 456's closest companion is. 
+    First, find the player who has interacted with Player 456 the most frequently in daily activities. 
+    Then, confirm this player is still alive and return a row with both players' first names, and the number of interactions they've had.
+*/
+/* 
+    SCHEMA for `player`:
+    id	first_name	last_name	age	    status
+    1	Luigi	    Mangione	27	    alive
+    2	Seokjin	    Nam	        68	    dead
+    3	Chiho	    Dae	        54	    dead
+
+    SCHEMA for `Daily_interactions`:
+    id	player1_id	player2_id	type	        date
+    1	272	        431	        Conversation	Fri Jun 26 2020 08:00:00 GMT+0800 (Hong Kong Standard Time)
+    2	300	        417	        Eating	        Fri Jun 26 2020 08:00:00 GMT+0800 (Hong Kong Standard Time)
+    3	150	        1	        Hugging	        Thu Jun 25 2020 08:00:00 GMT+0800 (Hong Kong Standard Time)
+*/
+
+WITH
+	Player_interactions AS (
+	  SELECT t.target_id, t.player_id, COUNT(*) AS counts
+	  FROM (
+		  SELECT 
+			  456 AS target_id,
+			  CASE
+				WHEN player1_id &lt;&gt; 456 THEN player1_id
+				ELSE player2_id 
+			  END AS player_id,
+			  type,
+			  EXTRACT(DAY FROM date) AS day,
+			  EXTRACT(MONTH FROM date) AS month,
+			  EXTRACT(YEAR FROM date) AS year
+		  FROM Daily_interactions
+		  WHERE player1_id = 456 OR player2_id = 456
+	  ) AS t
+	  GROUP BY t.target_id, t.player_id
+	  ORDER BY counts DESC
+	)
+	
+SELECT 
+	pl.first_name AS name_456,
+	p.first_name AS name_other,
+	counts
+FROM Player_interactions i
+INNER JOIN player pl
+	ON i.target_id = pl.id
+INNER JOIN player p
+	ON i.player_id = p.id
+WHERE p.status = 'alive'
+LIMIT 1</code></pre>
+    </div>
+   </details>
+   <a class="button source-download" download="level_05.sql" href="assets/downloads/level_05.sql">
+    Download level_05.sql ↓
+   </a>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-or">
+     OR
+    </a>
+    <a href="#m-sql-count">
+     COUNT()
+    </a>
+    <a href="#m-sql-group-by">
+     GROUP BY
+    </a>
+    <a href="#m-sql-inner-join">
+     INNER JOIN
+    </a>
+    <a href="#m-sql-case">
+     CASE
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-with">
+     WITH
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+    <a href="#m-sql-order-by">
+     ORDER BY
+    </a>
+    <a href="#m-sql-limit">
+     LIMIT / OFFSET
+    </a>
+    <a href="#m-sql-extract">
+     EXTRACT()
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-loc">
+     Rows by label
+    </a>
+    <a href="#m-pd-head">
+     First rows
+    </a>
+    <a href="#m-pd-or">
+     OR
+    </a>
+    <a href="#m-pd-sort-values">
+     Sort one column
+    </a>
+    <a href="#m-pd-sort-desc">
+     Descending
+    </a>
+    <a href="#m-pd-new-column">
+     New column
+    </a>
+    <a href="#m-pd-rename">
+     Rename
+    </a>
+    <a href="#m-pd-where">
+     where()
+    </a>
+    <a href="#m-pd-loc-label">
+     Access label
+    </a>
+    <a href="#m-pd-merge-inner">
+     Inner merge
+    </a>
+    <a href="#m-pd-size">
+     size
+    </a>
+    <a href="#m-pd-groupby">
+     Basic group
+    </a>
+    <a href="#m-pd-group-size">
+     Group size
+    </a>
+    <a href="#m-pd-eq">
+     eq() / ne()
+    </a>
+    <a href="#m-pd-copy">
+     copy()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#squid-04">
+   <small>
+    ← Previous
+   </small>
+   Rank ten-player teams
+  </a>
+  <a href="#squid-06">
+   <small>
+    Next →
+   </small>
+   Trace equipment to its first failure
+  </a>
+ </div>
+</article>

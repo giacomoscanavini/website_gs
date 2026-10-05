@@ -1,0 +1,558 @@
+<article class="article method-page" id="m-pd-to-datetime">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=Dates">
+   pandas · Dates
+  </a>
+ </div>
+ <h1>
+  Convert date
+ </h1>
+ <p class="lead">
+  Parse datetime
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-to-datetime"><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span></code></pre>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-sql-str-to-date">
+   SQL · STR_TO_DATE()
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C45?code=code-C45-1&amp;method=pd-to-datetime&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     197 · Rising temperature
+    </strong>
+    <small>
+     Study solution · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">def rising_temperature(weather: pd.DataFrame) -&gt; pd.DataFrame:
+    weather = weather.assign(recordDate=pd.to_datetime(weather['recordDate']))
+    weather = weather.sort_values('recordDate')
+    df = weather[(weather.recordDate.diff().eq(pd.Timedelta(days=1))) &amp; (weather.temperature.diff() &gt; 0)]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-to-datetime&amp;line=7">
+   <div>
+    <span class="usage-label">
+     Squid Game · pandas
+    </span>
+    <strong>
+     Compare hot and cold months
+    </strong>
+    <small>
+     Saved walkthrough · line 7
+    </small>
+   </div>
+   <pre aria-hidden="true">games = honeycomb_game.copy()
+dates = pd.to_datetime(games['date'])
+games['month_num'], games['year_num'] = dates.dt.month, dates.dt.year
+joined = games.merge(extreme[['month']], left_on='month_num', right_on='month')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C07?code=code-C07-1&amp;method=pd-to-datetime&amp;line=9">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1251 · Average selling price
+    </strong>
+    <small>
+     Study solution · line 9
+    </small>
+   </div>
+   <pre aria-hidden="true">def average_selling_price(prices: pd.DataFrame, units_sold: pd.DataFrame) -&gt; pd.DataFrame:
+    p = prices.assign(start_date=pd.to_datetime(prices['start_date']), end_date=pd.to_datetime(prices['end_date']))
+    u = units_sold.assign(purchase_date=pd.to_datetime(units_sold['purchase_date']))
+    matched = p.merge(u, on='product_id', how='inner')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C11?code=code-C11-1&amp;method=pd-to-datetime&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1193 · Monthly transactions I
+    </strong>
+    <small>
+     Study solution · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">def monthly_transactions(transactions: pd.DataFrame) -&gt; pd.DataFrame:
+    t = transactions.assign(month=pd.to_datetime(transactions['trans_date']).dt.strftime('%Y-%m'))
+    t['approved'] = t['state'].eq('approved')
+    t['approved_amount'] = t['amount'].where(t['approved'], 0)</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C12?code=code-C12-1&amp;method=pd-to-datetime&amp;line=9">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1174 · Immediate first deliveries
+    </strong>
+    <small>
+     Study solution · line 9
+    </small>
+   </div>
+   <pre aria-hidden="true">def immediate_food_delivery(delivery: pd.DataFrame) -&gt; pd.DataFrame:
+    d = delivery.assign(order_date=pd.to_datetime(delivery['order_date']), customer_pref_delivery_date=pd.to_datetime(delivery['customer_pref_delivery_date']))
+    first = d.sort_values('order_date').drop_duplicates('customer_id', keep='first')
+    value = 100 * first['order_date'].eq(first['customer_pref_delivery_date']).mean()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C13?code=code-C13-1&amp;method=pd-to-datetime&amp;line=9">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     550 · Game Play Analysis IV
+    </strong>
+    <small>
+     Study solution · line 9
+    </small>
+   </div>
+   <pre aria-hidden="true">def gameplay_analysis(activity: pd.DataFrame) -&gt; pd.DataFrame:
+    a = activity.assign(event_date=pd.to_datetime(activity['event_date']))
+    first = a.groupby('player_id')['event_date'].transform('min')
+    valid = a['event_date'].eq(first + pd.Timedelta(days=1))</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   7 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C15?code=code-C15-1&amp;method=pd-to-datetime&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def user_activity(activity: pd.DataFrame) -&gt; pd.DataFrame:
+    a = activity.assign(activity_date=pd.to_datetime(activity['activity_date']))
+    kinds = ['open_session', 'end_session', 'scroll_down', 'send_message']
+    mask = a['activity_date'].between('2019-06-28', '2019-07-27') &amp; a['activity_type'].isin(kinds)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C25?code=code-C25-1&amp;method=pd-to-datetime&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1164 · Product price at a given date
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def price_at_given_date(products: pd.DataFrame) -&gt; pd.DataFrame:
+    p = products.assign(change_date=pd.to_datetime(products['change_date']))
+    valid = p.loc[p['change_date'].le(pd.Timestamp('2019-08-16'))]
+    latest = valid.sort_values('change_date').drop_duplicates('product_id', keep='last')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-to-datetime&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def movie_rating(movies: pd.DataFrame, users: pd.DataFrame, movie_rating: pd.DataFrame) -&gt; pd.DataFrame:
+    r = movie_rating.assign(created_at=pd.to_datetime(movie_rating['created_at']))
+    users_ranked = r.groupby('user_id').size().reset_index(name='n_reviews').merge(users, on='user_id')
+    first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-1&amp;method=pd-to-datetime&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      Study solution · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">def restaurant_growth(customer: pd.DataFrame) -&gt; pd.DataFrame:
+    c = customer.assign(visited_on=pd.to_datetime(customer['visited_on']))
+    daily = c.groupby('visited_on')['amount'].sum().sort_index()
+    if daily.empty:</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-1&amp;method=pd-to-datetime&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def list_products(products: pd.DataFrame, orders: pd.DataFrame) -&gt; pd.DataFrame:
+    dates = pd.to_datetime(orders['order_date'])
+    feb = orders.loc[dates.ge('2020-02-01') &amp; dates.lt('2020-03-01')]
+    g = feb.groupby('product_id', as_index=False).agg(unit=('unit', 'sum'))</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-06?code=code-squid-06-1&amp;method=pd-to-datetime&amp;line=13">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Trace equipment to its first failure
+     </strong>
+     <small>
+      Saved walkthrough · line 13
+     </small>
+    </div>
+    <pre aria-hidden="true">    failures = in_game.loc[in_game['supplier_id'].eq(supplier_id)].copy()
+    failures['installation_date'] = pd.to_datetime(failures['installation_date'])
+    failures['failure_date'] = pd.to_datetime(failures['failure_date'])
+    first = failures.groupby('failed_equipment_id').agg(</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-to-datetime&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Reconstruct access-log overlaps
+     </strong>
+     <small>
+      Saved walkthrough · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">games = game_schedule.loc[game_schedule['type'].str.lower().eq('squid game')].copy()
+games['date'] = pd.to_datetime(games['date'])
+result = pd.DataFrame(columns=['id', 'access_time'])
+if not games.empty:</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (10)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-to-datetime&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      My approach · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">def average_selling_price(prices: pd.DataFrame, units_sold: pd.DataFrame) -&gt; pd.DataFrame:
+    prices = prices.assign(start_date=pd.to_datetime(prices['start_date']),
+                           end_date=pd.to_datetime(prices['end_date']))
+    units_sold = units_sold.assign(purchase_date=pd.to_datetime(units_sold['purchase_date']))</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C11?code=code-C11-3&amp;method=pd-to-datetime&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      My approach · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    transactions['approved'] =   transactions.state == 'approved'
+    transactions['month'] =   pd.to_datetime(transactions['trans_date']).dt.strftime("%Y-%m")
+    transactions['approved_amount'] =   transactions['approved'] * transactions['amount']
+    return   transactions.groupby(by=['month', 'country'], dropna=False).agg(</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C12?code=code-C12-3&amp;method=pd-to-datetime&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1174 · Immediate first deliveries
+     </strong>
+     <small>
+      My approach · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">def immediate_food_delivery(delivery: pd.DataFrame) -&gt; pd.DataFrame:
+    delivery = delivery.assign(order_date=pd.to_datetime(delivery['order_date']),
+                               customer_pref_delivery_date=pd.to_datetime(delivery['customer_pref_delivery_date'])).reset_index(drop=True)
+    delivery['immediate'] =   delivery['order_date'] == delivery['customer_pref_delivery_date']</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C13?code=code-C13-3&amp;method=pd-to-datetime&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      550 · Game Play Analysis IV
+     </strong>
+     <small>
+      My approach · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">def gameplay_analysis(activity: pd.DataFrame) -&gt; pd.DataFrame:
+    activity = activity.assign(event_date=pd.to_datetime(activity['event_date']))
+    activity['first_login'] =   activity.groupby(by='player_id')['event_date'].transform('min')
+    activity['valid'] = activity['event_date'] ==   activity['first_login'] + pd.Timedelta(days = 1)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-3&amp;method=pd-to-datetime&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      My approach · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    activity['activity_date'] =   pd.to_datetime(activity['activity_date'])
+    end_date = pd.Timestamp('2019-07-27')
+    start_date = end_date - pd.Timedelta(days=29)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-5&amp;method=pd-to-datetime&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    activity['activity_date'] = pd.to_datetime(activity['activity_date'])
+    end_date = pd.Timestamp('2019-07-27')
+    start_date = end_date - pd.Timedelta(days=29)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C25?code=code-C25-3&amp;method=pd-to-datetime&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1164 · Product price at a given date
+     </strong>
+     <small>
+      My approach · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def price_at_given_date(products: pd.DataFrame) -&gt; pd.DataFrame:
+    products = products.assign(change_date=pd.to_datetime(products['change_date']))
+    ids = set(products.product_id)
+    df = products[products['change_date'] &lt;= '2019-08-16']</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-3&amp;method=pd-to-datetime&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      My approach · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def movie_rating(movies: pd.DataFrame, users: pd.DataFrame, movie_rating: pd.DataFrame) -&gt; pd.DataFrame:
+    movie_rating = movie_rating.assign(created_at=pd.to_datetime(movie_rating['created_at']))
+    df_users =   movie_rating.groupby(by='user_id').agg(
+        nReviews = ('rating', 'size')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-3&amp;method=pd-to-datetime&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      My approach · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">def restaurant_growth(customer: pd.DataFrame) -&gt; pd.DataFrame:
+    customer = customer.assign(visited_on=pd.to_datetime(customer['visited_on']))
+    daily = customer.groupby('visited_on')['amount'].sum().sort_index()
+    if daily.empty:</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-3&amp;method=pd-to-datetime&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">def list_products(products: pd.DataFrame, orders: pd.DataFrame) -&gt; pd.DataFrame:
+    orders = orders.assign(order_date=pd.to_datetime(orders['order_date']))
+    orders =   orders[(orders.order_date &gt;= '2020-02-01') &amp; (orders.order_date &lt; '2020-03-01')]
+    df =   orders.groupby(by='product_id').agg(</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · Dates. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=Dates">
+   <small>
+    ← Browse
+   </small>
+   pandas · Dates
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

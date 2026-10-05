@@ -1,0 +1,131 @@
+{
+  "id": "pd-filter-notnull",
+  "lang": "pd",
+  "category": "Filtering",
+  "label": "Non-missing",
+  "example": "df[df.score.notna()]",
+  "description": "Non-null rows",
+  "source": "image-pandas",
+  "related": [
+    "sql-is-not-null"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "notna",
+  "uses": [
+    {
+      "page": "C06",
+      "block": "code-C06-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "620 · Not boring movies",
+      "number": "620",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def not_boring_movies(cinema: pd.DataFrame) -> pd.DataFrame:\n    mask = cinema['id'].mod(2).eq(1) & cinema['description'].notna() & cinema['description'].ne('boring')\n    return cinema.loc[mask].sort_values('rating', ascending=False)",
+      "snippetLine": 3
+    },
+    {
+      "page": "C06",
+      "block": "code-C06-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "620 · Not boring movies",
+      "number": "620",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def not_boring_movies(cinema: pd.DataFrame) -> pd.DataFrame:\n    df =   cinema[(cinema.id % 2 == 1) & (cinema.description.notna()) & (cinema.description != 'boring')]\n    return   df.sort_values('rating', ascending=False)",
+      "snippetLine": 3
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def find_employees(employees: pd.DataFrame) -> pd.DataFrame:\n    mask = employees['salary'].lt(30000) & employees['manager_id'].notna() & ~employees['manager_id'].isin(employees['employee_id'])\n    return employees.loc[mask, ['employee_id']].sort_values('employee_id')",
+      "snippetLine": 3
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-1",
+      "line": 9,
+      "lines": [
+        9,
+        15
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "joined = guards.merge(rooms, how='left', left_on='assigned_room_id', right_on='room_id')\njoined = joined.merge(cameras.loc[cameras['guard_spotted_id'].notna()],\n                      left_on='guard_number', right_on='guard_spotted_id')\njoined = joined.loc[joined['isvacant'].eq(True)].copy()",
+      "snippetLine": 8
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-1",
+      "line": 18,
+      "lines": [
+        18
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    logs = shifts.merge(daily_door_access_logs.rename(columns={'id': 'log_id'}), on='guard_id')\n    off_post = (logs['assigned_post'].notna() & logs['door_location'].notna()\n                & logs['assigned_post'].ne(logs['door_location']))\n    locations = logs.loc[off_post, 'door_location']",
+      "snippetLine": 17
+    },
+    {
+      "page": "B02",
+      "block": "code-B02-5",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Numeric constraints",
+      "number": "02",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = movies.loc[movies['year'].notna() & ~movies['year'].between(2000, 2010)].copy()",
+      "snippetLine": 1
+    },
+    {
+      "page": "B03",
+      "block": "code-B03-5",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Text constraints and LIKE",
+      "number": "03",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "mask = movies['director'].notna() & movies['director'].ne('John Lasseter')\nresult = movies.loc[mask, ['title', 'director']].copy()",
+      "snippetLine": 1
+    },
+    {
+      "page": "B07",
+      "block": "code-B07-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "OUTER JOINs",
+      "number": "07",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = employees.loc[employees['building'].notna(), ['building']].drop_duplicates()",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 7
+}

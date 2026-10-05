@@ -1,0 +1,116 @@
+{
+  "id": "sql-max",
+  "lang": "sql",
+  "category": "Aggregation",
+  "label": "MAX()",
+  "example": "MAX(price)",
+  "description": "Maximum",
+  "source": "image-sql",
+  "related": [
+    "pd-max"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+  "aliases": "MAX",
+  "uses": [
+    {
+      "page": "C19",
+      "block": "code-C19-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT MAX(num) AS num FROM (\n    SELECT num FROM MyNumbers GROUP BY num HAVING COUNT(*) = 1\n) singles;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C19",
+      "block": "code-C19-2",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": ")\nSELECT MAX(num) AS num\nFROM Frequency\nWHERE frequency = 1;",
+      "snippetLine": 7
+    },
+    {
+      "page": "C19",
+      "block": "code-C19-4",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\nSELECT MAX(num) AS num\nFROM Frequency\nWHERE frequency = 1",
+      "snippetLine": 9
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT CASE WHEN id % 2 = 0 THEN id - 1\n            WHEN id < (SELECT MAX(id) FROM Seat) THEN id + 1\n            ELSE id END AS id, student\nFROM Seat ORDER BY id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT MAX(salary) AS SecondHighestSalary FROM Employee WHERE salary < (SELECT MAX(salary) FROM Employee);",
+      "snippetLine": 1
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-0",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\tc.movement_detected_time - r.last_check_time AS time_between_room_and_outside,\n\t(SELECT MAX(Camera.movement_detected_time) - MIN(Camera.movement_detected_time)\n     FROM Camera\n     WHERE Camera.guard_spotted_id IS NOT NULL) AS time_range_first_last_detection",
+      "snippetLine": 8
+    },
+    {
+      "page": "B10",
+      "block": "code-B10-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Aggregates and GROUP BY",
+      "number": "10",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT MAX(years_employed) AS max_years FROM employees;",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 5
+}

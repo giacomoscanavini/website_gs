@@ -1,0 +1,380 @@
+<article class="article method-page" id="m-pd-nunique">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=Aggregation">
+   pandas · Aggregation
+  </a>
+ </div>
+ <h1>
+  nunique()
+ </h1>
+ <p class="lead">
+  Unique count
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-nunique"><span class="n">df</span><span class="p">[</span><span class="s1">'id'</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span></code></pre>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-sql-count-distinct">
+   SQL · COUNT(DISTINCT)
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C14?code=code-C14-1&amp;method=pd-nunique&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     2356 · Unique subjects per teacher
+    </strong>
+    <small>
+     Study solution · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">def count_unique_subjects(teacher: pd.DataFrame) -&gt; pd.DataFrame:
+    return teacher.groupby('teacher_id', as_index=False).agg(cnt=('subject_id', 'nunique'))</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C15?code=code-C15-1&amp;method=pd-nunique&amp;line=7">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1141 · User activity in a 30-day window
+    </strong>
+    <small>
+     Study solution · line 7
+    </small>
+   </div>
+   <pre aria-hidden="true">    mask = a['activity_date'].between('2019-06-28', '2019-07-27') &amp; a['activity_type'].isin(kinds)
+    return a.loc[mask].groupby('activity_date', as_index=False).agg(active_users=('user_id', 'nunique')).rename(columns={'activity_date': 'day'})</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C17?code=code-C17-1&amp;method=pd-nunique&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     596 · Classes with at least five students
+    </strong>
+    <small>
+     Study solution · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">def find_classes(courses: pd.DataFrame) -&gt; pd.DataFrame:
+    g = courses.groupby('class', as_index=False).agg(n_students=('student', 'nunique'))
+    return g.loc[g['n_students'].ge(5), ['class']]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C18?code=code-C18-1&amp;method=pd-nunique&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1729 · Followers count
+    </strong>
+    <small>
+     Study solution · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">def count_followers(followers: pd.DataFrame) -&gt; pd.DataFrame:
+    return followers.groupby('user_id', as_index=False).agg(followers_count=('follower_id', 'nunique')).sort_values('user_id')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C20?code=code-C20-1&amp;method=pd-nunique&amp;line=6">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1045 · Customers who bought every product
+    </strong>
+    <small>
+     Study solution · line 6
+    </small>
+   </div>
+   <pre aria-hidden="true">    eligible = customer.loc[customer['product_key'].isin(keys)]
+    counts = eligible.groupby('customer_id')['product_key'].nunique()
+    ids = customer[['customer_id']].drop_duplicates()
+    mask = ids['customer_id'].map(counts).fillna(0).eq(len(keys))</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (10)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C14?code=code-C14-3&amp;method=pd-nunique&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      2356 · Unique subjects per teacher
+     </strong>
+     <small>
+      My approach · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    return   teacher.groupby(by='teacher_id').agg(
+        cnt = ('subject_id', 'nunique')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C14?code=code-C14-5&amp;method=pd-nunique&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      2356 · Unique subjects per teacher
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    return teacher.groupby(by='teacher_id').agg(
+        cnt = ('subject_id', 'nunique')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-3&amp;method=pd-nunique&amp;line=16">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      My approach · line 16
+     </small>
+    </div>
+    <pre aria-hidden="true">    return df.groupby(by='activity_date').agg(
+        active_users = ('user_id', 'nunique')
+    ).reset_index().rename(columns={'activity_date': 'day'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-5&amp;method=pd-nunique&amp;line=16">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      Uploaded submission · line 16
+     </small>
+    </div>
+    <pre aria-hidden="true">    return df.groupby(by='activity_date').agg(
+        active_users = ('user_id', 'nunique')
+    ).reset_index().rename(columns={'activity_date': 'day'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C17?code=code-C17-3&amp;method=pd-nunique&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      596 · Classes with at least five students
+     </strong>
+     <small>
+      My approach · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = courses.groupby(by='class').agg(
+        nStudents = ('student', 'nunique')
+    ).reset_index()
+    return   df[df.nStudents &gt;= 5][['class']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C17?code=code-C17-5&amp;method=pd-nunique&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      596 · Classes with at least five students
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = courses.groupby(by='class').agg(
+        nStudents = ('student', 'nunique')
+    ).reset_index()
+</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C18?code=code-C18-3&amp;method=pd-nunique&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1729 · Followers count
+     </strong>
+     <small>
+      My approach · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    df =   followers.groupby('user_id').agg(
+        followers_count = ('follower_id', 'nunique')
+    ).reset_index()
+    return df.sort_values('user_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C18?code=code-C18-5&amp;method=pd-nunique&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1729 · Followers count
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = followers.groupby('user_id').agg(
+        followers_count = ('follower_id', 'nunique')
+    ).reset_index()
+</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C20?code=code-C20-3&amp;method=pd-nunique&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1045 · Customers who bought every product
+     </strong>
+     <small>
+      My approach · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def find_customers(customer: pd.DataFrame, product: pd.DataFrame) -&gt; pd.DataFrame:
+    nProducts = product['product_key'].nunique()
+    customer_ids = customer[['customer_id']].drop_duplicates()
+    customer = customer[customer['product_key'].isin(product['product_key'])]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C20?code=code-C20-5&amp;method=pd-nunique&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1045 · Customers who bought every product
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def find_customers(customer: pd.DataFrame, product: pd.DataFrame) -&gt; pd.DataFrame:
+    nProducts = product['product_key'].nunique()
+
+    df = customer.groupby(by='customer_id').agg(</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · Aggregation. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=Aggregation">
+   <small>
+    ← Browse
+   </small>
+   pandas · Aggregation
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

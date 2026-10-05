@@ -1,0 +1,653 @@
+<article class="article method-page" id="m-pd-rename">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=Creating%20/%20modifying%20columns">
+   pandas · Creating / modifying columns
+  </a>
+ </div>
+ <h1>
+  Rename
+ </h1>
+ <p class="lead">
+  Rename columns
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-rename"><span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'a'</span><span class="p">:</span><span class="s1">'x'</span><span class="p">})</span></code></pre>
+ </div>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C04?code=code-C04-1&amp;method=pd-rename&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1148 · Article Views I
+    </strong>
+    <small>
+     Study solution · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">    result = views.loc[views['author_id'].eq(views['viewer_id']), ['author_id']]
+    return result.drop_duplicates().rename(columns={'author_id': 'id'}).sort_values('id')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-05?code=code-squid-05-1&amp;method=pd-rename&amp;line=7">
+   <div>
+    <span class="usage-label">
+     Squid Game · pandas
+    </span>
+    <strong>
+     Count a player’s closest interactions
+    </strong>
+    <small>
+     Saved walkthrough · line 7
+    </small>
+   </div>
+   <pre aria-hidden="true">    interactions['player1_id'].ne(456), interactions['player2_id'])
+counts = interactions.groupby('player_id', as_index=False).size().rename(columns={'size': 'counts'})
+counts['target_id'] = 456
+target = player[['id', 'first_name']].rename(columns={'id': 'target_id', 'first_name': 'name_456'})</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C49?code=code-C49-1&amp;method=pd-rename&amp;line=3">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     570 · Managers with at least five direct reports
+    </strong>
+    <small>
+     Study solution · line 3
+    </small>
+   </div>
+   <pre aria-hidden="true">def find_managers(employee: pd.DataFrame) -&gt; pd.DataFrame:
+    reports = employee.groupby(by='managerId').agg(
+        nReports = ('managerId', 'size')
+    ).reset_index().rename(columns={'managerId': 'id'})</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C15?code=code-C15-1&amp;method=pd-rename&amp;line=7">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1141 · User activity in a 30-day window
+    </strong>
+    <small>
+     Study solution · line 7
+    </small>
+   </div>
+   <pre aria-hidden="true">    mask = a['activity_date'].between('2019-06-28', '2019-07-27') &amp; a['activity_type'].isin(kinds)
+    return a.loc[mask].groupby('activity_date', as_index=False).agg(active_users=('user_id', 'nunique')).rename(columns={'activity_date': 'day'})</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C16?code=code-C16-1&amp;method=pd-rename&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1070 · First-year product sales
+    </strong>
+    <small>
+     Study solution · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">    first_year = sales.groupby('product_id')['year'].transform('min')
+    return sales.loc[sales['year'].eq(first_year), ['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C21?code=code-C21-3&amp;method=pd-rename&amp;line=10">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1731 · Employees reporting to employees
+    </strong>
+    <small>
+     Uploaded submission · line 10
+    </small>
+   </div>
+   <pre aria-hidden="true">    df = by_manager.merge(employees[['employee_id', 'name']], how='left', left_on='reports_to', right_on='employee_id')
+    df.rename(columns={'employee_id_y': 'employee_id'}, inplace=True)
+    return df[['employee_id', 'name', 'reports_count', 'average_age']]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   12 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C24?code=code-C24-1&amp;method=pd-rename&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      180 · Consecutive Numbers
+     </strong>
+     <small>
+      Study solution · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    mask = n.eq(n.shift(-1)) &amp; n.eq(n.shift(-2))
+    return ordered.loc[mask, ['num']].drop_duplicates().rename(columns={'num': 'ConsecutiveNums'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C25?code=code-C25-3&amp;method=pd-rename&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1164 · Product price at a given date
+     </strong>
+     <small>
+      My approach · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = products[products['change_date'] &lt;= '2019-08-16']
+    df = df.sort_values(by=['product_id', 'change_date'], ascending=[True, False]).drop_duplicates('product_id').rename(columns={'new_price': 'price'})
+
+    updated_ids = set(df.product_id)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-rename&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    users_ranked = r.groupby('user_id').size().reset_index(name='n_reviews').merge(users, on='user_id')
+    first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})
+    feb = r.loc[r['created_at'].ge('2020-02-01') &amp; r['created_at'].lt('2020-03-01')]
+    movies_ranked = feb.groupby('movie_id', as_index=False).agg(avg_rating=('rating', 'mean')).merge(movies, on='movie_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-1&amp;method=pd-rename&amp;line=15">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      Study solution · line 15
+     </small>
+    </div>
+    <pre aria-hidden="true">    rolled = rolled.loc[rolled.index &gt;= daily.index.min() + pd.Timedelta(days=6)]
+    result = rolled.rename('amount').reset_index()
+    result['average_amount'] = (result['amount'] / 7).map(round_half_up)
+    return result</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C34?code=code-C34-1&amp;method=pd-rename&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      185 · Department top three salaries
+     </strong>
+     <small>
+      Study solution · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    rank = employee.groupby('departmentId')['salary'].rank(method='dense', ascending=False)
+    chosen = employee.loc[rank.le(3)].rename(columns={'name': 'Employee', 'salary': 'Salary'})
+    dept = department.rename(columns={'id': 'departmentId', 'name': 'Department'})
+    result = chosen.merge(dept, on='departmentId', how='inner', validate='many_to_one')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC181?code=code-LC181-1&amp;method=pd-rename&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      181 · Employees earning more than their managers
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = df[df.salary_x &gt; df.salary_y]
+    df = df.rename(columns={'name_x': 'Employee'})
+    return df[['Employee']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC262?code=code-LC262-1&amp;method=pd-rename&amp;line=25">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      262 · Trips and users
+     </strong>
+     <small>
+      Uploaded submission · line 25
+     </small>
+    </div>
+    <pre aria-hidden="true">    df['Cancellation Rate'] = (df['cancelTotal'] / df['validTotal']).round(2)
+    df = df.rename(columns={'request_at': 'Day'})
+
+    return df[['Day', 'Cancellation Rate']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC1158?code=code-LC1158-1&amp;method=pd-rename&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1158 · Market analysis I
+     </strong>
+     <small>
+      Uploaded submission · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = df[['user_id', 'join_date', 'orders_in_2019']]
+    df = df.rename(columns={'user_id': 'buyer_id'})
+    
+    return df.fillna(0)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3521?code=code-LC3521-1&amp;method=pd-rename&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3521 · Find product recommendation pairs
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = df[(df.user_id_1 == df.user_id_2) &amp; (df.product_id_1 &lt; df.product_id_2)]
+    df = df.rename(columns={
+        'product_id_1': 'product1_id',
+        'product_id_2': 'product2_id',</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-rename&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Join room checks and camera sightings
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">
+guards = guard.rename(columns={'id': 'guard_number'})
+rooms = room.rename(columns={'id': 'room_id', 'last_check_time': 'last_seen_in_room'})
+cameras = camera.rename(columns={'id': 'camera_id',</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-08?code=code-squid-08-1&amp;method=pd-rename&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Find the longest hesitation
+     </strong>
+     <small>
+      Saved walkthrough · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">              [['id', 'first_name', 'last_name', 'last_moved_time_seconds']])
+result = result.rename(columns={'last_moved_time_seconds': 'hesitation_time'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-rename&amp;line=16">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Reconstruct access-log overlaps
+     </strong>
+     <small>
+      Saved walkthrough · line 16
+     </small>
+    </div>
+    <pre aria-hidden="true">                | (a.between(start, end) &amp; b.between(start, end)))
+    shifts = shifts.loc[overlaps].rename(columns={'id': 'guard_id'})
+    logs = shifts.merge(daily_door_access_logs.rename(columns={'id': 'log_id'}), on='guard_id')
+    off_post = (logs['assigned_post'].notna() &amp; logs['door_location'].notna()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (11)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C49?code=code-C49-3&amp;method=pd-rename&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      570 · Managers with at least five direct reports
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def find_managers(employee: pd.DataFrame) -&gt; pd.DataFrame:
+    reports = employee.groupby(by='managerId').agg(
+        nReports = ('managerId', 'size')
+    ).reset_index().rename(columns={'managerId': 'id'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-3&amp;method=pd-rename&amp;line=15">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      My approach · line 15
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return df.groupby(by='activity_date').agg(
+        active_users = ('user_id', 'nunique')
+    ).reset_index().rename(columns={'activity_date': 'day'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-5&amp;method=pd-rename&amp;line=15">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      Uploaded submission · line 15
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return df.groupby(by='activity_date').agg(
+        active_users = ('user_id', 'nunique')
+    ).reset_index().rename(columns={'activity_date': 'day'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C16?code=code-C16-3&amp;method=pd-rename&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1070 · First-year product sales
+     </strong>
+     <small>
+      My approach · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    sales = sales[sales['year_order'] == 1]
+    sales = sales[['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})
+    return sales</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C16?code=code-C16-5&amp;method=pd-rename&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1070 · First-year product sales
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    sales = sales[sales['year_order'] == 1]
+    sales = sales[['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})
+    return sales</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C25?code=code-C25-5&amp;method=pd-rename&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1164 · Product price at a given date
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = products[products['change_date'] &lt;= '2019-08-16']
+    df = df.sort_values(by=['product_id', 'change_date'], ascending=[True, False]).drop_duplicates('product_id').rename(columns={'new_price': 'price'})
+    
+    updated_ids = set(df.product_id)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-3&amp;method=pd-rename&amp;line=14">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      My approach · line 14
+     </small>
+    </div>
+    <pre aria-hidden="true">    df_movies =   df_movies.merge(movies, on='movie_id', how='left').sort_values(by=['avgRating', 'title'], ascending=[False, True])[['title', 'avgRating']]
+    return   pd.concat([df_users.head(1)[['name']].rename(columns={'name': 'results'}),
+                        df_movies.head(1)[['title']].rename(columns={'title': 'results'}),
+                    ])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-5&amp;method=pd-rename&amp;line=15">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Uploaded submission · line 15
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return pd.concat([df_users.iloc[[0]][['name']].rename(columns={'name': 'results'}),
+                      df_movies.iloc[[0]][['title']].rename(columns={'title': 'results'}),
+                    ])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-3&amp;method=pd-rename&amp;line=15">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      My approach · line 15
+     </small>
+    </div>
+    <pre aria-hidden="true">    total = total[total.index &gt;= daily.index.min() + pd.Timedelta(days=6)]
+    result = total.rename('amount').reset_index()
+    result['average_amount'] = (result['amount'] / 7).map(round_half_up)
+    return result</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C34?code=code-C34-3&amp;method=pd-rename&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      185 · Department top three salaries
+     </strong>
+     <small>
+      My approach · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    df =   employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])
+    df = df.rename(columns={
+        'name_x': 'Employee',
+        'name_y': 'Department',</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C34?code=code-C34-5&amp;method=pd-rename&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      185 · Department top three salaries
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])
+    df = df.rename(columns={
+        'name_x': 'Employee',
+        'name_y': 'Department',</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · Creating / modifying columns. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=Creating%20/%20modifying%20columns">
+   <small>
+    ← Browse
+   </small>
+   pandas · Creating / modifying columns
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

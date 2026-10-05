@@ -1,0 +1,513 @@
+<section aria-labelledby="momentum-title" class="page-view lesson-layout" id="momentum">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     10
+    </span>
+    Part 2 · Optimization
+   </p>
+   <h1 id="momentum-title" tabindex="-1">
+    Momentum and Nesterov acceleration
+   </h1>
+   <p class="standfirst">
+    See gradient history as a direction estimate that accumulates persistent motion and cancels oscillation.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Optimization · PDF pp. 7–9 · §3" data-page="7" data-pdf="optim" type="button">
+     Optimization · PDF pp. 7–9 · §3
+    </button>
+    <button aria-label="Open source: Neural networks · PDF p. 23 · §33" data-page="23" data-pdf="basics" type="button">
+     Neural networks · PDF p. 23 · §33
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="the-narrow-valley-problem" href="#momentum?section=the-narrow-valley-problem">
+     The narrow-valley problem
+    </a>
+    <a data-section="work-through-the-sources-two-updates" href="#momentum?section=work-through-the-sources-two-updates">
+     Work through the source’s two updates
+    </a>
+    <a data-section="memory-and-overshoot" href="#momentum?section=memory-and-overshoot">
+     Memory and overshoot
+    </a>
+    <a data-section="two-conventions-in-the-supplied-pdfs" href="#momentum?section=two-conventions-in-the-supplied-pdfs">
+     Two conventions in the supplied PDFs
+    </a>
+    <a data-section="nesterovs-look-ahead-intuition" href="#momentum?section=nesterovs-look-ahead-intuition">
+     Nesterov’s look-ahead intuition
+    </a>
+    <a data-section="the-distinction-from-adaptive-optimizers" href="#momentum?section=the-distinction-from-adaptive-optimizers">
+     The distinction from adaptive optimizers
+    </a>
+    <a data-section="implementation" href="#momentum?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="the-narrow-valley-problem" id="momentum--the-narrow-valley-problem">
+    The narrow-valley problem
+   </h2>
+   <p>
+    Suppose the objective changes rapidly in one direction and slowly in another. A gradient step can jump across the steep direction while moving only a little along the shallow one. The next gradient then points back across the valley. Plain descent can spend many steps repeating this correction.
+   </p>
+   <p>
+    Momentum stores a velocity-like summary of previous gradients. In the optimization PDF’s convention,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><mi>β</mi><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>g</mi><mi>t</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><msub><mi>v</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">v_t=\beta v_{t-1}+g_t,\qquad \theta_{t+1}=\theta_t-\eta v_t.</annotation></semantics></math>
+   </div>
+   <p>
+    Expanding the recursion shows what is retained:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><msub><mi>g</mi><mi>t</mi></msub><mo>+</mo><mi>β</mi><msub><mi>g</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msup><mi>β</mi><mn>2</mn></msup><msub><mi>g</mi><mrow><mi>t</mi><mo>−</mo><mn>2</mn></mrow></msub><mo>+</mo><mi>⋯</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">v_t=g_t+\beta g_{t-1}+\beta^2g_{t-2}+\cdots.</annotation></semantics></math>
+   </div>
+   <p>
+    Recent gradients count most; old contributions decay geometrically. If a coordinate’s gradients repeatedly agree, their contributions accumulate. If they alternate signs, they partly cancel.
+   </p>
+   <figure class="source-figure">
+    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="optim-8" type="button">
+     <img alt="Momentum and plain descent on the source’s illustrative narrow quadratic valley. The momentum trajectory can overshoot; acceleration is not the same as monotonic loss reduction." height="577" loading="lazy" src="assets/images/momentum-and-plain-descent-on-the-source-s-illustrative-narrow-qu-6849f295db.webp" width="820"/>
+    </button>
+    <figcaption>
+     Momentum and plain descent on the source’s illustrative narrow quadratic valley. The momentum trajectory can overshoot; acceleration is not the same as monotonic loss reduction.
+     <button aria-label="Open source: Optimization · PDF p. 8" data-page="8" data-pdf="optim" type="button">
+      Optimization · PDF p. 8
+     </button>
+    </figcaption>
+   </figure>
+   <h2 data-section="work-through-the-sources-two-updates" id="momentum--work-through-the-sources-two-updates">
+    Work through the source’s two updates
+   </h2>
+   <p>
+    Set
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\eta=0.1</annotation></semantics></math>
+    ,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">\beta=0.9</annotation></semantics></math>
+    , and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">v_0=0</annotation></semantics></math>
+    . For
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mn>1</mn></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">g_1=(2,1)^\top</annotation></semantics></math>
+    ,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>Δ</mi><msub><mi>θ</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.1</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">v_1=\begin{bmatrix}2\\1\end{bmatrix},\qquad
+\Delta\theta_1=\begin{bmatrix}-0.2\\-0.1\end{bmatrix}.</annotation></semantics></math>
+   </div>
+   <p>
+    Now let
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mn>2</mn></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.5</mn><mo>,</mo><mi>−</mi><mn>0.8</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">g_2=(1.5,-0.8)^\top</annotation></semantics></math>
+    . Then
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>2</mn></msub><mo>=</mo><mn>0.9</mn><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>+</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1.5</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.8</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>3.3</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.1</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">v_2=0.9\begin{bmatrix}2\\1\end{bmatrix}+\begin{bmatrix}1.5\\-0.8\end{bmatrix}
+=\begin{bmatrix}3.3\\0.1\end{bmatrix}.</annotation></semantics></math>
+   </div>
+   <p>
+    The first coordinate retains accumulated motion, while the second nearly cancels. The new displacement is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.33</mn><mo>,</mo><mi>−</mi><mn>0.01</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><annotation encoding="application/x-tex">(-0.33,-0.01)^\top</annotation></semantics></math>
+    . This numerical example explains the mechanism more directly than the phrase “a ball rolling downhill.”
+   </p>
+   <h2 data-section="memory-and-overshoot" id="momentum--memory-and-overshoot">
+    Memory and overshoot
+   </h2>
+   <p>
+    The guide describes an approximate memory timescale of
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">1/(1-\beta)</annotation></semantics></math>
+    . A value of
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.9</mn><annotation encoding="application/x-tex">0.9</annotation></semantics></math>
+    corresponds to roughly a ten-step scale;
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.99</mn><annotation encoding="application/x-tex">0.99</annotation></semantics></math>
+    keeps history much longer. This is a characteristic decay scale, not a hard cutoff.
+   </p>
+   <p>
+    Longer memory can stabilize a persistent direction but makes the optimizer slower to respond when the useful direction changes. Momentum can carry a parameter beyond a minimum or into a region where earlier gradients are no longer relevant. The rate and momentum coefficient should therefore be considered together.
+   </p>
+   <details class="derivation" data-derivation="geometric-memory" id="momentum--derivation-geometric-memory">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Unroll momentum and derive its effective memory
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><mi>β</mi><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>g</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">v_t=\beta v_{t-1}+g_t</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">v_0=0</annotation></semantics></math>
+      , and constant
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><mi>β</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0\le\beta&lt;1</annotation></semantics></math>
+      . This is the unnormalized convention from the optimization guide.
+     </p>
+     <h4>
+      1 · Expand the first three recurrences
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>1</mn></msub><mo>=</mo><msub><mi>g</mi><mn>1</mn></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>v</mi><mn>2</mn></msub><mo>=</mo><mi>β</mi><msub><mi>g</mi><mn>1</mn></msub><mo>+</mo><msub><mi>g</mi><mn>2</mn></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">v_1=g_1,\qquad v_2=\beta g_1+g_2,</annotation></semantics></math>
+     </div>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>3</mn></msub><mo>=</mo><mi>β</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>β</mi><msub><mi>g</mi><mn>1</mn></msub><mo>+</mo><msub><mi>g</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>g</mi><mn>3</mn></msub><mo>=</mo><msup><mi>β</mi><mn>2</mn></msup><msub><mi>g</mi><mn>1</mn></msub><mo>+</mo><mi>β</mi><msub><mi>g</mi><mn>2</mn></msub><mo>+</mo><msub><mi>g</mi><mn>3</mn></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">v_3=\beta(\beta g_1+g_2)+g_3=\beta^2g_1+\beta g_2+g_3.</annotation></semantics></math>
+     </div>
+     <p>
+      Each substitution moves every older gradient one power of
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>
+      further into the past. Induction therefore gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>t</mi></munderover><msup><mi>β</mi><mrow><mi>t</mi><mo>−</mo><mi>j</mi></mrow></msup><msub><mi>g</mi><mi>j</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">v_t=\sum_{j=1}^t\beta^{t-j}g_j.</annotation></semantics></math>
+     </div>
+     <p>
+      For nonzero initialization, add the term
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>β</mi><mi>t</mi></msup><msub><mi>v</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">\beta^t v_0</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Evaluate a constant gradient
+     </h4>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>j</mi></msub><mo>=</mo><mi>g</mi></mrow><annotation encoding="application/x-tex">g_j=g</annotation></semantics></math>
+      for every step, use the finite geometric sum
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>+</mo><mi>β</mi><mo>+</mo><mi>⋯</mi><mo>+</mo><msup><mi>β</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msup><mo>=</mo><mfrac><mrow><mn>1</mn><mo>−</mo><msup><mi>β</mi><mi>t</mi></msup></mrow><mrow><mn>1</mn><mo>−</mo><mi>β</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">1+\beta+\cdots+\beta^{t-1}=\frac{1-\beta^t}{1-\beta}</annotation></semantics></math>
+     </div>
+     <p>
+      to obtain
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><mi>g</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msup><mi>β</mi><mi>t</mi></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">v_t=g(1-\beta^t)/(1-\beta)</annotation></semantics></math>
+      . As
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>→</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">t\to\infty</annotation></semantics></math>
+      , the buffer approaches
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">g/(1-\beta)</annotation></semantics></math>
+      . Thus the long-run displacement is approximately
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>η</mi><mi>g</mi><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">-\eta g/(1-\beta)</annotation></semantics></math>
+      , not
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>η</mi><mi>g</mi></mrow><annotation encoding="application/x-tex">-\eta g</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      3 · Translate the normalized convention
+     </h4>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>v</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><mi>β</mi><msub><mover><mi>v</mi><mo accent="true">‾</mo></mover><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>g</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">\bar v_t=\beta\bar v_{t-1}+(1-\beta)g_t</annotation></semantics></math>
+      with zero initialization, the expansion gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>v</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>v</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">\bar v_t=(1-\beta)v_t</annotation></semantics></math>
+      . To obtain the same displacement,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>η</mi><mo accent="true">‾</mo></mover><msub><mover><mi>v</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><mi>η</mi><msub><mi>v</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">\bar\eta\bar v_t=\eta v_t</annotation></semantics></math>
+      requires
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>η</mi><mo accent="true">‾</mo></mover><mo>=</mo><mi>η</mi><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\bar\eta=\eta/(1-\beta)</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      4 · Derive a decay timescale
+     </h4>
+     <p>
+      A contribution
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+      steps old is multiplied by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>β</mi><mi>k</mi></msup><annotation encoding="application/x-tex">\beta^k</annotation></semantics></math>
+      . Set
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>β</mi><mi>τ</mi></msup><mo>=</mo><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\beta^\tau=e^{-1}</annotation></semantics></math>
+      and take logarithms:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi><mo>log</mo><mi>β</mi><mo>=</mo><mi>−</mi><mn>1</mn><mo>,</mo><mspace width="2.0em"></mspace><mi>τ</mi><mo>=</mo><mi>−</mi><mfrac><mn>1</mn><mrow><mo>log</mo><mi>β</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\tau\log\beta=-1,\qquad\tau=-\frac1{\log\beta}.</annotation></semantics></math>
+     </div>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>
+      near one, write
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><mn>1</mn><mo>−</mo><mi>u</mi></mrow><annotation encoding="application/x-tex">\beta=1-u</annotation></semantics></math>
+      and use
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>u</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mi>−</mi><mi>u</mi></mrow><annotation encoding="application/x-tex">\log(1-u)\approx-u</annotation></semantics></math>
+      , giving
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>τ</mi><mo>≈</mo><mn>1</mn><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\tau\approx1/(1-\beta)</annotation></semantics></math>
+      . This is an approximation; for
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">\beta=0.9</annotation></semantics></math>
+      the exact e-fold time is about
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>9.49</mn><annotation encoding="application/x-tex">9.49</annotation></semantics></math>
+      steps. The half-life is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mo>log</mo><mi>β</mi></mrow><annotation encoding="application/x-tex">\log(1/2)/\log\beta</annotation></semantics></math>
+      , about
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>6.58</mn><annotation encoding="application/x-tex">6.58</annotation></semantics></math>
+      steps at
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.9</mn><annotation encoding="application/x-tex">0.9</annotation></semantics></math>
+      .
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="7" data-pdf="optim" type="button">
+       Chapter source · PDF p. 7
+      </button>
+      <a class="calculation-link" href="#momentum?derivation=geometric-memory">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="two-conventions-in-the-supplied-pdfs" id="momentum--two-conventions-in-the-supplied-pdfs">
+    Two conventions in the supplied PDFs
+   </h2>
+   <p>
+    The basics PDF writes an exponentially averaged gradient,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>v</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><mi>β</mi><msub><mover><mi>v</mi><mo accent="true">‾</mo></mover><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>g</mi><mi>t</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\bar v_t=\beta\bar v_{t-1}+(1-\beta)g_t,</annotation></semantics></math>
+   </div>
+   <p>
+    while the dedicated optimization PDF uses the unnormalized sum shown above. These equations express the same history-weighting idea but
+    <strong>
+     not the same numerical scale at a fixed learning rate
+    </strong>
+    . With zero initialization and constant
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>
+    ,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>v</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>v</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">\bar v_t=(1-\beta)v_t</annotation></semantics></math>
+    ; matching parameter trajectories requires a corresponding step-size adjustment.
+   </p>
+   <p>
+    Both source conventions are retained here rather than silently blended. In actual PyTorch code, consult the SGD reference for momentum-buffer initialization, dampening, and its precise Nesterov update. The examples in one convention should not be compared numerically to another without translation.
+   </p>
+   <h2 data-section="nesterovs-look-ahead-intuition" id="momentum--nesterovs-look-ahead-intuition">
+    Nesterov’s look-ahead intuition
+   </h2>
+   <p>
+    The optimization guide writes a look-ahead parameter point and gradient:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mi>β</mi><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\tilde\theta_t=\theta_t-\eta\beta v_{t-1},</annotation></semantics></math>
+   </div>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><mi>β</mi><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>∇</mi><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mover><mi>θ</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><msub><mi>v</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">v_t=\beta v_{t-1}+\nabla J(\tilde\theta_t),\qquad
+\theta_{t+1}=\theta_t-\eta v_t.</annotation></semantics></math>
+   </div>
+   <p>
+    The idea is to evaluate the correction where existing momentum is about to take the parameters, rather than only where they are now. This anticipates part of the overshoot. Practical implementations may express the update in algebraically rearranged variables; the linked official algorithm is the appropriate reference when matching code exactly.
+   </p>
+   <details class="derivation" data-derivation="nesterov-variables" id="momentum--derivation-nesterov-variables">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Connect look-ahead Nesterov to its rearranged update
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Use constant learning rate
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>η</mi><annotation encoding="application/x-tex">\eta</annotation></semantics></math>
+      , constant momentum
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>
+      , no dampening or weight decay, and an initial zero buffer. Different rates or initialization rules require redoing the variable transformation.
+     </p>
+     <h4>
+      1 · Start with the look-ahead equations
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>t</mi></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mi>β</mi><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>g</mi><mi>t</mi></msub><mo>=</mo><mi>∇</mi><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">y_t=\theta_t-\eta\beta v_{t-1},\qquad g_t=\nabla J(y_t),</annotation></semantics></math>
+     </div>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><mi>β</mi><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>g</mi><mi>t</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><msub><mi>v</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">v_t=\beta v_{t-1}+g_t,\qquad \theta_{t+1}=\theta_t-\eta v_t.</annotation></semantics></math>
+     </div>
+     <p>
+      The gradient is evaluated at
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>y</mi><mi>t</mi></msub><annotation encoding="application/x-tex">y_t</annotation></semantics></math>
+      , not at
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>θ</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\theta_t</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Express next step’s look-ahead point
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><mi>η</mi><mi>β</mi><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>v</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">y_{t+1}=\theta_{t+1}-\eta\beta v_t=\theta_t-\eta(1+\beta)v_t.</annotation></semantics></math>
+     </div>
+     <p>
+      From the first equation,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mi>t</mi></msub><mo>=</mo><msub><mi>y</mi><mi>t</mi></msub><mo>+</mo><mi>η</mi><mi>β</mi><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">\theta_t=y_t+\eta\beta v_{t-1}</annotation></semantics></math>
+      . Substitute it:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>y</mi><mi>t</mi></msub><mo>+</mo><mi>η</mi><mi>β</mi><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>−</mo><mi>η</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>v</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">y_{t+1}=y_t+\eta\beta v_{t-1}-\eta(1+\beta)v_t.</annotation></semantics></math>
+     </div>
+     <h4>
+      3 · Eliminate the old buffer
+     </h4>
+     <p>
+      The buffer recurrence implies
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>v</mi><mi>t</mi></msub><mo>−</mo><msub><mi>g</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">\beta v_{t-1}=v_t-g_t</annotation></semantics></math>
+      . Hence
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>y</mi><mi>t</mi></msub><mo>+</mo><mi>η</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>v</mi><mi>t</mi></msub><mo>−</mo><msub><mi>g</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>η</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><msub><mi>y</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>g</mi><mi>t</mi></msub><mo>+</mo><mi>β</mi><msub><mi>v</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">y_{t+1}=y_t+\eta(v_t-g_t)-\eta(1+\beta)v_t=y_t-\eta(g_t+\beta v_t).</annotation></semantics></math>
+     </div>
+     <h4>
+      4 · Read the implemented form
+     </h4>
+     <p>
+      If the stored parameter is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>y</mi><mi>t</mi></msub><annotation encoding="application/x-tex">y_t</annotation></semantics></math>
+      , an implementation can compute its gradient, update the buffer, and step using
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>t</mi></msub><mo>+</mo><mi>β</mi><msub><mi>v</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">g_t+\beta v_t</annotation></semantics></math>
+      without explicitly moving to a separate look-ahead point first. This explains the apparently different formula in a Nesterov SGD implementation.
+     </p>
+     <h4>
+      5 · Preserve the interpretation of the variables
+     </h4>
+     <p>
+      The sequences called
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>y</mi><mi>t</mi></msub><annotation encoding="application/x-tex">y_t</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>θ</mi><mi>t</mi></msub><annotation encoding="application/x-tex">\theta_t</annotation></semantics></math>
+      are not identical. Comparing an implementation’s stored parameters against the wrong textbook variable makes two equivalent descriptions appear inconsistent. The official SGD algorithm includes additional choices such as initialization and dampening, so verify those before claiming numerical equivalence.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="7" data-pdf="optim" type="button">
+       Chapter source · PDF p. 7
+      </button>
+      <a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.SGD.html" rel="noopener noreferrer" target="_blank">
+       SGD: momentum and Nesterov conventions
+      </a>
+      <a class="calculation-link" href="#momentum?derivation=nesterov-variables">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="the-distinction-from-adaptive-optimizers" id="momentum--the-distinction-from-adaptive-optimizers">
+    The distinction from adaptive optimizers
+   </h2>
+   <p>
+    Momentum changes the direction estimate using history. By itself it does not construct a different normalization for every coordinate.
+    <a href="#adaptive-scaling">
+     AdaGrad and RMSProp
+    </a>
+    use squared-gradient history for scale;
+    <a href="#adam-adamw">
+     Adam
+    </a>
+    combines a smoothed direction with adaptive scaling. Keeping direction and scale separate makes the optimizer family easier to remember.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="momentum--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="sgd-api">
+     <span class="resource-meta">
+      PyTorch · API + algorithm
+     </span>
+     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.SGD.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       SGD: momentum and Nesterov conventions
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Check the documented update, momentum-buffer initialization and dampening. These details explain why two textbook momentum formulas may need different learning-rate scaling.
+     </p>
+    </div>
+    <div class="resource" data-resource="optimization">
+     <span class="resource-meta">
+      PyTorch · Tutorial + code
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Optimizing Model Parameters
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Follow separate training and test loops. Identify the forward calculation, loss, backward pass and optimizer update rather than treating training as one operation.
+     </p>
+    </div>
+   </div>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    How does momentum help in a narrow valley?
+   </summary>
+   <p>
+    Gradients that alternate sign across the steep direction partly cancel in the velocity, while gradients that persist along the shallow direction accumulate. Momentum can therefore reduce zig-zagging and accelerate progress, but it can also overshoot.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#sgd">
+    <small>
+     ← Previous
+    </small>
+    SGD, gradient noise, and learning rates
+   </a>
+   <a href="#adaptive-scaling">
+    <small>
+     Next →
+    </small>
+    AdaGrad and RMSProp: adaptive scaling
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="the-narrow-valley-problem" href="#momentum?section=the-narrow-valley-problem">
+    The narrow-valley problem
+   </a>
+   <a data-section="work-through-the-sources-two-updates" href="#momentum?section=work-through-the-sources-two-updates">
+    Work through the source’s two updates
+   </a>
+   <a data-section="memory-and-overshoot" href="#momentum?section=memory-and-overshoot">
+    Memory and overshoot
+   </a>
+   <a data-section="two-conventions-in-the-supplied-pdfs" href="#momentum?section=two-conventions-in-the-supplied-pdfs">
+    Two conventions in the supplied PDFs
+   </a>
+   <a data-section="nesterovs-look-ahead-intuition" href="#momentum?section=nesterovs-look-ahead-intuition">
+    Nesterov’s look-ahead intuition
+   </a>
+   <a data-section="the-distinction-from-adaptive-optimizers" href="#momentum?section=the-distinction-from-adaptive-optimizers">
+    The distinction from adaptive optimizers
+   </a>
+   <a data-section="implementation" href="#momentum?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

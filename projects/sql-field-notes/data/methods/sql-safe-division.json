@@ -1,0 +1,44 @@
+{
+  "id": "sql-safe-division",
+  "lang": "sql",
+  "category": "Useful LeetCode patterns",
+  "label": "Safe division",
+  "example": "a / NULLIF(b,0)",
+  "description": "Avoid divide-by-zero",
+  "source": "image-sql",
+  "related": [],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C07",
+      "block": "code-C07-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT p.product_id,\n       COALESCE(ROUND(SUM(p.price * u.units) / NULLIF(SUM(u.units), 0), 2), 0) AS average_price\nFROM Prices p LEFT JOIN UnitsSold u\n  ON p.product_id = u.product_id AND u.purchase_date BETWEEN p.start_date AND p.end_date",
+      "snippetLine": 1
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": ")\nSELECT product_id, COALESCE(ROUND(SUM(paid) / NULLIF(SUM(units), 0), 2), 0) AS average_price\nFROM Sold\nGROUP BY product_id;",
+      "snippetLine": 5
+    }
+  ],
+  "pageCount": 1
+}

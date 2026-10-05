@@ -1,0 +1,539 @@
+<section aria-labelledby="adam-adamw-title" class="page-view lesson-layout" id="adam-adamw">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     12
+    </span>
+    Part 2 · Optimization
+   </p>
+   <h1 id="adam-adamw-title" tabindex="-1">
+    Adam, bias correction, and AdamW
+   </h1>
+   <p class="standfirst">
+    Separate momentum-like direction, adaptive magnitude, initialization bias, and decoupled decay.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Optimization · PDF pp. 13–15 · §§7–8" data-page="13" data-pdf="optim" type="button">
+     Optimization · PDF pp. 13–15 · §§7–8
+    </button>
+    <button aria-label="Open source: Optimization · PDF pp. 22–23 · §18" data-page="22" data-pdf="optim" type="button">
+     Optimization · PDF pp. 22–23 · §18
+    </button>
+    <button aria-label="Open source: Regularization · PDF pp. 8–9 · §3.7" data-page="8" data-pdf="reg" type="button">
+     Regularization · PDF pp. 8–9 · §3.7
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="two-memories-serve-two-different-purposes" href="#adam-adamw?section=two-memories-serve-two-different-purposes">
+     Two memories serve two different purposes
+    </a>
+    <a data-section="why-zero-initialization-needs-a-correction" href="#adam-adamw?section=why-zero-initialization-needs-a-correction">
+     Why zero initialization needs a correction
+    </a>
+    <a data-section="the-complete-first-step-from-the-pdf" href="#adam-adamw?section=the-complete-first-step-from-the-pdf">
+     The complete first step from the PDF
+    </a>
+    <a data-section="l2-regularization-versus-weight-decay" href="#adam-adamw?section=l2-regularization-versus-weight-decay">
+     L2 regularization versus weight decay
+    </a>
+    <a data-section="interpreting-hyperparameters-and-failure" href="#adam-adamw?section=interpreting-hyperparameters-and-failure">
+     Interpreting hyperparameters and failure
+    </a>
+    <a data-section="implementation" href="#adam-adamw?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="two-memories-serve-two-different-purposes" id="adam-adamw--two-memories-serve-two-different-purposes">
+    Two memories serve two different purposes
+   </h2>
+   <p>
+    Adam stores an exponential average of gradients and of squared gradients:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>t</mi></msub><mo>=</mo><msub><mi>β</mi><mn>1</mn></msub><msub><mi>m</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>g</mi><mi>t</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">m_t=\beta_1m_{t-1}+(1-\beta_1)g_t,</annotation></semantics></math>
+   </div>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><msub><mi>β</mi><mn>2</mn></msub><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>g</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi>g</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">v_t=\beta_2v_{t-1}+(1-\beta_2)(g_t\odot g_t).</annotation></semantics></math>
+   </div>
+   <p>
+    The first moment
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>m</mi><mi>t</mi></msub><annotation encoding="application/x-tex">m_t</annotation></semantics></math>
+    smooths direction. The second moment
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>v</mi><mi>t</mi></msub><annotation encoding="application/x-tex">v_t</annotation></semantics></math>
+    tracks a coordinate-wise magnitude scale. It is an average of squared gradients, not the centered variance unless the mean correction is also accounted for.
+   </p>
+   <p>
+    An intuitive comparison is: RMSProp uses the current gradient over a recent magnitude estimate; Adam uses a smoothed gradient over a recent magnitude estimate.
+   </p>
+   <h2 data-section="why-zero-initialization-needs-a-correction" id="adam-adamw--why-zero-initialization-needs-a-correction">
+    Why zero initialization needs a correction
+   </h2>
+   <p>
+    Start with
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mn>0</mn></msub><mo>=</mo><msub><mi>v</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">m_0=v_0=0</annotation></semantics></math>
+    . For a constant scalar gradient
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>g</mi><annotation encoding="application/x-tex">g</annotation></semantics></math>
+    , expanding the recurrence gives
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msubsup><mi>β</mi><mn>1</mn><mi>t</mi></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mi>g</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">m_t=(1-\beta_1^t)g.</annotation></semantics></math>
+   </div>
+   <p>
+    The moment estimate is initially pulled toward the zero starting value. The correction is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>m</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>=</mo><mfrac><msub><mi>m</mi><mi>t</mi></msub><mrow><mn>1</mn><mo>−</mo><msubsup><mi>β</mi><mn>1</mn><mi>t</mi></msubsup></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mover><mi>v</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>=</mo><mfrac><msub><mi>v</mi><mi>t</mi></msub><mrow><mn>1</mn><mo>−</mo><msubsup><mi>β</mi><mn>2</mn><mi>t</mi></msubsup></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat m_t=\frac{m_t}{1-\beta_1^t},\qquad
+\hat v_t=\frac{v_t}{1-\beta_2^t}.</annotation></semantics></math>
+   </div>
+   <p>
+    Under the constant-gradient calculation, the corrected moments recover
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>g</mi><annotation encoding="application/x-tex">g</annotation></semantics></math>
+    and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>g</mi><mn>2</mn></msup><annotation encoding="application/x-tex">g^2</annotation></semantics></math>
+    . “Bias correction” refers to this initialization effect in the moving averages, not correction for biased training data or statistical model bias.
+   </p>
+   <p>
+    The update is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mfrac><msub><mover><mi>m</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mrow><msqrt><msub><mover><mi>v</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub></msqrt><mo>+</mo><mi>ϵ</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\theta_{t+1}=\theta_t-\eta\frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon}.</annotation></semantics></math>
+   </div>
+   <p>
+    Here
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>η</mi><annotation encoding="application/x-tex">\eta</annotation></semantics></math>
+    is a base scale; the normalized moment ratio also controls the step. Adam is not free of learning-rate tuning.
+   </p>
+   <details class="derivation" data-derivation="adam-bias-correction" id="adam-adamw--derivation-adam-bias-correction">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive both bias-correction factors and the first Adam step
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Constant
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mn>1</mn></msub><mo>,</mo><msub><mi>β</mi><mn>2</mn></msub><mo>∈</mo><mo form="prefix" stretchy="false">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\beta_1,\beta_2\in[0,1)</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mn>0</mn></msub><mo>=</mo><msub><mi>v</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">m_0=v_0=0</annotation></semantics></math>
+      . First derive the moving-average algebra; then specify when it is an unbiased moment estimate.
+     </p>
+     <h4>
+      1 · Unroll the first-moment recurrence
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>g</mi><mi>t</mi></msub><mo>+</mo><msub><mi>β</mi><mn>1</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>g</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mi>⋯</mi><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><msubsup><mi>β</mi><mn>1</mn><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msubsup><msub><mi>g</mi><mn>1</mn></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">m_t=(1-\beta_1)g_t+\beta_1(1-\beta_1)g_{t-1}+\cdots+(1-\beta_1)\beta_1^{t-1}g_1.</annotation></semantics></math>
+     </div>
+     <p>
+      Equivalently
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>t</mi></msubsup><msubsup><mi>β</mi><mn>1</mn><mrow><mi>t</mi><mo>−</mo><mi>j</mi></mrow></msubsup><msub><mi>g</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">m_t=(1-\beta_1)\sum_{j=1}^t\beta_1^{t-j}g_j</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Sum the weight mass
+     </h4>
+     <p>
+      The geometric identity gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></munderover><msubsup><mi>β</mi><mn>1</mn><mi>k</mi></msubsup><mo>=</mo><mn>1</mn><mo>−</mo><msubsup><mi>β</mi><mn>1</mn><mi>t</mi></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">(1-\beta_1)\sum_{k=0}^{t-1}\beta_1^k=1-\beta_1^t.</annotation></semantics></math>
+     </div>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>g</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>μ</mi></mrow><annotation encoding="application/x-tex">\mathbb E[g_j]=\mu</annotation></semantics></math>
+      for each included step, then
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>m</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msubsup><mi>β</mi><mn>1</mn><mi>t</mi></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mi>μ</mi></mrow><annotation encoding="application/x-tex">\mathbb E[m_t]=(1-\beta_1^t)\mu</annotation></semantics></math>
+      . Dividing by this weight mass gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>m</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>=</mo><msub><mi>m</mi><mi>t</mi></msub><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msubsup><mi>β</mi><mn>1</mn><mi>t</mi></msubsup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\hat m_t=m_t/(1-\beta_1^t)</annotation></semantics></math>
+      with expectation
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>μ</mi><annotation encoding="application/x-tex">\mu</annotation></semantics></math>
+      . Independence across steps is not needed for this expectation; stationarity of the mean is.
+     </p>
+     <h4>
+      3 · Repeat for squared gradients
+     </h4>
+     <p>
+      With
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>g</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>s</mi></mrow><annotation encoding="application/x-tex">\mathbb E[g_j^2]=s</annotation></semantics></math>
+      constant,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>β</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>t</mi></munderover><msubsup><mi>β</mi><mn>2</mn><mrow><mi>t</mi><mo>−</mo><mi>j</mi></mrow></msubsup><msubsup><mi>g</mi><mi>j</mi><mn>2</mn></msubsup><mo>,</mo><mspace width="2.0em"></mspace><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>v</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msubsup><mi>β</mi><mn>2</mn><mi>t</mi></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mi>s</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">v_t=(1-\beta_2)\sum_{j=1}^t\beta_2^{t-j}g_j^2,\qquad
+\mathbb E[v_t]=(1-\beta_2^t)s.</annotation></semantics></math>
+     </div>
+     <p>
+      Thus
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>v</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mo>=</mo><msub><mi>v</mi><mi>t</mi></msub><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msubsup><mi>β</mi><mn>2</mn><mi>t</mi></msubsup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\hat v_t=v_t/(1-\beta_2^t)</annotation></semantics></math>
+      removes the zero-start weight deficit.
+     </p>
+     <h4>
+      4 · Work the first step numerically
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mn>1</mn></msub><mo>=</mo><mn>0.4</mn></mrow><annotation encoding="application/x-tex">g_1=0.4</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mn>0.9</mn><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.4</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.04</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">m_1=(1-0.9)(0.4)=0.04,</annotation></semantics></math>
+     </div>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mn>0.999</mn><mo form="postfix" stretchy="true">)</mo></mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.4</mn><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>=</mo><mn>0.001</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.16</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.00016</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">v_1=(1-0.999)(0.4)^2=0.001(0.16)=0.00016.</annotation></semantics></math>
+     </div>
+     <p>
+      Then
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>m</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo>=</mo><mn>0.04</mn><mi>/</mi><mn>0.1</mn><mo>=</mo><mn>0.4</mn></mrow><annotation encoding="application/x-tex">\hat m_1=0.04/0.1=0.4</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>v</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo>=</mo><mn>0.00016</mn><mi>/</mi><mn>0.001</mn><mo>=</mo><mn>0.16</mn></mrow><annotation encoding="application/x-tex">\hat v_1=0.00016/0.001=0.16</annotation></semantics></math>
+      . With
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mo>=</mo><mn>0.001</mn></mrow><annotation encoding="application/x-tex">\eta=0.001</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi><mo>=</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>8</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\epsilon=10^{-8}</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>θ</mi><mn>1</mn></msub><mo>=</mo><mi>−</mi><mn>0.001</mn><mfrac><mn>0.4</mn><mrow><mn>0.4</mn><mo>+</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>8</mn></mrow></msup></mrow></mfrac><mo>≈</mo><mi>−</mi><mn>0.000999999975</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\Delta\theta_1=-0.001\frac{0.4}{0.4+10^{-8}}\approx-0.000999999975.</annotation></semantics></math>
+     </div>
+     <h4>
+      5 · State exactly what is corrected
+     </h4>
+     <p>
+      When moments change over time, the corrected quantity is a normalized history-weighted average, not necessarily an unbiased estimate of the
+      <strong>
+       current
+      </strong>
+      moment. Furthermore,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>m</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mi>/</mi><msqrt><msub><mover><mi>v</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub></msqrt></mrow><annotation encoding="application/x-tex">\hat m_t/\sqrt{\hat v_t}</annotation></semantics></math>
+      is a nonlinear ratio, so separately corrected moments do not imply an unbiased optimizer direction. No general convergence guarantee follows from these identities alone.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="13" data-pdf="optim" type="button">
+       Chapter source · PDF p. 13
+      </button>
+      <a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.AdamW.html" rel="noopener noreferrer" target="_blank">
+       AdamW: decoupled weight decay
+      </a>
+      <a class="calculation-link" href="#adam-adamw?derivation=adam-bias-correction">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="the-complete-first-step-from-the-pdf" id="adam-adamw--the-complete-first-step-from-the-pdf">
+    The complete first step from the PDF
+   </h2>
+   <p>
+    Let
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mn>1</mn></msub><mo>=</mo><mn>0.4</mn></mrow><annotation encoding="application/x-tex">g_1=0.4</annotation></semantics></math>
+    ,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mn>1</mn></msub><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">\beta_1=0.9</annotation></semantics></math>
+    ,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mn>2</mn></msub><mo>=</mo><mn>0.999</mn></mrow><annotation encoding="application/x-tex">\beta_2=0.999</annotation></semantics></math>
+    , and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mo>=</mo><mn>0.001</mn></mrow><annotation encoding="application/x-tex">\eta=0.001</annotation></semantics></math>
+    . With zero initial moments,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mn>1</mn></msub><mo>=</mo><mn>0.04</mn><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>v</mi><mn>1</mn></msub><mo>=</mo><mn>0.00016</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">m_1=0.04,\qquad v_1=0.00016,</annotation></semantics></math>
+   </div>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>m</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo>=</mo><mn>0.4</mn><mo>,</mo><mspace width="2.0em"></mspace><msub><mover><mi>v</mi><mo accent="true">̂</mo></mover><mn>1</mn></msub><mo>=</mo><mn>0.16</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat m_1=0.4,\qquad\hat v_1=0.16.</annotation></semantics></math>
+   </div>
+   <p>
+    Ignoring a negligible
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+    , the parameter displacement is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>θ</mi><mn>1</mn></msub><mo>=</mo><mi>−</mi><mn>0.001</mn><mfrac><mn>0.4</mn><msqrt><mn>0.16</mn></msqrt></mfrac><mo>=</mo><mi>−</mi><mn>0.001</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\Delta\theta_1=-0.001\frac{0.4}{\sqrt{0.16}}=-0.001.</annotation></semantics></math>
+   </div>
+   <p>
+    The source emphasizes that, for a nonzero first gradient, the magnitude is close to the base rate. Later steps depend on history, so this observation is not a rule that Adam always moves by exactly
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>η</mi><annotation encoding="application/x-tex">\eta</annotation></semantics></math>
+    .
+   </p>
+   <h2 data-section="l2-regularization-versus-weight-decay" id="adam-adamw--l2-regularization-versus-weight-decay">
+    L2 regularization versus weight decay
+   </h2>
+   <p>
+    For the objective
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>J</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">g</mi></mrow></msub><mo>=</mo><mi>J</mi><mo>+</mo><mfrac displaystyle="false"><mi>λ</mi><mn>2</mn></mfrac><mo form="prefix" stretchy="false">∥</mo><mi>θ</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">J_{\mathrm{reg}}=J+\tfrac\lambda2\lVert\theta\rVert^2</annotation></semantics></math>
+    , its gradient is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo>+</mo><mi>λ</mi><mi>θ</mi></mrow><annotation encoding="application/x-tex">g+\lambda\theta</annotation></semantics></math>
+    . With basic SGD,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>g</mi><mi>t</mi></msub><mo>+</mo><mi>λ</mi><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>η</mi><mi>λ</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><msub><mi>g</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\theta_{t+1}=\theta_t-\eta(g_t+\lambda\theta_t)
+=(1-\eta\lambda)\theta_t-\eta g_t.</annotation></semantics></math>
+   </div>
+   <p>
+    This algebra gives the familiar equivalence between L2 and multiplicative decay
+    <strong>
+     for that basic update
+    </strong>
+    . If the combined gradient instead passes through adaptive moment calculations, the penalty contribution affects the moments and is rescaled coordinate by coordinate. It is no longer the same independent shrinkage.
+   </p>
+   <p>
+    AdamW decouples the decay. The guide gives the schematic update
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mfrac><msub><mover><mi>m</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub><mrow><msqrt><msub><mover><mi>v</mi><mo accent="true">̂</mo></mover><mi>t</mi></msub></msqrt><mo>+</mo><mi>ϵ</mi></mrow></mfrac><mo>−</mo><mi>η</mi><mi>λ</mi><msub><mi>θ</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\theta_{t+1}=\theta_t-\eta\frac{\hat m_t}{\sqrt{\hat v_t}+\epsilon}-\eta\lambda\theta_t.</annotation></semantics></math>
+   </div>
+   <p>
+    This is a conceptual separation of the adaptive data-gradient update and shrinkage. The linked official algorithm specifies the implementation order and options. Do not infer exact library behavior merely from an optimizer name.
+   </p>
+   <details class="derivation" data-derivation="decoupled-decay" id="adam-adamw--derivation-decoupled-decay">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive when L2 equals weight decay—and when it does not
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <h4>
+      1 · Differentiate the L2 penalty coordinate by coordinate
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Ω</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mi>λ</mi><mn>2</mn></mfrac><munder><mo>∑</mo><mi>j</mi></munder><msubsup><mi>θ</mi><mi>j</mi><mn>2</mn></msubsup><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>Ω</mi></mrow><mrow><mi>∂</mi><msub><mi>θ</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mi>λ</mi><msub><mi>θ</mi><mi>j</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\Omega(\theta)=\frac\lambda2\sum_j\theta_j^2,\qquad
+\frac{\partial\Omega}{\partial\theta_j}=\lambda\theta_j.</annotation></semantics></math>
+     </div>
+     <p>
+      Thus the total gradient is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo>+</mo><mi>λ</mi><mi>θ</mi></mrow><annotation encoding="application/x-tex">g+\lambda\theta</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Substitute into plain SGD
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>g</mi><mi>t</mi></msub><mo>+</mo><mi>λ</mi><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munder><munder><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>η</mi><mi>λ</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>θ</mi><mi>t</mi></msub></mrow><mo accent="true">⏟</mo></munder><mtext mathvariant="normal">multiplicative term</mtext></munder><mo>−</mo><mi>η</mi><msub><mi>g</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\theta_{t+1}=\theta_t-\eta(g_t+\lambda\theta_t)
+=\underbrace{(1-\eta\lambda)\theta_t}_{\text{multiplicative term}}-\eta g_t.</annotation></semantics></math>
+     </div>
+     <p>
+      When
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>η</mi><mi>λ</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0&lt;\eta\lambda&lt;1</annotation></semantics></math>
+      , the multiplicative term is literal shrinkage toward zero. The equality is algebraic; unusually large decay steps need not behave as gentle shrinkage.
+     </p>
+     <h4>
+      3 · Add a diagonal preconditioner
+     </h4>
+     <p>
+      For a fixed positive diagonal matrix
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>P</mi><mi>t</mi></msub><annotation encoding="application/x-tex">P_t</annotation></semantics></math>
+      , a coupled penalty gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>η</mi><mi>λ</mi><msub><mi>P</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><msub><mi>P</mi><mi>t</mi></msub><msub><mi>g</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\theta_{t+1}=(I-\eta\lambda P_t)\theta_t-\eta P_tg_t.</annotation></semantics></math>
+     </div>
+     <p>
+      Coordinate
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+      shrinks by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>η</mi><mi>λ</mi><msub><mi>P</mi><mrow><mi>t</mi><mo>,</mo><mi>j</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">1-\eta\lambda P_{t,jj}</annotation></semantics></math>
+      , not by one common factor. Decoupled decay instead uses
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>η</mi><mi>λ</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><msub><mi>P</mi><mi>t</mi></msub><msub><mi>g</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\theta_{t+1}=(1-\eta\lambda)\theta_t-\eta P_tg_t.</annotation></semantics></math>
+     </div>
+     <p>
+      These are unequal unless the preconditioner and decay coefficients satisfy the required special relation.
+     </p>
+     <h4>
+      4 · Identify Adam’s additional history effect
+     </h4>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>t</mi></msub><mo>+</mo><mi>λ</mi><msub><mi>θ</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">g_t+\lambda\theta_t</annotation></semantics></math>
+      is passed into Adam, both
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>m</mi><mi>t</mi></msub><annotation encoding="application/x-tex">m_t</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>v</mi><mi>t</mi></msub><annotation encoding="application/x-tex">v_t</annotation></semantics></math>
+      include that penalty contribution. In particular the square contains
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>g</mi><mi>t</mi></msub><mo>+</mo><mi>λ</mi><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>=</mo><msubsup><mi>g</mi><mi>t</mi><mn>2</mn></msubsup><mo>+</mo><mn>2</mn><mi>λ</mi><msub><mi>g</mi><mi>t</mi></msub><msub><mi>θ</mi><mi>t</mi></msub><mo>+</mo><msup><mi>λ</mi><mn>2</mn></msup><msubsup><mi>θ</mi><mi>t</mi><mn>2</mn></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">(g_t+\lambda\theta_t)^2=g_t^2+2\lambda g_t\theta_t+\lambda^2\theta_t^2.</annotation></semantics></math>
+     </div>
+     <p>
+      Decay changes future moments as well as the current step. AdamW updates moments from the data gradient and applies parameter decay separately.
+     </p>
+     <h4>
+      5 · Do not extend the plain-SGD identity to momentum automatically
+     </h4>
+     <p>
+      Coupled L2 with momentum uses
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><mi>β</mi><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>g</mi><mi>t</mi></msub><mo>+</mo><mi>λ</mi><msub><mi>θ</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">v_t=\beta v_{t-1}+g_t+\lambda\theta_t</annotation></semantics></math>
+      . Its buffer retains
+      <strong>
+       past penalty gradients
+      </strong>
+      . Decaying parameters outside that buffer is a different procedure. The simple exact equivalence in step 2 applies to basic SGD without momentum, not to every optimizer bearing the SGD name.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="13" data-pdf="optim" type="button">
+       Chapter source · PDF p. 13
+      </button>
+      <a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.AdamW.html" rel="noopener noreferrer" target="_blank">
+       AdamW: decoupled weight decay
+      </a>
+      <a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.SGD.html" rel="noopener noreferrer" target="_blank">
+       SGD: momentum and Nesterov conventions
+      </a>
+      <a class="calculation-link" href="#adam-adamw?derivation=decoupled-decay">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="interpreting-hyperparameters-and-failure" id="adam-adamw--interpreting-hyperparameters-and-failure">
+    Interpreting hyperparameters and failure
+   </h2>
+   <p>
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>1</mn></msub><annotation encoding="application/x-tex">\beta_1</annotation></semantics></math>
+    controls direction memory.
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mn>2</mn></msub><annotation encoding="application/x-tex">\beta_2</annotation></semantics></math>
+    controls how quickly the magnitude estimate reacts. An extremely long memory can be stable but slow to follow a sudden change in gradient statistics.
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+    stabilizes division and matters when moments are small. Weight decay controls a separate shrinkage effect.
+   </p>
+   <p>
+    Fast reduction of training loss does not establish strong generalization. The PDFs recommend diagnosing the learning curve and tuning learning rate, schedule, regularization, and batch size under a proper validation scheme. When comparing Adam with momentum SGD, compare the
+    <strong>
+     whole tuned procedure
+    </strong>
+    , not one uncalibrated rate shared by both.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="adam-adamw--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="adamw-api">
+     <span class="resource-meta">
+      PyTorch · API + algorithm
+     </span>
+     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.AdamW.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       AdamW: decoupled weight decay
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Compare the parameter-decay step with the first- and second-moment updates. Weight decay is kept separate from the gradient moments.
+     </p>
+    </div>
+    <div class="resource" data-resource="optim">
+     <span class="resource-meta">
+      PyTorch · Implementation reference
+     </span>
+     <a href="https://docs.pytorch.org/docs/2.13/optim.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       torch.optim
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Check optimizer construction, per-parameter options, closure usage and scheduler ordering. Use the training tutorial for a complete surrounding loop.
+     </p>
+    </div>
+    <div class="resource" data-resource="optimization">
+     <span class="resource-meta">
+      PyTorch · Tutorial + code
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Optimizing Model Parameters
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Follow separate training and test loops. Identify the forward calculation, loss, backward pass and optimizer update rather than treating training as one operation.
+     </p>
+    </div>
+   </div>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Why is adding L2 to Adam’s loss not generally the same as AdamW?
+   </summary>
+   <p>
+    An L2 penalty adds λθ to the gradient before Adam’s moment estimation and adaptive normalization. Decoupled weight decay shrinks parameters separately from that gradient transformation. Basic SGD has an algebraic equivalence; adaptive methods generally do not.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#adaptive-scaling">
+    <small>
+     ← Previous
+    </small>
+    AdaGrad and RMSProp: adaptive scaling
+   </a>
+   <a href="#curvature">
+    <small>
+     Next →
+    </small>
+    Curvature, conditioning, and preconditioning
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="two-memories-serve-two-different-purposes" href="#adam-adamw?section=two-memories-serve-two-different-purposes">
+    Two memories serve two different purposes
+   </a>
+   <a data-section="why-zero-initialization-needs-a-correction" href="#adam-adamw?section=why-zero-initialization-needs-a-correction">
+    Why zero initialization needs a correction
+   </a>
+   <a data-section="the-complete-first-step-from-the-pdf" href="#adam-adamw?section=the-complete-first-step-from-the-pdf">
+    The complete first step from the PDF
+   </a>
+   <a data-section="l2-regularization-versus-weight-decay" href="#adam-adamw?section=l2-regularization-versus-weight-decay">
+    L2 regularization versus weight decay
+   </a>
+   <a data-section="interpreting-hyperparameters-and-failure" href="#adam-adamw?section=interpreting-hyperparameters-and-failure">
+    Interpreting hyperparameters and failure
+   </a>
+   <a data-section="implementation" href="#adam-adamw?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

@@ -1,0 +1,243 @@
+{
+  "id": "sql-not",
+  "lang": "sql",
+  "category": "Filtering",
+  "label": "NOT",
+  "example": "NOT age > 30",
+  "description": "Negate condition",
+  "source": "image-sql",
+  "related": [],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "aliases": "NOT",
+  "uses": [
+    {
+      "page": "C20",
+      "block": "code-C20-0",
+      "line": 2,
+      "lines": [
+        2,
+        3
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT DISTINCT c.customer_id FROM Customer c\nWHERE NOT EXISTS (\n    SELECT 1 FROM Product p WHERE NOT EXISTS (\n        SELECT 1 FROM Customer bought",
+      "snippetLine": 1
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    FROM Employees\n    WHERE reports_to IS NOT NULL\n    GROUP BY reports_to\n)",
+      "snippetLine": 5
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-2",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    GROUP BY reports_to\n    HAVING reports_to IS NOT NULL\n)\n",
+      "snippetLine": 8
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-2",
+      "line": 21,
+      "lines": [
+        21
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Products\nWHERE product_id NOT IN (SELECT product_id FROM Valid);",
+      "snippetLine": 20
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-4",
+      "line": 25,
+      "lines": [
+        25
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Products\nWHERE product_id NOT IN (SELECT product_id FROM Valid)",
+      "snippetLine": 24
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-2",
+      "line": 26,
+      "lines": [
+        26
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Categories\nWHERE category NOT IN (SELECT category FROM Valid);",
+      "snippetLine": 25
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-4",
+      "line": 30,
+      "lines": [
+        30
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Categories\nWHERE category NOT IN (SELECT category FROM Valid)",
+      "snippetLine": 29
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-0",
+      "line": 2,
+      "lines": [
+        2,
+        3
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT e.employee_id FROM Employees e\nWHERE e.salary < 30000 AND e.manager_id IS NOT NULL\n  AND NOT EXISTS (SELECT 1 FROM Employees m WHERE m.employee_id = e.manager_id)\nORDER BY e.employee_id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    FROM Employees\n    WHERE manager_id NOT IN (SELECT employee_id FROM Employees)\n)\nSELECT employee_id",
+      "snippetLine": 3
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    FROM Employees\n    WHERE manager_id NOT IN (SELECT employee_id FROM Employees)\n)\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-2",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        FROM Employee\n        WHERE salary IS NOT NULL\n    ),\n    UniqueRanks AS (",
+      "snippetLine": 6
+    },
+    {
+      "page": "LC607",
+      "block": "code-LC607-0",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "607 · Sales person",
+      "number": "607",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM SalesPerson\nWHERE sales_id NOT IN (\n    SELECT sales_id\n    FROM IdToExclude",
+      "snippetLine": 10
+    },
+    {
+      "page": "LC3497",
+      "block": "code-LC3497-0",
+      "line": 16,
+      "lines": [
+        16,
+        17
+      ],
+      "title": "3497 · Analyze subscription conversion",
+      "number": "3497",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "WHERE \n    paid_avg_duration IS NOT NULL\n    AND trial_avg_duration IS NOT NULL",
+      "snippetLine": 15
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-0",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "     FROM Camera\n     WHERE Camera.guard_spotted_id IS NOT NULL) AS time_range_first_last_detection\nFROM Guard g\nLEFT JOIN Room r",
+      "snippetLine": 10
+    },
+    {
+      "page": "B02",
+      "block": "code-B02-4",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Numeric constraints",
+      "number": "02",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies WHERE year NOT BETWEEN 2000 AND 2010;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B07",
+      "block": "code-B07-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "OUTER JOINs",
+      "number": "07",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT DISTINCT building FROM employees WHERE building IS NOT NULL;",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 11
+}

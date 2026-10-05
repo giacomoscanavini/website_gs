@@ -1,0 +1,371 @@
+{
+  "id": "pd-mean",
+  "lang": "pd",
+  "category": "Aggregation",
+  "label": "mean()",
+  "example": "df['score'].mean()",
+  "description": "Mean",
+  "source": "image-pandas",
+  "related": [
+    "sql-avg"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "mean",
+  "uses": [
+    {
+      "page": "C46",
+      "block": "code-C46-1",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df['processing_time'] = df['timestamp_e'] - df['timestamp_s']\n    result = df.groupby('machine_id', as_index=False).agg(processing_time=('processing_time', 'mean'))\n    result['processing_time'] = result['processing_time'].map(lambda x: round_half_up(x, 3))\n    return result",
+      "snippetLine": 12
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-3",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return df.groupby(by='machine_id').mean().round(3).reset_index()",
+      "snippetLine": 9
+    },
+    {
+      "page": "C08",
+      "block": "code-C08-1",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    m = project.merge(employee, on='employee_id', how='left', validate='many_to_one')\n    g = m.groupby('project_id', as_index=False).agg(average_years=('experience_years', 'mean'))\n    g['average_years'] = g['average_years'].map(round_half_up)\n    return g",
+      "snippetLine": 9
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-1",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    q = queries.assign(quality_ratio=queries['rating'] / queries['position'], poor=queries['rating'].lt(3).astype(int))\n    g = q.groupby('query_name', dropna=False, as_index=False).agg(quality=('quality_ratio', 'mean'), poor_query_percentage=('poor', 'mean'))\n    g['quality'] = g['quality'].map(round_half_up)\n    g['poor_query_percentage'] = (100 * g['poor_query_percentage']).map(round_half_up)",
+      "snippetLine": 9
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-3",
+      "line": 12,
+      "lines": [
+        12,
+        13
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df =   queries.groupby(by='query_name', dropna=False).agg(\n        quality = ('quality_ratio', 'mean'),\n        poor_query_percentage   = ('poor',   'mean')\n    ).reset_index()",
+      "snippetLine": 11
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-5",
+      "line": 10,
+      "lines": [
+        10,
+        11
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = queries.groupby(by='query_name').agg(\n        quality = ('quality_ratio', 'mean'),\n        poor_query_percentage = ('poor', 'mean')\n    ).reset_index()",
+      "snippetLine": 9
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    first = d.sort_values('order_date').drop_duplicates('customer_id', keep='first')\n    value = 100 * first['order_date'].eq(first['customer_pref_delivery_date']).mean()\n    return pd.DataFrame({'immediate_percentage': [round_half_up(value)]})",
+      "snippetLine": 10
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-3",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    idx_to_keep =   delivery.groupby(by='customer_id')['order_date'].idxmin()\n    return   pd.DataFrame({'immediate_percentage': [round_half_up(100 * delivery['immediate'][idx_to_keep].mean(), 2)]})",
+      "snippetLine": 12
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-5",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    idx_to_keep = delivery.groupby(by='customer_id')['order_date'].idxmin()\n    return pd.DataFrame({'immediate_percentage': [round(100 * delivery['immediate'][idx_to_keep].mean(), 2)]})",
+      "snippetLine": 5
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-1",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    valid = a['event_date'].eq(first + pd.Timedelta(days=1))\n    fraction = valid.groupby(a['player_id']).any().mean()\n    return pd.DataFrame({'fraction': [round_half_up(fraction)]})",
+      "snippetLine": 11
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-3",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    return   pd.DataFrame({\n        'fraction': [round_half_up(activity.groupby(by='player_id')['valid'].any().mean(), 2)]\n    })",
+      "snippetLine": 13
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-5",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    return pd.DataFrame({\n        'fraction': [round(activity.groupby(by='player_id')['valid'].any().mean(), 2)]\n    })",
+      "snippetLine": 7
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "        reports_count=('employee_id', 'size'),\n        average_age=('age', 'mean')\n    )\n    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)",
+      "snippetLine": 5
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-3",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        reports_count=('employee_id', 'size'), \n        average_age=('age', 'mean')\n    )\n    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)",
+      "snippetLine": 5
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-1",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    feb = r.loc[r['created_at'].ge('2020-02-01') & r['created_at'].lt('2020-03-01')]\n    movies_ranked = feb.groupby('movie_id', as_index=False).agg(avg_rating=('rating', 'mean')).merge(movies, on='movie_id')\n    second = movies_ranked.sort_values(['avg_rating', 'title'], ascending=[False, True]).head(1)[['title']].rename(columns={'title': 'results'})\n    return pd.concat([first, second], ignore_index=True)",
+      "snippetLine": 7
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-3",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df_movies = df_movies.groupby(by='movie_id').agg(\n        avgRating = ('rating', 'mean')\n    )\n    df_movies =   df_movies.merge(movies, on='movie_id', how='left').sort_values(by=['avgRating', 'title'], ascending=[False, True])[['title', 'avgRating']]",
+      "snippetLine": 10
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-5",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df_movies = df_movies.groupby(by='movie_id').agg(\n        avgRating = ('rating', 'mean')\n    )\n    df_movies = df_movies.merge(movies, on='movie_id', how='left').sort_values(by=['avgRating', 'title'], ascending=[False, True])[['title', 'avgRating']]",
+      "snippetLine": 10
+    },
+    {
+      "page": "LC3497",
+      "block": "code-LC3497-1",
+      "line": 11,
+      "lines": [
+        11,
+        12
+      ],
+      "title": "3497 · Analyze subscription conversion",
+      "number": "3497",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        return pd.Series({\n            'trial_avg_duration': round2(x['activity_duration'][free_flag].mean()), \n            'paid_avg_duration': round2(x['activity_duration'][paid_flag].mean()), \n        })",
+      "snippetLine": 10
+    },
+    {
+      "page": "squid-03",
+      "block": "code-squid-03-1",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "Compare hot and cold months",
+      "number": "03",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "          .groupby(['shape', 'month_num'], as_index=False)\n          .agg(avg_temp=('average_completion_time', 'mean'))\n          .sort_values('avg_temp'))",
+      "snippetLine": 11
+    },
+    {
+      "page": "squid-04",
+      "block": "code-squid-04-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "Rank ten-player teams",
+      "number": "04",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "teams = player.groupby('team_id', as_index=False, dropna=False).agg(\n    n_players=('id', 'size'), age_team=('age', 'mean'))\nresult = teams.loc[teams['n_players'].eq(10), ['team_id', 'age_team']].copy()\nresult['age_group'] = 'Grizzled'",
+      "snippetLine": 3
+    },
+    {
+      "page": "squid-06",
+      "block": "code-squid-06-1",
+      "line": 18,
+      "lines": [
+        18
+      ],
+      "title": "Trace equipment to its first failure",
+      "number": "06",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    years = (first['failed'] - first['installed']).dt.total_seconds() / (86400 * 365.2425)\n    result = pd.DataFrame({'average_lifespan_years': [np.floor(years.mean())]})",
+      "snippetLine": 17
+    },
+    {
+      "page": "squid-08",
+      "block": "code-squid-08-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "Find the longest hesitation",
+      "number": "08",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "if not pushed.empty:\n    means = pushed.groupby('game_id')['last_moved_time_seconds'].mean()\n    game_id = means.sort_values(ascending=False).index[0]\n    result = (pushed.loc[pushed['game_id'].eq(game_id)]",
+      "snippetLine": 5
+    },
+    {
+      "page": "B10",
+      "block": "code-B10-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Aggregates and GROUP BY",
+      "number": "10",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = employees.groupby('role', dropna=False, as_index=False).agg(average_years=('years_employed', 'mean'))",
+      "snippetLine": 1
+    },
+    {
+      "page": "B19",
+      "block": "code-B19-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Additional topic · Subqueries",
+      "number": "19",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "threshold = sales_associates['revenue_generated'].mean()\nresult = sales_associates.loc[sales_associates['salary'].gt(threshold)]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B19",
+      "block": "code-B19-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Additional topic · Subqueries",
+      "number": "19",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "mean_revenue = employees.groupby('department')['revenue_generated'].transform('mean')\nresult = employees.loc[employees['salary'].gt(mean_revenue)]",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 14
+}

@@ -1,0 +1,708 @@
+<section aria-labelledby="ridge-title" class="page-view lesson-layout" id="ridge">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     18
+    </span>
+    Part 3 · Regularization &amp; ensembles
+   </p>
+   <h1 id="ridge-title" tabindex="-1">
+    OLS, Ridge, and spectral shrinkage
+   </h1>
+   <p class="standfirst">
+    Derive the closed form and use singular directions to explain stability under collinearity.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Regularization · PDF pp. 6–9 · §§2–3" data-page="6" data-pdf="reg" type="button">
+     Regularization · PDF pp. 6–9 · §§2–3
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="ols-exposes-the-instability" href="#ridge?section=ols-exposes-the-instability">
+     OLS exposes the instability
+    </a>
+    <a data-section="add-an-l2-preference" href="#ridge?section=add-an-l2-preference">
+     Add an L2 preference
+    </a>
+    <a data-section="the-spectral-explanation" href="#ridge?section=the-spectral-explanation">
+     The spectral explanation
+    </a>
+    <a data-section="work-the-orthogonal-case" href="#ridge?section=work-the-orthogonal-case">
+     Work the orthogonal case
+    </a>
+    <a data-section="geometry-and-coefficient-paths" href="#ridge?section=geometry-and-coefficient-paths">
+     Geometry and coefficient paths
+    </a>
+    <a data-section="from-linear-models-to-neural-weights" href="#ridge?section=from-linear-models-to-neural-weights">
+     From linear models to neural weights
+    </a>
+    <a data-section="implementation" href="#ridge?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="ols-exposes-the-instability" id="ridge--ols-exposes-the-instability">
+    OLS exposes the instability
+   </h2>
+   <p>
+    For
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mi>X</mi><mi>β</mi><mo>+</mo><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">y=X\beta+\epsilon</annotation></semantics></math>
+    , ordinary least squares minimizes
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msubsup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">\lVert y-X\beta\rVert_2^2</annotation></semantics></math>
+    . If
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mi>⊤</mi></msup><mi>X</mi></mrow><annotation encoding="application/x-tex">X^\top X</annotation></semantics></math>
+    is invertible,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mrow><mi mathvariant="normal">O</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi></mrow></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>X</mi><mi>⊤</mi></msup><mi>X</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>X</mi><mi>⊤</mi></msup><mi>y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat\beta_{\mathrm{OLS}}=(X^\top X)^{-1}X^\top y.</annotation></semantics></math>
+   </div>
+   <p>
+    When columns are highly correlated, different coefficient combinations can make nearly the same prediction on the observed data. The loss then changes little along some directions, and small sample perturbations can produce large coefficient changes. If the design is rank deficient, the inverse expression does not apply; the source notes that there may be infinitely many fitting solutions.
+   </p>
+   <p>
+    The guide recommends standardized predictors because coefficient penalties depend on units. The same physical signal measured in dollars or millions of dollars should not receive an unintended difference in shrinkage merely because the coefficient’s numerical size changed.
+   </p>
+   <h2 data-section="add-an-l2-preference" id="ridge--add-an-l2-preference">
+    Add an L2 preference
+   </h2>
+   <p>
+    The source’s Ridge objective is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">e</mi></mrow></msub><mo>∈</mo><msub><mo>argmin</mo><mi>β</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo form="prefix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msubsup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn><mn>2</mn></msubsup><mo>+</mo><mi>λ</mi><mo form="prefix" stretchy="false">∥</mo><mi>β</mi><msubsup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat\beta_{\mathrm{Ridge}}\in\mathop{\mathrm{argmin}}_\beta
+\left[\lVert y-X\beta\rVert_2^2+\lambda\lVert\beta\rVert_2^2\right].</annotation></semantics></math>
+   </div>
+   <p>
+    Differentiating gives
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>2</mn><msup><mi>X</mi><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>2</mn><mi>λ</mi><mi>β</mi></mrow><annotation encoding="application/x-tex">-2X^\top(y-X\beta)+2\lambda\beta</annotation></semantics></math>
+    . Set this to zero:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>X</mi><mi>⊤</mi></msup><mi>X</mi><mo>+</mo><mi>λ</mi><mi>I</mi><mo form="postfix" stretchy="true">)</mo></mrow><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>=</mo><msup><mi>X</mi><mi>⊤</mi></msup><mi>y</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">(X^\top X+\lambda I)\hat\beta=X^\top y,</annotation></semantics></math>
+   </div>
+   <p>
+    so
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">e</mi></mrow></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>X</mi><mi>⊤</mi></msup><mi>X</mi><mo>+</mo><mi>λ</mi><mi>I</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>X</mi><mi>⊤</mi></msup><mi>y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat\beta_{\mathrm{Ridge}}=(X^\top X+\lambda I)^{-1}X^\top y.</annotation></semantics></math>
+   </div>
+   <p>
+    For positive
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
+    , adding
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mi>I</mi></mrow><annotation encoding="application/x-tex">\lambda I</annotation></semantics></math>
+    lifts the weak eigenvalues. The intercept is usually not penalized; centering the data or handling the intercept separately keeps this matrix expression consistent with that choice.
+   </p>
+   <details class="derivation" data-derivation="normal-equations" id="ridge--derivation-normal-equations">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive OLS and Ridge from individual coefficient derivatives
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>n</mi><mo>×</mo><mi>p</mi></mrow></msup></mrow><annotation encoding="application/x-tex">X\in\mathbb R^{n\times p}</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>∈</mo><msup><mi>ℝ</mi><mi>p</mi></msup></mrow><annotation encoding="application/x-tex">\beta\in\mathbb R^p</annotation></semantics></math>
+      , and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>∈</mo><msup><mi>ℝ</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">y\in\mathbb R^n</annotation></semantics></math>
+      . Center columns and targets so the intercept can be handled separately. Use the
+      <strong>
+       sum-loss convention
+      </strong>
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>p</mi></munderover><msub><mi>X</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub><msub><mi>β</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>+</mo><mfrac><mi>λ</mi><mn>2</mn></mfrac><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>p</mi></munderover><msubsup><mi>β</mi><mi>k</mi><mn>2</mn></msubsup><mo>,</mo><mspace width="2.0em"></mspace><mi>λ</mi><mo>≥</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">J(\beta)=\frac12\sum_{i=1}^n\left(y_i-\sum_{k=1}^pX_{ik}\beta_k\right)^2+\frac\lambda2\sum_{k=1}^p\beta_k^2,\qquad\lambda\ge0.</annotation></semantics></math>
+     </div>
+     <h4>
+      1 · Differentiate one residual
+     </h4>
+     <p>
+      Define
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>i</mi></msub><mo>=</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mo>∑</mo><mi>k</mi></msub><msub><mi>X</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub><msub><mi>β</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">r_i=y_i-\sum_kX_{ik}\beta_k</annotation></semantics></math>
+      . Only the term with
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mi>j</mi></mrow><annotation encoding="application/x-tex">k=j</annotation></semantics></math>
+      changes with
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\beta_j</annotation></semantics></math>
+      , so
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><msub><mi>r</mi><mi>i</mi></msub><mi>/</mi><mi>∂</mi><msub><mi>β</mi><mi>j</mi></msub><mo>=</mo><mi>−</mi><msub><mi>X</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\partial r_i/\partial\beta_j=-X_{ij}</annotation></semantics></math>
+      . The chain rule gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>r</mi><mi>i</mi><mn>2</mn></msubsup><mi>/</mi><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><mi>∂</mi><msub><mi>β</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><msub><mi>r</mi><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><msub><mi>X</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial(r_i^2/2)}{\partial\beta_j}=r_i(-X_{ij}).</annotation></semantics></math>
+     </div>
+     <p>
+      The penalty derivative is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>λ</mi><msub><mo>∑</mo><mi>k</mi></msub><msubsup><mi>β</mi><mi>k</mi><mn>2</mn></msubsup><mi>/</mi><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mi>∂</mi><msub><mi>β</mi><mi>j</mi></msub><mo>=</mo><mi>λ</mi><msub><mi>β</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\partial(\lambda\sum_k\beta_k^2/2)/\partial\beta_j=\lambda\beta_j</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Add the observation contributions
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>J</mi></mrow><mrow><mi>∂</mi><msub><mi>β</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mi>−</mi><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>X</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><munder><mo>∑</mo><mi>k</mi></munder><msub><mi>X</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub><msub><mi>β</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>λ</mi><msub><mi>β</mi><mi>j</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial J}{\partial\beta_j}=-\sum_iX_{ij}\left(y_i-\sum_kX_{ik}\beta_k\right)+\lambda\beta_j.</annotation></semantics></math>
+     </div>
+     <p>
+      Collecting these
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
+      coordinates gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>β</mi></msub><mi>J</mi><mo>=</mo><mi>−</mi><msup><mi>X</mi><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>λ</mi><mi>β</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_\beta J=-X^\top(y-X\beta)+\lambda\beta.</annotation></semantics></math>
+     </div>
+     <h4>
+      3 · Set the gradient to zero and collect coefficients
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><msup><mi>X</mi><mi>⊤</mi></msup><mi>y</mi><mo>+</mo><msup><mi>X</mi><mi>⊤</mi></msup><mi>X</mi><mi>β</mi><mo>+</mo><mi>λ</mi><mi>β</mi><mo>=</mo><mn>0</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">-X^\top y+X^\top X\beta+\lambda\beta=0,</annotation></semantics></math>
+     </div>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>X</mi><mi>⊤</mi></msup><mi>X</mi><mo>+</mo><mi>λ</mi><mi>I</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>β</mi><mo>=</mo><msup><mi>X</mi><mi>⊤</mi></msup><mi>y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">(X^\top X+\lambda I)\beta=X^\top y.</annotation></semantics></math>
+     </div>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda&gt;0</annotation></semantics></math>
+      , the matrix is positive definite: for any nonzero
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>v</mi><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>X</mi><mi>⊤</mi></msup><mi>X</mi><mo>+</mo><mi>λ</mi><mi>I</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>v</mi><mo>=</mo><mo form="postfix" stretchy="false">∥</mo><mi>X</mi><mi>v</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>+</mo><mi>λ</mi><mo form="postfix" stretchy="false">∥</mo><mi>v</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>&gt;</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">v^\top(X^\top X+\lambda I)v=\|Xv\|^2+\lambda\|v\|^2&gt;0.</annotation></semantics></math>
+     </div>
+     <p>
+      Thus the stationary point is the unique global minimum and
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>λ</mi></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>X</mi><mi>⊤</mi></msup><mi>X</mi><mo>+</mo><mi>λ</mi><mi>I</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup><msup><mi>X</mi><mi>⊤</mi></msup><mi>y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat\beta_\lambda=(X^\top X+\lambda I)^{-1}X^\top y.</annotation></semantics></math>
+     </div>
+     <p>
+      Numerically, solve this linear system rather than explicitly forming its inverse.
+     </p>
+     <h4>
+      4 · Recover OLS and handle rank deficiency
+     </h4>
+     <p>
+      Set
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda=0</annotation></semantics></math>
+      . If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
+      has full column rank,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mi>⊤</mi></msup><mi>X</mi></mrow><annotation encoding="application/x-tex">X^\top X</annotation></semantics></math>
+      is invertible and the OLS formula follows. Otherwise the normal equations still characterize minimizers, but there may be infinitely many coefficient vectors;
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mo>+</mo></msup><mi>y</mi></mrow><annotation encoding="application/x-tex">X^+y</annotation></semantics></math>
+      selects the minimum-Euclidean-norm solution.
+     </p>
+     <h4>
+      5 · Track normalization and the intercept
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>n</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>λ</mi><mo form="postfix" stretchy="false">∥</mo><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\|y-X\beta\|^2/(2n)+\lambda\|\beta\|^2/2</annotation></semantics></math>
+      , the system is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>X</mi><mi>⊤</mi></msup><mi>X</mi><mo>+</mo><mi>n</mi><mi>λ</mi><mi>I</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>β</mi><mo>=</mo><msup><mi>X</mi><mi>⊤</mi></msup><mi>y</mi></mrow><annotation encoding="application/x-tex">(X^\top X+n\lambda I)\beta=X^\top y</annotation></semantics></math>
+      . The same symbol
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
+      therefore has a different numerical scale. With an unpenalized intercept, differentiation gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>b</mi><mo accent="true">̂</mo></mover><mo>=</mo><mover><mi>y</mi><mo accent="true">‾</mo></mover><mo>−</mo><msup><mover><mi>x</mi><mo accent="true">‾</mo></mover><mi>⊤</mi></msup><mover><mi>β</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">\hat b=\bar y-\bar x^\top\hat\beta</annotation></semantics></math>
+      ; centering is what made it disappear above.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="6" data-pdf="reg" type="button">
+       Chapter source · PDF p. 6
+      </button>
+      <a class="calculation-link" href="#ridge?derivation=normal-equations">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="the-spectral-explanation" id="ridge--the-spectral-explanation">
+    The spectral explanation
+   </h2>
+   <p>
+    Let
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>=</mo><mi>U</mi><mi>D</mi><msup><mi>V</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">X=UDV^\top</annotation></semantics></math>
+    , with singular values
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>d</mi><mi>j</mi></msub><annotation encoding="application/x-tex">d_j</annotation></semantics></math>
+    . In the identifiable singular directions,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">e</mi></mrow></msub><mo>=</mo><mi>V</mi><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><msub><mi>d</mi><mi>j</mi></msub><mrow><msubsup><mi>d</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><mi>λ</mi></mrow></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><msup><mi>U</mi><mi>⊤</mi></msup><mi>y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat\beta_{\mathrm{Ridge}}=V\operatorname{diag}\left(\frac{d_j}{d_j^2+\lambda}\right)U^\top y.</annotation></semantics></math>
+   </div>
+   <p>
+    OLS uses the factor
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><msub><mi>d</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">1/d_j</annotation></semantics></math>
+    . Relative to OLS, Ridge attenuates direction
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+    by
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><msubsup><mi>d</mi><mi>j</mi><mn>2</mn></msubsup><mrow><msubsup><mi>d</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><mi>λ</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{d_j^2}{d_j^2+\lambda}.</annotation></semantics></math>
+   </div>
+   <p>
+    This factor is close to one when
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>d</mi><mi>j</mi><mn>2</mn></msubsup><annotation encoding="application/x-tex">d_j^2</annotation></semantics></math>
+    is large relative to
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
+    , and close to zero when the direction is weakly identified. The formula explains why Ridge is not simply “subtracting the same amount from every coefficient.” Shrinkage depends on the geometry of the design.
+   </p>
+   <details class="derivation" data-derivation="svd-filter" id="ridge--derivation-svd-filter">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive the spectral shrinkage factors and the constraint connection
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Use the sum-loss Ridge objective above. Take a thin SVD over the
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>
+      positive singular values:
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>=</mo><msub><mi>U</mi><mi>r</mi></msub><msub><mi>D</mi><mi>r</mi></msub><msubsup><mi>V</mi><mi>r</mi><mi>⊤</mi></msubsup></mrow><annotation encoding="application/x-tex">X=U_rD_rV_r^\top</annotation></semantics></math>
+      , with
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>r</mi></msub><mo>=</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>d</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>d</mi><mi>r</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">D_r=\operatorname{diag}(d_1,\ldots,d_r)</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>j</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">d_j&gt;0</annotation></semantics></math>
+      . Both
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>U</mi><mi>r</mi></msub><annotation encoding="application/x-tex">U_r</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>V</mi><mi>r</mi></msub><annotation encoding="application/x-tex">V_r</annotation></semantics></math>
+      have orthonormal columns.
+     </p>
+     <h4>
+      1 · Express the normal equations in singular directions
+     </h4>
+     <p>
+      Since
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mi>⊤</mi></msup><mi>X</mi><mo>=</mo><msub><mi>V</mi><mi>r</mi></msub><msubsup><mi>D</mi><mi>r</mi><mn>2</mn></msubsup><msubsup><mi>V</mi><mi>r</mi><mi>⊤</mi></msubsup></mrow><annotation encoding="application/x-tex">X^\top X=V_rD_r^2V_r^\top</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mi>⊤</mi></msup><mi>y</mi><mo>=</mo><msub><mi>V</mi><mi>r</mi></msub><msub><mi>D</mi><mi>r</mi></msub><msubsup><mi>U</mi><mi>r</mi><mi>⊤</mi></msubsup><mi>y</mi></mrow><annotation encoding="application/x-tex">X^\top y=V_rD_rU_r^\top y</annotation></semantics></math>
+      , write the coefficient as
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><msub><mi>V</mi><mi>r</mi></msub><mi>a</mi><mo>+</mo><msub><mi>β</mi><mo>⊥</mo></msub></mrow><annotation encoding="application/x-tex">\beta=V_ra+\beta_\perp</annotation></semantics></math>
+      , where
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>V</mi><mi>r</mi><mi>⊤</mi></msubsup><msub><mi>β</mi><mo>⊥</mo></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">V_r^\top\beta_\perp=0</annotation></semantics></math>
+      . The data-fit term cannot see
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mo>⊥</mo></msub><annotation encoding="application/x-tex">\beta_\perp</annotation></semantics></math>
+      , while
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda&gt;0</annotation></semantics></math>
+      penalizes it, so the minimizer has
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mo>⊥</mo></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\beta_\perp=0</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Solve one coordinate at a time
+     </h4>
+     <p>
+      Premultiply the normal equations by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>V</mi><mi>r</mi><mi>⊤</mi></msubsup><annotation encoding="application/x-tex">V_r^\top</annotation></semantics></math>
+      :
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>D</mi><mi>r</mi><mn>2</mn></msubsup><mo>+</mo><mi>λ</mi><mi>I</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>a</mi><mo>=</mo><msub><mi>D</mi><mi>r</mi></msub><msubsup><mi>U</mi><mi>r</mi><mi>⊤</mi></msubsup><mi>y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">(D_r^2+\lambda I)a=D_rU_r^\top y.</annotation></semantics></math>
+     </div>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>j</mi></msub><mo>=</mo><msubsup><mi>u</mi><mi>j</mi><mi>⊤</mi></msubsup><mi>y</mi></mrow><annotation encoding="application/x-tex">c_j=u_j^\top y</annotation></semantics></math>
+      , this says
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>d</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><mi>λ</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>a</mi><mi>j</mi></msub><mo>=</mo><msub><mi>d</mi><mi>j</mi></msub><msub><mi>c</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">(d_j^2+\lambda)a_j=d_jc_j</annotation></semantics></math>
+      . Therefore
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>j</mi></msub><mo>=</mo><mfrac><msub><mi>d</mi><mi>j</mi></msub><mrow><msubsup><mi>d</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><mi>λ</mi></mrow></mfrac><msub><mi>c</mi><mi>j</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>λ</mi></msub><mo>=</mo><msub><mi>V</mi><mi>r</mi></msub><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><msub><mi>d</mi><mi>j</mi></msub><mrow><msubsup><mi>d</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><mi>λ</mi></mrow></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><msubsup><mi>U</mi><mi>r</mi><mi>⊤</mi></msubsup><mi>y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">a_j=\frac{d_j}{d_j^2+\lambda}c_j,\qquad
+\hat\beta_\lambda=V_r\operatorname{diag}\left(\frac{d_j}{d_j^2+\lambda}\right)U_r^\top y.</annotation></semantics></math>
+     </div>
+     <h4>
+      3 · Compare coefficients and fitted values with OLS
+     </h4>
+     <p>
+      The minimum-norm OLS coordinate is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>a</mi><mi>j</mi><mrow><mi mathvariant="normal">O</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi></mrow></msubsup><mo>=</mo><msub><mi>c</mi><mi>j</mi></msub><mi>/</mi><msub><mi>d</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">a_j^{\mathrm{OLS}}=c_j/d_j</annotation></semantics></math>
+      . Their ratio is
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><msub><mi>a</mi><mi>j</mi></msub><msubsup><mi>a</mi><mi>j</mi><mrow><mi mathvariant="normal">O</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi></mrow></msubsup></mfrac><mo>=</mo><mfrac><msubsup><mi>d</mi><mi>j</mi><mn>2</mn></msubsup><mrow><msubsup><mi>d</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><mi>λ</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{a_j}{a_j^{\mathrm{OLS}}}=\frac{d_j^2}{d_j^2+\lambda}</annotation></semantics></math>
+     </div>
+     <p>
+      when the denominator coordinate is nonzero; the same multiplier identity holds even when
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">c_j=0</annotation></semantics></math>
+      . Multiplying by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
+      yields
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>λ</mi></msub><mo>=</mo><msub><mi>U</mi><mi>r</mi></msub><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><msubsup><mi>d</mi><mi>j</mi><mn>2</mn></msubsup><mrow><msubsup><mi>d</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><mi>λ</mi></mrow></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><msubsup><mi>U</mi><mi>r</mi><mi>⊤</mi></msubsup><mi>y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat y_\lambda=U_r\operatorname{diag}\left(\frac{d_j^2}{d_j^2+\lambda}\right)U_r^\top y.</annotation></semantics></math>
+     </div>
+     <p>
+      Small
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>d</mi><mi>j</mi><mn>2</mn></msubsup><annotation encoding="application/x-tex">d_j^2</annotation></semantics></math>
+      receive the strongest shrinkage. Original-feature coefficients mix singular directions, so an individual
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>β</mi><mi>k</mi></msub><annotation encoding="application/x-tex">\beta_k</annotation></semantics></math>
+      need not decrease monotonically in magnitude.
+     </p>
+     <h4>
+      4 · Check the orthogonal example
+     </h4>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mi>⊤</mi></msup><mi>X</mi><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">X^\top X=I</annotation></semantics></math>
+      , all singular values are one and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>λ</mi></msub><mo>=</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mrow><mi mathvariant="normal">O</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi></mrow></msub><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><mi>λ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\hat\beta_\lambda=\hat\beta_{\mathrm{OLS}}/(1+\lambda)</annotation></semantics></math>
+      . For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>3</mn><mo>,</mo><mi>−</mi><mn>2</mn><mo>,</mo><mn>0.5</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(3,-2,0.5)</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\lambda=1</annotation></semantics></math>
+      , divide each coordinate by two to get
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.5</mn><mo>,</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>0.25</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(1.5,-1,0.25)</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      5 · Connect to a constrained problem without assuming a one-to-one map
+     </h4>
+     <p>
+      For minimizing
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\|y-X\beta\|^2/2</annotation></semantics></math>
+      subject to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>≤</mo><mi>t</mi></mrow><annotation encoding="application/x-tex">\|\beta\|^2\le t</annotation></semantics></math>
+      , the Lagrangian is
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℒ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>β</mi><mo>,</mo><mi>ν</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo form="postfix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>+</mo><mi>ν</mi><mrow><mo form="prefix" stretchy="true">(</mo><mo form="postfix" stretchy="false">∥</mo><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>−</mo><mi>t</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>ν</mi><mo>≥</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal L(\beta,\nu)=\frac12\|y-X\beta\|^2+\nu(\|\beta\|^2-t),\qquad\nu\ge0.</annotation></semantics></math>
+     </div>
+     <p>
+      Stationarity gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>X</mi><mi>β</mi><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>2</mn><mi>ν</mi><mi>β</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">X^\top(X\beta-y)+2\nu\beta=0</annotation></semantics></math>
+      , the Ridge equation with
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>2</mn><mi>ν</mi></mrow><annotation encoding="application/x-tex">\lambda=2\nu</annotation></semantics></math>
+      . Complementary slackness requires
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ν</mi><mrow><mo form="prefix" stretchy="true">(</mo><mo form="postfix" stretchy="false">∥</mo><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>−</mo><mi>t</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\nu(\|\beta\|^2-t)=0</annotation></semantics></math>
+      . When a constraint is inactive, several
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+      values can share the same unregularized solution. Equivalence of appropriate solutions does not imply a globally one-to-one correspondence at every endpoint.
+     </p>
+     <figure aria-label="Compare two shrinkage rules" class="interactive-visual" data-visual="shrink">
+      <div class="visual-heading">
+       <strong>
+        Compare two shrinkage rules
+       </strong>
+       <button data-reset-visual="" type="button">
+        Reset
+       </button>
+      </div>
+      <div class="visual-controls">
+       <div class="visual-control">
+        <label for="visual-shrink-lambda">
+         Penalty λ
+        </label>
+        <input aria-describedby="visual-shrink-output" data-default="1" data-value="lambda" id="visual-shrink-lambda" max="3" min="0" step="0.05" type="range" value="1"/>
+        <output data-range-output="lambda" for="visual-shrink-lambda">
+         1
+        </output>
+       </div>
+      </div>
+      <svg aria-describedby="visual-shrink-output" aria-label="Compare two shrinkage rules" role="img" viewbox="0 0 640 300"></svg>
+      <div aria-hidden="true" class="visual-legend">
+       <span style="--series:#356650">
+        Ridge
+       </span>
+       <span style="--series:#92663c">
+        LASSO
+       </span>
+       <span style="--series:#547c99">
+        Unregularized
+       </span>
+      </div>
+      <figcaption aria-live="polite" class="visual-output" id="visual-shrink-output">
+      </figcaption>
+      <div class="visual-note">
+       Interactive calculation using the assumptions above · computed locally, not fitted performance
+      </div>
+      <noscript>
+       <p class="visual-fallback">
+        The interactive plot needs JavaScript. The complete equations and worked values remain available in the calculation above.
+       </p>
+      </noscript>
+     </figure>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="6" data-pdf="reg" type="button">
+       Chapter source · PDF p. 6
+      </button>
+      <a class="calculation-link" href="#ridge?derivation=svd-filter">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="work-the-orthogonal-case" id="ridge--work-the-orthogonal-case">
+    Work the orthogonal case
+   </h2>
+   <p>
+    The PDF assumes
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>X</mi><mi>⊤</mi></msup><mi>X</mi><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">X^\top X=I</annotation></semantics></math>
+    and gives
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mrow><mi mathvariant="normal">O</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi></mrow></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>3</mn><mo>,</mo><mi>−</mi><mn>2</mn><mo>,</mo><mn>0.5</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\hat\beta_{\mathrm{OLS}}=(3,-2,0.5)^\top</annotation></semantics></math>
+    . Ridge then reduces to
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mrow><mi mathvariant="normal">R</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">g</mi><mi mathvariant="normal">e</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><mi>λ</mi></mrow></mfrac><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mrow><mi mathvariant="normal">O</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">S</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat\beta_{\mathrm{Ridge}}=\frac{1}{1+\lambda}\hat\beta_{\mathrm{OLS}}.</annotation></semantics></math>
+   </div>
+   <p>
+    For
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\lambda=1</annotation></semantics></math>
+    , the coefficients become
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.5</mn><mo>,</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>0.25</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><annotation encoding="application/x-tex">(1.5,-1,0.25)^\top</annotation></semantics></math>
+    . They shrink continuously rather than being thresholded to exact zeros. This particular uniform shrinkage holds because the design is orthogonal with the stated normalization.
+   </p>
+   <h2 data-section="geometry-and-coefficient-paths" id="ridge--geometry-and-coefficient-paths">
+    Geometry and coefficient paths
+   </h2>
+   <p>
+    The constrained interpretation minimizes fitting error within an L2 ball. In two dimensions, that feasible region is a circle. By contrast, the L1 ball has corners lying on coordinate axes, which is central to the sparsity argument in the next chapter.
+   </p>
+   <figure class="source-figure">
+    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="reg-7" type="button">
+     <img alt="The source’s L2 and L1 constraint geometry. The picture supports the contrast between a smooth boundary and coordinate-axis corners." height="602" loading="lazy" src="assets/images/the-source-s-l2-and-l1-constraint-geometry-the-picture-supports-t-bb4615f8ea.webp" width="700"/>
+    </button>
+    <figcaption>
+     The source’s L2 and L1 constraint geometry. The picture supports the contrast between a smooth boundary and coordinate-axis corners.
+     <button aria-label="Open source: Regularization · PDF p. 7" data-page="7" data-pdf="reg" type="button">
+      Regularization · PDF p. 7
+     </button>
+    </figcaption>
+   </figure>
+   <p>
+    The linked official Ridge example already supplies code and a coefficient-path visualization.
+    <strong>
+     Interpretation note:
+    </strong>
+    spectral attenuation concerns singular directions. With correlated inputs, individual coefficients expressed in the original coordinate system need not each move monotonically toward zero over the entire path. The orthogonal worked example has the simpler behavior exactly.
+   </p>
+   <h2 data-section="from-linear-models-to-neural-weights" id="ridge--from-linear-models-to-neural-weights">
+    From linear models to neural weights
+   </h2>
+   <p>
+    The source writes a neural penalty as
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac displaystyle="false"><mi>λ</mi><mn>2</mn></mfrac><msub><mo>∑</mo><mo>ℓ</mo></msub><mo form="prefix" stretchy="false">∥</mo><msup><mi>W</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><msubsup><mo form="postfix" stretchy="false">∥</mo><mi>F</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">\tfrac\lambda2\sum_\ell\lVert W^{[\ell]}\rVert_F^2</annotation></semantics></math>
+    , whose gradient adds
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mi>W</mi></mrow><annotation encoding="application/x-tex">\lambda W</annotation></semantics></math>
+    to the data gradient. The Frobenius norm sums squared matrix entries. Biases or particular parameter tensors may be treated separately by design.
+   </p>
+   <p>
+    For basic SGD, this produces a multiplicative shrinkage factor. For adaptive optimizers, the distinction between adding a penalty gradient and applying decoupled decay matters; see
+    <a href="#adam-adamw">
+     AdamW
+    </a>
+    . Always keep the loss normalization and penalty normalization explicit when comparing derivations, libraries, or batch reductions.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="ridge--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="ridgeplot">
+     <span class="resource-meta">
+      scikit-learn · Official experiment + plot
+     </span>
+     <a href="https://scikit-learn.org/stable/auto_examples/linear_model/plot_ridge_path.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Plot Ridge coefficients as a function of regularization
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Run the coefficient-path example and compare shrinkage with the guide’s spectral explanation. Coefficients in correlated designs need not each decrease monotonically in magnitude.
+     </p>
+    </div>
+    <div class="resource" data-resource="polynomial">
+     <span class="resource-meta">
+      PyTorch · Worked regression example
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/pytorch_with_examples.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Learning PyTorch with Examples
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      An older, still useful teaching sequence: fit a polynomial while moving from explicit derivatives to autograd, modules and optimizers. Use it to compare the same mathematics across abstraction levels.
+     </p>
+    </div>
+   </div>
+   <details class="local-example">
+    <summary>
+     Check the regularization identities
+     <small>
+      Local worked example · Python / PyTorch
+     </small>
+    </summary>
+    <p class="local-description">
+     An authored companion for the source’s orthogonal Ridge, LASSO threshold and fixed dropout-mask examples. A seeded Monte Carlo calculation checks the Gaussian input-noise identity approximately. Run locally; Python is not executed by this webpage.
+    </p>
+    <div class="code-wrap">
+     <div class="code-tools">
+      <span>
+       regularization_identities.py
+      </span>
+      <div>
+       <button data-action="copy" data-example="regularization_identities" type="button">
+        Copy
+       </button>
+       <button data-action="download" data-example="regularization_identities" type="button">
+        Save .py
+       </button>
+      </div>
+     </div>
+     <pre tabindex="0"><code><span class="sd">"""Small numerical checks for regularization identities from the supplied guide"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">set_num_threads</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Generator</span><span class="p">()</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">41</span><span class="p">)</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">float64</span>
+
+    <span class="c1"># Orthogonal Ridge example with the source's unnormalized objective</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">ridge</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">x</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_close</span><span class="p">(</span><span class="n">ridge</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Orthogonal Ridge coefficients:"</span><span class="p">,</span> <span class="n">ridge</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+    <span class="c1"># The LASSO soft threshold is exact for this orthogonal scalar subproblem</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">2.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">lasso</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">sign</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.7</span><span class="p">)</span><span class="o">.</span><span class="n">clamp_min</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_close</span><span class="p">(</span><span class="n">lasso</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.7</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Soft-thresholded coefficients:"</span><span class="p">,</span> <span class="n">lasso</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+    <span class="c1"># Verify the Gaussian input-noise identity approximately by Monte Carlo</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="n">generator</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.6</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">@</span> <span class="n">beta</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="mf">0.2</span>
+    <span class="n">perturbations</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100_000</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="n">generator</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">noisy_losses</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">perturbations</span><span class="p">)</span> <span class="o">@</span> <span class="n">beta</span><span class="p">)</span><span class="o">.</span><span class="n">square</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">empirical</span> <span class="o">=</span> <span class="n">noisy_losses</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">analytical</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">x</span> <span class="o">@</span> <span class="n">beta</span><span class="p">)</span><span class="o">.</span><span class="n">square</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">beta</span><span class="o">.</span><span class="n">square</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">standard_error</span> <span class="o">=</span> <span class="n">noisy_losses</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">/</span> <span class="n">noisy_losses</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">empirical</span> <span class="o">-</span> <span class="n">analytical</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">standard_error</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Expected noisy squared loss: </span><span class="si">{</span><span class="n">analytical</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Monte Carlo estimate: </span><span class="si">{</span><span class="n">empirical</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">standard_error</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> SE"</span><span class="p">)</span>
+
+    <span class="c1"># Reproduce the fixed-mask inverted-dropout example</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">masked</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">*</span> <span class="n">h</span> <span class="o">/</span> <span class="mf">0.5</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_close</span><span class="p">(</span><span class="n">masked</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Inverted dropout under the illustrated mask:"</span><span class="p">,</span> <span class="n">masked</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Exact checks passed; the noise expectation is a finite-sample approximation"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre>
+    </div>
+    <details class="recorded-result">
+     <summary>
+      Recorded CPU output
+     </summary>
+     <pre>Orthogonal Ridge coefficients: [1.5, -1.0, 0.25]
+Soft-thresholded coefficients: [1.7, 0.0, -0.40000000000000013]
+Expected noisy squared loss: 0.408000
+Monte Carlo estimate: 0.406796 ± 0.000719 SE
+Inverted dropout under the illustrated mask: [4.0, 0.0, -6.0, 0.0]
+Exact checks passed; the noise expectation is a finite-sample approximation
+</pre>
+    </details>
+   </details>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Why does Ridge help when predictors are correlated?
+   </summary>
+   <p>
+    Correlated predictors create weakly identified singular directions and small eigenvalues of XᵀX. Ridge adds λI and attenuates those unstable directions relative to OLS. It trades unbiased fitting of those directions for more stable estimates.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#bias-variance">
+    <small>
+     ← Previous
+    </small>
+    Generalization and the bias–variance trade-off
+   </a>
+   <a href="#lasso">
+    <small>
+     Next →
+    </small>
+    LASSO, subgradients, and exact zeros
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="ols-exposes-the-instability" href="#ridge?section=ols-exposes-the-instability">
+    OLS exposes the instability
+   </a>
+   <a data-section="add-an-l2-preference" href="#ridge?section=add-an-l2-preference">
+    Add an L2 preference
+   </a>
+   <a data-section="the-spectral-explanation" href="#ridge?section=the-spectral-explanation">
+    The spectral explanation
+   </a>
+   <a data-section="work-the-orthogonal-case" href="#ridge?section=work-the-orthogonal-case">
+    Work the orthogonal case
+   </a>
+   <a data-section="geometry-and-coefficient-paths" href="#ridge?section=geometry-and-coefficient-paths">
+    Geometry and coefficient paths
+   </a>
+   <a data-section="from-linear-models-to-neural-weights" href="#ridge?section=from-linear-models-to-neural-weights">
+    From linear models to neural weights
+   </a>
+   <a data-section="implementation" href="#ridge?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

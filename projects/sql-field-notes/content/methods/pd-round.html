@@ -1,0 +1,322 @@
+<article class="article method-page" id="m-pd-round">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
+   pandas · Also used in these notes
+  </a>
+ </div>
+ <h1>
+  round()
+ </h1>
+ <p class="lead">
+  Round numeric values
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-round"><span class="n">df</span><span class="p">[</span><span class="s1">'score'</span><span class="p">]</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span></code></pre>
+ </div>
+ <div class="note">
+  <b>
+   Implementation note.
+  </b>
+  The source uses pandas rounding. Halfway behavior can differ from MySQL exact-value rounding; the saved setup page includes a half-up helper.
+  <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.round.html" rel="noopener noreferrer" target="_blank">
+   Documentation ↗
+  </a>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-sql-round">
+   SQL · ROUND()
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C46?code=code-C46-3&amp;method=pd-round&amp;line=10">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1661 · Average processing time per machine
+    </strong>
+    <small>
+     Uploaded submission · line 10
+    </small>
+   </div>
+   <pre aria-hidden="true">
+    return df.groupby(by='machine_id').mean().round(3).reset_index()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C50?code=code-C50-3&amp;method=pd-round&amp;line=12">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1934 · Confirmation rate
+    </strong>
+    <small>
+     Uploaded submission · line 12
+    </small>
+   </div>
+   <pre aria-hidden="true">
+    df['confirmation_rate'] = (df['positive'] / df['total']).round(2)
+    return df[['user_id', 'confirmation_rate']]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C08?code=code-C08-5&amp;method=pd-round&amp;line=10">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1075 · Project employees I
+    </strong>
+    <small>
+     Uploaded submission · line 10
+    </small>
+   </div>
+   <pre aria-hidden="true">
+    df['average_years'] = (df['total_years'] / df['n_employees']).round(2)
+
+    return df[['project_id', 'average_years']]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C09?code=code-C09-5&amp;method=pd-round&amp;line=9">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1633 · Users registered in a contest
+    </strong>
+    <small>
+     Uploaded submission · line 9
+    </small>
+   </div>
+   <pre aria-hidden="true">
+    df['percentage'] = (100 * df['nUsersPerTest'] / nUsers).round(2)
+
+    return df[['contest_id', 'percentage']].sort_values(by=['percentage', 'contest_id'], ascending=[False, True])</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C10?code=code-C10-5&amp;method=pd-round&amp;line=14">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1211 · Queries quality and percentage
+    </strong>
+    <small>
+     Uploaded submission · line 14
+    </small>
+   </div>
+   <pre aria-hidden="true">
+    df['quality'] = df['quality'].round(2)
+    df['poor_query_percentage'] = (100 * df['poor_query_percentage']).round(2)
+</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C21?code=code-C21-1&amp;method=pd-round&amp;line=8">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1731 · Employees reporting to employees
+    </strong>
+    <small>
+     Study solution · line 8
+    </small>
+   </div>
+   <pre aria-hidden="true">    )
+    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)
+    df = by_manager.merge(employees[['employee_id', 'name']], how='left',
+                          left_on='reports_to', right_on='employee_id')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   4 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C31?code=code-C31-5&amp;method=pd-round&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      Uploaded submission · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">    customer['amount'] = customer.amount.rolling(nDays).sum()
+    customer['average_amount'] = (customer.amount / nDays).round(2)
+
+    return customer.dropna()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C33?code=code-C33-5&amp;method=pd-round&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      585 · Investments in 2016
+     </strong>
+     <small>
+      Uploaded submission · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = insurance[flag_nonunique_tiv &amp; flag_unique_city]
+    return df[['tiv_2016']].sum().to_frame('tiv_2016').round(2)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC262?code=code-LC262-1&amp;method=pd-round&amp;line=24">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      262 · Trips and users
+     </strong>
+     <small>
+      Uploaded submission · line 24
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df['Cancellation Rate'] = (df['cancelTotal'] / df['validTotal']).round(2)
+    df = df.rename(columns={'request_at': 'Day'})
+</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3564?code=code-LC3564-1&amp;method=pd-round&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3564 · Seasonal sales analysis
+     </strong>
+     <small>
+      Uploaded submission · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">    sales['season'] = sales['sale_date'].dt.month.apply(season)
+    sales['revenue'] = (sales['quantity'] * sales['price']).round(2)
+    sales = sales.merge(products, on='product_id', how='left')
+</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (1)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C21?code=code-C21-3&amp;method=pd-round&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1731 · Employees reporting to employees
+     </strong>
+     <small>
+      Uploaded submission · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">    )
+    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)
+    df = by_manager.merge(employees[['employee_id', 'name']], how='left', left_on='reports_to', right_on='employee_id')
+    df.rename(columns={'employee_id_y': 'employee_id'}, inplace=True)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    Methods present in the supplied code, added to the image-based index · Also used in these notes. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.round.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
+   <small>
+    ← Browse
+   </small>
+   pandas · Also used in these notes
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

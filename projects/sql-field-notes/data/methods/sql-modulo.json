@@ -1,0 +1,131 @@
+{
+  "id": "sql-modulo",
+  "lang": "sql",
+  "category": "Also used in these notes",
+  "label": "% operator",
+  "example": "amount % 2 = 0",
+  "description": "Test an integer remainder",
+  "source": "saved-code",
+  "related": [],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C06",
+      "block": "code-C06-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "620 · Not boring movies",
+      "number": "620",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT id, movie, description, rating FROM Cinema\nWHERE id % 2 = 1 AND description <> 'boring' ORDER BY rating DESC;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C06",
+      "block": "code-C06-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "620 · Not boring movies",
+      "number": "620",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Cinema\nWHERE id % 2 = 1 AND description <> 'boring'\nORDER BY rating DESC;",
+      "snippetLine": 2
+    },
+    {
+      "page": "C06",
+      "block": "code-C06-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "620 · Not boring movies",
+      "number": "620",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Cinema\nWHERE id % 2 = 1 AND description <> \"boring\"\nORDER BY rating DESC",
+      "snippetLine": 3
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT CASE WHEN id % 2 = 0 THEN id - 1\n            WHEN id < (SELECT MAX(id) FROM Seat) THEN id + 1\n            ELSE id END AS id, student",
+      "snippetLine": 1
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-2",
+      "line": 7,
+      "lines": [
+        7,
+        8
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    CASE\n        WHEN id % 2 = 0 THEN id-1\n        WHEN id <> (SELECT length FROM   NStudents) AND id % 2 = 1 THEN id+1\n        ELSE id",
+      "snippetLine": 6
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-4",
+      "line": 9,
+      "lines": [
+        9,
+        10
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    CASE \n        WHEN id % 2 = 0 THEN id-1\n        WHEN id <> (SELECT length FROM NStudents) AND id % 2 = 1 THEN id+1\n        ELSE id",
+      "snippetLine": 8
+    },
+    {
+      "page": "LC3220",
+      "block": "code-LC3220-0",
+      "line": 12,
+      "lines": [
+        12,
+        20
+      ],
+      "title": "3220 · Odd and even transactions",
+      "number": "3220",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        FROM Transactions\n        WHERE amount % 2 = 0\n        GROUP BY transaction_date\n    ),",
+      "snippetLine": 11
+    },
+    {
+      "page": "B09",
+      "block": "code-B09-4",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Expressions and aliases",
+      "number": "09",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT title, year FROM movies WHERE year % 2 = 0;",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 4
+}

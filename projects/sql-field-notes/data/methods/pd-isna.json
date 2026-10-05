@@ -1,0 +1,481 @@
+{
+  "id": "pd-isna",
+  "lang": "pd",
+  "category": "Missing values",
+  "label": "Check null",
+  "example": "df.isna()",
+  "description": "Boolean null mask",
+  "source": "image-pandas",
+  "related": [
+    "sql-is-null"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "isna",
+  "uses": [
+    {
+      "page": "C02",
+      "block": "code-C02-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def find_customer_referee(customer: pd.DataFrame) -> pd.DataFrame:\n    mask = customer['referee_id'].isna() | customer['referee_id'].ne(2)\n    return customer.loc[mask, ['name']].copy()",
+      "snippetLine": 3
+    },
+    {
+      "page": "C02",
+      "block": "code-C02-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def find_customer_referee(customer: pd.DataFrame) -> pd.DataFrame:\n    df =   customer[(customer.referee_id != 2) | (customer.referee_id.isna())]\n    return df[['name']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C02",
+      "block": "code-C02-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def find_customer_referee(customer: pd.DataFrame) -> pd.DataFrame:\n    df = customer[(customer.referee_id != 2) | (customer.referee_id.isna())]\n    return df[['name']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C44",
+      "block": "code-C44-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1581 · Customers who visited without transactions",
+      "number": "1581",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df = visits.merge(transactions, on='visit_id', how='left')\n    df = df[df.transaction_id.isna()]\n    return df.groupby('customer_id').size().reset_index(name='count_no_trans')",
+      "snippetLine": 4
+    },
+    {
+      "page": "C44",
+      "block": "code-C44-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1581 · Customers who visited without transactions",
+      "number": "1581",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = visits.merge(transactions, on='visit_id', how='left')\n    df = df[df.amount.isna()]\n    return df.groupby(by='customer_id')['amount'].agg(count_no_trans = 'size').reset_index()",
+      "snippetLine": 4
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C47",
+      "block": "code-C47-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "577 · Employee bonus",
+      "number": "577",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df = employee.merge(bonus, on='empId', how='left')\n    return df[(df.bonus < 1000) | (df.bonus.isna())][['name', 'bonus']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C47",
+      "block": "code-C47-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "577 · Employee bonus",
+      "number": "577",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = employee.merge(bonus, on='empId', how='left')\n    return df[(df.bonus < 1000) | (df.bonus.isna())][['name', 'bonus']]",
+      "snippetLine": 4
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-3",
+      "line": 5,
+      "lines": [
+        5,
+        13
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = prices.merge(units_sold, on='product_id', how='left')\n    df = df[df.purchase_date.isna() | ((df.end_date >= df.purchase_date) & (df.purchase_date >= df.start_date))]\n    df['paid'] = df['price'] * df['units']\n    ",
+      "snippetLine": 4
+    },
+    {
+      "page": "C08",
+      "block": "code-C08-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C08",
+      "block": "code-C08-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    flag_lowSalary = employees.salary <   30000\n    flag_hasManager = ~employees.manager_id.isna()\n    flag_managerLeft = ~employees['manager_id'].isin(employees['employee_id'])\n    flag_ = flag_lowSalary &   flag_hasManager & flag_managerLeft",
+      "snippetLine": 3
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    flag_lowSalary = employees.salary < 30000\n    flag_hasManager = ~employees.manager_id.isna()\n    flag_managerLeft = ~employees['manager_id'].isin(employees['employee_id'])\n    flag_ = flag_lowSalary & flag_hasManager & flag_managerLeft",
+      "snippetLine": 4
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def round_half_up(value, digits: int = 2):\n    if pd.isna(value): return float('nan')\n    return float(Decimal(str(value)).quantize(Decimal(1).scaleb(-digits), rounding=ROUND_HALF_UP))\ndef find_investments(insurance: pd.DataFrame) -> pd.DataFrame:",
+      "snippetLine": 4
+    },
+    {
+      "page": "C35",
+      "block": "code-C35-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1667 · Fix names in a table",
+      "number": "1667",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    def fix_string(x):\n        if pd.isna(x): return x\n        if not x: return x\n        if len(x) > 1: return x[0].upper() + x[1:].lower()",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC608",
+      "block": "code-LC608-1",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "608 · Tree node",
+      "number": "608",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    def classify(x):\n        if pd.isna(x['p_id']): return 'Root'\n        elif x['id'] in parents: return 'Inner'\n        else: return 'Leaf'",
+      "snippetLine": 6
+    },
+    {
+      "page": "B08",
+      "block": "code-B08-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "NULL and unmatched rows",
+      "number": "08",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = employees.loc[employees['building'].isna(), ['name', 'role']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B15",
+      "block": "code-B15-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DELETE rows",
+      "number": "15",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies = movies.loc[movies['year'].isna() | movies['year'].ge(2005)].copy()",
+      "snippetLine": 1
+    },
+    {
+      "page": "B15",
+      "block": "code-B15-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DELETE rows",
+      "number": "15",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies = movies.loc[movies['director'].isna() | movies['director'].ne('Andrew Stanton')].copy()",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 18
+}

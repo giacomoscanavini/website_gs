@@ -1,0 +1,203 @@
+{
+  "id": "pd-head",
+  "lang": "pd",
+  "category": "DataFrame basics",
+  "label": "First rows",
+  "example": "df.head()",
+  "description": "Preview top rows",
+  "source": "image-pandas",
+  "related": [
+    "sql-limit"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "head",
+  "uses": [
+    {
+      "page": "C30",
+      "block": "code-C30-1",
+      "line": 6,
+      "lines": [
+        6,
+        9
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    users_ranked = r.groupby('user_id').size().reset_index(name='n_reviews').merge(users, on='user_id')\n    first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})\n    feb = r.loc[r['created_at'].ge('2020-02-01') & r['created_at'].lt('2020-03-01')]\n    movies_ranked = feb.groupby('movie_id', as_index=False).agg(avg_rating=('rating', 'mean')).merge(movies, on='movie_id')",
+      "snippetLine": 5
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-3",
+      "line": 14,
+      "lines": [
+        14,
+        15
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df_movies =   df_movies.merge(movies, on='movie_id', how='left').sort_values(by=['avgRating', 'title'], ascending=[False, True])[['title', 'avgRating']]\n    return   pd.concat([df_users.head(1)[['name']].rename(columns={'name': 'results'}),\n                        df_movies.head(1)[['title']].rename(columns={'title': 'results'}),\n                    ])",
+      "snippetLine": 13
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    counts = ids.value_counts().rename_axis('id').reset_index(name='num')\n    return counts.sort_values(['num', 'id'], ascending=[False, True]).head(1)",
+      "snippetLine": 5
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-3",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df.columns = ['id', 'num']\n    return df.sort_values(['num', 'id'], ascending=[False, True]).head(1)",
+      "snippetLine": 8
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-5",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return df.head(1)",
+      "snippetLine": 11
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = (\n        performance_reviews\n        .sort_values(by=['employee_id', 'review_date'], ascending=[True, False])\n        .groupby(by='employee_id')",
+      "snippetLine": 4
+    },
+    {
+      "page": "murder-02",
+      "block": "code-murder-02-1",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "Find the two witnesses",
+      "number": "02",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "\nfirst = (person.loc[person['address_street_name'].eq('Northwestern Dr')]\n         .sort_values('address_number', ascending=False).head(1))\nsecond = person.loc[",
+      "snippetLine": 2
+    },
+    {
+      "page": "squid-03",
+      "block": "code-squid-03-1",
+      "line": 3,
+      "lines": [
+        3,
+        4
+      ],
+      "title": "Compare hot and cold months",
+      "number": "03",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\ncold = monthly_temperatures.sort_values('avg_temperature').head(1)\nhot = monthly_temperatures.sort_values('avg_temperature', ascending=False).head(1)\nextreme = pd.concat([cold, hot], ignore_index=True).drop_duplicates()",
+      "snippetLine": 2
+    },
+    {
+      "page": "squid-05",
+      "block": "code-squid-05-1",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "Count a player’s closest interactions",
+      "number": "05",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "# Explicit final sort is an authored addition\nresult = (joined.loc[joined['status'].eq('alive')]\n          .sort_values('counts', ascending=False).head(1)\n          [['name_456', 'name_other', 'counts']])",
+      "snippetLine": 12
+    },
+    {
+      "page": "squid-08",
+      "block": "code-squid-08-1",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "Find the longest hesitation",
+      "number": "08",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    game_id = means.sort_values(ascending=False).index[0]\n    result = (pushed.loc[pushed['game_id'].eq(game_id)]\n              .sort_values('last_moved_time_seconds', ascending=False).head(1)\n              [['id', 'first_name', 'last_name', 'last_moved_time_seconds']])",
+      "snippetLine": 7
+    },
+    {
+      "page": "B04",
+      "block": "code-B04-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DISTINCT, sorting and pagination",
+      "number": "04",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = movies.sort_values('year', ascending=False).head(4)",
+      "snippetLine": 1
+    },
+    {
+      "page": "B04",
+      "block": "code-B04-5",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DISTINCT, sorting and pagination",
+      "number": "04",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = movies.sort_values('title').head(5)",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-7",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = north_american_cities.loc[north_american_cities['country'].eq('Mexico')].sort_values('population', ascending=False).head(2)[['city', 'population']]",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 9
+}

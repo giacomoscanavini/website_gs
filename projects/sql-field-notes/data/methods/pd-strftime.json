@@ -1,0 +1,60 @@
+{
+  "id": "pd-strftime",
+  "lang": "pd",
+  "category": "Also used in these notes",
+  "label": "dt.strftime()",
+  "example": "df.date.dt.strftime('%Y-%m')",
+  "description": "Format a datetime as text",
+  "source": "saved-code",
+  "related": [
+    "sql-date-format"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "strftime",
+  "uses": [
+    {
+      "page": "C11",
+      "block": "code-C11-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def monthly_transactions(transactions: pd.DataFrame) -> pd.DataFrame:\n    t = transactions.assign(month=pd.to_datetime(transactions['trans_date']).dt.strftime('%Y-%m'))\n    t['approved'] = t['state'].eq('approved')\n    t['approved_amount'] = t['amount'].where(t['approved'], 0)",
+      "snippetLine": 3
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    transactions['approved'] =   transactions.state == 'approved'\n    transactions['month'] =   pd.to_datetime(transactions['trans_date']).dt.strftime(\"%Y-%m\")\n    transactions['approved_amount'] =   transactions['approved'] * transactions['amount']\n    return   transactions.groupby(by=['month', 'country'], dropna=False).agg(",
+      "snippetLine": 4
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    transactions['approved'] = transactions.state == 'approved'\n    transactions['month'] = transactions.trans_date.dt.strftime(\"%Y-%m\")\n    transactions['approved_amount'] = transactions['approved'] * transactions['amount']\n",
+      "snippetLine": 4
+    }
+  ],
+  "pageCount": 1
+}

@@ -1,0 +1,156 @@
+{
+  "id": "pd-conditional-column",
+  "lang": "pd",
+  "category": "Creating / modifying columns",
+  "label": "Conditional column",
+  "example": "df['flag'] = df.age > 30",
+  "description": "Boolean column",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C05",
+      "block": "code-C05-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1683 · Invalid tweets",
+      "number": "1683",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def invalid_tweets(tweets: pd.DataFrame) -> pd.DataFrame:\n    tweets['valid'] = tweets['content'].str.len()   <= 15\n    \"\"\"\n    Alternative using APPLY method",
+      "snippetLine": 3
+    },
+    {
+      "page": "C05",
+      "block": "code-C05-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1683 · Invalid tweets",
+      "number": "1683",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def invalid_tweets(tweets: pd.DataFrame) -> pd.DataFrame:\n    tweets['valid'] = tweets['content'].str.len() <= 15\n    \"\"\"\n    Alternative using APPLY method",
+      "snippetLine": 3
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = signups.merge(confirmations, on='user_id', how='left')[['user_id', 'action']]\n    df['confirmation_rate'] = df.action == 'confirmed'\n\n    df = df[['user_id', 'confirmation_rate']].groupby(by='user_id').agg(",
+      "snippetLine": 4
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    t = transactions.assign(month=pd.to_datetime(transactions['trans_date']).dt.strftime('%Y-%m'))\n    t['approved'] = t['state'].eq('approved')\n    t['approved_amount'] = t['amount'].where(t['approved'], 0)\n    return t.groupby(['month', 'country'], dropna=False, as_index=False).agg(",
+      "snippetLine": 4
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def monthly_transactions(transactions: pd.DataFrame) -> pd.DataFrame:\n    transactions['approved'] =   transactions.state == 'approved'\n    transactions['month'] =   pd.to_datetime(transactions['trans_date']).dt.strftime(\"%Y-%m\")\n    transactions['approved_amount'] =   transactions['approved'] * transactions['amount']",
+      "snippetLine": 3
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def monthly_transactions(transactions: pd.DataFrame) -> pd.DataFrame:\n    transactions['approved'] = transactions.state == 'approved'\n    transactions['month'] = transactions.trans_date.dt.strftime(\"%Y-%m\")\n    transactions['approved_amount'] = transactions['approved'] * transactions['amount']",
+      "snippetLine": 3
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-3",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "                               customer_pref_delivery_date=pd.to_datetime(delivery['customer_pref_delivery_date'])).reset_index(drop=True)\n    delivery['immediate'] =   delivery['order_date'] == delivery['customer_pref_delivery_date']\n    idx_to_keep =   delivery.groupby(by='customer_id')['order_date'].idxmin()\n    return   pd.DataFrame({'immediate_percentage': [round_half_up(100 * delivery['immediate'][idx_to_keep].mean(), 2)]})",
+      "snippetLine": 10
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def immediate_food_delivery(delivery: pd.DataFrame) -> pd.DataFrame:\n    delivery['immediate'] = delivery['order_date'] == delivery['customer_pref_delivery_date']\n    idx_to_keep = delivery.groupby(by='customer_id')['order_date'].idxmin()\n    return pd.DataFrame({'immediate_percentage': [round(100 * delivery['immediate'][idx_to_keep].mean(), 2)]})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-3",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    activity['first_login'] =   activity.groupby(by='player_id')['event_date'].transform('min')\n    activity['valid'] = activity['event_date'] ==   activity['first_login'] + pd.Timedelta(days = 1)\n\n    return   pd.DataFrame({",
+      "snippetLine": 10
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    activity['first_login'] = activity.groupby(by='player_id')['event_date'].transform('min')\n    activity['valid'] = activity['event_date'] == activity['first_login'] + pd.Timedelta(days = 1)\n    \n    return pd.DataFrame({",
+      "snippetLine": 4
+    }
+  ],
+  "pageCount": 5
+}

@@ -1,0 +1,72 @@
+{
+  "id": "pd-group-count",
+  "lang": "pd",
+  "category": "GroupBy",
+  "label": "Group count",
+  "example": "df.groupby('city')['score'].count()",
+  "description": "Non-null count",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C48",
+      "block": "code-C48-3",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    exam_count = examinations.groupby(by=['student_id', 'subject_name']).agg(\n        attended_exams = ('subject_name', 'count')\n    ).reset_index()\n",
+      "snippetLine": 6
+    },
+    {
+      "page": "C08",
+      "block": "code-C08-3",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        total_years = ('experience_years', 'sum'),\n        n_employees = ('experience_years', 'count'),\n    ).reset_index()\n    df['average_years'] =   (df['total_years'] / df['n_employees']).map(round_half_up)",
+      "snippetLine": 11
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-3",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def find_primary_department(employee: pd.DataFrame) -> pd.DataFrame:\n    employee['nDepartments'] =   employee.groupby('employee_id').department_id.transform('count')\n    employee =   employee.query(\"(primary_flag == 'Y')   | (nDepartments == 1)\")\n    return employee[['employee_id', 'department_id']]",
+      "snippetLine": 2
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def find_primary_department(employee: pd.DataFrame) -> pd.DataFrame:\n    employee['nDepartments'] = employee.groupby('employee_id').department_id.transform('count')\n    employee = employee.query(\"(primary_flag == 'Y') | (nDepartments == 1)\")\n    return employee[['employee_id', 'department_id']]",
+      "snippetLine": 3
+    }
+  ],
+  "pageCount": 3
+}

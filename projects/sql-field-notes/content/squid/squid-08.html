@@ -1,0 +1,306 @@
+<article class="article" id="squid-08">
+ <div class="breadcrumb">
+  <a href="#squid-game">
+   SQL Squid Game
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Level 8
+  </span>
+ </div>
+ <h1>
+  Find the longest hesitation
+ </h1>
+ <p class="lead">
+  Choose a group by its average, then a row within that group by its maximum.
+ </p>
+ <h2>
+  Task
+ </h2>
+ <p>
+  Find and display the information for the player with the highest hesitation time among those who were pushed off in the game that has the highest average hesitation time before a push occured
+ </p>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-115-panel-0" aria-selected="true" id="example-115-tab-0" role="tab" tabindex="0" type="button">
+     My SQL
+    </button>
+    <button aria-controls="example-115-panel-1" aria-selected="false" id="example-115-tab-1" role="tab" tabindex="-1" type="button">
+     pandas alternative
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-115-tab-0" class="code-panel" id="example-115-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    My SQL
+   </div>
+   <pre id="code-squid-08-0" tabindex="0"><code class="language-sql" data-origin="squid-query-08"><span class="k">WITH</span><span class="w"> </span>
+<span class="w">    </span><span class="n">Hesitation_game</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">game_id</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">Player</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">death_description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'pushed'</span>
+<span class="w">        </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">game_id</span>
+<span class="w">        </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">last_moved_time_seconds</span><span class="p">)</span><span class="w"> </span><span class="k">DESC</span>
+<span class="w">        </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">    </span><span class="p">)</span>
+
+<span class="k">SELECT</span><span class="w"> </span>
+<span class="w">    </span><span class="n">p</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">p</span><span class="p">.</span><span class="n">first_name</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">p</span><span class="p">.</span><span class="n">last_name</span><span class="p">,</span>
+<span class="w">    </span><span class="n">p</span><span class="p">.</span><span class="n">last_moved_time_seconds</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">hesitation_time</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Player</span><span class="w"> </span><span class="n">p</span>
+<span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Hesitation_game</span><span class="w"> </span><span class="n">h</span>
+<span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">game_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">h</span><span class="p">.</span><span class="n">game_id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">death_description</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'pushed'</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">last_moved_time_seconds</span><span class="w"> </span><span class="k">DESC</span>
+<span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span></code></pre>
+  </div>
+  <div aria-labelledby="example-115-tab-1" class="code-panel" id="example-115-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas alternative
+   </div>
+   <pre id="code-squid-08-1" tabindex="0"><code class="language-python" data-origin="squid-08-pandas"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">pushed</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">player</span><span class="p">[</span><span class="s1">'death_description'</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="s1">'pushed'</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">pushed</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:</span><span class="mi">0</span><span class="p">][[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'first_name'</span><span class="p">,</span> <span class="s1">'last_name'</span><span class="p">,</span> <span class="s1">'last_moved_time_seconds'</span><span class="p">]]</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">pushed</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+    <span class="n">means</span> <span class="o">=</span> <span class="n">pushed</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'game_id'</span><span class="p">)[</span><span class="s1">'last_moved_time_seconds'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">game_id</span> <span class="o">=</span> <span class="n">means</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">pushed</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">pushed</span><span class="p">[</span><span class="s1">'game_id'</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">game_id</span><span class="p">)]</span>
+              <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'last_moved_time_seconds'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+              <span class="p">[[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'first_name'</span><span class="p">,</span> <span class="s1">'last_name'</span><span class="p">,</span> <span class="s1">'last_moved_time_seconds'</span><span class="p">]])</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'last_moved_time_seconds'</span><span class="p">:</span> <span class="s1">'hesitation_time'</span><span class="p">})</span></code></pre>
+   <p class="panel-note">
+    Added translation ·
+    <a href="#squid-game">
+     DataFrame assumptions
+    </a>
+   </p>
+  </div>
+ </div>
+ <h2>
+  How it works
+ </h2>
+ <p>
+  Among records whose death_description is pushed, pick the game with the highest mean last_moved_time_seconds. Then restrict to that game’s pushed players and take the row with the highest hesitation time.
+ </p>
+ <div class="note warning">
+  <b>
+   Source-aware note.
+  </b>
+  Both stages use the pushed subset; the average is not across all players. Ties have no secondary ordering in the source. The glass_bridge sample schema is included in the file but is not used by this query.
+ </div>
+ <p class="small">
+  No query-result table was stored in this SQL file. Sample-schema rows below are inputs, not the answer.
+ </p>
+ <details class="reference-details">
+  <summary>
+   Sources and original files
+  </summary>
+  <div class="sources-content">
+   <div class="source-note">
+    <b>
+     Source:
+    </b>
+    <code>
+     sql_squid_game-main/level_08.sql
+    </code>
+    .
+    <a href="https://datalemur.com/sql-game/level8.html" rel="noopener noreferrer" target="_blank">
+     Original level ↗
+    </a>
+    . The brief and original SQL come from my saved file; study notes and pandas code are newly authored.
+   </div>
+   <details class="source-details">
+    <summary>
+     Original sample-schema comments · not a full dataset
+    </summary>
+    <div class="codebox">
+     <div class="codehead">
+      <span>
+       Schema and sample rows · preserved source text
+      </span>
+      <button aria-label="Copy Schema and sample rows · preserved source text" data-copy="" type="button">
+       Copy
+      </button>
+     </div>
+     <pre id="code-squid-08-2" tabindex="0"><code class="language-text">SCHEMA for `player`:
+    id	first_name	last_name	game_id	survived	death_description	last_moved_time_seconds
+    1	Luigi	    Mangione	50	    true	    null	            39
+    4	Joonho	    Choi	    50	    true	    null	            7
+    5	Seokjin	    Jung	    50	    false	    Wrong panel	        63
+
+    SCHEMA for `glass_bridge`:
+    id	date
+    1	Wed Jul 29 1970 09:00:00 GMT+0900 (Hong Kong Summer Time)
+    2	Thu Jul 29 1971 09:00:00 GMT+0900 (Hong Kong Summer Time)
+    3	Sat Jul 29 1972 09:00:00 GMT+0900 (Hong Kong Summer Time)</code></pre>
+    </div>
+   </details>
+   <details class="source-details">
+    <summary>
+     Complete original file · brief, sample schema and SQL
+    </summary>
+    <div class="codebox">
+     <div class="codehead">
+      <span>
+       level_08.sql · original source
+      </span>
+      <button aria-label="Copy level_08.sql · original source" data-copy="" type="button">
+       Copy
+      </button>
+     </div>
+     <pre id="code-squid-08-3" tabindex="0"><code class="language-text" data-origin="level_08.sql">/* LEVEL 08: https://datalemur.com/sql-game/level8.html
+
+    Find and display the information for the player with the highest hesitation time among those who were pushed off 
+    in the game that has the highest average hesitation time before a push occured
+*/
+/* 
+    SCHEMA for `player`:
+    id	first_name	last_name	game_id	survived	death_description	last_moved_time_seconds
+    1	Luigi	    Mangione	50	    true	    null	            39
+    4	Joonho	    Choi	    50	    true	    null	            7
+    5	Seokjin	    Jung	    50	    false	    Wrong panel	        63
+
+    SCHEMA for `glass_bridge`:
+    id	date
+    1	Wed Jul 29 1970 09:00:00 GMT+0900 (Hong Kong Summer Time)
+    2	Thu Jul 29 1971 09:00:00 GMT+0900 (Hong Kong Summer Time)
+    3	Sat Jul 29 1972 09:00:00 GMT+0900 (Hong Kong Summer Time)
+*/
+
+WITH 
+    Hesitation_game AS (
+        SELECT game_id
+        FROM Player
+        WHERE death_description = 'pushed'
+        GROUP BY game_id
+        ORDER BY AVG(last_moved_time_seconds) DESC
+        LIMIT 1
+    )
+
+SELECT 
+    p.id, 
+    p.first_name, 
+    p.last_name,
+    p.last_moved_time_seconds AS hesitation_time
+FROM Player p
+INNER JOIN Hesitation_game h
+    ON p.game_id = h.game_id
+WHERE p.death_description = 'pushed'
+ORDER BY p.last_moved_time_seconds DESC
+LIMIT 1</code></pre>
+    </div>
+   </details>
+   <a class="button source-download" download="level_08.sql" href="assets/downloads/level_08.sql">
+    Download level_08.sql ↓
+   </a>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-avg">
+     AVG()
+    </a>
+    <a href="#m-sql-group-by">
+     GROUP BY
+    </a>
+    <a href="#m-sql-inner-join">
+     INNER JOIN
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-with">
+     WITH
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+    <a href="#m-sql-order-by">
+     ORDER BY
+    </a>
+    <a href="#m-sql-limit">
+     LIMIT / OFFSET
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-loc">
+     Rows by label
+    </a>
+    <a href="#m-pd-iloc">
+     Rows by position
+    </a>
+    <a href="#m-pd-head">
+     First rows
+    </a>
+    <a href="#m-pd-sort-values">
+     Sort one column
+    </a>
+    <a href="#m-pd-sort-desc">
+     Descending
+    </a>
+    <a href="#m-pd-rename">
+     Rename
+    </a>
+    <a href="#m-pd-loc-label">
+     Access label
+    </a>
+    <a href="#m-pd-mean">
+     mean()
+    </a>
+    <a href="#m-pd-groupby">
+     Basic group
+    </a>
+    <a href="#m-pd-eq">
+     eq() / ne()
+    </a>
+    <a href="#m-pd-copy">
+     copy()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#squid-07">
+   <small>
+    ← Previous
+   </small>
+   Join room checks and camera sightings
+  </a>
+  <a href="#squid-09">
+   <small>
+    Next →
+   </small>
+   Reconstruct access-log overlaps
+  </a>
+ </div>
+</article>

@@ -1,0 +1,273 @@
+<article class="article" id="C35">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Problem 1667
+  </span>
+ </div>
+ <h1>
+  1667 · Fix names in a table
+ </h1>
+ <p>
+  Uppercase the first character and lowercase the rest, ordered by user_id.
+ </p>
+ <p class="pattern">
+  Pattern: String normalization
+ </p>
+ <h2>
+  Example
+ </h2>
+ <p>
+  "aLICE" → "Alice"; "b" → "B"; an empty string remains empty.
+ </p>
+ <h2>
+  Study solution
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-94-panel-0" aria-selected="true" id="example-94-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="example-94-panel-1" aria-selected="false" id="example-94-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-94-tab-0" class="code-panel" id="example-94-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-C35-0" tabindex="0"><code class="language-sql" data-origin="legacy-C35-0"><span class="k">SELECT</span><span class="w"> </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">CONCAT</span><span class="p">(</span><span class="k">UPPER</span><span class="p">(</span><span class="k">SUBSTRING</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)),</span><span class="w"> </span><span class="k">LOWER</span><span class="p">(</span><span class="k">SUBSTRING</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Users</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">user_id</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-94-tab-1" class="code-panel" id="example-94-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-C35-1" tabindex="0"><code class="language-python" data-origin="legacy-C35-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fix_names</span><span class="p">(</span><span class="n">users</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">users</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">result</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[:</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">result</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'user_id'</span><span class="p">)</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  Why it works
+ </h2>
+ <p>
+  Apply the transformation to the first character and remaining substring separately, not title case for every word.
+ </p>
+ <h2>
+  Notes
+ </h2>
+ <p>
+  Transform the first character and the remaining substring separately. Empty names remain empty.
+ </p>
+ <details class="original-details">
+  <summary>
+   My approach
+  </summary>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="approach-C35-panel-0" aria-selected="true" id="approach-C35-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="approach-C35-panel-1" aria-selected="false" id="approach-C35-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="approach-C35-tab-0" class="code-panel" id="approach-C35-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     SQL
+    </div>
+    <pre id="code-C35-2" tabindex="0"><code class="language-sql" data-origin="approach-C35-sql"><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">user_id</span><span class="p">,</span>
+<span class="w">    </span><span class="n">CONCAT</span><span class="p">(</span><span class="k">UPPER</span><span class="p">(</span><span class="k">SUBSTRING</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)),</span><span class="w"> </span><span class="k">LOWER</span><span class="p">(</span><span class="k">SUBSTRING</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Users</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">user_id</span><span class="p">;</span></code></pre>
+   </div>
+   <div aria-labelledby="approach-C35-tab-1" class="code-panel" id="approach-C35-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C35-3" tabindex="0"><code class="language-python" data-origin="approach-C35-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fix_names</span><span class="p">(</span><span class="n">users</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fix_string</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">x</span><span class="p">):</span> <span class="k">return</span> <span class="n">x</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">x</span><span class="p">:</span> <span class="k">return</span> <span class="n">x</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="n">users</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">users</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">fix_string</span><span class="p">)</span>
+
+    <span class="k">return</span>   <span class="n">users</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'user_id'</span><span class="p">)</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Sources
+  </summary>
+  <div class="sources-content">
+   <p>
+    Primary exercise basis: your uploaded Pasted markdown(3).md, exercise 1667, line 7. The exercise heading may be abbreviated in the upload; full official problem statements and schemas were not supplied.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     pandas SQL comparison
+    </a>
+    — Projection, filtering, grouping, joins and operations.
+   </p>
+   <p>
+    <a href="https://dev.mysql.com/doc/refman/8.4/en/string-functions.html" rel="noopener noreferrer" target="_blank">
+     MySQL strings
+    </a>
+    — String operations, character versus byte lengths.
+   </p>
+  </div>
+ </details>
+ <details class="original-details archive-submission">
+  <summary>
+   Uploaded submission · SQL.zip
+  </summary>
+  <p class="small">
+   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
+  </p>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="archive-1667-panel-0" aria-selected="true" id="archive-1667-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="archive-1667-panel-1" aria-selected="false" id="archive-1667-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="archive-1667-tab-0" class="code-panel" id="archive-1667-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     MySQL
+    </div>
+    <pre id="code-C35-4" tabindex="0"><code class="language-sql" data-origin="archive-1667-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">SELECT</span>
+<span class="w">    </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="nf">CONCAT</span><span class="p">(</span><span class="nf">UPPER</span><span class="p">(</span><span class="nf">SUBSTRING</span><span class="p">(</span><span class="k">name</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)),</span><span class="w"> </span><span class="nf">LOWER</span><span class="p">(</span><span class="nf">SUBSTRING</span><span class="p">(</span><span class="k">name</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Users</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">user_id</span></code></pre>
+   </div>
+   <div aria-labelledby="archive-1667-tab-1" class="code-panel" id="archive-1667-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C35-5" tabindex="0"><code class="language-python" data-origin="archive-1667-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fix_names</span><span class="p">(</span><span class="n">users</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fix_string</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span> <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+    <span class="n">users</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span> <span class="o">=</span> <span class="n">users</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">fix_string</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">users</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'user_id'</span><span class="p">)</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-concat">
+     CONCAT()
+    </a>
+    <a href="#m-sql-lower">
+     LOWER()
+    </a>
+    <a href="#m-sql-upper">
+     UPPER()
+    </a>
+    <a href="#m-sql-substring">
+     SUBSTRING()
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+    <a href="#m-sql-order-by">
+     ORDER BY
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-filter-null">
+     Missing
+    </a>
+    <a href="#m-pd-sort-values">
+     Sort one column
+    </a>
+    <a href="#m-pd-new-column">
+     New column
+    </a>
+    <a href="#m-pd-isna">
+     Check null
+    </a>
+    <a href="#m-pd-size">
+     size
+    </a>
+    <a href="#m-pd-transform">
+     Group transform
+    </a>
+    <a href="#m-pd-str-lower">
+     Lowercase
+    </a>
+    <a href="#m-pd-str-upper">
+     Uppercase
+    </a>
+    <a href="#m-pd-copy">
+     copy()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#C34">
+   <small>
+    ← Previous
+   </small>
+   185 · Department top three salaries
+  </a>
+  <a href="#C36">
+   <small>
+    Next →
+   </small>
+   1527 · Patients with a disease
+  </a>
+ </div>
+</article>

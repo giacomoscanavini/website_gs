@@ -1,0 +1,58 @@
+{
+  "id": "pd-str-startswith",
+  "lang": "pd",
+  "category": "Strings",
+  "label": "Starts with",
+  "example": "df.name.str.startswith('A')",
+  "description": "Prefix",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "startswith",
+  "uses": [
+    {
+      "page": "LC3475",
+      "block": "code-LC3475-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "3475 · DNA pattern recognition",
+      "number": "3475",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def analyze_dna_patterns(samples: pd.DataFrame) -> pd.DataFrame:\n    samples['has_start'] = (samples.dna_sequence.str.startswith('ATG')).astype('int')\n    samples['has_stop'] = (samples.dna_sequence.str.endswith('TAA') | \n                           samples.dna_sequence.str.endswith('TAG') | ",
+      "snippetLine": 3
+    },
+    {
+      "page": "murder-02",
+      "block": "code-murder-02-1",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "Find the two witnesses",
+      "number": "02",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "    person['address_street_name'].eq('Franklin Ave')\n    & person['name'].str.startswith('Annabel', na=False)\n]\nresult = pd.concat([first, second], ignore_index=True).drop_duplicates()",
+      "snippetLine": 6
+    },
+    {
+      "page": "murder-04",
+      "block": "code-murder-04-1",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "Follow the gym clue",
+      "number": "04",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "        & joined['membership_status'].eq('gold')\n        & joined['id'].str.startswith('48Z', na=False))\nresult = joined.loc[mask, ['membership_id', 'check_in_date', 'person_id',\n                           'name', 'membership_status']].copy()",
+      "snippetLine": 6
+    }
+  ],
+  "pageCount": 3
+}

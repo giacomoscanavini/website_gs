@@ -1,0 +1,1340 @@
+<article class="article method-page" id="m-pd-sort-values">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=Sorting">
+   pandas · Sorting
+  </a>
+ </div>
+ <h1>
+  Sort one column
+ </h1>
+ <p class="lead">
+  Ascending sort
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-sort-values"><span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'age'</span><span class="p">)</span></code></pre>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-sql-window-order">
+   SQL · ORDER BY
+  </a>
+  <a href="#m-sql-order-by">
+   SQL · ORDER BY
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C04?code=code-C04-1&amp;method=pd-sort-values&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1148 · Article Views I
+    </strong>
+    <small>
+     Study solution · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">    result = views.loc[views['author_id'].eq(views['viewer_id']), ['author_id']]
+    return result.drop_duplicates().rename(columns={'author_id': 'id'}).sort_values('id')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#murder-02?code=code-murder-02-1&amp;method=pd-sort-values&amp;line=3">
+   <div>
+    <span class="usage-label">
+     Murder City · pandas
+    </span>
+    <strong>
+     Find the two witnesses
+    </strong>
+    <small>
+     Saved walkthrough · line 3
+    </small>
+   </div>
+   <pre aria-hidden="true">
+first = (person.loc[person['address_street_name'].eq('Northwestern Dr')]
+         .sort_values('address_number', ascending=False).head(1))
+second = person.loc[</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-sort-values&amp;line=3">
+   <div>
+    <span class="usage-label">
+     Squid Game · pandas
+    </span>
+    <strong>
+     Compare hot and cold months
+    </strong>
+    <small>
+     Saved walkthrough · line 3
+    </small>
+   </div>
+   <pre aria-hidden="true">
+cold = monthly_temperatures.sort_values('avg_temperature').head(1)
+hot = monthly_temperatures.sort_values('avg_temperature', ascending=False).head(1)
+extreme = pd.concat([cold, hot], ignore_index=True).drop_duplicates()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#B04?code=code-B04-1&amp;method=pd-sort-values&amp;line=1">
+   <div>
+    <span class="usage-label">
+     SQLBolt · pandas
+    </span>
+    <strong>
+     DISTINCT, sorting and pagination
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">result = movies[['director']].drop_duplicates().sort_values('director')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C45?code=code-C45-1&amp;method=pd-sort-values&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     197 · Rising temperature
+    </strong>
+    <small>
+     Study solution · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">    weather = weather.assign(recordDate=pd.to_datetime(weather['recordDate']))
+    weather = weather.sort_values('recordDate')
+    df = weather[(weather.recordDate.diff().eq(pd.Timedelta(days=1))) &amp; (weather.temperature.diff() &gt; 0)]
+    return df[['id']]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C48?code=code-C48-1&amp;method=pd-sort-values&amp;line=8">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1280 · Students and examinations
+    </strong>
+    <small>
+     Study solution · line 8
+    </small>
+   </div>
+   <pre aria-hidden="true">    df['attended_exams'] = df['attended_exams'].fillna(0).astype(int)
+    return df[['student_id', 'student_name', 'subject_name', 'attended_exams']].sort_values(['student_id', 'subject_name'])</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   27 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C06?code=code-C06-1&amp;method=pd-sort-values&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      620 · Not boring movies
+     </strong>
+     <small>
+      Study solution · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    mask = cinema['id'].mod(2).eq(1) &amp; cinema['description'].notna() &amp; cinema['description'].ne('boring')
+    return cinema.loc[mask].sort_values('rating', ascending=False)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C09?code=code-C09-1&amp;method=pd-sort-values&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1633 · Users registered in a contest
+     </strong>
+     <small>
+      Study solution · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">    g['percentage'] = (100 * g['participants'] / len(users)).map(round_half_up)
+    return g[['contest_id', 'percentage']].sort_values(['percentage', 'contest_id'], ascending=[False, True])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C12?code=code-C12-1&amp;method=pd-sort-values&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1174 · Immediate first deliveries
+     </strong>
+     <small>
+      Study solution · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    d = delivery.assign(order_date=pd.to_datetime(delivery['order_date']), customer_pref_delivery_date=pd.to_datetime(delivery['customer_pref_delivery_date']))
+    first = d.sort_values('order_date').drop_duplicates('customer_id', keep='first')
+    value = 100 * first['order_date'].eq(first['customer_pref_delivery_date']).mean()
+    return pd.DataFrame({'immediate_percentage': [round_half_up(value)]})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C18?code=code-C18-1&amp;method=pd-sort-values&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1729 · Followers count
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def count_followers(followers: pd.DataFrame) -&gt; pd.DataFrame:
+    return followers.groupby('user_id', as_index=False).agg(followers_count=('follower_id', 'nunique')).sort_values('user_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C21?code=code-C21-1&amp;method=pd-sort-values&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1731 · Employees reporting to employees
+     </strong>
+     <small>
+      Study solution · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">                          left_on='reports_to', right_on='employee_id')
+    return df[['employee_id', 'name', 'reports_count', 'average_age']].sort_values('employee_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C24?code=code-C24-1&amp;method=pd-sort-values&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      180 · Consecutive Numbers
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def consecutive_numbers(logs: pd.DataFrame) -&gt; pd.DataFrame:
+    ordered = logs.sort_values('id')
+    n = ordered['num']
+    mask = n.eq(n.shift(-1)) &amp; n.eq(n.shift(-2))</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C25?code=code-C25-1&amp;method=pd-sort-values&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1164 · Product price at a given date
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    valid = p.loc[p['change_date'].le(pd.Timestamp('2019-08-16'))]
+    latest = valid.sort_values('change_date').drop_duplicates('product_id', keep='last')
+    result = p[['product_id']].drop_duplicates().merge(latest[['product_id', 'new_price']], on='product_id', how='left')
+    result['price'] = result['new_price'].fillna(10)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C26?code=code-C26-1&amp;method=pd-sort-values&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1204 · Last person to fit in the bus
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def last_passenger(queue: pd.DataFrame) -&gt; pd.DataFrame:
+    q = queue.sort_values('turn')
+    return q.loc[q['weight'].cumsum().le(1000), ['person_name']].tail(1)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C28?code=code-C28-1&amp;method=pd-sort-values&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1978 · Low-salary employees whose manager left
+     </strong>
+     <small>
+      Study solution · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    mask = employees['salary'].lt(30000) &amp; employees['manager_id'].notna() &amp; ~employees['manager_id'].isin(employees['employee_id'])
+    return employees.loc[mask, ['employee_id']].sort_values('employee_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C29?code=code-C29-1&amp;method=pd-sort-values&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      626 · Exchange seats
+     </strong>
+     <small>
+      Study solution · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    new_ids = swapped.where(~(ids.eq(ids.max()) &amp; ids.mod(2).eq(1)), ids)
+    return seat.assign(id=new_ids).sort_values('id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-sort-values&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    users_ranked = r.groupby('user_id').size().reset_index(name='n_reviews').merge(users, on='user_id')
+    first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})
+    feb = r.loc[r['created_at'].ge('2020-02-01') &amp; r['created_at'].lt('2020-03-01')]
+    movies_ranked = feb.groupby('movie_id', as_index=False).agg(avg_rating=('rating', 'mean')).merge(movies, on='movie_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C32?code=code-C32-1&amp;method=pd-sort-values&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      602 · Most accepted friends
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    counts = ids.value_counts().rename_axis('id').reset_index(name='num')
+    return counts.sort_values(['num', 'id'], ascending=[False, True]).head(1)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C35?code=code-C35-1&amp;method=pd-sort-values&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1667 · Fix names in a table
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    result['name'] = result['name'].str[:1].str.upper() + result['name'].str[1:].str.lower()
+    return result.sort_values('user_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C37?code=code-C37-1&amp;method=pd-sort-values&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      196 · Delete duplicate emails
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def delete_duplicate_emails(person: pd.DataFrame) -&gt; None:
+    person.sort_values('id', inplace=True)
+    person.drop_duplicates(subset='email', keep='first', inplace=True)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C38?code=code-C38-1&amp;method=pd-sort-values&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      176 · Second highest salary
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def second_highest_salary(employee: pd.DataFrame) -&gt; pd.DataFrame:
+    salaries = employee['salary'].dropna().drop_duplicates().sort_values(ascending=False)
+    value = salaries.iloc[1] if len(salaries) &gt;= 2 else None
+    return pd.DataFrame({'SecondHighestSalary': [value]})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C39?code=code-C39-1&amp;method=pd-sort-values&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1484 · Products sold by date
+     </strong>
+     <small>
+      Study solution · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    unique = activities[['sell_date', 'product']].drop_duplicates()
+    return unique.groupby('sell_date', as_index=False).agg(
+        num_sold=('product', 'size'), products=('product', lambda s: ','.join(sorted(s)))).sort_values('sell_date')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC601?code=code-LC601-1&amp;method=pd-sort-values&amp;line=14">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      601 · Human traffic of stadium
+     </strong>
+     <small>
+      Uploaded submission · line 14
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = df.merge(valid_groups, on='groups', how='inner')
+    return df[['id', 'visit_date', 'people']].sort_values(by='visit_date', ascending=True)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3521?code=code-LC3521-1&amp;method=pd-sort-values&amp;line=26">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3521 · Find product recommendation pairs
+     </strong>
+     <small>
+      Uploaded submission · line 26
+     </small>
+    </div>
+    <pre aria-hidden="true">    
+    return df.sort_values(by=['customer_count', 'product1_id', 'product2_id'], ascending=[False, True, True])
+    </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3564?code=code-LC3564-1&amp;method=pd-sort-values&amp;line=21">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3564 · Seasonal sales analysis
+     </strong>
+     <small>
+      Uploaded submission · line 21
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = df.sort_values(by=['season', 'total_quantity', 'total_revenue'], ascending=[True, False, False])
+    return df.groupby(by='season').first().reset_index()
+    </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3580?code=code-LC3580-1&amp;method=pd-sort-values&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3580 · Find consistently improving employees
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = (
+        performance_reviews
+        .sort_values(by=['employee_id', 'review_date'], ascending=[True, False])
+        .groupby(by='employee_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-05?code=code-squid-05-1&amp;method=pd-sort-values&amp;line=13">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Count a player’s closest interactions
+     </strong>
+     <small>
+      Saved walkthrough · line 13
+     </small>
+    </div>
+    <pre aria-hidden="true"># Explicit final sort is an authored addition
+result = (joined.loc[joined['status'].eq('alive')]
+          .sort_values('counts', ascending=False).head(1)
+          [['name_456', 'name_other', 'counts']])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-06?code=code-squid-06-1&amp;method=pd-sort-values&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Trace equipment to its first failure
+     </strong>
+     <small>
+      Saved walkthrough · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">    game_counts = joined.groupby('game_type', dropna=False).size()
+    game_type = game_counts.sort_values(ascending=False).index[0]
+    in_game = joined.loc[joined['game_type'].eq(game_type)]
+    supplier_id = in_game.groupby('supplier_id').size().sort_values(ascending=False).index[0]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-sort-values&amp;line=18">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Join room checks and camera sightings
+     </strong>
+     <small>
+      Saved walkthrough · line 18
+     </small>
+    </div>
+    <pre aria-hidden="true">joined['time_range_first_last_detection'] = times.max() - times.min()
+result = joined.sort_values('guard_number')[[
+    'guard_number', 'code_name', 'status', 'last_seen_in_room',
+    'spotted_outside_room_time', 'spotted_outside_room_location',</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-08?code=code-squid-08-1&amp;method=pd-sort-values&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Find the longest hesitation
+     </strong>
+     <small>
+      Saved walkthrough · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    means = pushed.groupby('game_id')['last_moved_time_seconds'].mean()
+    game_id = means.sort_values(ascending=False).index[0]
+    result = (pushed.loc[pushed['game_id'].eq(game_id)]
+              .sort_values('last_moved_time_seconds', ascending=False).head(1)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-sort-values&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Reconstruct access-log overlaps
+     </strong>
+     <small>
+      Saved walkthrough · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">if not games.empty:
+    latest = games.sort_values('date', ascending=False).iloc[0]
+    start = pd.to_timedelta(str(latest['start_time']))
+    end = pd.to_timedelta(str(latest['end_time']))</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B05?code=code-B05-3&amp;method=pd-sort-values&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Review · Simple SELECT queries
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = north_american_cities.loc[north_american_cities['country'].eq('United States')].sort_values('latitude', ascending=False)[['city']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B06?code=code-B06-5&amp;method=pd-sort-values&amp;line=2">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      INNER JOIN
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+result = m.sort_values('rating', ascending=False)[['title', 'rating']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (33)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C45?code=code-C45-3&amp;method=pd-sort-values&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      197 · Rising temperature
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def rising_temperature(weather: pd.DataFrame) -&gt; pd.DataFrame:
+    weather.sort_values(by='recordDate', inplace=True)
+    df = weather[(weather.recordDate.diff().dt.days == 1) &amp; (weather.temperature.diff() &gt; 0)]
+    return df[['id']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C48?code=code-C48-3&amp;method=pd-sort-values&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1280 · Students and examinations
+     </strong>
+     <small>
+      Uploaded submission · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left').fillna(0)
+    return df.sort_values(['student_id', 'subject_name'])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C06?code=code-C06-3&amp;method=pd-sort-values&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      620 · Not boring movies
+     </strong>
+     <small>
+      My approach · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    df =   cinema[(cinema.id % 2 == 1) &amp; (cinema.description.notna()) &amp; (cinema.description != 'boring')]
+    return   df.sort_values('rating', ascending=False)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C06?code=code-C06-5&amp;method=pd-sort-values&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      620 · Not boring movies
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = cinema[(cinema.id % 2 == 1) &amp; (cinema.description != 'boring')]
+    return df.sort_values('rating', ascending=False)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C09?code=code-C09-3&amp;method=pd-sort-values&amp;line=14">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1633 · Users registered in a contest
+     </strong>
+     <small>
+      My approach · line 14
+     </small>
+    </div>
+    <pre aria-hidden="true">    df['percentage'] = (100 * df['nUsersPerTest'] / nUsers).map(round_half_up)
+    return df[['contest_id', 'percentage']].sort_values(by=['percentage', 'contest_id'], ascending=[False, True])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C09?code=code-C09-5&amp;method=pd-sort-values&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1633 · Users registered in a contest
+     </strong>
+     <small>
+      Uploaded submission · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return df[['contest_id', 'percentage']].sort_values(by=['percentage', 'contest_id'], ascending=[False, True])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C18?code=code-C18-3&amp;method=pd-sort-values&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1729 · Followers count
+     </strong>
+     <small>
+      My approach · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    ).reset_index()
+    return df.sort_values('user_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C24?code=code-C24-3&amp;method=pd-sort-values&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      180 · Consecutive Numbers
+     </strong>
+     <small>
+      My approach · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def consecutive_numbers(logs: pd.DataFrame) -&gt; pd.DataFrame:
+    logs = logs.sort_values('id')
+    numbers = logs['num']
+    repeated = numbers.eq(numbers.shift(1)) &amp; numbers.eq(numbers.shift(2))</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C25?code=code-C25-3&amp;method=pd-sort-values&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1164 · Product price at a given date
+     </strong>
+     <small>
+      My approach · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = products[products['change_date'] &lt;= '2019-08-16']
+    df = df.sort_values(by=['product_id', 'change_date'], ascending=[True, False]).drop_duplicates('product_id').rename(columns={'new_price': 'price'})
+
+    updated_ids = set(df.product_id)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C25?code=code-C25-5&amp;method=pd-sort-values&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1164 · Product price at a given date
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = products[products['change_date'] &lt;= '2019-08-16']
+    df = df.sort_values(by=['product_id', 'change_date'], ascending=[True, False]).drop_duplicates('product_id').rename(columns={'new_price': 'price'})
+    
+    updated_ids = set(df.product_id)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C26?code=code-C26-3&amp;method=pd-sort-values&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1204 · Last person to fit in the bus
+     </strong>
+     <small>
+      My approach · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def last_passenger(queue: pd.DataFrame) -&gt; pd.DataFrame:
+    queue.sort_values(by='turn', ascending=True, inplace=True)
+    queue['cumsum_weight'] = queue['weight'].cumsum()
+    return   queue[queue.cumsum_weight &lt;= 1000].tail(1)[['person_name']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C26?code=code-C26-5&amp;method=pd-sort-values&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1204 · Last person to fit in the bus
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def last_passenger(queue: pd.DataFrame) -&gt; pd.DataFrame:
+    queue.sort_values(by='turn', ascending=True, inplace=True)
+    queue['cumsum_weight'] = queue['weight'].cumsum()
+    return queue[queue.cumsum_weight &lt;= 1000].tail(1)[['person_name']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C28?code=code-C28-3&amp;method=pd-sort-values&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1978 · Low-salary employees whose manager left
+     </strong>
+     <small>
+      My approach · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    flag_ = flag_lowSalary &amp;   flag_hasManager &amp; flag_managerLeft
+    return   employees[flag_][['employee_id']].sort_values(by='employee_id', ascending=True)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C28?code=code-C28-5&amp;method=pd-sort-values&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1978 · Low-salary employees whose manager left
+     </strong>
+     <small>
+      Uploaded submission · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return employees[flag_][['employee_id']].sort_values(by='employee_id', ascending=True)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C29?code=code-C29-3&amp;method=pd-sort-values&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      626 · Exchange seats
+     </strong>
+     <small>
+      My approach · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    seat['id'] = seat['id'].transform(swap_ids)
+    return   seat.sort_values(by='id', ascending=True)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C29?code=code-C29-5&amp;method=pd-sort-values&amp;line=13">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      626 · Exchange seats
+     </strong>
+     <small>
+      Uploaded submission · line 13
+     </small>
+    </div>
+    <pre aria-hidden="true">    seat['id'] = seat['id'].transform(swap_ids)
+    return seat.sort_values(by='id', ascending=True)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-3&amp;method=pd-sort-values&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      My approach · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">    ).reset_index()
+    df_users =   df_users.merge(users, on='user_id', how='left').sort_values(by=['nReviews', 'name'], ascending=[False, True])[['name', 'nReviews']]
+    df_movies =   movie_rating[(movie_rating.created_at &gt;=   '2020-02-01') &amp; (movie_rating.created_at &lt; '2020-03-01')]
+    df_movies = df_movies.groupby(by='movie_id').agg(</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-5&amp;method=pd-sort-values&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    ).reset_index()
+    df_users = df_users.merge(users, on='user_id', how='left').sort_values(by=['nReviews', 'name'], ascending=[False, True])[['name', 'nReviews']]
+
+    df_movies = movie_rating[(movie_rating.created_at &gt;= '2020-02-01') &amp; (movie_rating.created_at &lt; '2020-03-01')]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C32?code=code-C32-3&amp;method=pd-sort-values&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      602 · Most accepted friends
+     </strong>
+     <small>
+      My approach · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">    df.columns = ['id', 'num']
+    return df.sort_values(['num', 'id'], ascending=[False, True]).head(1)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C35?code=code-C35-3&amp;method=pd-sort-values&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1667 · Fix names in a table
+     </strong>
+     <small>
+      My approach · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return   users.sort_values(by='user_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C35?code=code-C35-5&amp;method=pd-sort-values&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1667 · Fix names in a table
+     </strong>
+     <small>
+      Uploaded submission · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    
+    return users.sort_values(by='user_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C37?code=code-C37-3&amp;method=pd-sort-values&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      196 · Delete duplicate emails
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">def delete_duplicate_emails(person: pd.DataFrame) -&gt; None:
+    person.sort_values(by='id', ascending=True, inplace=True)
+    person.drop_duplicates(subset='email', keep='first', inplace=True)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C37?code=code-C37-5&amp;method=pd-sort-values&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      196 · Delete duplicate emails
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def delete_duplicate_emails(person: pd.DataFrame) -&gt; None:
+    person.sort_values(by='id', ascending=True, inplace=True)
+    person.drop_duplicates(subset='email', keep='first', inplace=True)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C38?code=code-C38-3&amp;method=pd-sort-values&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      176 · Second highest salary
+     </strong>
+     <small>
+      My approach · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    unique_salaries = employee['salary'].dropna().drop_duplicates()
+    second_highest = unique_salaries.sort_values(ascending=False)
+    if len(second_highest) &gt; 1:
+        return   pd.DataFrame({'SecondHighestSalary': [second_highest.values[1]]})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C38?code=code-C38-5&amp;method=pd-sort-values&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      176 · Second highest salary
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    unique_salaries = employee['salary'].drop_duplicates()
+    second_highest = unique_salaries.sort_values(ascending=False)
+    if len(second_highest) &gt; 1: 
+        return pd.DataFrame({'SecondHighestSalary': [second_highest.values[1]]})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C39?code=code-C39-3&amp;method=pd-sort-values&amp;line=12">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1484 · Products sold by date
+     </strong>
+     <small>
+      My approach · line 12
+     </small>
+    </div>
+    <pre aria-hidden="true">    ).reset_index()
+    return df.sort_values('sell_date')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C39?code=code-C39-5&amp;method=pd-sort-values&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1484 · Products sold by date
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    def concat_string(x):
+        x.sort_values(ascending=True, inplace=True)
+        return ','.join(x)
+    </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B04?code=code-B04-3&amp;method=pd-sort-values&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      DISTINCT, sorting and pagination
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.sort_values('year', ascending=False).head(4)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B04?code=code-B04-5&amp;method=pd-sort-values&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      DISTINCT, sorting and pagination
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.sort_values('title').head(5)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B04?code=code-B04-7&amp;method=pd-sort-values&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      DISTINCT, sorting and pagination
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.sort_values('title').iloc[5:10]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B05?code=code-B05-5&amp;method=pd-sort-values&amp;line=2">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Review · Simple SELECT queries
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">chicago_lon = north_american_cities.loc[north_american_cities['city'].eq('Chicago'), 'longitude'].iloc[0]
+result = north_american_cities.loc[north_american_cities['longitude'].lt(chicago_lon)].sort_values('longitude')[['city']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B05?code=code-B05-7&amp;method=pd-sort-values&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Review · Simple SELECT queries
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = north_american_cities.loc[north_american_cities['country'].eq('Mexico')].sort_values('population', ascending=False).head(2)[['city', 'population']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B05?code=code-B05-9&amp;method=pd-sort-values&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Review · Simple SELECT queries
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = north_american_cities.loc[north_american_cities['country'].eq('United States')].sort_values('population', ascending=False).iloc[2:4][['city', 'population']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · Sorting. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=Sorting">
+   <small>
+    ← Browse
+   </small>
+   pandas · Sorting
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

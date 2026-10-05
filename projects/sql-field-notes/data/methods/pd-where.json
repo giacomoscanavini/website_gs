@@ -1,0 +1,60 @@
+{
+  "id": "pd-where",
+  "lang": "pd",
+  "category": "Conditional logic",
+  "label": "where()",
+  "example": "df.x.where(df.x > 0, 0)",
+  "description": "Keep or replace",
+  "source": "image-pandas",
+  "related": [
+    "sql-case"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "where",
+  "uses": [
+    {
+      "page": "C11",
+      "block": "code-C11-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    t['approved'] = t['state'].eq('approved')\n    t['approved_amount'] = t['amount'].where(t['approved'], 0)\n    return t.groupby(['month', 'country'], dropna=False, as_index=False).agg(\n        trans_count=('amount', 'size'), approved_count=('approved', 'sum'),",
+      "snippetLine": 5
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    swapped = ids + 2 * ids.mod(2) - 1\n    new_ids = swapped.where(~(ids.eq(ids.max()) & ids.mod(2).eq(1)), ids)\n    return seat.assign(id=new_ids).sort_values('id')",
+      "snippetLine": 5
+    },
+    {
+      "page": "squid-05",
+      "block": "code-squid-05-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "Count a player’s closest interactions",
+      "number": "05",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "interactions = daily_interactions.loc[mask].copy()\ninteractions['player_id'] = interactions['player1_id'].where(\n    interactions['player1_id'].ne(456), interactions['player2_id'])\ncounts = interactions.groupby('player_id', as_index=False).size().rename(columns={'size': 'counts'})",
+      "snippetLine": 4
+    }
+  ],
+  "pageCount": 3
+}

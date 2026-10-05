@@ -1,0 +1,60 @@
+{
+  "id": "sql-date-add",
+  "lang": "sql",
+  "category": "Date/time functions",
+  "label": "DATE_ADD()",
+  "example": "DATE_ADD(d, INTERVAL 7 DAY)",
+  "description": "Add time",
+  "source": "image-sql",
+  "related": [
+    "pd-timedelta"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html",
+  "aliases": "DATE_ADD",
+  "uses": [
+    {
+      "page": "C13",
+      "block": "code-C13-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    SELECT 1 FROM Activity a\n    WHERE a.player_id = f.player_id AND a.event_date = DATE_ADD(f.first_day, INTERVAL 1 DAY)\n) THEN 1 ELSE 0 END), 2) AS fraction\nFROM first_login f;",
+      "snippetLine": 5
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-0",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT visited_on, amount, ROUND(amount / 7.0, 2) AS average_amount\nFROM rolled WHERE visited_on >= DATE_ADD(first_day, INTERVAL 6 DAY) ORDER BY visited_on;",
+      "snippetLine": 9
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-2",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Rolling\nWHERE visited_on >= DATE_ADD(first_date, INTERVAL 6 DAY)\nORDER BY visited_on;",
+      "snippetLine": 14
+    }
+  ],
+  "pageCount": 2
+}

@@ -1,0 +1,117 @@
+{
+  "id": "pd-not-isin",
+  "lang": "pd",
+  "category": "Filtering",
+  "label": "Not membership",
+  "example": "df[~df.city.isin(['HK'])]",
+  "description": "Exclude values",
+  "source": "image-pandas",
+  "related": [
+    "sql-not-in"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C28",
+      "block": "code-C28-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def find_employees(employees: pd.DataFrame) -> pd.DataFrame:\n    mask = employees['salary'].lt(30000) & employees['manager_id'].notna() & ~employees['manager_id'].isin(employees['employee_id'])\n    return employees.loc[mask, ['employee_id']].sort_values('employee_id')",
+      "snippetLine": 3
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    flag_hasManager = ~employees.manager_id.isna()\n    flag_managerLeft = ~employees['manager_id'].isin(employees['employee_id'])\n    flag_ = flag_lowSalary &   flag_hasManager & flag_managerLeft\n    return   employees[flag_][['employee_id']].sort_values(by='employee_id', ascending=True)",
+      "snippetLine": 4
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-5",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    flag_hasManager = ~employees.manager_id.isna()\n    flag_managerLeft = ~employees['manager_id'].isin(employees['employee_id'])\n    flag_ = flag_lowSalary & flag_hasManager & flag_managerLeft\n",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC262",
+      "block": "code-LC262-1",
+      "line": 7,
+      "lines": [
+        7,
+        8
+      ],
+      "title": "262 · Trips and users",
+      "number": "262",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    trips = trips[\n        ~trips['client_id'].isin(banned_ids) &\n        ~trips['driver_id'].isin(banned_ids)\n    ]",
+      "snippetLine": 6
+    },
+    {
+      "page": "LC607",
+      "block": "code-LC607-1",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "607 · Sales person",
+      "number": "607",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    flag = ~sales_person['sales_id'].isin(idexlude)\n    return sales_person[flag][['name']]\n    ",
+      "snippetLine": 7
+    },
+    {
+      "page": "B08",
+      "block": "code-B08-3",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "NULL and unmatched rows",
+      "number": "08",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "occupied = employees['building'].dropna()\nresult = buildings.loc[~buildings['building_name'].isin(occupied), ['building_name']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B20",
+      "block": "code-B20-7",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Additional topic · Set operations",
+      "number": "20",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = a.loc[~a['id'].isin(b['id']), ['id']].drop_duplicates()",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 5
+}

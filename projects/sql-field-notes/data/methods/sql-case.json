@@ -1,0 +1,415 @@
+{
+  "id": "sql-case",
+  "lang": "sql",
+  "category": "Conditional / NULL handling",
+  "label": "CASE",
+  "example": "CASE WHEN x>0 THEN 'Y' ELSE 'N' END",
+  "description": "Conditional logic",
+  "source": "image-sql",
+  "related": [
+    "pd-where",
+    "pd-np-where"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/flow-control-functions.html",
+  "aliases": "CASE",
+  "uses": [
+    {
+      "page": "C50",
+      "block": "code-C50-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "        s.user_id,\n        CASE\n            WHEN c.action = 'confirmed' THEN 1\n            ELSE 0",
+      "snippetLine": 3
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        s.user_id, \n        CASE\n            WHEN c.action = 'confirmed' THEN 1\n            ELSE 0",
+      "snippetLine": 4
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT query_name, ROUND(AVG(rating / position), 2) AS quality,\n       ROUND(100.0 * AVG(CASE WHEN rating < 3 THEN 1 ELSE 0 END), 2) AS poor_query_percentage\nFROM Queries GROUP BY query_name;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        (rating / position) AS quality,\n        CASE\n            WHEN rating < 3 THEN 1\n            ELSE 0",
+      "snippetLine": 4
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-4",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        (rating / position) AS quality,\n        CASE\n            WHEN rating < 3 THEN 1\n            ELSE 0",
+      "snippetLine": 5
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-0",
+      "line": 3,
+      "lines": [
+        3,
+        5
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "       COUNT(*) AS trans_count,\n       SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END) AS approved_count,\n       SUM(amount) AS trans_total_amount,\n       SUM(CASE WHEN state = 'approved' THEN amount ELSE 0 END) AS approved_total_amount",
+      "snippetLine": 2
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        amount,\n        CASE\n            WHEN state = 'approved' THEN 1\n            ELSE 0",
+      "snippetLine": 5
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-4",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        amount,\n        CASE \n            WHEN state = 'approved' THEN 1\n            ELSE 0",
+      "snippetLine": 6
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": ")\nSELECT ROUND(100.0 * AVG(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END), 2)\n       AS immediate_percentage\nFROM ranked WHERE rn = 1;",
+      "snippetLine": 4
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        customer_id,\n        CASE\n            WHEN order_date =   customer_pref_delivery_date THEN 1\n            ELSE 0",
+      "snippetLine": 3
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        customer_id,\n        CASE\n            WHEN order_date = customer_pref_delivery_date THEN 1\n            ELSE 0",
+      "snippetLine": 4
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": ")\nSELECT ROUND(AVG(CASE WHEN EXISTS (\n    SELECT 1 FROM Activity a\n    WHERE a.player_id = f.player_id AND a.event_date = DATE_ADD(f.first_day, INTERVAL 1 DAY)",
+      "snippetLine": 3
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "GROUP BY c.customer_id\nHAVING (SELECT COUNT(*) FROM Product) = COUNT(DISTINCT CASE\n    WHEN c.product_key IN (SELECT product_key FROM Product) THEN c.product_key END);",
+      "snippetLine": 3
+    },
+    {
+      "page": "C23",
+      "block": "code-C23-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "610 · Triangle judgement",
+      "number": "610",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT x, y, z,\n       CASE WHEN x + y > z AND x + z > y AND y + z > x THEN 'Yes' ELSE 'No' END AS triangle\nFROM Triangle;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C23",
+      "block": "code-C23-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "610 · Triangle judgement",
+      "number": "610",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    x, y, z,\n    CASE\n        WHEN x + y <= z THEN 'No'\n        WHEN x + z <= y THEN 'No'",
+      "snippetLine": 2
+    },
+    {
+      "page": "C23",
+      "block": "code-C23-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "610 · Triangle judgement",
+      "number": "610",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    x, y, z, \n    CASE \n        WHEN x + y <= z THEN 'No'\n        WHEN x + z <= y THEN 'No'",
+      "snippetLine": 3
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        SELECT\n            CASE\n                WHEN income < 20000 THEN 'Low Salary'\n                WHEN income >= 20000 AND income <= 50000 THEN 'Average Salary'",
+      "snippetLine": 3
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        SELECT \n            CASE\n                WHEN income < 20000 THEN 'Low Salary'\n                WHEN income >= 20000 AND income <= 50000 THEN 'Average Salary'",
+      "snippetLine": 4
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT CASE WHEN id % 2 = 0 THEN id - 1\n            WHEN id < (SELECT MAX(id) FROM Seat) THEN id + 1\n            ELSE id END AS id, student",
+      "snippetLine": 1
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "SELECT\n    CASE\n        WHEN id % 2 = 0 THEN id-1\n        WHEN id <> (SELECT length FROM   NStudents) AND id % 2 = 1 THEN id+1",
+      "snippetLine": 5
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-4",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "SELECT\n    CASE \n        WHEN id % 2 = 0 THEN id-1\n        WHEN id <> (SELECT length FROM NStudents) AND id % 2 = 1 THEN id+1",
+      "snippetLine": 7
+    },
+    {
+      "page": "LC608",
+      "block": "code-LC608-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "608 · Tree node",
+      "number": "608",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    id, \n    CASE\n        WHEN p_id IS NULL THEN 'Root'\n        WHEN id IN (SELECT p_id FROM Tree) THEN 'Inner'",
+      "snippetLine": 3
+    },
+    {
+      "page": "LC1393",
+      "block": "code-LC1393-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1393 · Capital gain/loss",
+      "number": "1393",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        stock_name,  \n        CASE \n            WHEN operation = 'Buy' THEN -1 * price\n            ELSE price",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC3475",
+      "block": "code-LC3475-0",
+      "line": 6,
+      "lines": [
+        6,
+        10,
+        16,
+        20
+      ],
+      "title": "3475 · DNA pattern recognition",
+      "number": "3475",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    species,\n    CASE\n        WHEN dna_sequence LIKE 'ATG%' THEN 1\n        ELSE 0",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            s.product_id, \n            CASE \n                WHEN MONTH(s.sale_date) IN (12, 1, 2) THEN 'Winter'\n                WHEN MONTH(s.sale_date) IN (3, 4, 5) THEN 'Spring'",
+      "snippetLine": 5
+    },
+    {
+      "page": "squid-02",
+      "block": "code-squid-02-0",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "Calculate the ration threshold",
+      "number": "02",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    table_prop.portions AS portions,\n    CASE \n        WHEN table_prop.portions > rations.amount THEN 'False'\n        ELSE 'True'",
+      "snippetLine": 9
+    },
+    {
+      "page": "squid-04",
+      "block": "code-squid-04-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "Rank ten-player teams",
+      "number": "04",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    t.age_team,\n    CASE\n        WHEN t.age_team < 40 THEN 'Fit'\n        WHEN t.age_team > 50 THEN 'Elderly'",
+      "snippetLine": 3
+    },
+    {
+      "page": "squid-05",
+      "block": "code-squid-05-0",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "Count a player’s closest interactions",
+      "number": "05",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\t\t\t  456 AS target_id,\n\t\t\t  CASE\n\t\t\t\tWHEN player1_id <> 456 THEN player1_id\n\t\t\t\tELSE player2_id ",
+      "snippetLine": 6
+    }
+  ],
+  "pageCount": 16
+}

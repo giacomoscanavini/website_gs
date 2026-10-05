@@ -1,0 +1,363 @@
+<article class="article method-page" id="m-pd-concat-rows">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=Merge%20/%20join">
+   pandas · Merge / join
+  </a>
+ </div>
+ <h1>
+  Concatenate rows
+ </h1>
+ <p class="lead">
+  Stack rows
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-concat-rows"><span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">])</span></code></pre>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-sql-union">
+   SQL · UNION
+  </a>
+  <a href="#m-sql-union-all">
+   SQL · UNION ALL
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C25?code=code-C25-3&amp;method=pd-concat-rows&amp;line=13">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1164 · Product price at a given date
+    </strong>
+    <small>
+     My approach · line 13
+    </small>
+   </div>
+   <pre aria-hidden="true">                        'price': [10 for x in to_update]})
+    return   pd.concat([df[['product_id', 'price']], df1])</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#murder-02?code=code-murder-02-1&amp;method=pd-concat-rows&amp;line=9">
+   <div>
+    <span class="usage-label">
+     Murder City · pandas
+    </span>
+    <strong>
+     Find the two witnesses
+    </strong>
+    <small>
+     Saved walkthrough · line 9
+    </small>
+   </div>
+   <pre aria-hidden="true">]
+result = pd.concat([first, second], ignore_index=True).drop_duplicates()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-concat-rows&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Squid Game · pandas
+    </span>
+    <strong>
+     Compare hot and cold months
+    </strong>
+    <small>
+     Saved walkthrough · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">hot = monthly_temperatures.sort_values('avg_temperature', ascending=False).head(1)
+extreme = pd.concat([cold, hot], ignore_index=True).drop_duplicates()
+games = honeycomb_game.copy()
+dates = pd.to_datetime(games['date'])</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#B13?code=code-B13-1&amp;method=pd-concat-rows&amp;line=3">
+   <div>
+    <span class="usage-label">
+     SQLBolt · pandas
+    </span>
+    <strong>
+     INSERT rows
+    </strong>
+    <small>
+     Study solution · line 3
+    </small>
+   </div>
+   <pre aria-hidden="true">new_movie = pd.DataFrame([{'id': new_id, 'title': 'Toy Story 4', 'director': 'Example Director', 'year': 2019, 'length_minutes': 100}])
+movies = pd.concat([movies, new_movie], ignore_index=True)</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-concat-rows&amp;line=10">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1341 · Movie rating report
+    </strong>
+    <small>
+     Study solution · line 10
+    </small>
+   </div>
+   <pre aria-hidden="true">    second = movies_ranked.sort_values(['avg_rating', 'title'], ascending=[False, True]).head(1)[['title']].rename(columns={'title': 'results'})
+    return pd.concat([first, second], ignore_index=True)</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C32?code=code-C32-1&amp;method=pd-concat-rows&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     602 · Most accepted friends
+    </strong>
+    <small>
+     Study solution · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">def most_friends(request_accepted: pd.DataFrame) -&gt; pd.DataFrame:
+    ids = pd.concat([request_accepted['requester_id'], request_accepted['accepter_id']], ignore_index=True)
+    counts = ids.value_counts().rename_axis('id').reset_index(name='num')
+    return counts.sort_values(['num', 'id'], ascending=[False, True]).head(1)</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   1 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#B20?code=code-B20-1&amp;method=pd-concat-rows&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Additional topic · Set operations
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = pd.concat([a[['id']], b[['id']]], ignore_index=True)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (7)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C25?code=code-C25-5&amp;method=pd-concat-rows&amp;line=14">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1164 · Product price at a given date
+     </strong>
+     <small>
+      Uploaded submission · line 14
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return pd.concat([df[['product_id', 'price']], df1])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-3&amp;method=pd-concat-rows&amp;line=14">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      My approach · line 14
+     </small>
+    </div>
+    <pre aria-hidden="true">    df_movies =   df_movies.merge(movies, on='movie_id', how='left').sort_values(by=['avgRating', 'title'], ascending=[False, True])[['title', 'avgRating']]
+    return   pd.concat([df_users.head(1)[['name']].rename(columns={'name': 'results'}),
+                        df_movies.head(1)[['title']].rename(columns={'title': 'results'}),
+                    ])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-5&amp;method=pd-concat-rows&amp;line=15">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Uploaded submission · line 15
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return pd.concat([df_users.iloc[[0]][['name']].rename(columns={'name': 'results'}),
+                      df_movies.iloc[[0]][['title']].rename(columns={'title': 'results'}),
+                    ])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C32?code=code-C32-3&amp;method=pd-concat-rows&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      602 · Most accepted friends
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">def most_friends(request_accepted: pd.DataFrame) -&gt; pd.DataFrame:
+    friends = pd.concat([
+        request_accepted['requester_id'],
+        request_accepted['accepter_id']</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C32?code=code-C32-5&amp;method=pd-concat-rows&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      602 · Most accepted friends
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def most_friends(request_accepted: pd.DataFrame) -&gt; pd.DataFrame:
+    friends = pd.concat([
+        request_accepted['requester_id'], 
+        request_accepted['accepter_id']</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B13?code=code-B13-3&amp;method=pd-concat-rows&amp;line=3">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      INSERT rows
+     </strong>
+     <small>
+      Study solution · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">new_sales = pd.DataFrame([{'movie_id': movie_id, 'rating': 8.7, 'domestic_sales': 340_000_000, 'international_sales': 270_000_000}])
+boxoffice = pd.concat([boxoffice, new_sales], ignore_index=True)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B20?code=code-B20-3&amp;method=pd-concat-rows&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Additional topic · Set operations
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = pd.concat([a[['id']], b[['id']]], ignore_index=True).drop_duplicates()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · Merge / join. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=Merge%20/%20join">
+   <small>
+    ← Browse
+   </small>
+   pandas · Merge / join
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

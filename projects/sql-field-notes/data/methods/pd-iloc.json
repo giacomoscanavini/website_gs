@@ -1,0 +1,144 @@
+{
+  "id": "pd-iloc",
+  "lang": "pd",
+  "category": "DataFrame basics",
+  "label": "Rows by position",
+  "example": "df.iloc[0:3]",
+  "description": "Select by positions",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "iloc",
+  "uses": [
+    {
+      "page": "C30",
+      "block": "code-C30-5",
+      "line": 15,
+      "lines": [
+        15,
+        16
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return pd.concat([df_users.iloc[[0]][['name']].rename(columns={'name': 'results'}),\n                      df_movies.iloc[[0]][['title']].rename(columns={'title': 'results'}),\n                    ])",
+      "snippetLine": 14
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    salaries = employee['salary'].dropna().drop_duplicates().sort_values(ascending=False)\n    value = salaries.iloc[1] if len(salaries) >= 2 else None\n    return pd.DataFrame({'SecondHighestSalary': [value]})",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC3421",
+      "block": "code-LC3421-1",
+      "line": 8,
+      "lines": [
+        8,
+        9
+      ],
+      "title": "3421 · Find students who improved",
+      "number": "3421",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n        latest_score = x['score'].iloc[last_date]\n        first_score = x['score'].iloc[first_date]\n",
+      "snippetLine": 7
+    },
+    {
+      "page": "squid-08",
+      "block": "code-squid-08-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "Find the longest hesitation",
+      "number": "08",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "pushed = player.loc[player['death_description'].eq('pushed')].copy()\nresult = pushed.iloc[:0][['id', 'first_name', 'last_name', 'last_moved_time_seconds']]\nif not pushed.empty:\n    means = pushed.groupby('game_id')['last_moved_time_seconds'].mean()",
+      "snippetLine": 3
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-1",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "if not games.empty:\n    latest = games.sort_values('date', ascending=False).iloc[0]\n    start = pd.to_timedelta(str(latest['start_time']))\n    end = pd.to_timedelta(str(latest['end_time']))",
+      "snippetLine": 6
+    },
+    {
+      "page": "B04",
+      "block": "code-B04-7",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DISTINCT, sorting and pagination",
+      "number": "04",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = movies.sort_values('title').iloc[5:10]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-5",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "chicago_lon = north_american_cities.loc[north_american_cities['city'].eq('Chicago'), 'longitude'].iloc[0]\nresult = north_american_cities.loc[north_american_cities['longitude'].lt(chicago_lon)].sort_values('longitude')[['city']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-9",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = north_american_cities.loc[north_american_cities['country'].eq('United States')].sort_values('population', ascending=False).iloc[2:4][['city', 'population']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B13",
+      "block": "code-B13-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "INSERT rows",
+      "number": "13",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movie_id = movies.loc[movies['title'].eq('Toy Story 4'), 'id'].iloc[0]\nnew_sales = pd.DataFrame([{'movie_id': movie_id, 'rating': 8.7, 'domestic_sales': 340_000_000, 'international_sales': 270_000_000}])\nboxoffice = pd.concat([boxoffice, new_sales], ignore_index=True)",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 8
+}

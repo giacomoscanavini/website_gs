@@ -1,0 +1,102 @@
+{
+  "id": "sql-sum-over",
+  "lang": "sql",
+  "category": "Window functions",
+  "label": "SUM() OVER",
+  "example": "SUM(x) OVER (...)",
+  "description": "Window/running sum",
+  "source": "image-sql",
+  "related": [
+    "pd-cumsum"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+  "aliases": "SUM",
+  "uses": [
+    {
+      "page": "C26",
+      "block": "code-C26-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH cumulative AS (\n    SELECT person_name, turn, SUM(weight) OVER (ORDER BY turn ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_weight\n    FROM Queue\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        turn,\n        SUM(weight) OVER (ORDER BY turn ASC) AS cumsum_weight\n    FROM Queue\n)",
+      "snippetLine": 4
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-4",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        turn,\n        SUM(weight) OVER (ORDER BY turn ASC) AS cumsum_weight\n    FROM Queue\n)",
+      "snippetLine": 5
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    SELECT visited_on,\n           SUM(amount) OVER (ORDER BY visited_on RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW) AS amount,\n           MIN(visited_on) OVER () AS first_day\n    FROM daily",
+      "snippetLine": 4
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        DISTINCT visited_on,\n        SUM(amount) OVER (\n            ORDER BY visited_on RANGE BETWEEN   INTERVAL 6 DAY   PRECEDING AND CURRENT ROW\n        ) AS rolling_amount,",
+      "snippetLine": 3
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        DISTINCT visited_on, \n        SUM(amount) OVER (\n            ORDER BY visited_on RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW\n        ) AS rolling_amount,",
+      "snippetLine": 4
+    }
+  ],
+  "pageCount": 2
+}

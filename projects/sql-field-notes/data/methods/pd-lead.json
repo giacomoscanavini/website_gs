@@ -1,0 +1,47 @@
+{
+  "id": "pd-lead",
+  "lang": "pd",
+  "category": "Window-like operations",
+  "label": "Next row",
+  "example": "df['x'].shift(-1)",
+  "description": "Lead",
+  "source": "image-pandas",
+  "related": [
+    "sql-lead"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C24",
+      "block": "code-C24-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    n = ordered['num']\n    mask = n.eq(n.shift(-1)) & n.eq(n.shift(-2))\n    return ordered.loc[mask, ['num']].drop_duplicates().rename(columns={'num': 'ConsecutiveNums'})",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-1",
+      "line": 14,
+      "lines": [
+        14,
+        15
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df['rating2'] = df['rating'].shift(-1)\n    df['rating3'] = df['rating2'].shift(-1)\n    df = df.groupby(by='employee_id').first().reset_index()",
+      "snippetLine": 13
+    }
+  ],
+  "pageCount": 2
+}

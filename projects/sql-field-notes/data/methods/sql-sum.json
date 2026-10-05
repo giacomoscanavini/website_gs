@@ -1,0 +1,504 @@
+{
+  "id": "sql-sum",
+  "lang": "sql",
+  "category": "Aggregation",
+  "label": "SUM()",
+  "example": "SUM(sales)",
+  "description": "Sum",
+  "source": "image-sql",
+  "related": [
+    "pd-sum"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+  "aliases": "SUM",
+  "uses": [
+    {
+      "page": "C46",
+      "block": "code-C46-0",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    )\nSELECT machine_id, ROUND(SUM(processing_time)/COUNT(*), 3) AS processing_time\nFROM m\nGROUP BY machine_id",
+      "snippetLine": 16
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-2",
+      "line": 21,
+      "lines": [
+        21
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\nSELECT machine_id, ROUND(SUM(processing_time)/COUNT(*), 3) AS processing_time\nFROM m\nGROUP BY machine_id",
+      "snippetLine": 20
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-0",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": ")\nSELECT user_id, ROUND(SUM(boolean)/COUNT(boolean), 2) AS confirmation_rate\nFROM Rate\nGROUP BY user_id",
+      "snippetLine": 10
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-2",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\nSELECT user_id, ROUND(SUM(boolean)/COUNT(boolean), 2) AS confirmation_rate\nFROM Rate\nGROUP BY user_id",
+      "snippetLine": 12
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT p.product_id,\n       COALESCE(ROUND(SUM(p.price * u.units) / NULLIF(SUM(u.units), 0), 2), 0) AS average_price\nFROM Prices p LEFT JOIN UnitsSold u\n  ON p.product_id = u.product_id AND u.purchase_date BETWEEN p.start_date AND p.end_date",
+      "snippetLine": 1
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": ")\nSELECT product_id, COALESCE(ROUND(SUM(paid) / NULLIF(SUM(units), 0), 2), 0) AS average_price\nFROM Sold\nGROUP BY product_id;",
+      "snippetLine": 5
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-4",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\nSELECT product_id, COALESCE(ROUND(SUM(paid) / SUM(units), 2), 0) AS average_price\nFROM Sold\nGROUP BY product_id",
+      "snippetLine": 7
+    },
+    {
+      "page": "C08",
+      "block": "code-C08-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    p.project_id,\n    ROUND(SUM(e.experience_years) / COUNT(e.experience_years), 2) AS average_years\nFROM Project p\nLEFT JOIN Employee e   ON p.employee_id = e.employee_id",
+      "snippetLine": 2
+    },
+    {
+      "page": "C08",
+      "block": "code-C08-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    p.project_id, \n    ROUND(SUM(e.experience_years) / COUNT(e.experience_years), 2) AS average_years\nFROM Project p\nLEFT JOIN Employee e ON p.employee_id = e.employee_id",
+      "snippetLine": 3
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-2",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    ROUND(AVG(quality), 2) AS quality,\n    ROUND(100 * SUM(poor_quality)/COUNT(poor_quality), 2) AS poor_query_percentage\nFROM Quality\nGROUP BY query_name;",
+      "snippetLine": 13
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-4",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    ROUND(AVG(quality), 2) AS quality, \n    ROUND(100 * SUM(poor_quality)/COUNT(poor_quality), 2) AS poor_query_percentage\nFROM Quality\nGROUP BY query_name",
+      "snippetLine": 15
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-0",
+      "line": 3,
+      "lines": [
+        3,
+        4,
+        5
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "       COUNT(*) AS trans_count,\n       SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END) AS approved_count,\n       SUM(amount) AS trans_total_amount,\n       SUM(CASE WHEN state = 'approved' THEN amount ELSE 0 END) AS approved_total_amount",
+      "snippetLine": 2
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-2",
+      "line": 16,
+      "lines": [
+        16,
+        17,
+        18
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    COUNT(approved) AS trans_count,\n    SUM(approved) AS approved_count,\n    SUM(amount) AS   trans_total_amount,\n    SUM(amount * approved) AS   approved_total_amount",
+      "snippetLine": 15
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-4",
+      "line": 18,
+      "lines": [
+        18,
+        19,
+        20
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    COUNT(approved) AS trans_count,\n    SUM(approved) AS approved_count, \n    SUM(amount) AS trans_total_amount,\n    SUM(amount * approved) AS approved_total_amount",
+      "snippetLine": 17
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-2",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": ")\nSELECT ROUND(100 * SUM(immediate) / COUNT(immediate), 2) AS   immediate_percentage\nFROM Orders\nWHERE number = 1;",
+      "snippetLine": 13
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-4",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\nSELECT ROUND(100 * SUM(immediate) / COUNT(immediate), 2) AS immediate_percentage\nFROM Orders\nWHERE number = 1",
+      "snippetLine": 15
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH cumulative AS (\n    SELECT person_name, turn, SUM(weight) OVER (ORDER BY turn ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_weight\n    FROM Queue\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        turn,\n        SUM(weight) OVER (ORDER BY turn ASC) AS cumsum_weight\n    FROM Queue\n)",
+      "snippetLine": 4
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-4",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        turn,\n        SUM(weight) OVER (ORDER BY turn ASC) AS cumsum_weight\n    FROM Queue\n)",
+      "snippetLine": 5
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-0",
+      "line": 2,
+      "lines": [
+        2,
+        5
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH daily AS (\n    SELECT visited_on, SUM(amount) AS amount FROM Customer GROUP BY visited_on\n), rolled AS (\n    SELECT visited_on,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        DISTINCT visited_on,\n        SUM(amount) OVER (\n            ORDER BY visited_on RANGE BETWEEN   INTERVAL 6 DAY   PRECEDING AND CURRENT ROW\n        ) AS rolling_amount,",
+      "snippetLine": 3
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        DISTINCT visited_on, \n        SUM(amount) OVER (\n            ORDER BY visited_on RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW\n        ) AS rolling_amount,",
+      "snippetLine": 4
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": ")\nSELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016 FROM marked\nWHERE value_count > 1 AND location_count = 1;",
+      "snippetLine": 4
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-2",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "\nSELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016\nFROM Insurance\nWHERE pid IN (SELECT pid FROM UniqueCity) AND tiv_2015 IN (SELECT tiv_2015 FROM NonUniqueTIV);",
+      "snippetLine": 14
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-4",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    \nSELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016\nFROM Insurance\nWHERE pid IN (SELECT pid FROM UniqueCity) AND tiv_2015 IN (SELECT tiv_2015 FROM NonUniqueTIV)",
+      "snippetLine": 15
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-0",
+      "line": 1,
+      "lines": [
+        1,
+        4
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT p.product_name, SUM(o.unit) AS unit FROM Orders o\nJOIN Products p ON o.product_id = p.product_id\nWHERE o.order_date >= '2020-02-01' AND o.order_date < '2020-03-01'",
+      "snippetLine": 1
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        product_id,\n        SUM(unit) AS unit\n    FROM Orders\n    WHERE order_date >= '2020-02-01' AND order_date < '2020-03-01'",
+      "snippetLine": 3
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        product_id, \n        SUM(unit) AS unit\n    FROM Orders\n    WHERE order_date > '2020-01-31' AND order_date < '2020-03-01'",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC1393",
+      "block": "code-LC1393-0",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "1393 · Capital gain/loss",
+      "number": "1393",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\nSELECT stock_name, SUM(capital_gain_loss) AS capital_gain_loss\nFROM Operations\nGROUP BY stock_name",
+      "snippetLine": 11
+    },
+    {
+      "page": "LC3220",
+      "block": "code-LC3220-0",
+      "line": 10,
+      "lines": [
+        10,
+        18
+      ],
+      "title": "3220 · Odd and even transactions",
+      "number": "3220",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            transaction_date, \n            SUM(amount) AS even_sum\n        FROM Transactions\n        WHERE amount % 2 = 0",
+      "snippetLine": 9
+    },
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-0",
+      "line": 21,
+      "lines": [
+        21,
+        22
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            season, category, \n            SUM(quantity) AS total_quantity, \n            ROUND(SUM(revenue), 2) AS total_revenue\n        FROM SeasonSales",
+      "snippetLine": 20
+    },
+    {
+      "page": "B10",
+      "block": "code-B10-4",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Aggregates and GROUP BY",
+      "number": "10",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT building, SUM(years_employed) AS total_years FROM employees GROUP BY building;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B11",
+      "block": "code-B11-4",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "WHERE versus HAVING",
+      "number": "11",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT role, SUM(years_employed) AS total_years\nFROM employees GROUP BY role HAVING role = 'Engineer';",
+      "snippetLine": 1
+    },
+    {
+      "page": "B12",
+      "block": "code-B12-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Logical query order",
+      "number": "12",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT m.director, SUM(b.domestic_sales + b.international_sales) AS total_sales\nFROM movies m JOIN boxoffice b ON m.id = b.movie_id GROUP BY m.director;",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 17
+}

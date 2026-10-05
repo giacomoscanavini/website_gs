@@ -1,0 +1,128 @@
+{
+  "id": "pd-dropna",
+  "lang": "pd",
+  "category": "Missing values",
+  "label": "Drop null rows",
+  "example": "df.dropna()",
+  "description": "Remove incomplete rows",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "dropna",
+  "uses": [
+    {
+      "page": "C19",
+      "block": "code-C19-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def biggest_single_number(my_numbers: pd.DataFrame) -> pd.DataFrame:\n    s = my_numbers.loc[~my_numbers['num'].duplicated(keep=False), 'num'].dropna()\n    return pd.DataFrame({'num': [s.max() if not s.empty else None]})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def find_customers(customer: pd.DataFrame, product: pd.DataFrame) -> pd.DataFrame:\n    keys = product['product_key'].dropna().drop_duplicates()\n    eligible = customer.loc[customer['product_key'].isin(keys)]\n    counts = eligible.groupby('customer_id')['product_key'].nunique()",
+      "snippetLine": 3
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-5",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return customer.dropna()",
+      "snippetLine": 9
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def second_highest_salary(employee: pd.DataFrame) -> pd.DataFrame:\n    salaries = employee['salary'].dropna().drop_duplicates().sort_values(ascending=False)\n    value = salaries.iloc[1] if len(salaries) >= 2 else None\n    return pd.DataFrame({'SecondHighestSalary': [value]})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-3",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def second_highest_salary(employee: pd.DataFrame) -> pd.DataFrame:\n    unique_salaries = employee['salary'].dropna().drop_duplicates()\n    second_highest = unique_salaries.sort_values(ascending=False)\n    if len(second_highest) > 1:",
+      "snippetLine": 2
+    },
+    {
+      "page": "LC608",
+      "block": "code-LC608-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "608 · Tree node",
+      "number": "608",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def tree_node(tree: pd.DataFrame) -> pd.DataFrame:\n    parents = tree['p_id'].dropna().unique()\n\n    def classify(x):",
+      "snippetLine": 3
+    },
+    {
+      "page": "LC3497",
+      "block": "code-LC3497-1",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "3497 · Analyze subscription conversion",
+      "number": "3497",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return df.dropna()",
+      "snippetLine": 16
+    },
+    {
+      "page": "B08",
+      "block": "code-B08-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "NULL and unmatched rows",
+      "number": "08",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "occupied = employees['building'].dropna()\nresult = buildings.loc[~buildings['building_name'].isin(occupied), ['building_name']]",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 7
+}

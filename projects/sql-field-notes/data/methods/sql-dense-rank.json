@@ -1,0 +1,60 @@
+{
+  "id": "sql-dense-rank",
+  "lang": "sql",
+  "category": "Window functions",
+  "label": "DENSE_RANK()",
+  "example": "DENSE_RANK() OVER (...)",
+  "description": "Rank without gaps",
+  "source": "image-sql",
+  "related": [
+    "pd-rank-dense"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+  "aliases": "DENSE_RANK",
+  "uses": [
+    {
+      "page": "C34",
+      "block": "code-C34-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ranked AS (\n    SELECT *, DENSE_RANK() OVER (PARTITION BY departmentId ORDER BY salary DESC) AS salary_rank FROM Employee\n)\nSELECT d.name AS Department, r.name AS Employee, r.salary AS Salary",
+      "snippetLine": 1
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        id, name, salary,   departmentId,\n        DENSE_RANK() OVER (\n            PARTITION BY   departmentId ORDER BY salary DESC\n        ) AS ranked",
+      "snippetLine": 3
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        id, name, salary, departmentId,\n        DENSE_RANK() OVER (\n            PARTITION BY departmentId ORDER BY salary DESC\n        ) AS ranked",
+      "snippetLine": 4
+    }
+  ],
+  "pageCount": 1
+}

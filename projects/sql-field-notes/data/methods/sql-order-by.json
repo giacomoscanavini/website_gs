@@ -1,0 +1,1177 @@
+{
+  "id": "sql-order-by",
+  "lang": "sql",
+  "category": "Also used in these notes",
+  "label": "ORDER BY",
+  "example": "ORDER BY score DESC, id",
+  "description": "Sort the output rows",
+  "source": "saved-code",
+  "related": [
+    "pd-sort-values"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "aliases": "ORDER BY",
+  "uses": [
+    {
+      "page": "C04",
+      "block": "code-C04-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1148 · Article Views I",
+      "number": "1148",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT DISTINCT author_id AS id FROM Views WHERE author_id = viewer_id ORDER BY id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C04",
+      "block": "code-C04-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1148 · Article Views I",
+      "number": "1148",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WHERE author_id = viewer_id\nORDER BY id ASC;",
+      "snippetLine": 3
+    },
+    {
+      "page": "C04",
+      "block": "code-C04-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1148 · Article Views I",
+      "number": "1148",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "WHERE author_id = viewer_id\nORDER BY id ASC",
+      "snippetLine": 4
+    },
+    {
+      "page": "C48",
+      "block": "code-C48-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "GROUP BY s.student_id, s.student_name, su.subject_name\nORDER BY s.student_id, s.student_name, su.subject_name",
+      "snippetLine": 5
+    },
+    {
+      "page": "C48",
+      "block": "code-C48-2",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "GROUP BY s.student_id, s.student_name, su.subject_name\nORDER BY s.student_id, s.student_name, su.subject_name",
+      "snippetLine": 6
+    },
+    {
+      "page": "C06",
+      "block": "code-C06-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "620 · Not boring movies",
+      "number": "620",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT id, movie, description, rating FROM Cinema\nWHERE id % 2 = 1 AND description <> 'boring' ORDER BY rating DESC;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C06",
+      "block": "code-C06-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "620 · Not boring movies",
+      "number": "620",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WHERE id % 2 = 1 AND description <> 'boring'\nORDER BY rating DESC;",
+      "snippetLine": 3
+    },
+    {
+      "page": "C06",
+      "block": "code-C06-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "620 · Not boring movies",
+      "number": "620",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "WHERE id % 2 = 1 AND description <> \"boring\"\nORDER BY rating DESC",
+      "snippetLine": 4
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT contest_id, ROUND(100.0 * COUNT(*) / (SELECT COUNT(*) FROM Users), 2) AS percentage\nFROM Register GROUP BY contest_id ORDER BY percentage DESC, contest_id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "GROUP BY contest_id\nORDER BY percentage DESC,   contest_id ASC;",
+      "snippetLine": 5
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-4",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "GROUP BY contest_id\nORDER BY percentage DESC, contest_id ASC",
+      "snippetLine": 6
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ranked AS (\n    SELECT *, ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS rn\n    FROM Delivery\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-2",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "            PARTITION BY   customer_id\n            ORDER BY order_date ASC\n        ) AS number\n    FROM Delivery",
+      "snippetLine": 9
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-4",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            PARTITION BY customer_id\n            ORDER BY order_date ASC\n        ) AS number\n    FROM Delivery",
+      "snippetLine": 10
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-2",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "            PARTITION BY   product_id\n            ORDER BY year ASC\n        ) AS year_order,\n        quantity,",
+      "snippetLine": 6
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-4",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            PARTITION BY product_id\n            ORDER BY year ASC\n        ) AS year_order, \n        quantity,",
+      "snippetLine": 7
+    },
+    {
+      "page": "C18",
+      "block": "code-C18-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1729 · Followers count",
+      "number": "1729",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT user_id, COUNT(DISTINCT follower_id) AS followers_count FROM Followers GROUP BY user_id ORDER BY user_id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C18",
+      "block": "code-C18-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1729 · Followers count",
+      "number": "1729",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "GROUP BY user_id\nORDER BY user_id;",
+      "snippetLine": 5
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-0",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "LEFT JOIN Employees e ON r.manager_id = e.employee_id\nORDER BY r.manager_id;",
+      "snippetLine": 11
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-2",
+      "line": 19,
+      "lines": [
+        19
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "LEFT JOIN Employees e ON r.manager_id = e.employee_id\nORDER BY r.manager_id",
+      "snippetLine": 18
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-0",
+      "line": 2,
+      "lines": [
+        2,
+        3
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ordered AS (\n    SELECT num, LEAD(num, 1) OVER (ORDER BY id) AS next_num,\n           LEAD(num, 2) OVER (ORDER BY id) AS next_next_num FROM Logs\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-2",
+      "line": 4,
+      "lines": [
+        4,
+        5
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        num,\n        LEAD(num, 1) OVER (ORDER BY id) AS next_num,\n        LEAD(num, 2) OVER (ORDER BY id) AS next_next_num\n    FROM Logs",
+      "snippetLine": 3
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ranked AS (\n    SELECT product_id, new_price, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY change_date DESC) AS rn\n    FROM Products WHERE change_date <= '2019-08-16'\n), ids AS (SELECT DISTINCT product_id FROM Products)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "            ROW_NUMBER() OVER (\n                PARTITION BY   product_id ORDER BY change_date DESC\n            ) AS latest\n        FROM Products",
+      "snippetLine": 5
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-4",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            ROW_NUMBER() OVER (\n                PARTITION BY product_id ORDER BY change_date DESC\n            ) AS latest\n        FROM Products ",
+      "snippetLine": 6
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-0",
+      "line": 2,
+      "lines": [
+        2,
+        5
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH cumulative AS (\n    SELECT person_name, turn, SUM(weight) OVER (ORDER BY turn ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_weight\n    FROM Queue\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-2",
+      "line": 5,
+      "lines": [
+        5,
+        11
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        turn,\n        SUM(weight) OVER (ORDER BY turn ASC) AS cumsum_weight\n    FROM Queue\n)",
+      "snippetLine": 4
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-4",
+      "line": 6,
+      "lines": [
+        6,
+        13
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        turn,\n        SUM(weight) OVER (ORDER BY turn ASC) AS cumsum_weight\n    FROM Queue\n)",
+      "snippetLine": 5
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "  AND NOT EXISTS (SELECT 1 FROM Employees m WHERE m.employee_id = e.manager_id)\nORDER BY e.employee_id;",
+      "snippetLine": 3
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-2",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WHERE manager_id IN (SELECT manager_id FROM ManagersLeftID)   AND   salary < 30000\nORDER BY employee_id   ASC;",
+      "snippetLine": 8
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-4",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "WHERE manager_id IN (SELECT manager_id FROM ManagersLeftID) AND salary < 30000\nORDER BY employee_id ASC",
+      "snippetLine": 10
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "            ELSE id END AS id, student\nFROM Seat ORDER BY id;",
+      "snippetLine": 3
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-2",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Seat\nORDER BY id ASC;",
+      "snippetLine": 12
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-4",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Seat\nORDER BY id ASC",
+      "snippetLine": 14
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-0",
+      "line": 3,
+      "lines": [
+        3,
+        7,
+        12
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    SELECT u.name AS results FROM MovieRating r JOIN Users u ON r.user_id = u.user_id\n    GROUP BY u.user_id, u.name ORDER BY COUNT(*) DESC, u.name LIMIT 1\n), movie_winner AS (\n    SELECT m.title AS results FROM MovieRating r JOIN Movies m ON r.movie_id = m.movie_id",
+      "snippetLine": 2
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-2",
+      "line": 15,
+      "lines": [
+        15,
+        32,
+        41
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        FROM   ReviewPerUserName\n        ORDER BY nReviews DESC, name ASC\n        LIMIT 1\n    ),",
+      "snippetLine": 14
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-4",
+      "line": 16,
+      "lines": [
+        16,
+        33
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        FROM ReviewPerUserName\n        ORDER BY nReviews DESC, name ASC\n        LIMIT 1\n    ),",
+      "snippetLine": 15
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-0",
+      "line": 5,
+      "lines": [
+        5,
+        10
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    SELECT visited_on,\n           SUM(amount) OVER (ORDER BY visited_on RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW) AS amount,\n           MIN(visited_on) OVER () AS first_day\n    FROM daily",
+      "snippetLine": 4
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-2",
+      "line": 5,
+      "lines": [
+        5,
+        16
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        SUM(amount) OVER (\n            ORDER BY visited_on RANGE BETWEEN   INTERVAL 6 DAY   PRECEDING AND CURRENT ROW\n        ) AS rolling_amount,\n        MIN(visited_on) OVER () AS first_date",
+      "snippetLine": 4
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-4",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        SUM(amount) OVER (\n            ORDER BY visited_on RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW\n        ) AS rolling_amount,\n        MIN(visited_on) OVER () AS first_date",
+      "snippetLine": 5
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": ")\nSELECT id, COUNT(*) AS num FROM endpoints GROUP BY id ORDER BY num DESC, id LIMIT 1;",
+      "snippetLine": 4
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-2",
+      "line": 35,
+      "lines": [
+        35
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Numbers\nORDER BY num DESC, id\nLIMIT 1;",
+      "snippetLine": 34
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-4",
+      "line": 37,
+      "lines": [
+        37
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Numbers\nORDER BY num DESC\nLIMIT 1",
+      "snippetLine": 36
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ranked AS (\n    SELECT *, DENSE_RANK() OVER (PARTITION BY departmentId ORDER BY salary DESC) AS salary_rank FROM Employee\n)\nSELECT d.name AS Department, r.name AS Employee, r.salary AS Salary",
+      "snippetLine": 1
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-2",
+      "line": 5,
+      "lines": [
+        5,
+        8
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        DENSE_RANK() OVER (\n            PARTITION BY   departmentId ORDER BY salary DESC\n        ) AS ranked\n    FROM Employee",
+      "snippetLine": 4
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-4",
+      "line": 6,
+      "lines": [
+        6,
+        9
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        DENSE_RANK() OVER (\n            PARTITION BY departmentId ORDER BY salary DESC\n        ) AS ranked\n    FROM Employee",
+      "snippetLine": 5
+    },
+    {
+      "page": "C35",
+      "block": "code-C35-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1667 · Fix names in a table",
+      "number": "1667",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT user_id, CONCAT(UPPER(SUBSTRING(name, 1, 1)), LOWER(SUBSTRING(name, 2))) AS name FROM Users ORDER BY user_id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C35",
+      "block": "code-C35-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1667 · Fix names in a table",
+      "number": "1667",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Users\nORDER BY user_id;",
+      "snippetLine": 4
+    },
+    {
+      "page": "C35",
+      "block": "code-C35-4",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1667 · Fix names in a table",
+      "number": "1667",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Users\nORDER BY user_id",
+      "snippetLine": 5
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        ROW_NUMBER() OVER (\n            PARTITION BY email ORDER BY id\n        ) AS ranked\n    FROM Person",
+      "snippetLine": 5
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-4",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        ROW_NUMBER() OVER (\n            PARTITION BY email ORDER BY id\n        ) AS ranked\n    FROM Person",
+      "snippetLine": 6
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-2",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "            salary,\n            ROW_NUMBER() OVER (ORDER BY salary DESC) AS numb\n        FROM UniqueRanks\n    )",
+      "snippetLine": 16
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-4",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            salary,\n            ROW_NUMBER() OVER (ORDER BY salary DESC) AS numb\n        FROM UniqueRanks\n    )",
+      "snippetLine": 16
+    },
+    {
+      "page": "C39",
+      "block": "code-C39-0",
+      "line": 2,
+      "lines": [
+        2,
+        3
+      ],
+      "title": "1484 · Products sold by date",
+      "number": "1484",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT sell_date, COUNT(DISTINCT product) AS num_sold,\n       GROUP_CONCAT(DISTINCT product ORDER BY product SEPARATOR ',') AS products\nFROM Activities GROUP BY sell_date ORDER BY sell_date;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C39",
+      "block": "code-C39-2",
+      "line": 6,
+      "lines": [
+        6,
+        11
+      ],
+      "title": "1484 · Products sold by date",
+      "number": "1484",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        DISTINCT product\n        ORDER BY product ASC\n        SEPARATOR   ','\n    ) AS products",
+      "snippetLine": 5
+    },
+    {
+      "page": "C39",
+      "block": "code-C39-4",
+      "line": 7,
+      "lines": [
+        7,
+        12
+      ],
+      "title": "1484 · Products sold by date",
+      "number": "1484",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        DISTINCT product \n        ORDER BY product ASC \n        SEPARATOR ','\n    ) AS products",
+      "snippetLine": 6
+    },
+    {
+      "page": "LC586",
+      "block": "code-LC586-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "586 · Customer placing the largest number of orders",
+      "number": "586",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "GROUP BY customer_number\nORDER BY COUNT(*) DESC\nLIMIT 1",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC601",
+      "block": "code-LC601-0",
+      "line": 6,
+      "lines": [
+        6,
+        21
+      ],
+      "title": "601 · Human traffic of stadium",
+      "number": "601",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            id, visit_date, people,\n            id - ROW_NUMBER() OVER (ORDER BY id) AS group_num\n        FROM Stadium \n        WHERE people >= 100",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC3220",
+      "block": "code-LC3220-0",
+      "line": 31,
+      "lines": [
+        31
+      ],
+      "title": "3220 · Odd and even transactions",
+      "number": "3220",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "LEFT JOIN Evens e ON d.transaction_date = e.transaction_date\nORDER BY d.transaction_date\n\n",
+      "snippetLine": 30
+    },
+    {
+      "page": "LC3421",
+      "block": "code-LC3421-0",
+      "line": 8,
+      "lines": [
+        8,
+        12
+      ],
+      "title": "3421 · Find students who improved",
+      "number": "3421",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            PARTITION BY student_id, subject\n            ORDER BY exam_date ASC\n        ) AS first_score,\n        NTH_VALUE(score, 1) OVER (",
+      "snippetLine": 7
+    },
+    {
+      "page": "LC3497",
+      "block": "code-LC3497-0",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "3497 · Analyze subscription conversion",
+      "number": "3497",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    GROUP BY user_id\n    ORDER BY user_id ASC\n) \n",
+      "snippetLine": 9
+    },
+    {
+      "page": "LC3521",
+      "block": "code-LC3521-0",
+      "line": 27,
+      "lines": [
+        27
+      ],
+      "title": "3521 · Find product recommendation pairs",
+      "number": "3521",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "LEFT JOIN ProductInfo p2 ON v.product2_id = p2.product_id\nORDER BY customer_count DESC, v.product1_id ASC, v.product2_id ASC",
+      "snippetLine": 26
+    },
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-0",
+      "line": 25,
+      "lines": [
+        25,
+        32
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        GROUP BY season, category\n        ORDER BY total_quantity DESC, total_revenue DESC\n    ),\n    OrderedSales AS (",
+      "snippetLine": 24
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-0",
+      "line": 8,
+      "lines": [
+        8,
+        49
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "                PARTITION BY employee_id \n                ORDER BY review_id DESC\n            ) AS ranked\n        FROM Performance_reviews",
+      "snippetLine": 7
+    },
+    {
+      "page": "murder-02",
+      "block": "code-murder-02-0",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "Find the two witnesses",
+      "number": "02",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "\tWHERE address_street_name = 'Northwestern Dr'\n\tORDER BY address_number DESC\n\tLIMIT 1\n)",
+      "snippetLine": 6
+    },
+    {
+      "page": "squid-03",
+      "block": "code-squid-03-0",
+      "line": 7,
+      "lines": [
+        7,
+        17,
+        40
+      ],
+      "title": "Compare hot and cold months",
+      "number": "03",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "            FROM monthly_temperatures\n            ORDER BY avg_temperature ASC\n            LIMIT 1\n        ) as Cold",
+      "snippetLine": 6
+    },
+    {
+      "page": "squid-04",
+      "block": "code-squid-04-0",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "Rank ten-player teams",
+      "number": "04",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    END AS age_group,\n    RANK() OVER (ORDER BY age_team DESC) AS rank\nFROM (\n    SELECT team_id, COUNT(*) AS n_players, AVG(age) AS age_team",
+      "snippetLine": 8
+    },
+    {
+      "page": "squid-05",
+      "block": "code-squid-05-0",
+      "line": 19,
+      "lines": [
+        19
+      ],
+      "title": "Count a player’s closest interactions",
+      "number": "05",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\t  GROUP BY t.target_id, t.player_id\n\t  ORDER BY counts DESC\n\t)\n\t",
+      "snippetLine": 18
+    },
+    {
+      "page": "squid-06",
+      "block": "code-squid-06-0",
+      "line": 8,
+      "lines": [
+        8,
+        19
+      ],
+      "title": "Trace equipment to its first failure",
+      "number": "06",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\t\tGROUP BY e.game_type\n\t\tORDER BY COUNT(*) DESC\n\t\tLIMIT 1\n\t),",
+      "snippetLine": 7
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-0",
+      "line": 18,
+      "lines": [
+        18
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "WHERE r.isVacant = true\nORDER BY g.id            ",
+      "snippetLine": 17
+    },
+    {
+      "page": "squid-08",
+      "block": "code-squid-08-0",
+      "line": 7,
+      "lines": [
+        7,
+        20
+      ],
+      "title": "Find the longest hesitation",
+      "number": "08",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "        GROUP BY game_id\n        ORDER BY AVG(last_moved_time_seconds) DESC\n        LIMIT 1\n    )",
+      "snippetLine": 6
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "        WHERE LOWER(type) = 'squid game'\n        ORDER BY date DESC\n        LIMIT 1\n\t),",
+      "snippetLine": 5
+    },
+    {
+      "page": "B04",
+      "block": "code-B04-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DISTINCT, sorting and pagination",
+      "number": "04",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT DISTINCT director FROM movies ORDER BY director;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B04",
+      "block": "code-B04-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DISTINCT, sorting and pagination",
+      "number": "04",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies ORDER BY year DESC LIMIT 4;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B04",
+      "block": "code-B04-4",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DISTINCT, sorting and pagination",
+      "number": "04",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies ORDER BY title LIMIT 5;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B04",
+      "block": "code-B04-6",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DISTINCT, sorting and pagination",
+      "number": "04",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies ORDER BY title LIMIT 5 OFFSET 5;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT city FROM north_american_cities WHERE country = 'United States' ORDER BY latitude DESC;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-4",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "WHERE longitude < (SELECT longitude FROM north_american_cities WHERE city = 'Chicago')\nORDER BY longitude;",
+      "snippetLine": 2
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-6",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT city, population FROM north_american_cities\nWHERE country = 'Mexico' ORDER BY population DESC LIMIT 2;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-8",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT city, population FROM north_american_cities\nWHERE country = 'United States' ORDER BY population DESC LIMIT 2 OFFSET 2;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B06",
+      "block": "code-B06-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "INNER JOIN",
+      "number": "06",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT m.title, b.rating FROM movies m\nJOIN boxoffice b ON m.id = b.movie_id ORDER BY b.rating DESC;",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 40
+}

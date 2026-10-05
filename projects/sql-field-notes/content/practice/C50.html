@@ -1,0 +1,276 @@
+<article class="article" id="C50">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Problem 1934
+  </span>
+ </div>
+ <h1>
+  1934 · Confirmation rate
+ </h1>
+ <p>
+  For each signed-up user, divide confirmed actions by confirmation requests and round to two decimals. Users without requests receive zero.
+ </p>
+ <p class="pattern">
+  Pattern: Left join / conditional count / ratio
+ </p>
+ <h2>
+  Illustrative example
+ </h2>
+ <p>
+  User 1 has two confirmed actions and one timeout, user 2 has no requests, and user 3 has one confirmed action. Their rates are 0.67, 0.00 and 1.00.
+ </p>
+ <h2>
+  My solution
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="exercise-1934-panel-0" aria-selected="true" id="exercise-1934-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="exercise-1934-panel-1" aria-selected="false" id="exercise-1934-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="exercise-1934-tab-0" class="code-panel" id="exercise-1934-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-C50-0" tabindex="0"><code class="language-sql" data-origin="supplied-1934-sql"><span class="k">WITH</span><span class="w"> </span><span class="n">Rate</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">s</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span>
+<span class="w">        </span><span class="k">CASE</span>
+<span class="w">            </span><span class="k">WHEN</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'confirmed'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">            </span><span class="k">ELSE</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="nb">boolean</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">Signups</span><span class="w"> </span><span class="n">s</span>
+<span class="w">    </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Confirmations</span><span class="w"> </span><span class="k">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">user_id</span>
+<span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="nb">boolean</span><span class="p">)</span><span class="o">/</span><span class="k">COUNT</span><span class="p">(</span><span class="nb">boolean</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">confirmation_rate</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Rate</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">user_id</span></code></pre>
+  </div>
+  <div aria-labelledby="exercise-1934-tab-1" class="code-panel" id="exercise-1934-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-C50-1" tabindex="0"><code class="language-python" data-origin="supplied-1934-python"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">round_half_up</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">digits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">value</span><span class="p">):</span> <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">'nan'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">scaleb</span><span class="p">(</span><span class="o">-</span><span class="n">digits</span><span class="p">),</span> <span class="n">rounding</span><span class="o">=</span><span class="n">ROUND_HALF_UP</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">confirmation_rate</span><span class="p">(</span><span class="n">signups</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">confirmations</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">signups</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">confirmations</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)[[</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="s1">'action'</span><span class="p">]]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">'confirmation_rate'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">action</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="s1">'confirmed'</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="n">total</span><span class="o">=</span><span class="p">(</span><span class="s1">'confirmation_rate'</span><span class="p">,</span> <span class="s1">'size'</span><span class="p">),</span>
+        <span class="n">positive</span><span class="o">=</span><span class="p">(</span><span class="s1">'confirmation_rate'</span><span class="p">,</span> <span class="s1">'sum'</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">'confirmation_rate'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'positive'</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s1">'total'</span><span class="p">])</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">round_half_up</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="s1">'confirmation_rate'</span><span class="p">]]</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  Why it works
+ </h2>
+ <p>
+  The left join retains every signup. CASE or the pandas comparison assigns 1/True to confirmed actions and 0/False otherwise. Summing gives the confirmed count and counting rows gives the denominator. A user without requests has one unmatched row with a zero flag, producing 0/1 = 0.
+ </p>
+ <div class="note">
+  Users with no confirmations have rate zero. Rates use half-up rounding to two decimal places.
+ </div>
+ <details class="reference-details">
+  <summary>
+   Source
+  </summary>
+  <div class="sources-content">
+   <p>
+    Based on the submitted SQL and pandas solutions.
+   </p>
+  </div>
+ </details>
+ <details class="original-details archive-submission">
+  <summary>
+   Uploaded submission · SQL.zip
+  </summary>
+  <p class="small">
+   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
+  </p>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="archive-1934-panel-0" aria-selected="true" id="archive-1934-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="archive-1934-panel-1" aria-selected="false" id="archive-1934-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="archive-1934-tab-0" class="code-panel" id="archive-1934-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     MySQL
+    </div>
+    <pre id="code-C50-2" tabindex="0"><code class="language-sql" data-origin="archive-1934-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">WITH</span><span class="w"> </span><span class="n">Rate</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span>
+<span class="w">        </span><span class="n">s</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="k">CASE</span>
+<span class="w">            </span><span class="k">WHEN</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="k">action</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'confirmed'</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">            </span><span class="k">ELSE</span><span class="w"> </span><span class="mi">0</span>
+<span class="w">        </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="kt">boolean</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">Signups</span><span class="w"> </span><span class="n">s</span>
+<span class="w">    </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Confirmations</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">user_id</span>
+<span class="p">)</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span><span class="nf">ROUND</span><span class="p">(</span><span class="nf">SUM</span><span class="p">(</span><span class="kt">boolean</span><span class="p">)</span><span class="o">/</span><span class="nf">COUNT</span><span class="p">(</span><span class="kt">boolean</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">confirmation_rate</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Rate</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">user_id</span></code></pre>
+   </div>
+   <div aria-labelledby="archive-1934-tab-1" class="code-panel" id="archive-1934-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C50-3" tabindex="0"><code class="language-python" data-origin="archive-1934-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">confirmation_rate</span><span class="p">(</span><span class="n">signups</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">confirmations</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">signups</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">confirmations</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)[[</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="s1">'action'</span><span class="p">]]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">'confirmation_rate'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">action</span> <span class="o">==</span> <span class="s1">'confirmed'</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="s1">'confirmation_rate'</span><span class="p">]]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'user_id'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'confirmation_rate'</span><span class="p">,</span> <span class="s1">'size'</span><span class="p">),</span>
+        <span class="n">positive</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'confirmation_rate'</span><span class="p">,</span> <span class="s1">'sum'</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+    <span class="n">df</span><span class="p">[</span><span class="s1">'confirmation_rate'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'positive'</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s1">'total'</span><span class="p">])</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="s1">'confirmation_rate'</span><span class="p">]]</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-count">
+     COUNT()
+    </a>
+    <a href="#m-sql-sum">
+     SUM()
+    </a>
+    <a href="#m-sql-group-by">
+     GROUP BY
+    </a>
+    <a href="#m-sql-left-join">
+     LEFT JOIN
+    </a>
+    <a href="#m-sql-case">
+     CASE
+    </a>
+    <a href="#m-sql-round">
+     ROUND()
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-with">
+     WITH
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-filter-null">
+     Missing
+    </a>
+    <a href="#m-pd-new-column">
+     New column
+    </a>
+    <a href="#m-pd-conditional-column">
+     Conditional column
+    </a>
+    <a href="#m-pd-map">
+     map()
+    </a>
+    <a href="#m-pd-reset-index">
+     Reset index
+    </a>
+    <a href="#m-pd-isna">
+     Check null
+    </a>
+    <a href="#m-pd-fillna">
+     Fill null
+    </a>
+    <a href="#m-pd-merge-left">
+     Left merge
+    </a>
+    <a href="#m-pd-sum">
+     sum()
+    </a>
+    <a href="#m-pd-size">
+     size
+    </a>
+    <a href="#m-pd-groupby">
+     Basic group
+    </a>
+    <a href="#m-pd-agg-named">
+     Named aggregation
+    </a>
+    <a href="#m-pd-group-size">
+     Group size
+    </a>
+    <a href="#m-pd-round">
+     round()
+    </a>
+    <a href="#m-pd-eq">
+     eq() / ne()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#C49">
+   <small>
+    ← Previous
+   </small>
+   570 · Managers with at least five direct reports
+  </a>
+  <a href="#C06">
+   <small>
+    Next →
+   </small>
+   620 · Not boring movies
+  </a>
+ </div>
+</article>

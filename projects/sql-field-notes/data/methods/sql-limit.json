@@ -1,0 +1,318 @@
+{
+  "id": "sql-limit",
+  "lang": "sql",
+  "category": "Also used in these notes",
+  "label": "LIMIT / OFFSET",
+  "example": "LIMIT 5 OFFSET 10",
+  "description": "Select a page of sorted results",
+  "source": "saved-code",
+  "related": [
+    "pd-head"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "aliases": "LIMIT",
+  "uses": [
+    {
+      "page": "C26",
+      "block": "code-C26-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": ")\nSELECT person_name FROM cumulative WHERE running_weight <= 1000 ORDER BY turn DESC LIMIT 1;",
+      "snippetLine": 4
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-2",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "ORDER BY turn DESC\nLIMIT 1;",
+      "snippetLine": 11
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-4",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "ORDER BY turn DESC\nLIMIT 1",
+      "snippetLine": 13
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-0",
+      "line": 3,
+      "lines": [
+        3,
+        7
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    SELECT u.name AS results FROM MovieRating r JOIN Users u ON r.user_id = u.user_id\n    GROUP BY u.user_id, u.name ORDER BY COUNT(*) DESC, u.name LIMIT 1\n), movie_winner AS (\n    SELECT m.title AS results FROM MovieRating r JOIN Movies m ON r.movie_id = m.movie_id",
+      "snippetLine": 2
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-2",
+      "line": 16,
+      "lines": [
+        16,
+        33
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        ORDER BY nReviews DESC, name ASC\n        LIMIT 1\n    ),\n      MovieAvgRatingFeb AS (",
+      "snippetLine": 15
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-4",
+      "line": 17,
+      "lines": [
+        17,
+        34
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        ORDER BY nReviews DESC, name ASC\n        LIMIT 1\n    ),\n    MovieAvgRatingFeb AS (",
+      "snippetLine": 16
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": ")\nSELECT id, COUNT(*) AS num FROM endpoints GROUP BY id ORDER BY num DESC, id LIMIT 1;",
+      "snippetLine": 4
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-2",
+      "line": 36,
+      "lines": [
+        36
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "ORDER BY num DESC, id\nLIMIT 1;",
+      "snippetLine": 35
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-4",
+      "line": 38,
+      "lines": [
+        38
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "ORDER BY num DESC\nLIMIT 1",
+      "snippetLine": 37
+    },
+    {
+      "page": "LC586",
+      "block": "code-LC586-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "586 · Customer placing the largest number of orders",
+      "number": "586",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "ORDER BY COUNT(*) DESC\nLIMIT 1",
+      "snippetLine": 5
+    },
+    {
+      "page": "murder-02",
+      "block": "code-murder-02-0",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "Find the two witnesses",
+      "number": "02",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "\tORDER BY address_number DESC\n\tLIMIT 1\n)\n",
+      "snippetLine": 7
+    },
+    {
+      "page": "squid-03",
+      "block": "code-squid-03-0",
+      "line": 8,
+      "lines": [
+        8,
+        18
+      ],
+      "title": "Compare hot and cold months",
+      "number": "03",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "            ORDER BY avg_temperature ASC\n            LIMIT 1\n        ) as Cold\n",
+      "snippetLine": 7
+    },
+    {
+      "page": "squid-05",
+      "block": "code-squid-05-0",
+      "line": 32,
+      "lines": [
+        32
+      ],
+      "title": "Count a player’s closest interactions",
+      "number": "05",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "WHERE p.status = 'alive'\nLIMIT 1",
+      "snippetLine": 31
+    },
+    {
+      "page": "squid-06",
+      "block": "code-squid-06-0",
+      "line": 9,
+      "lines": [
+        9,
+        20
+      ],
+      "title": "Trace equipment to its first failure",
+      "number": "06",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\t\tORDER BY COUNT(*) DESC\n\t\tLIMIT 1\n\t),\n\tWorst_supplier AS (",
+      "snippetLine": 8
+    },
+    {
+      "page": "squid-08",
+      "block": "code-squid-08-0",
+      "line": 8,
+      "lines": [
+        8,
+        21
+      ],
+      "title": "Find the longest hesitation",
+      "number": "08",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "        ORDER BY AVG(last_moved_time_seconds) DESC\n        LIMIT 1\n    )\n",
+      "snippetLine": 7
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-0",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "        ORDER BY date DESC\n        LIMIT 1\n\t),\n    Guards_on_shift AS (",
+      "snippetLine": 6
+    },
+    {
+      "page": "B04",
+      "block": "code-B04-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DISTINCT, sorting and pagination",
+      "number": "04",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies ORDER BY year DESC LIMIT 4;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B04",
+      "block": "code-B04-4",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DISTINCT, sorting and pagination",
+      "number": "04",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies ORDER BY title LIMIT 5;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B04",
+      "block": "code-B04-6",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DISTINCT, sorting and pagination",
+      "number": "04",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies ORDER BY title LIMIT 5 OFFSET 5;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-6",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT city, population FROM north_american_cities\nWHERE country = 'Mexico' ORDER BY population DESC LIMIT 2;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-8",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT city, population FROM north_american_cities\nWHERE country = 'United States' ORDER BY population DESC LIMIT 2 OFFSET 2;",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 12
+}

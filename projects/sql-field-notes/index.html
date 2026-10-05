@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" data-palette="linen" data-color-surface="sql">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>
+   SQL Field Notes · Giacomo Scanavini
+  </title>
+  <meta content="SQLBolt, worked SQL and pandas examples, SQL Murder City and SQL Squid Game solutions." name="description"/>
+  <meta content="Giacomo Scanavini" name="author"/>
+  <meta content="#E9E7E2" name="theme-color"/>
+  <meta content="SQL Field Notes · Giacomo Scanavini" property="og:title"/>
+  <meta content="SQL, pandas and worked solutions." property="og:description"/>
+  <meta content="website" property="og:type"/>
+  <meta content="strict-origin-when-cross-origin" name="referrer"/>
+  <link href="css/reader.css" rel="stylesheet"/>
+  <link href="css/theme.css" rel="stylesheet"/>
+ 
+  <link rel="stylesheet" href="../../css/themes/linen-ink.css?v=1">
+  <link rel="stylesheet" href="../../css/themes/readers.css?v=linen-ink-1">
+
+ </head>
+ <body>
+  <a class="skip-link" href="#main-content">
+   Skip to content
+  </a>
+  <header class="mobile-header">
+   <a href="#home">
+    SQL Field Notes
+   </a>
+   <button aria-controls="sidebar" aria-expanded="false" id="menu-toggle" type="button">
+    Browse notes
+   </button>
+  </header>
+  <aside aria-label="SQL Field Notes navigation" class="sidebar" id="sidebar">
+   <a class="brand" href="#home">
+    <span aria-hidden="true" class="brand-mark">
+     s;
+    </span>
+    <span class="brand-text">
+     SQL Field Notes
+     <small>
+      SQL &amp; pandas
+     </small>
+    </span>
+   </a>
+   <button aria-label="Close navigation" class="close-menu" id="close-menu" type="button">
+    ×
+   </button>
+   <div class="search-wrap">
+    <label class="sr-only" for="search">
+     Search titles, problem IDs and code
+    </label>
+    <input autocomplete="off" id="search" placeholder="Search everything…" spellcheck="false" type="search"/>
+    <kbd aria-hidden="true">
+     /
+    </kbd>
+    <span aria-hidden="true" class="search-icon">
+     <svg aria-hidden="true" class="ui-icon" viewbox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
+    </span>
+   </div>
+   <nav aria-label="Sections" class="collection-nav">
+    <a data-collection="methods" href="#methods">
+     <svg aria-hidden="true" class="ui-icon" viewbox="0 0 24 24"><rect height="7" rx="1.5" width="7" x="3" y="3"></rect><rect height="7" rx="1.5" width="7" x="14" y="3"></rect><rect height="7" rx="1.5" width="7" x="3" y="14"></rect><rect height="7" rx="1.5" width="7" x="14" y="14"></rect></svg>
+     Method explorer
+    </a>
+    <a data-collection="sqlbolt" href="#sqlbolt">
+     <svg aria-hidden="true" class="ui-icon" viewbox="0 0 24 24"><path d="m13 2-8 12h6l-1 8 9-13h-6z"></path></svg>
+     SQLBolt
+    </a>
+    <a data-collection="practice" href="#practice">
+     <svg aria-hidden="true" class="ui-icon" viewbox="0 0 24 24"><path d="m8 5-6 7 6 7m8-14 6 7-6 7m-3-14-2 14"></path></svg>
+     Leetcode problems
+    </a>
+    <a data-collection="murder" href="#murder-city">
+     <svg aria-hidden="true" class="ui-icon" viewbox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
+     SQL Murder City
+    </a>
+    <a data-collection="squid" href="#squid-game">
+     <svg aria-hidden="true" class="ui-icon" viewbox="0 0 24 24"><circle cx="5" cy="7" r="3"></circle><path d="m17 3 4 7h-8z"></path><rect height="7" rx=".5" width="7" x="9" y="15"></rect></svg>
+     SQL Squid Game
+    </a>
+    <a data-collection="reference" href="#reference">
+     <svg aria-hidden="true" class="ui-icon" viewbox="0 0 24 24"><path d="M12 5v16m0-16c-3-2-7-2-10-1v15c4-1 7-1 10 2 3-3 6-3 10-2V4c-3-1-7-1-10 1z"></path></svg>
+     Reference
+    </a>
+   </nav>
+   <nav aria-label="Notes in this section" class="page-nav" id="page-nav">
+    <div data-nav-group="sqlbolt">
+     <a href="#B01">
+      <span class="nav-num">
+       01
+      </span>
+      <span class="nav-label">
+       SELECT queries 101
+      </span>
+     </a>
+     <a href="#B02">
+      <span class="nav-num">
+       02
+      </span>
+      <span class="nav-label">
+       Numeric constraints
+      </span>
+     </a>
+     <a href="#B03">
+      <span class="nav-num">
+       03
+      </span>
+      <span class="nav-label">
+       Text constraints and LIKE
+      </span>
+     </a>
+     <a href="#B04">
+      <span class="nav-num">
+       04
+      </span>
+      <span class="nav-label">
+       DISTINCT, sorting and pagination
+      </span>
+     </a>
+     <a href="#B05">
+      <span class="nav-num">
+       05
+      </span>
+      <span class="nav-label">
+       Review · Simple SELECT queries
+      </span>
+     </a>
+     <a href="#B06">
+      <span class="nav-num">
+       06
+      </span>
+      <span class="nav-label">
+       INNER JOIN
+      </span>
+     </a>
+     <a href="#B07">
+      <span class="nav-num">
+       07
+      </span>
+      <span class="nav-label">
+       OUTER JOINs
+      </span>
+     </a>
+     <a href="#B08">
+      <span class="nav-num">
+       08
+      </span>
+      <span class="nav-label">
+       NULL and unmatched rows
+      </span>
+     </a>
+     <a href="#B09">
+      <span class="nav-num">
+       09
+      </span>
+      <span class="nav-label">
+       Expressions and aliases
+      </span>
+     </a>
+     <a href="#B10">
+      <span class="nav-num">
+       10
+      </span>
+      <span class="nav-label">
+       Aggregates and GROUP BY
+      </span>
+     </a>
+     <a href="#B11">
+      <span class="nav-num">
+       11
+      </span>
+      <span class="nav-label">
+       WHERE versus HAVING
+      </span>
+     </a>
+     <a href="#B12">
+      <span class="nav-num">
+       12
+      </span>
+      <span class="nav-label">
+       Logical query order
+      </span>
+     </a>
+     <a href="#B13">
+      <span class="nav-num">
+       13
+      </span>
+      <span class="nav-label">
+       INSERT rows
+      </span>
+     </a>
+     <a href="#B14">
+      <span class="nav-num">
+       14
+      </span>
+      <span class="nav-label">
+       UPDATE rows
+      </span>
+     </a>
+     <a href="#B15">
+      <span class="nav-num">
+       15
+      </span>
+      <span class="nav-label">
+       DELETE rows
+      </span>
+     </a>
+     <a href="#B16">
+      <span class="nav-num">
+       16
+      </span>
+      <span class="nav-label">
+       CREATE TABLE and schemas
+      </span>
+     </a>
+     <a href="#B17">
+      <span class="nav-num">
+       17
+      </span>
+      <span class="nav-label">
+       ALTER TABLE
+      </span>
+     </a>
+     <a href="#B18">
+      <span class="nav-num">
+       18
+      </span>
+      <span class="nav-label">
+       DROP TABLE
+      </span>
+     </a>
+     <a href="#B19">
+      <span class="nav-num">
+       19
+      </span>
+      <span class="nav-label">
+       Additional topic · Subqueries
+      </span>
+     </a>
+     <a href="#B20">
+      <span class="nav-num">
+       20
+      </span>
+      <span class="nav-label">
+       Additional topic · Set operations
+      </span>
+     </a>
+    </div>
+    <div data-nav-group="practice">
+     <h3 class="nav-topic">
+      Select
+     </h3>
+     <a href="#C01">
+      <span class="nav-num">
+       1757
+      </span>
+      <span class="nav-label">
+       Recyclable and low-fat products
+      </span>
+     </a>
+     <a href="#C02">
+      <span class="nav-num">
+       584
+      </span>
+      <span class="nav-label">
+       Find customer referee
+      </span>
+     </a>
+     <a href="#C03">
+      <span class="nav-num">
+       595
+      </span>
+      <span class="nav-label">
+       Big countries
+      </span>
+     </a>
+     <a href="#C04">
+      <span class="nav-num">
+       1148
+      </span>
+      <span class="nav-label">
+       Article Views I
+      </span>
+     </a>
+     <a href="#C05">
+      <span class="nav-num">
+       1683
+      </span>
+      <span class="nav-label">
+       Invalid tweets
+      </span>
+     </a>
+     <h3 class="nav-topic">
+      Basic Joins
+     </h3>
+     <a href="#C42">
+      <span class="nav-num">
+       1378
+      </span>
+      <span class="nav-label">
+       Replace employee ID with the unique identifier
+      </span>
+     </a>
+     <a href="#C43">
+      <span class="nav-num">
+       1068
+      </span>
+      <span class="nav-label">
+       Product sales analysis I
+      </span>
+     </a>
+     <a href="#C44">
+      <span class="nav-num">
+       1581
+      </span>
+      <span class="nav-label">
+       Customers who visited without transactions
+      </span>
+     </a>
+     <a href="#C45">
+      <span class="nav-num">
+       197
+      </span>
+      <span class="nav-label">
+       Rising temperature
+      </span>
+     </a>
+     <a href="#C46">
+      <span class="nav-num">
+       1661
+      </span>
+      <span class="nav-label">
+       Average processing time per machine
+      </span>
+     </a>
+     <a href="#C47">
+      <span class="nav-num">
+       577
+      </span>
+      <span class="nav-label">
+       Employee bonus
+      </span>
+     </a>
+     <a href="#C48">
+      <span class="nav-num">
+       1280
+      </span>
+      <span class="nav-label">
+       Students and examinations
+      </span>
+     </a>
+     <a href="#C49">
+      <span class="nav-num">
+       570
+      </span>
+      <span class="nav-label">
+       Managers with at least five direct reports
+      </span>
+     </a>
+     <a href="#C50">
+      <span class="nav-num">
+       1934
+      </span>
+      <span class="nav-label">
+       Confirmation rate
+      </span>
+     </a>
+     <h3 class="nav-topic">
+      Basic Aggregate Functions
+     </h3>
+     <a href="#C06">
+      <span class="nav-num">
+       620
+      </span>
+      <span class="nav-label">
+       Not boring movies
+      </span>
+     </a>
+     <a href="#C07">
+      <span class="nav-num">
+       1251
+      </span>
+      <span class="nav-label">
+       Average selling price
+      </span>
+     </a>
+     <a href="#C08">
+      <span class="nav-num">
+       1075
+      </span>
+      <span class="nav-label">
+       Project employees I
+      </span>
+     </a>
+     <a href="#C09">
+      <span class="nav-num">
+       1633
+      </span>
+      <span class="nav-label">
+       Users registered in a contest
+      </span>
+     </a>
+     <a href="#C10">
+      <span class="nav-num">
+       1211
+      </span>
+      <span class="nav-label">
+       Queries quality and percentage
+      </span>
+     </a>
+     <a href="#C11">
+      <span class="nav-num">
+       1193
+      </span>
+      <span class="nav-label">
+       Monthly transactions I
+      </span>
+     </a>
+     <a href="#C12">
+      <span class="nav-num">
+       1174
+      </span>
+      <span class="nav-label">
+       Immediate first deliveries
+      </span>
+     </a>
+     <a href="#C13">
+      <span class="nav-num">
+       550
+      </span>
+      <span class="nav-label">
+       Game Play Analysis IV
+      </span>
+     </a>
+     <h3 class="nav-topic">
+      Sorting and Grouping
+     </h3>
+     <a href="#C14">
+      <span class="nav-num">
+       2356
+      </span>
+      <span class="nav-label">
+       Unique subjects per teacher
+      </span>
+     </a>
+     <a href="#C15">
+      <span class="nav-num">
+       1141
+      </span>
+      <span class="nav-label">
+       User activity in a 30-day window
+      </span>
+     </a>
+     <a href="#C16">
+      <span class="nav-num">
+       1070
+      </span>
+      <span class="nav-label">
+       First-year product sales
+      </span>
+     </a>
+     <a href="#C17">
+      <span class="nav-num">
+       596
+      </span>
+      <span class="nav-label">
+       Classes with at least five students
+      </span>
+     </a>
+     <a href="#C18">
+      <span class="nav-num">
+       1729
+      </span>
+      <span class="nav-label">
+       Followers count
+      </span>
+     </a>
+     <a href="#C19">
+      <span class="nav-num">
+       619
+      </span>
+      <span class="nav-label">
+       Biggest single number
+      </span>
+     </a>
+     <a href="#C20">
+      <span class="nav-num">
+       1045
+      </span>
+      <span class="nav-label">
+       Customers who bought every product
+      </span>
+     </a>
+     <h3 class="nav-topic">
+      Advanced Select and Joins
+     </h3>
+     <a href="#C21">
+      <span class="nav-num">
+       1731
+      </span>
+      <span class="nav-label">
+       Employees reporting to employees
+      </span>
+     </a>
+     <a href="#C22">
+      <span class="nav-num">
+       1789
+      </span>
+      <span class="nav-label">
+       Primary department per employee
+      </span>
+     </a>
+     <a href="#C23">
+      <span class="nav-num">
+       610
+      </span>
+      <span class="nav-label">
+       Triangle judgement
+      </span>
+     </a>
+     <a href="#C24">
+      <span class="nav-num">
+       180
+      </span>
+      <span class="nav-label">
+       Consecutive Numbers
+      </span>
+     </a>
+     <a href="#C25">
+      <span class="nav-num">
+       1164
+      </span>
+      <span class="nav-label">
+       Product price at a given date
+      </span>
+     </a>
+     <a href="#C26">
+      <span class="nav-num">
+       1204
+      </span>
+      <span class="nav-label">
+       Last person to fit in the bus
+      </span>
+     </a>
+     <a href="#C27">
+      <span class="nav-num">
+       1907
+      </span>
+      <span class="nav-label">
+       Count salary categories
+      </span>
+     </a>
+     <h3 class="nav-topic">
+      Subqueries
+     </h3>
+     <a href="#C28">
+      <span class="nav-num">
+       1978
+      </span>
+      <span class="nav-label">
+       Low-salary employees whose manager left
+      </span>
+     </a>
+     <a href="#C29">
+      <span class="nav-num">
+       626
+      </span>
+      <span class="nav-label">
+       Exchange seats
+      </span>
+     </a>
+     <a href="#C30">
+      <span class="nav-num">
+       1341
+      </span>
+      <span class="nav-label">
+       Movie rating report
+      </span>
+     </a>
+     <a href="#C31">
+      <span class="nav-num">
+       1321
+      </span>
+      <span class="nav-label">
+       Restaurant growth
+      </span>
+     </a>
+     <a href="#C32">
+      <span class="nav-num">
+       602
+      </span>
+      <span class="nav-label">
+       Most accepted friends
+      </span>
+     </a>
+     <a href="#C33">
+      <span class="nav-num">
+       585
+      </span>
+      <span class="nav-label">
+       Investments in 2016
+      </span>
+     </a>
+     <a href="#C34">
+      <span class="nav-num">
+       185
+      </span>
+      <span class="nav-label">
+       Department top three salaries
+      </span>
+     </a>
+     <h3 class="nav-topic">
+      Advanced String Functions / Regex / Clause
+     </h3>
+     <a href="#C35">
+      <span class="nav-num">
+       1667
+      </span>
+      <span class="nav-label">
+       Fix names in a table
+      </span>
+     </a>
+     <a href="#C36">
+      <span class="nav-num">
+       1527
+      </span>
+      <span class="nav-label">
+       Patients with a disease
+      </span>
+     </a>
+     <a href="#C37">
+      <span class="nav-num">
+       196
+      </span>
+      <span class="nav-label">
+       Delete duplicate emails
+      </span>
+     </a>
+     <a href="#C38">
+      <span class="nav-num">
+       176
+      </span>
+      <span class="nav-label">
+       Second highest salary
+      </span>
+     </a>
+     <a href="#C39">
+      <span class="nav-num">
+       1484
+      </span>
+      <span class="nav-label">
+       Products sold by date
+      </span>
+     </a>
+     <a href="#C40">
+      <span class="nav-num">
+       1327
+      </span>
+      <span class="nav-label">
+       Products with at least 100 February units
+      </span>
+     </a>
+     <a href="#C41">
+      <span class="nav-num">
+       1517
+      </span>
+      <span class="nav-label">
+       Users with valid emails
+      </span>
+     </a>
+     <h3 class="nav-topic">
+      Additional problems
+     </h3>
+     <a href="#LC181">
+      <span class="nav-num">
+       181
+      </span>
+      <span class="nav-label">
+       Employees earning more than their managers
+      </span>
+     </a>
+     <a href="#LC262">
+      <span class="nav-num">
+       262
+      </span>
+      <span class="nav-label">
+       Trips and users
+      </span>
+     </a>
+     <a href="#LC586">
+      <span class="nav-num">
+       586
+      </span>
+      <span class="nav-label">
+       Customer placing the largest number of orders
+      </span>
+     </a>
+     <a href="#LC601">
+      <span class="nav-num">
+       601
+      </span>
+      <span class="nav-label">
+       Human traffic of stadium
+      </span>
+     </a>
+     <a href="#LC607">
+      <span class="nav-num">
+       607
+      </span>
+      <span class="nav-label">
+       Sales person
+      </span>
+     </a>
+     <a href="#LC608">
+      <span class="nav-num">
+       608
+      </span>
+      <span class="nav-label">
+       Tree node
+      </span>
+     </a>
+     <a href="#LC1158">
+      <span class="nav-num">
+       1158
+      </span>
+      <span class="nav-label">
+       Market analysis I
+      </span>
+     </a>
+     <a href="#LC1393">
+      <span class="nav-num">
+       1393
+      </span>
+      <span class="nav-label">
+       Capital gain/loss
+      </span>
+     </a>
+     <a href="#LC3220">
+      <span class="nav-num">
+       3220
+      </span>
+      <span class="nav-label">
+       Odd and even transactions
+      </span>
+     </a>
+     <a href="#LC3421">
+      <span class="nav-num">
+       3421
+      </span>
+      <span class="nav-label">
+       Find students who improved
+      </span>
+     </a>
+     <a href="#LC3475">
+      <span class="nav-num">
+       3475
+      </span>
+      <span class="nav-label">
+       DNA pattern recognition
+      </span>
+     </a>
+     <a href="#LC3497">
+      <span class="nav-num">
+       3497
+      </span>
+      <span class="nav-label">
+       Analyze subscription conversion
+      </span>
+     </a>
+     <a href="#LC3521">
+      <span class="nav-num">
+       3521
+      </span>
+      <span class="nav-label">
+       Find product recommendation pairs
+      </span>
+     </a>
+     <a href="#LC3564">
+      <span class="nav-num">
+       3564
+      </span>
+      <span class="nav-label">
+       Seasonal sales analysis
+      </span>
+     </a>
+     <a href="#LC3580">
+      <span class="nav-num">
+       3580
+      </span>
+      <span class="nav-label">
+       Find consistently improving employees
+      </span>
+     </a>
+    </div>
+    <div data-nav-group="murder">
+     <a href="#murder-city">
+      <span class="nav-label">
+       Overview
+      </span>
+     </a>
+     <a href="#murder-01">
+      <span class="nav-num">
+       01
+      </span>
+      <span class="nav-label">
+       Retrieve the crime report
+      </span>
+     </a>
+     <a href="#murder-02">
+      <span class="nav-num">
+       02
+      </span>
+      <span class="nav-label">
+       Find the two witnesses
+      </span>
+     </a>
+     <a href="#murder-03">
+      <span class="nav-num">
+       03
+      </span>
+      <span class="nav-label">
+       Read the witness interviews
+      </span>
+     </a>
+     <a href="#murder-04">
+      <span class="nav-num">
+       04
+      </span>
+      <span class="nav-label">
+       Follow the gym clue
+      </span>
+     </a>
+     <a href="#murder-05">
+      <span class="nav-num">
+       05
+      </span>
+      <span class="nav-label">
+       Cross-check the licence plate
+      </span>
+     </a>
+     <a href="#murder-06">
+      <span class="nav-num">
+       06
+      </span>
+      <span class="nav-label">
+       Submit the first identification
+      </span>
+     </a>
+     <a href="#murder-07">
+      <span class="nav-num">
+       07
+      </span>
+      <span class="nav-label">
+       Follow the second interview
+      </span>
+     </a>
+     <a href="#murder-08">
+      <span class="nav-num">
+       08
+      </span>
+      <span class="nav-label">
+       Candidate shortlist
+      </span>
+     </a>
+     <a href="#murder-09">
+      <span class="nav-num">
+       09
+      </span>
+      <span class="nav-label">
+       Inspect December event check-ins
+      </span>
+     </a>
+     <a href="#murder-10">
+      <span class="nav-num">
+       10
+      </span>
+      <span class="nav-label">
+       Submit the final identification
+      </span>
+     </a>
+    </div>
+    <div data-nav-group="squid">
+     <a href="#squid-game">
+      <span class="nav-label">
+       Overview
+      </span>
+     </a>
+     <a href="#squid-01">
+      <span class="nav-num">
+       01
+      </span>
+      <span class="nav-label">
+       Filter the player pool
+      </span>
+     </a>
+     <a href="#squid-02">
+      <span class="nav-num">
+       02
+      </span>
+      <span class="nav-label">
+       Calculate the ration threshold
+      </span>
+     </a>
+     <a href="#squid-03">
+      <span class="nav-num">
+       03
+      </span>
+      <span class="nav-label">
+       Compare hot and cold months
+      </span>
+     </a>
+     <a href="#squid-04">
+      <span class="nav-num">
+       04
+      </span>
+      <span class="nav-label">
+       Rank ten-player teams
+      </span>
+     </a>
+     <a href="#squid-05">
+      <span class="nav-num">
+       05
+      </span>
+      <span class="nav-label">
+       Count a player’s closest interactions
+      </span>
+     </a>
+     <a href="#squid-06">
+      <span class="nav-num">
+       06
+      </span>
+      <span class="nav-label">
+       Trace equipment to its first failure
+      </span>
+     </a>
+     <a href="#squid-07">
+      <span class="nav-num">
+       07
+      </span>
+      <span class="nav-label">
+       Join room checks and camera sightings
+      </span>
+     </a>
+     <a href="#squid-08">
+      <span class="nav-num">
+       08
+      </span>
+      <span class="nav-label">
+       Find the longest hesitation
+      </span>
+     </a>
+     <a href="#squid-09">
+      <span class="nav-num">
+       09
+      </span>
+      <span class="nav-label">
+       Reconstruct access-log overlaps
+      </span>
+     </a>
+    </div>
+    <div data-nav-group="reference">
+     <a href="#A00">
+      <span class="nav-label">
+       About these notes
+      </span>
+     </a>
+     <a href="#A01">
+      <span class="nav-label">
+       SQL ↔ pandas translation sheet
+      </span>
+     </a>
+     <a href="#A02">
+      <span class="nav-label">
+       Setup and conventions
+      </span>
+     </a>
+     <a href="#D01">
+      <span class="nav-label">
+       Exercise coverage
+      </span>
+     </a>
+     <a href="#D02">
+      <span class="nav-label">
+       Sources and validation
+      </span>
+     </a>
+    </div>
+    <div data-nav-group="methods">
+     <a href="#A01">
+      <span class="nav-label">
+       SQL ↔ pandas comparison
+      </span>
+     </a>
+     <h3 class="nav-topic">
+      MySQL
+     </h3>
+     <a href="#methods?lang=sql&amp;cat=Filtering">
+      <span class="nav-label">
+       Filtering
+      </span>
+     </a>
+     <a href="#methods?lang=sql&amp;cat=Aggregation">
+      <span class="nav-label">
+       Aggregation
+      </span>
+     </a>
+     <a href="#methods?lang=sql&amp;cat=Joins">
+      <span class="nav-label">
+       Joins
+      </span>
+     </a>
+     <a href="#methods?lang=sql&amp;cat=Conditional%20/%20NULL%20handling">
+      <span class="nav-label">
+       Conditional / NULL handling
+      </span>
+     </a>
+     <a href="#methods?lang=sql&amp;cat=Data%20modification">
+      <span class="nav-label">
+       Data modification
+      </span>
+     </a>
+     <a href="#methods?lang=sql&amp;cat=Table%20operations">
+      <span class="nav-label">
+       Table operations
+      </span>
+     </a>
+     <a href="#methods?lang=sql&amp;cat=Useful%20LeetCode%20patterns">
+      <span class="nav-label">
+       Useful LeetCode patterns
+      </span>
+     </a>
+     <a href="#methods?lang=sql&amp;cat=String%20functions">
+      <span class="nav-label">
+       String functions
+      </span>
+     </a>
+     <a href="#methods?lang=sql&amp;cat=Numeric%20functions">
+      <span class="nav-label">
+       Numeric functions
+      </span>
+     </a>
+     <a href="#methods?lang=sql&amp;cat=Date/time%20functions">
+      <span class="nav-label">
+       Date/time functions
+      </span>
+     </a>
+     <a href="#methods?lang=sql&amp;cat=Window%20functions">
+      <span class="nav-label">
+       Window functions
+      </span>
+     </a>
+     <a href="#methods?lang=sql&amp;cat=Subqueries%20and%20CTEs">
+      <span class="nav-label">
+       Subqueries and CTEs
+      </span>
+     </a>
+     <a href="#methods?lang=sql&amp;cat=Set%20operations">
+      <span class="nav-label">
+       Set operations
+      </span>
+     </a>
+     <a href="#methods?lang=sql&amp;cat=Also%20used%20in%20these%20notes">
+      <span class="nav-label">
+       Also used in these notes
+      </span>
+     </a>
+     <h3 class="nav-topic">
+      pandas
+     </h3>
+     <a href="#methods?lang=pd&amp;cat=DataFrame%20basics">
+      <span class="nav-label">
+       DataFrame basics
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Filtering">
+      <span class="nav-label">
+       Filtering
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Sorting">
+      <span class="nav-label">
+       Sorting
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Creating%20/%20modifying%20columns">
+      <span class="nav-label">
+       Creating / modifying columns
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Conditional%20logic">
+      <span class="nav-label">
+       Conditional logic
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Index%20operations">
+      <span class="nav-label">
+       Index operations
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Very%20common%20interview%20/%20LeetCode%20patterns">
+      <span class="nav-label">
+       Very common interview / LeetCode patterns
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Less%20common%20but%20useful">
+      <span class="nav-label">
+       Less common but useful
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Missing%20values">
+      <span class="nav-label">
+       Missing values
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Duplicates">
+      <span class="nav-label">
+       Duplicates
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Merge%20/%20join">
+      <span class="nav-label">
+       Merge / join
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Aggregation">
+      <span class="nav-label">
+       Aggregation
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=GroupBy">
+      <span class="nav-label">
+       GroupBy
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Window-like%20operations">
+      <span class="nav-label">
+       Window-like operations
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Strings">
+      <span class="nav-label">
+       Strings
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Dates">
+      <span class="nav-label">
+       Dates
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Ranking%20/%20ordering">
+      <span class="nav-label">
+       Ranking / ordering
+      </span>
+     </a>
+     <a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
+      <span class="nav-label">
+       Also used in these notes
+      </span>
+     </a>
+    </div>
+   </nav>
+   <div class="side-footer">
+    <a href="../../projects.html#sql-field-notes">
+     ← Back to Side projects
+    </a>
+    <a href="../ml-theory-notes/index.html#contents">
+     ML Theory Notes ↗
+    </a>
+   </div>
+  </aside>
+  <button aria-label="Close navigation" class="scrim" id="scrim" tabindex="-1">
+  </button>
+  <div class="app">
+   <main class="content" id="main-content" tabindex="-1">
+    <p id="reader-loading" role="status">
+     Loading SQL Field Notes…
+    </p>
+    <section class="directory method-explorer" id="methods">
+     <div class="breadcrumb">
+      REFERENCE LIBRARY
+     </div>
+     <h1>
+      SQL &amp; pandas
+      <span class="title-light">
+       reference
+      </span>
+     </h1>
+     <p class="intro">
+      Look up a method, then open a saved solution that uses it.
+     </p>
+     <div class="explorer-controls">
+      <label class="method-search">
+       <span class="sr-only">
+        Find a method or pattern
+       </span>
+       <input autocomplete="off" id="method-search" placeholder="Search a method or pattern…" spellcheck="false" type="search"/>
+       <span aria-hidden="true" class="search-icon">
+        <svg aria-hidden="true" class="ui-icon" viewbox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="m16 16 5 5"></path></svg>
+       </span>
+      </label>
+      <div aria-label="Reference language" class="language-filter" role="group">
+       <button aria-pressed="true" data-method-lang="sql" type="button">
+        MySQL
+       </button>
+       <button aria-pressed="false" data-method-lang="pd" type="button">
+        pandas
+       </button>
+       <button aria-pressed="false" data-method-lang="all" type="button">
+        Both
+       </button>
+      </div>
+      <label class="category-filter">
+       <span class="sr-only">
+        Category
+       </span>
+       <select id="method-category">
+        <option value="all">
+         All categories
+        </option>
+       </select>
+      </label>
+     </div>
+     <div class="explorer-subline">
+      <p aria-live="polite" id="method-count">
+      </p>
+      <a href="#A01">
+       SQL ↔ pandas comparison
+      </a>
+     </div>
+     <div id="method-results">
+     </div>
+     <p class="small explorer-foot">
+      Syntax examples use placeholder DataFrames such as df, a and b. Import pandas as pd; np.where also needs NumPy. Methods without a saved example remain searchable.
+     </p>
+    </section>
+    <noscript>
+     <p class="nojs-info">
+      This modular reader uses JavaScript to load individual chapters. Use a local web server or your published website.
+     </p>
+    </noscript>
+    <section class="directory" id="home">
+     <h1>
+      SQL Field Notes
+     </h1>
+     <p class="intro">
+      SQL, pandas and worked solutions.
+     </p>
+     <div class="directory-grid">
+      <a href="#methods">
+       <strong>
+        Method explorer
+       </strong>
+       <span>
+        SQL and pandas syntax linked to saved solutions
+       </span>
+      </a>
+      <a href="#sqlbolt">
+       <strong>
+        SQLBolt
+       </strong>
+       <span>
+        Lessons, joins, aggregations and subqueries
+       </span>
+      </a>
+      <a href="#practice">
+       <strong>
+        Leetcode problems
+       </strong>
+       <span>
+        SQL 50 plus 15 additional problems
+       </span>
+      </a>
+      <a href="#murder-city">
+       <strong>
+        SQL Murder City
+       </strong>
+       <span>
+        The investigation, step by step
+       </span>
+      </a>
+      <a href="#squid-game">
+       <strong>
+        SQL Squid Game
+       </strong>
+       <span>
+        Solutions to all nine levels
+       </span>
+      </a>
+     </div>
+     <div class="quick-links">
+      <a href="#A01">
+       SQL ↔ pandas reference
+      </a>
+      <a href="#A02">
+       Setup &amp; conventions
+      </a>
+      <a href="#A00">
+       About these notes
+      </a>
+     </div>
+    </section>
+    <section class="directory" id="collection-view">
+    </section>
+    <section class="search-view" id="search-view">
+     <div class="breadcrumb">
+      <a href="#home">
+       Contents
+      </a>
+     </div>
+     <h1>
+      Search notes
+     </h1>
+     <p aria-live="polite" class="result-count" id="result-count">
+     </p>
+     <div id="search-results">
+     </div>
+    </section>
+   </main>
+  </div>
+  <div class="notification" hidden="" id="notification" role="status">
+  </div>
+  <script defer="True" src="../shared/loader.js"></script>
+  <script defer="True" src="js/reader.js"></script>
+ </body>
+</html>

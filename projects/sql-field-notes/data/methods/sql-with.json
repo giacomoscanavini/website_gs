@@ -1,0 +1,1136 @@
+{
+  "id": "sql-with",
+  "lang": "sql",
+  "category": "Subqueries and CTEs",
+  "label": "WITH",
+  "example": "WITH temp AS (...)",
+  "description": "CTE",
+  "source": "image-sql",
+  "related": [],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/with.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C46",
+      "block": "code-C46-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH\n    s AS (\n        SELECT machine_id, process_id, timestamp",
+      "snippetLine": 1
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH \n    s AS (\n        SELECT machine_id, process_id, timestamp",
+      "snippetLine": 1
+    },
+    {
+      "page": "C49",
+      "block": "code-C49-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "570 · Managers with at least five direct reports",
+      "number": "570",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH M AS (\n    SELECT managerId, COUNT(*) AS nReports\n    FROM Employee",
+      "snippetLine": 1
+    },
+    {
+      "page": "C49",
+      "block": "code-C49-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "570 · Managers with at least five direct reports",
+      "number": "570",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH M AS (\n    SELECT managerId, COUNT(*) AS nReports\n    FROM Employee",
+      "snippetLine": 1
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH Rate AS (\n    SELECT\n        s.user_id,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Rate AS (\n    SELECT \n        s.user_id, ",
+      "snippetLine": 1
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH Sold AS (\n    SELECT p.product_id, u.units, p.price * u.units AS paid\n    FROM Prices p",
+      "snippetLine": 1
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Sold AS (\n    SELECT p.product_id, u.units, p.price * u.units AS paid\n    FROM Prices p",
+      "snippetLine": 1
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH Quality AS (\n    SELECT\n        *,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Quality AS (\n    SELECT \n        *,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH T AS (\n    SELECT\n        DATE_FORMAT(trans_date,   '%Y-%m')   AS month,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH T AS (\n    SELECT \n        DATE_FORMAT(trans_date, '%Y-%m') AS month,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ranked AS (\n    SELECT *, ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS rn\n    FROM Delivery",
+      "snippetLine": 1
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH Orders AS (\n    SELECT\n        customer_id,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Orders AS (\n    SELECT \n        customer_id,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH first_login AS (\n    SELECT player_id, MIN(event_date) AS first_day FROM Activity GROUP BY player_id\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH First_login AS (\n    SELECT\n        DISTINCT player_id,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH First_login AS (\n    SELECT \n        DISTINCT player_id,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH SalesII AS (\n    SELECT\n        product_id,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH SalesII AS (\n    SELECT \n        product_id, ",
+      "snippetLine": 1
+    },
+    {
+      "page": "C17",
+      "block": "code-C17-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "596 · Classes with at least five students",
+      "number": "596",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH Classes AS (\n    SELECT\n        COUNT(DISTINCT student) AS nStudents,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C17",
+      "block": "code-C17-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "596 · Classes with at least five students",
+      "number": "596",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Classes AS (\n    SELECT \n        COUNT(DISTINCT student) AS nStudents, ",
+      "snippetLine": 1
+    },
+    {
+      "page": "C19",
+      "block": "code-C19-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH Frequency AS (\n    SELECT\n        num,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C19",
+      "block": "code-C19-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Frequency AS (\n    SELECT\n        num, ",
+      "snippetLine": 1
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH Reports AS (\n    SELECT reports_to AS manager_id,\n           COUNT(*) AS reports_count,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Reports AS (\n    SELECT \n        reports_to AS manager_id,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH counted AS (\n    SELECT *, COUNT(*) OVER (PARTITION BY employee_id) AS n_departments FROM Employee\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ordered AS (\n    SELECT num, LEAD(num, 1) OVER (ORDER BY id) AS next_num,\n           LEAD(num, 2) OVER (ORDER BY id) AS next_next_num FROM Logs",
+      "snippetLine": 1
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH Nums AS (\n    SELECT\n        num,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Nums AS (\n    SELECT \n        num, ",
+      "snippetLine": 1
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ranked AS (\n    SELECT product_id, new_price, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY change_date DESC) AS rn\n    FROM Products WHERE change_date <= '2019-08-16'",
+      "snippetLine": 1
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH\n    Latest AS (\n        SELECT",
+      "snippetLine": 1
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH \n    Latest AS (\n        SELECT ",
+      "snippetLine": 1
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH cumulative AS (\n    SELECT person_name, turn, SUM(weight) OVER (ORDER BY turn ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_weight\n    FROM Queue",
+      "snippetLine": 1
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH Cumulative AS (\n    SELECT\n        person_name,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Cumulative AS (\n    SELECT \n        person_name, ",
+      "snippetLine": 1
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH\n    Labels AS (\n        SELECT",
+      "snippetLine": 1
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH \n    Labels AS (\n        SELECT ",
+      "snippetLine": 1
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH ManagersLeftID AS (\n    SELECT manager_id\n    FROM Employees",
+      "snippetLine": 1
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH ManagersLeftID AS (\n    SELECT manager_id\n    FROM Employees",
+      "snippetLine": 1
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH NStudents AS (\n    SELECT COUNT(id) AS length\n    FROM Seat",
+      "snippetLine": 1
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH NStudents AS (\n    SELECT COUNT(id) AS length\n    FROM Seat",
+      "snippetLine": 1
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH user_winner AS (\n    SELECT u.name AS results FROM MovieRating r JOIN Users u ON r.user_id = u.user_id\n    GROUP BY u.user_id, u.name ORDER BY COUNT(*) DESC, u.name LIMIT 1",
+      "snippetLine": 1
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH\n      ReviewPerUserID AS (\n        SELECT user_id, COUNT(*) AS nReviews",
+      "snippetLine": 1
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH \n    ReviewPerUserID AS (\n        SELECT user_id, COUNT(*) AS nReviews",
+      "snippetLine": 1
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH daily AS (\n    SELECT visited_on, SUM(amount) AS amount FROM Customer GROUP BY visited_on\n), rolled AS (",
+      "snippetLine": 1
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH Rolling AS (\n    SELECT\n        DISTINCT visited_on,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Rolling AS (\n    SELECT \n        DISTINCT visited_on, ",
+      "snippetLine": 1
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH endpoints AS (\n    SELECT requester_id AS id FROM RequestAccepted\n    UNION ALL SELECT accepter_id FROM RequestAccepted",
+      "snippetLine": 1
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH\n    TableRequest AS (\n        SELECT",
+      "snippetLine": 1
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH \n    TableRequest AS (\n        SELECT ",
+      "snippetLine": 1
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH marked AS (\n    SELECT *, COUNT(*) OVER (PARTITION BY tiv_2015) AS value_count,\n           COUNT(*) OVER (PARTITION BY lat, lon) AS location_count FROM Insurance",
+      "snippetLine": 1
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH\n    NonUniqueTIV AS (\n        SELECT tiv_2015",
+      "snippetLine": 1
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH \n    NonUniqueTIV AS (\n        SELECT tiv_2015",
+      "snippetLine": 1
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ranked AS (\n    SELECT *, DENSE_RANK() OVER (PARTITION BY departmentId ORDER BY salary DESC) AS salary_rank FROM Employee\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH Ranked AS (\n    SELECT\n        id, name, salary,   departmentId,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Ranked AS (\n    SELECT \n        id, name, salary, departmentId,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH Ranked AS (\n    SELECT\n        id,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Ranked AS (\n    SELECT \n        id, ",
+      "snippetLine": 1
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH\n    Ranked AS (\n        SELECT",
+      "snippetLine": 1
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH \n    Ranked AS (\n        SELECT ",
+      "snippetLine": 1
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH Quantities AS (\n    SELECT\n        product_id,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Quantities AS (\n    SELECT \n        product_id, ",
+      "snippetLine": 1
+    },
+    {
+      "page": "LC262",
+      "block": "code-LC262-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "262 · Trips and users",
+      "number": "262",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH \n    ValidTrips AS (\n        SELECT ",
+      "snippetLine": 1
+    },
+    {
+      "page": "LC601",
+      "block": "code-LC601-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "601 · Human traffic of stadium",
+      "number": "601",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH \n    CrowdedDays AS (\n        SELECT  ",
+      "snippetLine": 1
+    },
+    {
+      "page": "LC607",
+      "block": "code-LC607-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "607 · Sales person",
+      "number": "607",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH IdToExclude AS (\n    SELECT DISTINCT o.sales_id\n    FROM Orders o",
+      "snippetLine": 1
+    },
+    {
+      "page": "LC1158",
+      "block": "code-LC1158-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1158 · Market analysis I",
+      "number": "1158",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Orders2019 AS (\n    SELECT buyer_id, COUNT(*) AS orders_in_2019\n    FROM Orders ",
+      "snippetLine": 1
+    },
+    {
+      "page": "LC1393",
+      "block": "code-LC1393-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1393 · Capital gain/loss",
+      "number": "1393",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Operations AS (\n    SELECT \n        stock_name,  ",
+      "snippetLine": 1
+    },
+    {
+      "page": "LC3220",
+      "block": "code-LC3220-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "3220 · Odd and even transactions",
+      "number": "3220",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH \n    Days AS (\n        SELECT DISTINCT transaction_date",
+      "snippetLine": 1
+    },
+    {
+      "page": "LC3421",
+      "block": "code-LC3421-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "3421 · Find students who improved",
+      "number": "3421",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Comparison AS (\n    SELECT \n        student_id,",
+      "snippetLine": 1
+    },
+    {
+      "page": "LC3497",
+      "block": "code-LC3497-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "3497 · Analyze subscription conversion",
+      "number": "3497",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH Payments AS (\n    SELECT \n        user_id, ",
+      "snippetLine": 1
+    },
+    {
+      "page": "LC3521",
+      "block": "code-LC3521-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "3521 · Find product recommendation pairs",
+      "number": "3521",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH \n    BoughtPairs AS (\n        SELECT ",
+      "snippetLine": 1
+    },
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH \n    SeasonSales AS (\n        SELECT ",
+      "snippetLine": 1
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nWITH \n    ValidReviews AS (\n        SELECT ",
+      "snippetLine": 1
+    },
+    {
+      "page": "squid-02",
+      "block": "code-squid-02-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Calculate the ration threshold",
+      "number": "02",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "WITH\n    table_prop AS (\n        SELECT FLOOR( COUNT(*) * 0.9 ) AS portions",
+      "snippetLine": 1
+    },
+    {
+      "page": "squid-03",
+      "block": "code-squid-03-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Compare hot and cold months",
+      "number": "03",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "WITH \n    Extrama_month AS (\n        SELECT *",
+      "snippetLine": 1
+    },
+    {
+      "page": "squid-05",
+      "block": "code-squid-05-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Count a player’s closest interactions",
+      "number": "05",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "WITH\n\tPlayer_interactions AS (\n\t  SELECT t.target_id, t.player_id, COUNT(*) AS counts",
+      "snippetLine": 1
+    },
+    {
+      "page": "squid-06",
+      "block": "code-squid-06-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Trace equipment to its first failure",
+      "number": "06",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "WITH\t\n\tGame_with_highest_failures AS (\n\t  \tSELECT e.game_type",
+      "snippetLine": 1
+    },
+    {
+      "page": "squid-08",
+      "block": "code-squid-08-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Find the longest hesitation",
+      "number": "08",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "WITH \n    Hesitation_game AS (\n        SELECT game_id",
+      "snippetLine": 1
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "WITH \n\tMost_recent_squid_game AS (\n        SELECT start_time, end_time",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 44
+}

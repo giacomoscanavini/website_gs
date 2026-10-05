@@ -1,0 +1,190 @@
+<article class="article" id="C47">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Problem 577
+  </span>
+ </div>
+ <h1>
+  577 · Employee bonus
+ </h1>
+ <p>
+  Return employee names and bonuses where the bonus is below 1000 or missing.
+ </p>
+ <p class="pattern">
+  Pattern: Left join / NULL-aware filtering
+ </p>
+ <h2>
+  Illustrative example
+ </h2>
+ <p>
+  Ana has no bonus record, Bo has a bonus of 500 and Cleo has a bonus of 1000. Keep Ana with a missing bonus and Bo with 500; exclude Cleo.
+ </p>
+ <h2>
+  My solution
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="exercise-577-panel-0" aria-selected="true" id="exercise-577-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="exercise-577-panel-1" aria-selected="false" id="exercise-577-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="exercise-577-tab-0" class="code-panel" id="exercise-577-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-C47-0" tabindex="0"><code class="language-sql" data-origin="supplied-577-sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">bonus</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Employee</span><span class="w"> </span><span class="n">e</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Bonus</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">empId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">empId</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">bonus</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1000</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">bonus</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NULL</span></code></pre>
+  </div>
+  <div aria-labelledby="exercise-577-tab-1" class="code-panel" id="exercise-577-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-C47-1" tabindex="0"><code class="language-python" data-origin="supplied-577-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">employee_bonus</span><span class="p">(</span><span class="n">employee</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">bonus</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">employee</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">bonus</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'empId'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">bonus</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">bonus</span><span class="o">.</span><span class="n">isna</span><span class="p">())][[</span><span class="s1">'name'</span><span class="p">,</span> <span class="s1">'bonus'</span><span class="p">]]</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  Why it works
+ </h2>
+ <p>
+  A left join preserves employees with no Bonus row. The OR condition includes those missing values along with bonuses strictly below 1000; a bonus equal to 1000 does not qualify.
+ </p>
+ <details class="reference-details">
+  <summary>
+   Source
+  </summary>
+  <div class="sources-content">
+   <p>
+    Based on the submitted SQL and pandas solutions.
+   </p>
+  </div>
+ </details>
+ <details class="original-details archive-submission">
+  <summary>
+   Uploaded submission · SQL.zip
+  </summary>
+  <p class="small">
+   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
+  </p>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="archive-577-panel-0" aria-selected="true" id="archive-577-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="archive-577-panel-1" aria-selected="false" id="archive-577-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="archive-577-tab-0" class="code-panel" id="archive-577-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     MySQL
+    </div>
+    <pre id="code-C47-2" tabindex="0"><code class="language-sql" data-origin="archive-577-sql"><span class="c1"># Write your MySQL query statement below</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="k">name</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">bonus</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Employee</span><span class="w"> </span><span class="n">e</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Bonus</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">empId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">empId</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">bonus</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">1000</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">bonus</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="no">NULL</span></code></pre>
+   </div>
+   <div aria-labelledby="archive-577-tab-1" class="code-panel" id="archive-577-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C47-3" tabindex="0"><code class="language-python" data-origin="archive-577-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">employee_bonus</span><span class="p">(</span><span class="n">employee</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">bonus</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">employee</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">bonus</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'empId'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">bonus</span> <span class="o">&lt;</span> <span class="mi">1000</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">bonus</span><span class="o">.</span><span class="n">isna</span><span class="p">())][[</span><span class="s1">'name'</span><span class="p">,</span> <span class="s1">'bonus'</span><span class="p">]]</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-or">
+     OR
+    </a>
+    <a href="#m-sql-is-null">
+     IS NULL
+    </a>
+    <a href="#m-sql-left-join">
+     LEFT JOIN
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-filter">
+     Condition
+    </a>
+    <a href="#m-pd-or">
+     OR
+    </a>
+    <a href="#m-pd-filter-null">
+     Missing
+    </a>
+    <a href="#m-pd-isna">
+     Check null
+    </a>
+    <a href="#m-pd-merge-left">
+     Left merge
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#C46">
+   <small>
+    ← Previous
+   </small>
+   1661 · Average processing time per machine
+  </a>
+  <a href="#C48">
+   <small>
+    Next →
+   </small>
+   1280 · Students and examinations
+  </a>
+ </div>
+</article>

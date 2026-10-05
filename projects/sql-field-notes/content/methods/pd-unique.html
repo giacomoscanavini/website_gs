@@ -1,0 +1,194 @@
+<article class="article method-page" id="m-pd-unique">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
+   pandas · Also used in these notes
+  </a>
+ </div>
+ <h1>
+  unique()
+ </h1>
+ <p class="lead">
+  Distinct values as an array
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-unique"><span class="n">df</span><span class="p">[</span><span class="s1">'id'</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span></code></pre>
+ </div>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C04?code=code-C04-3&amp;method=pd-unique&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1148 · Article Views I
+    </strong>
+    <small>
+     My approach · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">def article_views(views: pd.DataFrame) -&gt; pd.DataFrame:
+    ids = sorted(views[views.author_id   == views.viewer_id].author_id.unique())
+    return   pd.DataFrame({'id': ids})</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C24?code=code-C24-3&amp;method=pd-unique&amp;line=7">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     180 · Consecutive Numbers
+    </strong>
+    <small>
+     My approach · line 7
+    </small>
+   </div>
+   <pre aria-hidden="true">    repeated = numbers.eq(numbers.shift(1)) &amp; numbers.eq(numbers.shift(2))
+    return pd.DataFrame({'ConsecutiveNums': logs.loc[repeated, 'num'].unique()})</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#LC607?code=code-LC607-1&amp;method=pd-unique&amp;line=6">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     607 · Sales person
+    </strong>
+    <small>
+     Uploaded submission · line 6
+    </small>
+   </div>
+   <pre aria-hidden="true">    orders = orders[orders.name.eq('RED')]
+    idexlude = orders['sales_id'].unique()
+
+    flag = ~sales_person['sales_id'].isin(idexlude)</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#LC608?code=code-LC608-1&amp;method=pd-unique&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     608 · Tree node
+    </strong>
+    <small>
+     Uploaded submission · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">def tree_node(tree: pd.DataFrame) -&gt; pd.DataFrame:
+    parents = tree['p_id'].dropna().unique()
+
+    def classify(x):</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (2)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C04?code=code-C04-5&amp;method=pd-unique&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1148 · Article Views I
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def article_views(views: pd.DataFrame) -&gt; pd.DataFrame:
+    ids = sorted(views[views.author_id == views.viewer_id].author_id.unique())
+    return pd.DataFrame({'id': ids})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C24?code=code-C24-5&amp;method=pd-unique&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      180 · Consecutive Numbers
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    logs['var'] = logs['num'].rolling(window=3).var()
+    return pd.DataFrame({'ConsecutiveNums': logs[logs['var']==0]['num'].unique()})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    Methods present in the supplied code, added to the image-based index · Also used in these notes. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
+   <small>
+    ← Browse
+   </small>
+   pandas · Also used in these notes
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

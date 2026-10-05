@@ -1,0 +1,374 @@
+{
+  "id": "sql-inner-join",
+  "lang": "sql",
+  "category": "Joins",
+  "label": "INNER JOIN",
+  "example": "A JOIN B ON A.id=B.id",
+  "description": "Matching rows",
+  "source": "image-sql",
+  "related": [
+    "pd-merge-inner"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/join.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C43",
+      "block": "code-C43-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1068 · Product sales analysis I",
+      "number": "1068",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "FROM Sales s\nJOIN Product p ON s.product_id = p.product_id",
+      "snippetLine": 2
+    },
+    {
+      "page": "C43",
+      "block": "code-C43-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1068 · Product sales analysis I",
+      "number": "1068",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Sales s\nJOIN Product p ON s.product_id = p.product_id",
+      "snippetLine": 3
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-0",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "        FROM s\n        JOIN e ON s.machine_id = e.machine_id AND s.process_id = e.process_id\n    )\nSELECT machine_id, ROUND(SUM(processing_time)/COUNT(*), 3) AS processing_time",
+      "snippetLine": 14
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-2",
+      "line": 18,
+      "lines": [
+        18
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        FROM s\n        JOIN e ON s.machine_id = e.machine_id AND s.process_id = e.process_id\n    )\n",
+      "snippetLine": 17
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-2",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Activity a\nINNER JOIN   First_login f ON\n    DATEDIFF(a.event_date, f.first_day) = 1 AND\n    a.player_id = f.player_id;",
+      "snippetLine": 8
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-4",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Activity a\nINNER JOIN First_login f ON \n    DATEDIFF(a.event_date, f.first_day) = 1 AND\n    a.player_id = f.player_id",
+      "snippetLine": 10
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT s.product_id, s.year AS first_year, s.quantity, s.price\nFROM Sales s JOIN (SELECT product_id, MIN(year) AS first_year FROM Sales GROUP BY product_id) f\nON s.product_id = f.product_id AND s.year = f.first_year;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-0",
+      "line": 2,
+      "lines": [
+        2,
+        5
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH user_winner AS (\n    SELECT u.name AS results FROM MovieRating r JOIN Users u ON r.user_id = u.user_id\n    GROUP BY u.user_id, u.name ORDER BY COUNT(*) DESC, u.name LIMIT 1\n), movie_winner AS (",
+      "snippetLine": 1
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT d.name AS Department, r.name AS Employee, r.salary AS Salary\nFROM ranked r JOIN Department d ON r.departmentId = d.id WHERE r.salary_rank <= 3;",
+      "snippetLine": 4
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-2",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Ranked r\nJOIN Department   d ON r.departmentId = d.id\nWHERE r.ranked <= 3;",
+      "snippetLine": 14
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "DELETE p1 FROM Person p1 JOIN Person p2\nON p1.email = p2.email AND p1.id > p2.id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT p.product_name, SUM(o.unit) AS unit FROM Orders o\nJOIN Products p ON o.product_id = p.product_id\nWHERE o.order_date >= '2020-02-01' AND o.order_date < '2020-03-01'\nGROUP BY p.product_id, p.product_name HAVING SUM(o.unit) >= 100;",
+      "snippetLine": 1
+    },
+    {
+      "page": "LC601",
+      "block": "code-LC601-0",
+      "line": 20,
+      "lines": [
+        20
+      ],
+      "title": "601 · Human traffic of stadium",
+      "number": "601",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM CrowdedDays c\nJOIN ValidGroups v ON c.group_num = v.group_num\nORDER BY c.visit_date ASC\n",
+      "snippetLine": 19
+    },
+    {
+      "page": "squid-03",
+      "block": "code-squid-03-0",
+      "line": 36,
+      "lines": [
+        36
+      ],
+      "title": "Compare hot and cold months",
+      "number": "03",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "FROM Honeycomb_game_extended h \nINNER JOIN Extrama_month e\n    ON e.month = h.month_num\nWHERE h.year_num >= 2006",
+      "snippetLine": 35
+    },
+    {
+      "page": "squid-05",
+      "block": "code-squid-05-0",
+      "line": 27,
+      "lines": [
+        27,
+        29
+      ],
+      "title": "Count a player’s closest interactions",
+      "number": "05",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "FROM Player_interactions i\nINNER JOIN player pl\n\tON i.target_id = pl.id\nINNER JOIN player p",
+      "snippetLine": 26
+    },
+    {
+      "page": "squid-06",
+      "block": "code-squid-06-0",
+      "line": 5,
+      "lines": [
+        5,
+        14,
+        16,
+        34
+      ],
+      "title": "Trace equipment to its first failure",
+      "number": "06",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\t\tFROM Equipment e\n\t\tINNER JOIN Failure_incidents f\n\t\t\tON e.id = f.failed_equipment_id\n\t\tGROUP BY e.game_type",
+      "snippetLine": 4
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-0",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\tON r.id = g.assigned_room_id\nINNER JOIN Camera c\n\tON c.guard_spotted_id = g.id\nWHERE r.isVacant = true",
+      "snippetLine": 14
+    },
+    {
+      "page": "squid-08",
+      "block": "code-squid-08-0",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "Find the longest hesitation",
+      "number": "08",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "FROM Player p\nINNER JOIN Hesitation_game h\n    ON p.game_id = h.game_id\nWHERE p.death_description = 'pushed'",
+      "snippetLine": 16
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-0",
+      "line": 26,
+      "lines": [
+        26,
+        33
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\t\tFROM Guards_on_shift g\n\t\tINNER JOIN Daily_door_access_logs d\n\t\t\tON g.id = d.guard_id\n\t\tWHERE g.assigned_post <> d.door_location",
+      "snippetLine": 25
+    },
+    {
+      "page": "B06",
+      "block": "code-B06-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "INNER JOIN",
+      "number": "06",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT m.title, b.domestic_sales, b.international_sales\nFROM movies m JOIN boxoffice b ON m.id = b.movie_id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B06",
+      "block": "code-B06-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "INNER JOIN",
+      "number": "06",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT m.title, b.domestic_sales, b.international_sales\nFROM movies m JOIN boxoffice b ON m.id = b.movie_id\nWHERE b.international_sales > b.domestic_sales;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B06",
+      "block": "code-B06-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "INNER JOIN",
+      "number": "06",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT m.title, b.rating FROM movies m\nJOIN boxoffice b ON m.id = b.movie_id ORDER BY b.rating DESC;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B09",
+      "block": "code-B09-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "Expressions and aliases",
+      "number": "09",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT m.title, (b.domestic_sales + b.international_sales) / 1000000.0 AS sales_millions\nFROM movies m JOIN boxoffice b ON m.id = b.movie_id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B09",
+      "block": "code-B09-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "Expressions and aliases",
+      "number": "09",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT m.title, b.rating * 10.0 AS rating_percent\nFROM movies m JOIN boxoffice b ON m.id = b.movie_id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B12",
+      "block": "code-B12-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "Logical query order",
+      "number": "12",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT m.director, SUM(b.domestic_sales + b.international_sales) AS total_sales\nFROM movies m JOIN boxoffice b ON m.id = b.movie_id GROUP BY m.director;",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 18
+}

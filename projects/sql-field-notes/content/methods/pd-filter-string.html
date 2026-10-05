@@ -1,0 +1,213 @@
+<article class="article method-page" id="m-pd-filter-string">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=Filtering">
+   pandas · Filtering
+  </a>
+ </div>
+ <h1>
+  String match
+ </h1>
+ <p class="lead">
+  Match text
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-filter-string"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">'Ann'</span><span class="p">)]</span></code></pre>
+ </div>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C36?code=code-C36-1&amp;method=pd-filter-string&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1527 · Patients with a disease
+    </strong>
+    <small>
+     Study solution · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">def find_patients(patients: pd.DataFrame) -&gt; pd.DataFrame:
+    mask = patients['conditions'].str.contains(r'(?:^| )DIAB1', regex=True, na=False)
+    return patients.loc[mask].copy()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#LC262?code=code-LC262-1&amp;method=pd-filter-string&amp;line=17">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     262 · Trips and users
+    </strong>
+    <small>
+     Uploaded submission · line 17
+    </small>
+   </div>
+   <pre aria-hidden="true">    def filter_status(x):
+        return x.str.contains('cancelled').sum()
+
+    df = trips.groupby('request_at').agg(</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#LC3475?code=code-LC3475-1&amp;method=pd-filter-string&amp;line=8">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     3475 · DNA pattern recognition
+    </strong>
+    <small>
+     Uploaded submission · line 8
+    </small>
+   </div>
+   <pre aria-hidden="true">                           samples.dna_sequence.str.endswith('TGA')).astype('int')
+    samples['has_atat'] = (samples.dna_sequence.str.contains('ATAT')).astype('int')
+    samples['has_ggg'] = (samples.dna_sequence.str.contains('GGG')).astype('int')
+</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#murder-05?code=code-murder-05-1&amp;method=pd-filter-string&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Murder City · pandas
+    </span>
+    <strong>
+     Cross-check the licence plate
+    </strong>
+    <small>
+     Saved walkthrough · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">joined = drivers_license.merge(people, how='left', left_on='id', right_on='license_id')
+mask = joined['plate_number'].str.contains('H42W', regex=False, na=False)
+result = joined.loc[mask, ['id', 'age', 'plate_number', 'car_make', 'car_model', 'name']].copy()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#B03?code=code-B03-1&amp;method=pd-filter-string&amp;line=1">
+   <div>
+    <span class="usage-label">
+     SQLBolt · pandas
+    </span>
+    <strong>
+     Text constraints and LIKE
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">result = movies.loc[movies['title'].str.contains(r'^Toy Story', case=False, na=False)].copy()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (2)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C36?code=code-C36-3&amp;method=pd-filter-string&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1527 · Patients with a disease
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">def find_patients(patients: pd.DataFrame) -&gt; pd.DataFrame:
+    flag =   patients['conditions'].str.contains(r'^DIAB1| DIAB1', na=False)
+    return   patients[flag]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C36?code=code-C36-5&amp;method=pd-filter-string&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1527 · Patients with a disease
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def find_patients(patients: pd.DataFrame) -&gt; pd.DataFrame:
+    flag = patients['conditions'].str.contains(r'^DIAB1| DIAB1')
+    return patients[flag]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · Filtering. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=Filtering">
+   <small>
+    ← Browse
+   </small>
+   pandas · Filtering
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

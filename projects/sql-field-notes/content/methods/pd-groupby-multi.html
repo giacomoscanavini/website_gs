@@ -1,0 +1,260 @@
+<article class="article method-page" id="m-pd-groupby-multi">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=GroupBy">
+   pandas · GroupBy
+  </a>
+ </div>
+ <h1>
+  Multiple groups
+ </h1>
+ <p class="lead">
+  Group by several columns
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-groupby-multi"><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">'city'</span><span class="p">,</span><span class="s1">'year'</span><span class="p">])</span></code></pre>
+ </div>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C48?code=code-C48-1&amp;method=pd-groupby-multi&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1280 · Students and examinations
+    </strong>
+    <small>
+     Study solution · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">    df = students.merge(subjects, how='cross')
+    exam_count = examinations.groupby(['student_id', 'subject_name']).size().reset_index(name='attended_exams')
+    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left')
+    df['attended_exams'] = df['attended_exams'].fillna(0).astype(int)</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C11?code=code-C11-1&amp;method=pd-groupby-multi&amp;line=7">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1193 · Monthly transactions I
+    </strong>
+    <small>
+     Study solution · line 7
+    </small>
+   </div>
+   <pre aria-hidden="true">    t['approved_amount'] = t['amount'].where(t['approved'], 0)
+    return t.groupby(['month', 'country'], dropna=False, as_index=False).agg(
+        trans_count=('amount', 'size'), approved_count=('approved', 'sum'),
+        trans_total_amount=('amount', 'sum'), approved_total_amount=('approved_amount', 'sum'))</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#LC3421?code=code-LC3421-1&amp;method=pd-groupby-multi&amp;line=17">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     3421 · Find students who improved
+    </strong>
+    <small>
+     Uploaded submission · line 17
+    </small>
+   </div>
+   <pre aria-hidden="true">
+    df = scores.groupby(by=['student_id', 'subject']).apply(custom_func).reset_index()
+
+    return df[df.improved == True][['student_id', 'subject', 'first_score', 'latest_score']]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#LC3521?code=code-LC3521-1&amp;method=pd-groupby-multi&amp;line=12">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     3521 · Find product recommendation pairs
+    </strong>
+    <small>
+     Uploaded submission · line 12
+    </small>
+   </div>
+   <pre aria-hidden="true">    
+    df = df.groupby(by=['product1_id', 'product2_id']).agg(
+        customer_count = ('product1_id', 'size')
+    ).reset_index()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#LC3564?code=code-LC3564-1&amp;method=pd-groupby-multi&amp;line=16">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     3564 · Seasonal sales analysis
+    </strong>
+    <small>
+     Uploaded submission · line 16
+    </small>
+   </div>
+   <pre aria-hidden="true">
+    df = sales.groupby(by=['season', 'category']).agg(
+        total_quantity = ('quantity', 'sum'),
+        total_revenue = ('revenue', 'sum')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-groupby-multi&amp;line=10">
+   <div>
+    <span class="usage-label">
+     Squid Game · pandas
+    </span>
+    <strong>
+     Compare hot and cold months
+    </strong>
+    <small>
+     Saved walkthrough · line 10
+    </small>
+   </div>
+   <pre aria-hidden="true">joined = games.merge(extreme[['month']], left_on='month_num', right_on='month')
+result = (joined.loc[joined['year_num'].ge(2006)]
+          .groupby(['shape', 'month_num'], as_index=False)
+          .agg(avg_temp=('average_completion_time', 'mean'))</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (3)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C48?code=code-C48-3&amp;method=pd-groupby-multi&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1280 · Students and examinations
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    exam_count = examinations.groupby(by=['student_id', 'subject_name']).agg(
+        attended_exams = ('subject_name', 'count')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C11?code=code-C11-3&amp;method=pd-groupby-multi&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      My approach · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    transactions['approved_amount'] =   transactions['approved'] * transactions['amount']
+    return   transactions.groupby(by=['month', 'country'], dropna=False).agg(
+        trans_count = ('amount', 'size'),
+        approved_count = ('approved', 'sum'),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C11?code=code-C11-5&amp;method=pd-groupby-multi&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      Uploaded submission · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return transactions.groupby(by=['month', 'country'], dropna=False).agg(
+        trans_count = ('amount', 'size'),
+        approved_count = ('approved', 'sum'),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · GroupBy. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=GroupBy">
+   <small>
+    ← Browse
+   </small>
+   pandas · GroupBy
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

@@ -1,0 +1,281 @@
+<article class="article" id="C46">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Problem 1661
+  </span>
+ </div>
+ <h1>
+  1661 · Average processing time per machine
+ </h1>
+ <p>
+  Pair each process start and end, then report the average duration per machine rounded to three decimals.
+ </p>
+ <p class="pattern">
+  Pattern: CTEs / paired join / grouped mean
+ </p>
+ <h2>
+  Illustrative example
+ </h2>
+ <p>
+  Machine 0 runs a process from 1.0 to 2.5 and another from 3.0 to 5.5. The durations are 1.5 and 2.5, so its average processing_time is 2.000.
+ </p>
+ <h2>
+  My solution
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="exercise-1661-panel-0" aria-selected="true" id="exercise-1661-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="exercise-1661-panel-1" aria-selected="false" id="exercise-1661-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="exercise-1661-tab-0" class="code-panel" id="exercise-1661-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-C46-0" tabindex="0"><code class="language-sql" data-origin="supplied-1661-sql"><span class="k">WITH</span>
+<span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">machine_id</span><span class="p">,</span><span class="w"> </span><span class="n">process_id</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">Activity</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">activity_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'start'</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="n">e</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">machine_id</span><span class="p">,</span><span class="w"> </span><span class="n">process_id</span><span class="p">,</span><span class="w"> </span><span class="k">timestamp</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">Activity</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">activity_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'end'</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">    </span><span class="n">m</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">machine_id</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">process_id</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="k">timestamp</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="k">timestamp</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">processing_time</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">s</span>
+<span class="w">        </span><span class="k">JOIN</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">machine_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">machine_id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">process_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">process_id</span>
+<span class="w">    </span><span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">machine_id</span><span class="p">,</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">processing_time</span><span class="p">)</span><span class="o">/</span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">processing_time</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">m</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">machine_id</span></code></pre>
+  </div>
+  <div aria-labelledby="exercise-1661-tab-1" class="code-panel" id="exercise-1661-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-C46-1" tabindex="0"><code class="language-python" data-origin="supplied-1661-python"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">round_half_up</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">digits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">value</span><span class="p">):</span> <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">'nan'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">scaleb</span><span class="p">(</span><span class="o">-</span><span class="n">digits</span><span class="p">),</span> <span class="n">rounding</span><span class="o">=</span><span class="n">ROUND_HALF_UP</span><span class="p">))</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_average_time</span><span class="p">(</span><span class="n">activity</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df_s</span> <span class="o">=</span> <span class="n">activity</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">activity_type</span> <span class="o">==</span> <span class="s1">'start'</span><span class="p">]</span>
+    <span class="n">df_e</span> <span class="o">=</span> <span class="n">activity</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">activity_type</span> <span class="o">==</span> <span class="s1">'end'</span><span class="p">]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df_s</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_e</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">'machine_id'</span><span class="p">,</span> <span class="s1">'process_id'</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s1">'inner'</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s1">'_s'</span><span class="p">,</span> <span class="s1">'_e'</span><span class="p">))</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">'processing_time'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'timestamp_e'</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">'timestamp_s'</span><span class="p">]</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'machine_id'</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">processing_time</span><span class="o">=</span><span class="p">(</span><span class="s1">'processing_time'</span><span class="p">,</span> <span class="s1">'mean'</span><span class="p">))</span>
+    <span class="n">result</span><span class="p">[</span><span class="s1">'processing_time'</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">'processing_time'</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">round_half_up</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">result</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  Why it works
+ </h2>
+ <p>
+  Both implementations split start and end events and join them on machine_id plus process_id. Subtracting the start timestamp from the end timestamp gives the duration. SQL uses SUM/COUNT and pandas uses mean to average those durations.
+ </p>
+ <div class="note">
+  Each (machine_id, process_id) has one start and one end. Join on both keys.
+ </div>
+ <details class="reference-details">
+  <summary>
+   Source
+  </summary>
+  <div class="sources-content">
+   <p>
+    Based on the submitted SQL and pandas solutions.
+   </p>
+  </div>
+ </details>
+ <details class="original-details archive-submission">
+  <summary>
+   Uploaded submission · SQL.zip
+  </summary>
+  <p class="small">
+   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
+  </p>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="archive-1661-panel-0" aria-selected="true" id="archive-1661-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="archive-1661-panel-1" aria-selected="false" id="archive-1661-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="archive-1661-tab-0" class="code-panel" id="archive-1661-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     MySQL
+    </div>
+    <pre id="code-C46-2" tabindex="0"><code class="language-sql" data-origin="archive-1661-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">WITH</span><span class="w"> </span>
+<span class="w">    </span><span class="n">s</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">machine_id</span><span class="p">,</span><span class="w"> </span><span class="n">process_id</span><span class="p">,</span><span class="w"> </span><span class="kt">timestamp</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">Activity</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">activity_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'start'</span>
+<span class="w">    </span><span class="p">),</span>
+
+<span class="w">    </span><span class="n">e</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">machine_id</span><span class="p">,</span><span class="w"> </span><span class="n">process_id</span><span class="p">,</span><span class="w"> </span><span class="kt">timestamp</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">Activity</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">activity_type</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'end'</span>
+<span class="w">    </span><span class="p">),</span>
+
+<span class="w">    </span><span class="n">m</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">machine_id</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">process_id</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="kt">timestamp</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="kt">timestamp</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">processing_time</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">s</span>
+<span class="w">        </span><span class="k">JOIN</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">machine_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">machine_id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">process_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">process_id</span>
+<span class="w">    </span><span class="p">)</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="n">machine_id</span><span class="p">,</span><span class="w"> </span><span class="nf">ROUND</span><span class="p">(</span><span class="nf">SUM</span><span class="p">(</span><span class="n">processing_time</span><span class="p">)</span><span class="o">/</span><span class="nf">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">processing_time</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">m</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">machine_id</span>
+</code></pre>
+   </div>
+   <div aria-labelledby="archive-1661-tab-1" class="code-panel" id="archive-1661-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C46-3" tabindex="0"><code class="language-python" data-origin="archive-1661-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">get_average_time</span><span class="p">(</span><span class="n">activity</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df_s</span> <span class="o">=</span> <span class="n">activity</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">activity_type</span> <span class="o">==</span> <span class="s1">'start'</span><span class="p">]</span>
+    <span class="n">df_e</span> <span class="o">=</span> <span class="n">activity</span><span class="p">[</span><span class="n">activity</span><span class="o">.</span><span class="n">activity_type</span> <span class="o">==</span> <span class="s1">'end'</span><span class="p">]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df_s</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_e</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s1">'machine_id'</span><span class="p">,</span> <span class="s1">'process_id'</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">(</span><span class="s1">'_s'</span><span class="p">,</span> <span class="s1">'_e'</span><span class="p">))</span>
+    <span class="n">df</span><span class="p">[</span><span class="s1">'processing_time'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'timestamp_e'</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">'timestamp_s'</span><span class="p">]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">'process_id'</span><span class="p">,</span> <span class="s1">'activity_type_s'</span><span class="p">,</span> <span class="s1">'activity_type_e'</span><span class="p">,</span> <span class="s1">'timestamp_s'</span><span class="p">,</span> <span class="s1">'timestamp_e'</span><span class="p">])</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'machine_id'</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-and">
+     AND
+    </a>
+    <a href="#m-sql-count">
+     COUNT()
+    </a>
+    <a href="#m-sql-sum">
+     SUM()
+    </a>
+    <a href="#m-sql-group-by">
+     GROUP BY
+    </a>
+    <a href="#m-sql-inner-join">
+     INNER JOIN
+    </a>
+    <a href="#m-sql-round">
+     ROUND()
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-with">
+     WITH
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-filter">
+     Condition
+    </a>
+    <a href="#m-pd-filter-null">
+     Missing
+    </a>
+    <a href="#m-pd-new-column">
+     New column
+    </a>
+    <a href="#m-pd-drop-column">
+     Drop column
+    </a>
+    <a href="#m-pd-map">
+     map()
+    </a>
+    <a href="#m-pd-reset-index">
+     Reset index
+    </a>
+    <a href="#m-pd-isna">
+     Check null
+    </a>
+    <a href="#m-pd-merge-inner">
+     Inner merge
+    </a>
+    <a href="#m-pd-merge-left">
+     Left merge
+    </a>
+    <a href="#m-pd-mean">
+     mean()
+    </a>
+    <a href="#m-pd-groupby">
+     Basic group
+    </a>
+    <a href="#m-pd-agg-named">
+     Named aggregation
+    </a>
+    <a href="#m-pd-round">
+     round()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#C45">
+   <small>
+    ← Previous
+   </small>
+   197 · Rising temperature
+  </a>
+  <a href="#C47">
+   <small>
+    Next →
+   </small>
+   577 · Employee bonus
+  </a>
+ </div>
+</article>

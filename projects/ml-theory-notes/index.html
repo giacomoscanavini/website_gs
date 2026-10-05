@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en" data-palette="linen" data-color-surface="ml">
+ <head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width,initial-scale=1" name="viewport"/>
+  <title>
+   Machine Learning · Theory Notes
+  </title>
+  <meta content="Giacomo Scanavini" name="author"/>
+  <meta content="Theory-first machine learning, neural networks and reinforcement learning: detailed derivations, visual calculations and official PyTorch implementations." name="description"/>
+  <meta content="#E9E7E2" name="theme-color"/>
+  <link href="css/reader.css" rel="stylesheet"/>
+  <link href="css/derivations.css" rel="stylesheet"/>
+  <link href="css/reinforcement.css" rel="stylesheet"/>
+ 
+  <link rel="stylesheet" href="../../css/themes/linen-ink.css?v=1">
+  <link rel="stylesheet" href="../../css/themes/readers.css?v=linen-ink-1">
+
+ </head>
+ <body>
+  <a class="skip" href="#main">
+   Skip to content
+  </a>
+  <header class="mobilebar">
+   <a href="#contents">
+    ML Theory Notes
+   </a>
+   <button aria-controls="sidebar" aria-expanded="false" id="menu-toggle" type="button">
+    Contents &amp; search
+   </button>
+  </header>
+  <aside aria-label="Study navigation" class="sidebar" id="sidebar">
+   <a class="brand" href="#contents">
+    Machine Learning
+    <span>
+     Theory Notes
+    </span>
+   </a>
+   <button aria-label="Close navigation" class="close-menu" id="close-menu" type="button">
+    ×
+   </button>
+   <div class="search-box">
+    <label class="sr-only" for="search">
+     Search concepts and explanations
+    </label>
+    <input autocomplete="off" id="search" placeholder="Search a concept…" spellcheck="false" type="search"/>
+    <kbd aria-hidden="true">
+     /
+    </kbd>
+   </div>
+   <nav aria-label="Reader" class="main-nav">
+    <a href="#contents">
+     Contents
+    </a>
+    <a href="#sources">
+     Sources &amp; examples
+    </a>
+   </nav>
+   <div class="chapter-nav">
+    <details class="part-nav" data-part="1" open="">
+     <summary>
+      <span class="part-no">
+       01
+      </span>
+      <span>
+       Neural-network foundations
+      </span>
+     </summary>
+     <nav aria-label="Neural-network foundations">
+      <a href="#learning-objective">
+       <span class="nav-number">
+        01
+       </span>
+       <span>
+        What does a model learn?
+       </span>
+      </a>
+      <a href="#neurons-and-layers">
+       <span class="nav-number">
+        02
+       </span>
+       <span>
+        Neurons, layers, and model capacity
+       </span>
+      </a>
+      <a href="#activations">
+       <span class="nav-number">
+        03
+       </span>
+       <span>
+        Activations and their derivatives
+       </span>
+      </a>
+      <a href="#forward-pass">
+       <span class="nav-number">
+        04
+       </span>
+       <span>
+        A complete forward pass
+       </span>
+      </a>
+      <a href="#losses-and-outputs">
+       <span class="nav-number">
+        05
+       </span>
+       <span>
+        Regression, classification, and the loss
+       </span>
+      </a>
+      <a href="#backpropagation">
+       <span class="nav-number">
+        06
+       </span>
+       <span>
+        Backpropagation, worked all the way through
+       </span>
+      </a>
+      <a href="#training-cycle">
+       <span class="nav-number">
+        07
+       </span>
+       <span>
+        Training cycles, mini-batches, and autograd
+       </span>
+      </a>
+      <a href="#gradient-flow">
+       <span class="nav-number">
+        08
+       </span>
+       <span>
+        Gradient flow and initialization
+       </span>
+      </a>
+     </nav>
+    </details>
+    <details class="part-nav" data-part="2">
+     <summary>
+      <span class="part-no">
+       02
+      </span>
+      <span>
+       Optimization
+      </span>
+     </summary>
+     <nav aria-label="Optimization">
+      <a href="#sgd">
+       <span class="nav-number">
+        09
+       </span>
+       <span>
+        SGD, gradient noise, and learning rates
+       </span>
+      </a>
+      <a href="#momentum">
+       <span class="nav-number">
+        10
+       </span>
+       <span>
+        Momentum and Nesterov acceleration
+       </span>
+      </a>
+      <a href="#adaptive-scaling">
+       <span class="nav-number">
+        11
+       </span>
+       <span>
+        AdaGrad and RMSProp: adaptive scaling
+       </span>
+      </a>
+      <a href="#adam-adamw">
+       <span class="nav-number">
+        12
+       </span>
+       <span>
+        Adam, bias correction, and AdamW
+       </span>
+      </a>
+      <a href="#curvature">
+       <span class="nav-number">
+        13
+       </span>
+       <span>
+        Curvature, conditioning, and preconditioning
+       </span>
+      </a>
+      <a href="#conjugate-gradient">
+       <span class="nav-number">
+        14
+       </span>
+       <span>
+        Conjugate Gradient: directions that do not repeat work
+       </span>
+      </a>
+      <a href="#bfgs-lbfgs">
+       <span class="nav-number">
+        15
+       </span>
+       <span>
+        BFGS, L-BFGS, and line search
+       </span>
+      </a>
+      <a href="#training-diagnosis">
+       <span class="nav-number">
+        16
+       </span>
+       <span>
+        Diagnosing optimization versus generalization
+       </span>
+      </a>
+     </nav>
+    </details>
+    <details class="part-nav" data-part="3">
+     <summary>
+      <span class="part-no">
+       03
+      </span>
+      <span>
+       Regularization &amp; ensembles
+      </span>
+     </summary>
+     <nav aria-label="Regularization &amp; ensembles">
+      <a href="#bias-variance">
+       <span class="nav-number">
+        17
+       </span>
+       <span>
+        Generalization and the bias–variance trade-off
+       </span>
+      </a>
+      <a href="#ridge">
+       <span class="nav-number">
+        18
+       </span>
+       <span>
+        OLS, Ridge, and spectral shrinkage
+       </span>
+      </a>
+      <a href="#lasso">
+       <span class="nav-number">
+        19
+       </span>
+       <span>
+        LASSO, subgradients, and exact zeros
+       </span>
+      </a>
+      <a href="#elastic-net">
+       <span class="nav-number">
+        20
+       </span>
+       <span>
+        Elastic Net and correlated predictors
+       </span>
+      </a>
+      <a href="#augmentation-noise">
+       <span class="nav-number">
+        21
+       </span>
+       <span>
+        Augmentation, invariance, and noise injection
+       </span>
+      </a>
+      <a href="#early-stopping">
+       <span class="nav-number">
+        22
+       </span>
+       <span>
+        Early stopping as spectral regularization
+       </span>
+      </a>
+      <a href="#sparsity-and-dropout">
+       <span class="nav-number">
+        23
+       </span>
+       <span>
+        Sparse representations and dropout
+       </span>
+      </a>
+      <a href="#bagging">
+       <span class="nav-number">
+        24
+       </span>
+       <span>
+        Bagging, random forests, and out-of-bag evaluation
+       </span>
+      </a>
+      <a href="#ensembles">
+       <span class="nav-number">
+        25
+       </span>
+       <span>
+        Averaging, covariance weights, and stacking
+       </span>
+      </a>
+     </nav>
+    </details>
+    <details class="part-nav" data-part="4">
+     <summary>
+      <span class="part-no">
+       04
+      </span>
+      <span>
+       Architectures &amp; information flow
+      </span>
+     </summary>
+     <nav aria-label="Architectures &amp; information flow">
+      <a href="#architecture-map">
+       <span class="nav-number">
+        26
+       </span>
+       <span>
+        Architectures as information flow
+       </span>
+      </a>
+      <a href="#rnn">
+       <span class="nav-number">
+        27
+       </span>
+       <span>
+        Recurrent networks and backpropagation through time
+       </span>
+      </a>
+      <a href="#lstm">
+       <span class="nav-number">
+        28
+       </span>
+       <span>
+        LSTM gates and memory timescales
+       </span>
+      </a>
+      <a href="#gru">
+       <span class="nav-number">
+        29
+       </span>
+       <span>
+        GRUs and gate conventions
+       </span>
+      </a>
+      <a href="#encoder-decoder">
+       <span class="nav-number">
+        30
+       </span>
+       <span>
+        Encoders, decoders, and teacher forcing
+       </span>
+      </a>
+      <a href="#autoencoders">
+       <span class="nav-number">
+        31
+       </span>
+       <span>
+        Autoencoders, bottlenecks, and denoising
+       </span>
+      </a>
+      <a href="#vae">
+       <span class="nav-number">
+        32
+       </span>
+       <span>
+        Variational autoencoders and the ELBO
+       </span>
+      </a>
+      <a href="#attention">
+       <span class="nav-number">
+        33
+       </span>
+       <span>
+        Attention: queries, keys, values, and weights
+       </span>
+      </a>
+      <a href="#transformers">
+       <span class="nav-number">
+        34
+       </span>
+       <span>
+        Transformers: position, residual paths, and masking
+       </span>
+      </a>
+      <a href="#graphs">
+       <span class="nav-number">
+        35
+       </span>
+       <span>
+        GNNs, graph attention, and relational bottlenecks
+       </span>
+      </a>
+     </nav>
+    </details>
+    <details class="part-nav" data-part="5">
+     <summary>
+      <span class="part-no">
+       05
+      </span>
+      <span>
+       Reinforcement learning
+      </span>
+     </summary>
+     <nav aria-label="Reinforcement learning">
+      <a href="#reinforcement-learning">
+       <span class="nav-number">
+        36
+       </span>
+       <span>
+        Rewards, values, and policies
+       </span>
+      </a>
+     </nav>
+    </details>
+   </div>
+   <div class="side-footer">
+    <a href="../sql-field-notes/index.html">
+     SQL Field Notes ↗
+    </a>
+    <a href="../../projects.html#ml-theory-notes">
+     ← Side projects
+    </a>
+   </div>
+  </aside>
+  <button aria-label="Close navigation" class="scrim" id="scrim" tabindex="-1">
+  </button>
+  <div class="app">
+   <div class="topbar">
+    <a href="#contents">
+     Giacomo Scanavini / Field Notes
+    </a>
+    <span class="top-subtitle">
+     Concepts first. Implementation alongside.
+    </span>
+   </div>
+   <main class="main" id="main" tabindex="-1">
+    <p id="reader-loading" role="status">
+     Loading ML Theory Notes…
+    </p>
+    <noscript>
+     <p class="nojs-info">
+      This modular reader uses JavaScript to load individual chapters. Use a local web server or your published website.
+     </p>
+    </noscript>
+    <section class="page-view search-view" id="search-results-view">
+     <p class="part-label">
+      Across the reader
+     </p>
+     <h1 tabindex="-1">
+      Find a concept
+     </h1>
+     <p aria-live="polite" class="search-meta" id="search-count">
+     </p>
+     <div id="search-results">
+     </div>
+    </section>
+   </main>
+   <footer class="footer">
+    Machine Learning Theory Notes · Four source guides + reinforcement-learning supplement
+   </footer>
+  </div>
+  <div class="toast" hidden="" id="toast" role="status">
+  </div>
+  <dialog aria-label="Source figure" class="figure-dialog" id="figure-dialog">
+   <div class="dialog-head">
+    <span>
+     Original study-guide figure
+    </span>
+    <button id="close-figure" type="button">
+     Close
+    </button>
+   </div>
+   <img alt="Enlarged source figure" id="dialog-image"/>
+   <p id="dialog-caption">
+   </p>
+  </dialog>
+  <script defer="True" src="../shared/loader.js"></script>
+  <script defer="True" src="js/visualizations.js"></script>
+  <script defer="True" src="js/reinforcement.js"></script>
+  <script defer="True" src="js/reader.js"></script>
+ </body>
+</html>

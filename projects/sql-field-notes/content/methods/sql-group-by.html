@@ -1,0 +1,1722 @@
+<article class="article method-page" id="m-sql-group-by">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=sql&amp;cat=Aggregation">
+   MySQL · Aggregation
+  </a>
+ </div>
+ <h1>
+  GROUP BY
+ </h1>
+ <p class="lead">
+  Aggregate by group
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    MySQL
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-group-by"><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">city</span></code></pre>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-pd-groupby">
+   pandas · Basic group
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C44?code=code-C44-0&amp;method=sql-group-by&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     1581 · Customers who visited without transactions
+    </strong>
+    <small>
+     Study solution · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">WHERE t.transaction_id IS NULL
+GROUP BY v.customer_id;</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-03?code=code-squid-03-0&amp;method=sql-group-by&amp;line=39">
+   <div>
+    <span class="usage-label">
+     Squid Game · SQL
+    </span>
+    <strong>
+     Compare hot and cold months
+    </strong>
+    <small>
+     Saved walkthrough · line 39
+    </small>
+   </div>
+   <pre aria-hidden="true">WHERE h.year_num &gt;= 2006
+GROUP BY h.shape, h.month_num
+ORDER BY avg_temp ASC</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#B10?code=code-B10-2&amp;method=sql-group-by&amp;line=1">
+   <div>
+    <span class="usage-label">
+     SQLBolt · SQL
+    </span>
+    <strong>
+     Aggregates and GROUP BY
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">SELECT role, AVG(years_employed) AS average_years FROM employees GROUP BY role;</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C46?code=code-C46-0&amp;method=sql-group-by&amp;line=19">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     1661 · Average processing time per machine
+    </strong>
+    <small>
+     Study solution · line 19
+    </small>
+   </div>
+   <pre aria-hidden="true">FROM m
+GROUP BY machine_id</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C48?code=code-C48-0&amp;method=sql-group-by&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     1280 · Students and examinations
+    </strong>
+    <small>
+     Study solution · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">LEFT JOIN Examinations e ON s.student_id = e.student_id AND su.subject_name = e.subject_name
+GROUP BY s.student_id, s.student_name, su.subject_name
+ORDER BY s.student_id, s.student_name, su.subject_name</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C49?code=code-C49-0&amp;method=sql-group-by&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     570 · Managers with at least five direct reports
+    </strong>
+    <small>
+     Study solution · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">    FROM Employee
+    GROUP BY managerId
+)
+SELECT e.name</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   39 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C50?code=code-C50-0&amp;method=sql-group-by&amp;line=13">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1934 · Confirmation rate
+     </strong>
+     <small>
+      Study solution · line 13
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Rate
+GROUP BY user_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-0&amp;method=sql-group-by&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      Study solution · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">  ON p.product_id = u.product_id AND u.purchase_date BETWEEN p.start_date AND p.end_date
+GROUP BY p.product_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C08?code=code-C08-0&amp;method=sql-group-by&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1075 · Project employees I
+     </strong>
+     <small>
+      Study solution · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Project p LEFT JOIN Employee e ON p.employee_id = e.employee_id
+GROUP BY p.project_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C09?code=code-C09-0&amp;method=sql-group-by&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1633 · Users registered in a contest
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT contest_id, ROUND(100.0 * COUNT(*) / (SELECT COUNT(*) FROM Users), 2) AS percentage
+FROM Register GROUP BY contest_id ORDER BY percentage DESC, contest_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C10?code=code-C10-0&amp;method=sql-group-by&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1211 · Queries quality and percentage
+     </strong>
+     <small>
+      Study solution · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">       ROUND(100.0 * AVG(CASE WHEN rating &lt; 3 THEN 1 ELSE 0 END), 2) AS poor_query_percentage
+FROM Queries GROUP BY query_name;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C11?code=code-C11-0&amp;method=sql-group-by&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">       SUM(CASE WHEN state = 'approved' THEN amount ELSE 0 END) AS approved_total_amount
+FROM Transactions GROUP BY DATE_FORMAT(trans_date, '%Y-%m'), country;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C13?code=code-C13-0&amp;method=sql-group-by&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      550 · Game Play Analysis IV
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH first_login AS (
+    SELECT player_id, MIN(event_date) AS first_day FROM Activity GROUP BY player_id
+)
+SELECT ROUND(AVG(CASE WHEN EXISTS (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C14?code=code-C14-0&amp;method=sql-group-by&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      2356 · Unique subjects per teacher
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT teacher_id, COUNT(DISTINCT subject_id) AS cnt FROM Teacher GROUP BY teacher_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-0&amp;method=sql-group-by&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      Study solution · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">  AND activity_type IN ('open_session', 'end_session', 'scroll_down', 'send_message')
+GROUP BY activity_date;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C16?code=code-C16-0&amp;method=sql-group-by&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1070 · First-year product sales
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT s.product_id, s.year AS first_year, s.quantity, s.price
+FROM Sales s JOIN (SELECT product_id, MIN(year) AS first_year FROM Sales GROUP BY product_id) f
+ON s.product_id = f.product_id AND s.year = f.first_year;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C17?code=code-C17-0&amp;method=sql-group-by&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      596 · Classes with at least five students
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT class FROM Courses GROUP BY class HAVING COUNT(DISTINCT student) &gt;= 5;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C18?code=code-C18-0&amp;method=sql-group-by&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1729 · Followers count
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT user_id, COUNT(DISTINCT follower_id) AS followers_count FROM Followers GROUP BY user_id ORDER BY user_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C19?code=code-C19-0&amp;method=sql-group-by&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      619 · Biggest single number
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT MAX(num) AS num FROM (
+    SELECT num FROM MyNumbers GROUP BY num HAVING COUNT(*) = 1
+) singles;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C20?code=code-C20-2&amp;method=sql-group-by&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1045 · Customers who bought every product
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Customer c
+GROUP BY c.customer_id
+HAVING (SELECT COUNT(*) FROM Product) = COUNT(DISTINCT CASE
+    WHEN c.product_key IN (SELECT product_key FROM Product) THEN c.product_key END);</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C21?code=code-C21-0&amp;method=sql-group-by&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1731 · Employees reporting to employees
+     </strong>
+     <small>
+      Study solution · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    WHERE reports_to IS NOT NULL
+    GROUP BY reports_to
+)
+SELECT r.manager_id AS employee_id, e.name, r.reports_count, r.average_age</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C22?code=code-C22-2&amp;method=sql-group-by&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1789 · Primary department per employee
+     </strong>
+     <small>
+      My approach · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Employee
+GROUP BY employee_id
+HAVING COUNT(employee_id) = 1;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C27?code=code-C27-2&amp;method=sql-group-by&amp;line=14">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1907 · Count salary categories
+     </strong>
+     <small>
+      My approach · line 14
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM Labels
+        GROUP BY category
+    ),
+    Categories AS (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-0&amp;method=sql-group-by&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Study solution · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">    SELECT u.name AS results FROM MovieRating r JOIN Users u ON r.user_id = u.user_id
+    GROUP BY u.user_id, u.name ORDER BY COUNT(*) DESC, u.name LIMIT 1
+), movie_winner AS (
+    SELECT m.title AS results FROM MovieRating r JOIN Movies m ON r.movie_id = m.movie_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-0&amp;method=sql-group-by&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH daily AS (
+    SELECT visited_on, SUM(amount) AS amount FROM Customer GROUP BY visited_on
+), rolled AS (
+    SELECT visited_on,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C32?code=code-C32-0&amp;method=sql-group-by&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      602 · Most accepted friends
+     </strong>
+     <small>
+      Study solution · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">)
+SELECT id, COUNT(*) AS num FROM endpoints GROUP BY id ORDER BY num DESC, id LIMIT 1;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C33?code=code-C33-2&amp;method=sql-group-by&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      585 · Investments in 2016
+     </strong>
+     <small>
+      My approach · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM Insurance
+        GROUP BY tiv_2015
+        HAVING COUNT(*) &gt; 1
+    ),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C39?code=code-C39-0&amp;method=sql-group-by&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1484 · Products sold by date
+     </strong>
+     <small>
+      Study solution · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">       GROUP_CONCAT(DISTINCT product ORDER BY product SEPARATOR ',') AS products
+FROM Activities GROUP BY sell_date ORDER BY sell_date;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-0&amp;method=sql-group-by&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">WHERE o.order_date &gt;= '2020-02-01' AND o.order_date &lt; '2020-03-01'
+GROUP BY p.product_id, p.product_name HAVING SUM(o.unit) &gt;= 100;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC262?code=code-LC262-0&amp;method=sql-group-by&amp;line=20">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      262 · Trips and users
+     </strong>
+     <small>
+      Uploaded submission · line 20
+     </small>
+    </div>
+    <pre aria-hidden="true">        WHERE status LIKE 'cancelled%'
+        GROUP BY request_at
+    ),
+    ValidTotal AS (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC586?code=code-LC586-0&amp;method=sql-group-by&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      586 · Customer placing the largest number of orders
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Orders
+GROUP BY customer_number
+ORDER BY COUNT(*) DESC
+LIMIT 1</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC601?code=code-LC601-0&amp;method=sql-group-by&amp;line=13">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      601 · Human traffic of stadium
+     </strong>
+     <small>
+      Uploaded submission · line 13
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM CrowdedDays
+        GROUP BY group_num
+        HAVING COUNT(*) &gt;= 3
+    )</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC1158?code=code-LC1158-0&amp;method=sql-group-by&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1158 · Market analysis I
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    WHERE order_date &gt;= '2019-01-01' AND order_date &lt;= '2019-12-31'
+    GROUP BY buyer_id
+)
+</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC1393?code=code-LC1393-0&amp;method=sql-group-by&amp;line=14">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1393 · Capital gain/loss
+     </strong>
+     <small>
+      Uploaded submission · line 14
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Operations
+GROUP BY stock_name</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3220?code=code-LC3220-0&amp;method=sql-group-by&amp;line=13">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3220 · Odd and even transactions
+     </strong>
+     <small>
+      Uploaded submission · line 13
+     </small>
+    </div>
+    <pre aria-hidden="true">        WHERE amount % 2 = 0
+        GROUP BY transaction_date
+    ),
+    Odds AS ( </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3497?code=code-LC3497-0&amp;method=sql-group-by&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3497 · Analyze subscription conversion
+     </strong>
+     <small>
+      Uploaded submission · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">    WHERE activity_type &lt;&gt; 'cancelled'
+    GROUP BY user_id
+    ORDER BY user_id ASC
+) </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3521?code=code-LC3521-0&amp;method=sql-group-by&amp;line=15">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3521 · Find product recommendation pairs
+     </strong>
+     <small>
+      Uploaded submission · line 15
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM BoughtPairs
+        GROUP BY product1_id, product2_id
+        HAVING COUNT(*) &gt;= 3
+    )</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3564?code=code-LC3564-0&amp;method=sql-group-by&amp;line=24">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3564 · Seasonal sales analysis
+     </strong>
+     <small>
+      Uploaded submission · line 24
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM SeasonSales
+        GROUP BY season, category
+        ORDER BY total_quantity DESC, total_revenue DESC
+    ),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3580?code=code-LC3580-0&amp;method=sql-group-by&amp;line=14">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3580 · Find consistently improving employees
+     </strong>
+     <small>
+      Uploaded submission · line 14
+     </small>
+    </div>
+    <pre aria-hidden="true">            FROM Performance_reviews
+            GROUP BY employee_id
+            HAVING COUNT(*) &gt;= 3
+        )</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-04?code=code-squid-04-0&amp;method=sql-group-by&amp;line=13">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Rank ten-player teams
+     </strong>
+     <small>
+      Saved walkthrough · line 13
+     </small>
+    </div>
+    <pre aria-hidden="true">    FROM player  
+    GROUP BY team_id
+) t
+WHERE t.n_players = 10</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-05?code=code-squid-05-0&amp;method=sql-group-by&amp;line=18">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Count a player’s closest interactions
+     </strong>
+     <small>
+      Saved walkthrough · line 18
+     </small>
+    </div>
+    <pre aria-hidden="true">	  ) AS t
+	  GROUP BY t.target_id, t.player_id
+	  ORDER BY counts DESC
+	)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-06?code=code-squid-06-0&amp;method=sql-group-by&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Trace equipment to its first failure
+     </strong>
+     <small>
+      Saved walkthrough · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">			ON e.id = f.failed_equipment_id
+		GROUP BY e.game_type
+		ORDER BY COUNT(*) DESC
+		LIMIT 1</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-08?code=code-squid-08-0&amp;method=sql-group-by&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Find the longest hesitation
+     </strong>
+     <small>
+      Saved walkthrough · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">        WHERE death_description = 'pushed'
+        GROUP BY game_id
+        ORDER BY AVG(last_moved_time_seconds) DESC
+        LIMIT 1</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B11?code=code-B11-2&amp;method=sql-group-by&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      WHERE versus HAVING
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT role, COUNT(*) AS employee_count FROM employees GROUP BY role;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B12?code=code-B12-0&amp;method=sql-group-by&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Logical query order
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT director, COUNT(*) AS movie_count FROM movies GROUP BY director;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (41)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C44?code=code-C44-2&amp;method=sql-group-by&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1581 · Customers who visited without transactions
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">WHERE t.amount IS NULL
+GROUP BY v.customer_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C46?code=code-C46-2&amp;method=sql-group-by&amp;line=23">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1661 · Average processing time per machine
+     </strong>
+     <small>
+      Uploaded submission · line 23
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM m
+GROUP BY machine_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C48?code=code-C48-2&amp;method=sql-group-by&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1280 · Students and examinations
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">LEFT JOIN Examinations e ON s.student_id = e.student_id AND su.subject_name = e.subject_name
+GROUP BY s.student_id, s.student_name, su.subject_name
+ORDER BY s.student_id, s.student_name, su.subject_name</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C49?code=code-C49-2&amp;method=sql-group-by&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      570 · Managers with at least five direct reports
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    FROM Employee
+    GROUP BY managerId
+)
+</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C50?code=code-C50-2&amp;method=sql-group-by&amp;line=15">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1934 · Confirmation rate
+     </strong>
+     <small>
+      Uploaded submission · line 15
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Rate
+GROUP BY user_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-2&amp;method=sql-group-by&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      My approach · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Sold
+GROUP BY product_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-4&amp;method=sql-group-by&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      Uploaded submission · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Sold
+GROUP BY product_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C08?code=code-C08-2&amp;method=sql-group-by&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1075 · Project employees I
+     </strong>
+     <small>
+      My approach · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">LEFT JOIN Employee e   ON p.employee_id = e.employee_id
+GROUP BY p.project_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C08?code=code-C08-4&amp;method=sql-group-by&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1075 · Project employees I
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">LEFT JOIN Employee e ON p.employee_id = e.employee_id
+GROUP BY p.project_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C09?code=code-C09-2&amp;method=sql-group-by&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1633 · Users registered in a contest
+     </strong>
+     <small>
+      My approach · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Register
+GROUP BY contest_id
+ORDER BY percentage DESC,   contest_id ASC;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C09?code=code-C09-4&amp;method=sql-group-by&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1633 · Users registered in a contest
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Register
+GROUP BY contest_id
+ORDER BY percentage DESC, contest_id ASC</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C10?code=code-C10-2&amp;method=sql-group-by&amp;line=16">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1211 · Queries quality and percentage
+     </strong>
+     <small>
+      My approach · line 16
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Quality
+GROUP BY query_name;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C10?code=code-C10-4&amp;method=sql-group-by&amp;line=18">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1211 · Queries quality and percentage
+     </strong>
+     <small>
+      Uploaded submission · line 18
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Quality
+GROUP BY query_name</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C11?code=code-C11-2&amp;method=sql-group-by&amp;line=20">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      My approach · line 20
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM T
+GROUP BY month,   country;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C11?code=code-C11-4&amp;method=sql-group-by&amp;line=22">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      Uploaded submission · line 22
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM T
+GROUP BY month, country</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C14?code=code-C14-2&amp;method=sql-group-by&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      2356 · Unique subjects per teacher
+     </strong>
+     <small>
+      My approach · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Teacher
+GROUP BY teacher_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C14?code=code-C14-4&amp;method=sql-group-by&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      2356 · Unique subjects per teacher
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Teacher
+GROUP BY teacher_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-2&amp;method=sql-group-by&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      My approach · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">    activity_type   IN ('open_session', 'end_session', 'scroll_down', 'send_message')
+GROUP BY   activity_date;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-4&amp;method=sql-group-by&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      Uploaded submission · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    activity_type IN ('open_session', 'end_session', 'scroll_down', 'send_message')
+GROUP BY activity_date </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C17?code=code-C17-2&amp;method=sql-group-by&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      596 · Classes with at least five students
+     </strong>
+     <small>
+      My approach · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    FROM Courses
+    GROUP BY class
+)
+SELECT class</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C17?code=code-C17-4&amp;method=sql-group-by&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      596 · Classes with at least five students
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    FROM Courses
+    GROUP BY class
+)
+</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C18?code=code-C18-2&amp;method=sql-group-by&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1729 · Followers count
+     </strong>
+     <small>
+      My approach · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Followers
+GROUP BY user_id
+ORDER BY user_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C18?code=code-C18-4&amp;method=sql-group-by&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1729 · Followers count
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Followers
+GROUP BY user_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C19?code=code-C19-2&amp;method=sql-group-by&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      619 · Biggest single number
+     </strong>
+     <small>
+      My approach · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    FROM MyNumbers
+    GROUP BY num
+)
+SELECT MAX(num) AS num</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C19?code=code-C19-4&amp;method=sql-group-by&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      619 · Biggest single number
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    FROM MyNumbers
+    GROUP BY num
+)
+</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C20?code=code-C20-4&amp;method=sql-group-by&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1045 · Customers who bought every product
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Customer
+GROUP BY customer_id
+HAVING (SELECT COUNT(product_key) FROM Product) = COUNT(DISTINCT product_key) </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C21?code=code-C21-2&amp;method=sql-group-by&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1731 · Employees reporting to employees
+     </strong>
+     <small>
+      Uploaded submission · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">    FROM Employees
+    GROUP BY reports_to
+    HAVING reports_to IS NOT NULL
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C22?code=code-C22-4&amp;method=sql-group-by&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1789 · Primary department per employee
+     </strong>
+     <small>
+      Uploaded submission · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Employee
+GROUP BY employee_id
+HAVING COUNT(employee_id) = 1</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C27?code=code-C27-4&amp;method=sql-group-by&amp;line=15">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1907 · Count salary categories
+     </strong>
+     <small>
+      Uploaded submission · line 15
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM Labels
+        GROUP BY category
+    ),
+    Categories AS (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-2&amp;method=sql-group-by&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      My approach · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM MovieRating
+        GROUP BY user_id
+    ),
+      ReviewPerUserName AS (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-4&amp;method=sql-group-by&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM MovieRating
+        GROUP BY user_id
+    ),
+    ReviewPerUserName AS (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C32?code=code-C32-2&amp;method=sql-group-by&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      602 · Most accepted friends
+     </strong>
+     <small>
+      My approach · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM RequestAccepted
+        GROUP BY   requester_id
+    ),
+    TableAccepted   AS (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C32?code=code-C32-4&amp;method=sql-group-by&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      602 · Most accepted friends
+     </strong>
+     <small>
+      Uploaded submission · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM RequestAccepted
+        GROUP BY requester_id
+    ),
+    TableAccepted AS (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C33?code=code-C33-4&amp;method=sql-group-by&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      585 · Investments in 2016
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM Insurance
+        GROUP BY tiv_2015
+        HAVING COUNT(*) &gt; 1
+    ),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C39?code=code-C39-2&amp;method=sql-group-by&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1484 · Products sold by date
+     </strong>
+     <small>
+      My approach · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Activities
+GROUP BY sell_date
+ORDER BY sell_date ASC;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C39?code=code-C39-4&amp;method=sql-group-by&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1484 · Products sold by date
+     </strong>
+     <small>
+      Uploaded submission · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Activities
+GROUP BY sell_date
+ORDER BY sell_date ASC</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-2&amp;method=sql-group-by&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      My approach · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    WHERE order_date &gt;= '2020-02-01' AND order_date &lt; '2020-03-01'
+    GROUP BY product_id
+)
+SELECT</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-4&amp;method=sql-group-by&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      Uploaded submission · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">    WHERE order_date &gt; '2020-01-31' AND order_date &lt; '2020-03-01'
+    GROUP BY product_id
+)
+</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B10?code=code-B10-4&amp;method=sql-group-by&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Aggregates and GROUP BY
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT building, SUM(years_employed) AS total_years FROM employees GROUP BY building;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B11?code=code-B11-4&amp;method=sql-group-by&amp;line=2">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      WHERE versus HAVING
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT role, SUM(years_employed) AS total_years
+FROM employees GROUP BY role HAVING role = 'Engineer';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B12?code=code-B12-2&amp;method=sql-group-by&amp;line=2">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Logical query order
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT m.director, SUM(b.domestic_sales + b.international_sales) AS total_sales
+FROM movies m JOIN boxoffice b ON m.id = b.movie_id GROUP BY m.director;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    SQL cheat-sheet image · Aggregation. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=sql&amp;cat=Aggregation">
+   <small>
+    ← Browse
+   </small>
+   MySQL · Aggregation
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

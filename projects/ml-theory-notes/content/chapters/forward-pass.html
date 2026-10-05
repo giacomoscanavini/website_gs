@@ -1,0 +1,595 @@
+<section aria-labelledby="forward-pass-title" class="page-view lesson-layout" id="forward-pass">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     04
+    </span>
+    Part 1 · Neural-network foundations
+   </p>
+   <h1 id="forward-pass-title" tabindex="-1">
+    A complete forward pass
+   </h1>
+   <p class="standfirst">
+    Follow the PDFs’ 2 → 2 → 1 network from input values to a binary probability and loss.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Neural networks · PDF pp. 11–12 · §§9–12" data-page="11" data-pdf="basics" type="button">
+     Neural networks · PDF pp. 11–12 · §§9–12
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="the-recursive-definition" href="#forward-pass?section=the-recursive-definition">
+     The recursive definition
+    </a>
+    <a data-section="step-1-compute-the-hidden-pre-activations" href="#forward-pass?section=step-1-compute-the-hidden-pre-activations">
+     Step 1: compute the hidden pre-activations
+    </a>
+    <a data-section="step-2-apply-the-hidden-activation" href="#forward-pass?section=step-2-apply-the-hidden-activation">
+     Step 2: apply the hidden activation
+    </a>
+    <a data-section="step-3-compute-the-output-logit" href="#forward-pass?section=step-3-compute-the-output-logit">
+     Step 3: compute the output logit
+    </a>
+    <a data-section="step-4-map-to-a-probability-and-evaluate-the-loss" href="#forward-pass?section=step-4-map-to-a-probability-and-evaluate-the-loss">
+     Step 4: map to a probability and evaluate the loss
+    </a>
+    <a data-section="what-comes-next" href="#forward-pass?section=what-comes-next">
+     What comes next
+    </a>
+    <a data-section="implementation" href="#forward-pass?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="the-recursive-definition" id="forward-pass--the-recursive-definition">
+    The recursive definition
+   </h2>
+   <p>
+    For a network with
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
+    transformations, set
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>0</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">a^{[0]}=x</annotation></semantics></math>
+    and compute
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>z</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><msup><mi>W</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>+</mo><msup><mi>b</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><msup><mi>ϕ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>z</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">z^{[\ell]}=W^{[\ell]}a^{[\ell-1]}+b^{[\ell]},\qquad
+ a^{[\ell]}=\phi^{[\ell]}(z^{[\ell]}).</annotation></semantics></math>
+   </div>
+   <p>
+    The output is the last activation. The notation separates
+    <strong>
+     pre-activation
+    </strong>
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
+    ,
+    <strong>
+     activation
+    </strong>
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
+    , and
+    <strong>
+     parameters
+    </strong>
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>W</mi><mo>,</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">W,b</annotation></semantics></math>
+    . Maintaining that separation is essential when deriving the backward pass.
+   </p>
+   <p>
+    The example below preserves the numerical values from the supplied guide. It is a single observation, not a fitted dataset or a performance demonstration.
+   </p>
+   <h2 data-section="step-1-compute-the-hidden-pre-activations" id="forward-pass--step-1-compute-the-hidden-pre-activations">
+    Step 1: compute the hidden pre-activations
+   </h2>
+   <p>
+    Take
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msup><mi>W</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.5</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.3</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.8</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msup><mi>b</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.1</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">x=\begin{bmatrix}1\\2\end{bmatrix},\quad
+W^{[1]}=\begin{bmatrix}0.5&amp;-0.2\\0.3&amp;0.8\end{bmatrix},\quad
+b^{[1]}=\begin{bmatrix}0.1\\-0.1\end{bmatrix}.</annotation></semantics></math>
+   </div>
+   <p>
+    Each row of the weight matrix produces one hidden unit:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>z</mi><mn>1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>=</mo><mn>0.5</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mn>0.2</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0.1</mn><mo>=</mo><mn>0.2</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">z^{[1]}_1=0.5(1)-0.2(2)+0.1=0.2,</annotation></semantics></math>
+   </div>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>z</mi><mn>2</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>=</mo><mn>0.3</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0.8</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mn>0.1</mn><mo>=</mo><mn>1.8</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">z^{[1]}_2=0.3(1)+0.8(2)-0.1=1.8.</annotation></semantics></math>
+   </div>
+   <p>
+    There are two input coordinates and two hidden coordinates, but their meanings differ. The hidden values are learned combinations of inputs rather than additional observations.
+   </p>
+   <h2 data-section="step-2-apply-the-hidden-activation" id="forward-pass--step-2-apply-the-hidden-activation">
+    Step 2: apply the hidden activation
+   </h2>
+   <p>
+    Both pre-activations are positive, so ReLU leaves them unchanged:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>z</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1.8</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1.8</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">z^{[1]}=\begin{bmatrix}0.2\\1.8\end{bmatrix},\qquad
+ a^{[1]}=\begin{bmatrix}0.2\\1.8\end{bmatrix}.</annotation></semantics></math>
+   </div>
+   <p>
+    ReLU happens to be the identity on these two values. The network is still globally nonlinear because another input could make one of those values negative and change the active path. A single forward pass explores one region of the function.
+   </p>
+   <h2 data-section="step-3-compute-the-output-logit" id="forward-pass--step-3-compute-the-output-logit">
+    Step 3: compute the output logit
+   </h2>
+   <p>
+    Use
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>W</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.7</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.5</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>b</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mn>0.2</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">W^{[2]}=\begin{bmatrix}0.7&amp;-0.5\end{bmatrix},\qquad b^{[2]}=0.2.</annotation></semantics></math>
+   </div>
+   <p>
+    Then
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>z</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mn>0.7</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mn>0.5</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.8</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0.2</mn><mo>=</mo><mi>−</mi><mn>0.56</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">z^{[2]}=0.7(0.2)-0.5(1.8)+0.2=-0.56.</annotation></semantics></math>
+   </div>
+   <p>
+    The positive contribution of the first hidden unit is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.14</mn><annotation encoding="application/x-tex">0.14</annotation></semantics></math>
+    , and the negative contribution of the second is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.9</mn></mrow><annotation encoding="application/x-tex">-0.9</annotation></semantics></math>
+    . Adding the output bias gives a negative logit. The sign is meaningful for a binary classifier: after sigmoid, a negative logit corresponds to a probability below one half.
+   </p>
+   <h2 data-section="step-4-map-to-a-probability-and-evaluate-the-loss" id="forward-pass--step-4-map-to-a-probability-and-evaluate-the-loss">
+    Step 4: map to a probability and evaluate the loss
+   </h2>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.56</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mn>0.363547</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat y=\sigma(-0.56)\approx0.363547.</annotation></semantics></math>
+   </div>
+   <p>
+    For target
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">y=1</annotation></semantics></math>
+    , the binary cross-entropy loss reduces to
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>−</mi><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mn>1.01185</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">L=-\log(\hat y)\approx1.01185.</annotation></semantics></math>
+   </div>
+   <p>
+    The PDF rounds this to approximately 1.0118. This is a penalty for assigning insufficient probability to the true class, not a classification accuracy. If we thresholded at
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math>
+    , the example would be classified as zero, but the loss uses the full confidence value.
+   </p>
+   <div aria-label="Scrollable calculation table" class="table-scroll" role="region" tabindex="0">
+    <table>
+     <thead>
+      <tr class="header">
+       <th>
+        Quantity
+       </th>
+       <th>
+        Value
+       </th>
+       <th>
+        Role
+       </th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr class="odd">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+       </td>
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><annotation encoding="application/x-tex">(1,2)^\top</annotation></semantics></math>
+       </td>
+       <td>
+        Observed input
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>z</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><annotation encoding="application/x-tex">z^{[1]}</annotation></semantics></math>
+       </td>
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.2</mn><mo>,</mo><mn>1.8</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><annotation encoding="application/x-tex">(0.2,1.8)^\top</annotation></semantics></math>
+       </td>
+       <td>
+        Hidden affine outputs
+       </td>
+      </tr>
+      <tr class="odd">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><annotation encoding="application/x-tex">a^{[1]}</annotation></semantics></math>
+       </td>
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.2</mn><mo>,</mo><mn>1.8</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><annotation encoding="application/x-tex">(0.2,1.8)^\top</annotation></semantics></math>
+       </td>
+       <td>
+        Hidden representation
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>z</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><annotation encoding="application/x-tex">z^{[2]}</annotation></semantics></math>
+       </td>
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.56</mn></mrow><annotation encoding="application/x-tex">-0.56</annotation></semantics></math>
+       </td>
+       <td>
+        Output logit
+       </td>
+      </tr>
+      <tr class="odd">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>y</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat y</annotation></semantics></math>
+       </td>
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.363547</mn><annotation encoding="application/x-tex">0.363547</annotation></semantics></math>
+       </td>
+       <td>
+        Probability of class one
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
+       </td>
+       <td>
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.01185</mn><annotation encoding="application/x-tex">1.01185</annotation></semantics></math>
+       </td>
+       <td>
+        Binary cross-entropy for
+        <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">y=1</annotation></semantics></math>
+       </td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+   <details class="derivation" data-derivation="full-arithmetic" id="forward-pass--derivation-full-arithmetic">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Expand the entire numerical forward calculation
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Use the exact parameters shown above, one example
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">x=(1,2)^\top</annotation></semantics></math>
+      , and target
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">y=1</annotation></semantics></math>
+      . Decimal approximations are introduced only after the affine calculations.
+     </p>
+     <h4>
+      1 · Expand the first matrix multiplication
+     </h4>
+     <p>
+      The first row gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.5</mn><mo>⋅</mo><mn>1</mn><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>⋅</mo><mn>2</mn><mo>=</mo><mn>0.5</mn><mo>−</mo><mn>0.4</mn><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">0.5\cdot1+(-0.2)\cdot2=0.5-0.4=0.1</annotation></semantics></math>
+      . Its bias makes
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mn>1</mn></msub><mo>=</mo><mn>0.1</mn><mo>+</mo><mn>0.1</mn><mo>=</mo><mn>0.2</mn></mrow><annotation encoding="application/x-tex">z_1=0.1+0.1=0.2</annotation></semantics></math>
+      . The second row gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.3</mn><mo>⋅</mo><mn>1</mn><mo>+</mo><mn>0.8</mn><mo>⋅</mo><mn>2</mn><mo>=</mo><mn>0.3</mn><mo>+</mo><mn>1.6</mn><mo>=</mo><mn>1.9</mn></mrow><annotation encoding="application/x-tex">0.3\cdot1+0.8\cdot2=0.3+1.6=1.9</annotation></semantics></math>
+      , then
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mn>2</mn></msub><mo>=</mo><mn>1.9</mn><mo>−</mo><mn>0.1</mn><mo>=</mo><mn>1.8</mn></mrow><annotation encoding="application/x-tex">z_2=1.9-0.1=1.8</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Evaluate ReLU separately for each coordinate
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mn>1</mn></msub><mo>=</mo><mo>max</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mn>0.2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.2</mn><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>a</mi><mn>2</mn></msub><mo>=</mo><mo>max</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mn>1.8</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1.8</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">a_1=\max(0,0.2)=0.2,\qquad a_2=\max(0,1.8)=1.8.</annotation></semantics></math>
+     </div>
+     <p>
+      These are the inputs to the next affine layer; the original
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+      is not multiplied by the output weights directly.
+     </p>
+     <h4>
+      3 · Form the output logit
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mn>0.7</mn><mo>⋅</mo><mn>0.2</mn><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.5</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>⋅</mo><mn>1.8</mn><mo>+</mo><mn>0.2</mn><mo>=</mo><mn>0.14</mn><mo>−</mo><mn>0.90</mn><mo>+</mo><mn>0.20</mn><mo>=</mo><mi>−</mi><mn>0.56</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">z=0.7\cdot0.2+(-0.5)\cdot1.8+0.2=0.14-0.90+0.20=-0.56.</annotation></semantics></math>
+     </div>
+     <p>
+      A logit is a real-valued score, not yet a probability.
+     </p>
+     <h4>
+      4 · Compute the binary probability
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mn>0.56</mn></msup></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">p=\frac1{1+e^{-z}}=\frac1{1+e^{0.56}}.</annotation></semantics></math>
+     </div>
+     <p>
+      With
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mn>0.56</mn></msup><mo>≈</mo><mn>1.7506725003</mn></mrow><annotation encoding="application/x-tex">e^{0.56}\approx1.7506725003</annotation></semantics></math>
+      , the denominator is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2.7506725003</mn><annotation encoding="application/x-tex">2.7506725003</annotation></semantics></math>
+      and
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>≈</mo><mn>0.3635474597</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">p\approx0.3635474597.</annotation></semantics></math>
+     </div>
+     <p>
+      The complementary class probability is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>p</mi><mo>≈</mo><mn>0.6364525403</mn></mrow><annotation encoding="application/x-tex">1-p\approx0.6364525403</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      5 · Substitute the target into both loss terms
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>−</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>log</mo><mi>p</mi><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>−</mi><mo>log</mo><mi>p</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">L=-[1\log p+(1-1)\log(1-p)]=-\log p.</annotation></semantics></math>
+     </div>
+     <p>
+      Since
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mn>0.56</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">p=(1+e^{0.56})^{-1}</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mn>0.56</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mn>1.0118454273</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">L=\log(1+e^{0.56})\approx1.0118454273.</annotation></semantics></math>
+     </div>
+     <p>
+      This logarithmic form avoids rounding the probability before computing the loss. Both forms are algebraically equal.
+     </p>
+     <h4>
+      6 · Check the output’s odds
+     </h4>
+     <p>
+      From
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mi>e</mi><mi>z</mi></msup></mrow><annotation encoding="application/x-tex">p/(1-p)=e^z</annotation></semantics></math>
+      , the odds are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>e</mi><mrow><mi>−</mi><mn>0.56</mn></mrow></msup><mo>≈</mo><mn>0.5712091</mn></mrow><annotation encoding="application/x-tex">e^{-0.56}\approx0.5712091</annotation></semantics></math>
+      . The log odds are therefore
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>p</mi><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>−</mi><mn>0.56</mn></mrow><annotation encoding="application/x-tex">\log[p/(1-p)]=-0.56</annotation></semantics></math>
+      , recovering the original logit. A threshold of
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mn>1</mn><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">p=1/2</annotation></semantics></math>
+      corresponds exactly to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">z=0</annotation></semantics></math>
+      , but thresholding is not part of the differentiable loss calculation.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="11" data-pdf="basics" type="button">
+       Chapter source · PDF p. 11
+      </button>
+      <a class="calculation-link" href="#forward-pass?derivation=full-arithmetic">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="what-comes-next" id="forward-pass--what-comes-next">
+    What comes next
+   </h2>
+   <p>
+    The forward pass gives values, not instructions for how each parameter should change. The
+    <a href="#backpropagation">
+     backpropagation chapter
+    </a>
+    continues with exactly these values and computes the gradient of every weight and bias. Keeping the same example exposes the chain connecting representation, prediction, loss, and update.
+   </p>
+   <p>
+    The official tutorials show complete implementations for the general mechanism. The optional local companion below exists only to reproduce
+    <strong>
+     these exact PDF numbers
+    </strong>
+    and check the hand-derived gradients against autograd; it is not a replacement training framework.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="forward-pass--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="build">
+     <span class="resource-meta">
+      PyTorch · Tutorial + code
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Build the Neural Network
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Inspect how Flatten, Linear, ReLU and Sequential implement a feed-forward model, and how its parameters and tensor dimensions are exposed.
+     </p>
+    </div>
+    <div class="resource" data-resource="polynomial">
+     <span class="resource-meta">
+      PyTorch · Worked regression example
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/pytorch_with_examples.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Learning PyTorch with Examples
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      An older, still useful teaching sequence: fit a polynomial while moving from explicit derivatives to autograd, modules and optimizers. Use it to compare the same mathematics across abstraction levels.
+     </p>
+    </div>
+    <div class="resource" data-resource="autograd">
+     <span class="resource-meta">
+      PyTorch · Tutorial + diagram
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Automatic Differentiation with torch.autograd
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Trace the computation graph and run the gradient example. Compare the role of requires_grad, backward and disabled gradient tracking.
+     </p>
+    </div>
+   </div>
+   <details class="local-example">
+    <summary>
+     Reproduce the full forward and backward pass
+     <small>
+      Local worked example · Python / PyTorch
+     </small>
+    </summary>
+    <p class="local-description">
+     A small authored companion reproducing the exact network in the supplied guide. Every parameter gradient is checked against the hand calculation, followed by one update. Run locally; Python is not executed by this webpage.
+    </p>
+    <div class="code-wrap">
+     <div class="code-tools">
+      <span>
+       worked_backprop.py
+      </span>
+      <div>
+       <button data-action="copy" data-example="worked_backprop" type="button">
+        Copy
+       </button>
+       <button data-action="download" data-example="worked_backprop" type="button">
+        Save .py
+       </button>
+      </div>
+     </div>
+     <pre tabindex="0"><code><span class="sd">"""Reproduce the supplied 2 → 2 → 1 forward and backward calculation"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">float64</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">w1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">],</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">b1</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">w2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.7</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">b2</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">requires_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">z1</span> <span class="o">=</span> <span class="n">w1</span> <span class="o">@</span> <span class="n">x</span> <span class="o">+</span> <span class="n">b1</span>
+    <span class="n">hidden</span> <span class="o">=</span> <span class="n">z1</span><span class="o">.</span><span class="n">relu</span><span class="p">()</span>
+    <span class="n">logit</span> <span class="o">=</span> <span class="n">w2</span> <span class="o">@</span> <span class="n">hidden</span> <span class="o">+</span> <span class="n">b2</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">binary_cross_entropy_with_logits</span><span class="p">(</span><span class="n">logit</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+    <span class="c1"># The hand calculation uses the source's single-observation convention</span>
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="n">delta2</span> <span class="o">=</span> <span class="n">logit</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">()</span> <span class="o">-</span> <span class="n">y</span>
+        <span class="n">delta1</span> <span class="o">=</span> <span class="n">w2</span> <span class="o">*</span> <span class="n">delta2</span> <span class="o">*</span> <span class="p">(</span><span class="n">z1</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">expected</span> <span class="o">=</span> <span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="n">outer</span><span class="p">(</span><span class="n">delta1</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">delta1</span><span class="p">,</span> <span class="n">delta2</span> <span class="o">*</span> <span class="n">hidden</span><span class="p">,</span> <span class="n">delta2</span><span class="p">]</span>
+        <span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span><span class="n">w1</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">w2</span><span class="p">,</span> <span class="n">b2</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">parameter</span><span class="p">,</span> <span class="n">gradient</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+            <span class="n">torch</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_close</span><span class="p">(</span><span class="n">parameter</span><span class="o">.</span><span class="n">grad</span><span class="p">,</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Hidden activations: </span><span class="si">{</span><span class="n">hidden</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Logit: </span><span class="si">{</span><span class="n">logit</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">; probability: </span><span class="si">{</span><span class="n">logit</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loss before update: </span><span class="si">{</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">parameter</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s2">"W1"</span><span class="p">,</span> <span class="s2">"b1"</span><span class="p">,</span> <span class="s2">"W2"</span><span class="p">,</span> <span class="s2">"b2"</span><span class="p">],</span> <span class="n">parameters</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Gradient </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">parameter</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">parameter</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="n">parameter</span><span class="o">.</span><span class="n">grad</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=-</span><span class="mf">0.1</span><span class="p">)</span>
+
+        <span class="n">next_logit</span> <span class="o">=</span> <span class="n">w2</span> <span class="o">@</span> <span class="p">(</span><span class="n">w1</span> <span class="o">@</span> <span class="n">x</span> <span class="o">+</span> <span class="n">b1</span><span class="p">)</span><span class="o">.</span><span class="n">relu</span><span class="p">()</span> <span class="o">+</span> <span class="n">b2</span>
+        <span class="n">next_loss</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">binary_cross_entropy_with_logits</span><span class="p">(</span><span class="n">next_logit</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">next_loss</span> <span class="o">&lt;</span> <span class="n">loss</span><span class="p">,</span> <span class="s2">"The illustrated update should reduce this example's loss"</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Updated W1: </span><span class="si">{</span><span class="n">w1</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Updated W2: </span><span class="si">{</span><span class="n">w2</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Loss after update: </span><span class="si">{</span><span class="n">next_loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"All four autograd gradients match the hand derivation"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre>
+    </div>
+    <details class="recorded-result">
+     <summary>
+      Recorded CPU output
+     </summary>
+     <pre>Hidden activations: [0.19999999999999998, 1.8]
+Logit: -0.560000; probability: 0.363547
+Loss before update: 1.011845
+Gradient W1: [[-0.44551677819709645, -0.8910335563941929], [0.3182262701407832, 0.6364525402815664]]
+Gradient b1: [-0.44551677819709645, 0.3182262701407832]
+Gradient W2: [-0.12729050805631326, -1.1456145725068196]
+Gradient b2: -0.6364525402815664
+Updated W1: [[0.5445516778197097, -0.11089664436058072], [0.26817737298592165, 0.7363547459718434]]
+Updated W2: [0.7127290508056313, -0.38543854274931805]
+Loss after update: 0.704958
+All four autograd gradients match the hand derivation
+</pre>
+    </details>
+   </details>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Which quantities in this example are learned, and which are recomputed?
+   </summary>
+   <p>
+    Weights and biases are learned. Pre-activations, hidden activations, logits, probabilities, and the loss are recomputed from the current parameters for each input. A forward pass uses the parameters but does not update them.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#activations">
+    <small>
+     ← Previous
+    </small>
+    Activations and their derivatives
+   </a>
+   <a href="#losses-and-outputs">
+    <small>
+     Next →
+    </small>
+    Regression, classification, and the loss
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="the-recursive-definition" href="#forward-pass?section=the-recursive-definition">
+    The recursive definition
+   </a>
+   <a data-section="step-1-compute-the-hidden-pre-activations" href="#forward-pass?section=step-1-compute-the-hidden-pre-activations">
+    Step 1: compute the hidden pre-activations
+   </a>
+   <a data-section="step-2-apply-the-hidden-activation" href="#forward-pass?section=step-2-apply-the-hidden-activation">
+    Step 2: apply the hidden activation
+   </a>
+   <a data-section="step-3-compute-the-output-logit" href="#forward-pass?section=step-3-compute-the-output-logit">
+    Step 3: compute the output logit
+   </a>
+   <a data-section="step-4-map-to-a-probability-and-evaluate-the-loss" href="#forward-pass?section=step-4-map-to-a-probability-and-evaluate-the-loss">
+    Step 4: map to a probability and evaluate the loss
+   </a>
+   <a data-section="what-comes-next" href="#forward-pass?section=what-comes-next">
+    What comes next
+   </a>
+   <a data-section="implementation" href="#forward-pass?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

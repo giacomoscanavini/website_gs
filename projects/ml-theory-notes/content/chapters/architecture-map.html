@@ -1,0 +1,478 @@
+<section aria-labelledby="architecture-map-title" class="page-view lesson-layout" id="architecture-map">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     26
+    </span>
+    Part 4 · Architectures &amp; information flow
+   </p>
+   <h1 id="architecture-map-title" tabindex="-1">
+    Architectures as information flow
+   </h1>
+   <p class="standfirst">
+    Use the supplied guide’s organizing question: how does information move through the model?
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Architectures · PDF pp. 1–5 · Learning path and §1" data-page="1" data-pdf="arch" type="button">
+     Architectures · PDF pp. 1–5 · Learning path and §1
+    </button>
+    <button aria-label="Open source: Architectures · PDF pp. 29–32 · §§11–13" data-page="29" data-pdf="arch" type="button">
+     Architectures · PDF pp. 29–32 · §§11–13
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="separate-structure-routing-and-objective" href="#architecture-map?section=separate-structure-routing-and-objective">
+     Separate structure, routing, and objective
+    </a>
+    <a data-section="the-sources-conceptual-map" href="#architecture-map?section=the-sources-conceptual-map">
+     The source’s conceptual map
+    </a>
+    <a data-section="choose-the-architecture-by-the-available-relationships" href="#architecture-map?section=choose-the-architecture-by-the-available-relationships">
+     Choose the architecture by the available relationships
+    </a>
+    <a data-section="roles-can-be-combined" href="#architecture-map?section=roles-can-be-combined">
+     Roles can be combined
+    </a>
+    <a data-section="complexity-is-not-just-parameter-count" href="#architecture-map?section=complexity-is-not-just-parameter-count">
+     Complexity is not just parameter count
+    </a>
+    <a data-section="scope-of-this-reader" href="#architecture-map?section=scope-of-this-reader">
+     Scope of this reader
+    </a>
+    <a data-section="implementation" href="#architecture-map?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="separate-structure-routing-and-objective" id="architecture-map--separate-structure-routing-and-objective">
+    Separate structure, routing, and objective
+   </h2>
+   <p>
+    The architecture guide distinguishes three choices: the structure of the data, the information-routing rule, and the prediction objective. Models can use the same loss while moving information in very different ways.
+   </p>
+   <p>
+    A sequence contains meaningful order. A graph specifies relations that are not generally a simple sequence. A vector or image can be compressed through a latent representation. The appropriate architecture encodes assumptions about which interactions should be easy to represent.
+   </p>
+   <p>
+    The source’s central question is
+    <strong>
+     how does information move?
+    </strong>
+    That question gives a more stable mental map than a list of model acronyms.
+   </p>
+   <h2 data-section="the-sources-conceptual-map" id="architecture-map--the-sources-conceptual-map">
+    The source’s conceptual map
+   </h2>
+   <div aria-label="Scrollable calculation table" class="table-scroll" role="region" tabindex="0">
+    <table>
+     <colgroup>
+      <col style="width: 33%"/>
+      <col style="width: 33%"/>
+      <col style="width: 33%"/>
+     </colgroup>
+     <thead>
+      <tr class="header">
+       <th>
+        Family
+       </th>
+       <th>
+        Routing mechanism
+       </th>
+       <th>
+        Persistent or intermediate representation
+       </th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr class="odd">
+       <td>
+        RNN
+       </td>
+       <td>
+        Reuse a state transition across time
+       </td>
+       <td>
+        Hidden state
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        LSTM / GRU
+       </td>
+       <td>
+        Gate the state update
+       </td>
+       <td>
+        Cell/hidden state or one gated state
+       </td>
+      </tr>
+      <tr class="odd">
+       <td>
+        Encoder–decoder
+       </td>
+       <td>
+        Encode a source, decode a target
+       </td>
+       <td>
+        Context or source memory
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        Autoencoder
+       </td>
+       <td>
+        Compress and reconstruct
+       </td>
+       <td>
+        Latent code
+       </td>
+      </tr>
+      <tr class="odd">
+       <td>
+        Transformer
+       </td>
+       <td>
+        Content-dependent token interaction
+       </td>
+       <td>
+        Contextual token representations
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        GNN
+       </td>
+       <td>
+        Pass messages along edges
+       </td>
+       <td>
+        Node representations
+       </td>
+      </tr>
+      <tr class="odd">
+       <td>
+        GAT
+       </td>
+       <td>
+        Learn weights over graph neighbors
+       </td>
+       <td>
+        Attention-weighted node representations
+       </td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+   <p>
+    There is no strict hierarchy in which each newer family replaces all earlier ones. The models express different inductive biases, and some solve different training objectives altogether.
+   </p>
+   <h2 data-section="choose-the-architecture-by-the-available-relationships" id="architecture-map--choose-the-architecture-by-the-available-relationships">
+    Choose the architecture by the available relationships
+   </h2>
+   <p>
+    For a streaming sequence, a recurrent state naturally carries information from the past. A bidirectional recurrent model uses future context too; that can be useful offline and invalid when future inputs are unavailable at prediction time.
+   </p>
+   <p>
+    For a long sequence with content-dependent interactions, attention offers direct access to allowed source positions. The cost of dense pairwise interactions grows with sequence length, so the routing benefit comes with a computational trade-off.
+   </p>
+   <p>
+    For relational data, a graph model uses the given neighborhood rather than flattening every entity into unrelated rows. Its usefulness depends on graph construction, edge direction, self-loops, and whether the split matches deployment.
+   </p>
+   <p>
+    An autoencoder is appropriate when reconstruction or a latent representation is the objective. If labels for a downstream task are available, good reconstruction does not automatically mean the representation is best for that task.
+   </p>
+   <h2 data-section="roles-can-be-combined" id="architecture-map--roles-can-be-combined">
+    Roles can be combined
+   </h2>
+   <p>
+    The guide gives LSTM autoencoders, temporal GNNs, graph Transformers, and encoders feeding relational models as examples of hybrids. These are not exceptions to the map: each component contributes a routing or representation role.
+   </p>
+   <p>
+    A residual connection and an LSTM cell path share an optimization theme: preserve a relatively direct route and learn modifications around it. Gates and attention both select information, but at different granularities. A gate scales state coordinates; attention assigns weights across candidate source representations.
+   </p>
+   <p>
+    Every autoencoder has an encoder, but a classifier’s encoder does not make it an autoencoder. Distinguishing architectural roles from training objectives prevents several common study confusions.
+   </p>
+   <h2 data-section="complexity-is-not-just-parameter-count" id="architecture-map--complexity-is-not-just-parameter-count">
+    Complexity is not just parameter count
+   </h2>
+   <p>
+    Two models with similar parameter counts can have very different computational structure. Recurrence has a sequential dependency chain. Dense attention has pairwise interactions and parallel training across positions. Graph models operate on the selected edges and can create a different batching problem for variable-size graphs.
+   </p>
+   <p>
+    The source asks for comparison under the same split and metric, including training time, inference cost, robustness, and data regime. The architecture should earn its complexity by improving the intended procedure rather than merely having greater expressiveness.
+   </p>
+   <details class="derivation" data-derivation="routing-reach" id="architecture-map--derivation-routing-reach">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive receptive reach from repeated local information routing
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
+      be a nonnegative adjacency matrix describing allowed one-step messages between
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+      positions or nodes. Ignore nonlinearities for the first calculation so the support of information flow is easy to inspect. This is a structural derivation, not a claim that every allowed influence is learned or useful.
+     </p>
+     <h4>
+      1 · Expand one and two propagation steps
+     </h4>
+     <p>
+      For scalar input features
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+      , one step gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>h</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>=</mo><mi>A</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">h^{(1)}=Ax</annotation></semantics></math>
+      , with
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>h</mi><mi>i</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo>=</mo><msub><mo>∑</mo><mi>j</mi></msub><msub><mi>A</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>x</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">h^{(1)}_i=\sum_jA_{ij}x_j</annotation></semantics></math>
+      . A second gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>h</mi><mi>i</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>A</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msubsup><mi>h</mi><mi>j</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><munder><mo>∑</mo><mi>k</mi></munder><msub><mi>A</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>A</mi><mrow><mi>j</mi><mi>k</mi></mrow></msub><msub><mi>x</mi><mi>k</mi></msub><mo>=</mo><munder><mo>∑</mo><mi>k</mi></munder><msub><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>A</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>i</mi><mi>k</mi></mrow></msub><msub><mi>x</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">h^{(2)}_i=\sum_jA_{ij}h^{(1)}_j
+=\sum_j\sum_kA_{ij}A_{jk}x_k
+=\sum_k(A^2)_{ik}x_k.</annotation></semantics></math>
+     </div>
+     <p>
+      A term
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>A</mi><mrow><mi>j</mi><mi>k</mi></mrow></msub></mrow><annotation encoding="application/x-tex">A_{ij}A_{jk}</annotation></semantics></math>
+      is nonzero only when information can travel from
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+      through
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+      to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Extend by induction
+     </h4>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>h</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>L</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>=</mo><msup><mi>A</mi><mi>L</mi></msup><mi>x</mi></mrow><annotation encoding="application/x-tex">h^{(L)}=A^Lx</annotation></semantics></math>
+      , then
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>h</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>L</mi><mo>+</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>=</mo><mi>A</mi><msup><mi>h</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>L</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>=</mo><msup><mi>A</mi><mrow><mi>L</mi><mo>+</mo><mn>1</mn></mrow></msup><mi>x</mi></mrow><annotation encoding="application/x-tex">h^{(L+1)}=Ah^{(L)}=A^{L+1}x</annotation></semantics></math>
+      . For an unweighted graph,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>A</mi><mi>L</mi></msup><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>i</mi><mi>k</mi></mrow></msub><annotation encoding="application/x-tex">(A^L)_{ik}</annotation></semantics></math>
+      counts walks of length
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
+      from
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+      to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+      . Including self-loops lets shorter paths be padded with “stay” steps, giving access within at most
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
+      hops.
+     </p>
+     <h4>
+      3 · Restore learned transformations
+     </h4>
+     <p>
+      A local message-passing layer can transform and nonlinearly combine its inputs, but without an extra long-range connection its output still depends only on its allowed neighbors. Repeated composition expands the possible dependency set by another hop per layer. Cancellation, learned zero weights, or compression can make the actual dependence smaller than this structural bound.
+     </p>
+     <h4>
+      4 · Compare recurrence and unrestricted attention
+     </h4>
+     <p>
+      In a recurrent chain, an input at time
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+      reaches time
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
+      through
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>−</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">T-k</annotation></semantics></math>
+      transitions. Dense attention permits a direct edge between any allowed pair in one layer, while causal or local masks remove edges. This changes dependency path length, not a guarantee of successful memory or reasoning.
+     </p>
+     <h4>
+      5 · Keep computation separate from parameter sharing
+     </h4>
+     <p>
+      Repeating the same recurrent cell for
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
+      steps multiplies its compute and activation-storage needs but not the number of distinct cell parameters. Unrestricted attention has
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>T</mi><mn>2</mn></msup><annotation encoding="application/x-tex">T^2</annotation></semantics></math>
+      candidate interactions per head. A sparse graph with
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">|</mo><mi>E</mi><mo form="postfix" stretchy="true">|</mo></mrow><annotation encoding="application/x-tex">|E|</annotation></semantics></math>
+      edges has an edge-dependent propagation cost. Equal parameter counts therefore do not imply equal memory use, sequential depth, or runtime.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="1" data-pdf="arch" type="button">
+       Chapter source · PDF p. 1
+      </button>
+      <a class="calculation-link" href="#architecture-map?derivation=routing-reach">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="scope-of-this-reader" id="architecture-map--scope-of-this-reader">
+    Scope of this reader
+   </h2>
+   <p>
+    The next chapters follow the supplied architecture guide: recurrence, gates, encoding/decoding, reconstruction, attention, and graphs. The PDFs mention CNNs as possible components but do not develop a full convolution chapter. The official PyTorch Neural Networks tutorial is provided as a clearly labeled supplementary route for convolutional layers and a working classifier, rather than silently attributing extra CNN theory to these PDFs.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="architecture-map--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="rnnexample">
+     <span class="resource-meta">
+      PyTorch · Training example + visuals
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/intermediate/char_rnn_classification_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Classifying Names with a Character-Level RNN
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Study a complete sequence classifier and its evaluation. The confusion-matrix visualization provides a practical interpretation of classification mistakes.
+     </p>
+    </div>
+    <div class="resource" data-resource="seq2seq">
+     <span class="resource-meta">
+      PyTorch · Training example + attention map
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Translation with a Sequence-to-Sequence Network and Attention
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Inspect the GRU encoder/decoder, teacher forcing, attention and generated translations. Its attention plots show alignments; its additive attention is distinct from scaled dot-product attention.
+     </p>
+    </div>
+    <div class="resource" data-resource="sdpa">
+     <span class="resource-meta">
+      PyTorch · Tutorial + implementation
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/intermediate/scaled_dot_product_attention_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Scaled Dot Product Attention
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Connect Q, K and V to the attention primitive and a larger attention module. Note mask semantics and dropout behavior when moving from the mathematical formula to the function.
+     </p>
+    </div>
+    <div class="resource" data-resource="pygintro">
+     <span class="resource-meta">
+      PyTorch Geometric · GCN training example
+     </span>
+     <a href="https://pytorch-geometric.readthedocs.io/en/latest/get_started/introduction.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Introduction by Example
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Study graph tensors, edge indices and a trained GCN with training masks. PyTorch Geometric is a separate graph-learning library built on PyTorch.
+     </p>
+    </div>
+    <div class="resource" data-resource="cnn">
+     <span class="resource-meta">
+      PyTorch · End-to-end image example
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Training a Classifier
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Train and test a convolutional classifier on CIFAR-10. This is supplemental CNN implementation material, not a claim that the supplied architecture PDF derives convolutional networks in depth.
+     </p>
+    </div>
+   </div>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Is an encoder–decoder a competing layer type to an LSTM or Transformer?
+   </summary>
+   <p>
+    No. Encoder and decoder describe roles in an input-to-output architecture. Either role can be implemented using recurrent layers, attention, convolutions, or other components. Autoencoder instead names a particular reconstruction objective with an encoder and decoder.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#ensembles">
+    <small>
+     ← Previous
+    </small>
+    Averaging, covariance weights, and stacking
+   </a>
+   <a href="#rnn">
+    <small>
+     Next →
+    </small>
+    Recurrent networks and backpropagation through time
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="separate-structure-routing-and-objective" href="#architecture-map?section=separate-structure-routing-and-objective">
+    Separate structure, routing, and objective
+   </a>
+   <a data-section="the-sources-conceptual-map" href="#architecture-map?section=the-sources-conceptual-map">
+    The source’s conceptual map
+   </a>
+   <a data-section="choose-the-architecture-by-the-available-relationships" href="#architecture-map?section=choose-the-architecture-by-the-available-relationships">
+    Choose the architecture by the available relationships
+   </a>
+   <a data-section="roles-can-be-combined" href="#architecture-map?section=roles-can-be-combined">
+    Roles can be combined
+   </a>
+   <a data-section="complexity-is-not-just-parameter-count" href="#architecture-map?section=complexity-is-not-just-parameter-count">
+    Complexity is not just parameter count
+   </a>
+   <a data-section="scope-of-this-reader" href="#architecture-map?section=scope-of-this-reader">
+    Scope of this reader
+   </a>
+   <a data-section="implementation" href="#architecture-map?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

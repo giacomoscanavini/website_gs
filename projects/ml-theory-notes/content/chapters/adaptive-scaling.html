@@ -1,0 +1,540 @@
+<section aria-labelledby="adaptive-scaling-title" class="page-view lesson-layout" id="adaptive-scaling">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     11
+    </span>
+    Part 2 · Optimization
+   </p>
+   <h1 id="adaptive-scaling-title" tabindex="-1">
+    AdaGrad and RMSProp: adaptive scaling
+   </h1>
+   <p class="standfirst">
+    Distinguish permanent accumulation from exponentially decaying memory of squared gradients.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Optimization · PDF pp. 9–13 · §§4–6" data-page="9" data-pdf="optim" type="button">
+     Optimization · PDF pp. 9–13 · §§4–6
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="one-global-step-scale-may-not-suit-every-coordinate" href="#adaptive-scaling?section=one-global-step-scale-may-not-suit-every-coordinate">
+     One global step scale may not suit every coordinate
+    </a>
+    <a data-section="adagrad-remembers-every-squared-gradient" href="#adaptive-scaling?section=adagrad-remembers-every-squared-gradient">
+     AdaGrad remembers every squared gradient
+    </a>
+    <a data-section="adagrads-worked-example" href="#adaptive-scaling?section=adagrads-worked-example">
+     AdaGrad’s worked example
+    </a>
+    <a data-section="rmsprop-remembers-the-recent-scale" href="#adaptive-scaling?section=rmsprop-remembers-the-recent-scale">
+     RMSProp remembers the recent scale
+    </a>
+    <a data-section="what-this-adaptation-does-not-solve" href="#adaptive-scaling?section=what-this-adaptation-does-not-solve">
+     What this adaptation does not solve
+    </a>
+    <a data-section="implementation" href="#adaptive-scaling?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="one-global-step-scale-may-not-suit-every-coordinate" id="adaptive-scaling--one-global-step-scale-may-not-suit-every-coordinate">
+    One global step scale may not suit every coordinate
+   </h2>
+   <p>
+    Some parameters receive large or frequent gradients; others receive small or infrequent ones. A single learning rate can be too aggressive for the first group and too weak for the second. The guide represents adaptation as
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><msubsup><mi>D</mi><mi>t</mi><mrow><mi>−</mi><mn>1</mn></mrow></msubsup><msub><mi>g</mi><mi>t</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\theta_{t+1}=\theta_t-\eta D_t^{-1}g_t,</annotation></semantics></math>
+   </div>
+   <p>
+    where
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>D</mi><mi>t</mi></msub><annotation encoding="application/x-tex">D_t</annotation></semantics></math>
+    is usually a positive diagonal matrix constructed from past squared gradients. This is a cheap
+    <strong>
+     diagonal preconditioner
+    </strong>
+    : it rescales each coordinate without modeling every cross-coordinate interaction.
+   </p>
+   <p>
+    It does not measure the Hessian directly. Gradient magnitude history and curvature are related only indirectly, so adaptive scaling is not synonymous with Newton’s method.
+   </p>
+   <h2 data-section="adagrad-remembers-every-squared-gradient" id="adaptive-scaling--adagrad-remembers-every-squared-gradient">
+    AdaGrad remembers every squared gradient
+   </h2>
+   <p>
+    Starting with
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">G_0=0</annotation></semantics></math>
+    ,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mi>t</mi></msub><mo>=</mo><msub><mi>G</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>g</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi>g</mi><mi>t</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mfrac><msub><mi>g</mi><mi>t</mi></msub><mrow><msqrt><msub><mi>G</mi><mi>t</mi></msub></msqrt><mo>+</mo><mi>ϵ</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">G_t=G_{t-1}+g_t\odot g_t,\qquad
+\theta_{t+1}=\theta_t-\eta\frac{g_t}{\sqrt{G_t}+\epsilon}.</annotation></semantics></math>
+   </div>
+   <p>
+    Operations are elementwise. For coordinate
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+    , the denominator contains
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mrow><mi>s</mi><mo>≤</mo><mi>t</mi></mrow></msub><msubsup><mi>g</mi><mrow><mi>s</mi><mo>,</mo><mi>j</mi></mrow><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">\sum_{s\le t}g_{s,j}^2</annotation></semantics></math>
+    . Frequently active coordinates accumulate more history and receive smaller effective steps. Infrequently active coordinates retain a larger scale for longer.
+   </p>
+   <p>
+    The small
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+    protects the division and affects behavior when the accumulator is tiny. The expression here follows the guide’s square-root-then-add convention; actual numerical comparisons should respect a library’s epsilon placement and other options.
+   </p>
+   <h2 data-section="adagrads-worked-example" id="adaptive-scaling--adagrads-worked-example">
+    AdaGrad’s worked example
+   </h2>
+   <p>
+    The source uses
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\eta=1</annotation></semantics></math>
+    , negligible
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+    ,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">G_0=0</annotation></semantics></math>
+    , and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mn>1</mn></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>3</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">g_1=(3,1)^\top</annotation></semantics></math>
+    . Then
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mn>1</mn></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>9</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">G_1=(9,1)^\top</annotation></semantics></math>
+    , and the normalized gradient is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><annotation encoding="application/x-tex">(1,1)^\top</annotation></semantics></math>
+    .
+   </p>
+   <p>
+    For
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mn>2</mn></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>3</mn><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">g_2=(3,0)^\top</annotation></semantics></math>
+    , the accumulator becomes
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>18</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><annotation encoding="application/x-tex">(18,1)^\top</annotation></semantics></math>
+    . Coordinate one’s normalized gradient is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mi>/</mi><msqrt><mn>18</mn></msqrt><mo>≈</mo><mn>0.707</mn></mrow><annotation encoding="application/x-tex">3/\sqrt{18}\approx0.707</annotation></semantics></math>
+    ; coordinate two does not move because its current gradient is zero. A larger
+    <strong>
+     available scale
+    </strong>
+    does not create an update in the absence of a gradient.
+   </p>
+   <figure class="source-figure">
+    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="optim-11" type="button">
+     <img alt="The source’s illustrative AdaGrad multipliers for frequent and infrequent coordinates. The comparison concerns gradient-history scaling, not the semantic importance of a feature." height="532" loading="lazy" src="assets/images/the-source-s-illustrative-adagrad-multipliers-for-frequent-and-in-09ee390074.webp" width="820"/>
+    </button>
+    <figcaption>
+     The source’s illustrative AdaGrad multipliers for frequent and infrequent coordinates. The comparison concerns gradient-history scaling, not the semantic importance of a feature.
+     <button aria-label="Open source: Optimization · PDF p. 11" data-page="11" data-pdf="optim" type="button">
+      Optimization · PDF p. 11
+     </button>
+    </figcaption>
+   </figure>
+   <p>
+    The weakness follows from the same mechanism: the accumulator never forgets. Effective rates can become too small after a long history even when more learning is needed.
+   </p>
+   <details class="derivation" data-derivation="adagrad-history" id="adaptive-scaling--derivation-adagrad-history">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Expand AdaGrad’s history and effective step size
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      The AdaGrad recurrence is an algorithmic design choice. The derivation here exposes its consequences; it is not claimed to follow uniquely from minimizing every loss.
+     </p>
+     <h4>
+      1 · Expand the accumulator
+     </h4>
+     <p>
+      Starting from
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mrow><mn>0</mn><mo>,</mo><mi>j</mi></mrow></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">G_{0,j}=0</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mrow><mn>1</mn><mo>,</mo><mi>j</mi></mrow></msub><mo>=</mo><msubsup><mi>g</mi><mrow><mn>1</mn><mo>,</mo><mi>j</mi></mrow><mn>2</mn></msubsup><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>G</mi><mrow><mn>2</mn><mo>,</mo><mi>j</mi></mrow></msub><mo>=</mo><msubsup><mi>g</mi><mrow><mn>1</mn><mo>,</mo><mi>j</mi></mrow><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>g</mi><mrow><mn>2</mn><mo>,</mo><mi>j</mi></mrow><mn>2</mn></msubsup><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>G</mi><mrow><mi>t</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>s</mi><mo>=</mo><mn>1</mn></mrow><mi>t</mi></munderover><msubsup><mi>g</mi><mrow><mi>s</mi><mo>,</mo><mi>j</mi></mrow><mn>2</mn></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">G_{1,j}=g_{1,j}^2,\quad G_{2,j}=g_{1,j}^2+g_{2,j}^2,\quad
+G_{t,j}=\sum_{s=1}^t g_{s,j}^2.</annotation></semantics></math>
+     </div>
+     <p>
+      Every term is nonnegative, so
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn><mo>,</mo><mi>j</mi></mrow></msub><mo>≥</mo><msub><mi>G</mi><mrow><mi>t</mi><mo>,</mo><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">G_{t+1,j}\ge G_{t,j}</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Isolate the coordinate multiplier
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>θ</mi><mrow><mi>t</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>=</mo><mi>−</mi><mfrac><mi>η</mi><mrow><msqrt><msub><mi>G</mi><mrow><mi>t</mi><mo>,</mo><mi>j</mi></mrow></msub></msqrt><mo>+</mo><mi>ϵ</mi></mrow></mfrac><msub><mi>g</mi><mrow><mi>t</mi><mo>,</mo><mi>j</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\Delta\theta_{t,j}=-\frac{\eta}{\sqrt{G_{t,j}}+\epsilon}g_{t,j}.</annotation></semantics></math>
+     </div>
+     <p>
+      For fixed positive
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>η</mi><annotation encoding="application/x-tex">\eta</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+      , the multiplier cannot increase as history accumulates. That is a statement about the multiplier; the actual displacement also depends on the current gradient.
+     </p>
+     <h4>
+      3 · Compute both steps from the source
+     </h4>
+     <p>
+      With
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>3</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">g_1=(3,1)</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>9</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">G_1=(9,1)</annotation></semantics></math>
+      and negligible
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+      , the normalized gradient is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>3</mn><mi>/</mi><mn>3</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">(3/3,1/1)=(1,1)</annotation></semantics></math>
+      . With
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mn>2</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>3</mn><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">g_2=(3,0)</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mn>2</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>9</mn><mo>+</mo><mn>9</mn><mo>,</mo><mn>1</mn><mo>+</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>18</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mfrac><msub><mi>g</mi><mn>2</mn></msub><msqrt><msub><mi>G</mi><mn>2</mn></msub></msqrt></mfrac><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><mn>3</mn><msqrt><mn>18</mn></msqrt></mfrac><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><mn>1</mn><msqrt><mn>2</mn></msqrt></mfrac><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">G_2=(9+9,1+0)=(18,1),\qquad
+\frac{g_2}{\sqrt{G_2}}=\left(\frac3{\sqrt{18}},0\right)=\left(\frac1{\sqrt2},0\right).</annotation></semantics></math>
+     </div>
+     <h4>
+      4 · Derive the repeated-gradient decay
+     </h4>
+     <p>
+      If one coordinate receives the same nonzero gradient
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>g</mi><annotation encoding="application/x-tex">g</annotation></semantics></math>
+      for
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+      steps,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mi>t</mi></msub><mo>=</mo><mi>t</mi><msup><mi>g</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">G_t=tg^2</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><msub><mi>G</mi><mi>t</mi></msub></msqrt><mo>=</mo><msqrt><mi>t</mi></msqrt><mspace width="0.167em"></mspace><mrow><mo form="prefix" stretchy="true">|</mo><mi>g</mi><mo form="postfix" stretchy="true">|</mo></mrow></mrow><annotation encoding="application/x-tex">\sqrt{G_t}=\sqrt t\,|g|</annotation></semantics></math>
+      . Ignoring
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>θ</mi><mi>t</mi></msub><mo>=</mo><mi>−</mi><mfrac><mi>η</mi><msqrt><mi>t</mi></msqrt></mfrac><mo>sign</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>g</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\Delta\theta_t=-\frac\eta{\sqrt t}\operatorname{sign}(g).</annotation></semantics></math>
+     </div>
+     <p>
+      If it has been active only
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
+      times, the corresponding nonzero-step magnitude is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mi>/</mi><msqrt><mi>k</mi></msqrt></mrow><annotation encoding="application/x-tex">\eta/\sqrt k</annotation></semantics></math>
+      . Sparse activity therefore retains a larger available scale, but zero current gradient still gives zero movement.
+     </p>
+     <h4>
+      5 · Treat zero history explicitly
+     </h4>
+     <p>
+      With
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>G</mi><mi>t</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">G_t=0</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>t</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g_t=0</annotation></semantics></math>
+      , the implementation’s positive
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+      prevents
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mi>/</mi><mn>0</mn></mrow><annotation encoding="application/x-tex">0/0</annotation></semantics></math>
+      . Sending
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
+      to zero is legitimate only in numerical examples whose denominators remain positive.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="9" data-pdf="optim" type="button">
+       Chapter source · PDF p. 9
+      </button>
+      <a class="calculation-link" href="#adaptive-scaling?derivation=adagrad-history">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="rmsprop-remembers-the-recent-scale" id="adaptive-scaling--rmsprop-remembers-the-recent-scale">
+    RMSProp remembers the recent scale
+   </h2>
+   <p>
+    RMSProp replaces the cumulative sum with an exponentially weighted average:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><mi>ρ</mi><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>g</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi>g</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mfrac><msub><mi>g</mi><mi>t</mi></msub><mrow><msqrt><msub><mi>v</mi><mi>t</mi></msub></msqrt><mo>+</mo><mi>ϵ</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">v_t=\rho v_{t-1}+(1-\rho)(g_t\odot g_t),\qquad
+\theta_{t+1}=\theta_t-\eta\frac{g_t}{\sqrt{v_t}+\epsilon}.</annotation></semantics></math>
+   </div>
+   <p>
+    If recent gradients become smaller, old large values decay and the denominator can shrink again. This is the core reason RMSProp can respond to changing gradient scales where AdaGrad’s permanent history cannot.
+   </p>
+   <p>
+    With
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">\rho=0.9</annotation></semantics></math>
+    ,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\eta=0.1</annotation></semantics></math>
+    ,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">v_0=0</annotation></semantics></math>
+    , and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mn>1</mn></msub><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">g_1=2</annotation></semantics></math>
+    , the source computes
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>1</mn></msub><mo>=</mo><mn>0.4</mn></mrow><annotation encoding="application/x-tex">v_1=0.4</annotation></semantics></math>
+    and an update magnitude near
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.316</mn><annotation encoding="application/x-tex">0.316</annotation></semantics></math>
+    . If
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">g_2=1</annotation></semantics></math>
+    , then
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>2</mn></msub><mo>=</mo><mn>0.46</mn></mrow><annotation encoding="application/x-tex">v_2=0.46</annotation></semantics></math>
+    and the magnitude is near
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.147</mn><annotation encoding="application/x-tex">0.147</annotation></semantics></math>
+    .
+   </p>
+   <p>
+    These numbers show why the base learning rate is not a literal update magnitude. The ratio of gradient to its scale estimate modifies the result.
+   </p>
+   <figure class="source-figure">
+    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="optim-10" type="button">
+     <img alt="The guide compares adaptive multipliers under changing gradients. AdaGrad accumulates permanently; RMSProp and Adam retain decaying histories." height="545" loading="lazy" src="assets/images/the-guide-compares-adaptive-multipliers-under-changing-gradients--a20656d3db.webp" width="840"/>
+    </button>
+    <figcaption>
+     The guide compares adaptive multipliers under changing gradients. AdaGrad accumulates permanently; RMSProp and Adam retain decaying histories.
+     <button aria-label="Open source: Optimization · PDF p. 10" data-page="10" data-pdf="optim" type="button">
+      Optimization · PDF p. 10
+     </button>
+    </figcaption>
+   </figure>
+   <details class="derivation" data-derivation="rmsprop-memory" id="adaptive-scaling--derivation-rmsprop-memory">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Expand RMSProp’s decaying second moment
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><mi>ρ</mi><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo form="postfix" stretchy="true">)</mo></mrow><msubsup><mi>g</mi><mi>t</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">v_t=\rho v_{t-1}+(1-\rho)g_t^2</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><mi>ρ</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0\le\rho&lt;1</annotation></semantics></math>
+      , applied coordinatewise. The usual denominator shown here is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><msub><mi>v</mi><mi>t</mi></msub></msqrt><mo>+</mo><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">\sqrt{v_t}+\epsilon</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      1 · Substitute the previous recurrence
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><mi>ρ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>ρ</mi><msub><mi>v</mi><mrow><mi>t</mi><mo>−</mo><mn>2</mn></mrow></msub><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo form="postfix" stretchy="true">)</mo></mrow><msubsup><mi>g</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo form="postfix" stretchy="true">)</mo></mrow><msubsup><mi>g</mi><mi>t</mi><mn>2</mn></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">v_t=\rho[\rho v_{t-2}+(1-\rho)g_{t-1}^2]+(1-\rho)g_t^2.</annotation></semantics></math>
+     </div>
+     <p>
+      Continuing to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>v</mi><mn>0</mn></msub><annotation encoding="application/x-tex">v_0</annotation></semantics></math>
+      gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>t</mi></msub><mo>=</mo><msup><mi>ρ</mi><mi>t</mi></msup><msub><mi>v</mi><mn>0</mn></msub><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo form="postfix" stretchy="true">)</mo></mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>t</mi></munderover><msup><mi>ρ</mi><mrow><mi>t</mi><mo>−</mo><mi>j</mi></mrow></msup><msubsup><mi>g</mi><mi>j</mi><mn>2</mn></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">v_t=\rho^t v_0+(1-\rho)\sum_{j=1}^t\rho^{t-j}g_j^2.</annotation></semantics></math>
+     </div>
+     <p>
+      The weights of the observed squared gradients sum to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mi>t</mi></msup></mrow><annotation encoding="application/x-tex">1-\rho^t</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Interpret the initialization effect
+     </h4>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">v_0=0</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>g</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>s</mi></mrow><annotation encoding="application/x-tex">\mathbb E[g_j^2]=s</annotation></semantics></math>
+      is constant over time, linearity of expectation gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>v</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>s</mi><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></munderover><msup><mi>ρ</mi><mi>k</mi></msup><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mi>t</mi></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>s</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[v_t]=(1-\rho)s\sum_{k=0}^{t-1}\rho^k=(1-\rho^t)s.</annotation></semantics></math>
+     </div>
+     <p>
+      This estimate is initially below
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
+      . Standard uncentered RMSProp does not automatically apply Adam’s
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><msup><mi>ρ</mi><mi>t</mi></msup></mrow><annotation encoding="application/x-tex">1-\rho^t</annotation></semantics></math>
+      correction; that is an algorithmic difference.
+     </p>
+     <h4>
+      3 · Calculate the two source steps
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">\rho=0.9</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mn>1</mn></msub><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">g_1=2</annotation></semantics></math>
+      , and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">v_0=0</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>1</mn></msub><mo>=</mo><mn>0.9</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><msup><mn>2</mn><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.4</mn><mo>,</mo><mspace width="2.0em"></mspace><mrow><mo form="prefix" stretchy="true">|</mo><mi>Δ</mi><msub><mi>θ</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">|</mo></mrow><mo>=</mo><mn>0.1</mn><mfrac><mn>2</mn><msqrt><mn>0.4</mn></msqrt></mfrac><mo>≈</mo><mn>0.316228</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">v_1=0.9(0)+0.1(2^2)=0.4,\qquad |\Delta\theta_1|=0.1\frac2{\sqrt{0.4}}\approx0.316228.</annotation></semantics></math>
+     </div>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">g_2=1</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>2</mn></msub><mo>=</mo><mn>0.9</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.4</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.46</mn><mo>,</mo><mspace width="2.0em"></mspace><mrow><mo form="prefix" stretchy="true">|</mo><mi>Δ</mi><msub><mi>θ</mi><mn>2</mn></msub><mo form="postfix" stretchy="true">|</mo></mrow><mo>=</mo><mn>0.1</mn><mfrac><mn>1</mn><msqrt><mn>0.46</mn></msqrt></mfrac><mo>≈</mo><mn>0.147442</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">v_2=0.9(0.4)+0.1(1)=0.46,\qquad |\Delta\theta_2|=0.1\frac1{\sqrt{0.46}}\approx0.147442.</annotation></semantics></math>
+     </div>
+     <h4>
+      4 · See how old large gradients disappear
+     </h4>
+     <p>
+      If future gradients are zero, the recurrence becomes
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mrow><mi>t</mi><mo>+</mo><mi>k</mi></mrow></msub><mo>=</mo><msup><mi>ρ</mi><mi>k</mi></msup><msub><mi>v</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">v_{t+k}=\rho^k v_t</annotation></semantics></math>
+      . Therefore the scale estimate decays instead of remaining permanently large as in AdaGrad. The exact e-fold timescale is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mo>log</mo><mi>ρ</mi></mrow><annotation encoding="application/x-tex">-1/\log\rho</annotation></semantics></math>
+      , with the same near-one approximation as momentum.
+     </p>
+     <h4>
+      5 · Do not call this a variance without centering
+     </h4>
+     <p>
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>v</mi><mi>t</mi></msub><annotation encoding="application/x-tex">v_t</annotation></semantics></math>
+      tracks a raw second moment. A variance is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msup><mi>g</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mo>−</mo><mi>𝔼</mi><msup><mrow><mo form="prefix" stretchy="true">[</mo><mi>g</mi><mo form="postfix" stretchy="true">]</mo></mrow><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\mathbb E[g^2]-\mathbb E[g]^2</annotation></semantics></math>
+      . Centered RMSProp variants estimate both terms; the plain recurrence above does not. Also,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mi>/</mi><msqrt><msub><mi>v</mi><mi>t</mi></msub></msqrt><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbb E[1/\sqrt{v_t}]</annotation></semantics></math>
+      is generally not
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><msqrt><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>v</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow></mrow></msqrt></mrow><annotation encoding="application/x-tex">1/\sqrt{\mathbb E[v_t]}</annotation></semantics></math>
+      , so moment expectations alone do not give the expected parameter step.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="9" data-pdf="optim" type="button">
+       Chapter source · PDF p. 9
+      </button>
+      <a class="calculation-link" href="#adaptive-scaling?derivation=rmsprop-memory">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="what-this-adaptation-does-not-solve" id="adaptive-scaling--what-this-adaptation-does-not-solve">
+    What this adaptation does not solve
+   </h2>
+   <p>
+    Diagonal scaling treats coordinates independently. It cannot generally undo a rotated, highly elongated valley as a full curvature model could. It also cannot repair bad labels, leakage, a detached graph, or inappropriate input transformations. Feature scaling and initialization remain relevant even when the optimizer is adaptive.
+   </p>
+   <p>
+    The comparison to remember is
+    <strong>
+     permanent history versus recent history
+    </strong>
+    , not “old optimizer versus new optimizer.” Whether either method is useful depends on the gradient process and the task.
+    <a href="#adam-adamw">
+     Adam
+    </a>
+    adds a smoothed numerator to this adaptive-denominator idea.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="adaptive-scaling--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="optim">
+     <span class="resource-meta">
+      PyTorch · Implementation reference
+     </span>
+     <a href="https://docs.pytorch.org/docs/2.13/optim.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       torch.optim
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Check optimizer construction, per-parameter options, closure usage and scheduler ordering. Use the training tutorial for a complete surrounding loop.
+     </p>
+    </div>
+    <div class="resource" data-resource="optimization">
+     <span class="resource-meta">
+      PyTorch · Tutorial + code
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Optimizing Model Parameters
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Follow separate training and test loops. Identify the forward calculation, loss, backward pass and optimizer update rather than treating training as one operation.
+     </p>
+    </div>
+   </div>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Why can AdaGrad become ineffective late in training?
+   </summary>
+   <p>
+    Its squared-gradient accumulator never decreases. With continued nonzero gradients, the denominator grows and the effective coordinate learning rate can become very small. RMSProp replaces that permanent history with a decaying average that can respond to a new scale.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#momentum">
+    <small>
+     ← Previous
+    </small>
+    Momentum and Nesterov acceleration
+   </a>
+   <a href="#adam-adamw">
+    <small>
+     Next →
+    </small>
+    Adam, bias correction, and AdamW
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="one-global-step-scale-may-not-suit-every-coordinate" href="#adaptive-scaling?section=one-global-step-scale-may-not-suit-every-coordinate">
+    One global step scale may not suit every coordinate
+   </a>
+   <a data-section="adagrad-remembers-every-squared-gradient" href="#adaptive-scaling?section=adagrad-remembers-every-squared-gradient">
+    AdaGrad remembers every squared gradient
+   </a>
+   <a data-section="adagrads-worked-example" href="#adaptive-scaling?section=adagrads-worked-example">
+    AdaGrad’s worked example
+   </a>
+   <a data-section="rmsprop-remembers-the-recent-scale" href="#adaptive-scaling?section=rmsprop-remembers-the-recent-scale">
+    RMSProp remembers the recent scale
+   </a>
+   <a data-section="what-this-adaptation-does-not-solve" href="#adaptive-scaling?section=what-this-adaptation-does-not-solve">
+    What this adaptation does not solve
+   </a>
+   <a data-section="implementation" href="#adaptive-scaling?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

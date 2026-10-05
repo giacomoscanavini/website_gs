@@ -1,0 +1,582 @@
+<section aria-labelledby="augmentation-noise-title" class="page-view lesson-layout" id="augmentation-noise">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     21
+    </span>
+    Part 3 · Regularization &amp; ensembles
+   </p>
+   <h1 id="augmentation-noise-title" tabindex="-1">
+    Augmentation, invariance, and noise injection
+   </h1>
+   <p class="standfirst">
+    Explain what a valid transformation teaches and derive the exact noise–Ridge connection for linear regression.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Regularization · PDF pp. 13–16 · §§7–9" data-page="13" data-pdf="reg" type="button">
+     Regularization · PDF pp. 13–16 · §§7–9
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="augmentation-encodes-a-statement-about-the-target" href="#augmentation-noise?section=augmentation-encodes-a-statement-about-the-target">
+     Augmentation encodes a statement about the target
+    </a>
+    <a data-section="different-data-types-allow-different-invariances" href="#augmentation-noise?section=different-data-types-allow-different-invariances">
+     Different data types allow different invariances
+    </a>
+    <a data-section="noise-injection-emphasizes-local-robustness" href="#augmentation-noise?section=noise-injection-emphasizes-local-robustness">
+     Noise injection emphasizes local robustness
+    </a>
+    <a data-section="derive-the-exact-linear-regression-identity" href="#augmentation-noise?section=derive-the-exact-linear-regression-identity">
+     Derive the exact linear-regression identity
+    </a>
+    <a data-section="boundaries-of-the-connection" href="#augmentation-noise?section=boundaries-of-the-connection">
+     Boundaries of the connection
+    </a>
+    <a data-section="implementation" href="#augmentation-noise?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="augmentation-encodes-a-statement-about-the-target" id="augmentation-noise--augmentation-encodes-a-statement-about-the-target">
+    Augmentation encodes a statement about the target
+   </h2>
+   <p>
+    Let
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
+    be a sampled transformation. The augmented objective is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">g</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>𝔼</mi><mi>T</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>,</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">L_{\mathrm{aug}}(\theta)=\frac1n\sum_i\mathbb E_T\left[\ell(y_i,f_\theta(Tx_i))\right].</annotation></semantics></math>
+   </div>
+   <p>
+    The crucial assumption is that the chosen transformation preserves the relevant target. If
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>y</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">y(Tx)=y(x)</annotation></semantics></math>
+    , training on both variants encourages an invariance such as
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">f_\theta(Tx)\approx f_\theta(x)</annotation></semantics></math>
+    .
+   </p>
+   <p>
+    This is stronger and more specific than “more data is good.” A transformed example can be harmful when its original label is no longer valid. The regularization guide gives orientation-sensitive images, text, medical anatomy, and structurally constrained tabular data as settings where careless transformations can be misleading.
+   </p>
+   <figure class="source-figure">
+    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="reg-14" type="button">
+     <img alt="The source visualizes augmented observations as local clouds around original points. Whether such a cloud is valid depends on the task’s target-preserving transformations." height="584" loading="lazy" src="assets/images/the-source-visualizes-augmented-observations-as-local-clouds-arou-b25f371b31.webp" width="700"/>
+    </button>
+    <figcaption>
+     The source visualizes augmented observations as local clouds around original points. Whether such a cloud is valid depends on the task’s target-preserving transformations.
+     <button aria-label="Open source: Regularization · PDF p. 14" data-page="14" data-pdf="reg" type="button">
+      Regularization · PDF p. 14
+     </button>
+    </figcaption>
+   </figure>
+   <details class="derivation" data-derivation="augmented-risk" id="augmentation-noise--derivation-augmented-risk">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive the augmented objective and its stochastic gradient
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      A transformation
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>T</mi><annotation encoding="application/x-tex">T</annotation></semantics></math>
+      is drawn from a fixed distribution
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>
+      independently of the parameters. For classification-style invariance, assume the label remains valid:
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>y</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">y(Tx)=y(x)</annotation></semantics></math>
+      . For segmentation or other equivariant tasks, both input and target must instead transform consistently.
+     </p>
+     <h4>
+      1 · Start with the loss for a single transformed example
+     </h4>
+     <p>
+      For observation
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+      , the loss is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>ℓ</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>,</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\ell(y_i,f_\theta(Tx_i))</annotation></semantics></math>
+      . Since training can see different transformations of the same example, its expected contribution is the integral
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>T</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>,</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mo>∫</mo><mo>ℓ</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>,</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>q</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>d</mi><mi>T</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E_T[\ell(y_i,f_\theta(Tx_i))]=\int\ell(y_i,f_\theta(Tx_i))q(dT).</annotation></semantics></math>
+     </div>
+     <h4>
+      2 · Average over the observed sample
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>J</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">g</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mi>𝔼</mi><mi>T</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>,</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">J_{\mathrm{aug}}(\theta)=\frac1n\sum_{i=1}^n\mathbb E_T[\ell(y_i,f_\theta(Tx_i))].</annotation></semantics></math>
+     </div>
+     <p>
+      A single random transform per selected observation is a Monte Carlo estimate of this expectation. It does not make the augmented observations statistically independent new labels.
+     </p>
+     <h4>
+      3 · Obtain a stochastic gradient under explicit assumptions
+     </h4>
+     <p>
+      Assume differentiation may pass under the integral, for example through a locally integrable dominating bound on the derivative. Then
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∇</mi><msub><mi>J</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">g</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>𝔼</mi><mi>T</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>∇</mi><mi>θ</mi></msub><mo>ℓ</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>,</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla J_{\mathrm{aug}}(\theta)=\frac1n\sum_i\mathbb E_T[\nabla_\theta\ell(y_i,f_\theta(Tx_i))].</annotation></semantics></math>
+     </div>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>I</mi><annotation encoding="application/x-tex">I</annotation></semantics></math>
+      is a fresh uniform index and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>∼</mo><mi>q</mi></mrow><annotation encoding="application/x-tex">T\sim q</annotation></semantics></math>
+      , then
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mrow><mi>I</mi><mo>,</mo><mi>T</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>∇</mi><mi>θ</mi></msub><mo>ℓ</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>I</mi></msub><mo>,</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><msub><mi>x</mi><mi>I</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>∇</mi><msub><mi>J</mi><mrow><mi mathvariant="normal">a</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">g</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbb E_{I,T}[\nabla_\theta\ell(y_I,f_\theta(Tx_I))]=\nabla J_{\mathrm{aug}}(\theta)</annotation></semantics></math>
+      . A transformation policy learned jointly with the model requires differentiating its parameter dependence too; this argument holds
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>
+      fixed.
+     </p>
+     <h4>
+      4 · Separate encouragement from exact invariance
+     </h4>
+     <p>
+      The objective rewards low loss over sampled variations, but does not algebraically enforce
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">f_\theta(Tx)=f_\theta(x)</annotation></semantics></math>
+      . For an exact finite-group construction, define
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>f</mi><mo accent="true">‾</mo></mover><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">|</mo><mi>G</mi><mo form="postfix" stretchy="true">|</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup><msub><mo>∑</mo><mrow><mi>g</mi><mo>∈</mo><mi>G</mi></mrow></msub><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>g</mi><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\bar f(x)=|G|^{-1}\sum_{g\in G}f(gx)</annotation></semantics></math>
+      . For any
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>∈</mo><mi>G</mi></mrow><annotation encoding="application/x-tex">h\in G</annotation></semantics></math>
+      , the products
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">gh</annotation></semantics></math>
+      enumerate
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>G</mi><annotation encoding="application/x-tex">G</annotation></semantics></math>
+      again, so
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>f</mi><mo accent="true">‾</mo></mover><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mrow><mo form="prefix" stretchy="true">|</mo><mi>G</mi><mo form="postfix" stretchy="true">|</mo></mrow></mfrac><munder><mo>∑</mo><mrow><mi>g</mi><mo>∈</mo><mi>G</mi></mrow></munder><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>g</mi><mi>h</mi><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mrow><mo form="prefix" stretchy="true">|</mo><mi>G</mi><mo form="postfix" stretchy="true">|</mo></mrow></mfrac><munder><mo>∑</mo><mrow><mi>u</mi><mo>∈</mo><mi>G</mi></mrow></munder><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>u</mi><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mover><mi>f</mi><mo accent="true">‾</mo></mover><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar f(hx)=\frac1{|G|}\sum_{g\in G}f(ghx)=\frac1{|G|}\sum_{u\in G}f(ux)=\bar f(x).</annotation></semantics></math>
+     </div>
+     <p>
+      Exact group averaging provides invariance by construction. Random augmentation merely encourages related behavior through optimization and finite samples.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="13" data-pdf="reg" type="button">
+       Chapter source · PDF p. 13
+      </button>
+      <a class="calculation-link" href="#augmentation-noise?derivation=augmented-risk">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="different-data-types-allow-different-invariances" id="augmentation-noise--different-data-types-allow-different-invariances">
+    Different data types allow different invariances
+   </h2>
+   <p>
+    Small translations or some crops may preserve an image category. Audio perturbations may model nuisance changes in acquisition. Text transformations can alter meaning even when only a few tokens change. Financial or other temporal tables may have constraints that arbitrary row shuffling, time reversal, or independent feature noise destroys.
+   </p>
+   <p>
+    Exact duplication is not the same as useful augmentation. Duplicating one observation changes its weight in the objective; duplicating every observation equally leaves a mean objective unchanged. A valid transformation adds a preference about how nearby or equivalent inputs should be treated.
+   </p>
+   <p>
+    The official TorchVision gallery already provides transformations, code, and before/after images. The transfer-learning tutorial shows augmentation in a complete training application. Those links support the concept without requiring another locally invented visualization.
+   </p>
+   <h2 data-section="noise-injection-emphasizes-local-robustness" id="augmentation-noise--noise-injection-emphasizes-local-robustness">
+    Noise injection emphasizes local robustness
+   </h2>
+   <p>
+    For Gaussian input noise,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>x</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>x</mi><mo>+</mo><mi>ϵ</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>ϵ</mi><mo>∼</mo><mi>𝒩</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><msup><mi>σ</mi><mn>2</mn></msup><mi>I</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\tilde x=x+\epsilon,\qquad\epsilon\sim\mathcal N(0,\sigma^2I),</annotation></semantics></math>
+   </div>
+   <p>
+    and the training objective averages the loss over perturbations. If a small input change causes a large deterioration, that model is penalized by the noisy objective. A Taylor expansion relates the effect to derivatives with respect to the input.
+   </p>
+   <p>
+    The source distinguishes noise added to inputs, activations, weights, gradients, and labels. These are not equivalent operations. Input noise modifies the observed examples; gradient noise modifies the update dynamics. Label perturbation is especially sensitive because it changes the supervised target.
+   </p>
+   <h2 data-section="derive-the-exact-linear-regression-identity" id="augmentation-noise--derive-the-exact-linear-regression-identity">
+    Derive the exact linear-regression identity
+   </h2>
+   <p>
+    For
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>β</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mi>x</mi><mi>⊤</mi></msup><mi>β</mi></mrow><annotation encoding="application/x-tex">f_\beta(x)=x^\top\beta</annotation></semantics></math>
+    , perturb the design by an independent matrix
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>E</mi><annotation encoding="application/x-tex">E</annotation></semantics></math>
+    with entries of mean zero and variance
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
+    . Let
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi></mrow><annotation encoding="application/x-tex">r=y-X\beta</annotation></semantics></math>
+    . Then
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>X</mi><mo>+</mo><mi>E</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><mo form="prefix" stretchy="false">∥</mo><mi>r</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>−</mo><mn>2</mn><msup><mi>r</mi><mi>⊤</mi></msup><mi>E</mi><mi>β</mi><mo>+</mo><mo form="prefix" stretchy="false">∥</mo><mi>E</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\lVert y-(X+E)\beta\rVert^2
+=\lVert r\rVert^2-2r^\top E\beta+\lVert E\beta\rVert^2.</annotation></semantics></math>
+   </div>
+   <p>
+    The expected cross term is zero. Independence and isotropic coordinate variance give
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msup><mi>E</mi><mi>⊤</mi></msup><mi>E</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>n</mi><msup><mi>σ</mi><mn>2</mn></msup><mi>I</mi></mrow><annotation encoding="application/x-tex">\mathbb E[E^\top E]=n\sigma^2I</annotation></semantics></math>
+    , so
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mo form="prefix" stretchy="false">∥</mo><mi>E</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><mi>n</mi><msup><mi>σ</mi><mn>2</mn></msup><mo form="prefix" stretchy="false">∥</mo><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E\lVert E\beta\rVert^2=n\sigma^2\lVert\beta\rVert^2.</annotation></semantics></math>
+   </div>
+   <p>
+    Therefore
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>E</mi></msub><mo form="prefix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>X</mi><mo>+</mo><mi>E</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><mo form="prefix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>+</mo><mi>n</mi><msup><mi>σ</mi><mn>2</mn></msup><mo form="prefix" stretchy="false">∥</mo><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E_E\lVert y-(X+E)\beta\rVert^2
+=\lVert y-X\beta\rVert^2+n\sigma^2\lVert\beta\rVert^2.</annotation></semantics></math>
+   </div>
+   <p>
+    Under the stated
+    <strong>
+     summed-loss
+    </strong>
+    convention, the extra term is exactly an L2 penalty. Dividing the whole objective by
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+    also divides the penalty scale. This is why normalization must remain explicit.
+   </p>
+   <details class="derivation" data-derivation="noise-quadratic" id="augmentation-noise--derivation-noise-quadratic">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Expand the exact noise–L2 identity, then identify the nonlinear remainder
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Hold
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>,</mo><mi>y</mi><mo>,</mo><mi>β</mi></mrow><annotation encoding="application/x-tex">X,y,\beta</annotation></semantics></math>
+      fixed. Let the
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+      noise rows
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>ε</mi><mi>i</mi><mi>⊤</mi></msubsup><annotation encoding="application/x-tex">\varepsilon_i^\top</annotation></semantics></math>
+      have mean zero and covariance
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Σ</mi><mi>ε</mi></msub><annotation encoding="application/x-tex">\Sigma_\varepsilon</annotation></semantics></math>
+      . Put them into
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>E</mi><annotation encoding="application/x-tex">E</annotation></semantics></math>
+      , so noisy predictions are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>X</mi><mo>+</mo><mi>E</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>β</mi></mrow><annotation encoding="application/x-tex">(X+E)\beta</annotation></semantics></math>
+      . Gaussianity is not needed for the quadratic expectation; the stated first two moments suffice.
+     </p>
+     <h4>
+      1 · Expand the residual norm before taking expectations
+     </h4>
+     <p>
+      Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi></mrow><annotation encoding="application/x-tex">r=y-X\beta</annotation></semantics></math>
+      . Then
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>r</mi><mo>−</mo><mi>E</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><msup><mi>r</mi><mi>⊤</mi></msup><mi>r</mi><mo>−</mo><mn>2</mn><msup><mi>r</mi><mi>⊤</mi></msup><mi>E</mi><mi>β</mi><mo>+</mo><msup><mi>β</mi><mi>⊤</mi></msup><msup><mi>E</mi><mi>⊤</mi></msup><mi>E</mi><mi>β</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\|r-E\beta\|^2=r^\top r-2r^\top E\beta+\beta^\top E^\top E\beta.</annotation></semantics></math>
+     </div>
+     <p>
+      Since
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>E</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mathbb E[E]=0</annotation></semantics></math>
+      , the middle term has expectation zero.
+     </p>
+     <h4>
+      2 · Evaluate the remaining random term row by row
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>E</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msup><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>ε</mi><mi>i</mi><mi>⊤</mi></msubsup><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msup><mi>β</mi><mi>⊤</mi></msup><msub><mi>ε</mi><mi>i</mi></msub><msubsup><mi>ε</mi><mi>i</mi><mi>⊤</mi></msubsup><mi>β</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\|E\beta\|^2=\sum_{i=1}^n(\varepsilon_i^\top\beta)^2
+=\sum_i\beta^\top\varepsilon_i\varepsilon_i^\top\beta.</annotation></semantics></math>
+     </div>
+     <p>
+      Taking expectations gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mo form="postfix" stretchy="false">∥</mo><mi>E</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><mi>n</mi><msup><mi>β</mi><mi>⊤</mi></msup><msub><mi>Σ</mi><mi>ε</mi></msub><mi>β</mi></mrow><annotation encoding="application/x-tex">\mathbb E\|E\beta\|^2=n\beta^\top\Sigma_\varepsilon\beta</annotation></semantics></math>
+      . Therefore
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mo form="postfix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>X</mi><mo>+</mo><mi>E</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><mo form="postfix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>+</mo><mi>n</mi><msup><mi>β</mi><mi>⊤</mi></msup><msub><mi>Σ</mi><mi>ε</mi></msub><mi>β</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E\|y-(X+E)\beta\|^2=\|y-X\beta\|^2+n\beta^\top\Sigma_\varepsilon\beta.</annotation></semantics></math>
+     </div>
+     <p>
+      For isotropic covariance
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Σ</mi><mi>ε</mi></msub><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mi>I</mi></mrow><annotation encoding="application/x-tex">\Sigma_\varepsilon=\sigma^2I</annotation></semantics></math>
+      , this is the source’s
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><msup><mi>σ</mi><mn>2</mn></msup><mo form="postfix" stretchy="false">∥</mo><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">n\sigma^2\|\beta\|^2</annotation></semantics></math>
+      penalty. For mean half-squared loss, divide every term by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>n</mi></mrow><annotation encoding="application/x-tex">2n</annotation></semantics></math>
+      , giving penalty
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo form="postfix" stretchy="false">∥</mo><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\sigma^2\|\beta\|^2/2</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      3 · See what changes for a nonlinear predictor
+     </h4>
+     <p>
+      For one input, use loss
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mo form="prefix" stretchy="true">[</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">]</mo></mrow><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">L(x)=\frac12[f(x)-y]^2</annotation></semantics></math>
+      , residual
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">r=f(x)-y</annotation></semantics></math>
+      , gradient
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><msub><mi>∇</mi><mi>x</mi></msub><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">a=\nabla_xf(x)</annotation></semantics></math>
+      , and Hessian
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>f</mi></msub><annotation encoding="application/x-tex">H_f</annotation></semantics></math>
+      . A second-order expansion is
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>+</mo><mi>ε</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>y</mi><mo>=</mo><mi>r</mi><mo>+</mo><msup><mi>a</mi><mi>⊤</mi></msup><mi>ε</mi><mo>+</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><msup><mi>ε</mi><mi>⊤</mi></msup><msub><mi>H</mi><mi>f</mi></msub><mi>ε</mi><mo>+</mo><mtext mathvariant="normal">higher-order terms</mtext><mi>.</mi></mrow><annotation encoding="application/x-tex">f(x+\varepsilon)-y=r+a^\top\varepsilon+\tfrac12\varepsilon^\top H_f\varepsilon+\text{higher-order terms}.</annotation></semantics></math>
+     </div>
+     <p>
+      Squaring and keeping terms through second order in the noise gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>+</mo><mi>ε</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mi>r</mi><mn>2</mn></msup><mo>+</mo><mi>r</mi><msup><mi>a</mi><mi>⊤</mi></msup><mi>ε</mi><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>a</mi><mi>⊤</mi></msup><mi>ε</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>+</mo><mfrac><mi>r</mi><mn>2</mn></mfrac><msup><mi>ε</mi><mi>⊤</mi></msup><msub><mi>H</mi><mi>f</mi></msub><mi>ε</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">L(x+\varepsilon)\approx\frac12r^2+r a^\top\varepsilon
++\frac12(a^\top\varepsilon)^2+\frac r2\varepsilon^\top H_f\varepsilon.</annotation></semantics></math>
+     </div>
+     <p>
+      Terms such as
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>a</mi><mi>⊤</mi></msup><mi>ε</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>ε</mi><mi>⊤</mi></msup><msub><mi>H</mi><mi>f</mi></msub><mi>ε</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">(a^\top\varepsilon)(\varepsilon^\top H_f\varepsilon)</annotation></semantics></math>
+      are third order; the squared quadratic term is fourth order.
+     </p>
+     <h4>
+      4 · Take the second-order expectation
+     </h4>
+     <p>
+      Using
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mi>ε</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mathbb E\varepsilon=0</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msup><mi>ε</mi><mi>⊤</mi></msup><mi>A</mi><mi>ε</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>A</mi><msub><mi>Σ</mi><mi>ε</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbb E[\varepsilon^\top A\varepsilon]=\operatorname{tr}(A\Sigma_\varepsilon)</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>L</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>+</mo><mi>ε</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>≈</mo><mi>L</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mi>a</mi><mi>⊤</mi></msup><msub><mi>Σ</mi><mi>ε</mi></msub><mi>a</mi><mo>+</mo><mfrac><mi>r</mi><mn>2</mn></mfrac><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>H</mi><mi>f</mi></msub><msub><mi>Σ</mi><mi>ε</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[L(x+\varepsilon)]\approx L(x)
++\frac12a^\top\Sigma_\varepsilon a
++\frac r2\operatorname{tr}(H_f\Sigma_\varepsilon).</annotation></semantics></math>
+     </div>
+     <p>
+      For isotropic noise, the extra terms are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo form="postfix" stretchy="false">∥</mo><mi>∇</mi><mi>f</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\sigma^2\|\nabla f\|^2/2</annotation></semantics></math>
+      <strong>
+       and
+      </strong>
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mi>r</mi><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>H</mi><mi>f</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\sigma^2r\operatorname{tr}(H_f)/2</annotation></semantics></math>
+      . The second term need not be nonnegative. Thus a nonlinear noisy objective is not generally exactly Ridge, nor solely a gradient-norm penalty. The expansion needs sufficiently small noise and smoothness; the linear identity above is exact.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="13" data-pdf="reg" type="button">
+       Chapter source · PDF p. 13
+      </button>
+      <a class="calculation-link" href="#augmentation-noise?derivation=noise-quadratic">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="boundaries-of-the-connection" id="augmentation-noise--boundaries-of-the-connection">
+    Boundaries of the connection
+   </h2>
+   <p>
+    The exact identity uses linear prediction, squared error, and the stated independent noise model. A nonlinear network’s response includes higher-order effects, and anisotropic noise gives a different quadratic form. The source’s local Taylor discussion is an intuition for broader models, not proof that every noisy training procedure equals ordinary Ridge.
+   </p>
+   <p>
+    Noise strength also has meaning only relative to feature scale. A single
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math>
+    can be negligible for one column and overwhelming for another. A large perturbation can leave the region where the label-preservation assumption is plausible.
+   </p>
+   <p>
+    The optional companion checks the linear identity numerically. It is kept small because the point is the mathematical equivalence under its assumptions, not a generic augmentation toolkit.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="augmentation-noise--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="transforms">
+     <span class="resource-meta">
+      TorchVision · Official visual gallery
+     </span>
+     <a href="https://docs.pytorch.org/vision/stable/auto_examples/transforms/plot_transforms_illustrations.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Illustration of transforms
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Compare original and transformed images with their generating code. Decide whether each transformation preserves your own target before adopting the operation.
+     </p>
+    </div>
+    <div class="resource" data-resource="transfer">
+     <span class="resource-meta">
+      PyTorch · Training example + visuals
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/transfer_learning_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Transfer Learning for Computer Vision
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Inspect augmentation, the validation phase, retention of the best validation model and visualized predictions. Best-model restoration and stopping are different operations.
+     </p>
+    </div>
+   </div>
+   <details class="local-example">
+    <summary>
+     Check the regularization identities
+     <small>
+      Local worked example · Python / PyTorch
+     </small>
+    </summary>
+    <p class="local-description">
+     An authored companion for the source’s orthogonal Ridge, LASSO threshold and fixed dropout-mask examples. A seeded Monte Carlo calculation checks the Gaussian input-noise identity approximately. Run locally; Python is not executed by this webpage.
+    </p>
+    <div class="code-wrap">
+     <div class="code-tools">
+      <span>
+       regularization_identities.py
+      </span>
+      <div>
+       <button data-action="copy" data-example="regularization_identities" type="button">
+        Copy
+       </button>
+       <button data-action="download" data-example="regularization_identities" type="button">
+        Save .py
+       </button>
+      </div>
+     </div>
+     <pre tabindex="0"><code><span class="sd">"""Small numerical checks for regularization identities from the supplied guide"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">set_num_threads</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Generator</span><span class="p">()</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">41</span><span class="p">)</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">float64</span>
+
+    <span class="c1"># Orthogonal Ridge example with the source's unnormalized objective</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">ridge</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">x</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_close</span><span class="p">(</span><span class="n">ridge</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Orthogonal Ridge coefficients:"</span><span class="p">,</span> <span class="n">ridge</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+    <span class="c1"># The LASSO soft threshold is exact for this orthogonal scalar subproblem</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">2.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">lasso</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">sign</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.7</span><span class="p">)</span><span class="o">.</span><span class="n">clamp_min</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_close</span><span class="p">(</span><span class="n">lasso</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.7</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Soft-thresholded coefficients:"</span><span class="p">,</span> <span class="n">lasso</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+    <span class="c1"># Verify the Gaussian input-noise identity approximately by Monte Carlo</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="n">generator</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.6</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">@</span> <span class="n">beta</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="mf">0.2</span>
+    <span class="n">perturbations</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100_000</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="n">generator</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">noisy_losses</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">perturbations</span><span class="p">)</span> <span class="o">@</span> <span class="n">beta</span><span class="p">)</span><span class="o">.</span><span class="n">square</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">empirical</span> <span class="o">=</span> <span class="n">noisy_losses</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">analytical</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">x</span> <span class="o">@</span> <span class="n">beta</span><span class="p">)</span><span class="o">.</span><span class="n">square</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">beta</span><span class="o">.</span><span class="n">square</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">standard_error</span> <span class="o">=</span> <span class="n">noisy_losses</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">/</span> <span class="n">noisy_losses</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">empirical</span> <span class="o">-</span> <span class="n">analytical</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">standard_error</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Expected noisy squared loss: </span><span class="si">{</span><span class="n">analytical</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Monte Carlo estimate: </span><span class="si">{</span><span class="n">empirical</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">standard_error</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> SE"</span><span class="p">)</span>
+
+    <span class="c1"># Reproduce the fixed-mask inverted-dropout example</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">masked</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">*</span> <span class="n">h</span> <span class="o">/</span> <span class="mf">0.5</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_close</span><span class="p">(</span><span class="n">masked</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Inverted dropout under the illustrated mask:"</span><span class="p">,</span> <span class="n">masked</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Exact checks passed; the noise expectation is a finite-sample approximation"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre>
+    </div>
+    <details class="recorded-result">
+     <summary>
+      Recorded CPU output
+     </summary>
+     <pre>Orthogonal Ridge coefficients: [1.5, -1.0, 0.25]
+Soft-thresholded coefficients: [1.7, 0.0, -0.40000000000000013]
+Expected noisy squared loss: 0.408000
+Monte Carlo estimate: 0.406796 ± 0.000719 SE
+Inverted dropout under the illustrated mask: [4.0, 0.0, -6.0, 0.0]
+Exact checks passed; the noise expectation is a finite-sample approximation
+</pre>
+    </details>
+   </details>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    When is Gaussian input noise equivalent to L2 regularization?
+   </summary>
+   <p>
+    For linear predictions, squared error, and independent zero-mean isotropic feature noise, the expected noisy squared error equals the original squared error plus nσ²‖β‖² under the guide’s sum convention. The identity is not an exact universal equivalence for nonlinear models or arbitrary noise.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#elastic-net">
+    <small>
+     ← Previous
+    </small>
+    Elastic Net and correlated predictors
+   </a>
+   <a href="#early-stopping">
+    <small>
+     Next →
+    </small>
+    Early stopping as spectral regularization
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="augmentation-encodes-a-statement-about-the-target" href="#augmentation-noise?section=augmentation-encodes-a-statement-about-the-target">
+    Augmentation encodes a statement about the target
+   </a>
+   <a data-section="different-data-types-allow-different-invariances" href="#augmentation-noise?section=different-data-types-allow-different-invariances">
+    Different data types allow different invariances
+   </a>
+   <a data-section="noise-injection-emphasizes-local-robustness" href="#augmentation-noise?section=noise-injection-emphasizes-local-robustness">
+    Noise injection emphasizes local robustness
+   </a>
+   <a data-section="derive-the-exact-linear-regression-identity" href="#augmentation-noise?section=derive-the-exact-linear-regression-identity">
+    Derive the exact linear-regression identity
+   </a>
+   <a data-section="boundaries-of-the-connection" href="#augmentation-noise?section=boundaries-of-the-connection">
+    Boundaries of the connection
+   </a>
+   <a data-section="implementation" href="#augmentation-noise?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

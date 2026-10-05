@@ -1,0 +1,202 @@
+{
+  "id": "sql-row-number",
+  "lang": "sql",
+  "category": "Window functions",
+  "label": "ROW_NUMBER()",
+  "example": "ROW_NUMBER() OVER (...)",
+  "description": "Sequential number",
+  "source": "image-sql",
+  "related": [
+    "pd-cumcount"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+  "aliases": "ROW_NUMBER",
+  "uses": [
+    {
+      "page": "C12",
+      "block": "code-C12-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ranked AS (\n    SELECT *, ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS rn\n    FROM Delivery\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-2",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        END AS immediate,\n        ROW_NUMBER() OVER (\n            PARTITION BY   customer_id\n            ORDER BY order_date ASC",
+      "snippetLine": 7
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-4",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        END AS immediate,\n        ROW_NUMBER() OVER (\n            PARTITION BY customer_id\n            ORDER BY order_date ASC",
+      "snippetLine": 8
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ranked AS (\n    SELECT product_id, new_price, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY change_date DESC) AS rn\n    FROM Products WHERE change_date <= '2019-08-16'\n), ids AS (SELECT DISTINCT product_id FROM Products)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "            *,\n            ROW_NUMBER() OVER (\n                PARTITION BY   product_id ORDER BY change_date DESC\n            ) AS latest",
+      "snippetLine": 4
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-4",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            *,\n            ROW_NUMBER() OVER (\n                PARTITION BY product_id ORDER BY change_date DESC\n            ) AS latest",
+      "snippetLine": 5
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        email,\n        ROW_NUMBER() OVER (\n            PARTITION BY email ORDER BY id\n        ) AS ranked",
+      "snippetLine": 4
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-4",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        email, \n        ROW_NUMBER() OVER (\n            PARTITION BY email ORDER BY id\n        ) AS ranked",
+      "snippetLine": 5
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-2",
+      "line": 5,
+      "lines": [
+        5,
+        17
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "            salary,\n            ROW_NUMBER() OVER (PARTITION BY salary)   AS   ranks\n        FROM Employee\n        WHERE salary IS NOT NULL",
+      "snippetLine": 4
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-4",
+      "line": 6,
+      "lines": [
+        6,
+        17
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            salary, \n            ROW_NUMBER() OVER (PARTITION BY salary) AS ranks\n        FROM Employee\n    ),",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC601",
+      "block": "code-LC601-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "601 · Human traffic of stadium",
+      "number": "601",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            id, visit_date, people,\n            id - ROW_NUMBER() OVER (ORDER BY id) AS group_num\n        FROM Stadium \n        WHERE people >= 100",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-0",
+      "line": 30,
+      "lines": [
+        30
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            season, category, total_quantity, total_revenue,\n            ROW_NUMBER() OVER (\n                PARTITION BY season \n                ORDER BY total_quantity DESC, total_revenue DESC",
+      "snippetLine": 29
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            review_id, employee_id, rating, \n            ROW_NUMBER() OVER (\n                PARTITION BY employee_id \n                ORDER BY review_id DESC",
+      "snippetLine": 5
+    }
+  ],
+  "pageCount": 7
+}

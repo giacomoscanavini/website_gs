@@ -1,0 +1,256 @@
+{
+  "id": "pd-or",
+  "lang": "pd",
+  "category": "Filtering",
+  "label": "OR",
+  "example": "df[(df.city == 'HK') | (df.city == 'SG')]",
+  "description": "OR",
+  "source": "image-pandas",
+  "related": [
+    "sql-or"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "BitOr",
+  "uses": [
+    {
+      "page": "C02",
+      "block": "code-C02-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def find_customer_referee(customer: pd.DataFrame) -> pd.DataFrame:\n    mask = customer['referee_id'].isna() | customer['referee_id'].ne(2)\n    return customer.loc[mask, ['name']].copy()",
+      "snippetLine": 3
+    },
+    {
+      "page": "C02",
+      "block": "code-C02-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def find_customer_referee(customer: pd.DataFrame) -> pd.DataFrame:\n    df =   customer[(customer.referee_id != 2) | (customer.referee_id.isna())]\n    return df[['name']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C02",
+      "block": "code-C02-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def find_customer_referee(customer: pd.DataFrame) -> pd.DataFrame:\n    df = customer[(customer.referee_id != 2) | (customer.referee_id.isna())]\n    return df[['name']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C03",
+      "block": "code-C03-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "595 · Big countries",
+      "number": "595",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def big_countries(world: pd.DataFrame) -> pd.DataFrame:\n    mask = world['area'].ge(3_000_000) | world['population'].ge(25_000_000)\n    return world.loc[mask, ['name', 'population', 'area']].copy()",
+      "snippetLine": 3
+    },
+    {
+      "page": "C03",
+      "block": "code-C03-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "595 · Big countries",
+      "number": "595",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def big_countries(world: pd.DataFrame) -> pd.DataFrame:\n    df =   world[(world.area >= 3000000) | (world.population >= 25000000)]\n    return df[['name', 'population', 'area']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C03",
+      "block": "code-C03-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "595 · Big countries",
+      "number": "595",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def big_countries(world: pd.DataFrame) -> pd.DataFrame:\n    df = world[(world.area >= 3000000) | (world.population >= 25000000)]\n    return df[['name', 'population', 'area']]\n    ",
+      "snippetLine": 3
+    },
+    {
+      "page": "C47",
+      "block": "code-C47-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "577 · Employee bonus",
+      "number": "577",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df = employee.merge(bonus, on='empId', how='left')\n    return df[(df.bonus < 1000) | (df.bonus.isna())][['name', 'bonus']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C47",
+      "block": "code-C47-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "577 · Employee bonus",
+      "number": "577",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = employee.merge(bonus, on='empId', how='left')\n    return df[(df.bonus < 1000) | (df.bonus.isna())][['name', 'bonus']]",
+      "snippetLine": 4
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-3",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df = prices.merge(units_sold, on='product_id', how='left')\n    df = df[df.purchase_date.isna() | df.purchase_date.between(df.start_date, df.end_date)].copy()\n    df['paid'] = df['price'] * df['units']\n    totals = df.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))",
+      "snippetLine": 12
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = prices.merge(units_sold, on='product_id', how='left')\n    df = df[df.purchase_date.isna() | ((df.end_date >= df.purchase_date) & (df.purchase_date >= df.start_date))]\n    df['paid'] = df['price'] * df['units']\n    ",
+      "snippetLine": 4
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    n = employee.groupby('employee_id')['department_id'].transform('size')\n    mask = employee['primary_flag'].eq('Y') | n.eq(1)\n    return employee.loc[mask, ['employee_id', 'department_id']].copy()",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC3475",
+      "block": "code-LC3475-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "3475 · DNA pattern recognition",
+      "number": "3475",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    samples['has_start'] = (samples.dna_sequence.str.startswith('ATG')).astype('int')\n    samples['has_stop'] = (samples.dna_sequence.str.endswith('TAA') | \n                           samples.dna_sequence.str.endswith('TAG') | \n                           samples.dna_sequence.str.endswith('TGA')).astype('int')",
+      "snippetLine": 4
+    },
+    {
+      "page": "squid-01",
+      "block": "code-squid-01-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "Filter the player pool",
+      "number": "01",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "mask = (player['status'].eq('alive') & player['debt'].gt(400000000)\n        & (player['age'].gt(65)\n           | (player['vice'].eq('Gambling') & player['has_close_family'].eq(False))))\nresult = player.loc[mask.fillna(False)].copy()",
+      "snippetLine": 3
+    },
+    {
+      "page": "squid-05",
+      "block": "code-squid-05-1",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "Count a player’s closest interactions",
+      "number": "05",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\nmask = daily_interactions['player1_id'].eq(456) | daily_interactions['player2_id'].eq(456)\ninteractions = daily_interactions.loc[mask].copy()\ninteractions['player_id'] = interactions['player1_id'].where(",
+      "snippetLine": 2
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-1",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    # Literal same-day overlap logic from the supplied SQL\n    overlaps = ((a.le(start) & b.ge(start)) | (a.le(end) & b.ge(end))\n                | (a.between(start, end) & b.between(start, end)))\n    shifts = shifts.loc[overlaps].rename(columns={'id': 'guard_id'})",
+      "snippetLine": 13
+    },
+    {
+      "page": "B15",
+      "block": "code-B15-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DELETE rows",
+      "number": "15",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies = movies.loc[movies['year'].isna() | movies['year'].ge(2005)].copy()",
+      "snippetLine": 1
+    },
+    {
+      "page": "B15",
+      "block": "code-B15-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DELETE rows",
+      "number": "15",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies = movies.loc[movies['director'].isna() | movies['director'].ne('Andrew Stanton')].copy()",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 10
+}

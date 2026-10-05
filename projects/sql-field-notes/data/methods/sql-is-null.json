@@ -1,0 +1,158 @@
+{
+  "id": "sql-is-null",
+  "lang": "sql",
+  "category": "Filtering",
+  "label": "IS NULL",
+  "example": "score IS NULL",
+  "description": "Check null",
+  "source": "image-sql",
+  "related": [
+    "pd-isna"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "aliases": "IS NULL",
+  "uses": [
+    {
+      "page": "C02",
+      "block": "code-C02-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT name FROM Customer WHERE referee_id <> 2 OR referee_id IS NULL;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C02",
+      "block": "code-C02-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Customer\nWHERE referee_id IS NULL OR   referee_id <> 2;",
+      "snippetLine": 2
+    },
+    {
+      "page": "C02",
+      "block": "code-C02-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Customer\nWHERE referee_id IS NULL OR referee_id <> 2",
+      "snippetLine": 3
+    },
+    {
+      "page": "C44",
+      "block": "code-C44-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1581 · Customers who visited without transactions",
+      "number": "1581",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "LEFT JOIN Transactions t ON v.visit_id = t.visit_id\nWHERE t.transaction_id IS NULL\nGROUP BY v.customer_id;",
+      "snippetLine": 3
+    },
+    {
+      "page": "C44",
+      "block": "code-C44-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1581 · Customers who visited without transactions",
+      "number": "1581",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "LEFT JOIN Transactions t ON v.visit_id = t.visit_id\nWHERE t.amount IS NULL\nGROUP BY v.customer_id",
+      "snippetLine": 4
+    },
+    {
+      "page": "C47",
+      "block": "code-C47-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "577 · Employee bonus",
+      "number": "577",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "LEFT JOIN Bonus b ON e.empId = b.empId\nWHERE b.bonus < 1000 OR b.bonus IS NULL",
+      "snippetLine": 3
+    },
+    {
+      "page": "C47",
+      "block": "code-C47-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "577 · Employee bonus",
+      "number": "577",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "LEFT JOIN Bonus b ON e.empId = b.empId\nWHERE b.bonus < 1000 OR b.bonus IS NULL",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC608",
+      "block": "code-LC608-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "608 · Tree node",
+      "number": "608",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    CASE\n        WHEN p_id IS NULL THEN 'Root'\n        WHEN id IN (SELECT p_id FROM Tree) THEN 'Inner'\n        ELSE 'Leaf'",
+      "snippetLine": 4
+    },
+    {
+      "page": "B08",
+      "block": "code-B08-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "NULL and unmatched rows",
+      "number": "08",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT name, role FROM employees WHERE building IS NULL;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B08",
+      "block": "code-B08-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "NULL and unmatched rows",
+      "number": "08",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT b.building_name FROM buildings b\nLEFT JOIN employees e ON b.building_name = e.building WHERE e.building IS NULL;",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 5
+}

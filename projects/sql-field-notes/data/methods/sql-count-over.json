@@ -1,0 +1,47 @@
+{
+  "id": "sql-count-over",
+  "lang": "sql",
+  "category": "Window functions",
+  "label": "COUNT() OVER",
+  "example": "COUNT(*) OVER (...)",
+  "description": "Window count",
+  "source": "image-sql",
+  "related": [
+    "pd-transform"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+  "aliases": "COUNT",
+  "uses": [
+    {
+      "page": "C22",
+      "block": "code-C22-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH counted AS (\n    SELECT *, COUNT(*) OVER (PARTITION BY employee_id) AS n_departments FROM Employee\n)\nSELECT employee_id, department_id FROM counted WHERE primary_flag = 'Y' OR n_departments = 1;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-0",
+      "line": 2,
+      "lines": [
+        2,
+        3
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH marked AS (\n    SELECT *, COUNT(*) OVER (PARTITION BY tiv_2015) AS value_count,\n           COUNT(*) OVER (PARTITION BY lat, lon) AS location_count FROM Insurance\n)",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 2
+}

@@ -1,0 +1,104 @@
+<article class="article method-page" id="m-sql-nth-value">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=sql&amp;cat=Also%20used%20in%20these%20notes">
+   MySQL · Also used in these notes
+  </a>
+ </div>
+ <h1>
+  NTH_VALUE()
+ </h1>
+ <p class="lead">
+  Read the nth value in a window frame
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    MySQL
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-nth-value"><span class="k">NTH_VALUE</span><span class="p">(</span><span class="n">score</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">OVER</span><span class="w"> </span><span class="p">(</span><span class="k">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">student_id</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">exam_date</span><span class="p">)</span></code></pre>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-pd-endpoints">
+   pandas · First/last score
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#LC3421?code=code-LC3421-0&amp;method=sql-nth-value&amp;line=6">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     3421 · Find students who improved
+    </strong>
+    <small>
+     Uploaded submission · line 6
+    </small>
+   </div>
+   <pre aria-hidden="true">        subject,
+        NTH_VALUE(score, 1) OVER (
+            PARTITION BY student_id, subject
+            ORDER BY exam_date ASC</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    Methods present in the supplied code, added to the image-based index · Also used in these notes. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://dev.mysql.com/doc/refman/8.4/en/" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=sql&amp;cat=Also%20used%20in%20these%20notes">
+   <small>
+    ← Browse
+   </small>
+   MySQL · Also used in these notes
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

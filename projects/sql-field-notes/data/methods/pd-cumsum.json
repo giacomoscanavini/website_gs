@@ -1,0 +1,60 @@
+{
+  "id": "pd-cumsum",
+  "lang": "pd",
+  "category": "Window-like operations",
+  "label": "Cumulative sum",
+  "example": "df['x'].cumsum()",
+  "description": "Running sum",
+  "source": "image-pandas",
+  "related": [
+    "sql-sum-over"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "cumsum",
+  "uses": [
+    {
+      "page": "C26",
+      "block": "code-C26-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    q = queue.sort_values('turn')\n    return q.loc[q['weight'].cumsum().le(1000), ['person_name']].tail(1)",
+      "snippetLine": 4
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    queue.sort_values(by='turn', ascending=True, inplace=True)\n    queue['cumsum_weight'] = queue['weight'].cumsum()\n    return   queue[queue.cumsum_weight <= 1000].tail(1)[['person_name']]",
+      "snippetLine": 4
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    queue.sort_values(by='turn', ascending=True, inplace=True)\n    queue['cumsum_weight'] = queue['weight'].cumsum()\n    return queue[queue.cumsum_weight <= 1000].tail(1)[['person_name']]",
+      "snippetLine": 4
+    }
+  ],
+  "pageCount": 1
+}

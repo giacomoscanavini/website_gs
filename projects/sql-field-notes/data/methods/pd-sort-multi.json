@@ -1,0 +1,230 @@
+{
+  "id": "pd-sort-multi",
+  "lang": "pd",
+  "category": "Sorting",
+  "label": "Multiple columns",
+  "example": "df.sort_values(['age','name'])",
+  "description": "Multi-column sort",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C48",
+      "block": "code-C48-1",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df['attended_exams'] = df['attended_exams'].fillna(0).astype(int)\n    return df[['student_id', 'student_name', 'subject_name', 'attended_exams']].sort_values(['student_id', 'subject_name'])",
+      "snippetLine": 7
+    },
+    {
+      "page": "C48",
+      "block": "code-C48-3",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left').fillna(0)\n    return df.sort_values(['student_id', 'subject_name'])",
+      "snippetLine": 10
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    g['percentage'] = (100 * g['participants'] / len(users)).map(round_half_up)\n    return g[['contest_id', 'percentage']].sort_values(['percentage', 'contest_id'], ascending=[False, True])",
+      "snippetLine": 10
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-3",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df['percentage'] = (100 * df['nUsersPerTest'] / nUsers).map(round_half_up)\n    return df[['contest_id', 'percentage']].sort_values(by=['percentage', 'contest_id'], ascending=[False, True])",
+      "snippetLine": 13
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-5",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return df[['contest_id', 'percentage']].sort_values(by=['percentage', 'contest_id'], ascending=[False, True])",
+      "snippetLine": 10
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-3",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df = products[products['change_date'] <= '2019-08-16']\n    df = df.sort_values(by=['product_id', 'change_date'], ascending=[True, False]).drop_duplicates('product_id').rename(columns={'new_price': 'price'})\n\n    updated_ids = set(df.product_id)",
+      "snippetLine": 6
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-5",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = products[products['change_date'] <= '2019-08-16']\n    df = df.sort_values(by=['product_id', 'change_date'], ascending=[True, False]).drop_duplicates('product_id').rename(columns={'new_price': 'price'})\n    \n    updated_ids = set(df.product_id)",
+      "snippetLine": 6
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-1",
+      "line": 6,
+      "lines": [
+        6,
+        9
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    users_ranked = r.groupby('user_id').size().reset_index(name='n_reviews').merge(users, on='user_id')\n    first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})\n    feb = r.loc[r['created_at'].ge('2020-02-01') & r['created_at'].lt('2020-03-01')]\n    movies_ranked = feb.groupby('movie_id', as_index=False).agg(avg_rating=('rating', 'mean')).merge(movies, on='movie_id')",
+      "snippetLine": 5
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-3",
+      "line": 8,
+      "lines": [
+        8,
+        13
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    ).reset_index()\n    df_users =   df_users.merge(users, on='user_id', how='left').sort_values(by=['nReviews', 'name'], ascending=[False, True])[['name', 'nReviews']]\n    df_movies =   movie_rating[(movie_rating.created_at >=   '2020-02-01') & (movie_rating.created_at < '2020-03-01')]\n    df_movies = df_movies.groupby(by='movie_id').agg(",
+      "snippetLine": 7
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-5",
+      "line": 7,
+      "lines": [
+        7,
+        13
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    ).reset_index()\n    df_users = df_users.merge(users, on='user_id', how='left').sort_values(by=['nReviews', 'name'], ascending=[False, True])[['name', 'nReviews']]\n\n    df_movies = movie_rating[(movie_rating.created_at >= '2020-02-01') & (movie_rating.created_at < '2020-03-01')]",
+      "snippetLine": 6
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    counts = ids.value_counts().rename_axis('id').reset_index(name='num')\n    return counts.sort_values(['num', 'id'], ascending=[False, True]).head(1)",
+      "snippetLine": 5
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-3",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df.columns = ['id', 'num']\n    return df.sort_values(['num', 'id'], ascending=[False, True]).head(1)",
+      "snippetLine": 8
+    },
+    {
+      "page": "LC3521",
+      "block": "code-LC3521-1",
+      "line": 26,
+      "lines": [
+        26
+      ],
+      "title": "3521 · Find product recommendation pairs",
+      "number": "3521",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    \n    return df.sort_values(by=['customer_count', 'product1_id', 'product2_id'], ascending=[False, True, True])\n    ",
+      "snippetLine": 25
+    },
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-1",
+      "line": 21,
+      "lines": [
+        21
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df = df.sort_values(by=['season', 'total_quantity', 'total_revenue'], ascending=[True, False, False])\n    return df.groupby(by='season').first().reset_index()\n    ",
+      "snippetLine": 20
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-1",
+      "line": 5,
+      "lines": [
+        5,
+        22
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = (\n        performance_reviews\n        .sort_values(by=['employee_id', 'review_date'], ascending=[True, False])\n        .groupby(by='employee_id')",
+      "snippetLine": 4
+    }
+  ],
+  "pageCount": 8
+}

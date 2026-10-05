@@ -1,0 +1,203 @@
+{
+  "id": "sql-between",
+  "lang": "sql",
+  "category": "Filtering",
+  "label": "BETWEEN",
+  "example": "age BETWEEN 20 AND 30",
+  "description": "Inclusive range",
+  "source": "image-sql",
+  "related": [
+    "pd-between"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "aliases": "BETWEEN",
+  "uses": [
+    {
+      "page": "C07",
+      "block": "code-C07-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "FROM Prices p LEFT JOIN UnitsSold u\n  ON p.product_id = u.product_id AND u.purchase_date BETWEEN p.start_date AND p.end_date\nGROUP BY p.product_id;",
+      "snippetLine": 3
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    FROM Prices p\n    LEFT JOIN UnitsSold   u ON (p.product_id = u.product_id) AND (u.purchase_date BETWEEN   p.start_date AND p.end_date)\n)\nSELECT product_id, COALESCE(ROUND(SUM(paid) / NULLIF(SUM(units), 0), 2), 0) AS average_price",
+      "snippetLine": 3
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    FROM Prices p\n    LEFT JOIN UnitsSold u ON (p.product_id = u.product_id) AND (u.purchase_date BETWEEN p.start_date AND p.end_date)\n)\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "FROM Activity\nWHERE activity_date BETWEEN '2019-06-28' AND '2019-07-27'\n  AND activity_type IN ('open_session', 'end_session', 'scroll_down', 'send_message')\nGROUP BY activity_date;",
+      "snippetLine": 2
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH cumulative AS (\n    SELECT person_name, turn, SUM(weight) OVER (ORDER BY turn ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_weight\n    FROM Queue\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "UNION ALL\nSELECT 'Average Salary', COUNT(*) FROM Accounts WHERE income BETWEEN 20000 AND 50000\nUNION ALL\nSELECT 'High Salary', COUNT(*) FROM Accounts WHERE income > 50000;",
+      "snippetLine": 2
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    SELECT visited_on,\n           SUM(amount) OVER (ORDER BY visited_on RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW) AS amount,\n           MIN(visited_on) OVER () AS first_day\n    FROM daily",
+      "snippetLine": 4
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        SUM(amount) OVER (\n            ORDER BY visited_on RANGE BETWEEN   INTERVAL 6 DAY   PRECEDING AND CURRENT ROW\n        ) AS rolling_amount,\n        MIN(visited_on) OVER () AS first_date",
+      "snippetLine": 4
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-4",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        SUM(amount) OVER (\n            ORDER BY visited_on RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW\n        ) AS rolling_amount,\n        MIN(visited_on) OVER () AS first_date",
+      "snippetLine": 5
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-0",
+      "line": 13,
+      "lines": [
+        13,
+        14,
+        15,
+        36
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "        WHERE \n            (m.start_time BETWEEN g.shift_start and g.shift_end) OR \n            (m.end_time   BETWEEN g.shift_start and g.shift_end) OR \n            ((g.shift_start BETWEEN m.start_time and m.end_time) AND (g.shift_end BETWEEN m.start_time and m.end_time))",
+      "snippetLine": 12
+    },
+    {
+      "page": "B02",
+      "block": "code-B02-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Numeric constraints",
+      "number": "02",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies WHERE year BETWEEN 2000 AND 2010;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B02",
+      "block": "code-B02-4",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Numeric constraints",
+      "number": "02",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies WHERE year NOT BETWEEN 2000 AND 2010;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B02",
+      "block": "code-B02-6",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Numeric constraints",
+      "number": "02",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT title, year FROM movies WHERE id BETWEEN 1 AND 5;",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 7
+}

@@ -1,0 +1,238 @@
+<article class="article" id="B01">
+ <div class="breadcrumb">
+  <a href="#sqlbolt">
+   SQLBolt
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Lesson 1
+  </span>
+ </div>
+ <h1>
+  SELECT queries 101
+ </h1>
+ <p>
+  SELECT chooses the columns returned from a table. Naming columns controls the output schema; * returns every column. A projection does not remove duplicate rows.
+ </p>
+ <p>
+  <b>
+   Note.
+  </b>
+  Pandas examples use lowercase SQLBolt column names and import pandas as pd. Each query is independent unless a write lesson says otherwise.
+ </p>
+ <h2>
+  01 · Film titles
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-1-panel-0" aria-selected="true" id="example-1-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-1-panel-1" aria-selected="false" id="example-1-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-1-tab-0" class="code-panel" id="example-1-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B01-0" tabindex="0"><code class="language-sql" data-origin="legacy-B01-0"><span class="k">SELECT</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-1-tab-1" class="code-panel" id="example-1-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B01-1" tabindex="0"><code class="language-python" data-origin="legacy-B01-1"><span class="n">result</span> <span class="o">=</span> <span class="n">movies</span><span class="p">[[</span><span class="s1">'title'</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  02 · Film directors
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-2-panel-0" aria-selected="true" id="example-2-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-2-panel-1" aria-selected="false" id="example-2-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-2-tab-0" class="code-panel" id="example-2-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B01-2" tabindex="0"><code class="language-sql" data-origin="legacy-B01-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">director</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-2-tab-1" class="code-panel" id="example-2-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B01-3" tabindex="0"><code class="language-python" data-origin="legacy-B01-3"><span class="n">result</span> <span class="o">=</span> <span class="n">movies</span><span class="p">[[</span><span class="s1">'director'</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  03 · Titles with directors
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-3-panel-0" aria-selected="true" id="example-3-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-3-panel-1" aria-selected="false" id="example-3-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-3-tab-0" class="code-panel" id="example-3-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B01-4" tabindex="0"><code class="language-sql" data-origin="legacy-B01-4"><span class="k">SELECT</span><span class="w"> </span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">director</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-3-tab-1" class="code-panel" id="example-3-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B01-5" tabindex="0"><code class="language-python" data-origin="legacy-B01-5"><span class="n">result</span> <span class="o">=</span> <span class="n">movies</span><span class="p">[[</span><span class="s1">'title'</span><span class="p">,</span> <span class="s1">'director'</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  04 · Titles with release years
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-4-panel-0" aria-selected="true" id="example-4-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-4-panel-1" aria-selected="false" id="example-4-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-4-tab-0" class="code-panel" id="example-4-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B01-6" tabindex="0"><code class="language-sql" data-origin="legacy-B01-6"><span class="k">SELECT</span><span class="w"> </span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="k">year</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-4-tab-1" class="code-panel" id="example-4-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B01-7" tabindex="0"><code class="language-python" data-origin="legacy-B01-7"><span class="n">result</span> <span class="o">=</span> <span class="n">movies</span><span class="p">[[</span><span class="s1">'title'</span><span class="p">,</span> <span class="s1">'year'</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  05 · Every movie column
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-5-panel-0" aria-selected="true" id="example-5-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-5-panel-1" aria-selected="false" id="example-5-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-5-tab-0" class="code-panel" id="example-5-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B01-8" tabindex="0"><code class="language-sql" data-origin="legacy-B01-8"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-5-tab-1" class="code-panel" id="example-5-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B01-9" tabindex="0"><code class="language-python" data-origin="legacy-B01-9"><span class="n">result</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+  </div>
+ </div>
+ <details class="reference-details">
+  <summary>
+   Sources
+  </summary>
+  <div class="sources-content">
+   <p>
+    The worked examples and pandas translations are study alternatives, not an official answer key. Shared DataFrame setup is listed under Reference.
+   </p>
+   <p>
+    <a href="https://sqlbolt.com/lesson/select_queries_introduction" rel="noopener noreferrer" target="_blank">
+     SQLBolt — SELECT queries 101
+    </a>
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     pandas SQL comparison
+    </a>
+    — Projection, filtering, grouping, joins and operations.
+   </p>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-copy">
+     copy()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#home">
+   <small>
+    Contents
+   </small>
+   All sections
+  </a>
+  <a href="#B02">
+   <small>
+    Next →
+   </small>
+   Numeric constraints
+  </a>
+ </div>
+</article>

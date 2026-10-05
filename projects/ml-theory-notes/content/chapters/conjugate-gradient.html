@@ -1,0 +1,641 @@
+<section aria-labelledby="conjugate-gradient-title" class="page-view lesson-layout" id="conjugate-gradient">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     14
+    </span>
+    Part 2 · Optimization
+   </p>
+   <h1 id="conjugate-gradient-title" tabindex="-1">
+    Conjugate Gradient: directions that do not repeat work
+   </h1>
+   <p class="standfirst">
+    Follow the source’s two-dimensional quadratic, then distinguish linear CG from nonlinear CG.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Optimization · PDF pp. 16–18 · §10" data-page="16" data-pdf="optim" type="button">
+     Optimization · PDF pp. 16–18 · §10
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="begin-with-a-linear-system" href="#conjugate-gradient?section=begin-with-a-linear-system">
+     Begin with a linear system
+    </a>
+    <a data-section="the-recursion" href="#conjugate-gradient?section=the-recursion">
+     The recursion
+    </a>
+    <a data-section="the-sources-first-step" href="#conjugate-gradient?section=the-sources-first-step">
+     The source’s first step
+    </a>
+    <a data-section="complete-the-second-step" href="#conjugate-gradient?section=complete-the-second-step">
+     Complete the second step
+    </a>
+    <a data-section="nonlinear-cg-is-a-different-extension" href="#conjugate-gradient?section=nonlinear-cg-is-a-different-extension">
+     Nonlinear CG is a different extension
+    </a>
+    <a data-section="practical-companion" href="#conjugate-gradient?section=practical-companion">
+     Practical companion
+    </a>
+    <a data-section="implementation" href="#conjugate-gradient?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="begin-with-a-linear-system" id="conjugate-gradient--begin-with-a-linear-system">
+    Begin with a linear system
+   </h2>
+   <p>
+    Classical Conjugate Gradient solves
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>x</mi><mo>=</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">Ax=b</annotation></semantics></math>
+    for symmetric positive-definite
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
+    . This is equivalent to minimizing
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mi>x</mi><mi>⊤</mi></msup><mi>A</mi><mi>x</mi><mo>−</mo><msup><mi>b</mi><mi>⊤</mi></msup><mi>x</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">f(x)=\frac12x^\top Ax-b^\top x,</annotation></semantics></math>
+   </div>
+   <p>
+    because
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∇</mi><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>A</mi><mi>x</mi><mo>−</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">\nabla f(x)=Ax-b</annotation></semantics></math>
+    . The residual
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mi>b</mi><mo>−</mo><mi>A</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">r=b-Ax</annotation></semantics></math>
+    is therefore the negative gradient.
+   </p>
+   <p>
+    Steepest descent chooses each direction from the current slope. In an elongated quadratic, that can undo aspects of previous progress. CG chooses directions that are conjugate under the metric defined by
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
+    :
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mi>i</mi><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn><mspace width="1.0em"></mspace><mrow><mo form="prefix" stretchy="true">(</mo><mi>i</mi><mo>≠</mo><mi>j</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">p_i^\top A p_j=0\quad(i\ne j).</annotation></semantics></math>
+   </div>
+   <p>
+    This is different from ordinary Euclidean orthogonality
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mi>i</mi><mi>⊤</mi></msubsup><msub><mi>p</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">p_i^\top p_j=0</annotation></semantics></math>
+    . For the quadratic, minimizing along a new conjugate direction does not disturb the optimum already established along previous conjugate directions.
+   </p>
+   <h2 data-section="the-recursion" id="conjugate-gradient--the-recursion">
+    The recursion
+   </h2>
+   <p>
+    Set
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mn>0</mn></msub><mo>=</mo><mi>b</mi><mo>−</mo><mi>A</mi><msub><mi>x</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">r_0=b-Ax_0</annotation></semantics></math>
+    and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>0</mn></msub><mo>=</mo><msub><mi>r</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">p_0=r_0</annotation></semantics></math>
+    . Then compute
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>k</mi></msub><mo>=</mo><mfrac><mrow><msubsup><mi>r</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi>r</mi><mi>k</mi></msub></mrow><mrow><msubsup><mi>p</mi><mi>k</mi><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mi>k</mi></msub></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>x</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>x</mi><mi>k</mi></msub><mo>+</mo><msub><mi>α</mi><mi>k</mi></msub><msub><mi>p</mi><mi>k</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\alpha_k=\frac{r_k^\top r_k}{p_k^\top Ap_k},\qquad
+x_{k+1}=x_k+\alpha_kp_k,</annotation></semantics></math>
+   </div>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>r</mi><mi>k</mi></msub><mo>−</mo><msub><mi>α</mi><mi>k</mi></msub><mi>A</mi><msub><mi>p</mi><mi>k</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>β</mi><mi>k</mi></msub><mo>=</mo><mfrac><mrow><msubsup><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mi>⊤</mi></msubsup><msub><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><mrow><msubsup><mi>r</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi>r</mi><mi>k</mi></msub></mrow></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">r_{k+1}=r_k-\alpha_kAp_k,\qquad
+\beta_k=\frac{r_{k+1}^\top r_{k+1}}{r_k^\top r_k},</annotation></semantics></math>
+   </div>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>β</mi><mi>k</mi></msub><msub><mi>p</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">p_{k+1}=r_{k+1}+\beta_kp_k.</annotation></semantics></math>
+   </div>
+   <p>
+    The expensive operation is an action of
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
+    on a vector, not an explicit matrix inverse. In larger systems, that distinction can make CG attractive when a matrix–vector product is available cheaply.
+   </p>
+   <details class="derivation" data-derivation="cg-recurrence" id="conjugate-gradient--derivation-cg-recurrence">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive CG’s step length and conjugate direction
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>≻</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">A\succ0</annotation></semantics></math>
+      is symmetric, calculations use exact arithmetic, and the initial point is fixed. Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>k</mi></msub><mo>=</mo><mi>b</mi><mo>−</mo><mi>A</mi><msub><mi>x</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">r_k=b-Ax_k</annotation></semantics></math>
+      , so
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∇</mi><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><msub><mi>r</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\nabla f(x_k)=-r_k</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      1 · Minimize exactly along an arbitrary direction
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>x</mi><mi>k</mi></msub><mo>+</mo><mi>α</mi><msub><mi>p</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">x(\alpha)=x_k+\alpha p_k</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>d</mi><mrow><mi>d</mi><mi>α</mi></mrow></mfrac><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>k</mi></msub><mo>+</mo><mi>α</mi><msub><mi>p</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msubsup><mi>p</mi><mi>k</mi><mi>⊤</mi></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><mi>A</mi><msub><mi>x</mi><mi>k</mi></msub><mo>−</mo><mi>b</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>α</mi><msubsup><mi>p</mi><mi>k</mi><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mi>k</mi></msub><mo>=</mo><mi>−</mi><msubsup><mi>p</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi>r</mi><mi>k</mi></msub><mo>+</mo><mi>α</mi><msubsup><mi>p</mi><mi>k</mi><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{d}{d\alpha}f(x_k+\alpha p_k)
+=p_k^\top(Ax_k-b)+\alpha p_k^\top Ap_k
+=-p_k^\top r_k+\alpha p_k^\top Ap_k.</annotation></semantics></math>
+     </div>
+     <p>
+      Setting this to zero yields
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>k</mi></msub><mo>=</mo><msubsup><mi>p</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi>r</mi><mi>k</mi></msub><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>p</mi><mi>k</mi><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha_k=p_k^\top r_k/(p_k^\top Ap_k)</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Update the residual by substitution
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>b</mi><mo>−</mo><mi>A</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>k</mi></msub><mo>+</mo><msub><mi>α</mi><mi>k</mi></msub><msub><mi>p</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>r</mi><mi>k</mi></msub><mo>−</mo><msub><mi>α</mi><mi>k</mi></msub><mi>A</mi><msub><mi>p</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">r_{k+1}=b-A(x_k+\alpha_kp_k)=r_k-\alpha_kAp_k.</annotation></semantics></math>
+     </div>
+     <p>
+      Taking its inner product with
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>k</mi></msub><annotation encoding="application/x-tex">p_k</annotation></semantics></math>
+      and using step 1 gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">p_k^\top r_{k+1}=0</annotation></semantics></math>
+      . Exact line minimization makes the new residual orthogonal to the direction just used.
+     </p>
+     <h4>
+      3 · Explain why earlier orthogonality is retained
+     </h4>
+     <p>
+      Suppose previous directions are mutually
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
+      -conjugate and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>r</mi><mi>k</mi></msub><annotation encoding="application/x-tex">r_k</annotation></semantics></math>
+      is orthogonal to them. For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>&lt;</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">j&lt;k</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mi>j</mi><mi>⊤</mi></msubsup><msub><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msubsup><mi>p</mi><mi>j</mi><mi>⊤</mi></msubsup><msub><mi>r</mi><mi>k</mi></msub><mo>−</mo><msub><mi>α</mi><mi>k</mi></msub><msubsup><mi>p</mi><mi>j</mi><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mi>k</mi></msub><mo>=</mo><mn>0</mn><mo>−</mo><mn>0</mn><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">p_j^\top r_{k+1}=p_j^\top r_k-\alpha_k p_j^\top Ap_k=0-0=0.</annotation></semantics></math>
+     </div>
+     <p>
+      Thus the next residual is orthogonal to all directions used so far. The property starts at
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">k=0</annotation></semantics></math>
+      after the first exact line search and is preserved by conjugate updates.
+     </p>
+     <h4>
+      4 · Simplify the numerator
+     </h4>
+     <p>
+      The direction has the form
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>k</mi></msub><mo>=</mo><msub><mi>r</mi><mi>k</mi></msub><mo>+</mo><msub><mi>β</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><msub><mi>p</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">p_k=r_k+\beta_{k-1}p_{k-1}</annotation></semantics></math>
+      . Because
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow><mi>⊤</mi></msubsup><msub><mi>r</mi><mi>k</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">p_{k-1}^\top r_k=0</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi>r</mi><mi>k</mi></msub><mo>=</mo><msubsup><mi>r</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi>r</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">p_k^\top r_k=r_k^\top r_k.</annotation></semantics></math>
+     </div>
+     <p>
+      This recovers the usual
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>k</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>r</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi>r</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>p</mi><mi>k</mi><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\alpha_k=(r_k^\top r_k)/(p_k^\top Ap_k)</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      5 · Enforce conjugacy for the next direction
+     </h4>
+     <p>
+      Set
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>β</mi><mi>k</mi></msub><msub><mi>p</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">p_{k+1}=r_{k+1}+\beta_kp_k</annotation></semantics></math>
+      . Requiring
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mi>k</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">p_{k+1}^\top Ap_k=0</annotation></semantics></math>
+      gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>k</mi></msub><mo>=</mo><mi>−</mi><mfrac><mrow><msubsup><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mi>k</mi></msub></mrow><mrow><msubsup><mi>p</mi><mi>k</mi><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mi>k</mi></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\beta_k=-\frac{r_{k+1}^\top Ap_k}{p_k^\top Ap_k}.</annotation></semantics></math>
+     </div>
+     <p>
+      From step 2,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><msub><mi>p</mi><mi>k</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>r</mi><mi>k</mi></msub><mo>−</mo><msub><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><msub><mi>α</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">Ap_k=(r_k-r_{k+1})/\alpha_k</annotation></semantics></math>
+      . Also
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>k</mi></msub><mo>=</mo><msub><mi>p</mi><mi>k</mi></msub><mo>−</mo><msub><mi>β</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub><msub><mi>p</mi><mrow><mi>k</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">r_k=p_k-\beta_{k-1}p_{k-1}</annotation></semantics></math>
+      lies in the span of directions to which
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">r_{k+1}</annotation></semantics></math>
+      is orthogonal. Hence
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mi>⊤</mi></msubsup><msub><mi>r</mi><mi>k</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">r_{k+1}^\top r_k=0</annotation></semantics></math>
+      and
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mi>k</mi></msub><mo>=</mo><mi>−</mi><mfrac><mrow><mo form="postfix" stretchy="false">∥</mo><msub><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup></mrow><msub><mi>α</mi><mi>k</mi></msub></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">r_{k+1}^\top Ap_k=-\frac{\|r_{k+1}\|^2}{\alpha_k}.</annotation></semantics></math>
+     </div>
+     <p>
+      Substitute
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mi>k</mi></msub><msubsup><mi>p</mi><mi>k</mi><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mi>k</mi></msub><mo>=</mo><mo form="postfix" stretchy="false">∥</mo><msub><mi>r</mi><mi>k</mi></msub><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\alpha_kp_k^\top Ap_k=\|r_k\|^2</annotation></semantics></math>
+      to obtain
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>k</mi></msub><mo>=</mo><mo form="postfix" stretchy="false">∥</mo><msub><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>/</mi><mo form="postfix" stretchy="false">∥</mo><msub><mi>r</mi><mi>k</mi></msub><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\beta_k=\|r_{k+1}\|^2/\|r_k\|^2</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      6 · Check conjugacy with all older directions
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>&lt;</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">j&lt;k</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><msub><mi>p</mi><mi>j</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>r</mi><mi>j</mi></msub><mo>−</mo><msub><mi>r</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><msub><mi>α</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">Ap_j=(r_j-r_{j+1})/\alpha_j</annotation></semantics></math>
+      is in the span of earlier search directions. The new residual is orthogonal to that span. Therefore
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>r</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">r_{k+1}^\top Ap_j=0</annotation></semantics></math>
+      , and the
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>k</mi></msub><msub><mi>p</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\beta_kp_k</annotation></semantics></math>
+      term is also
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
+      -orthogonal to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>j</mi></msub><annotation encoding="application/x-tex">p_j</annotation></semantics></math>
+      . This completes the induction behind the recursion.
+     </p>
+     <h4>
+      7 · Understand finite termination
+     </h4>
+     <p>
+      Nonzero mutually
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
+      -conjugate directions are linearly independent: multiplying a zero linear combination by each
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mi>j</mi><mi>⊤</mi></msubsup><mi>A</mi></mrow><annotation encoding="application/x-tex">p_j^\top A</annotation></semantics></math>
+      forces its coefficient to zero. There can be at most
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>
+      such directions in
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>ℝ</mi><mi>d</mi></msup><annotation encoding="application/x-tex">\mathbb R^d</annotation></semantics></math>
+      . After minimizing along a full basis, the residual is orthogonal to all of
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>ℝ</mi><mi>d</mi></msup><annotation encoding="application/x-tex">\mathbb R^d</annotation></semantics></math>
+      , so it is zero. Roundoff destroys exact orthogonality; the finite-step statement is not an unqualified floating-point promise.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="16" data-pdf="optim" type="button">
+       Chapter source · PDF p. 16
+      </button>
+      <a class="calculation-link" href="#conjugate-gradient?derivation=cg-recurrence">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="the-sources-first-step" id="conjugate-gradient--the-sources-first-step">
+    The source’s first step
+   </h2>
+   <p>
+    Use
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>4</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>3</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mi>b</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>x</mi><mn>0</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">A=\begin{bmatrix}4&amp;1\\1&amp;3\end{bmatrix},\quad
+b=\begin{bmatrix}1\\2\end{bmatrix},\quad x_0=\begin{bmatrix}0\\0\end{bmatrix}.</annotation></semantics></math>
+   </div>
+   <p>
+    Then
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mn>0</mn></msub><mo>=</mo><msub><mi>p</mi><mn>0</mn></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">r_0=p_0=(1,2)^\top</annotation></semantics></math>
+    and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><msub><mi>p</mi><mn>0</mn></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>6</mn><mo>,</mo><mn>7</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">Ap_0=(6,7)^\top</annotation></semantics></math>
+    . The line-minimizing coefficient is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>0</mn></msub><mo>=</mo><mn>5</mn><mi>/</mi><mn>20</mn><mo>=</mo><mn>1</mn><mi>/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">\alpha_0=5/20=1/4</annotation></semantics></math>
+    , so
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn><mi>/</mi><mn>4</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn><mi>/</mi><mn>2</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>r</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn><mi>/</mi><mn>4</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">x_1=\begin{bmatrix}1/4\\1/2\end{bmatrix},\qquad
+r_1=\begin{bmatrix}-1/2\\1/4\end{bmatrix}.</annotation></semantics></math>
+   </div>
+   <p>
+    The new squared-residual ratio is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mn>0</mn></msub><mo>=</mo><mn>1</mn><mi>/</mi><mn>16</mn></mrow><annotation encoding="application/x-tex">\beta_0=1/16</annotation></semantics></math>
+    , giving
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>7</mn><mi>/</mi><mn>16</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>3</mn><mi>/</mi><mn>8</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">p_1=\begin{bmatrix}-7/16\\3/8\end{bmatrix}.</annotation></semantics></math>
+   </div>
+   <p>
+    These values preserve the PDF’s worked calculation.
+   </p>
+   <h2 data-section="complete-the-second-step" id="conjugate-gradient--complete-the-second-step">
+    Complete the second step
+   </h2>
+   <p>
+    The source states that a second line minimization reaches the exact solution. Expanding that final arithmetic,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><msub><mi>p</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>11</mn><mi>/</mi><mn>8</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>11</mn><mi>/</mi><mn>16</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>α</mi><mn>1</mn></msub><mo>=</mo><mfrac><mrow><mn>5</mn><mi>/</mi><mn>16</mn></mrow><mrow><mn>55</mn><mi>/</mi><mn>64</mn></mrow></mfrac><mo>=</mo><mfrac><mn>4</mn><mn>11</mn></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">Ap_1=\begin{bmatrix}-11/8\\11/16\end{bmatrix},\qquad
+\alpha_1=\frac{5/16}{55/64}=\frac4{11}.</annotation></semantics></math>
+   </div>
+   <p>
+    Thus
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mfrac><mn>4</mn><mn>11</mn></mfrac><msub><mi>p</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn><mi>/</mi><mn>11</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>7</mn><mi>/</mi><mn>11</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>A</mi><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><mi>b</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">x_2=x_1+\frac4{11}p_1=\begin{bmatrix}1/11\\7/11\end{bmatrix},\qquad Ax_2=b.</annotation></semantics></math>
+   </div>
+   <p>
+    The result demonstrates the two-dimensional exact-arithmetic guarantee. Floating-point roundoff, finite tolerances, and loss of conjugacy complicate real implementations, so the equality should not become a blanket performance promise.
+   </p>
+   <details class="derivation" data-derivation="cg-two-steps" id="conjugate-gradient--derivation-cg-two-steps">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Expand every arithmetic operation in the two-step solve
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <h4>
+      1 · Start from the stated matrix and residual
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>4</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>3</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mi>b</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>x</mi><mn>0</mn></msub><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">A=\begin{bmatrix}4&amp;1\\1&amp;3\end{bmatrix},\quad b=\begin{bmatrix}1\\2\end{bmatrix},\quad x_0=0.</annotation></semantics></math>
+     </div>
+     <p>
+      Then
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mn>0</mn></msub><mo>=</mo><msub><mi>p</mi><mn>0</mn></msub><mo>=</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">r_0=p_0=b</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><msub><mi>p</mi><mn>0</mn></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>4</mn><mo>⋅</mo><mn>1</mn><mo>+</mo><mn>1</mn><mo>⋅</mo><mn>2</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>1</mn><mo>⋅</mo><mn>1</mn><mo>+</mo><mn>3</mn><mo>⋅</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>6</mn><mo>,</mo><mn>7</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">Ap_0=(4\cdot1+1\cdot2,\ 1\cdot1+3\cdot2)^\top=(6,7)^\top</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Form the first step
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>r</mi><mn>0</mn><mi>⊤</mi></msubsup><msub><mi>r</mi><mn>0</mn></msub><mo>=</mo><msup><mn>1</mn><mn>2</mn></msup><mo>+</mo><msup><mn>2</mn><mn>2</mn></msup><mo>=</mo><mn>5</mn><mo>,</mo><mspace width="2.0em"></mspace><msubsup><mi>p</mi><mn>0</mn><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mn>0</mn></msub><mo>=</mo><mn>1</mn><mo>⋅</mo><mn>6</mn><mo>+</mo><mn>2</mn><mo>⋅</mo><mn>7</mn><mo>=</mo><mn>20</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">r_0^\top r_0=1^2+2^2=5,\qquad p_0^\top Ap_0=1\cdot6+2\cdot7=20.</annotation></semantics></math>
+     </div>
+     <p>
+      Thus
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>0</mn></msub><mo>=</mo><mn>1</mn><mi>/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">\alpha_0=1/4</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">x_1=(1/4,1/2)^\top</annotation></semantics></math>
+      , and
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mn>1</mn></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mo>−</mo><mfrac displaystyle="false"><mn>1</mn><mn>4</mn></mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>6</mn><mo>,</mo><mn>7</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn><mo>,</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">r_1=(1,2)^\top-\tfrac14(6,7)^\top=(-1/2,1/4)^\top.</annotation></semantics></math>
+     </div>
+     <h4>
+      3 · Form the next direction
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><msub><mi>r</mi><mn>1</mn></msub><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>16</mn><mo>=</mo><mn>5</mn><mi>/</mi><mn>16</mn><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>β</mi><mn>0</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>5</mn><mi>/</mi><mn>16</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mn>5</mn><mo>=</mo><mn>1</mn><mi>/</mi><mn>16</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\|r_1\|^2=1/4+1/16=5/16,\qquad\beta_0=(5/16)/5=1/16.</annotation></semantics></math>
+     </div>
+     <p>
+      Therefore
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mn>1</mn></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn><mo>+</mo><mn>1</mn><mi>/</mi><mn>16</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>1</mn><mi>/</mi><mn>4</mn><mo>+</mo><mn>2</mn><mi>/</mi><mn>16</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>7</mn><mi>/</mi><mn>16</mn><mo>,</mo><mn>3</mn><mi>/</mi><mn>8</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">p_1=(-1/2+1/16,\ 1/4+2/16)^\top=(-7/16,3/8)^\top</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      4 · Multiply by the matrix and verify conjugacy
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><msub><mi>p</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>4</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>7</mn><mi>/</mi><mn>16</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>3</mn><mi>/</mi><mn>8</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>7</mn><mi>/</mi><mn>16</mn><mo>+</mo><mn>3</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>3</mn><mi>/</mi><mn>8</mn><mo form="postfix" stretchy="true">)</mo></mrow></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>11</mn><mi>/</mi><mn>8</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>11</mn><mi>/</mi><mn>16</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">Ap_1=\begin{bmatrix}4(-7/16)+3/8\\-7/16+3(3/8)\end{bmatrix}
+=\begin{bmatrix}-11/8\\11/16\end{bmatrix}.</annotation></semantics></math>
+     </div>
+     <p>
+      Then
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mn>0</mn><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mn>1</mn></msub><mo>=</mo><mi>−</mi><mn>11</mn><mi>/</mi><mn>8</mn><mo>+</mo><mn>2</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>11</mn><mi>/</mi><mn>16</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">p_0^\top Ap_1=-11/8+2(11/16)=0</annotation></semantics></math>
+      , as required.
+     </p>
+     <h4>
+      5 · Compute the second line coefficient
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mn>1</mn><mi>⊤</mi></msubsup><mi>A</mi><msub><mi>p</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>7</mn><mi>/</mi><mn>16</mn><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>11</mn><mi>/</mi><mn>8</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>3</mn><mi>/</mi><mn>8</mn><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>11</mn><mi>/</mi><mn>16</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>77</mn><mi>/</mi><mn>128</mn><mo>+</mo><mn>33</mn><mi>/</mi><mn>128</mn><mo>=</mo><mn>55</mn><mi>/</mi><mn>64</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">p_1^\top Ap_1=(-7/16)(-11/8)+(3/8)(11/16)=77/128+33/128=55/64.</annotation></semantics></math>
+     </div>
+     <p>
+      Thus
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>5</mn><mi>/</mi><mn>16</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>55</mn><mi>/</mi><mn>64</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>5</mn><mi>/</mi><mn>16</mn><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>64</mn><mi>/</mi><mn>55</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>4</mn><mi>/</mi><mn>11</mn></mrow><annotation encoding="application/x-tex">\alpha_1=(5/16)/(55/64)=(5/16)(64/55)=4/11</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      6 · Update each coordinate and check the residual
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mrow><mn>2</mn><mo>,</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>1</mn><mi>/</mi><mn>4</mn><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>4</mn><mi>/</mi><mn>11</mn><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>7</mn><mi>/</mi><mn>16</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>11</mn><mi>/</mi><mn>44</mn><mo>−</mo><mn>7</mn><mi>/</mi><mn>44</mn><mo>=</mo><mn>1</mn><mi>/</mi><mn>11</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">x_{2,1}=1/4+(4/11)(-7/16)=11/44-7/44=1/11,</annotation></semantics></math>
+     </div>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mrow><mn>2</mn><mo>,</mo><mn>2</mn></mrow></msub><mo>=</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>4</mn><mi>/</mi><mn>11</mn><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>3</mn><mi>/</mi><mn>8</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>11</mn><mi>/</mi><mn>22</mn><mo>+</mo><mn>3</mn><mi>/</mi><mn>22</mn><mo>=</mo><mn>7</mn><mi>/</mi><mn>11</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">x_{2,2}=1/2+(4/11)(3/8)=11/22+3/22=7/11.</annotation></semantics></math>
+     </div>
+     <p>
+      Finally
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>4</mn><mi>/</mi><mn>11</mn><mo>+</mo><mn>7</mn><mi>/</mi><mn>11</mn><mo>,</mo><mspace width="0.222em"></mspace><mn>1</mn><mi>/</mi><mn>11</mn><mo>+</mo><mn>21</mn><mi>/</mi><mn>11</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mo>=</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">Ax_2=(4/11+7/11,\ 1/11+21/11)^\top=(1,2)^\top=b</annotation></semantics></math>
+      . Both components of the residual vanish exactly in this rational calculation.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="16" data-pdf="optim" type="button">
+       Chapter source · PDF p. 16
+      </button>
+      <a class="calculation-link" href="#conjugate-gradient?derivation=cg-two-steps">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="nonlinear-cg-is-a-different-extension" id="conjugate-gradient--nonlinear-cg-is-a-different-extension">
+    Nonlinear CG is a different extension
+   </h2>
+   <p>
+    For a nonquadratic neural objective, nonlinear CG uses
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>−</mi><msub><mi>g</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>β</mi><mi>k</mi></msub><msub><mi>p</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">p_{k+1}=-g_{k+1}+\beta_kp_k</annotation></semantics></math>
+   </div>
+   <p>
+    with a line search to choose the step. The PDF describes Fletcher–Reeves,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>β</mi><mi>k</mi><mrow><mi mathvariant="normal">F</mi><mi mathvariant="normal">R</mi></mrow></msubsup><mo>=</mo><mfrac><mrow><msubsup><mi>g</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mi>⊤</mi></msubsup><msub><mi>g</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><mrow><msubsup><mi>g</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi>g</mi><mi>k</mi></msub></mrow></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">\beta_k^{\mathrm{FR}}=\frac{g_{k+1}^\top g_{k+1}}{g_k^\top g_k},</annotation></semantics></math>
+   </div>
+   <p>
+    and Polak–Ribiere,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>β</mi><mi>k</mi><mrow><mi mathvariant="normal">P</mi><mi mathvariant="normal">R</mi></mrow></msubsup><mo>=</mo><mfrac><mrow><msubsup><mi>g</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mi>⊤</mi></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>g</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi>g</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><msubsup><mi>g</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi>g</mi><mi>k</mi></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\beta_k^{\mathrm{PR}}=\frac{g_{k+1}^\top(g_{k+1}-g_k)}{g_k^\top g_k}.</annotation></semantics></math>
+   </div>
+   <p>
+    Exact conjugacy no longer persists automatically, and restarts can be important. Mini-batch noise can further disrupt line-search and history assumptions. “CG is fast on a quadratic” does not establish that it is a superior default for large stochastic networks.
+   </p>
+   <h2 data-section="practical-companion" id="conjugate-gradient--practical-companion">
+    Practical companion
+   </h2>
+   <p>
+    The selected official PyTorch tutorial supplies Hessian-vector-product building blocks, not a full CG training recipe. The small local companion below therefore implements the
+    <strong>
+     source’s positive-definite quadratic example
+    </strong>
+    and checks it against a direct solve. It is explicitly not advertised as a general-purpose nonlinear optimizer.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="conjugate-gradient--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="hessian">
+     <span class="resource-meta">
+      PyTorch · Tutorial + code
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/intermediate/jacobians_hessians.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Jacobians, Hessians and Hessian–vector products
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Use function transforms to calculate derivatives beyond a scalar gradient. The Hessian–vector examples make the curvature discussion concrete without requiring a dense Hessian.
+     </p>
+    </div>
+   </div>
+   <details class="local-example">
+    <summary>
+     Solve the guide’s two-dimensional CG example
+     <small>
+      Local worked example · Python / PyTorch
+     </small>
+    </summary>
+    <p class="local-description">
+     An authored implementation for the source’s symmetric positive-definite system, with the second step written out and checked against a direct solve. This is not a general nonlinear optimizer. Run locally; Python is not executed by this webpage.
+    </p>
+    <div class="code-wrap">
+     <div class="code-tools">
+      <span>
+       cg_quadratic.py
+      </span>
+      <div>
+       <button data-action="copy" data-example="cg_quadratic" type="button">
+        Copy
+       </button>
+       <button data-action="download" data-example="cg_quadratic" type="button">
+        Save .py
+       </button>
+      </div>
+     </div>
+     <pre tabindex="0"><code><span class="sd">"""Classical CG on the source's symmetric positive-definite two-dimensional system"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">conjugate_gradient</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-12</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">a</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">numel</span><span class="p">(),</span> <span class="n">b</span><span class="o">.</span><span class="n">numel</span><span class="p">())</span> <span class="ow">or</span> <span class="n">b</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Expected a square matrix and a matching one-dimensional right-hand side"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">tolerance</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">a</span><span class="o">.</span><span class="n">is_floating_point</span><span class="p">()</span> <span class="ow">or</span> <span class="n">a</span><span class="o">.</span><span class="n">dtype</span> <span class="o">!=</span> <span class="n">b</span><span class="o">.</span><span class="n">dtype</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Use a positive tolerance and matching floating-point dtypes"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">allclose</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">a</span><span class="o">.</span><span class="n">T</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Classical CG requires a symmetric matrix"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">eigvalsh</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"This educational implementation requires positive definiteness"</span><span class="p">)</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">residual</span> <span class="o">=</span> <span class="n">b</span> <span class="o">-</span> <span class="n">a</span> <span class="o">@</span> <span class="n">x</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="n">residual</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
+    <span class="n">squared_norm</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">@</span> <span class="n">residual</span>
+    <span class="k">if</span> <span class="n">squared_norm</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">tolerance</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+    <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">b</span><span class="o">.</span><span class="n">numel</span><span class="p">()):</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">a</span> <span class="o">@</span> <span class="n">direction</span>
+        <span class="n">denominator</span> <span class="o">=</span> <span class="n">direction</span> <span class="o">@</span> <span class="n">action</span>
+        <span class="k">if</span> <span class="n">denominator</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ArithmeticError</span><span class="p">(</span><span class="s2">"Encountered nonpositive curvature"</span><span class="p">)</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">squared_norm</span> <span class="o">/</span> <span class="n">denominator</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">direction</span>
+        <span class="n">residual</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">-</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">action</span>
+        <span class="n">next_squared_norm</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">@</span> <span class="n">residual</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Step </span><span class="si">{</span><span class="n">step</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">: alpha=</span><span class="si">{</span><span class="n">alpha</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.8f</span><span class="si">}</span><span class="s2">, x=</span><span class="si">{</span><span class="n">x</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">, residual=</span><span class="si">{</span><span class="n">residual</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">next_squared_norm</span><span class="o">.</span><span class="n">sqrt</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">tolerance</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="n">next_squared_norm</span> <span class="o">/</span> <span class="n">squared_norm</span>
+        <span class="n">direction</span> <span class="o">=</span> <span class="n">residual</span> <span class="o">+</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">direction</span>
+        <span class="n">squared_norm</span> <span class="o">=</span> <span class="n">next_squared_norm</span>
+    <span class="k">return</span> <span class="n">x</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([[</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">conjugate_gradient</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_close</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">),</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_close</span><span class="p">(</span><span class="n">a</span> <span class="o">@</span> <span class="n">result</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">,</span> <span class="n">rtol</span><span class="o">=</span><span class="mf">1e-12</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"CG agrees with the direct solve: [1/11, 7/11]"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"This small deterministic example is not a general nonlinear training optimizer"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre>
+    </div>
+    <details class="recorded-result">
+     <summary>
+      Recorded CPU output
+     </summary>
+     <pre>Step 1: alpha=0.25000000, x=[0.25, 0.5], residual=[-0.5, 0.25]
+Step 2: alpha=0.36363636, x=[0.09090909090909091, 0.6363636363636364], residual=[0.0, 0.0]
+CG agrees with the direct solve: [1/11, 7/11]
+This small deterministic example is not a general nonlinear training optimizer
+</pre>
+    </details>
+   </details>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    What does conjugate mean, and where does the finite-step guarantee apply?
+   </summary>
+   <p>
+    Directions are A-conjugate when pᵢᵀApⱼ=0 for i≠j. Classical CG solves a d-dimensional symmetric positive-definite quadratic in at most d steps in exact arithmetic. That guarantee does not transfer to noisy, nonquadratic neural-network training.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#curvature">
+    <small>
+     ← Previous
+    </small>
+    Curvature, conditioning, and preconditioning
+   </a>
+   <a href="#bfgs-lbfgs">
+    <small>
+     Next →
+    </small>
+    BFGS, L-BFGS, and line search
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="begin-with-a-linear-system" href="#conjugate-gradient?section=begin-with-a-linear-system">
+    Begin with a linear system
+   </a>
+   <a data-section="the-recursion" href="#conjugate-gradient?section=the-recursion">
+    The recursion
+   </a>
+   <a data-section="the-sources-first-step" href="#conjugate-gradient?section=the-sources-first-step">
+    The source’s first step
+   </a>
+   <a data-section="complete-the-second-step" href="#conjugate-gradient?section=complete-the-second-step">
+    Complete the second step
+   </a>
+   <a data-section="nonlinear-cg-is-a-different-extension" href="#conjugate-gradient?section=nonlinear-cg-is-a-different-extension">
+    Nonlinear CG is a different extension
+   </a>
+   <a data-section="practical-companion" href="#conjugate-gradient?section=practical-companion">
+    Practical companion
+   </a>
+   <a data-section="implementation" href="#conjugate-gradient?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

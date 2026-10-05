@@ -1,0 +1,133 @@
+<article class="article method-page" id="m-pd-group-apply">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=GroupBy">
+   pandas · GroupBy
+  </a>
+ </div>
+ <h1>
+  Group apply
+ </h1>
+ <p class="lead">
+  Custom group logic
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-group-apply"><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'city'</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">func</span><span class="p">)</span></code></pre>
+ </div>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C07?code=code-C07-5&amp;method=pd-group-apply&amp;line=8">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1251 · Average selling price
+    </strong>
+    <small>
+     Uploaded submission · line 8
+    </small>
+   </div>
+   <pre aria-hidden="true">    
+    return df.groupby(by='product_id').apply(
+        lambda x: round(x['paid'].sum() / x['units'].sum(), 2) if x['units'].sum() != 0 else 0
+    ).reset_index(name='average_price')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#LC3421?code=code-LC3421-1&amp;method=pd-group-apply&amp;line=17">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     3421 · Find students who improved
+    </strong>
+    <small>
+     Uploaded submission · line 17
+    </small>
+   </div>
+   <pre aria-hidden="true">
+    df = scores.groupby(by=['student_id', 'subject']).apply(custom_func).reset_index()
+
+    return df[df.improved == True][['student_id', 'subject', 'first_score', 'latest_score']]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#LC3497?code=code-LC3497-1&amp;method=pd-group-apply&amp;line=15">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     3497 · Analyze subscription conversion
+    </strong>
+    <small>
+     Uploaded submission · line 15
+    </small>
+   </div>
+   <pre aria-hidden="true">
+    df = user_activity.groupby(by='user_id').apply(custom_func).reset_index()
+
+    return df.dropna()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · GroupBy. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=GroupBy">
+   <small>
+    ← Browse
+   </small>
+   pandas · GroupBy
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

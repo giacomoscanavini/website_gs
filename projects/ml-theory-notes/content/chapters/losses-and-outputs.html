@@ -1,0 +1,832 @@
+<section aria-labelledby="losses-and-outputs-title" class="page-view lesson-layout" id="losses-and-outputs">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     05
+    </span>
+    Part 1 · Neural-network foundations
+   </p>
+   <h1 id="losses-and-outputs-title" tabindex="-1">
+    Regression, classification, and the loss
+   </h1>
+   <p class="standfirst">
+    Match the mathematical target to an output domain, a probability model, and a differentiable objective.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Neural networks · PDF p. 8 · §4 output choices" data-page="8" data-pdf="basics" type="button">
+     Neural networks · PDF p. 8 · §4 output choices
+    </button>
+    <button aria-label="Open source: Neural networks · PDF pp. 12–13 · §§11–14" data-page="12" data-pdf="basics" type="button">
+     Neural networks · PDF pp. 12–13 · §§11–14
+    </button>
+    <button aria-label="Open source: Neural networks · PDF pp. 20–21 · §§27–28" data-page="20" data-pdf="basics" type="button">
+     Neural networks · PDF pp. 20–21 · §§27–28
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="the-prediction-domain-is-part-of-the-task" href="#losses-and-outputs?section=the-prediction-domain-is-part-of-the-task">
+     The prediction domain is part of the task
+    </a>
+    <a data-section="squared-error-and-its-gradient" href="#losses-and-outputs?section=squared-error-and-its-gradient">
+     Squared error and its gradient
+    </a>
+    <a data-section="binary-cross-entropy-and-logits" href="#losses-and-outputs?section=binary-cross-entropy-and-logits">
+     Binary cross entropy and logits
+    </a>
+    <a data-section="multiclass-cross-entropy" href="#losses-and-outputs?section=multiclass-cross-entropy">
+     Multiclass cross entropy
+    </a>
+    <a data-section="a-compact-implementation-map" href="#losses-and-outputs?section=a-compact-implementation-map">
+     A compact implementation map
+    </a>
+    <a data-section="implementation" href="#losses-and-outputs?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="the-prediction-domain-is-part-of-the-task" id="losses-and-outputs--the-prediction-domain-is-part-of-the-task">
+    The prediction domain is part of the task
+   </h2>
+   <p>
+    A network’s last layer must express the quantity being predicted. The guide distinguishes unrestricted regression, binary probabilities, mutually exclusive classes, and multiple independent labels. The number of outputs alone does not determine the interpretation.
+   </p>
+   <p>
+    For unrestricted regression, a final affine map can produce any real value. For binary classification, one logit parameterizes one Bernoulli probability. For multiclass classification,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
+    logits parameterize a distribution over
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
+    mutually exclusive alternatives. In multilabel classification,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
+    sigmoid probabilities represent
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
+    separate binary targets rather than one probability vector summing to one.
+   </p>
+   <h2 data-section="squared-error-and-its-gradient" id="losses-and-outputs--squared-error-and-its-gradient">
+    Squared error and its gradient
+   </h2>
+   <p>
+    The source uses the convenient single-observation convention
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mover><mi>y</mi><mo accent="true">̂</mo></mover></mrow></mfrac><mo>=</mo><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">L=\frac12(\hat y-y)^2,\qquad \frac{\partial L}{\partial\hat y}=\hat y-y.</annotation></semantics></math>
+   </div>
+   <p>
+    A positive residual gives a positive derivative, so a negative-gradient update tries to reduce the prediction; a negative residual reverses the direction. Large residuals contribute disproportionately because the loss is quadratic.
+   </p>
+   <p>
+    <strong>
+     Implementation convention.
+    </strong>
+    PyTorch’s ordinary mean squared error omits the factor
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">1/2</annotation></semantics></math>
+    and, by default, averages over elements. The derivative’s scale therefore differs from the source’s scalar convention. Neither convention is wrong, but a numerical derivation and its code must use the same normalization. Scaling the loss changes gradient scale and can require changes to the learning rate or penalty coefficient.
+   </p>
+   <p>
+    An unrestricted regression output should not automatically inherit the hidden activation. The guide’s signed-return example illustrates the issue: a ReLU output could never predict a negative value.
+   </p>
+   <details class="derivation" data-derivation="mse-and-mean" id="losses-and-outputs--derivation-mse-and-mean">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      From Gaussian likelihood to squared loss and the conditional mean
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <h4>
+      1 · Specify an observation distribution
+     </h4>
+     <p>
+      Assume
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>∣</mo><mi>X</mi><mo>=</mo><mi>x</mi><mo>∼</mo><mi>𝒩</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><msup><mi>σ</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">Y\mid X=x\sim\mathcal N(f_\theta(x),\sigma^2)</annotation></semantics></math>
+      with fixed positive variance. For one target
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
+      , the negative log-density is
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>y</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>π</mi><msup><mi>σ</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>y</mi><mo>−</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mrow><mn>2</mn><msup><mi>σ</mi><mn>2</mn></msup></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">-\log p_\theta(y\mid x)=\frac12\log(2\pi\sigma^2)+\frac{(y-f_\theta(x))^2}{2\sigma^2}.</annotation></semantics></math>
+     </div>
+     <p>
+      The log normalizing constant is independent of the predicted mean. For optimizing the mean, dropping that constant and multiplying by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
+      gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">L=\tfrac12(\hat y-y)^2</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Differentiate the residual explicitly
+     </h4>
+     <p>
+      Set
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">r=\hat y-y</annotation></semantics></math>
+      . With the target fixed,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>r</mi><mi>/</mi><mi>d</mi><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">dr/d\hat y=1</annotation></semantics></math>
+      . Hence
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>d</mi><mi>L</mi></mrow><mrow><mi>d</mi><mover><mi>y</mi><mo accent="true">̂</mo></mover></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo>⋅</mo><mn>2</mn><mi>r</mi><mo>⋅</mo><mn>1</mn><mo>=</mo><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>y</mi><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><msup><mi>d</mi><mn>2</mn></msup><mi>L</mi></mrow><mrow><mi>d</mi><msup><mover><mi>y</mi><mo accent="true">̂</mo></mover><mn>2</mn></msup></mrow></mfrac><mo>=</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{dL}{d\hat y}=\frac12\cdot2r\cdot1=\hat y-y,\qquad \frac{d^2L}{d\hat y^2}=1.</annotation></semantics></math>
+     </div>
+     <p>
+      For the mean of
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>
+      scalar examples, each prediction derivative is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mi>B</mi></mrow><annotation encoding="application/x-tex">(\hat y_i-y_i)/B</annotation></semantics></math>
+      . PyTorch’s unhalved MSE mean over
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>M</mi><annotation encoding="application/x-tex">M</annotation></semantics></math>
+      output elements instead gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mrow><mo form="prefix" stretchy="true">(</mo><msub><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>−</mo><msub><mi>y</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mi>M</mi></mrow><annotation encoding="application/x-tex">2(\hat y_i-y_i)/M</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      3 · Ask which prediction minimizes expected squared error
+     </h4>
+     <p>
+      At a fixed
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+      , let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>Y</mi><mo>∣</mo><mi>X</mi><mo>=</mo><mi>x</mi><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">m(x)=\mathbb E[Y\mid X=x]</annotation></semantics></math>
+      and let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
+      be a candidate scalar prediction. Add and subtract
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
+      :
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>Y</mi><mo>−</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">[</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>Y</mi><mo>−</mo><mi>m</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>m</mi><mo>−</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">(Y-a)^2=[(Y-m)+(m-a)]^2.</annotation></semantics></math>
+     </div>
+     <p>
+      Expanding gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>Y</mi><mo>−</mo><mi>m</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>+</mo><mn>2</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>Y</mi><mo>−</mo><mi>m</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>m</mi><mo>−</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>m</mi><mo>−</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">(Y-m)^2+2(Y-m)(m-a)+(m-a)^2</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      4 · Take the conditional expectation term by term
+     </h4>
+     <p>
+      Because
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>−</mo><mi>a</mi></mrow><annotation encoding="application/x-tex">m-a</annotation></semantics></math>
+      is constant given
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>Y</mi><mo>−</mo><mi>m</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mathbb E[Y-m\mid x]=0</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>Y</mi><mo>−</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>Y</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>m</mi><mo>−</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[(Y-a)^2\mid x]=\operatorname{Var}(Y\mid x)+(m-a)^2.</annotation></semantics></math>
+     </div>
+     <p>
+      The first term cannot be changed by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
+      . The second is nonnegative and is zero only at
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><mi>m</mi></mrow><annotation encoding="application/x-tex">a=m</annotation></semantics></math>
+      . Thus squared-loss prediction targets a conditional mean, provided the required second moment is finite; a Gaussian model is
+      <strong>
+       not
+      </strong>
+      needed for this final conclusion.
+     </p>
+     <h4>
+      5 · Preserve the qualification when learning variance
+     </h4>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
+      is itself predicted,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><mo>log</mo><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\tfrac12\log\sigma^2</annotation></semantics></math>
+      is not constant and cannot be dropped. Minimizing only squared residual divided by a trainable variance would permit inflating the variance rather than learning a valid Gaussian likelihood.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="8" data-pdf="basics" type="button">
+       Chapter source · PDF p. 8
+      </button>
+      <a class="calculation-link" href="#losses-and-outputs?derivation=mse-and-mean">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="binary-cross-entropy-and-logits" id="losses-and-outputs--binary-cross-entropy-and-logits">
+    Binary cross entropy and logits
+   </h2>
+   <p>
+    With
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p=\sigma(z)</annotation></semantics></math>
+    and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>∈</mo><mo form="prefix" stretchy="false">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">y\in\{0,1\}</annotation></semantics></math>
+    ,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>−</mi><mi>y</mi><mo>log</mo><mi>p</mi><mo>−</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">L=-y\log p-(1-y)\log(1-p).</annotation></semantics></math>
+   </div>
+   <p>
+    The target selects the negative log probability of the observed outcome. A confidently wrong prediction is penalized much more than a mildly uncertain one. This is why accuracy and cross entropy answer different questions.
+   </p>
+   <p>
+    Combining the derivatives of cross entropy and sigmoid gives
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>z</mi></mrow></mfrac><mo>=</mo><mi>p</mi><mo>−</mo><mi>y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial z}=p-y.</annotation></semantics></math>
+   </div>
+   <p>
+    The complicated-looking terms cancel. For the running example,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>≈</mo><mn>0.363547</mn></mrow><annotation encoding="application/x-tex">p\approx0.363547</annotation></semantics></math>
+    and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">y=1</annotation></semantics></math>
+    , so the output-logit derivative is approximately
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.636453</mn></mrow><annotation encoding="application/x-tex">-0.636453</annotation></semantics></math>
+    . It asks the optimizer to increase the logit along an appropriate parameter direction.
+   </p>
+   <p>
+    The official
+    <code>
+     BCEWithLogitsLoss
+    </code>
+    reference documents a numerically stable fused calculation. The model returns
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
+    ; the loss handles the sigmoid/logarithm combination. At inference, applying sigmoid gives
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
+    . The loss implementation uses logarithmic identities to avoid explicitly forming unstable probabilities at extreme logits.
+   </p>
+   <details class="derivation" data-derivation="binary-logit-gradient" id="losses-and-outputs--derivation-binary-logit-gradient">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive binary cross entropy, its logit gradient, and its stable form
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      One observation,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>∈</mo><mo form="prefix" stretchy="false">{</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="false">}</mo></mrow><annotation encoding="application/x-tex">y\in\{0,1\}</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p=\sigma(z)</annotation></semantics></math>
+      , no class weighting, and no batch reduction yet.
+     </p>
+     <h4>
+      1 · Write the Bernoulli probability
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>Y</mi><mo>=</mo><mi>y</mi><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mi>p</mi><mi>y</mi></msup><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mn>1</mn><mo>−</mo><mi>y</mi></mrow></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">P(Y=y\mid z)=p^y(1-p)^{1-y}.</annotation></semantics></math>
+     </div>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">y=1</annotation></semantics></math>
+      this equals
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
+      ; for
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">y=0</annotation></semantics></math>
+      it equals
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">1-p</annotation></semantics></math>
+      . The negative log is
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>−</mi><mi>y</mi><mo>log</mo><mi>p</mi><mo>−</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">L=-y\log p-(1-y)\log(1-p).</annotation></semantics></math>
+     </div>
+     <h4>
+      2 · Differentiate with respect to probability
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>p</mi></mrow></mfrac><mo>=</mo><mi>−</mi><mfrac><mi>y</mi><mi>p</mi></mfrac><mo>−</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mfrac><mrow><mi>−</mi><mn>1</mn></mrow><mrow><mn>1</mn><mo>−</mo><mi>p</mi></mrow></mfrac><mo>=</mo><mi>−</mi><mfrac><mi>y</mi><mi>p</mi></mfrac><mo>+</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>y</mi></mrow><mrow><mn>1</mn><mo>−</mo><mi>p</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial p}=-\frac yp-(1-y)\frac{-1}{1-p}=-\frac yp+\frac{1-y}{1-p}.</annotation></semantics></math>
+     </div>
+     <p>
+      Put both fractions over the same denominator:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mfrac><mi>y</mi><mi>p</mi></mfrac><mo>+</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>y</mi></mrow><mrow><mn>1</mn><mo>−</mo><mi>p</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>−</mi><mi>y</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>p</mi></mrow><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>p</mi><mo>−</mo><mi>y</mi></mrow><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">-\frac yp+\frac{1-y}{1-p}=\frac{-y(1-p)+(1-y)p}{p(1-p)}=\frac{p-y}{p(1-p)}.</annotation></semantics></math>
+     </div>
+     <h4>
+      3 · Apply the sigmoid derivative
+     </h4>
+     <p>
+      Since
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>p</mi><mi>/</mi><mi>d</mi><mi>z</mi><mo>=</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">dp/dz=p(1-p)</annotation></semantics></math>
+      , the chain rule gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>z</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>p</mi><mo>−</mo><mi>y</mi></mrow><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>p</mi><mo>−</mo><mi>y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial z}=\frac{p-y}{p(1-p)}p(1-p)=p-y.</annotation></semantics></math>
+     </div>
+     <p>
+      For finite
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>p</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0&lt;p&lt;1</annotation></semantics></math>
+      , so this cancellation is valid. Its stable software evaluation need not form the individually large intermediate fractions. The second derivative is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">p(1-p)\ge0</annotation></semantics></math>
+      , showing convexity
+      <strong>
+       in the logit
+      </strong>
+      . It does not make the loss convex in all deep-network weights.
+     </p>
+     <h4>
+      4 · Eliminate probabilities from the loss
+     </h4>
+     <p>
+      Use
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>p</mi><mo>=</mo><mi>z</mi><mo>−</mo><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mi>z</mi></msup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\log p=z-\log(1+e^z)</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mi>z</mi></msup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\log(1-p)=-\log(1+e^z)</annotation></semantics></math>
+      . Substitution gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>−</mi><mi>y</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>z</mi><mo>−</mo><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mi>z</mi></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mi>z</mi></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mi>z</mi></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>y</mi><mi>z</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">L=-y[z-\log(1+e^z)]+(1-y)\log(1+e^z)=\log(1+e^z)-yz.</annotation></semantics></math>
+     </div>
+     <h4>
+      5 · Avoid exponentiating a large positive number
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">z\ge0</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mi>z</mi></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>z</mi><mo>+</mo><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\log(1+e^z)=z+\log(1+e^{-z})</annotation></semantics></math>
+      . For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">z&lt;0</annotation></semantics></math>
+      , retain
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mi>z</mi></msup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\log(1+e^z)</annotation></semantics></math>
+      . Both branches combine as
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mo>max</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>y</mi><mi>z</mi><mo>+</mo><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mrow><mo form="prefix" stretchy="true">|</mo><mi>z</mi><mo form="postfix" stretchy="true">|</mo></mrow></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">L=\max(z,0)-yz+\log(1+e^{-|z|}).</annotation></semantics></math>
+     </div>
+     <p>
+      The exponential argument is now nonpositive. This is the mathematical identity behind a stable logit-based calculation, not a promise about one particular kernel’s internal instruction sequence.
+     </p>
+     <h4>
+      6 · Account for weighting and reduction
+     </h4>
+     <p>
+      A mean over
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>
+      scalar losses divides the gradient by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>
+      . With positive-class weight
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>w</mi><annotation encoding="application/x-tex">w</annotation></semantics></math>
+      in
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>w</mi><mi>y</mi><mo>log</mo><mi>p</mi><mo>−</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">-wy\log p-(1-y)\log(1-p)</annotation></semantics></math>
+      , the unscaled gradient becomes
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mi>y</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>p</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">w y(p-1)+(1-y)p.</annotation></semantics></math>
+     </div>
+     <p>
+      It reduces to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>−</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">p-y</annotation></semantics></math>
+      only when
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">w=1</annotation></semantics></math>
+      . Reusing the unweighted gradient for a weighted loss is incorrect.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="8" data-pdf="basics" type="button">
+       Chapter source · PDF p. 8
+      </button>
+      <a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.BCEWithLogitsLoss.html" rel="noopener noreferrer" target="_blank">
+       BCEWithLogitsLoss
+      </a>
+      <a class="calculation-link" href="#losses-and-outputs?derivation=binary-logit-gradient">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="multiclass-cross-entropy" id="losses-and-outputs--multiclass-cross-entropy">
+    Multiclass cross entropy
+   </h2>
+   <p>
+    Softmax defines
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>k</mi></msub><mo>=</mo><mfrac><mrow><mo>exp</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>K</mi></munderover><mo>exp</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><munder><mo>∑</mo><mi>k</mi></munder><msub><mi>p</mi><mi>k</mi></msub><mo>=</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">p_k=\frac{\exp(z_k)}{\sum_{j=1}^{K}\exp(z_j)},\qquad \sum_kp_k=1.</annotation></semantics></math>
+   </div>
+   <p>
+    For true class
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>
+    , the loss is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mo>log</mo><msub><mi>p</mi><mi>c</mi></msub></mrow><annotation encoding="application/x-tex">-\log p_c</annotation></semantics></math>
+    . With a one-hot target
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
+    , the equivalent expression is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><msub><mo>∑</mo><mi>k</mi></msub><msub><mi>y</mi><mi>k</mi></msub><mo>log</mo><msub><mi>p</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">-\sum_k y_k\log p_k</annotation></semantics></math>
+    . The gradient with respect to each logit is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>z</mi><mi>k</mi></msub></mrow></mfrac><mo>=</mo><msub><mi>p</mi><mi>k</mi></msub><mo>−</mo><msub><mi>y</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial z_k}=p_k-y_k.</annotation></semantics></math>
+   </div>
+   <p>
+    The scalar binary residual is therefore part of a broader pattern: under the standard cross-entropy pairing, the logit gradient is predicted probability minus target probability. This last expression is an expanded derivation of the guide’s output and cross-entropy discussion.
+   </p>
+   <p>
+    <strong>
+     Official API supplement.
+    </strong>
+    The usual PyTorch contract uses logits shaped
+    <code>
+     [B, K]
+    </code>
+    and integer class indices shaped
+    <code>
+     [B]
+    </code>
+    . The PDF describes this usual case. Current documentation also supports suitable probability targets, which is a separate API mode; a one-hot vector is not mandatory for ordinary classification.
+   </p>
+   <details class="derivation" data-derivation="softmax-cross-entropy" id="losses-and-outputs--derivation-softmax-cross-entropy">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive the softmax Jacobian and cross-entropy gradient
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
+      logits
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mi>j</mi></msub><annotation encoding="application/x-tex">z_j</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><msub><mo>∑</mo><mi>j</mi></msub><msup><mi>e</mi><msub><mi>z</mi><mi>j</mi></msub></msup></mrow><annotation encoding="application/x-tex">S=\sum_j e^{z_j}</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>i</mi></msub><mo>=</mo><msup><mi>e</mi><msub><mi>z</mi><mi>i</mi></msub></msup><mi>/</mi><mi>S</mi></mrow><annotation encoding="application/x-tex">p_i=e^{z_i}/S</annotation></semantics></math>
+      , and a fixed target distribution
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">y_i\ge0</annotation></semantics></math>
+      with
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sum_i y_i=1</annotation></semantics></math>
+      . No class weighting is applied.
+     </p>
+     <h4>
+      1 · Differentiate the denominator
+     </h4>
+     <p>
+      For a chosen coordinate
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mi>j</mi></msub><annotation encoding="application/x-tex">z_j</annotation></semantics></math>
+      , only one term in the sum varies, so
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>S</mi><mi>/</mi><mi>∂</mi><msub><mi>z</mi><mi>j</mi></msub><mo>=</mo><msup><mi>e</mi><msub><mi>z</mi><mi>j</mi></msub></msup></mrow><annotation encoding="application/x-tex">\partial S/\partial z_j=e^{z_j}</annotation></semantics></math>
+      . The numerator derivative is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><msup><mi>e</mi><msub><mi>z</mi><mi>i</mi></msub></msup><mi>/</mi><mi>∂</mi><msub><mi>z</mi><mi>j</mi></msub><mo>=</mo><msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msup><mi>e</mi><msub><mi>z</mi><mi>i</mi></msub></msup></mrow><annotation encoding="application/x-tex">\partial e^{z_i}/\partial z_j=\delta_{ij}e^{z_i}</annotation></semantics></math>
+      , where
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><annotation encoding="application/x-tex">\delta_{ij}</annotation></semantics></math>
+      is one if
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mi>j</mi></mrow><annotation encoding="application/x-tex">i=j</annotation></semantics></math>
+      and zero otherwise.
+     </p>
+     <h4>
+      2 · Use the quotient rule
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msub><mi>p</mi><mi>i</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>z</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mfrac><mrow><msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msup><mi>e</mi><msub><mi>z</mi><mi>i</mi></msub></msup><mi>S</mi><mo>−</mo><msup><mi>e</mi><msub><mi>z</mi><mi>i</mi></msub></msup><msup><mi>e</mi><msub><mi>z</mi><mi>j</mi></msub></msup></mrow><msup><mi>S</mi><mn>2</mn></msup></mfrac><mo>=</mo><msub><mi>p</mi><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>−</mo><msub><mi>p</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial p_i}{\partial z_j}=\frac{\delta_{ij}e^{z_i}S-e^{z_i}e^{z_j}}{S^2}=p_i(\delta_{ij}-p_j).</annotation></semantics></math>
+     </div>
+     <p>
+      Diagonal entries are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p_i(1-p_i)</annotation></semantics></math>
+      ; off-diagonal entries are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><msub><mi>p</mi><mi>i</mi></msub><msub><mi>p</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">-p_ip_j</annotation></semantics></math>
+      . In matrix form,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>J</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub><mo>=</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>p</mi><msup><mi>p</mi><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">J_{\mathrm{softmax}}=\operatorname{diag}(p)-pp^\top.</annotation></semantics></math>
+     </div>
+     <p>
+      Increasing one score necessarily changes other probabilities because their sum stays one.
+     </p>
+     <h4>
+      3 · Differentiate cross entropy
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>−</mi><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>y</mi><mi>i</mi></msub><mo>log</mo><msub><mi>p</mi><mi>i</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>z</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mi>−</mi><munder><mo>∑</mo><mi>i</mi></munder><mfrac><msub><mi>y</mi><mi>i</mi></msub><msub><mi>p</mi><mi>i</mi></msub></mfrac><mfrac><mrow><mi>∂</mi><msub><mi>p</mi><mi>i</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>z</mi><mi>j</mi></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">L=-\sum_i y_i\log p_i,\qquad
+\frac{\partial L}{\partial z_j}=-\sum_i\frac{y_i}{p_i}\frac{\partial p_i}{\partial z_j}.</annotation></semantics></math>
+     </div>
+     <p>
+      Substitute the Jacobian entry and cancel
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>i</mi></msub><annotation encoding="application/x-tex">p_i</annotation></semantics></math>
+      :
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>z</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mi>−</mi><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>y</mi><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>δ</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>−</mo><msub><mi>p</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><msub><mi>y</mi><mi>j</mi></msub><mo>+</mo><msub><mi>p</mi><mi>j</mi></msub><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><msub><mi>p</mi><mi>j</mi></msub><mo>−</mo><msub><mi>y</mi><mi>j</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial z_j}=-\sum_i y_i(\delta_{ij}-p_j)=-y_j+p_j\sum_i y_i=p_j-y_j.</annotation></semantics></math>
+     </div>
+     <p>
+      A one-hot target is a special case; the algebra also works for a normalized soft target.
+     </p>
+     <h4>
+      4 · Derive the log-sum-exp expression
+     </h4>
+     <p>
+      Because
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><msub><mi>p</mi><mi>i</mi></msub><mo>=</mo><msub><mi>z</mi><mi>i</mi></msub><mo>−</mo><mo>log</mo><mi>S</mi></mrow><annotation encoding="application/x-tex">\log p_i=z_i-\log S</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>−</mi><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>y</mi><mi>i</mi></msub><msub><mi>z</mi><mi>i</mi></msub><mo>+</mo><mo>log</mo><mi>S</mi><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><mo>log</mo><munder><mo>∑</mo><mi>j</mi></munder><msup><mi>e</mi><msub><mi>z</mi><mi>j</mi></msub></msup><mo>−</mo><msup><mi>y</mi><mi>⊤</mi></msup><mi>z</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">L=-\sum_i y_i z_i+\log S\sum_i y_i=\log\sum_j e^{z_j}-y^\top z.</annotation></semantics></math>
+     </div>
+     <p>
+      For a true class
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>y</mi><mi>⊤</mi></msup><mi>z</mi><mo>=</mo><msub><mi>z</mi><mi>c</mi></msub></mrow><annotation encoding="application/x-tex">y^\top z=z_c</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mo>log</mo><msub><mo>∑</mo><mi>j</mi></msub><msup><mi>e</mi><msub><mi>z</mi><mi>j</mi></msub></msup><mo>−</mo><msub><mi>z</mi><mi>c</mi></msub></mrow><annotation encoding="application/x-tex">L=\log\sum_j e^{z_j}-z_c</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      5 · Subtract a common maximum safely
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><msub><mo>max</mo><mi>j</mi></msub><msub><mi>z</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">a=\max_j z_j</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><munder><mo>∑</mo><mi>j</mi></munder><msup><mi>e</mi><msub><mi>z</mi><mi>j</mi></msub></msup><mo>=</mo><mi>a</mi><mo>+</mo><mo>log</mo><munder><mo>∑</mo><mi>j</mi></munder><msup><mi>e</mi><mrow><msub><mi>z</mi><mi>j</mi></msub><mo>−</mo><mi>a</mi></mrow></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\log\sum_j e^{z_j}=a+\log\sum_j e^{z_j-a}.</annotation></semantics></math>
+     </div>
+     <p>
+      This is an exact identity. It changes neither the probabilities nor the loss and avoids overflow from exponentiating large logits. The softmax gradient sums to zero:
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>j</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>p</mi><mi>j</mi></msub><mo>−</mo><msub><mi>y</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><mn>1</mn><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sum_j(p_j-y_j)=1-1=0</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      6 · State the weighted exception
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>−</mi><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>w</mi><mi>i</mi></msub><msub><mi>y</mi><mi>i</mi></msub><mo>log</mo><msub><mi>p</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">L=-\sum_i w_i y_i\log p_i</annotation></semantics></math>
+      , the unreduced gradient is
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>z</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><msub><mi>p</mi><mi>j</mi></msub><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>w</mi><mi>i</mi></msub><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msub><mi>w</mi><mi>j</mi></msub><msub><mi>y</mi><mi>j</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial z_j}=p_j\sum_iw_i y_i-w_jy_j.</annotation></semantics></math>
+     </div>
+     <p>
+      The normalizing denominator of a library’s weighted mean is an additional choice. The plain
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>−</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">p-y</annotation></semantics></math>
+      result assumes unweighted targets of total mass one and the stated reduction.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="8" data-pdf="basics" type="button">
+       Chapter source · PDF p. 8
+      </button>
+      <a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.CrossEntropyLoss.html" rel="noopener noreferrer" target="_blank">
+       CrossEntropyLoss
+      </a>
+      <a class="calculation-link" href="#losses-and-outputs?derivation=softmax-cross-entropy">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="a-compact-implementation-map" id="losses-and-outputs--a-compact-implementation-map">
+    A compact implementation map
+   </h2>
+   <div aria-label="Scrollable calculation table" class="table-scroll" role="region" tabindex="0">
+    <table>
+     <colgroup>
+      <col style="width: 25%"/>
+      <col style="width: 25%"/>
+      <col style="width: 25%"/>
+      <col style="width: 25%"/>
+     </colgroup>
+     <thead>
+      <tr class="header">
+       <th>
+        Task
+       </th>
+       <th>
+        Model output
+       </th>
+       <th>
+        Typical target
+       </th>
+       <th>
+        Loss
+       </th>
+      </tr>
+     </thead>
+     <tbody>
+      <tr class="odd">
+       <td>
+        Scalar regression
+       </td>
+       <td>
+        <code>
+         [B, 1]
+        </code>
+        , real values
+       </td>
+       <td>
+        Same shape, floating point
+       </td>
+       <td>
+        MSE
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        Binary classification
+       </td>
+       <td>
+        <code>
+         [B, 1]
+        </code>
+        , raw logits
+       </td>
+       <td>
+        Same shape, floating point
+       </td>
+       <td>
+        BCE with logits
+       </td>
+      </tr>
+      <tr class="odd">
+       <td>
+        Multiclass classification
+       </td>
+       <td>
+        <code>
+         [B, K]
+        </code>
+        , raw logits
+       </td>
+       <td>
+        <code>
+         [B]
+        </code>
+        , integer class index
+       </td>
+       <td>
+        Cross entropy
+       </td>
+      </tr>
+      <tr class="even">
+       <td>
+        Multilabel classification
+       </td>
+       <td>
+        <code>
+         [B, K]
+        </code>
+        , raw logits
+       </td>
+       <td>
+        Same shape, binary floats
+       </td>
+       <td>
+        Elementwise BCE with logits
+       </td>
+      </tr>
+     </tbody>
+    </table>
+   </div>
+   <p>
+    This table is an implementation supplement, not a new architectural taxonomy. Shape consistency matters: an accidentally broadcast target can produce a valid tensor calculation for the wrong objective. First state the prediction task mathematically, then check the library contract.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="losses-and-outputs--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="optimization">
+     <span class="resource-meta">
+      PyTorch · Tutorial + code
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Optimizing Model Parameters
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Follow separate training and test loops. Identify the forward calculation, loss, backward pass and optimizer update rather than treating training as one operation.
+     </p>
+    </div>
+    <div class="resource" data-resource="bce">
+     <span class="resource-meta">
+      PyTorch · API + usage example
+     </span>
+     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.BCEWithLogitsLoss.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       BCEWithLogitsLoss
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Use the combined logit-based binary loss rather than manually applying sigmoid before this function. The documentation also illustrates positive-class weighting.
+     </p>
+    </div>
+    <div class="resource" data-resource="ce">
+     <span class="resource-meta">
+      PyTorch · API + target examples
+     </span>
+     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.CrossEntropyLoss.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       CrossEntropyLoss
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Check raw-logit inputs and the distinction between integer class-index targets and probability-distribution targets. Review reduction, class weights and label smoothing.
+     </p>
+    </div>
+    <div class="resource" data-resource="polynomial">
+     <span class="resource-meta">
+      PyTorch · Worked regression example
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/pytorch_with_examples.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Learning PyTorch with Examples
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      An older, still useful teaching sequence: fit a polynomial while moving from explicit derivatives to autograd, modules and optimizers. Use it to compare the same mathematics across abstraction levels.
+     </p>
+    </div>
+   </div>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Why should you usually not apply softmax before CrossEntropyLoss?
+   </summary>
+   <p>
+    The class-index form of CrossEntropyLoss consumes logits and performs the log-softmax calculation internally. Applying softmax first changes the input from logits to probabilities and then applies a second normalization inside the loss. Apply softmax for interpreting predictions, not as a required preprocessing step for that loss.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#forward-pass">
+    <small>
+     ← Previous
+    </small>
+    A complete forward pass
+   </a>
+   <a href="#backpropagation">
+    <small>
+     Next →
+    </small>
+    Backpropagation, worked all the way through
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="the-prediction-domain-is-part-of-the-task" href="#losses-and-outputs?section=the-prediction-domain-is-part-of-the-task">
+    The prediction domain is part of the task
+   </a>
+   <a data-section="squared-error-and-its-gradient" href="#losses-and-outputs?section=squared-error-and-its-gradient">
+    Squared error and its gradient
+   </a>
+   <a data-section="binary-cross-entropy-and-logits" href="#losses-and-outputs?section=binary-cross-entropy-and-logits">
+    Binary cross entropy and logits
+   </a>
+   <a data-section="multiclass-cross-entropy" href="#losses-and-outputs?section=multiclass-cross-entropy">
+    Multiclass cross entropy
+   </a>
+   <a data-section="a-compact-implementation-map" href="#losses-and-outputs?section=a-compact-implementation-map">
+    A compact implementation map
+   </a>
+   <a data-section="implementation" href="#losses-and-outputs?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

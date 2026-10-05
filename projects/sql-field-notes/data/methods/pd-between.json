@@ -1,0 +1,159 @@
+{
+  "id": "pd-between",
+  "lang": "pd",
+  "category": "Filtering",
+  "label": "Range",
+  "example": "df[df.age.between(20,30)]",
+  "description": "Inclusive range",
+  "source": "image-pandas",
+  "related": [
+    "sql-between"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "between",
+  "uses": [
+    {
+      "page": "C07",
+      "block": "code-C07-1",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    matched = p.merge(u, on='product_id', how='inner')\n    matched = matched.loc[matched['purchase_date'].between(matched['start_date'], matched['end_date'])].copy()\n    matched['paid'] = matched['price'] * matched['units']\n    g = matched.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))",
+      "snippetLine": 11
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-3",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df = prices.merge(units_sold, on='product_id', how='left')\n    df = df[df.purchase_date.isna() | df.purchase_date.between(df.start_date, df.end_date)].copy()\n    df['paid'] = df['price'] * df['units']\n    totals = df.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))",
+      "snippetLine": 12
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    kinds = ['open_session', 'end_session', 'scroll_down', 'send_message']\n    mask = a['activity_date'].between('2019-06-28', '2019-07-27') & a['activity_type'].isin(kinds)\n    return a.loc[mask].groupby('activity_date', as_index=False).agg(active_users=('user_id', 'nunique')).rename(columns={'activity_date': 'day'})",
+      "snippetLine": 5
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-3",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    start_date = end_date - pd.Timedelta(days=29)\n    bool_activity_date = activity['activity_date'].between(start_date, end_date)\n\n    bool_flag = bool_activity_type   &   bool_activity_date",
+      "snippetLine": 9
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-5",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    start_date = end_date - pd.Timedelta(days=29)\n    bool_activity_date = activity['activity_date'].between(start_date, end_date)\n\n    bool_flag = bool_activity_type & bool_activity_date",
+      "snippetLine": 9
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    return pd.DataFrame({'category': ['Low Salary', 'Average Salary', 'High Salary'],\n                         'accounts_count': [int(s.lt(20000).sum()), int(s.between(20000, 50000).sum()), int(s.gt(50000).sum())]})",
+      "snippetLine": 5
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-1",
+      "line": 15,
+      "lines": [
+        15,
+        22
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    overlaps = ((a.le(start) & b.ge(start)) | (a.le(end) & b.ge(end))\n                | (a.between(start, end) & b.between(start, end)))\n    shifts = shifts.loc[overlaps].rename(columns={'id': 'guard_id'})\n    logs = shifts.merge(daily_door_access_logs.rename(columns={'id': 'log_id'}), on='guard_id')",
+      "snippetLine": 14
+    },
+    {
+      "page": "B02",
+      "block": "code-B02-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Numeric constraints",
+      "number": "02",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = movies.loc[movies['year'].between(2000, 2010)].copy()",
+      "snippetLine": 1
+    },
+    {
+      "page": "B02",
+      "block": "code-B02-5",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Numeric constraints",
+      "number": "02",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = movies.loc[movies['year'].notna() & ~movies['year'].between(2000, 2010)].copy()",
+      "snippetLine": 1
+    },
+    {
+      "page": "B02",
+      "block": "code-B02-7",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Numeric constraints",
+      "number": "02",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = movies.loc[movies['id'].between(1, 5), ['title', 'year']].copy()",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 5
+}

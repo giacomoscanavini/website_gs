@@ -1,0 +1,209 @@
+<article class="article" id="C45">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Problem 197
+  </span>
+ </div>
+ <h1>
+  197 · Rising temperature
+ </h1>
+ <p>
+  Return IDs for dates that are warmer than the preceding calendar day.
+ </p>
+ <p class="pattern">
+  Pattern: Date self-join / sorted differences
+ </p>
+ <h2>
+  Illustrative example
+ </h2>
+ <p>
+  For Jan 1 at 10°, Jan 2 at 12° and Jan 4 at 20°, only the Jan 2 row qualifies. Jan 4 is warmer than the previous recorded row, but there is no Jan 3 record.
+ </p>
+ <h2>
+  My solution
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="exercise-197-panel-0" aria-selected="true" id="exercise-197-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="exercise-197-panel-1" aria-selected="false" id="exercise-197-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="exercise-197-tab-0" class="code-panel" id="exercise-197-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-C45-0" tabindex="0"><code class="language-sql" data-origin="supplied-197-sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">w1</span><span class="p">.</span><span class="n">id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Weather</span><span class="w"> </span><span class="n">w1</span><span class="p">,</span><span class="w"> </span><span class="n">Weather</span><span class="w"> </span><span class="n">w2</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">DATEDIFF</span><span class="p">(</span><span class="n">w1</span><span class="p">.</span><span class="n">recordDate</span><span class="p">,</span><span class="w"> </span><span class="n">w2</span><span class="p">.</span><span class="n">recordDate</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">w1</span><span class="p">.</span><span class="n">temperature</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">w2</span><span class="p">.</span><span class="n">temperature</span></code></pre>
+  </div>
+  <div aria-labelledby="exercise-197-tab-1" class="code-panel" id="exercise-197-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-C45-1" tabindex="0"><code class="language-python" data-origin="supplied-197-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">rising_temperature</span><span class="p">(</span><span class="n">weather</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">weather</span> <span class="o">=</span> <span class="n">weather</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">recordDate</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">weather</span><span class="p">[</span><span class="s1">'recordDate'</span><span class="p">]))</span>
+    <span class="n">weather</span> <span class="o">=</span> <span class="n">weather</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'recordDate'</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">weather</span><span class="p">[(</span><span class="n">weather</span><span class="o">.</span><span class="n">recordDate</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)))</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">weather</span><span class="o">.</span><span class="n">temperature</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'id'</span><span class="p">]]</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  Why it works
+ </h2>
+ <p>
+  SQL compares pairs exactly one day apart and keeps the warmer current row. After sorting, pandas requires both a one-day date difference and a positive temperature difference.
+ </p>
+ <div class="note">
+  recordDate contains unique calendar dates. Compare a row only with the immediately preceding calendar day.
+ </div>
+ <details class="reference-details">
+  <summary>
+   Source
+  </summary>
+  <div class="sources-content">
+   <p>
+    Based on the submitted SQL and pandas solutions.
+   </p>
+  </div>
+ </details>
+ <details class="original-details archive-submission">
+  <summary>
+   Uploaded submission · SQL.zip
+  </summary>
+  <p class="small">
+   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
+  </p>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="archive-197-panel-0" aria-selected="true" id="archive-197-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="archive-197-panel-1" aria-selected="false" id="archive-197-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="archive-197-tab-0" class="code-panel" id="archive-197-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     MySQL
+    </div>
+    <pre id="code-C45-2" tabindex="0"><code class="language-sql" data-origin="archive-197-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">w1</span><span class="p">.</span><span class="n">id</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Weather</span><span class="w"> </span><span class="n">w1</span><span class="p">,</span><span class="w"> </span><span class="n">Weather</span><span class="w"> </span><span class="n">w2</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="nf">DATEDIFF</span><span class="p">(</span><span class="n">w1</span><span class="p">.</span><span class="n">recordDate</span><span class="p">,</span><span class="w"> </span><span class="n">w2</span><span class="p">.</span><span class="n">recordDate</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">w1</span><span class="p">.</span><span class="n">temperature</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">w2</span><span class="p">.</span><span class="n">temperature</span></code></pre>
+   </div>
+   <div aria-labelledby="archive-197-tab-1" class="code-panel" id="archive-197-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C45-3" tabindex="0"><code class="language-python" data-origin="archive-197-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">rising_temperature</span><span class="p">(</span><span class="n">weather</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">weather</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'recordDate'</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">weather</span><span class="p">[(</span><span class="n">weather</span><span class="o">.</span><span class="n">recordDate</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">days</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">weather</span><span class="o">.</span><span class="n">temperature</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'id'</span><span class="p">]]</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-and">
+     AND
+    </a>
+    <a href="#m-sql-self-join">
+     Self join
+    </a>
+    <a href="#m-sql-datediff">
+     DATEDIFF()
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-filter">
+     Condition
+    </a>
+    <a href="#m-pd-and">
+     Multiple conditions
+    </a>
+    <a href="#m-pd-sort-values">
+     Sort one column
+    </a>
+    <a href="#m-pd-assign">
+     assign()
+    </a>
+    <a href="#m-pd-diff">
+     Difference
+    </a>
+    <a href="#m-pd-to-datetime">
+     Convert date
+    </a>
+    <a href="#m-pd-dt-days">
+     Date difference
+    </a>
+    <a href="#m-pd-timedelta">
+     Add days
+    </a>
+    <a href="#m-pd-eq">
+     eq() / ne()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#C44">
+   <small>
+    ← Previous
+   </small>
+   1581 · Customers who visited without transactions
+  </a>
+  <a href="#C46">
+   <small>
+    Next →
+   </small>
+   1661 · Average processing time per machine
+  </a>
+ </div>
+</article>

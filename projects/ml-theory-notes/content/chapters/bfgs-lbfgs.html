@@ -1,0 +1,556 @@
+<section aria-labelledby="bfgs-lbfgs-title" class="page-view lesson-layout" id="bfgs-lbfgs">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     15
+    </span>
+    Part 2 · Optimization
+   </p>
+   <h1 id="bfgs-lbfgs-title" tabindex="-1">
+    BFGS, L-BFGS, and line search
+   </h1>
+   <p class="standfirst">
+    Learn curvature from successive gradients, and understand why deterministic objectives matter.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Optimization · PDF pp. 18–22 · §§11–15" data-page="18" data-pdf="optim" type="button">
+     Optimization · PDF pp. 18–22 · §§11–15
+    </button>
+    <button aria-label="Open source: Optimization · PDF pp. 25–26 · §23" data-page="25" data-pdf="optim" type="button">
+     Optimization · PDF pp. 25–26 · §23
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="infer-curvature-rather-than-compute-the-full-hessian" href="#bfgs-lbfgs?section=infer-curvature-rather-than-compute-the-full-hessian">
+     Infer curvature rather than compute the full Hessian
+    </a>
+    <a data-section="the-inverse-update-and-curvature-condition" href="#bfgs-lbfgs?section=the-inverse-update-and-curvature-condition">
+     The inverse update and curvature condition
+    </a>
+    <a data-section="why-line-search-evaluates-the-objective-repeatedly" href="#bfgs-lbfgs?section=why-line-search-evaluates-the-objective-repeatedly">
+     Why line search evaluates the objective repeatedly
+    </a>
+    <a data-section="limited-memory-changes-the-storage-cost" href="#bfgs-lbfgs?section=limited-memory-changes-the-storage-cost">
+     Limited memory changes the storage cost
+    </a>
+    <a data-section="why-stochastic-gradients-are-difficult-here" href="#bfgs-lbfgs?section=why-stochastic-gradients-are-difficult-here">
+     Why stochastic gradients are difficult here
+    </a>
+    <a data-section="follow-an-existing-implementation" href="#bfgs-lbfgs?section=follow-an-existing-implementation">
+     Follow an existing implementation
+    </a>
+    <a data-section="implementation" href="#bfgs-lbfgs?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="infer-curvature-rather-than-compute-the-full-hessian" id="bfgs-lbfgs--infer-curvature-rather-than-compute-the-full-hessian">
+    Infer curvature rather than compute the full Hessian
+   </h2>
+   <p>
+    Newton’s method uses a local Hessian to determine a direction. BFGS instead observes how the gradient changes when the parameters move. Define
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>s</mi><mi>k</mi></msub><mo>=</mo><msub><mi>θ</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi>θ</mi><mi>k</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>y</mi><mi>k</mi></msub><mo>=</mo><msub><mi>g</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi>g</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">s_k=\theta_{k+1}-\theta_k,\qquad y_k=g_{k+1}-g_k.</annotation></semantics></math>
+   </div>
+   <p>
+    For a local quadratic,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>k</mi></msub><mo>=</mo><mi>H</mi><msub><mi>s</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">y_k=Hs_k</annotation></semantics></math>
+    . A quasi-Newton approximation tries to preserve this relationship. If
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>
+    denotes a Hessian approximation, the
+    <strong>
+     secant condition
+    </strong>
+    is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>B</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><msub><mi>s</mi><mi>k</mi></msub><mo>=</mo><msub><mi>y</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">B_{k+1}s_k=y_k</annotation></semantics></math>
+    .
+   </p>
+   <p>
+    The source then uses
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>k</mi></msub><annotation encoding="application/x-tex">H_k</annotation></semantics></math>
+    for an
+    <em>
+     inverse
+    </em>
+    -Hessian approximation. That symbol is not the exact Hessian from the preceding curvature chapter. Keeping the two roles explicit avoids a common notational trap.
+   </p>
+   <h2 data-section="the-inverse-update-and-curvature-condition" id="bfgs-lbfgs--the-inverse-update-and-curvature-condition">
+    The inverse update and curvature condition
+   </h2>
+   <p>
+    With
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ρ</mi><mi>k</mi></msub><mo>=</mo><mn>1</mn><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>y</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi>s</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\rho_k=1/(y_k^\top s_k)</annotation></semantics></math>
+    ,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><msub><mi>ρ</mi><mi>k</mi></msub><msub><mi>s</mi><mi>k</mi></msub><msubsup><mi>y</mi><mi>k</mi><mi>⊤</mi></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>H</mi><mi>k</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><msub><mi>ρ</mi><mi>k</mi></msub><msub><mi>y</mi><mi>k</mi></msub><msubsup><mi>s</mi><mi>k</mi><mi>⊤</mi></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>ρ</mi><mi>k</mi></msub><msub><mi>s</mi><mi>k</mi></msub><msubsup><mi>s</mi><mi>k</mi><mi>⊤</mi></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">H_{k+1}=(I-\rho_ks_ky_k^\top)H_k(I-\rho_ky_ks_k^\top)+\rho_ks_ks_k^\top.</annotation></semantics></math>
+   </div>
+   <p>
+    The direction is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>k</mi></msub><mo>=</mo><mi>−</mi><msub><mi>H</mi><mi>k</mi></msub><msub><mi>g</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">p_k=-H_kg_k</annotation></semantics></math>
+    . The update is constructed to incorporate the newest observed curvature information while retaining a useful approximation from earlier steps.
+   </p>
+   <p>
+    The condition
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>y</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi>s</mi><mi>k</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">y_k^\top s_k&gt;0</annotation></semantics></math>
+    is central to preserving positive definiteness when the previous approximation is positive definite. Appropriate line-search conditions help obtain this property. BFGS is therefore more than “Adam with a Hessian”: it relies on a different structure of information and step control.
+   </p>
+   <details class="derivation" data-derivation="bfgs-secant" id="bfgs-lbfgs--derivation-bfgs-secant">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Construct the BFGS inverse update and verify its properties
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      In this panel
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>k</mi></msub><annotation encoding="application/x-tex">H_k</annotation></semantics></math>
+      denotes an
+      <strong>
+       inverse-Hessian approximation
+      </strong>
+      , not the exact Hessian. Assume
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>k</mi></msub><annotation encoding="application/x-tex">H_k</annotation></semantics></math>
+      is symmetric positive definite. Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><msub><mi>θ</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi>θ</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">s=\theta_{k+1}-\theta_k</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><msub><mi>g</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi>g</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">y=g_{k+1}-g_k</annotation></semantics></math>
+      , and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>y</mi><mi>⊤</mi></msup><mi>s</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">y^\top s&gt;0</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      1 · Obtain a secant relation from gradient changes
+     </h4>
+     <p>
+      Along the segment
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mi>k</mi></msub><mo>+</mo><mi>t</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">\theta_k+ts</annotation></semantics></math>
+      , the fundamental theorem of calculus gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><msubsup><mo>∫</mo><mn>0</mn><mn>1</mn></msubsup><msup><mi>∇</mi><mn>2</mn></msup><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>θ</mi><mi>k</mi></msub><mo>+</mo><mi>t</mi><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mspace width="0.167em"></mspace><mi>s</mi><mspace width="0.167em"></mspace><mi>d</mi><mi>t</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">y=\int_0^1\nabla^2J(\theta_k+ts)\,s\,dt.</annotation></semantics></math>
+     </div>
+     <p>
+      For a quadratic, the Hessian is constant and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mi>B</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">y=Bs</annotation></semantics></math>
+      . An inverse approximation should therefore satisfy
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mi>y</mi><mo>=</mo><mi>s</mi></mrow><annotation encoding="application/x-tex">H_{k+1}y=s</annotation></semantics></math>
+      . This condition alone does not uniquely specify an update.
+     </p>
+     <h4>
+      2 · Build a correction that removes the old response along
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
+     </h4>
+     <p>
+      Set
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mo>=</mo><mn>1</mn><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>y</mi><mi>⊤</mi></msup><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\rho=1/(y^\top s)</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><mi>I</mi><mo>−</mo><mi>ρ</mi><mi>s</mi><msup><mi>y</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">V=I-\rho s y^\top</annotation></semantics></math>
+      . Then
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mi>⊤</mi></msup><mi>y</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>ρ</mi><mi>y</mi><msup><mi>s</mi><mi>⊤</mi></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>y</mi><mo>=</mo><mi>y</mi><mo>−</mo><mi>ρ</mi><mi>y</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">V^\top y=(I-\rho ys^\top)y=y-\rho y(s^\top y)=0.</annotation></semantics></math>
+     </div>
+     <p>
+      Consequently
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><msub><mi>H</mi><mi>k</mi></msub><msup><mi>V</mi><mi>⊤</mi></msup><mi>y</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">VH_kV^\top y=0</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      3 · Add a rank-one term with the required response
+     </h4>
+     <p>
+      The matrix
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mi>s</mi><msup><mi>s</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\rho ss^\top</annotation></semantics></math>
+      sends
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
+      to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mi>s</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>s</mi></mrow><annotation encoding="application/x-tex">\rho s(s^\top y)=s</annotation></semantics></math>
+      . Combining the two pieces gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mi>V</mi><msub><mi>H</mi><mi>k</mi></msub><msup><mi>V</mi><mi>⊤</mi></msup><mo>+</mo><mi>ρ</mi><mi>s</mi><msup><mi>s</mi><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">H_{k+1}=VH_kV^\top+\rho ss^\top.</annotation></semantics></math>
+     </div>
+     <p>
+      Multiplication by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
+      produces
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>+</mo><mi>s</mi><mo>=</mo><mi>s</mi></mrow><annotation encoding="application/x-tex">0+s=s</annotation></semantics></math>
+      , verifying the inverse secant equation exactly. This is the BFGS construction, not a claim that any secant-satisfying matrix is BFGS.
+     </p>
+     <h4>
+      4 · Verify symmetry
+     </h4>
+     <p>
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><msub><mi>H</mi><mi>k</mi></msub><msup><mi>V</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">VH_kV^\top</annotation></semantics></math>
+      is symmetric because
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mi>k</mi></msub><annotation encoding="application/x-tex">H_k</annotation></semantics></math>
+      is symmetric. The outer product
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><msup><mi>s</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">ss^\top</annotation></semantics></math>
+      is symmetric. Their sum is therefore symmetric.
+     </p>
+     <h4>
+      5 · Verify positive definiteness
+     </h4>
+     <p>
+      For any nonzero vector
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>u</mi><mi>⊤</mi></msup><msub><mi>H</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mi>u</mi><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>V</mi><mi>⊤</mi></msup><mi>u</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><msub><mi>H</mi><mi>k</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>V</mi><mi>⊤</mi></msup><mi>u</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>ρ</mi><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>s</mi><mi>⊤</mi></msup><mi>u</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">u^\top H_{k+1}u=(V^\top u)^\top H_k(V^\top u)+\rho(s^\top u)^2.</annotation></semantics></math>
+     </div>
+     <p>
+      Both terms are nonnegative since
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mi>k</mi></msub><mo>≻</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">H_k\succ0</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\rho&gt;0</annotation></semantics></math>
+      . If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>s</mi><mi>⊤</mi></msup><mi>u</mi><mo>≠</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">s^\top u\ne0</annotation></semantics></math>
+      , the second is positive. If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>s</mi><mi>⊤</mi></msup><mi>u</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">s^\top u=0</annotation></semantics></math>
+      , then
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>V</mi><mi>⊤</mi></msup><mi>u</mi><mo>=</mo><mi>u</mi><mo>≠</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">V^\top u=u\ne0</annotation></semantics></math>
+      and the first is positive. Thus
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>≻</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">H_{k+1}\succ0</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      6 · Connect to a descent direction
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo>≠</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g\ne0</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mi>−</mi><msub><mi>H</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mi>g</mi></mrow><annotation encoding="application/x-tex">p=-H_{k+1}g</annotation></semantics></math>
+      satisfies
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>g</mi><mi>⊤</mi></msup><mi>p</mi><mo>=</mo><mi>−</mi><msup><mi>g</mi><mi>⊤</mi></msup><msub><mi>H</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mi>g</mi><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g^\top p=-g^\top H_{k+1}g&lt;0</annotation></semantics></math>
+      . The curvature condition therefore protects a useful descent geometry. Noisy or inconsistent gradient differences can violate the assumptions, which is why curvature checks and line-search safeguards matter.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="18" data-pdf="optim" type="button">
+       Chapter source · PDF p. 18
+      </button>
+      <a class="calculation-link" href="#bfgs-lbfgs?derivation=bfgs-secant">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="why-line-search-evaluates-the-objective-repeatedly" id="bfgs-lbfgs--why-line-search-evaluates-the-objective-repeatedly">
+    Why line search evaluates the objective repeatedly
+   </h2>
+   <p>
+    Given a direction
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>k</mi></msub><annotation encoding="application/x-tex">p_k</annotation></semantics></math>
+    , define
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>θ</mi><mi>k</mi></msub><mo>+</mo><mi>α</mi><msub><mi>p</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\varphi(\alpha)=J(\theta_k+\alpha p_k)</annotation></semantics></math>
+    . A line search seeks a useful positive
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+    . The guide gives Armijo sufficient decrease:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>θ</mi><mi>k</mi></msub><mo>+</mo><mi>α</mi><msub><mi>p</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>≤</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>θ</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>c</mi><mn>1</mn></msub><mi>α</mi><msubsup><mi>g</mi><mi>k</mi><mi>⊤</mi></msubsup><msub><mi>p</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">J(\theta_k+\alpha p_k)\le J(\theta_k)+c_1\alpha g_k^\top p_k.</annotation></semantics></math>
+   </div>
+   <p>
+    Wolfe-type conditions add information about the directional derivative after the step. The purpose is not only to lower the loss, but also to make subsequent curvature information useful.
+   </p>
+   <p>
+    Each trial can require another function or gradient evaluation. One accepted iteration is consequently not directly comparable to an SGD step. Compare data passes or wall-clock work as well as iteration counts.
+   </p>
+   <figure class="source-figure">
+    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="optim-20" type="button">
+     <img alt="The source’s Rosenbrock illustration shows how curvature-aware directions can reduce zig-zagging on a smooth deterministic objective. Its iteration counts are specific to the illustrated settings, not a universal speed ranking." height="613" loading="lazy" src="assets/images/the-source-s-rosenbrock-illustration-shows-how-curvature-aware-di-c367074298.webp" width="840"/>
+    </button>
+    <figcaption>
+     The source’s Rosenbrock illustration shows how curvature-aware directions can reduce zig-zagging on a smooth deterministic objective. Its iteration counts are specific to the illustrated settings, not a universal speed ranking.
+     <button aria-label="Open source: Optimization · PDF p. 20" data-page="20" data-pdf="optim" type="button">
+      Optimization · PDF p. 20
+     </button>
+    </figcaption>
+   </figure>
+   <details class="derivation" data-derivation="wolfe-curvature" id="bfgs-lbfgs--derivation-wolfe-curvature">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive how Wolfe curvature protects the BFGS update
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Choose a descent direction
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
+      at
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
+      , with
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>g</mi><mn>0</mn><mi>⊤</mi></msubsup><mi>p</mi><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g_0^\top p&lt;0</annotation></semantics></math>
+      . Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>α</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\varphi(\alpha)=J(\theta+\alpha p)</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\alpha&gt;0</annotation></semantics></math>
+      , and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><msub><mi>c</mi><mn>1</mn></msub><mo>&lt;</mo><msub><mi>c</mi><mn>2</mn></msub><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0&lt;c_1&lt;c_2&lt;1</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      1 · Differentiate the one-dimensional restriction
+     </h4>
+     <p>
+      The chain rule gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>∇</mi><mi>J</mi><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>α</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mi>p</mi></mrow><annotation encoding="application/x-tex">\varphi'(\alpha)=\nabla J(\theta+\alpha p)^\top p</annotation></semantics></math>
+      . In particular
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msubsup><mi>g</mi><mn>0</mn><mi>⊤</mi></msubsup><mi>p</mi><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\varphi'(0)=g_0^\top p&lt;0</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Write both weak Wolfe conditions
+     </h4>
+     <p>
+      Sufficient decrease (Armijo) requires
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≤</mo><mi>φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>c</mi><mn>1</mn></msub><mi>α</mi><mi>φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\varphi(\alpha)\le\varphi(0)+c_1\alpha\varphi'(0).</annotation></semantics></math>
+     </div>
+     <p>
+      The curvature condition requires
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≥</mo><msub><mi>c</mi><mn>2</mn></msub><mi>φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\varphi'(\alpha)\ge c_2\varphi'(0).</annotation></semantics></math>
+     </div>
+     <p>
+      Because the initial derivative is negative and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mn>2</mn></msub><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">c_2&lt;1</annotation></semantics></math>
+      , the second condition requires the slope to become less negative. An arbitrarily tiny step may pass Armijo but fail curvature.
+     </p>
+     <h4>
+      3 · Express the secant pair’s inner product
+     </h4>
+     <p>
+      Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>α</mi><mi>p</mi></mrow><annotation encoding="application/x-tex">s=\alpha p</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mi>∇</mi><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>α</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><msub><mi>g</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">y=\nabla J(\theta+\alpha p)-g_0</annotation></semantics></math>
+      . Then
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>y</mi><mi>⊤</mi></msup><mi>s</mi><mo>=</mo><mi>α</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>∇</mi><mi>J</mi><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>α</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mi>p</mi><mo>−</mo><msubsup><mi>g</mi><mn>0</mn><mi>⊤</mi></msubsup><mi>p</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>α</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">y^\top s=\alpha[\nabla J(\theta+\alpha p)^\top p-g_0^\top p]
+=\alpha[\varphi'(\alpha)-\varphi'(0)].</annotation></semantics></math>
+     </div>
+     <h4>
+      4 · Apply the curvature inequality
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>y</mi><mi>⊤</mi></msup><mi>s</mi><mo>≥</mo><mi>α</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>c</mi><mn>2</mn></msub><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>&gt;</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">y^\top s\ge\alpha(c_2-1)\varphi'(0)&gt;0.</annotation></semantics></math>
+     </div>
+     <p>
+      The strict positivity follows because
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\alpha&gt;0</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mn>2</mn></msub><mo>−</mo><mn>1</mn><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">c_2-1&lt;0</annotation></semantics></math>
+      , and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\varphi'(0)&lt;0</annotation></semantics></math>
+      . This is the condition needed in the preceding BFGS proof.
+     </p>
+     <h4>
+      5 · Relate strong Wolfe
+     </h4>
+     <p>
+      Strong Wolfe uses
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">|</mo><mi>φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">|</mo></mrow><mo>≤</mo><msub><mi>c</mi><mn>2</mn></msub><mrow><mo form="prefix" stretchy="true">|</mo><mi>φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">|</mo></mrow></mrow><annotation encoding="application/x-tex">|\varphi'(\alpha)|\le c_2|\varphi'(0)|</annotation></semantics></math>
+      . This implies
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≥</mo><mi>−</mi><msub><mi>c</mi><mn>2</mn></msub><mrow><mo form="prefix" stretchy="true">|</mo><mi>φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">|</mo></mrow><mo>=</mo><msub><mi>c</mi><mn>2</mn></msub><mi>φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\varphi'(\alpha)\ge-c_2|\varphi'(0)|=c_2\varphi'(0)</annotation></semantics></math>
+      , so it also supplies the lower bound above. These arguments assume all evaluations describe the same differentiable objective; fresh dropout masks or different mini-batches can undermine that interpretation.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="18" data-pdf="optim" type="button">
+       Chapter source · PDF p. 18
+      </button>
+      <a class="calculation-link" href="#bfgs-lbfgs?derivation=wolfe-curvature">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="limited-memory-changes-the-storage-cost" id="bfgs-lbfgs--limited-memory-changes-the-storage-cost">
+    Limited memory changes the storage cost
+   </h2>
+   <p>
+    Full BFGS stores an approximately
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>×</mo><mi>d</mi></mrow><annotation encoding="application/x-tex">d\times d</annotation></semantics></math>
+    matrix, costing
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>d</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O(d^2)</annotation></semantics></math>
+    memory. L-BFGS retains only the most recent
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
+    pairs
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>s</mi><mi>k</mi></msub><mo>,</mo><msub><mi>y</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(s_k,y_k)</annotation></semantics></math>
+    and reconstructs the inverse-Hessian action implicitly. Its history storage is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>m</mi><mi>d</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O(md)</annotation></semantics></math>
+    .
+   </p>
+   <p>
+    Limited memory makes the method more practical, but it does not make line-search reevaluation or high-quality gradient information free. For very large stochastic networks, a cheaper noisy first-order update can make more useful progress per unit of computation.
+   </p>
+   <h2 data-section="why-stochastic-gradients-are-difficult-here" id="bfgs-lbfgs--why-stochastic-gradients-are-difficult-here">
+    Why stochastic gradients are difficult here
+   </h2>
+   <p>
+    If
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>g</mi><mi>k</mi></msub><annotation encoding="application/x-tex">g_k</annotation></semantics></math>
+    and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>g</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">g_{k+1}</annotation></semantics></math>
+    use different mini-batches, their difference contains both parameter-induced curvature information and changes in the sampled observations. The secant pair can become a noisy account of the local surface. Random augmentation or dropout also changes the evaluated function unless controlled appropriately.
+   </p>
+   <p>
+    This is why the source associates L-BFGS with smaller smooth full-batch problems, deterministic fine-tuning, and scientific optimization. It does not claim the method is mathematically inferior; it identifies a mismatch between its preferred information and the usual large-scale mini-batch setting.
+   </p>
+   <h2 data-section="follow-an-existing-implementation" id="bfgs-lbfgs--follow-an-existing-implementation">
+    Follow an existing implementation
+   </h2>
+   <p>
+    The official PyTorch time-sequence example uses LSTM cells and L-BFGS with a reevaluating closure, and writes prediction plots. It is useful for understanding the closure mechanism in a working model. Its synthetic sequence task and evaluation design should not be mistaken for a complete production forecasting protocol.
+   </p>
+   <p>
+    The API reference specifies the actual optimizer constraints and step behavior. The practical question is whether your objective can be reevaluated consistently and cheaply enough for line search—not simply whether L-BFGS needs fewer nominal iterations.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="bfgs-lbfgs--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="lbfgs-api">
+     <span class="resource-meta">
+      PyTorch · API reference
+     </span>
+     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.LBFGS.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       L-BFGS and the closure contract
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Check the closure argument, limited-memory history and line_search_fn. Pair this API with the sequence-prediction script for an actual closure in use.
+     </p>
+    </div>
+    <div class="resource" data-resource="sequence-example">
+     <span class="resource-meta">
+      PyTorch examples · Official example code
+     </span>
+     <a href="https://github.com/pytorch/examples/blob/main/time_sequence_prediction/train.py" rel="noopener noreferrer" target="_blank">
+      <span>
+       Time Sequence Prediction: training script
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Inspect LSTMCell recurrence and an L-BFGS closure in a small sequence-prediction application. It illustrates implementation mechanics, not a complete production forecasting-validation protocol.
+     </p>
+    </div>
+    <div class="resource" data-resource="optim">
+     <span class="resource-meta">
+      PyTorch · Implementation reference
+     </span>
+     <a href="https://docs.pytorch.org/docs/2.13/optim.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       torch.optim
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Check optimizer construction, per-parameter options, closure usage and scheduler ordering. Use the training tutorial for a complete surrounding loop.
+     </p>
+    </div>
+   </div>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Why does PyTorch L-BFGS use a closure?
+   </summary>
+   <p>
+    An optimizer step may need repeated model/loss/gradient evaluations at trial parameter values. A closure supplies that reevaluation. It must compute a consistent objective; resampling different data or uncontrolled stochastic masks changes what is being evaluated.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#conjugate-gradient">
+    <small>
+     ← Previous
+    </small>
+    Conjugate Gradient: directions that do not repeat work
+   </a>
+   <a href="#training-diagnosis">
+    <small>
+     Next →
+    </small>
+    Diagnosing optimization versus generalization
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="infer-curvature-rather-than-compute-the-full-hessian" href="#bfgs-lbfgs?section=infer-curvature-rather-than-compute-the-full-hessian">
+    Infer curvature rather than compute the full Hessian
+   </a>
+   <a data-section="the-inverse-update-and-curvature-condition" href="#bfgs-lbfgs?section=the-inverse-update-and-curvature-condition">
+    The inverse update and curvature condition
+   </a>
+   <a data-section="why-line-search-evaluates-the-objective-repeatedly" href="#bfgs-lbfgs?section=why-line-search-evaluates-the-objective-repeatedly">
+    Why line search evaluates the objective repeatedly
+   </a>
+   <a data-section="limited-memory-changes-the-storage-cost" href="#bfgs-lbfgs?section=limited-memory-changes-the-storage-cost">
+    Limited memory changes the storage cost
+   </a>
+   <a data-section="why-stochastic-gradients-are-difficult-here" href="#bfgs-lbfgs?section=why-stochastic-gradients-are-difficult-here">
+    Why stochastic gradients are difficult here
+   </a>
+   <a data-section="follow-an-existing-implementation" href="#bfgs-lbfgs?section=follow-an-existing-implementation">
+    Follow an existing implementation
+   </a>
+   <a data-section="implementation" href="#bfgs-lbfgs?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

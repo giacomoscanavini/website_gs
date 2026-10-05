@@ -1,0 +1,201 @@
+{
+  "id": "pd-transform",
+  "lang": "pd",
+  "category": "GroupBy",
+  "label": "Group transform",
+  "example": "df.groupby('city')['x'].transform('mean')",
+  "description": "Return value per original row",
+  "source": "image-pandas",
+  "related": [
+    "sql-avg-over",
+    "sql-count-over"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "transform",
+  "uses": [
+    {
+      "page": "C13",
+      "block": "code-C13-1",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    a = activity.assign(event_date=pd.to_datetime(activity['event_date']))\n    first = a.groupby('player_id')['event_date'].transform('min')\n    valid = a['event_date'].eq(first + pd.Timedelta(days=1))\n    fraction = valid.groupby(a['player_id']).any().mean()",
+      "snippetLine": 9
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-3",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    activity = activity.assign(event_date=pd.to_datetime(activity['event_date']))\n    activity['first_login'] =   activity.groupby(by='player_id')['event_date'].transform('min')\n    activity['valid'] = activity['event_date'] ==   activity['first_login'] + pd.Timedelta(days = 1)\n",
+      "snippetLine": 9
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def gameplay_analysis(activity: pd.DataFrame) -> pd.DataFrame:\n    activity['first_login'] = activity.groupby(by='player_id')['event_date'].transform('min')\n    activity['valid'] = activity['event_date'] == activity['first_login'] + pd.Timedelta(days = 1)\n    ",
+      "snippetLine": 3
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def sales_analysis(sales: pd.DataFrame) -> pd.DataFrame:\n    first_year = sales.groupby('product_id')['year'].transform('min')\n    return sales.loc[sales['year'].eq(first_year), ['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def find_primary_department(employee: pd.DataFrame) -> pd.DataFrame:\n    n = employee.groupby('employee_id')['department_id'].transform('size')\n    mask = employee['primary_flag'].eq('Y') | n.eq(1)\n    return employee.loc[mask, ['employee_id', 'department_id']].copy()",
+      "snippetLine": 3
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-3",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def find_primary_department(employee: pd.DataFrame) -> pd.DataFrame:\n    employee['nDepartments'] =   employee.groupby('employee_id').department_id.transform('count')\n    employee =   employee.query(\"(primary_flag == 'Y')   | (nDepartments == 1)\")\n    return employee[['employee_id', 'department_id']]",
+      "snippetLine": 2
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def find_primary_department(employee: pd.DataFrame) -> pd.DataFrame:\n    employee['nDepartments'] = employee.groupby('employee_id').department_id.transform('count')\n    employee = employee.query(\"(primary_flag == 'Y') | (nDepartments == 1)\")\n    return employee[['employee_id', 'department_id']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-3",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "            else: return x + 1\n    seat['id'] = seat['id'].transform(swap_ids)\n    return   seat.sort_values(by='id', ascending=True)",
+      "snippetLine": 8
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-5",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    seat['id'] = seat['id'].transform(swap_ids)\n    return seat.sort_values(by='id', ascending=True)",
+      "snippetLine": 11
+    },
+    {
+      "page": "C35",
+      "block": "code-C35-3",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1667 · Fix names in a table",
+      "number": "1667",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        else: return x[0].upper()\n    users['name'] = users['name'].transform(fix_string)\n\n    return   users.sort_values(by='user_id')",
+      "snippetLine": 8
+    },
+    {
+      "page": "C35",
+      "block": "code-C35-5",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1667 · Fix names in a table",
+      "number": "1667",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    users['name'] = users['name'].transform(fix_string)\n    \n    return users.sort_values(by='user_id')",
+      "snippetLine": 7
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df['nRating'] = df.groupby(by='employee_id').rating.transform('size')\n    df = df[df.nRating >= 3]\n",
+      "snippetLine": 10
+    },
+    {
+      "page": "B19",
+      "block": "code-B19-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Additional topic · Subqueries",
+      "number": "19",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "mean_revenue = employees.groupby('department')['revenue_generated'].transform('mean')\nresult = employees.loc[employees['salary'].gt(mean_revenue)]",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 7
+}

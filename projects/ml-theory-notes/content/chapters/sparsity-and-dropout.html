@@ -1,0 +1,546 @@
+<section aria-labelledby="sparsity-and-dropout-title" class="page-view lesson-layout" id="sparsity-and-dropout">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     23
+    </span>
+    Part 3 · Regularization &amp; ensembles
+   </p>
+   <h1 id="sparsity-and-dropout-title" tabindex="-1">
+    Sparse representations and dropout
+   </h1>
+   <p class="standfirst">
+    Distinguish sparse parameters, sparse codes, and temporary random activation masks.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Regularization · PDF pp. 18–20 · §§11–12" data-page="18" data-pdf="reg" type="button">
+     Regularization · PDF pp. 18–20 · §§11–12
+    </button>
+    <button aria-label="Open source: Architectures · PDF p. 16 · §6.5" data-page="16" data-pdf="arch" type="button">
+     Architectures · PDF p. 16 · §6.5
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="three-meanings-of-sparse" href="#sparsity-and-dropout?section=three-meanings-of-sparse">
+     Three meanings of “sparse”
+    </a>
+    <a data-section="rarely-active-hidden-units" href="#sparsity-and-dropout?section=rarely-active-hidden-units">
+     Rarely active hidden units
+    </a>
+    <a data-section="dropouts-stochastic-mechanism" href="#sparsity-and-dropout?section=dropouts-stochastic-mechanism">
+     Dropout’s stochastic mechanism
+    </a>
+    <a data-section="why-it-can-regularize" href="#sparsity-and-dropout?section=why-it-can-regularize">
+     Why it can regularize
+    </a>
+    <a data-section="dropout-does-not-erase-learned-weights" href="#sparsity-and-dropout?section=dropout-does-not-erase-learned-weights">
+     Dropout does not erase learned weights
+    </a>
+    <a data-section="read-train-and-evaluation-behavior-explicitly" href="#sparsity-and-dropout?section=read-train-and-evaluation-behavior-explicitly">
+     Read train and evaluation behavior explicitly
+    </a>
+    <a data-section="implementation" href="#sparsity-and-dropout?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="three-meanings-of-sparse" id="sparsity-and-dropout--three-meanings-of-sparse">
+    Three meanings of “sparse”
+   </h2>
+   <p>
+    A parameter vector is sparse when many learned coefficients are zero. A representation is sparse when an example uses only a few latent features. A dropout mask creates temporary zeros in a computation. Similar-looking zeros do not make the mechanisms equivalent.
+   </p>
+   <p>
+    For sparse coding, the guide writes
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>≈</mo><mi>D</mi><mi>a</mi></mrow><annotation encoding="application/x-tex">x\approx Da</annotation></semantics></math>
+    , where
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>
+    is a dictionary and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
+    is the code. The code solves
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>a</mi><mo accent="true">̂</mo></mover><mo>∈</mo><msub><mo>argmin</mo><mi>a</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo form="prefix" stretchy="false">∥</mo><mi>x</mi><mo>−</mo><mi>D</mi><mi>a</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>+</mo><mi>λ</mi><mo form="prefix" stretchy="false">∥</mo><mi>a</mi><msub><mo form="postfix" stretchy="false">∥</mo><mn>1</mn></msub><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat a\in\mathop{\mathrm{argmin}}_a\left[\frac12\lVert x-Da\rVert^2+\lambda\lVert a\rVert_1\right].</annotation></semantics></math>
+   </div>
+   <p>
+    The dictionary can have more columns than input dimensions; each example still uses only a small subset. This is
+    <strong>
+     representation sparsity
+    </strong>
+    , not necessarily a sparse dictionary or a sparse network parameter matrix.
+   </p>
+   <h2 data-section="rarely-active-hidden-units" id="sparsity-and-dropout--rarely-active-hidden-units">
+    Rarely active hidden units
+   </h2>
+   <p>
+    A sparse autoencoder can penalize average hidden activity. If
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><annotation encoding="application/x-tex">\hat\rho_j</annotation></semantics></math>
+    is unit
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+    ’s observed mean activity and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ρ</mi><annotation encoding="application/x-tex">\rho</annotation></semantics></math>
+    is the desired small activity, one penalty is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mo>∑</mo><mi>j</mi></munder><mo>KL</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ρ</mi><mo form="postfix" stretchy="false">‖</mo><msub><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\sum_j\operatorname{KL}(\rho\Vert\hat\rho_j),</annotation></semantics></math>
+   </div>
+   <p>
+    where the Bernoulli divergence is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>KL</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ρ</mi><mo form="postfix" stretchy="false">‖</mo><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>ρ</mi><mo>log</mo><mfrac><mi>ρ</mi><mover><mi>ρ</mi><mo accent="true">̂</mo></mover></mfrac><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>log</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>ρ</mi></mrow><mrow><mn>1</mn><mo>−</mo><mover><mi>ρ</mi><mo accent="true">̂</mo></mover></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{KL}(\rho\Vert\hat\rho)=\rho\log\frac\rho{\hat\rho}+(1-\rho)\log\frac{1-\rho}{1-\hat\rho}.</annotation></semantics></math>
+   </div>
+   <p>
+    This expression assumes the activity quantities have the probability-like interpretation required by the Bernoulli divergence. It should not be applied mechanically to unrestricted hidden values. The aim is for units to be useful selectively across examples.
+   </p>
+   <details class="derivation" data-derivation="sparse-kl" id="sparsity-and-dropout--derivation-sparse-kl">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Differentiate the sparse-activation KL penalty all the way to one activation
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      A hidden unit has activations
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>a</mi><mi>B</mi></msub><mo>∈</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">a_1,\ldots,a_B\in(0,1)</annotation></semantics></math>
+      and empirical mean
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mo>=</mo><msup><mi>B</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>a</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\hat\rho=B^{-1}\sum_i a_i</annotation></semantics></math>
+      . A target activity
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mo>∈</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\rho\in(0,1)</annotation></semantics></math>
+      is fixed. Bernoulli KL requires both probabilities to lie strictly between zero and one for this finite formula.
+     </p>
+     <h4>
+      1 · Write the two possible Bernoulli outcomes
+     </h4>
+     <p>
+      For outcome one the probabilities are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ρ</mi><annotation encoding="application/x-tex">\rho</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\rho</annotation></semantics></math>
+      ; for outcome zero they are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>ρ</mi></mrow><annotation encoding="application/x-tex">1-\rho</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mover><mi>ρ</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">1-\hat\rho</annotation></semantics></math>
+      . By the definition of discrete KL,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>ρ</mi><mo>log</mo><mfrac><mi>ρ</mi><mover><mi>ρ</mi><mo accent="true">̂</mo></mover></mfrac><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>log</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>ρ</mi></mrow><mrow><mn>1</mn><mo>−</mo><mover><mi>ρ</mi><mo accent="true">̂</mo></mover></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">K(\hat\rho)=\rho\log\frac\rho{\hat\rho}+(1-\rho)\log\frac{1-\rho}{1-\hat\rho}.</annotation></semantics></math>
+     </div>
+     <h4>
+      2 · Separate constant and variable logarithms
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mi>ρ</mi><mo>log</mo><mi>ρ</mi><mo>−</mo><mi>ρ</mi><mo>log</mo><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">K=\rho\log\rho-\rho\log\hat\rho+(1-\rho)\log(1-\rho)-(1-\rho)\log(1-\hat\rho).</annotation></semantics></math>
+     </div>
+     <p>
+      Differentiate with respect to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\rho</annotation></semantics></math>
+      :
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mfrac><mi>ρ</mi><mover><mi>ρ</mi><mo accent="true">̂</mo></mover></mfrac><mo>+</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>ρ</mi></mrow><mrow><mn>1</mn><mo>−</mo><mover><mi>ρ</mi><mo accent="true">̂</mo></mover></mrow></mfrac><mo>=</mo><mfrac><mrow><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>ρ</mi></mrow><mrow><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">K'(\hat\rho)=-\frac\rho{\hat\rho}+\frac{1-\rho}{1-\hat\rho}
+=\frac{\hat\rho-\rho}{\hat\rho(1-\hat\rho)}.</annotation></semantics></math>
+     </div>
+     <p>
+      The denominator is positive, so the derivative points toward the target mean.
+     </p>
+     <h4>
+      3 · Verify the minimum
+     </h4>
+     <p>
+      The derivative is zero at
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mo>=</mo><mi>ρ</mi></mrow><annotation encoding="application/x-tex">\hat\rho=\rho</annotation></semantics></math>
+      , and
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mi>″</mi><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mi>ρ</mi><msup><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mn>2</mn></msup></mfrac><mo>+</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>ρ</mi></mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup></mfrac><mo>&gt;</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">K''(\hat\rho)=\frac\rho{\hat\rho^2}+\frac{1-\rho}{(1-\hat\rho)^2}&gt;0.</annotation></semantics></math>
+     </div>
+     <p>
+      Thus this is the unique minimum, with KL equal to zero.
+     </p>
+     <h4>
+      4 · Continue through averaging and an activation
+     </h4>
+     <p>
+      Since
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mover><mi>ρ</mi><mo accent="true">̂</mo></mover><mi>/</mi><mi>∂</mi><msub><mi>a</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn><mi>/</mi><mi>B</mi></mrow><annotation encoding="application/x-tex">\partial\hat\rho/\partial a_i=1/B</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>K</mi></mrow><mrow><mi>∂</mi><msub><mi>a</mi><mi>i</mi></msub></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mi>B</mi></mfrac><mrow><mo form="prefix" stretchy="true">[</mo><mi>−</mi><mfrac><mi>ρ</mi><mover><mi>ρ</mi><mo accent="true">̂</mo></mover></mfrac><mo>+</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>ρ</mi></mrow><mrow><mn>1</mn><mo>−</mo><mover><mi>ρ</mi><mo accent="true">̂</mo></mover></mrow></mfrac><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial K}{\partial a_i}=\frac1B\left[-\frac\rho{\hat\rho}+\frac{1-\rho}{1-\hat\rho}\right].</annotation></semantics></math>
+     </div>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">a_i=\sigma(z_i)</annotation></semantics></math>
+      , multiply by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>a</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">a_i(1-a_i)</annotation></semantics></math>
+      to obtain
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>K</mi><mi>/</mi><mi>∂</mi><msub><mi>z</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\partial K/\partial z_i</annotation></semantics></math>
+      . A total objective weighted by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
+      multiplies this contribution by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>
+      . Every example contributes to the shared mean, so this regularizer couples observations in a batch.
+     </p>
+     <h4>
+      5 · Do not apply the probability formula blindly
+     </h4>
+     <p>
+      An unconstrained ReLU activation can exceed one, so its average is not automatically a Bernoulli probability. Use a compatible bounded activation/statistic or a different sparsity penalty. Clamping for numerical safety changes gradients at the clamped boundary and should be explicit.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="18" data-pdf="reg" type="button">
+       Chapter source · PDF p. 18
+      </button>
+      <a class="calculation-link" href="#sparsity-and-dropout?derivation=sparse-kl">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="dropouts-stochastic-mechanism" id="sparsity-and-dropout--dropouts-stochastic-mechanism">
+    Dropout’s stochastic mechanism
+   </h2>
+   <p>
+    Let
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
+    be a hidden activation vector and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>1</mn><mo>−</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">q=1-p</annotation></semantics></math>
+    the keep probability, with
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>q</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0&lt;q\le1</annotation></semantics></math>
+    for the scaling formula below. In inverted dropout,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>j</mi></msub><mo>∼</mo><mo>Bernoulli</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>h</mi><mo accent="true">̃</mo></mover><mo>=</mo><mfrac><mrow><mi>m</mi><mo>⊙</mo><mi>h</mi></mrow><mi>q</mi></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">m_j\sim\operatorname{Bernoulli}(q),\qquad\tilde h=\frac{m\odot h}{q}.</annotation></semantics></math>
+   </div>
+   <p>
+    Conditioning on the original activation,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mover><mi>h</mi><mo accent="true">̃</mo></mover><mi>j</mi></msub><mo>∣</mo><msub><mi>h</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msub><mi>h</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\mathbb E[\tilde h_j\mid h_j]=h_j</annotation></semantics></math>
+    . Scaling during training therefore preserves the activation’s expectation, and the full activation is used without that random mask during ordinary evaluation.
+   </p>
+   <p>
+    The guide’s example takes
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo>,</mo><mn>1</mn><mo>,</mo><mi>−</mi><mn>3</mn><mo>,</mo><mn>4</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">h=(2,1,-3,4)</annotation></semantics></math>
+    ,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">p=0.5</annotation></semantics></math>
+    , and mask
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(1,0,1,0)</annotation></semantics></math>
+    . The result is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>4</mn><mo>,</mo><mn>0</mn><mo>,</mo><mi>−</mi><mn>6</mn><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(4,0,-6,0)</annotation></semantics></math>
+    . Dropping half the entries does not mean the surviving entries retain their original value under inverted scaling.
+   </p>
+   <figure class="source-figure">
+    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="reg-20" type="button">
+     <img alt="The source shows a distribution of outputs under random dropout masks alongside a deterministic evaluation output. The illustration is not a claim that the full nonlinear network exactly equals the average of all masked networks." height="484" loading="lazy" src="assets/images/the-source-shows-a-distribution-of-outputs-under-random-dropout-m-f725b78fda.webp" width="720"/>
+    </button>
+    <figcaption>
+     The source shows a distribution of outputs under random dropout masks alongside a deterministic evaluation output. The illustration is not a claim that the full nonlinear network exactly equals the average of all masked networks.
+     <button aria-label="Open source: Regularization · PDF p. 20" data-page="20" data-pdf="reg" type="button">
+      Regularization · PDF p. 20
+     </button>
+    </figcaption>
+   </figure>
+   <details class="derivation" data-derivation="dropout-moments" id="sparsity-and-dropout--derivation-dropout-moments">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive dropout’s mean, variance, and a nonlinear counterexample
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Treat an activation
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
+      as fixed and draw
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>∼</mo><mo>Bernoulli</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">m\sim\operatorname{Bernoulli}(q)</annotation></semantics></math>
+      , with keep probability
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>q</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0&lt;q\le1</annotation></semantics></math>
+      . Inverted dropout returns
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>h</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>m</mi><mi>h</mi><mi>/</mi><mi>q</mi></mrow><annotation encoding="application/x-tex">\tilde h=mh/q</annotation></semantics></math>
+      . The case
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">q=0</annotation></semantics></math>
+      is excluded from this analytic scaling formula.
+     </p>
+     <h4>
+      1 · Evaluate the two possible values
+     </h4>
+     <p>
+      With probability
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>h</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>h</mi><mi>/</mi><mi>q</mi></mrow><annotation encoding="application/x-tex">\tilde h=h/q</annotation></semantics></math>
+      . With probability
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>q</mi></mrow><annotation encoding="application/x-tex">1-q</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>h</mi><mo accent="true">̃</mo></mover><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\tilde h=0</annotation></semantics></math>
+      . Hence
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mover><mi>h</mi><mo accent="true">̃</mo></mover><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>q</mi><mfrac><mi>h</mi><mi>q</mi></mfrac><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>q</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>0</mn><mo>=</mo><mi>h</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[\tilde h]=q\frac hq+(1-q)0=h.</annotation></semantics></math>
+     </div>
+     <h4>
+      2 · Calculate the second moment, then the variance
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msup><mover><mi>h</mi><mo accent="true">̃</mo></mover><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>q</mi><mfrac><msup><mi>h</mi><mn>2</mn></msup><msup><mi>q</mi><mn>2</mn></msup></mfrac><mo>=</mo><mfrac><msup><mi>h</mi><mn>2</mn></msup><mi>q</mi></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathbb E[\tilde h^2]=q\frac{h^2}{q^2}=\frac{h^2}{q},</annotation></semantics></math>
+     </div>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>h</mi><mo accent="true">̃</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msup><mover><mi>h</mi><mo accent="true">̃</mo></mover><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mo>−</mo><mi>𝔼</mi><msup><mrow><mo form="prefix" stretchy="true">[</mo><mover><mi>h</mi><mo accent="true">̃</mo></mover><mo form="postfix" stretchy="true">]</mo></mrow><mn>2</mn></msup><mo>=</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>q</mi></mrow><mi>q</mi></mfrac><msup><mi>h</mi><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(\tilde h)=\mathbb E[\tilde h^2]-\mathbb E[\tilde h]^2
+=\frac{1-q}{q}h^2.</annotation></semantics></math>
+     </div>
+     <p>
+      At
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>1</mn><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">q=1/2</annotation></semantics></math>
+      , the two values are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>h</mi></mrow><annotation encoding="application/x-tex">2h</annotation></semantics></math>
+      , with mean
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
+      and variance
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>h</mi><mn>2</mn></msup><annotation encoding="application/x-tex">h^2</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      3 · Pass the noise through a linear output
+     </h4>
+     <p>
+      For independent masks
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>m</mi><mi>j</mi></msub><annotation encoding="application/x-tex">m_j</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><msub><mo>∑</mo><mi>j</mi></msub><msub><mi>w</mi><mi>j</mi></msub><msub><mi>m</mi><mi>j</mi></msub><msub><mi>h</mi><mi>j</mi></msub><mi>/</mi><mi>q</mi></mrow><annotation encoding="application/x-tex">s=\sum_jw_jm_jh_j/q</annotation></semantics></math>
+      , linearity gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>s</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msub><mo>∑</mo><mi>j</mi></msub><msub><mi>w</mi><mi>j</mi></msub><msub><mi>h</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\mathbb E[s]=\sum_jw_jh_j</annotation></semantics></math>
+      . Independence makes cross covariances zero, so
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>q</mi></mrow><mi>q</mi></mfrac><munder><mo>∑</mo><mi>j</mi></munder><msubsup><mi>w</mi><mi>j</mi><mn>2</mn></msubsup><msubsup><mi>h</mi><mi>j</mi><mn>2</mn></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(s)=\frac{1-q}{q}\sum_jw_j^2h_j^2.</annotation></semantics></math>
+     </div>
+     <p>
+      For squared loss and fixed target
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>s</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>+</mo><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[(s-y)^2]=(\mathbb E[s]-y)^2+\operatorname{Var}(s).</annotation></semantics></math>
+     </div>
+     <p>
+      In this particular linear-output case, dropout adds a feature-dependent quadratic penalty. It is not a universal single L2 coefficient for an entire nonlinear network.
+     </p>
+     <h4>
+      4 · Show why the full deterministic network need not equal the stochastic mean
+     </h4>
+     <p>
+      Take
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">h=1</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>1</mn><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">q=1/2</annotation></semantics></math>
+      , and a following transformation
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>u</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>ReLU</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>u</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">f(u)=\operatorname{ReLU}(u-1)</annotation></semantics></math>
+      . The stochastic outputs are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">f(0)=0</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">f(2)=1</annotation></semantics></math>
+      , so
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>h</mi><mo accent="true">̃</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mn>1</mn><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\mathbb E[f(\tilde h)]=1/2</annotation></semantics></math>
+      . But
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mover><mi>h</mi><mo accent="true">̃</mo></mover><mo form="postfix" stretchy="true">]</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">f(\mathbb E[\tilde h])=f(1)=0</annotation></semantics></math>
+      . Preserving a layer’s activation mean does
+      <strong>
+       not
+      </strong>
+      allow expectation to pass through every later nonlinearity.
+     </p>
+     <h4>
+      5 · Connect the identity to evaluation behavior
+     </h4>
+     <p>
+      Ordinary inverted-dropout evaluation uses the unchanged activation
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
+      instead of resampling and does not multiply it by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>
+      again. This matches the layerwise scaling convention, not an exact integration over all possible nonlinear subnetworks.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="18" data-pdf="reg" type="button">
+       Chapter source · PDF p. 18
+      </button>
+      <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.Dropout.html" rel="noopener noreferrer" target="_blank">
+       Library reference
+      </a>
+      <a class="calculation-link" href="#sparsity-and-dropout?derivation=dropout-moments">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="why-it-can-regularize" id="sparsity-and-dropout--why-it-can-regularize">
+    Why it can regularize
+   </h2>
+   <p>
+    The guide gives three complementary intuitions. Units cannot rely on the same partners always being present; this discourages co-adaptation. Many stochastic subnetworks share parameters during training. Multiplicative noise encourages robustness to missing internal features.
+   </p>
+   <p>
+    The expectation identity is local to the masked activation. A nonlinear downstream function generally does not commute with expectation. Treating dropout as a related-subnetwork ensemble is therefore an intuition, not an exact statement that one deterministic pass equals all-network averaging.
+   </p>
+   <h2 data-section="dropout-does-not-erase-learned-weights" id="sparsity-and-dropout--dropout-does-not-erase-learned-weights">
+    Dropout does not erase learned weights
+   </h2>
+   <p>
+    After a masked training pass, the weights still exist. In ordinary evaluation the network uses all units. LASSO’s exact parameter zeros and a sparse code’s selective activation pattern are different from these temporary masks.
+   </p>
+   <p>
+    The probability
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
+    is a hyperparameter, not a desired fraction of permanently removed parameters. Excessive dropout can create underfitting and noisy optimization. The PDF also cautions that placement depends on architecture: convolutional, recurrent, residual, and Transformer components have different conventions.
+   </p>
+   <h2 data-section="read-train-and-evaluation-behavior-explicitly" id="sparsity-and-dropout--read-train-and-evaluation-behavior-explicitly">
+    Read train and evaluation behavior explicitly
+   </h2>
+   <p>
+    The official PyTorch MNIST example demonstrates dropout in a full classifier. The API reference documents the probability and scaling behavior. In actual code, module evaluation mode changes dropout behavior, while disabling autograd only changes graph recording. Those are not substitutes for each other.
+   </p>
+   <p>
+    Use the model’s intended training/evaluation modes during metric calculation. A stochastic training result and a deterministic evaluation result are measuring different computations, so differences should be interpreted in that context.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="sparsity-and-dropout--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="mnist">
+     <span class="resource-meta">
+      PyTorch examples · Official example code
+     </span>
+     <a href="https://github.com/pytorch/examples/blob/main/mnist/main.py" rel="noopener noreferrer" target="_blank">
+      <span>
+       MNIST classifier: training script
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Locate the dropout layers and compare training with evaluation mode in a complete classifier. The script also provides data loading, loss and optimization context.
+     </p>
+    </div>
+    <div class="resource" data-resource="dropout-api">
+     <span class="resource-meta">
+      PyTorch · API + scaling contract
+     </span>
+     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.Dropout.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Dropout
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Check the drop probability p, inverted training-time scaling and identity behavior during evaluation. This is a behavioral reference; the MNIST script shows use within training.
+     </p>
+    </div>
+    <div class="resource" data-resource="pygintro">
+     <span class="resource-meta">
+      PyTorch Geometric · GCN training example
+     </span>
+     <a href="https://pytorch-geometric.readthedocs.io/en/latest/get_started/introduction.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Introduction by Example
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Study graph tensors, edge indices and a trained GCN with training masks. PyTorch Geometric is a separate graph-learning library built on PyTorch.
+     </p>
+    </div>
+   </div>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Does dropout perform permanent feature selection?
+   </summary>
+   <p>
+    No. It temporarily zeros activations during training and normally uses the full network at evaluation. LASSO can produce structurally zero parameters, while sparse coding penalizes the representation for each example. These are different objects and different meanings of sparsity.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#early-stopping">
+    <small>
+     ← Previous
+    </small>
+    Early stopping as spectral regularization
+   </a>
+   <a href="#bagging">
+    <small>
+     Next →
+    </small>
+    Bagging, random forests, and out-of-bag evaluation
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="three-meanings-of-sparse" href="#sparsity-and-dropout?section=three-meanings-of-sparse">
+    Three meanings of “sparse”
+   </a>
+   <a data-section="rarely-active-hidden-units" href="#sparsity-and-dropout?section=rarely-active-hidden-units">
+    Rarely active hidden units
+   </a>
+   <a data-section="dropouts-stochastic-mechanism" href="#sparsity-and-dropout?section=dropouts-stochastic-mechanism">
+    Dropout’s stochastic mechanism
+   </a>
+   <a data-section="why-it-can-regularize" href="#sparsity-and-dropout?section=why-it-can-regularize">
+    Why it can regularize
+   </a>
+   <a data-section="dropout-does-not-erase-learned-weights" href="#sparsity-and-dropout?section=dropout-does-not-erase-learned-weights">
+    Dropout does not erase learned weights
+   </a>
+   <a data-section="read-train-and-evaluation-behavior-explicitly" href="#sparsity-and-dropout?section=read-train-and-evaluation-behavior-explicitly">
+    Read train and evaluation behavior explicitly
+   </a>
+   <a data-section="implementation" href="#sparsity-and-dropout?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

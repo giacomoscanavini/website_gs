@@ -1,0 +1,247 @@
+<article class="article" id="murder-09">
+ <div class="breadcrumb">
+  <a href="#murder-city">
+   SQL Murder City
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Step 9
+  </span>
+ </div>
+ <h1>
+  Inspect December event check-ins
+ </h1>
+ <p class="lead">
+  Look up the recorded candidates’ event attendance during December 2017.
+ </p>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-107-panel-0" aria-selected="true" id="example-107-tab-0" role="tab" tabindex="0" type="button">
+     My SQL
+    </button>
+    <button aria-controls="example-107-panel-1" aria-selected="false" id="example-107-tab-1" role="tab" tabindex="-1" type="button">
+     pandas alternative
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-107-tab-0" class="code-panel" id="example-107-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    My SQL
+   </div>
+   <pre id="code-murder-09-0" tabindex="0"><code class="language-sql" data-origin="murder-cell-16"><span class="c1">-- Need to find who attended the SQL symphony city concerts</span>
+<span class="k">SELECT</span><span class="w"> </span>
+<span class="w">	</span><span class="n">p</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span>
+<span class="w">	</span><span class="n">f</span><span class="p">.</span><span class="n">event_name</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="nb">date</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Facebook_event_checkin</span><span class="w"> </span><span class="n">f</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">person_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">id</span>
+<span class="k">WHERE</span><span class="w"> </span>
+<span class="w">	</span><span class="n">f</span><span class="p">.</span><span class="n">person_id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">78881</span><span class="p">,</span><span class="w"> </span><span class="mi">90700</span><span class="p">,</span><span class="w"> </span><span class="mi">99716</span><span class="p">)</span>
+<span class="w">	</span><span class="k">AND</span><span class="w"> </span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">20171130</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="nb">date</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">20180101</span><span class="p">)</span></code></pre>
+  </div>
+  <div aria-labelledby="example-107-tab-1" class="code-panel" id="example-107-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas alternative
+   </div>
+   <pre id="code-murder-09-1" tabindex="0"><code class="language-python" data-origin="murder-09-pandas"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">joined</span> <span class="o">=</span> <span class="n">facebook_event_checkin</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">person</span><span class="p">[[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">]],</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">,</span>
+                                      <span class="n">left_on</span><span class="o">=</span><span class="s1">'person_id'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'id'</span><span class="p">)</span>
+<span class="n">dates</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_numeric</span><span class="p">(</span><span class="n">joined</span><span class="p">[</span><span class="s1">'date'</span><span class="p">],</span> <span class="n">errors</span><span class="o">=</span><span class="s1">'coerce'</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="p">(</span><span class="n">joined</span><span class="p">[</span><span class="s1">'person_id'</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="mi">78881</span><span class="p">,</span> <span class="mi">90700</span><span class="p">,</span> <span class="mi">99716</span><span class="p">])</span>
+        <span class="o">&amp;</span> <span class="n">dates</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">20171130</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">dates</span><span class="o">.</span><span class="n">lt</span><span class="p">(</span><span class="mi">20180101</span><span class="p">))</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">joined</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">,</span> <span class="s1">'event_name'</span><span class="p">,</span> <span class="s1">'date'</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+   <p class="panel-note">
+    Added translation ·
+    <a href="#murder-city">
+     DataFrame assumptions
+    </a>
+   </p>
+  </div>
+ </div>
+ <h2>
+  Recorded result
+ </h2>
+ <div aria-label="Scrollable data table" class="table-scroll" role="region" tabindex="0">
+  <table>
+   <thead>
+    <tr>
+     <th>
+      id
+     </th>
+     <th>
+      name
+     </th>
+     <th>
+      event_name
+     </th>
+     <th>
+      date
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td>
+      99716
+     </td>
+     <td>
+      Miranda Priestly
+     </td>
+     <td>
+      SQL Symphony Concert
+     </td>
+     <td>
+      20171206
+     </td>
+    </tr>
+    <tr>
+     <td>
+      99716
+     </td>
+     <td>
+      Miranda Priestly
+     </td>
+     <td>
+      SQL Symphony Concert
+     </td>
+     <td>
+      20171212
+     </td>
+    </tr>
+    <tr>
+     <td>
+      99716
+     </td>
+     <td>
+      Miranda Priestly
+     </td>
+     <td>
+      SQL Symphony Concert
+     </td>
+     <td>
+      20171229
+     </td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+ <h2>
+  How it works
+ </h2>
+ <p>
+  The query selects events for the three saved candidate IDs within December 2017. The notebook’s result table shows three SQL Symphony Concert check-ins for one candidate.
+ </p>
+ <div class="note warning">
+  <b>
+   Source-aware note.
+  </b>
+  The saved SQL does not filter event_name and does not use GROUP BY or HAVING COUNT(*) = 3. The concert name and count are read from the recorded output, not enforced by the query. The pandas translation preserves that distinction.
+ </div>
+ <details class="reference-details">
+  <summary>
+   Sources and original files
+  </summary>
+  <div class="sources-content">
+   <div class="source-note">
+    <b>
+     Source:
+    </b>
+    <code>
+     sql_murder_city.ipynb
+    </code>
+    , notebook cell 17 (one-based). Original code is reproduced unchanged. Explanations and pandas panels are additions to the website edition.
+   </div>
+   <p class="small">
+    Source:
+    <a href="#murder-city">
+     original notebook and casebook overview
+    </a>
+    . Original cell 17 and recorded Markdown cell 18.
+   </p>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-and">
+     AND
+    </a>
+    <a href="#m-sql-in">
+     IN
+    </a>
+    <a href="#m-sql-left-join">
+     LEFT JOIN
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-loc">
+     Rows by label
+    </a>
+    <a href="#m-pd-and">
+     Multiple conditions
+    </a>
+    <a href="#m-pd-isin">
+     Membership
+    </a>
+    <a href="#m-pd-loc-label">
+     Access label
+    </a>
+    <a href="#m-pd-merge-left">
+     Left merge
+    </a>
+    <a href="#m-pd-merge-keys">
+     Different keys
+    </a>
+    <a href="#m-pd-compare">
+     gt() / ge() / lt() / le()
+    </a>
+    <a href="#m-pd-copy">
+     copy()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#murder-08">
+   <small>
+    ← Previous
+   </small>
+   Keep the candidate-table gap visible
+  </a>
+  <a href="#murder-10">
+   <small>
+    Next →
+   </small>
+   Submit the final identification
+  </a>
+ </div>
+</article>

@@ -1,0 +1,257 @@
+<article class="article method-page" id="m-pd-iloc">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=DataFrame%20basics">
+   pandas · DataFrame basics
+  </a>
+ </div>
+ <h1>
+  Rows by position
+ </h1>
+ <p class="lead">
+  Select by positions
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-iloc"><span class="n">df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span></code></pre>
+ </div>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C30?code=code-C30-5&amp;method=pd-iloc&amp;line=15">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1341 · Movie rating report
+    </strong>
+    <small>
+     Uploaded submission · line 15
+    </small>
+   </div>
+   <pre aria-hidden="true">
+    return pd.concat([df_users.iloc[[0]][['name']].rename(columns={'name': 'results'}),
+                      df_movies.iloc[[0]][['title']].rename(columns={'title': 'results'}),
+                    ])</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-08?code=code-squid-08-1&amp;method=pd-iloc&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Squid Game · pandas
+    </span>
+    <strong>
+     Find the longest hesitation
+    </strong>
+    <small>
+     Saved walkthrough · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">pushed = player.loc[player['death_description'].eq('pushed')].copy()
+result = pushed.iloc[:0][['id', 'first_name', 'last_name', 'last_moved_time_seconds']]
+if not pushed.empty:
+    means = pushed.groupby('game_id')['last_moved_time_seconds'].mean()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#B04?code=code-B04-7&amp;method=pd-iloc&amp;line=1">
+   <div>
+    <span class="usage-label">
+     SQLBolt · pandas
+    </span>
+    <strong>
+     DISTINCT, sorting and pagination
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">result = movies.sort_values('title').iloc[5:10]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C38?code=code-C38-1&amp;method=pd-iloc&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     176 · Second highest salary
+    </strong>
+    <small>
+     Study solution · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">    salaries = employee['salary'].dropna().drop_duplicates().sort_values(ascending=False)
+    value = salaries.iloc[1] if len(salaries) &gt;= 2 else None
+    return pd.DataFrame({'SecondHighestSalary': [value]})</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#LC3421?code=code-LC3421-1&amp;method=pd-iloc&amp;line=8">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     3421 · Find students who improved
+    </strong>
+    <small>
+     Uploaded submission · line 8
+    </small>
+   </div>
+   <pre aria-hidden="true">
+        latest_score = x['score'].iloc[last_date]
+        first_score = x['score'].iloc[first_date]
+</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-iloc&amp;line=7">
+   <div>
+    <span class="usage-label">
+     Squid Game · pandas
+    </span>
+    <strong>
+     Reconstruct access-log overlaps
+    </strong>
+    <small>
+     Saved walkthrough · line 7
+    </small>
+   </div>
+   <pre aria-hidden="true">if not games.empty:
+    latest = games.sort_values('date', ascending=False).iloc[0]
+    start = pd.to_timedelta(str(latest['start_time']))
+    end = pd.to_timedelta(str(latest['end_time']))</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   2 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#B05?code=code-B05-5&amp;method=pd-iloc&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Review · Simple SELECT queries
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">chicago_lon = north_american_cities.loc[north_american_cities['city'].eq('Chicago'), 'longitude'].iloc[0]
+result = north_american_cities.loc[north_american_cities['longitude'].lt(chicago_lon)].sort_values('longitude')[['city']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B13?code=code-B13-3&amp;method=pd-iloc&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      INSERT rows
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">movie_id = movies.loc[movies['title'].eq('Toy Story 4'), 'id'].iloc[0]
+new_sales = pd.DataFrame([{'movie_id': movie_id, 'rating': 8.7, 'domestic_sales': 340_000_000, 'international_sales': 270_000_000}])
+boxoffice = pd.concat([boxoffice, new_sales], ignore_index=True)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (1)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#B05?code=code-B05-9&amp;method=pd-iloc&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Review · Simple SELECT queries
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = north_american_cities.loc[north_american_cities['country'].eq('United States')].sort_values('population', ascending=False).iloc[2:4][['city', 'population']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · DataFrame basics. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=DataFrame%20basics">
+   <small>
+    ← Browse
+   </small>
+   pandas · DataFrame basics
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

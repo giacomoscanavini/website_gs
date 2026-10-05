@@ -1,0 +1,215 @@
+<article class="article" id="B06">
+ <div class="breadcrumb">
+  <a href="#sqlbolt">
+   SQLBolt
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Lesson 6
+  </span>
+ </div>
+ <h1>
+  INNER JOIN
+ </h1>
+ <p>
+  An INNER JOIN returns matching rows from both tables. Join movies.id to boxoffice.movie_id; qualify columns with aliases to make their origins clear.
+ </p>
+ <p>
+  <b>
+   Note.
+  </b>
+  The tutorial specifies one BoxOffice record per movie. The pandas validate argument checks that assumption; a many-to-many join would multiply rows.
+ </p>
+ <h2>
+  01 · Domestic and international sales per movie
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-23-panel-0" aria-selected="true" id="example-23-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-23-panel-1" aria-selected="false" id="example-23-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-23-tab-0" class="code-panel" id="example-23-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B06-0" tabindex="0"><code class="language-sql" data-origin="legacy-B06-0"><span class="k">SELECT</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">domestic_sales</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">international_sales</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">boxoffice</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">movie_id</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-23-tab-1" class="code-panel" id="example-23-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B06-1" tabindex="0"><code class="language-python" data-origin="legacy-B06-1"><span class="n">m</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">boxoffice</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'movie_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'inner'</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="s1">'one_to_one'</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">m</span><span class="p">[[</span><span class="s1">'title'</span><span class="p">,</span> <span class="s1">'domestic_sales'</span><span class="p">,</span> <span class="s1">'international_sales'</span><span class="p">]]</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  02 · Movies with higher international sales
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-24-panel-0" aria-selected="true" id="example-24-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-24-panel-1" aria-selected="false" id="example-24-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-24-tab-0" class="code-panel" id="example-24-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B06-2" tabindex="0"><code class="language-sql" data-origin="legacy-B06-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">domestic_sales</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">international_sales</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">boxoffice</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">movie_id</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">international_sales</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">domestic_sales</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-24-tab-1" class="code-panel" id="example-24-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B06-3" tabindex="0"><code class="language-python" data-origin="legacy-B06-3"><span class="n">m</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">boxoffice</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'movie_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'inner'</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="s1">'one_to_one'</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">m</span><span class="p">[</span><span class="s1">'international_sales'</span><span class="p">]</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">m</span><span class="p">[</span><span class="s1">'domestic_sales'</span><span class="p">]),</span> <span class="p">[</span><span class="s1">'title'</span><span class="p">,</span> <span class="s1">'domestic_sales'</span><span class="p">,</span> <span class="s1">'international_sales'</span><span class="p">]]</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  03 · Movies ordered by rating, highest first
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-25-panel-0" aria-selected="true" id="example-25-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-25-panel-1" aria-selected="false" id="example-25-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-25-tab-0" class="code-panel" id="example-25-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B06-4" tabindex="0"><code class="language-sql" data-origin="legacy-B06-4"><span class="k">SELECT</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">rating</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="n">m</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">boxoffice</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">movie_id</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">rating</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-25-tab-1" class="code-panel" id="example-25-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B06-5" tabindex="0"><code class="language-python" data-origin="legacy-B06-5"><span class="n">m</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">boxoffice</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'movie_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'inner'</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="s1">'one_to_one'</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'rating'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)[[</span><span class="s1">'title'</span><span class="p">,</span> <span class="s1">'rating'</span><span class="p">]]</span></code></pre>
+  </div>
+ </div>
+ <details class="reference-details">
+  <summary>
+   Sources
+  </summary>
+  <div class="sources-content">
+   <p>
+    The worked examples and pandas translations are study alternatives, not an official answer key. Shared DataFrame setup is listed under Reference.
+   </p>
+   <p>
+    <a href="https://sqlbolt.com/lesson/select_queries_with_joins" rel="noopener noreferrer" target="_blank">
+     SQLBolt — INNER JOIN
+    </a>
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     pandas SQL comparison
+    </a>
+    — Projection, filtering, grouping, joins and operations.
+   </p>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-inner-join">
+     INNER JOIN
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+    <a href="#m-sql-order-by">
+     ORDER BY
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-loc">
+     Rows by label
+    </a>
+    <a href="#m-pd-sort-values">
+     Sort one column
+    </a>
+    <a href="#m-pd-sort-desc">
+     Descending
+    </a>
+    <a href="#m-pd-loc-label">
+     Access label
+    </a>
+    <a href="#m-pd-merge-inner">
+     Inner merge
+    </a>
+    <a href="#m-pd-merge-keys">
+     Different keys
+    </a>
+    <a href="#m-pd-compare">
+     gt() / ge() / lt() / le()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#B05">
+   <small>
+    ← Previous
+   </small>
+   Review · Simple SELECT queries
+  </a>
+  <a href="#B07">
+   <small>
+    Next →
+   </small>
+   OUTER JOINs
+  </a>
+ </div>
+</article>

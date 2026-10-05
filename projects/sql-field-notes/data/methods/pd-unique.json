@@ -1,0 +1,100 @@
+{
+  "id": "pd-unique",
+  "lang": "pd",
+  "category": "Also used in these notes",
+  "label": "unique()",
+  "example": "df['id'].unique()",
+  "description": "Distinct values as an array",
+  "source": "saved-code",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "unique",
+  "uses": [
+    {
+      "page": "C04",
+      "block": "code-C04-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1148 · Article Views I",
+      "number": "1148",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def article_views(views: pd.DataFrame) -> pd.DataFrame:\n    ids = sorted(views[views.author_id   == views.viewer_id].author_id.unique())\n    return   pd.DataFrame({'id': ids})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C04",
+      "block": "code-C04-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1148 · Article Views I",
+      "number": "1148",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def article_views(views: pd.DataFrame) -> pd.DataFrame:\n    ids = sorted(views[views.author_id == views.viewer_id].author_id.unique())\n    return pd.DataFrame({'id': ids})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-3",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    repeated = numbers.eq(numbers.shift(1)) & numbers.eq(numbers.shift(2))\n    return pd.DataFrame({'ConsecutiveNums': logs.loc[repeated, 'num'].unique()})",
+      "snippetLine": 6
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    logs['var'] = logs['num'].rolling(window=3).var()\n    return pd.DataFrame({'ConsecutiveNums': logs[logs['var']==0]['num'].unique()})",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC607",
+      "block": "code-LC607-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "607 · Sales person",
+      "number": "607",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    orders = orders[orders.name.eq('RED')]\n    idexlude = orders['sales_id'].unique()\n\n    flag = ~sales_person['sales_id'].isin(idexlude)",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC608",
+      "block": "code-LC608-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "608 · Tree node",
+      "number": "608",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def tree_node(tree: pd.DataFrame) -> pd.DataFrame:\n    parents = tree['p_id'].dropna().unique()\n\n    def classify(x):",
+      "snippetLine": 3
+    }
+  ],
+  "pageCount": 4
+}

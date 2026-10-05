@@ -1,0 +1,1236 @@
+[
+  {
+    "id": "A00",
+    "title": "About these notes",
+    "label": "A00",
+    "group": "reference",
+    "summary": "SQL and pandas methods connected to your saved solutions.",
+    "tags": [],
+    "number": ""
+  },
+  {
+    "id": "A01",
+    "title": "SQL ↔ pandas translation sheet",
+    "label": "A01",
+    "group": "reference",
+    "summary": "This is an authored cross-reference to the patterns used throughout SQLBolt and the supplied exercises. A similar-looking pandas expression is not automatically equivalent: row grain, missing values, duplicates and order",
+    "tags": [],
+    "number": ""
+  },
+  {
+    "id": "A02",
+    "title": "Setup and conventions",
+    "label": "A02",
+    "group": "reference",
+    "summary": "Every exercise has its own tables. SQLBolt examples use its tutorial schema; the Leetcode SQL targets MySQL 8 or later. Do not combine unrelated examples into one database script.",
+    "tags": [],
+    "number": ""
+  },
+  {
+    "id": "B01",
+    "title": "SELECT queries 101",
+    "label": "B01",
+    "group": "sqlbolt",
+    "summary": "SELECT chooses the columns returned from a table. Naming columns controls the output schema; * returns every column. A projection does not remove duplicate rows.",
+    "tags": [],
+    "number": "01"
+  },
+  {
+    "id": "B02",
+    "title": "Numeric constraints",
+    "label": "B02",
+    "group": "sqlbolt",
+    "summary": "WHERE filters rows before projection or aggregation. BETWEEN includes both endpoints; IN tests membership. Combine conditions with AND or OR.",
+    "tags": [],
+    "number": "02"
+  },
+  {
+    "id": "B03",
+    "title": "Text constraints and LIKE",
+    "label": "B03",
+    "group": "sqlbolt",
+    "summary": "LIKE patterns use % for zero or more characters and _ for exactly one character. Equality matches a complete value. NOT LIKE excludes matching non-NULL values.",
+    "tags": [],
+    "number": "03"
+  },
+  {
+    "id": "B04",
+    "title": "DISTINCT, sorting and pagination",
+    "label": "B04",
+    "group": "sqlbolt",
+    "summary": "DISTINCT removes duplicate result rows. ORDER BY controls order, DESC reverses it, and LIMIT/OFFSET choose a slice after sorting.",
+    "tags": [],
+    "number": "04"
+  },
+  {
+    "id": "B05",
+    "title": "Review · Simple SELECT queries",
+    "label": "B05",
+    "group": "sqlbolt",
+    "summary": "The review combines projection, country filters, ordering and pagination using north_american_cities. It occupies the position between lessons 4 and 6; SQLBolt labels it a review rather than Lesson 5.",
+    "tags": [],
+    "number": "05"
+  },
+  {
+    "id": "B06",
+    "title": "INNER JOIN",
+    "label": "B06",
+    "group": "sqlbolt",
+    "summary": "An INNER JOIN returns matching rows from both tables. Join movies.id to boxoffice.movie_id; qualify columns with aliases to make their origins clear.",
+    "tags": [],
+    "number": "06"
+  },
+  {
+    "id": "B07",
+    "title": "OUTER JOINs",
+    "label": "B07",
+    "group": "sqlbolt",
+    "summary": "LEFT JOIN preserves the left table’s rows, including unmatched ones. RIGHT JOIN preserves the right side; FULL JOIN preserves both. SQLBolt’s exercise environment here uses LEFT JOIN.",
+    "tags": [],
+    "number": "07"
+  },
+  {
+    "id": "B08",
+    "title": "NULL and unmatched rows",
+    "label": "B08",
+    "group": "sqlbolt",
+    "summary": "IS NULL and IS NOT NULL test missing values. An unmatched outer-join row contains NULLs on the missing side. A missing value is not automatically equivalent to zero or an empty string.",
+    "tags": [],
+    "number": "08"
+  },
+  {
+    "id": "B09",
+    "title": "Expressions and aliases",
+    "label": "B09",
+    "group": "sqlbolt",
+    "summary": "Expressions calculate values in a query; AS gives the result a readable name. Arithmetic can convert units, combine sales or identify even years.",
+    "tags": [],
+    "number": "09"
+  },
+  {
+    "id": "B10",
+    "title": "Aggregates and GROUP BY",
+    "label": "B10",
+    "group": "sqlbolt",
+    "summary": "Aggregates collapse rows into summary values. Without GROUP BY the entire input is one group; with GROUP BY there is one result per group. COUNT(*) counts rows, whereas COUNT(column) excludes NULL.",
+    "tags": [],
+    "number": "10"
+  },
+  {
+    "id": "B11",
+    "title": "WHERE versus HAVING",
+    "label": "B11",
+    "group": "sqlbolt",
+    "summary": "WHERE filters individual rows before aggregation. HAVING filters grouped results after aggregation. Choose the clause according to whether the condition describes an input row or a group result.",
+    "tags": [],
+    "number": "11"
+  },
+  {
+    "id": "B12",
+    "title": "Logical query order",
+    "label": "B12",
+    "group": "sqlbolt",
+    "summary": "The lesson’s logical order is FROM/JOIN → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT/OFFSET. This explains which values and aliases are available to each clause.",
+    "tags": [],
+    "number": "12"
+  },
+  {
+    "id": "B13",
+    "title": "INSERT rows",
+    "label": "B13",
+    "group": "sqlbolt",
+    "summary": "INSERT adds rows to a table. An explicit column list makes the relationship between fields and values clear and allows omitted columns to receive defaults.",
+    "tags": [],
+    "number": "13"
+  },
+  {
+    "id": "B14",
+    "title": "UPDATE rows",
+    "label": "B14",
+    "group": "sqlbolt",
+    "summary": "UPDATE changes the columns named in SET for rows matching WHERE. Omit WHERE only when changing every row is intentional.",
+    "tags": [],
+    "number": "14"
+  },
+  {
+    "id": "B15",
+    "title": "DELETE rows",
+    "label": "B15",
+    "group": "sqlbolt",
+    "summary": "DELETE removes matching rows but leaves the table schema. A statement without WHERE removes all rows.",
+    "tags": [],
+    "number": "15"
+  },
+  {
+    "id": "B16",
+    "title": "CREATE TABLE and schemas",
+    "label": "B16",
+    "group": "sqlbolt",
+    "summary": "CREATE TABLE declares column names, types and optional constraints. The lesson introduces primary keys, uniqueness, NOT NULL, checks, foreign keys and defaults; the exercise table itself has no constraints.",
+    "tags": [],
+    "number": "16"
+  },
+  {
+    "id": "B17",
+    "title": "ALTER TABLE",
+    "label": "B17",
+    "group": "sqlbolt",
+    "summary": "ALTER TABLE changes an existing schema. The exercises add two columns, one with a default. The lesson also discusses dropping columns and renaming tables.",
+    "tags": [],
+    "number": "17"
+  },
+  {
+    "id": "B18",
+    "title": "DROP TABLE",
+    "label": "B18",
+    "group": "sqlbolt",
+    "summary": "DROP TABLE removes both the rows and the table definition. IF EXISTS avoids an error when the table is already absent.",
+    "tags": [],
+    "number": "18"
+  },
+  {
+    "id": "B19",
+    "title": "Additional topic · Subqueries",
+    "label": "B19",
+    "group": "sqlbolt",
+    "summary": "A subquery supplies a scalar, a list or a derived table to another query. A correlated subquery refers to the current outer row. IN and NOT IN can test membership in query results.",
+    "tags": [],
+    "number": "19"
+  },
+  {
+    "id": "B20",
+    "title": "Additional topic · Set operations",
+    "label": "B20",
+    "group": "sqlbolt",
+    "summary": "UNION appends and deduplicates rows; UNION ALL preserves duplicates. INTERSECT retains shared rows. EXCEPT returns left-side rows absent on the right. Set operations require compatible corresponding columns.",
+    "tags": [],
+    "number": "20"
+  },
+  {
+    "id": "C01",
+    "title": "1757 · Recyclable and low-fat products",
+    "label": "C01",
+    "group": "practice",
+    "summary": "Return product IDs that satisfy both Y flags.",
+    "tags": [],
+    "number": "1757",
+    "studyTopic": "Select",
+    "studyPosition": 1
+  },
+  {
+    "id": "C02",
+    "title": "584 · Find customer referee",
+    "label": "C02",
+    "group": "practice",
+    "summary": "Keep customers not referred by ID 2, including missing referee IDs.",
+    "tags": [],
+    "number": "584",
+    "studyTopic": "Select",
+    "studyPosition": 2
+  },
+  {
+    "id": "C03",
+    "title": "595 · Big countries",
+    "label": "C03",
+    "group": "practice",
+    "summary": "Return a country if its area or population reaches the stated threshold.",
+    "tags": [],
+    "number": "595",
+    "studyTopic": "Select",
+    "studyPosition": 3
+  },
+  {
+    "id": "C04",
+    "title": "1148 · Article Views I",
+    "label": "C04",
+    "group": "practice",
+    "summary": "Return authors who viewed their own articles, without duplicates and sorted by ID.",
+    "tags": [],
+    "number": "1148",
+    "studyTopic": "Select",
+    "studyPosition": 4
+  },
+  {
+    "id": "C05",
+    "title": "1683 · Invalid tweets",
+    "label": "C05",
+    "group": "practice",
+    "summary": "Return IDs whose content has more than 15 characters.",
+    "tags": [],
+    "number": "1683",
+    "studyTopic": "Select",
+    "studyPosition": 5
+  },
+  {
+    "id": "C42",
+    "title": "1378 · Replace employee ID with the unique identifier",
+    "label": "C42",
+    "group": "practice",
+    "summary": "Return each employee’s unique identifier and name, keeping employees without an assigned identifier.",
+    "tags": [
+      "Outer join / preserve unmatched rows"
+    ],
+    "number": "1378",
+    "studyTopic": "Basic Joins",
+    "studyPosition": 6
+  },
+  {
+    "id": "C43",
+    "title": "1068 · Product sales analysis I",
+    "label": "C43",
+    "group": "practice",
+    "summary": "Attach the product name to each sale and return product_name, year and price.",
+    "tags": [
+      "Join / column selection"
+    ],
+    "number": "1068",
+    "studyTopic": "Basic Joins",
+    "studyPosition": 7
+  },
+  {
+    "id": "C44",
+    "title": "1581 · Customers who visited without transactions",
+    "label": "C44",
+    "group": "practice",
+    "summary": "Count visits without a transaction for each customer.",
+    "tags": [
+      "Left join / unmatched rows / grouped count"
+    ],
+    "number": "1581",
+    "studyTopic": "Basic Joins",
+    "studyPosition": 8
+  },
+  {
+    "id": "C45",
+    "title": "197 · Rising temperature",
+    "label": "C45",
+    "group": "practice",
+    "summary": "Return IDs for dates that are warmer than the preceding calendar day.",
+    "tags": [
+      "Date self-join / sorted differences"
+    ],
+    "number": "197",
+    "studyTopic": "Basic Joins",
+    "studyPosition": 9
+  },
+  {
+    "id": "C46",
+    "title": "1661 · Average processing time per machine",
+    "label": "C46",
+    "group": "practice",
+    "summary": "Pair each process start and end, then report the average duration per machine rounded to three decimals.",
+    "tags": [
+      "CTEs / paired join / grouped mean"
+    ],
+    "number": "1661",
+    "studyTopic": "Basic Joins",
+    "studyPosition": 10
+  },
+  {
+    "id": "C47",
+    "title": "577 · Employee bonus",
+    "label": "C47",
+    "group": "practice",
+    "summary": "Return employee names and bonuses where the bonus is below 1000 or missing.",
+    "tags": [
+      "Left join / NULL-aware filtering"
+    ],
+    "number": "577",
+    "studyTopic": "Basic Joins",
+    "studyPosition": 11
+  },
+  {
+    "id": "C48",
+    "title": "1280 · Students and examinations",
+    "label": "C48",
+    "group": "practice",
+    "summary": "Return every student–subject combination with its exam attendance count, including zero attendance.",
+    "tags": [
+      "Cross join / grouped count / zero fill"
+    ],
+    "number": "1280",
+    "studyTopic": "Basic Joins",
+    "studyPosition": 12
+  },
+  {
+    "id": "C49",
+    "title": "570 · Managers with at least five direct reports",
+    "label": "C49",
+    "group": "practice",
+    "summary": "Return the names of employees who have at least five direct reports.",
+    "tags": [
+      "Grouped count / self-join"
+    ],
+    "number": "570",
+    "studyTopic": "Basic Joins",
+    "studyPosition": 13
+  },
+  {
+    "id": "C50",
+    "title": "1934 · Confirmation rate",
+    "label": "C50",
+    "group": "practice",
+    "summary": "For each signed-up user, divide confirmed actions by confirmation requests and round to two decimals. Users without requests receive zero.",
+    "tags": [
+      "Left join / conditional count / ratio"
+    ],
+    "number": "1934",
+    "studyTopic": "Basic Joins",
+    "studyPosition": 14
+  },
+  {
+    "id": "C06",
+    "title": "620 · Not boring movies",
+    "label": "C06",
+    "group": "practice",
+    "summary": "Keep odd-ID movies with a non-boring description, sorted by rating descending.",
+    "tags": [],
+    "number": "620",
+    "studyTopic": "Basic Aggregate Functions",
+    "studyPosition": 15
+  },
+  {
+    "id": "C07",
+    "title": "1251 · Average selling price",
+    "label": "C07",
+    "group": "practice",
+    "summary": "Match units sold to the applicable price interval, then compute revenue divided by units for every product.",
+    "tags": [],
+    "number": "1251",
+    "studyTopic": "Basic Aggregate Functions",
+    "studyPosition": 16
+  },
+  {
+    "id": "C08",
+    "title": "1075 · Project employees I",
+    "label": "C08",
+    "group": "practice",
+    "summary": "Return the rounded average experience per project.",
+    "tags": [],
+    "number": "1075",
+    "studyTopic": "Basic Aggregate Functions",
+    "studyPosition": 17
+  },
+  {
+    "id": "C09",
+    "title": "1633 · Users registered in a contest",
+    "label": "C09",
+    "group": "practice",
+    "summary": "Compute contest participation as a percentage of all users and apply the specified tie-break.",
+    "tags": [],
+    "number": "1633",
+    "studyTopic": "Basic Aggregate Functions",
+    "studyPosition": 18
+  },
+  {
+    "id": "C10",
+    "title": "1211 · Queries quality and percentage",
+    "label": "C10",
+    "group": "practice",
+    "summary": "Average rating/position per query and calculate the percentage with rating below 3.",
+    "tags": [],
+    "number": "1211",
+    "studyTopic": "Basic Aggregate Functions",
+    "studyPosition": 19
+  },
+  {
+    "id": "C11",
+    "title": "1193 · Monthly transactions I",
+    "label": "C11",
+    "group": "practice",
+    "summary": "Summarize total and approved counts and amounts by month and country.",
+    "tags": [],
+    "number": "1193",
+    "studyTopic": "Basic Aggregate Functions",
+    "studyPosition": 20
+  },
+  {
+    "id": "C12",
+    "title": "1174 · Immediate first deliveries",
+    "label": "C12",
+    "group": "practice",
+    "summary": "Among each customer’s first orders, calculate the percentage requested for the order date.",
+    "tags": [],
+    "number": "1174",
+    "studyTopic": "Basic Aggregate Functions",
+    "studyPosition": 21
+  },
+  {
+    "id": "C13",
+    "title": "550 · Game Play Analysis IV",
+    "label": "C13",
+    "group": "practice",
+    "summary": "Find the fraction of players active exactly one day after their own first login.",
+    "tags": [],
+    "number": "550",
+    "studyTopic": "Basic Aggregate Functions",
+    "studyPosition": 22
+  },
+  {
+    "id": "C14",
+    "title": "2356 · Unique subjects per teacher",
+    "label": "C14",
+    "group": "practice",
+    "summary": "Count distinct subjects taught by each teacher.",
+    "tags": [],
+    "number": "2356",
+    "studyTopic": "Sorting and Grouping",
+    "studyPosition": 23
+  },
+  {
+    "id": "C15",
+    "title": "1141 · User activity in a 30-day window",
+    "label": "C15",
+    "group": "practice",
+    "summary": "Count daily unique users over the inclusive 30-day interval ending 2019-07-27.",
+    "tags": [],
+    "number": "1141",
+    "studyTopic": "Sorting and Grouping",
+    "studyPosition": 24
+  },
+  {
+    "id": "C16",
+    "title": "1070 · First-year product sales",
+    "label": "C16",
+    "group": "practice",
+    "summary": "Keep every sale row in each product’s earliest sales year.",
+    "tags": [],
+    "number": "1070",
+    "studyTopic": "Sorting and Grouping",
+    "studyPosition": 25
+  },
+  {
+    "id": "C17",
+    "title": "596 · Classes with at least five students",
+    "label": "C17",
+    "group": "practice",
+    "summary": "Return classes with five or more unique students.",
+    "tags": [],
+    "number": "596",
+    "studyTopic": "Sorting and Grouping",
+    "studyPosition": 26
+  },
+  {
+    "id": "C18",
+    "title": "1729 · Followers count",
+    "label": "C18",
+    "group": "practice",
+    "summary": "Return each user’s distinct follower count.",
+    "tags": [],
+    "number": "1729",
+    "studyTopic": "Sorting and Grouping",
+    "studyPosition": 27
+  },
+  {
+    "id": "C19",
+    "title": "619 · Biggest single number",
+    "label": "C19",
+    "group": "practice",
+    "summary": "Return the largest value occurring exactly once, or a one-row missing result.",
+    "tags": [],
+    "number": "619",
+    "studyTopic": "Sorting and Grouping",
+    "studyPosition": 28
+  },
+  {
+    "id": "C20",
+    "title": "1045 · Customers who bought every product",
+    "label": "C20",
+    "group": "practice",
+    "summary": "Return customers who have purchased all keys listed in Product.",
+    "tags": [],
+    "number": "1045",
+    "studyTopic": "Sorting and Grouping",
+    "studyPosition": 29
+  },
+  {
+    "id": "C21",
+    "title": "1731 · Employees reporting to employees",
+    "label": "C21",
+    "group": "practice",
+    "summary": "For each manager, return direct-report count and rounded average report age.",
+    "tags": [],
+    "number": "1731",
+    "studyTopic": "Advanced Select and Joins",
+    "studyPosition": 30
+  },
+  {
+    "id": "C22",
+    "title": "1789 · Primary department per employee",
+    "label": "C22",
+    "group": "practice",
+    "summary": "Return the flagged primary department, or the only department when an employee has one.",
+    "tags": [],
+    "number": "1789",
+    "studyTopic": "Advanced Select and Joins",
+    "studyPosition": 31
+  },
+  {
+    "id": "C23",
+    "title": "610 · Triangle judgement",
+    "label": "C23",
+    "group": "practice",
+    "summary": "Label a row Yes only if all three strict triangle inequalities hold.",
+    "tags": [],
+    "number": "610",
+    "studyTopic": "Advanced Select and Joins",
+    "studyPosition": 32
+  },
+  {
+    "id": "C24",
+    "title": "180 · Consecutive Numbers",
+    "label": "C24",
+    "group": "practice",
+    "summary": "Find values appearing in at least three consecutive rows when Logs is ordered by id.",
+    "tags": [],
+    "number": "180",
+    "studyTopic": "Advanced Select and Joins",
+    "studyPosition": 33
+  },
+  {
+    "id": "C25",
+    "title": "1164 · Product price at a given date",
+    "label": "C25",
+    "group": "practice",
+    "summary": "Use the most recent price change on or before 2019-08-16, otherwise default to 10.",
+    "tags": [],
+    "number": "1164",
+    "studyTopic": "Advanced Select and Joins",
+    "studyPosition": 34
+  },
+  {
+    "id": "C26",
+    "title": "1204 · Last person to fit in the bus",
+    "label": "C26",
+    "group": "practice",
+    "summary": "Return the final person in queue order whose prefix weight does not exceed 1000.",
+    "tags": [],
+    "number": "1204",
+    "studyTopic": "Advanced Select and Joins",
+    "studyPosition": 35
+  },
+  {
+    "id": "C27",
+    "title": "1907 · Count salary categories",
+    "label": "C27",
+    "group": "practice",
+    "summary": "Return counts for all three salary buckets, including categories with zero accounts.",
+    "tags": [],
+    "number": "1907",
+    "studyTopic": "Advanced Select and Joins",
+    "studyPosition": 36
+  },
+  {
+    "id": "C28",
+    "title": "1978 · Low-salary employees whose manager left",
+    "label": "C28",
+    "group": "practice",
+    "summary": "Return employees below 30000 whose nonmissing manager ID is absent from Employees.",
+    "tags": [],
+    "number": "1978",
+    "studyTopic": "Subqueries",
+    "studyPosition": 37
+  },
+  {
+    "id": "C29",
+    "title": "626 · Exchange seats",
+    "label": "C29",
+    "group": "practice",
+    "summary": "Swap adjacent seat IDs and leave an unpaired final odd seat unchanged.",
+    "tags": [],
+    "number": "626",
+    "studyTopic": "Subqueries",
+    "studyPosition": 38
+  },
+  {
+    "id": "C30",
+    "title": "1341 · Movie rating report",
+    "label": "C30",
+    "group": "practice",
+    "summary": "Return the most prolific reviewer overall, then the movie with highest average rating in February 2020.",
+    "tags": [],
+    "number": "1341",
+    "studyTopic": "Subqueries",
+    "studyPosition": 39
+  },
+  {
+    "id": "C31",
+    "title": "1321 · Restaurant growth",
+    "label": "C31",
+    "group": "practice",
+    "summary": "Compute seven-calendar-day spending totals and daily averages, starting when the first full window is available.",
+    "tags": [],
+    "number": "1321",
+    "studyTopic": "Subqueries",
+    "studyPosition": 40
+  },
+  {
+    "id": "C32",
+    "title": "602 · Most accepted friends",
+    "label": "C32",
+    "group": "practice",
+    "summary": "Count every person’s appearance at either end of an accepted friendship and return the maximum.",
+    "tags": [],
+    "number": "602",
+    "studyTopic": "Subqueries",
+    "studyPosition": 41
+  },
+  {
+    "id": "C33",
+    "title": "585 · Investments in 2016",
+    "label": "C33",
+    "group": "practice",
+    "summary": "Sum tiv_2016 when tiv_2015 is shared and the (lat, lon) location is unique.",
+    "tags": [],
+    "number": "585",
+    "studyTopic": "Subqueries",
+    "studyPosition": 42
+  },
+  {
+    "id": "C34",
+    "title": "185 · Department top three salaries",
+    "label": "C34",
+    "group": "practice",
+    "summary": "Keep all employees whose salary is among the three highest distinct salaries in their department.",
+    "tags": [],
+    "number": "185",
+    "studyTopic": "Subqueries",
+    "studyPosition": 43
+  },
+  {
+    "id": "C35",
+    "title": "1667 · Fix names in a table",
+    "label": "C35",
+    "group": "practice",
+    "summary": "Uppercase the first character and lowercase the rest, ordered by user_id.",
+    "tags": [],
+    "number": "1667",
+    "studyTopic": "Advanced String Functions / Regex / Clause",
+    "studyPosition": 44
+  },
+  {
+    "id": "C36",
+    "title": "1527 · Patients with a disease",
+    "label": "C36",
+    "group": "practice",
+    "summary": "Keep patients with a space-delimited condition token beginning DIAB1.",
+    "tags": [],
+    "number": "1527",
+    "studyTopic": "Advanced String Functions / Regex / Clause",
+    "studyPosition": 45
+  },
+  {
+    "id": "C37",
+    "title": "196 · Delete duplicate emails",
+    "label": "C37",
+    "group": "practice",
+    "summary": "Keep the smallest ID for each email and remove the other records.",
+    "tags": [],
+    "number": "196",
+    "studyTopic": "Advanced String Functions / Regex / Clause",
+    "studyPosition": 46
+  },
+  {
+    "id": "C38",
+    "title": "176 · Second highest salary",
+    "label": "C38",
+    "group": "practice",
+    "summary": "Return the second-highest distinct nonmissing salary, or one NULL result when absent.",
+    "tags": [],
+    "number": "176",
+    "studyTopic": "Advanced String Functions / Regex / Clause",
+    "studyPosition": 47
+  },
+  {
+    "id": "C39",
+    "title": "1484 · Products sold by date",
+    "label": "C39",
+    "group": "practice",
+    "summary": "For each date, count unique products and join their sorted names with commas.",
+    "tags": [],
+    "number": "1484",
+    "studyTopic": "Advanced String Functions / Regex / Clause",
+    "studyPosition": 48
+  },
+  {
+    "id": "C40",
+    "title": "1327 · Products with at least 100 February units",
+    "label": "C40",
+    "group": "practice",
+    "summary": "Sum each product’s February 2020 units and return qualifying product names.",
+    "tags": [],
+    "number": "1327",
+    "studyTopic": "Advanced String Functions / Regex / Clause",
+    "studyPosition": 49
+  },
+  {
+    "id": "C41",
+    "title": "1517 · Users with valid emails",
+    "label": "C41",
+    "group": "practice",
+    "summary": "Match a letter-led local part containing letters, digits, _, . or -, with exactly the domain leetcode.com.",
+    "tags": [],
+    "number": "1517",
+    "studyTopic": "Advanced String Functions / Regex / Clause",
+    "studyPosition": 50
+  },
+  {
+    "id": "LC181",
+    "title": "181 · Employees earning more than their managers",
+    "label": "181",
+    "number": "181",
+    "summary": "Match each employee to their manager, then return employee names where the employee salary is higher.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 51
+  },
+  {
+    "id": "LC262",
+    "title": "262 · Trips and users",
+    "label": "262",
+    "number": "262",
+    "summary": "Calculate cancellation rates for trips involving unbanned clients and drivers from 1–3 October 2013.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 52
+  },
+  {
+    "id": "LC586",
+    "title": "586 · Customer placing the largest number of orders",
+    "label": "586",
+    "number": "586",
+    "summary": "Return the customer number occurring most often in Orders.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 53
+  },
+  {
+    "id": "LC601",
+    "title": "601 · Human traffic of stadium",
+    "label": "601",
+    "number": "601",
+    "summary": "Keep crowded stadium records that belong to runs of at least three consecutive IDs.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 54
+  },
+  {
+    "id": "LC607",
+    "title": "607 · Sales person",
+    "label": "607",
+    "number": "607",
+    "summary": "Find salespeople who have no order associated with the company named RED.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 55
+  },
+  {
+    "id": "LC608",
+    "title": "608 · Tree node",
+    "label": "608",
+    "number": "608",
+    "summary": "Classify each tree node as Root, Inner or Leaf.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 56
+  },
+  {
+    "id": "LC1158",
+    "title": "1158 · Market analysis I",
+    "label": "1158",
+    "number": "1158",
+    "summary": "Count each user’s orders in 2019, keeping users with no such orders.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 57
+  },
+  {
+    "id": "LC1393",
+    "title": "1393 · Capital gain/loss",
+    "label": "1393",
+    "number": "1393",
+    "summary": "Add sale proceeds and subtract purchase costs for each stock.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 58
+  },
+  {
+    "id": "LC3220",
+    "title": "3220 · Odd and even transactions",
+    "label": "3220",
+    "number": "3220",
+    "summary": "Sum odd and even transaction amounts separately for each date.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 59
+  },
+  {
+    "id": "LC3421",
+    "title": "3421 · Find students who improved",
+    "label": "3421",
+    "number": "3421",
+    "summary": "Compare first and latest scores within each student–subject pair, keeping increases.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 60
+  },
+  {
+    "id": "LC3475",
+    "title": "3475 · DNA pattern recognition",
+    "label": "3475",
+    "number": "3475",
+    "summary": "Flag start, stop and repeated-substring patterns in each DNA sequence.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 61
+  },
+  {
+    "id": "LC3497",
+    "title": "3497 · Analyze subscription conversion",
+    "label": "3497",
+    "number": "3497",
+    "summary": "Compare average free-trial and paid activity duration for users with both types.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 62
+  },
+  {
+    "id": "LC3521",
+    "title": "3521 · Find product recommendation pairs",
+    "label": "3521",
+    "number": "3521",
+    "summary": "Find product pairs occurring together for at least three customers and attach their categories.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 63
+  },
+  {
+    "id": "LC3564",
+    "title": "3564 · Seasonal sales analysis",
+    "label": "3564",
+    "number": "3564",
+    "summary": "Choose a leading product category per season using quantity first and revenue second.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 64
+  },
+  {
+    "id": "LC3580",
+    "title": "3580 · Find consistently improving employees",
+    "label": "3580",
+    "number": "3580",
+    "summary": "Keep employees whose last three selected review ratings increase, and report their improvement.",
+    "group": "practice",
+    "tags": [],
+    "studyTopic": "Additional problems",
+    "studyPosition": 65
+  },
+  {
+    "id": "D01",
+    "title": "Exercise coverage",
+    "label": "D01",
+    "group": "reference",
+    "summary": "65 Leetcode problems, the complete SQL 50 and 15 additional submissions, plus both games and SQLBolt.",
+    "tags": [],
+    "number": ""
+  },
+  {
+    "id": "D02",
+    "title": "Sources and validation",
+    "label": "D02",
+    "group": "reference",
+    "summary": "Leetcode solutions are based on the submitted Markdown and follow-up messages. Game walkthroughs use the supplied Murder City notebook and nine Squid Game level files. Individual pages link to relevant exercise and langu",
+    "tags": [],
+    "number": ""
+  },
+  {
+    "id": "murder-city",
+    "title": "SQL Murder City",
+    "label": "CASEBOOK OVERVIEW",
+    "group": "murder",
+    "summary": "A step-by-step investigation with my original SQL, recorded results and pandas alternatives. Solutions are visible when you open a step.",
+    "tags": [
+      "10 steps",
+      "SQL + pandas",
+      "spoilers inside"
+    ],
+    "number": ""
+  },
+  {
+    "id": "murder-01",
+    "title": "Retrieve the crime report",
+    "label": "STEP 01 / 10",
+    "group": "murder",
+    "summary": "Start with the date, city and type of crime to recover the missing report.",
+    "tags": [
+      "WHERE",
+      "AND",
+      "exact matches"
+    ],
+    "number": "01"
+  },
+  {
+    "id": "murder-02",
+    "title": "Find the two witnesses",
+    "label": "STEP 02 / 10",
+    "group": "murder",
+    "summary": "Combine an ordered address search with a name-and-street filter.",
+    "tags": [
+      "UNION",
+      "ORDER BY",
+      "LIMIT",
+      "LIKE"
+    ],
+    "number": "02"
+  },
+  {
+    "id": "murder-03",
+    "title": "Read the witness interviews",
+    "label": "STEP 03 / 10",
+    "group": "murder",
+    "summary": "Attach each witness’s name to the interview transcript.",
+    "tags": [
+      "LEFT JOIN",
+      "OR",
+      "evidence"
+    ],
+    "number": "03"
+  },
+  {
+    "id": "murder-04",
+    "title": "Follow the gym clue",
+    "label": "STEP 04 / 10",
+    "group": "murder",
+    "summary": "Intersect the membership prefix, membership tier and visit date.",
+    "tags": [
+      "LEFT JOIN",
+      "LIKE",
+      "combined filters"
+    ],
+    "number": "04"
+  },
+  {
+    "id": "murder-05",
+    "title": "Cross-check the licence plate",
+    "label": "STEP 05 / 10",
+    "group": "murder",
+    "summary": "Use the partial plate to find a second, independent candidate list.",
+    "tags": [
+      "LIKE",
+      "LEFT JOIN",
+      "cross-check"
+    ],
+    "number": "05"
+  },
+  {
+    "id": "murder-06",
+    "title": "Submit the first identification",
+    "label": "STEP 06 / 10",
+    "group": "murder",
+    "summary": "Use the game’s solution table to submit the name supported by both clues.",
+    "tags": [
+      "INSERT",
+      "solution table"
+    ],
+    "number": "06"
+  },
+  {
+    "id": "murder-07",
+    "title": "Follow the second interview",
+    "label": "STEP 07 / 10",
+    "group": "murder",
+    "summary": "Read the identified person’s statement to uncover a second lead.",
+    "tags": [
+      "LEFT JOIN",
+      "ID lookup"
+    ],
+    "number": "07"
+  },
+  {
+    "id": "murder-08",
+    "title": "Candidate shortlist",
+    "label": "STEP 08 / 10",
+    "group": "murder",
+    "summary": "The notebook records three candidates here, but the selection query is missing.",
+    "tags": [
+      "source gap",
+      "recorded evidence"
+    ],
+    "number": "08"
+  },
+  {
+    "id": "murder-09",
+    "title": "Inspect December event check-ins",
+    "label": "STEP 09 / 10",
+    "group": "murder",
+    "summary": "Look up the recorded candidates’ event attendance during December 2017.",
+    "tags": [
+      "IN",
+      "date boundaries",
+      "LEFT JOIN"
+    ],
+    "number": "09"
+  },
+  {
+    "id": "murder-10",
+    "title": "Submit the final identification",
+    "label": "STEP 10 / 10",
+    "group": "murder",
+    "summary": "Finish the trail by submitting the person identified in the saved concert records.",
+    "tags": [
+      "INSERT",
+      "final submission"
+    ],
+    "number": "10"
+  },
+  {
+    "id": "squid-game",
+    "title": "SQL Squid Game",
+    "label": "NINE-LEVEL OVERVIEW",
+    "group": "squid",
+    "summary": "My solutions to the nine levels, with pandas alternatives and notes on the saved queries.",
+    "tags": [
+      "9 levels",
+      "SQL + pandas",
+      "original files"
+    ],
+    "number": ""
+  },
+  {
+    "id": "squid-01",
+    "title": "Filter the player pool",
+    "label": "LEVEL 01 / 09",
+    "group": "squid",
+    "summary": "Combine status and debt requirements with a nested either/or condition.",
+    "tags": [
+      "WHERE",
+      "AND / OR",
+      "boolean logic"
+    ],
+    "number": "01"
+  },
+  {
+    "id": "squid-02",
+    "title": "Calculate the ration threshold",
+    "label": "LEVEL 02 / 09",
+    "group": "squid",
+    "summary": "Count eligible players, round down a proportion and compare it with supply.",
+    "tags": [
+      "COUNT",
+      "FLOOR",
+      "CASE",
+      "CTE"
+    ],
+    "number": "02"
+  },
+  {
+    "id": "squid-03",
+    "title": "Compare hot and cold months",
+    "label": "LEVEL 03 / 09",
+    "group": "squid",
+    "summary": "Select temperature extremes, join by month and aggregate completion times.",
+    "tags": [
+      "UNION",
+      "EXTRACT",
+      "GROUP BY",
+      "AVG"
+    ],
+    "number": "03"
+  },
+  {
+    "id": "squid-04",
+    "title": "Rank ten-player teams",
+    "label": "LEVEL 04 / 09",
+    "group": "squid",
+    "summary": "Filter groups by size, label their average age and rank the retained teams.",
+    "tags": [
+      "GROUP BY",
+      "CASE",
+      "RANK"
+    ],
+    "number": "04"
+  },
+  {
+    "id": "squid-05",
+    "title": "Count a player’s closest interactions",
+    "label": "LEVEL 05 / 09",
+    "group": "squid",
+    "summary": "Normalize both sides of an interaction before counting counterpart players.",
+    "tags": [
+      "CASE",
+      "CTE",
+      "COUNT",
+      "JOIN"
+    ],
+    "number": "05"
+  },
+  {
+    "id": "squid-06",
+    "title": "Trace equipment to its first failure",
+    "label": "LEVEL 06 / 09",
+    "group": "squid",
+    "summary": "Narrow by game and supplier before calculating an equipment-level lifetime.",
+    "tags": [
+      "CTEs",
+      "MIN",
+      "AVG",
+      "date arithmetic"
+    ],
+    "number": "06"
+  },
+  {
+    "id": "squid-07",
+    "title": "Join room checks and camera sightings",
+    "label": "LEVEL 07 / 09",
+    "group": "squid",
+    "summary": "Build a guard report with per-sighting gaps and a shared detection range.",
+    "tags": [
+      "JOIN",
+      "scalar subquery",
+      "time arithmetic"
+    ],
+    "number": "07"
+  },
+  {
+    "id": "squid-08",
+    "title": "Find the longest hesitation",
+    "label": "LEVEL 08 / 09",
+    "group": "squid",
+    "summary": "Choose a group by its average, then a row within that group by its maximum.",
+    "tags": [
+      "AVG",
+      "GROUP BY",
+      "ORDER BY",
+      "LIMIT"
+    ],
+    "number": "08"
+  },
+  {
+    "id": "squid-09",
+    "title": "Reconstruct access-log overlaps",
+    "label": "LEVEL 09 / 09",
+    "group": "squid",
+    "summary": "Relate the latest game, overlapping shifts and off-post door locations.",
+    "tags": [
+      "CTEs",
+      "BETWEEN",
+      "IN",
+      "intervals"
+    ],
+    "number": "09"
+  }
+]

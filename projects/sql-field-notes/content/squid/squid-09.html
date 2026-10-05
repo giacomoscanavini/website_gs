@@ -1,0 +1,398 @@
+<article class="article" id="squid-09">
+ <div class="breadcrumb">
+  <a href="#squid-game">
+   SQL Squid Game
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Level 9
+  </span>
+ </div>
+ <h1>
+  Reconstruct access-log overlaps
+ </h1>
+ <p class="lead">
+  Relate the latest game, overlapping shifts and off-post door locations.
+ </p>
+ <h2>
+  Task
+ </h2>
+ <p>
+  Identify who deviated from their assigned position during the Squid Game, and then output a list of guard IDs and access times of any OTHER guards who visited the same location during the disappearance timeframe
+ </p>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-116-panel-0" aria-selected="true" id="example-116-tab-0" role="tab" tabindex="0" type="button">
+     My SQL
+    </button>
+    <button aria-controls="example-116-panel-1" aria-selected="false" id="example-116-tab-1" role="tab" tabindex="-1" type="button">
+     pandas alternative
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-116-tab-0" class="code-panel" id="example-116-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    My SQL
+   </div>
+   <pre id="code-squid-09-0" tabindex="0"><code class="language-sql" data-origin="squid-query-09"><span class="k">WITH</span><span class="w"> </span>
+<span class="w">	</span><span class="n">Most_recent_squid_game</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">start_time</span><span class="p">,</span><span class="w"> </span><span class="n">end_time</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">Game_schedule</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="k">LOWER</span><span class="p">(</span><span class="k">type</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'squid game'</span>
+<span class="w">        </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="nb">date</span><span class="w"> </span><span class="k">DESC</span>
+<span class="w">        </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">	</span><span class="p">),</span>
+<span class="w">    </span><span class="n">Guards_on_shift</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">assigned_post</span><span class="p">,</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">shift_start</span><span class="p">,</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">shift_end</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">Guard</span><span class="w"> </span><span class="k">g</span><span class="p">,</span><span class="w"> </span><span class="n">Most_recent_squid_game</span><span class="w"> </span><span class="n">m</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span>
+<span class="w">            </span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">start_time</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">shift_start</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">shift_end</span><span class="p">)</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span>
+<span class="w">            </span><span class="p">(</span><span class="n">m</span><span class="p">.</span><span class="n">end_time</span><span class="w">   </span><span class="k">BETWEEN</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">shift_start</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">shift_end</span><span class="p">)</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span>
+<span class="w">            </span><span class="p">((</span><span class="k">g</span><span class="p">.</span><span class="n">shift_start</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">start_time</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">end_time</span><span class="p">)</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="p">(</span><span class="k">g</span><span class="p">.</span><span class="n">shift_end</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">start_time</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">end_time</span><span class="p">))</span>
+<span class="w">    </span><span class="p">),</span>
+<span class="w">	</span><span class="n">Suspect</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">		</span><span class="k">SELECT</span><span class="w"> </span>
+<span class="w">			</span><span class="k">g</span><span class="p">.</span><span class="n">id</span><span class="p">,</span>
+<span class="w">			</span><span class="k">g</span><span class="p">.</span><span class="n">assigned_post</span><span class="p">,</span><span class="w"> </span>
+<span class="w">			</span><span class="k">g</span><span class="p">.</span><span class="n">shift_start</span><span class="p">,</span>
+<span class="w">			</span><span class="k">g</span><span class="p">.</span><span class="n">shift_end</span><span class="p">,</span><span class="w"> </span>
+<span class="w">			</span><span class="n">d</span><span class="p">.</span><span class="n">access_time</span><span class="p">,</span><span class="w"> </span>
+<span class="w">			</span><span class="n">d</span><span class="p">.</span><span class="n">door_location</span>
+<span class="w">		</span><span class="k">FROM</span><span class="w"> </span><span class="n">Guards_on_shift</span><span class="w"> </span><span class="k">g</span>
+<span class="w">		</span><span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Daily_door_access_logs</span><span class="w"> </span><span class="n">d</span>
+<span class="w">			</span><span class="k">ON</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">guard_id</span>
+<span class="w">		</span><span class="k">WHERE</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">assigned_post</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">door_location</span>
+<span class="w">	</span><span class="p">)</span>
+<span class="w">	</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">access_time</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Guards_on_shift</span><span class="w"> </span><span class="k">g</span>
+<span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Daily_door_access_logs</span><span class="w"> </span><span class="n">d</span>
+<span class="w">    </span><span class="k">ON</span><span class="w"> </span><span class="k">g</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">guard_id</span>
+<span class="k">WHERE</span><span class="w"> </span>
+<span class="w">    </span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">access_time</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span>
+<span class="w">	   </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">start_time</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">Most_recent_squid_game</span><span class="p">)</span><span class="w"> </span><span class="k">and</span>
+<span class="w">	   </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">end_time</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">Most_recent_squid_game</span><span class="p">))</span><span class="w"> </span><span class="k">AND</span>
+<span class="w">    </span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">door_location</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">door_location</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">Suspect</span><span class="p">))</span></code></pre>
+  </div>
+  <div aria-labelledby="example-116-tab-1" class="code-panel" id="example-116-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas alternative
+   </div>
+   <pre id="code-squid-09-1" tabindex="0"><code class="language-python" data-origin="squid-09-pandas"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">games</span> <span class="o">=</span> <span class="n">game_schedule</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">game_schedule</span><span class="p">[</span><span class="s1">'type'</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="s1">'squid game'</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">games</span><span class="p">[</span><span class="s1">'date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">games</span><span class="p">[</span><span class="s1">'date'</span><span class="p">])</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'access_time'</span><span class="p">])</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">games</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+    <span class="n">latest</span> <span class="o">=</span> <span class="n">games</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'date'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_timedelta</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">latest</span><span class="p">[</span><span class="s1">'start_time'</span><span class="p">]))</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_timedelta</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">latest</span><span class="p">[</span><span class="s1">'end_time'</span><span class="p">]))</span>
+    <span class="n">shifts</span> <span class="o">=</span> <span class="n">guard</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_timedelta</span><span class="p">(</span><span class="n">shifts</span><span class="p">[</span><span class="s1">'shift_start'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'string'</span><span class="p">))</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_timedelta</span><span class="p">(</span><span class="n">shifts</span><span class="p">[</span><span class="s1">'shift_end'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'string'</span><span class="p">))</span>
+    <span class="c1"># Literal same-day overlap logic from the supplied SQL</span>
+    <span class="n">overlaps</span> <span class="o">=</span> <span class="p">((</span><span class="n">a</span><span class="o">.</span><span class="n">le</span><span class="p">(</span><span class="n">start</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">b</span><span class="o">.</span><span class="n">ge</span><span class="p">(</span><span class="n">start</span><span class="p">))</span> <span class="o">|</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">le</span><span class="p">(</span><span class="n">end</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">b</span><span class="o">.</span><span class="n">ge</span><span class="p">(</span><span class="n">end</span><span class="p">))</span>
+                <span class="o">|</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">b</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)))</span>
+    <span class="n">shifts</span> <span class="o">=</span> <span class="n">shifts</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">overlaps</span><span class="p">]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="s1">'guard_id'</span><span class="p">})</span>
+    <span class="n">logs</span> <span class="o">=</span> <span class="n">shifts</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">daily_door_access_logs</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'id'</span><span class="p">:</span> <span class="s1">'log_id'</span><span class="p">}),</span> <span class="n">on</span><span class="o">=</span><span class="s1">'guard_id'</span><span class="p">)</span>
+    <span class="n">off_post</span> <span class="o">=</span> <span class="p">(</span><span class="n">logs</span><span class="p">[</span><span class="s1">'assigned_post'</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">logs</span><span class="p">[</span><span class="s1">'door_location'</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span>
+                <span class="o">&amp;</span> <span class="n">logs</span><span class="p">[</span><span class="s1">'assigned_post'</span><span class="p">]</span><span class="o">.</span><span class="n">ne</span><span class="p">(</span><span class="n">logs</span><span class="p">[</span><span class="s1">'door_location'</span><span class="p">]))</span>
+    <span class="n">locations</span> <span class="o">=</span> <span class="n">logs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">off_post</span><span class="p">,</span> <span class="s1">'door_location'</span><span class="p">]</span>
+    <span class="n">access</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_timedelta</span><span class="p">(</span><span class="n">logs</span><span class="p">[</span><span class="s1">'access_time'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'string'</span><span class="p">))</span>
+    <span class="n">keep</span> <span class="o">=</span> <span class="n">access</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">logs</span><span class="p">[</span><span class="s1">'door_location'</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">locations</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">logs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">keep</span><span class="p">,</span> <span class="p">[</span><span class="s1">'guard_id'</span><span class="p">,</span> <span class="s1">'access_time'</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'guard_id'</span><span class="p">:</span> <span class="s1">'id'</span><span class="p">})</span></code></pre>
+   <p class="panel-note">
+    Added translation ·
+    <a href="#squid-game">
+     DataFrame assumptions
+    </a>
+   </p>
+  </div>
+ </div>
+ <h2>
+  How it works
+ </h2>
+ <p>
+  Select the most recent Squid Game, identify shifts overlapping its start/end times, and collect off-post door locations from those guards’ logs. The final query returns on-shift guards who accessed those locations during the game window.
+ </p>
+ <div class="note warning">
+  <b>
+   Source-aware note.
+  </b>
+  The saved SQL does not explicitly exclude the suspect from the final output, even though the brief says OTHER guards. Suspect logs are not themselves restricted to the game window. Its simple BETWEEN checks do not handle overnight intervals such as those shown in the sample shifts. The translation deliberately retains these limitations; it is not a corrected investigation.
+ </div>
+ <p class="small">
+  No query-result table was stored in this SQL file. Sample-schema rows below are inputs, not the answer.
+ </p>
+ <details class="reference-details">
+  <summary>
+   Sources and original files
+  </summary>
+  <div class="sources-content">
+   <div class="source-note">
+    <b>
+     Source:
+    </b>
+    <code>
+     sql_squid_game-main/level_09.sql
+    </code>
+    .
+    <a href="https://datalemur.com/sql-game/level9.html" rel="noopener noreferrer" target="_blank">
+     Original level ↗
+    </a>
+    . The brief and original SQL come from my saved file; study notes and pandas code are newly authored.
+   </div>
+   <details class="source-details">
+    <summary>
+     Original sample-schema comments · not a full dataset
+    </summary>
+    <div class="codebox">
+     <div class="codehead">
+      <span>
+       Schema and sample rows · preserved source text
+      </span>
+      <button aria-label="Copy Schema and sample rows · preserved source text" data-copy="" type="button">
+       Copy
+      </button>
+     </div>
+     <pre id="code-squid-09-2" tabindex="0"><code class="language-text">SCHEMA for `guard`:
+    id	assigned_post	shift_start	shift_end
+    1	Stairs	        00:05:00	06:05:00
+    2	Stairs	        20:10:00	05:10:00
+    3	Stairs	        17:04:00	00:04:00
+    
+    SCHEMA for `daily_door_access_logs`:
+    id	guard_id	access_time	door_location
+    1	40	        17:30:00	Game area
+    2	7	        21:00:00	Stairs
+    3	19	        06:00:00	Dormitory
+        
+    SCHEMA for `game_schedule`:
+    id	type	                date	                                                    start_time	end_time
+    1	Red light green light	Thu May 26 1983 08:00:00 GMT+0800 (Hong Kong Standard Time)	19:02:00	20:14:00
+    2	Red light green light	Sat Sep 04 1971 09:00:00 GMT+0900 (Hong Kong Summer Time)	16:55:00	17:49:00
+    3	Tug of War	            Wed Apr 10 2013 08:00:00 GMT+0800 (Hong Kong Standard Time)	12:14:00	13:44:00</code></pre>
+    </div>
+   </details>
+   <details class="source-details">
+    <summary>
+     Complete original file · brief, sample schema and SQL
+    </summary>
+    <div class="codebox">
+     <div class="codehead">
+      <span>
+       level_09.sql · original source
+      </span>
+      <button aria-label="Copy level_09.sql · original source" data-copy="" type="button">
+       Copy
+      </button>
+     </div>
+     <pre id="code-squid-09-3" tabindex="0"><code class="language-text" data-origin="level_09.sql">/* LEVEL 09: https://datalemur.com/sql-game/level9.html
+    
+    Identify who deviated from their assigned position during the Squid Game, 
+    and then output a list of guard IDs and access times of any OTHER guards 
+    who visited the same location during the disappearance timeframe
+*/
+/*
+    SCHEMA for `guard`:
+    id	assigned_post	shift_start	shift_end
+    1	Stairs	        00:05:00	06:05:00
+    2	Stairs	        20:10:00	05:10:00
+    3	Stairs	        17:04:00	00:04:00
+    
+    SCHEMA for `daily_door_access_logs`:
+    id	guard_id	access_time	door_location
+    1	40	        17:30:00	Game area
+    2	7	        21:00:00	Stairs
+    3	19	        06:00:00	Dormitory
+        
+    SCHEMA for `game_schedule`:
+    id	type	                date	                                                    start_time	end_time
+    1	Red light green light	Thu May 26 1983 08:00:00 GMT+0800 (Hong Kong Standard Time)	19:02:00	20:14:00
+    2	Red light green light	Sat Sep 04 1971 09:00:00 GMT+0900 (Hong Kong Summer Time)	16:55:00	17:49:00
+    3	Tug of War	            Wed Apr 10 2013 08:00:00 GMT+0800 (Hong Kong Standard Time)	12:14:00	13:44:00
+*/
+
+
+WITH 
+	Most_recent_squid_game AS (
+        SELECT start_time, end_time
+        FROM Game_schedule
+        WHERE LOWER(type) = 'squid game'
+        ORDER BY date DESC
+        LIMIT 1
+	),
+    Guards_on_shift AS (
+        SELECT g.id, g.assigned_post, g.shift_start, g.shift_end
+        FROM Guard g, Most_recent_squid_game m
+        WHERE 
+            (m.start_time BETWEEN g.shift_start and g.shift_end) OR 
+            (m.end_time   BETWEEN g.shift_start and g.shift_end) OR 
+            ((g.shift_start BETWEEN m.start_time and m.end_time) AND (g.shift_end BETWEEN m.start_time and m.end_time))
+    ),
+	Suspect AS (
+		SELECT 
+			g.id,
+			g.assigned_post, 
+			g.shift_start,
+			g.shift_end, 
+			d.access_time, 
+			d.door_location
+		FROM Guards_on_shift g
+		INNER JOIN Daily_door_access_logs d
+			ON g.id = d.guard_id
+		WHERE g.assigned_post &lt;&gt; d.door_location
+	)
+	
+SELECT g.id, d.access_time
+FROM Guards_on_shift g
+INNER JOIN Daily_door_access_logs d
+    ON g.id = d.guard_id
+WHERE 
+    (d.access_time BETWEEN 
+	   (select start_time from Most_recent_squid_game) and
+	   (select end_time from Most_recent_squid_game)) AND
+    (d.door_location IN (select door_location from Suspect))</code></pre>
+    </div>
+   </details>
+   <a class="button source-download" download="level_09.sql" href="assets/downloads/level_09.sql">
+    Download level_09.sql ↓
+   </a>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-and">
+     AND
+    </a>
+    <a href="#m-sql-or">
+     OR
+    </a>
+    <a href="#m-sql-in">
+     IN
+    </a>
+    <a href="#m-sql-between">
+     BETWEEN
+    </a>
+    <a href="#m-sql-inner-join">
+     INNER JOIN
+    </a>
+    <a href="#m-sql-lower">
+     LOWER()
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-with">
+     WITH
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+    <a href="#m-sql-order-by">
+     ORDER BY
+    </a>
+    <a href="#m-sql-limit">
+     LIMIT / OFFSET
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-loc">
+     Rows by label
+    </a>
+    <a href="#m-pd-iloc">
+     Rows by position
+    </a>
+    <a href="#m-pd-and">
+     Multiple conditions
+    </a>
+    <a href="#m-pd-or">
+     OR
+    </a>
+    <a href="#m-pd-isin">
+     Membership
+    </a>
+    <a href="#m-pd-between">
+     Range
+    </a>
+    <a href="#m-pd-filter-notnull">
+     Non-missing
+    </a>
+    <a href="#m-pd-sort-values">
+     Sort one column
+    </a>
+    <a href="#m-pd-sort-desc">
+     Descending
+    </a>
+    <a href="#m-pd-new-column">
+     New column
+    </a>
+    <a href="#m-pd-rename">
+     Rename
+    </a>
+    <a href="#m-pd-loc-label">
+     Access label
+    </a>
+    <a href="#m-pd-merge-inner">
+     Inner merge
+    </a>
+    <a href="#m-pd-str-lower">
+     Lowercase
+    </a>
+    <a href="#m-pd-to-datetime">
+     Convert date
+    </a>
+    <a href="#m-pd-astype">
+     astype()
+    </a>
+    <a href="#m-pd-eq">
+     eq() / ne()
+    </a>
+    <a href="#m-pd-compare">
+     gt() / ge() / lt() / le()
+    </a>
+    <a href="#m-pd-copy">
+     copy()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#squid-08">
+   <small>
+    ← Previous
+   </small>
+   Find the longest hesitation
+  </a>
+  <a href="#home">
+   <small>
+    Contents
+   </small>
+   All sections
+  </a>
+ </div>
+</article>

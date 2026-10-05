@@ -1,0 +1,505 @@
+<section aria-labelledby="gradient-flow-title" class="page-view lesson-layout" id="gradient-flow">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     08
+    </span>
+    Part 1 · Neural-network foundations
+   </p>
+   <h1 id="gradient-flow-title" tabindex="-1">
+    Gradient flow and initialization
+   </h1>
+   <p class="standfirst">
+    Explain vanishing, explosion, symmetry breaking, and why scale-preserving initialization matters.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Neural networks · PDF pp. 18–19 · §§23–26" data-page="18" data-pdf="basics" type="button">
+     Neural networks · PDF pp. 18–19 · §§23–26
+    </button>
+    <button aria-label="Open source: Architectures · PDF pp. 7–8 · §§2.4–2.5" data-page="7" data-pdf="arch" type="button">
+     Architectures · PDF pp. 7–8 · §§2.4–2.5
+    </button>
+    <button aria-label="Open source: Optimization · PDF p. 23 · §19" data-page="23" data-pdf="optim" type="button">
+     Optimization · PDF p. 23 · §19
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="a-derivative-travels-through-a-product" href="#gradient-flow?section=a-derivative-travels-through-a-product">
+     A derivative travels through a product
+    </a>
+    <a data-section="active-relu-is-helpful-not-sufficient" href="#gradient-flow?section=active-relu-is-helpful-not-sufficient">
+     Active ReLU is helpful, not sufficient
+    </a>
+    <a data-section="symmetry-breaking" href="#gradient-flow?section=symmetry-breaking">
+     Symmetry breaking
+    </a>
+    <a data-section="fan-in-variance-and-activation-choice" href="#gradient-flow?section=fan-in-variance-and-activation-choice">
+     Fan-in, variance, and activation choice
+    </a>
+    <a data-section="clipping-changes-a-large-gradient-not-the-objective" href="#gradient-flow?section=clipping-changes-a-large-gradient-not-the-objective">
+     Clipping changes a large gradient, not the objective
+    </a>
+    <a data-section="a-useful-diagnostic-order" href="#gradient-flow?section=a-useful-diagnostic-order">
+     A useful diagnostic order
+    </a>
+    <a data-section="implementation" href="#gradient-flow?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="a-derivative-travels-through-a-product" id="gradient-flow--a-derivative-travels-through-a-product">
+    A derivative travels through a product
+   </h2>
+   <p>
+    For a multilayer network, an early sensitivity contains products of weight matrices and activation derivatives. The guide’s scalar illustration uses ten activation derivatives of
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.2</mn><annotation encoding="application/x-tex">0.2</annotation></semantics></math>
+    :
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>0.2</mn><mn>10</mn></msup><mo>=</mo><mn>1.024</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>7</mn></mrow></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">0.2^{10}=1.024\times10^{-7}.</annotation></semantics></math>
+   </div>
+   <p>
+    Even an order-one signal can become tiny after enough contractions. This illustration isolates the activation contribution; real network behavior also depends on weight matrices, their orientations, and the activations encountered on the actual input.
+   </p>
+   <p>
+    The opposite problem occurs when the effective transformations amplify sensitivity repeatedly. An exploding gradient can cause an enormous update, numerical instability, or an unusable training trajectory. Depth and recurrence both create long derivative paths, which is why the same issue appears in feed-forward networks and in backpropagation through time.
+   </p>
+   <details class="derivation" data-derivation="jacobian-norms" id="gradient-flow--derivation-jacobian-norms">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Expand a gradient path and identify what can shrink
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mi>ϕ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mo>ℓ</mo></msub><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>+</mo><msub><mi>b</mi><mo>ℓ</mo></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">a^{[\ell]}=\phi(W_\ell a^{[\ell-1]}+b_\ell)</annotation></semantics></math>
+      . Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>D</mi><mo>ℓ</mo></msub><annotation encoding="application/x-tex">D_\ell</annotation></semantics></math>
+      be the diagonal matrix of activation derivatives at that observation. We use column gradients and the Euclidean operator norm.
+     </p>
+     <h4>
+      1 · Write one forward Jacobian
+     </h4>
+     <p>
+      The local derivative is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>J</mi><mo>ℓ</mo></msub><mo>=</mo><mi>∂</mi><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mi>/</mi><mi>∂</mi><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><msub><mi>D</mi><mo>ℓ</mo></msub><msub><mi>W</mi><mo>ℓ</mo></msub></mrow><annotation encoding="application/x-tex">J_\ell=\partial a^{[\ell]}/\partial a^{[\ell-1]}=D_\ell W_\ell</annotation></semantics></math>
+      . The backward sensitivity is consequently
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo>=</mo><msubsup><mi>J</mi><mo>ℓ</mo><mi>⊤</mi></msubsup><msub><mi>∇</mi><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo>=</mo><msubsup><mi>W</mi><mo>ℓ</mo><mi>⊤</mi></msubsup><msub><mi>D</mi><mo>ℓ</mo></msub><msub><mi>∇</mi><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_{a^{[\ell-1]}}L=J_\ell^\top\nabla_{a^{[\ell]}}L=W_\ell^\top D_\ell\nabla_{a^{[\ell]}}L.</annotation></semantics></math>
+     </div>
+     <h4>
+      2 · Substitute repeatedly with the order intact
+     </h4>
+     <p>
+      For three layers,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>x</mi></msub><mi>L</mi><mo>=</mo><msubsup><mi>J</mi><mn>1</mn><mi>⊤</mi></msubsup><msubsup><mi>J</mi><mn>2</mn><mi>⊤</mi></msubsup><msubsup><mi>J</mi><mn>3</mn><mi>⊤</mi></msubsup><msub><mi>∇</mi><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>3</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_xL=J_1^\top J_2^\top J_3^\top\nabla_{a^{[3]}}L.</annotation></semantics></math>
+     </div>
+     <p>
+      The factors generally do not commute. Reversing their order changes the derivative.
+     </p>
+     <h4>
+      3 · Apply the norm inequality one factor at a time
+     </h4>
+     <p>
+      For any compatible matrix and vector,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>A</mi><mi>v</mi><mo form="postfix" stretchy="false">∥</mo><mo>≤</mo><mo form="postfix" stretchy="false">∥</mo><mi>A</mi><mo form="postfix" stretchy="false">∥</mo><mo form="postfix" stretchy="false">∥</mo><mi>v</mi><mo form="postfix" stretchy="false">∥</mo></mrow><annotation encoding="application/x-tex">\|Av\|\le\|A\|\|v\|</annotation></semantics></math>
+      . Thus
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><msub><mi>∇</mi><mi>x</mi></msub><mi>L</mi><mo form="postfix" stretchy="false">∥</mo><mo>≤</mo><munderover><mo>∏</mo><mrow><mo>ℓ</mo><mo>=</mo><mn>1</mn></mrow><mi>L</mi></munderover><mo form="postfix" stretchy="false">∥</mo><msub><mi>J</mi><mo>ℓ</mo></msub><mo form="postfix" stretchy="false">∥</mo><mspace width="0.167em"></mspace><mo form="postfix" stretchy="false">∥</mo><msub><mi>∇</mi><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>L</mi><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo form="postfix" stretchy="false">∥</mo><mo>≤</mo><munderover><mo>∏</mo><mrow><mo>ℓ</mo><mo>=</mo><mn>1</mn></mrow><mi>L</mi></munderover><mo form="postfix" stretchy="false">∥</mo><msub><mi>D</mi><mo>ℓ</mo></msub><mo form="postfix" stretchy="false">∥</mo><mo form="postfix" stretchy="false">∥</mo><msub><mi>W</mi><mo>ℓ</mo></msub><mo form="postfix" stretchy="false">∥</mo><mspace width="0.167em"></mspace><mo form="postfix" stretchy="false">∥</mo><msub><mi>∇</mi><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>L</mi><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo form="postfix" stretchy="false">∥</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">\|\nabla_xL\|\le\prod_{\ell=1}^L\|J_\ell\|\,\|\nabla_{a^{[L]}}L\|
+\le\prod_{\ell=1}^L\|D_\ell\|\|W_\ell\|\,\|\nabla_{a^{[L]}}L\|.</annotation></semantics></math>
+     </div>
+     <p>
+      If every
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><msub><mi>J</mi><mo>ℓ</mo></msub><mo form="postfix" stretchy="false">∥</mo><mo>≤</mo><mi>r</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\|J_\ell\|\le r&lt;1</annotation></semantics></math>
+      , this upper bound is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>r</mi><mi>L</mi></msup><annotation encoding="application/x-tex">r^L</annotation></semantics></math>
+      times the final sensitivity.
+     </p>
+     <h4>
+      4 · Interpret a large upper bound carefully
+     </h4>
+     <p>
+      A product of norms above one does
+      <strong>
+       not
+      </strong>
+      prove the actual gradient explodes: directions may rotate, or a matrix may contract the particular vector it receives. Repeated amplification along the realized path can cause explosion; a loose bound merely permits it.
+     </p>
+     <h4>
+      5 · Substitute the scalar illustration
+     </h4>
+     <p>
+      With ten scalar factors all equal to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.2</mn><annotation encoding="application/x-tex">0.2</annotation></semantics></math>
+      , the product is
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>0.2</mn><mn>10</mn></msup><mo>=</mo><mfrac><mn>1</mn><msup><mn>5</mn><mn>10</mn></msup></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>9765625</mn></mfrac><mo>=</mo><mn>1.024</mn><mo>×</mo><msup><mn>10</mn><mrow><mi>−</mi><mn>7</mn></mrow></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">0.2^{10}=\frac1{5^{10}}=\frac1{9765625}=1.024\times10^{-7}.</annotation></semantics></math>
+     </div>
+     <p>
+      This calculation isolates activation factors. Active ReLU replaces its factor by one; it does not remove the weight matrices or inactive branches from the full path.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="18" data-pdf="basics" type="button">
+       Chapter source · PDF p. 18
+      </button>
+      <a class="calculation-link" href="#gradient-flow?derivation=jacobian-norms">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="active-relu-is-helpful-not-sufficient" id="gradient-flow--active-relu-is-helpful-not-sufficient">
+    Active ReLU is helpful, not sufficient
+   </h2>
+   <p>
+    On a positive pre-activation, ReLU has derivative one. It removes activation saturation from that branch. But a sequence of contracting weight transformations can still shrink gradients, and negative ReLU branches still produce zero sensitivity. The claim “ReLU has derivative one” is incomplete without its active-region qualification.
+   </p>
+   <p>
+    Leaky ReLU gives a small negative-branch slope. Gated recurrent models introduce an additive memory path. Residual architectures preserve a comparatively direct identity path. These address different aspects of information and gradient flow; none guarantees useful long-term learning in all settings.
+   </p>
+   <h2 data-section="symmetry-breaking" id="gradient-flow--symmetry-breaking">
+    Symmetry breaking
+   </h2>
+   <p>
+    If all hidden units in a layer start with the same incoming weights and biases and are treated identically by the rest of the model, they can produce the same activations and receive the same updates. Instead of learning several distinct features, the units behave like copies. Random initialization breaks this symmetry.
+   </p>
+   <p>
+    Randomness alone is not enough. Very large initial weights can push sigmoid/tanh units into saturation or amplify signals. Very small weights can contract activations and gradients. Initialization is therefore both a
+    <strong>
+     diversity
+    </strong>
+    problem and a
+    <strong>
+     scale
+    </strong>
+    problem.
+   </p>
+   <h2 data-section="fan-in-variance-and-activation-choice" id="gradient-flow--fan-in-variance-and-activation-choice">
+    Fan-in, variance, and activation choice
+   </h2>
+   <p>
+    The source gives He initialization for ReLU networks:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>∼</mo><mi>𝒩</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mfrac><mn>2</mn><msub><mi>n</mi><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi></mrow></msub></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">W_{ij}\sim\mathcal N\left(0,\frac{2}{n_{\mathrm{in}}}\right).</annotation></semantics></math>
+   </div>
+   <p>
+    Under independent zero-mean initial weights, a weighted sum has a second moment proportional to fan-in times the weight variance and input second moment. For a symmetric pre-activation distribution, ReLU halves the second moment, not generally the centered variance: its output usually has a nonzero mean. Preserving that second moment gives the He factor
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>/</mi><msub><mi>n</mi><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">2/n_{\mathrm{in}}</annotation></semantics></math>
+    . These are initialization assumptions, not identities that every trained layer must satisfy.
+   </p>
+   <p>
+    For sigmoid or tanh, the source describes Xavier/Glorot initialization with a scale of order
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><msub><mi>n</mi><mrow><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">1/n_{\mathrm{in}}</annotation></semantics></math>
+    or a related fan-in/fan-out expression. The linked initialization reference gives exact PyTorch choices, gains, and weight-orientation assumptions. These assumptions matter more than memorizing an initializer’s name.
+   </p>
+   <details class="derivation" data-derivation="he-xavier" id="gradient-flow--derivation-he-xavier">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive fan-in scaling, He initialization, and the Xavier compromise
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      The calculation averages over random initial weights and inputs. Assume independent zero-mean weights of variance
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>v</mi><mi>w</mi></msub><annotation encoding="application/x-tex">v_w</annotation></semantics></math>
+      , independent of input activations, zero biases, and comparable activation second moments
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>a</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">q=\mathbb E[a_j^2]</annotation></semantics></math>
+      . These are initialization approximations, not permanent training properties.
+     </p>
+     <h4>
+      1 · Expand the second moment of a weighted sum
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>i</mi></msub><mo>=</mo><msubsup><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></msubsup><msub><mi>W</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>a</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">z_i=\sum_{j=1}^nW_{ij}a_j</annotation></semantics></math>
+      ,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>z</mi><mi>i</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>W</mi><mrow><mi>i</mi><mi>j</mi></mrow><mn>2</mn></msubsup><msubsup><mi>a</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mo>+</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>≠</mo><mi>k</mi></mrow></munder><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>W</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>W</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub><msub><mi>a</mi><mi>j</mi></msub><msub><mi>a</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[z_i^2]=\sum_j\mathbb E[W_{ij}^2a_j^2]+\sum_{j\ne k}\mathbb E[W_{ij}W_{ik}a_ja_k].</annotation></semantics></math>
+     </div>
+     <p>
+      Independent zero-mean weights make each cross term zero. Each diagonal term is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>w</mi></msub><mi>q</mi></mrow><annotation encoding="application/x-tex">v_wq</annotation></semantics></math>
+      , so
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>z</mi><mi>i</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>n</mi><msub><mi>v</mi><mi>w</mi></msub><mi>q</mi></mrow><annotation encoding="application/x-tex">\mathbb E[z_i^2]=nv_wq</annotation></semantics></math>
+      . The pre-activation is centered in this initialization ensemble, even if a preceding ReLU activation is not.
+     </p>
+     <h4>
+      2 · Evaluate the effect of ReLU
+     </h4>
+     <p>
+      If the distribution of
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
+      is symmetric around zero,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ReLU</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msubsup><mo>∫</mo><mn>0</mn><mi>∞</mi></msubsup><msup><mi>z</mi><mn>2</mn></msup><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mspace width="0.167em"></mspace><mi>d</mi><mi>z</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msup><mi>z</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[\operatorname{ReLU}(z)^2]=\int_0^\infty z^2p(z)\,dz=\frac12\mathbb E[z^2].</annotation></semantics></math>
+     </div>
+     <p>
+      The factor halves the
+      <strong>
+       second moment
+      </strong>
+      , not generally the centered variance. ReLU usually has a nonzero mean.
+     </p>
+     <h4>
+      3 · Preserve the activation second moment across a layer
+     </h4>
+     <p>
+      The next moment is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">x</mi><mi mathvariant="normal">t</mi></mrow></msub><mo>=</mo><mi>n</mi><msub><mi>v</mi><mi>w</mi></msub><mi>q</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">q_{\mathrm{next}}=nv_wq/2</annotation></semantics></math>
+      . Setting
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">x</mi><mi mathvariant="normal">t</mi></mrow></msub><mo>=</mo><mi>q</mi></mrow><annotation encoding="application/x-tex">q_{\mathrm{next}}=q</annotation></semantics></math>
+      for nonzero
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>
+      gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>w</mi></msub><mo>=</mo><mfrac><mn>2</mn><mi>n</mi></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">v_w=\frac2n.</annotation></semantics></math>
+     </div>
+     <p>
+      This is the He fan-in scale for ReLU. For Leaky ReLU with negative slope
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
+      , the positive and negative halves contribute
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>α</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">(1+\alpha^2)/2</annotation></semantics></math>
+      , giving
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>w</mi></msub><mo>=</mo><mn>2</mn><mi>/</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>n</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>α</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">v_w=2/[n(1+\alpha^2)]</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      4 · Compare forward and backward requirements for a linearized activation
+     </h4>
+     <p>
+      For a near-linear layer, forward second-moment preservation suggests
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><msub><mi>v</mi><mi>w</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">nv_w=1</annotation></semantics></math>
+      . Backpropagation sums over
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
+      outputs, so under an analogous independence approximation the backward requirement is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><msub><mi>v</mi><mi>w</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">mv_w=1</annotation></semantics></math>
+      . Both can hold exactly with one variance only when
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>=</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">m=n</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      5 · Form the Xavier compromise
+     </h4>
+     <p>
+      Using average fan size
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>n</mi><mo>+</mo><mi>m</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">(n+m)/2</annotation></semantics></math>
+      gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>w</mi></msub><mo>=</mo><mfrac><mn>2</mn><mrow><mi>n</mi><mo>+</mo><mi>m</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">v_w=\frac2{n+m}.</annotation></semantics></math>
+     </div>
+     <p>
+      A symmetric uniform distribution on
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">[</mo><mi>−</mi><mi>a</mi><mo>,</mo><mi>a</mi><mo form="postfix" stretchy="true">]</mo></mrow><annotation encoding="application/x-tex">[-a,a]</annotation></semantics></math>
+      has variance
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>a</mi><mn>2</mn></msup><mi>/</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">a^2/3</annotation></semantics></math>
+      : integrating
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>w</mi><mn>2</mn></msup><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">w^2/(2a)</annotation></semantics></math>
+      from
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>a</mi></mrow><annotation encoding="application/x-tex">-a</annotation></semantics></math>
+      to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
+      gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>a</mi><mn>2</mn></msup><mi>/</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">a^2/3</annotation></semantics></math>
+      . Thus the unit-gain Xavier uniform bound is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><msqrt><mrow><mn>6</mn><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>n</mi><mo>+</mo><mi>m</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></msqrt></mrow><annotation encoding="application/x-tex">a=\sqrt{6/(n+m)}</annotation></semantics></math>
+      . Activation-specific gains change this scale; framework defaults and initialization assumptions should be checked separately.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="18" data-pdf="basics" type="button">
+       Chapter source · PDF p. 18
+      </button>
+      <a href="https://docs.pytorch.org/docs/2.13/nn.init.html" rel="noopener noreferrer" target="_blank">
+       torch.nn.init
+      </a>
+      <a class="calculation-link" href="#gradient-flow?derivation=he-xavier">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="clipping-changes-a-large-gradient-not-the-objective" id="gradient-flow--clipping-changes-a-large-gradient-not-the-objective">
+    Clipping changes a large gradient, not the objective
+   </h2>
+   <p>
+    Global-norm clipping uses
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>g</mi><mo accent="true">̃</mo></mover><mo>=</mo><mrow><mo form="prefix" stretchy="true">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mi>g</mi></mtd><mtd columnalign="left" style="text-align: left"><mo form="prefix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo><mo>≤</mo><mi>c</mi><mo>,</mo></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mi>c</mi><mi>g</mi><mi>/</mi><mo form="prefix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo></mtd><mtd columnalign="left" style="text-align: left"><mo form="prefix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo><mo>&gt;</mo><mi>c</mi><mo>,</mo></mtd></mtr></mtable></mrow><mspace width="2.0em"></mspace><mi>c</mi><mo>&gt;</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\tilde g=\begin{cases}g&amp;\lVert g\rVert\le c,\\ cg/\lVert g\rVert&amp;\lVert g\rVert&gt;c,\end{cases}\qquad c&gt;0.</annotation></semantics></math>
+   </div>
+   <p>
+    When the norm is below
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>
+    , it leaves the gradient alone. Otherwise it rescales all coordinates by a common factor and preserves the direction. The optimizer then consumes this modified gradient. In adaptive optimizers, the resulting parameter update also depends on stored moments, so a gradient norm threshold is not an identical bound on every update norm.
+   </p>
+   <p>
+    Clipping limits explosions. It does not recover information already lost through a vanishing derivative, and it does not repair a wrong loss, a leakage problem, or missing connectivity in the computational graph.
+   </p>
+   <h2 data-section="a-useful-diagnostic-order" id="gradient-flow--a-useful-diagnostic-order">
+    A useful diagnostic order
+   </h2>
+   <p>
+    The guides suggest inspecting learning rate, initialization, gradient magnitudes, model shape, and objective consistency when a more expressive network unexpectedly fails. Ask whether early layers receive a useful derivative, whether units are mostly inactive or saturated, and whether changes in parameter scale are sensible. Only then interpret depth as the source of the problem.
+   </p>
+   <p>
+    The architecture chapters return to this theme:
+    <a href="#lstm">
+     LSTM memory
+    </a>
+    provides a gated additive path, while
+    <a href="#transformers">
+     Transformers
+    </a>
+    stabilize repeated blocks with residual connections and normalization.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="gradient-flow--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="initialization">
+     <span class="resource-meta">
+      PyTorch · API + usage examples
+     </span>
+     <a href="https://docs.pytorch.org/docs/2.13/nn.init.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       torch.nn.init
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Compare Xavier and Kaiming initialization, fan-in/fan-out and gain conventions. This is the parameter-initialization reference, not a complete training experiment.
+     </p>
+    </div>
+    <div class="resource" data-resource="autograd">
+     <span class="resource-meta">
+      PyTorch · Tutorial + diagram
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Automatic Differentiation with torch.autograd
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Trace the computation graph and run the gradient example. Compare the role of requires_grad, backward and disabled gradient tracking.
+     </p>
+    </div>
+    <div class="resource" data-resource="hessian">
+     <span class="resource-meta">
+      PyTorch · Tutorial + code
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/intermediate/jacobians_hessians.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Jacobians, Hessians and Hessian–vector products
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Use function transforms to calculate derivatives beyond a scalar gradient. The Hessian–vector examples make the curvature discussion concrete without requiring a dense Hessian.
+     </p>
+    </div>
+   </div>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Why is initializing all hidden weights to zero problematic?
+   </summary>
+   <p>
+    Hidden units can begin with identical outputs and receive identical updates, so they continue learning the same representation instead of different features. Random initialization breaks that symmetry. Its scale must also be chosen to avoid shrinking or exploding activations and gradients.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#training-cycle">
+    <small>
+     ← Previous
+    </small>
+    Training cycles, mini-batches, and autograd
+   </a>
+   <a href="#sgd">
+    <small>
+     Next →
+    </small>
+    SGD, gradient noise, and learning rates
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="a-derivative-travels-through-a-product" href="#gradient-flow?section=a-derivative-travels-through-a-product">
+    A derivative travels through a product
+   </a>
+   <a data-section="active-relu-is-helpful-not-sufficient" href="#gradient-flow?section=active-relu-is-helpful-not-sufficient">
+    Active ReLU is helpful, not sufficient
+   </a>
+   <a data-section="symmetry-breaking" href="#gradient-flow?section=symmetry-breaking">
+    Symmetry breaking
+   </a>
+   <a data-section="fan-in-variance-and-activation-choice" href="#gradient-flow?section=fan-in-variance-and-activation-choice">
+    Fan-in, variance, and activation choice
+   </a>
+   <a data-section="clipping-changes-a-large-gradient-not-the-objective" href="#gradient-flow?section=clipping-changes-a-large-gradient-not-the-objective">
+    Clipping changes a large gradient, not the objective
+   </a>
+   <a data-section="a-useful-diagnostic-order" href="#gradient-flow?section=a-useful-diagnostic-order">
+    A useful diagnostic order
+   </a>
+   <a data-section="implementation" href="#gradient-flow?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

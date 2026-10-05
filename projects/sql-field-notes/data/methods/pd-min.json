@@ -1,0 +1,130 @@
+{
+  "id": "pd-min",
+  "lang": "pd",
+  "category": "Aggregation",
+  "label": "min()",
+  "example": "df['score'].min()",
+  "description": "Minimum",
+  "source": "image-pandas",
+  "related": [
+    "sql-min"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "min",
+  "uses": [
+    {
+      "page": "C13",
+      "block": "code-C13-1",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    a = activity.assign(event_date=pd.to_datetime(activity['event_date']))\n    first = a.groupby('player_id')['event_date'].transform('min')\n    valid = a['event_date'].eq(first + pd.Timedelta(days=1))\n    fraction = valid.groupby(a['player_id']).any().mean()",
+      "snippetLine": 9
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-3",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    activity = activity.assign(event_date=pd.to_datetime(activity['event_date']))\n    activity['first_login'] =   activity.groupby(by='player_id')['event_date'].transform('min')\n    activity['valid'] = activity['event_date'] ==   activity['first_login'] + pd.Timedelta(days = 1)\n",
+      "snippetLine": 9
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def gameplay_analysis(activity: pd.DataFrame) -> pd.DataFrame:\n    activity['first_login'] = activity.groupby(by='player_id')['event_date'].transform('min')\n    activity['valid'] = activity['event_date'] == activity['first_login'] + pd.Timedelta(days = 1)\n    ",
+      "snippetLine": 3
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def sales_analysis(sales: pd.DataFrame) -> pd.DataFrame:\n    first_year = sales.groupby('product_id')['year'].transform('min')\n    return sales.loc[sales['year'].eq(first_year), ['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-1",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    rolled = daily.rolling('7D', closed='right').sum()\n    rolled = rolled.loc[rolled.index >= daily.index.min() + pd.Timedelta(days=6)]\n    result = rolled.rename('amount').reset_index()\n    result['average_amount'] = (result['amount'] / 7).map(round_half_up)",
+      "snippetLine": 13
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-3",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    total = daily.rolling('7D').sum()\n    total = total[total.index >= daily.index.min() + pd.Timedelta(days=6)]\n    result = total.rename('amount').reset_index()\n    result['average_amount'] = (result['amount'] / 7).map(round_half_up)",
+      "snippetLine": 13
+    },
+    {
+      "page": "squid-06",
+      "block": "code-squid-06-1",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "Trace equipment to its first failure",
+      "number": "06",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    first = failures.groupby('failed_equipment_id').agg(\n        installed=('installation_date', 'min'), failed=('failure_date', 'min'))\n    years = (first['failed'] - first['installed']).dt.total_seconds() / (86400 * 365.2425)\n    result = pd.DataFrame({'average_lifespan_years': [np.floor(years.mean())]})",
+      "snippetLine": 15
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-1",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "                                    'movement_detected_time'].astype('string'))\njoined['time_range_first_last_detection'] = times.max() - times.min()\nresult = joined.sort_values('guard_number')[[\n    'guard_number', 'code_name', 'status', 'last_seen_in_room',",
+      "snippetLine": 16
+    }
+  ],
+  "pageCount": 5
+}

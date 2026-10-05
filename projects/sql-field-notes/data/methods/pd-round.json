@@ -1,0 +1,173 @@
+{
+  "id": "pd-round",
+  "lang": "pd",
+  "category": "Also used in these notes",
+  "label": "round()",
+  "example": "df['score'].round(2)",
+  "description": "Round numeric values",
+  "source": "saved-code",
+  "related": [
+    "sql-round"
+  ],
+  "note": "The source uses pandas rounding. Halfway behavior can differ from MySQL exact-value rounding; the saved setup page includes a half-up helper.",
+  "doc": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.round.html",
+  "aliases": "round",
+  "uses": [
+    {
+      "page": "C46",
+      "block": "code-C46-3",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return df.groupby(by='machine_id').mean().round(3).reset_index()",
+      "snippetLine": 9
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-3",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df['confirmation_rate'] = (df['positive'] / df['total']).round(2)\n    return df[['user_id', 'confirmation_rate']]",
+      "snippetLine": 11
+    },
+    {
+      "page": "C08",
+      "block": "code-C08-5",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df['average_years'] = (df['total_years'] / df['n_employees']).round(2)\n\n    return df[['project_id', 'average_years']]",
+      "snippetLine": 9
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-5",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df['percentage'] = (100 * df['nUsersPerTest'] / nUsers).round(2)\n\n    return df[['contest_id', 'percentage']].sort_values(by=['percentage', 'contest_id'], ascending=[False, True])",
+      "snippetLine": 8
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-5",
+      "line": 14,
+      "lines": [
+        14,
+        15
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df['quality'] = df['quality'].round(2)\n    df['poor_query_percentage'] = (100 * df['poor_query_percentage']).round(2)\n",
+      "snippetLine": 13
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-1",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    )\n    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)\n    df = by_manager.merge(employees[['employee_id', 'name']], how='left',\n                          left_on='reports_to', right_on='employee_id')",
+      "snippetLine": 7
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-3",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    )\n    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)\n    df = by_manager.merge(employees[['employee_id', 'name']], how='left', left_on='reports_to', right_on='employee_id')\n    df.rename(columns={'employee_id_y': 'employee_id'}, inplace=True)",
+      "snippetLine": 7
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-5",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    customer['amount'] = customer.amount.rolling(nDays).sum()\n    customer['average_amount'] = (customer.amount / nDays).round(2)\n\n    return customer.dropna()",
+      "snippetLine": 7
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-5",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = insurance[flag_nonunique_tiv & flag_unique_city]\n    return df[['tiv_2016']].sum().to_frame('tiv_2016').round(2)",
+      "snippetLine": 7
+    },
+    {
+      "page": "LC262",
+      "block": "code-LC262-1",
+      "line": 24,
+      "lines": [
+        24
+      ],
+      "title": "262 · Trips and users",
+      "number": "262",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df['Cancellation Rate'] = (df['cancelTotal'] / df['validTotal']).round(2)\n    df = df.rename(columns={'request_at': 'Day'})\n",
+      "snippetLine": 23
+    },
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    sales['season'] = sales['sale_date'].dt.month.apply(season)\n    sales['revenue'] = (sales['quantity'] * sales['price']).round(2)\n    sales = sales.merge(products, on='product_id', how='left')\n",
+      "snippetLine": 10
+    }
+  ],
+  "pageCount": 10
+}

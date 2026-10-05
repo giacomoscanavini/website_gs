@@ -1,0 +1,267 @@
+<article class="article" id="murder-05">
+ <div class="breadcrumb">
+  <a href="#murder-city">
+   SQL Murder City
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Step 5
+  </span>
+ </div>
+ <h1>
+  Cross-check the licence plate
+ </h1>
+ <p class="lead">
+  Use the partial plate to find a second, independent candidate list.
+ </p>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-105-panel-0" aria-selected="true" id="example-105-tab-0" role="tab" tabindex="0" type="button">
+     My SQL
+    </button>
+    <button aria-controls="example-105-panel-1" aria-selected="false" id="example-105-tab-1" role="tab" tabindex="-1" type="button">
+     pandas alternative
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-105-tab-0" class="code-panel" id="example-105-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    My SQL
+   </div>
+   <pre id="code-murder-05-0" tabindex="0"><code class="language-sql" data-origin="murder-cell-9"><span class="c1">-- People associated to cars with plate matching the reported piece</span>
+<span class="k">SELECT</span><span class="w"> </span>
+<span class="w">	</span><span class="n">d</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">age</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">plate_number</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">car_make</span><span class="p">,</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">car_model</span><span class="p">,</span>
+<span class="w">	</span><span class="n">p</span><span class="p">.</span><span class="n">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Drivers_license</span><span class="w"> </span><span class="n">d</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">license_id</span>
+<span class="k">WHERE</span><span class="w"> </span>
+<span class="w">	</span><span class="n">d</span><span class="p">.</span><span class="n">plate_number</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'H42W%'</span>
+<span class="w">	</span><span class="k">OR</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">plate_number</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'%H42W'</span>
+<span class="w">	</span><span class="k">OR</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">plate_number</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'%H42W%'</span></code></pre>
+  </div>
+  <div aria-labelledby="example-105-tab-1" class="code-panel" id="example-105-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas alternative
+   </div>
+   <pre id="code-murder-05-1" tabindex="0"><code class="language-python" data-origin="murder-05-pandas"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">people</span> <span class="o">=</span> <span class="n">person</span><span class="p">[[</span><span class="s1">'license_id'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">]]</span>
+<span class="n">joined</span> <span class="o">=</span> <span class="n">drivers_license</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">people</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'license_id'</span><span class="p">)</span>
+<span class="n">mask</span> <span class="o">=</span> <span class="n">joined</span><span class="p">[</span><span class="s1">'plate_number'</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">'H42W'</span><span class="p">,</span> <span class="n">regex</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">joined</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'age'</span><span class="p">,</span> <span class="s1">'plate_number'</span><span class="p">,</span> <span class="s1">'car_make'</span><span class="p">,</span> <span class="s1">'car_model'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+   <p class="panel-note">
+    Added translation ·
+    <a href="#murder-city">
+     DataFrame assumptions
+    </a>
+   </p>
+  </div>
+ </div>
+ <h2>
+  Recorded result
+ </h2>
+ <div aria-label="Scrollable data table" class="table-scroll" role="region" tabindex="0">
+  <table>
+   <thead>
+    <tr>
+     <th>
+      id
+     </th>
+     <th>
+      age
+     </th>
+     <th>
+      plate_number
+     </th>
+     <th>
+      car_make
+     </th>
+     <th>
+      car_model
+     </th>
+     <th>
+      name
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td>
+      183779
+     </td>
+     <td>
+      21
+     </td>
+     <td>
+      H42W0X
+     </td>
+     <td>
+      Toyota
+     </td>
+     <td>
+      Prius
+     </td>
+     <td>
+      Maxine Whitely
+     </td>
+    </tr>
+    <tr>
+     <td>
+      423327
+     </td>
+     <td>
+      30
+     </td>
+     <td>
+      0H42W2
+     </td>
+     <td>
+      Chevrolet
+     </td>
+     <td>
+      Spark LS
+     </td>
+     <td>
+      Jeremy Bowers
+     </td>
+    </tr>
+    <tr>
+     <td>
+      664760
+     </td>
+     <td>
+      21
+     </td>
+     <td>
+      4H42WR
+     </td>
+     <td>
+      Nissan
+     </td>
+     <td>
+      Altima
+     </td>
+     <td>
+      Tushar Chandra
+     </td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+ <h2>
+  How it works
+ </h2>
+ <p>
+  Drivers_license is joined to Person through license_id. The partial plate H42W produces the saved list below, which can be compared with the gym candidates from the preceding step.
+ </p>
+ <div class="note warning">
+  <b>
+   Source-aware note.
+  </b>
+  The original three LIKE conditions are preserved. The last pattern, %H42W%, already covers a match at the beginning or end, so the pandas translation uses one literal substring test. It does not add a gender filter that is absent from the SQL.
+ </div>
+ <details class="reference-details">
+  <summary>
+   Sources and original files
+  </summary>
+  <div class="sources-content">
+   <div class="source-note">
+    <b>
+     Source:
+    </b>
+    <code>
+     sql_murder_city.ipynb
+    </code>
+    , notebook cell 10 (one-based). Original code is reproduced unchanged. Explanations and pandas panels are additions to the website edition.
+   </div>
+   <p class="small">
+    Source:
+    <a href="#murder-city">
+     original notebook and casebook overview
+    </a>
+    . Original cell 10 and recorded Markdown cell 11.
+   </p>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-or">
+     OR
+    </a>
+    <a href="#m-sql-like">
+     LIKE
+    </a>
+    <a href="#m-sql-left-join">
+     LEFT JOIN
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-loc">
+     Rows by label
+    </a>
+    <a href="#m-pd-filter-string">
+     String match
+    </a>
+    <a href="#m-pd-loc-label">
+     Access label
+    </a>
+    <a href="#m-pd-merge-left">
+     Left merge
+    </a>
+    <a href="#m-pd-merge-keys">
+     Different keys
+    </a>
+    <a href="#m-pd-str-contains">
+     Contains
+    </a>
+    <a href="#m-pd-copy">
+     copy()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#murder-04">
+   <small>
+    ← Previous
+   </small>
+   Follow the gym clue
+  </a>
+  <a href="#murder-06">
+   <small>
+    Next →
+   </small>
+   Submit the first identification
+  </a>
+ </div>
+</article>

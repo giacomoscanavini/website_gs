@@ -1,0 +1,276 @@
+<article class="article" id="C37">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Problem 196
+  </span>
+ </div>
+ <h1>
+  196 · Delete duplicate emails
+ </h1>
+ <p>
+  Keep the smallest ID for each email and remove the other records.
+ </p>
+ <p class="pattern">
+  Pattern: Deduplication / mutation
+ </p>
+ <h2>
+  Example
+ </h2>
+ <p>
+  Emails a@x at IDs 3 and 1, b@x at ID 2 → retain IDs 1 and 2.
+ </p>
+ <h2>
+  Study solution
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-96-panel-0" aria-selected="true" id="example-96-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="example-96-panel-1" aria-selected="false" id="example-96-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-96-tab-0" class="code-panel" id="example-96-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-C37-0" tabindex="0"><code class="language-sql" data-origin="legacy-C37-0"><span class="k">DELETE</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="n">p2</span>
+<span class="k">ON</span><span class="w"> </span><span class="n">p1</span><span class="p">.</span><span class="n">email</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">email</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">p1</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">id</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-96-tab-1" class="code-panel" id="example-96-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-C37-1" tabindex="0"><code class="language-python" data-origin="legacy-C37-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">delete_duplicate_emails</span><span class="p">(</span><span class="n">person</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s1">'email'</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s1">'first'</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  Why it works
+ </h2>
+ <p>
+  Sort before deduplicating so first means the smallest ID. Unlike the other pandas functions, this exercise requires modifying the input DataFrame in place and returning None.
+ </p>
+ <h2>
+  Notes
+ </h2>
+ <p>
+  Emails are nonmissing. Keep the smallest ID and modify the pandas input in place.
+ </p>
+ <details class="original-details">
+  <summary>
+   My approach
+  </summary>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="approach-C37-panel-0" aria-selected="true" id="approach-C37-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="approach-C37-panel-1" aria-selected="false" id="approach-C37-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="approach-C37-tab-0" class="code-panel" id="approach-C37-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     SQL
+    </div>
+    <pre id="code-C37-2" tabindex="0"><code class="language-sql" data-origin="approach-C37-sql"><span class="k">WITH</span><span class="w"> </span><span class="n">Ranked</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span>
+<span class="w">        </span><span class="n">id</span><span class="p">,</span>
+<span class="w">        </span><span class="n">email</span><span class="p">,</span>
+<span class="w">        </span><span class="n">ROW_NUMBER</span><span class="p">()</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span>
+<span class="w">            </span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span>
+<span class="w">        </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ranked</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">Person</span>
+<span class="p">)</span>
+<span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Person</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">Ranked</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">ranked</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span>
+<span class="p">);</span></code></pre>
+   </div>
+   <div aria-labelledby="approach-C37-tab-1" class="code-panel" id="approach-C37-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C37-3" tabindex="0"><code class="language-python" data-origin="approach-C37-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">delete_duplicate_emails</span><span class="p">(</span><span class="n">person</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s1">'email'</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s1">'first'</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Sources
+  </summary>
+  <div class="sources-content">
+   <p>
+    Primary exercise basis: your uploaded Pasted markdown(3).md, exercise 196, line 7. The exercise heading may be abbreviated in the upload; full official problem statements and schemas were not supplied.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     pandas SQL comparison
+    </a>
+    — Projection, filtering, grouping, joins and operations.
+   </p>
+  </div>
+ </details>
+ <details class="original-details archive-submission">
+  <summary>
+   Uploaded submission · SQL.zip
+  </summary>
+  <p class="small">
+   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
+  </p>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="archive-196-panel-0" aria-selected="true" id="archive-196-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="archive-196-panel-1" aria-selected="false" id="archive-196-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="archive-196-tab-0" class="code-panel" id="archive-196-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     MySQL
+    </div>
+    <pre id="code-C37-4" tabindex="0"><code class="language-sql" data-origin="archive-196-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">WITH</span><span class="w"> </span><span class="n">Ranked</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span>
+<span class="w">        </span><span class="n">id</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="n">email</span><span class="p">,</span><span class="w"> </span>
+<span class="w">        </span><span class="k">ROW_NUMBER</span><span class="p">()</span><span class="w"> </span><span class="k">OVER</span><span class="w"> </span><span class="p">(</span>
+<span class="w">            </span><span class="k">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">email</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span>
+<span class="w">        </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">ranked</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">Person</span>
+<span class="p">)</span>
+
+<span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Person</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">Ranked</span><span class="w"> </span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">ranked</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span>
+<span class="p">)</span></code></pre>
+   </div>
+   <div aria-labelledby="archive-196-tab-1" class="code-panel" id="archive-196-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C37-5" tabindex="0"><code class="language-python" data-origin="archive-196-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">delete_duplicate_emails</span><span class="p">(</span><span class="n">person</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">person</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s1">'email'</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s1">'first'</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-and">
+     AND
+    </a>
+    <a href="#m-sql-in">
+     IN
+    </a>
+    <a href="#m-sql-inner-join">
+     INNER JOIN
+    </a>
+    <a href="#m-sql-self-join">
+     Self join
+    </a>
+    <a href="#m-sql-delete">
+     DELETE
+    </a>
+    <a href="#m-sql-first-row">
+     First row per group
+    </a>
+    <a href="#m-sql-row-number">
+     ROW_NUMBER()
+    </a>
+    <a href="#m-sql-partition-by">
+     PARTITION BY
+    </a>
+    <a href="#m-sql-window-order">
+     ORDER BY
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-with">
+     WITH
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-sort-values">
+     Sort one column
+    </a>
+    <a href="#m-pd-drop-duplicates">
+     Drop duplicates
+    </a>
+    <a href="#m-pd-dedup-subset">
+     By columns
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#C36">
+   <small>
+    ← Previous
+   </small>
+   1527 · Patients with a disease
+  </a>
+  <a href="#C38">
+   <small>
+    Next →
+   </small>
+   176 · Second highest salary
+  </a>
+ </div>
+</article>

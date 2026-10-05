@@ -1,0 +1,160 @@
+<article class="article method-page" id="m-pd-group-count">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=GroupBy">
+   pandas · GroupBy
+  </a>
+ </div>
+ <h1>
+  Group count
+ </h1>
+ <p class="lead">
+  Non-null count
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-group-count"><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'city'</span><span class="p">)[</span><span class="s1">'score'</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span></code></pre>
+ </div>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C48?code=code-C48-3&amp;method=pd-group-count&amp;line=7">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1280 · Students and examinations
+    </strong>
+    <small>
+     Uploaded submission · line 7
+    </small>
+   </div>
+   <pre aria-hidden="true">    exam_count = examinations.groupby(by=['student_id', 'subject_name']).agg(
+        attended_exams = ('subject_name', 'count')
+    ).reset_index()
+</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C08?code=code-C08-3&amp;method=pd-group-count&amp;line=12">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1075 · Project employees I
+    </strong>
+    <small>
+     My approach · line 12
+    </small>
+   </div>
+   <pre aria-hidden="true">        total_years = ('experience_years', 'sum'),
+        n_employees = ('experience_years', 'count'),
+    ).reset_index()
+    df['average_years'] =   (df['total_years'] / df['n_employees']).map(round_half_up)</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C22?code=code-C22-3&amp;method=pd-group-count&amp;line=3">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1789 · Primary department per employee
+    </strong>
+    <small>
+     My approach · line 3
+    </small>
+   </div>
+   <pre aria-hidden="true">def find_primary_department(employee: pd.DataFrame) -&gt; pd.DataFrame:
+    employee['nDepartments'] =   employee.groupby('employee_id').department_id.transform('count')
+    employee =   employee.query("(primary_flag == 'Y')   | (nDepartments == 1)")
+    return employee[['employee_id', 'department_id']]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (1)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C22?code=code-C22-5&amp;method=pd-group-count&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1789 · Primary department per employee
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def find_primary_department(employee: pd.DataFrame) -&gt; pd.DataFrame:
+    employee['nDepartments'] = employee.groupby('employee_id').department_id.transform('count')
+    employee = employee.query("(primary_flag == 'Y') | (nDepartments == 1)")
+    return employee[['employee_id', 'department_id']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · GroupBy. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=GroupBy">
+   <small>
+    ← Browse
+   </small>
+   pandas · GroupBy
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

@@ -1,0 +1,117 @@
+{
+  "id": "sql-is-not-null",
+  "lang": "sql",
+  "category": "Filtering",
+  "label": "IS NOT NULL",
+  "example": "score IS NOT NULL",
+  "description": "Check non-null",
+  "source": "image-sql",
+  "related": [
+    "pd-filter-notnull"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "aliases": "IS NOT NULL",
+  "uses": [
+    {
+      "page": "C21",
+      "block": "code-C21-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    FROM Employees\n    WHERE reports_to IS NOT NULL\n    GROUP BY reports_to\n)",
+      "snippetLine": 5
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-2",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    GROUP BY reports_to\n    HAVING reports_to IS NOT NULL\n)\n",
+      "snippetLine": 8
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT e.employee_id FROM Employees e\nWHERE e.salary < 30000 AND e.manager_id IS NOT NULL\n  AND NOT EXISTS (SELECT 1 FROM Employees m WHERE m.employee_id = e.manager_id)\nORDER BY e.employee_id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-2",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        FROM Employee\n        WHERE salary IS NOT NULL\n    ),\n    UniqueRanks AS (",
+      "snippetLine": 6
+    },
+    {
+      "page": "LC3497",
+      "block": "code-LC3497-0",
+      "line": 16,
+      "lines": [
+        16,
+        17
+      ],
+      "title": "3497 · Analyze subscription conversion",
+      "number": "3497",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "WHERE \n    paid_avg_duration IS NOT NULL\n    AND trial_avg_duration IS NOT NULL",
+      "snippetLine": 15
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-0",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "     FROM Camera\n     WHERE Camera.guard_spotted_id IS NOT NULL) AS time_range_first_last_detection\nFROM Guard g\nLEFT JOIN Room r",
+      "snippetLine": 10
+    },
+    {
+      "page": "B07",
+      "block": "code-B07-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "OUTER JOINs",
+      "number": "07",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT DISTINCT building FROM employees WHERE building IS NOT NULL;",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 6
+}

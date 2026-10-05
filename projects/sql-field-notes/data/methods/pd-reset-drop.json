@@ -1,0 +1,44 @@
+{
+  "id": "pd-reset-drop",
+  "lang": "pd",
+  "category": "Index operations",
+  "label": "Drop old index",
+  "example": "df.reset_index(drop=True)",
+  "description": "Reset cleanly",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C12",
+      "block": "code-C12-3",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def immediate_food_delivery(delivery: pd.DataFrame) -> pd.DataFrame:\n    delivery = delivery.assign(order_date=pd.to_datetime(delivery['order_date']),\n                               customer_pref_delivery_date=pd.to_datetime(delivery['customer_pref_delivery_date'])).reset_index(drop=True)\n    delivery['immediate'] =   delivery['order_date'] == delivery['customer_pref_delivery_date']",
+      "snippetLine": 8
+    },
+    {
+      "page": "LC601",
+      "block": "code-LC601-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "601 · Human traffic of stadium",
+      "number": "601",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = stadium[stadium.people >= 100]\n    df = df.reset_index(drop=True)\n    df['groups'] = df['id'] - (df.index + 1)\n",
+      "snippetLine": 4
+    }
+  ],
+  "pageCount": 2
+}

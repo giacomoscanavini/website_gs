@@ -1,0 +1,184 @@
+<article class="article" id="B12">
+ <div class="breadcrumb">
+  <a href="#sqlbolt">
+   SQLBolt
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Lesson 12
+  </span>
+ </div>
+ <h1>
+  Logical query order
+ </h1>
+ <p>
+  The lesson’s logical order is FROM/JOIN → WHERE → GROUP BY → HAVING → SELECT → DISTINCT → ORDER BY → LIMIT/OFFSET. This explains which values and aliases are available to each clause.
+ </p>
+ <p>
+  <b>
+   Note.
+  </b>
+  This is a logical model, not a promise of the physical execution plan. Optimizers may transform execution. Window functions add another logical stage, covered in the reference pages.
+ </p>
+ <h2>
+  01 · Film count per director
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-40-panel-0" aria-selected="true" id="example-40-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-40-panel-1" aria-selected="false" id="example-40-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-40-tab-0" class="code-panel" id="example-40-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B12-0" tabindex="0"><code class="language-sql" data-origin="legacy-B12-0"><span class="k">SELECT</span><span class="w"> </span><span class="n">director</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">movie_count</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">director</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-40-tab-1" class="code-panel" id="example-40-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B12-1" tabindex="0"><code class="language-python" data-origin="legacy-B12-1"><span class="n">result</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'director'</span><span class="p">,</span> <span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">size</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'movie_count'</span><span class="p">)</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  02 · Combined domestic and international revenue per director
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-41-panel-0" aria-selected="true" id="example-41-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-41-panel-1" aria-selected="false" id="example-41-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-41-tab-0" class="code-panel" id="example-41-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B12-2" tabindex="0"><code class="language-sql" data-origin="legacy-B12-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">director</span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">b</span><span class="p">.</span><span class="n">domestic_sales</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">international_sales</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_sales</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">boxoffice</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">movie_id</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">director</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-41-tab-1" class="code-panel" id="example-41-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B12-3" tabindex="0"><code class="language-python" data-origin="legacy-B12-3"><span class="n">m</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">boxoffice</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'movie_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'inner'</span><span class="p">,</span> <span class="n">validate</span><span class="o">=</span><span class="s1">'one_to_one'</span><span class="p">)</span>
+<span class="n">m</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">total_sales</span><span class="o">=</span><span class="n">m</span><span class="p">[</span><span class="s1">'domestic_sales'</span><span class="p">]</span> <span class="o">+</span> <span class="n">m</span><span class="p">[</span><span class="s1">'international_sales'</span><span class="p">])</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'director'</span><span class="p">,</span> <span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="s1">'total_sales'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">min_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span></code></pre>
+  </div>
+ </div>
+ <details class="reference-details">
+  <summary>
+   Sources
+  </summary>
+  <div class="sources-content">
+   <p>
+    The worked examples and pandas translations are study alternatives, not an official answer key. Shared DataFrame setup is listed under Reference.
+   </p>
+   <p>
+    <a href="https://sqlbolt.com/lesson/select_queries_order_of_execution" rel="noopener noreferrer" target="_blank">
+     SQLBolt — Logical query order
+    </a>
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     pandas SQL comparison
+    </a>
+    — Projection, filtering, grouping, joins and operations.
+   </p>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-count">
+     COUNT()
+    </a>
+    <a href="#m-sql-sum">
+     SUM()
+    </a>
+    <a href="#m-sql-group-by">
+     GROUP BY
+    </a>
+    <a href="#m-sql-inner-join">
+     INNER JOIN
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-assign">
+     assign()
+    </a>
+    <a href="#m-pd-reset-index">
+     Reset index
+    </a>
+    <a href="#m-pd-merge-inner">
+     Inner merge
+    </a>
+    <a href="#m-pd-merge-keys">
+     Different keys
+    </a>
+    <a href="#m-pd-sum">
+     sum()
+    </a>
+    <a href="#m-pd-size">
+     size
+    </a>
+    <a href="#m-pd-groupby">
+     Basic group
+    </a>
+    <a href="#m-pd-group-size">
+     Group size
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#B11">
+   <small>
+    ← Previous
+   </small>
+   WHERE versus HAVING
+  </a>
+  <a href="#B13">
+   <small>
+    Next →
+   </small>
+   INSERT rows
+  </a>
+ </div>
+</article>

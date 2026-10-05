@@ -1,0 +1,146 @@
+{
+  "id": "sql-coalesce",
+  "lang": "sql",
+  "category": "Conditional / NULL handling",
+  "label": "COALESCE()",
+  "example": "COALESCE(a,b,0)",
+  "description": "First non-null",
+  "source": "image-sql",
+  "related": [
+    "pd-combine-first",
+    "pd-fillna"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/flow-control-functions.html",
+  "aliases": "COALESCE",
+  "uses": [
+    {
+      "page": "C07",
+      "block": "code-C07-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT p.product_id,\n       COALESCE(ROUND(SUM(p.price * u.units) / NULLIF(SUM(u.units), 0), 2), 0) AS average_price\nFROM Prices p LEFT JOIN UnitsSold u\n  ON p.product_id = u.product_id AND u.purchase_date BETWEEN p.start_date AND p.end_date",
+      "snippetLine": 1
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": ")\nSELECT product_id, COALESCE(ROUND(SUM(paid) / NULLIF(SUM(units), 0), 2), 0) AS average_price\nFROM Sold\nGROUP BY product_id;",
+      "snippetLine": 5
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-4",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\nSELECT product_id, COALESCE(ROUND(SUM(paid) / SUM(units), 2), 0) AS average_price\nFROM Sold\nGROUP BY product_id",
+      "snippetLine": 7
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "), ids AS (SELECT DISTINCT product_id FROM Products)\nSELECT i.product_id, COALESCE(r.new_price, 10) AS price FROM ids i\nLEFT JOIN ranked r ON i.product_id = r.product_id AND r.rn = 1;",
+      "snippetLine": 4
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-2",
+      "line": 28,
+      "lines": [
+        28
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "            u.id,\n            COALESCE(ta.receivedApproved, 0) + COALESCE(tr.askedApproved, 0) AS num\n        FROM Users u\n        LEFT JOIN   TableAccepted ta ON u.id = ta.id",
+      "snippetLine": 27
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-4",
+      "line": 29,
+      "lines": [
+        29
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            u.id, \n            COALESCE(ta.receivedApproved, 0) + COALESCE(tr.askedApproved, 0) AS num\n        FROM Users u\n        LEFT JOIN TableAccepted ta ON u.id = ta.id",
+      "snippetLine": 28
+    },
+    {
+      "page": "LC262",
+      "block": "code-LC262-0",
+      "line": 32,
+      "lines": [
+        32
+      ],
+      "title": "262 · Trips and users",
+      "number": "262",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    t.Day,\n    COALESCE(ROUND(c.valid_cancel / t.valid , 2), 0) AS 'Cancellation Rate'\nFROM ValidTotal t\nLEFT JOIN ValidCancelled c ON t.Day = c.Day",
+      "snippetLine": 31
+    },
+    {
+      "page": "LC1158",
+      "block": "code-LC1158-0",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "1158 · Market analysis I",
+      "number": "1158",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    u.join_date, \n    COALESCE(o.orders_in_2019, 0) AS orders_in_2019\nFROM Users u\nLEFT JOIN Orders2019 o ON u.user_id = o.buyer_id",
+      "snippetLine": 11
+    },
+    {
+      "page": "LC3220",
+      "block": "code-LC3220-0",
+      "line": 26,
+      "lines": [
+        26,
+        27
+      ],
+      "title": "3220 · Odd and even transactions",
+      "number": "3220",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    d.transaction_date, \n    COALESCE(o.odd_sum, 0) AS odd_sum, \n    COALESCE(e.even_sum, 0) AS even_sum\nFROM Days d",
+      "snippetLine": 25
+    }
+  ],
+  "pageCount": 6
+}

@@ -1,0 +1,229 @@
+<article class="article" id="B04">
+ <div class="breadcrumb">
+  <a href="#sqlbolt">
+   SQLBolt
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Lesson 4
+  </span>
+ </div>
+ <h1>
+  DISTINCT, sorting and pagination
+ </h1>
+ <p>
+  DISTINCT removes duplicate result rows. ORDER BY controls order, DESC reverses it, and LIMIT/OFFSET choose a slice after sorting.
+ </p>
+ <p>
+  <b>
+   Note.
+  </b>
+  Without ORDER BY, do not rely on row order. When sort keys tie, add a unique secondary key for deterministic pagination.
+ </p>
+ <h2>
+  01 · Unique directors in alphabetical order
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-14-panel-0" aria-selected="true" id="example-14-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-14-panel-1" aria-selected="false" id="example-14-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-14-tab-0" class="code-panel" id="example-14-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B04-0" tabindex="0"><code class="language-sql" data-origin="legacy-B04-0"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">director</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">director</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-14-tab-1" class="code-panel" id="example-14-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B04-1" tabindex="0"><code class="language-python" data-origin="legacy-B04-1"><span class="n">result</span> <span class="o">=</span> <span class="n">movies</span><span class="p">[[</span><span class="s1">'director'</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'director'</span><span class="p">)</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  02 · Four most recent releases
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-15-panel-0" aria-selected="true" id="example-15-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-15-panel-1" aria-selected="false" id="example-15-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-15-tab-0" class="code-panel" id="example-15-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B04-2" tabindex="0"><code class="language-sql" data-origin="legacy-B04-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">year</span><span class="w"> </span><span class="k">DESC</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-15-tab-1" class="code-panel" id="example-15-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B04-3" tabindex="0"><code class="language-python" data-origin="legacy-B04-3"><span class="n">result</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'year'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  03 · First five alphabetical titles
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-16-panel-0" aria-selected="true" id="example-16-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-16-panel-1" aria-selected="false" id="example-16-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-16-tab-0" class="code-panel" id="example-16-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B04-4" tabindex="0"><code class="language-sql" data-origin="legacy-B04-4"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-16-tab-1" class="code-panel" id="example-16-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B04-5" tabindex="0"><code class="language-python" data-origin="legacy-B04-5"><span class="n">result</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'title'</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  04 · Next five alphabetical titles
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-17-panel-0" aria-selected="true" id="example-17-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-17-panel-1" aria-selected="false" id="example-17-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-17-tab-0" class="code-panel" id="example-17-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B04-6" tabindex="0"><code class="language-sql" data-origin="legacy-B04-6"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">5</span><span class="w"> </span><span class="k">OFFSET</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-17-tab-1" class="code-panel" id="example-17-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B04-7" tabindex="0"><code class="language-python" data-origin="legacy-B04-7"><span class="n">result</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'title'</span><span class="p">)</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">5</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span></code></pre>
+  </div>
+ </div>
+ <details class="reference-details">
+  <summary>
+   Sources
+  </summary>
+  <div class="sources-content">
+   <p>
+    The worked examples and pandas translations are study alternatives, not an official answer key. Shared DataFrame setup is listed under Reference.
+   </p>
+   <p>
+    <a href="https://sqlbolt.com/lesson/filtering_sorting_query_results" rel="noopener noreferrer" target="_blank">
+     SQLBolt — DISTINCT, sorting and pagination
+    </a>
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     pandas SQL comparison
+    </a>
+    — Projection, filtering, grouping, joins and operations.
+   </p>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+    <a href="#m-sql-distinct">
+     DISTINCT
+    </a>
+    <a href="#m-sql-order-by">
+     ORDER BY
+    </a>
+    <a href="#m-sql-limit">
+     LIMIT / OFFSET
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-iloc">
+     Rows by position
+    </a>
+    <a href="#m-pd-head">
+     First rows
+    </a>
+    <a href="#m-pd-sort-values">
+     Sort one column
+    </a>
+    <a href="#m-pd-sort-desc">
+     Descending
+    </a>
+    <a href="#m-pd-drop-duplicates">
+     Drop duplicates
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#B03">
+   <small>
+    ← Previous
+   </small>
+   Text constraints and LIKE
+  </a>
+  <a href="#B05">
+   <small>
+    Next →
+   </small>
+   Review · Simple SELECT queries
+  </a>
+ </div>
+</article>

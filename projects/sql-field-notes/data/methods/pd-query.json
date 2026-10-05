@@ -1,0 +1,44 @@
+{
+  "id": "pd-query",
+  "lang": "pd",
+  "category": "Less common but useful",
+  "label": "query()",
+  "example": "df.query('age > 30')",
+  "description": "SQL-like filtering",
+  "source": "image-pandas",
+  "related": [],
+  "note": "query and eval accept expressions, not arbitrary SQL. Do not construct them from untrusted user input.",
+  "doc": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html",
+  "aliases": "query",
+  "uses": [
+    {
+      "page": "C22",
+      "block": "code-C22-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    employee['nDepartments'] =   employee.groupby('employee_id').department_id.transform('count')\n    employee =   employee.query(\"(primary_flag == 'Y')   | (nDepartments == 1)\")\n    return employee[['employee_id', 'department_id']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    employee['nDepartments'] = employee.groupby('employee_id').department_id.transform('count')\n    employee = employee.query(\"(primary_flag == 'Y') | (nDepartments == 1)\")\n    return employee[['employee_id', 'department_id']]",
+      "snippetLine": 4
+    }
+  ],
+  "pageCount": 1
+}

@@ -1,0 +1,1934 @@
+<article class="article method-page" id="m-pd-groupby">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=GroupBy">
+   pandas · GroupBy
+  </a>
+ </div>
+ <h1>
+  Basic group
+ </h1>
+ <p class="lead">
+  Aggregate by group
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-groupby"><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'city'</span><span class="p">)[</span><span class="s1">'sales'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></code></pre>
+ </div>
+ <div class="note">
+  <b>
+   Implementation note.
+  </b>
+  pandas drops missing grouping keys by default; use dropna=False when those rows must form a group.
+  <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+   Documentation ↗
+  </a>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-sql-group-by">
+   SQL · GROUP BY
+  </a>
+  <a href="#m-sql-partition-by">
+   SQL · PARTITION BY
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C44?code=code-C44-1&amp;method=pd-groupby&amp;line=6">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1581 · Customers who visited without transactions
+    </strong>
+    <small>
+     Study solution · line 6
+    </small>
+   </div>
+   <pre aria-hidden="true">    df = df[df.transaction_id.isna()]
+    return df.groupby('customer_id').size().reset_index(name='count_no_trans')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-groupby&amp;line=10">
+   <div>
+    <span class="usage-label">
+     Squid Game · pandas
+    </span>
+    <strong>
+     Compare hot and cold months
+    </strong>
+    <small>
+     Saved walkthrough · line 10
+    </small>
+   </div>
+   <pre aria-hidden="true">joined = games.merge(extreme[['month']], left_on='month_num', right_on='month')
+result = (joined.loc[joined['year_num'].ge(2006)]
+          .groupby(['shape', 'month_num'], as_index=False)
+          .agg(avg_temp=('average_completion_time', 'mean'))</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#B10?code=code-B10-3&amp;method=pd-groupby&amp;line=1">
+   <div>
+    <span class="usage-label">
+     SQLBolt · pandas
+    </span>
+    <strong>
+     Aggregates and GROUP BY
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">result = employees.groupby('role', dropna=False, as_index=False).agg(average_years=('years_employed', 'mean'))</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C46?code=code-C46-1&amp;method=pd-groupby&amp;line=13">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1661 · Average processing time per machine
+    </strong>
+    <small>
+     Study solution · line 13
+    </small>
+   </div>
+   <pre aria-hidden="true">    df['processing_time'] = df['timestamp_e'] - df['timestamp_s']
+    result = df.groupby('machine_id', as_index=False).agg(processing_time=('processing_time', 'mean'))
+    result['processing_time'] = result['processing_time'].map(lambda x: round_half_up(x, 3))
+    return result</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C48?code=code-C48-1&amp;method=pd-groupby&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1280 · Students and examinations
+    </strong>
+    <small>
+     Study solution · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">    df = students.merge(subjects, how='cross')
+    exam_count = examinations.groupby(['student_id', 'subject_name']).size().reset_index(name='attended_exams')
+    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left')
+    df['attended_exams'] = df['attended_exams'].fillna(0).astype(int)</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C49?code=code-C49-1&amp;method=pd-groupby&amp;line=3">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     570 · Managers with at least five direct reports
+    </strong>
+    <small>
+     Study solution · line 3
+    </small>
+   </div>
+   <pre aria-hidden="true">def find_managers(employee: pd.DataFrame) -&gt; pd.DataFrame:
+    reports = employee.groupby(by='managerId').agg(
+        nReports = ('managerId', 'size')
+    ).reset_index().rename(columns={'managerId': 'id'})</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   39 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C50?code=code-C50-1&amp;method=pd-groupby&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1934 · Confirmation rate
+     </strong>
+     <small>
+      Study solution · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">    df['confirmation_rate'] = df.action.eq('confirmed').fillna(False)
+    df = df.groupby('user_id', as_index=False).agg(
+        total=('confirmation_rate', 'size'),
+        positive=('confirmation_rate', 'sum')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-1&amp;method=pd-groupby&amp;line=14">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      Study solution · line 14
+     </small>
+    </div>
+    <pre aria-hidden="true">    matched['paid'] = matched['price'] * matched['units']
+    g = matched.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))
+    g['average_price'] = (g['paid'] / g['units'].replace(0, float('nan'))).map(round_half_up)
+    result = p[['product_id']].drop_duplicates().merge(g[['product_id', 'average_price']], on='product_id', how='left')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C08?code=code-C08-1&amp;method=pd-groupby&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1075 · Project employees I
+     </strong>
+     <small>
+      Study solution · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    m = project.merge(employee, on='employee_id', how='left', validate='many_to_one')
+    g = m.groupby('project_id', as_index=False).agg(average_years=('experience_years', 'mean'))
+    g['average_years'] = g['average_years'].map(round_half_up)
+    return g</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C09?code=code-C09-1&amp;method=pd-groupby&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1633 · Users registered in a contest
+     </strong>
+     <small>
+      Study solution · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">def users_percentage(users: pd.DataFrame, register: pd.DataFrame) -&gt; pd.DataFrame:
+    g = register.groupby('contest_id').size().reset_index(name='participants')
+    g['percentage'] = (100 * g['participants'] / len(users)).map(round_half_up)
+    return g[['contest_id', 'percentage']].sort_values(['percentage', 'contest_id'], ascending=[False, True])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C10?code=code-C10-1&amp;method=pd-groupby&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1211 · Queries quality and percentage
+     </strong>
+     <small>
+      Study solution · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    q = queries.assign(quality_ratio=queries['rating'] / queries['position'], poor=queries['rating'].lt(3).astype(int))
+    g = q.groupby('query_name', dropna=False, as_index=False).agg(quality=('quality_ratio', 'mean'), poor_query_percentage=('poor', 'mean'))
+    g['quality'] = g['quality'].map(round_half_up)
+    g['poor_query_percentage'] = (100 * g['poor_query_percentage']).map(round_half_up)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C11?code=code-C11-1&amp;method=pd-groupby&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      Study solution · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    t['approved_amount'] = t['amount'].where(t['approved'], 0)
+    return t.groupby(['month', 'country'], dropna=False, as_index=False).agg(
+        trans_count=('amount', 'size'), approved_count=('approved', 'sum'),
+        trans_total_amount=('amount', 'sum'), approved_total_amount=('approved_amount', 'sum'))</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C12?code=code-C12-3&amp;method=pd-groupby&amp;line=12">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1174 · Immediate first deliveries
+     </strong>
+     <small>
+      My approach · line 12
+     </small>
+    </div>
+    <pre aria-hidden="true">    delivery['immediate'] =   delivery['order_date'] == delivery['customer_pref_delivery_date']
+    idx_to_keep =   delivery.groupby(by='customer_id')['order_date'].idxmin()
+    return   pd.DataFrame({'immediate_percentage': [round_half_up(100 * delivery['immediate'][idx_to_keep].mean(), 2)]})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C13?code=code-C13-1&amp;method=pd-groupby&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      550 · Game Play Analysis IV
+     </strong>
+     <small>
+      Study solution · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    a = activity.assign(event_date=pd.to_datetime(activity['event_date']))
+    first = a.groupby('player_id')['event_date'].transform('min')
+    valid = a['event_date'].eq(first + pd.Timedelta(days=1))
+    fraction = valid.groupby(a['player_id']).any().mean()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C14?code=code-C14-1&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      2356 · Unique subjects per teacher
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def count_unique_subjects(teacher: pd.DataFrame) -&gt; pd.DataFrame:
+    return teacher.groupby('teacher_id', as_index=False).agg(cnt=('subject_id', 'nunique'))</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-1&amp;method=pd-groupby&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      Study solution · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    mask = a['activity_date'].between('2019-06-28', '2019-07-27') &amp; a['activity_type'].isin(kinds)
+    return a.loc[mask].groupby('activity_date', as_index=False).agg(active_users=('user_id', 'nunique')).rename(columns={'activity_date': 'day'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C16?code=code-C16-1&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1070 · First-year product sales
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def sales_analysis(sales: pd.DataFrame) -&gt; pd.DataFrame:
+    first_year = sales.groupby('product_id')['year'].transform('min')
+    return sales.loc[sales['year'].eq(first_year), ['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C17?code=code-C17-1&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      596 · Classes with at least five students
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def find_classes(courses: pd.DataFrame) -&gt; pd.DataFrame:
+    g = courses.groupby('class', as_index=False).agg(n_students=('student', 'nunique'))
+    return g.loc[g['n_students'].ge(5), ['class']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C18?code=code-C18-1&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1729 · Followers count
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def count_followers(followers: pd.DataFrame) -&gt; pd.DataFrame:
+    return followers.groupby('user_id', as_index=False).agg(followers_count=('follower_id', 'nunique')).sort_values('user_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C19?code=code-C19-3&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      619 · Biggest single number
+     </strong>
+     <small>
+      My approach · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def biggest_single_number(my_numbers: pd.DataFrame) -&gt; pd.DataFrame:
+    df =   my_numbers.groupby(by='num').agg(
+        freq = ('num', 'size')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C20?code=code-C20-1&amp;method=pd-groupby&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1045 · Customers who bought every product
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    eligible = customer.loc[customer['product_key'].isin(keys)]
+    counts = eligible.groupby('customer_id')['product_key'].nunique()
+    ids = customer[['customer_id']].drop_duplicates()
+    mask = ids['customer_id'].map(counts).fillna(0).eq(len(keys))</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C21?code=code-C21-1&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1731 · Employees reporting to employees
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def count_employees(employees: pd.DataFrame) -&gt; pd.DataFrame:
+    by_manager = employees.groupby('reports_to', as_index=False).agg(
+        reports_count=('employee_id', 'size'),
+        average_age=('age', 'mean')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C22?code=code-C22-1&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1789 · Primary department per employee
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def find_primary_department(employee: pd.DataFrame) -&gt; pd.DataFrame:
+    n = employee.groupby('employee_id')['department_id'].transform('size')
+    mask = employee['primary_flag'].eq('Y') | n.eq(1)
+    return employee.loc[mask, ['employee_id', 'department_id']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-groupby&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Study solution · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    r = movie_rating.assign(created_at=pd.to_datetime(movie_rating['created_at']))
+    users_ranked = r.groupby('user_id').size().reset_index(name='n_reviews').merge(users, on='user_id')
+    first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})
+    feb = r.loc[r['created_at'].ge('2020-02-01') &amp; r['created_at'].lt('2020-03-01')]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-1&amp;method=pd-groupby&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      Study solution · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    c = customer.assign(visited_on=pd.to_datetime(customer['visited_on']))
+    daily = c.groupby('visited_on')['amount'].sum().sort_index()
+    if daily.empty:
+        return pd.DataFrame(columns=['visited_on', 'amount', 'average_amount'])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C34?code=code-C34-1&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      185 · Department top three salaries
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def top_three_salaries(employee: pd.DataFrame, department: pd.DataFrame) -&gt; pd.DataFrame:
+    rank = employee.groupby('departmentId')['salary'].rank(method='dense', ascending=False)
+    chosen = employee.loc[rank.le(3)].rename(columns={'name': 'Employee', 'salary': 'Salary'})
+    dept = department.rename(columns={'id': 'departmentId', 'name': 'Department'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C39?code=code-C39-1&amp;method=pd-groupby&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1484 · Products sold by date
+     </strong>
+     <small>
+      Study solution · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    unique = activities[['sell_date', 'product']].drop_duplicates()
+    return unique.groupby('sell_date', as_index=False).agg(
+        num_sold=('product', 'size'), products=('product', lambda s: ','.join(sorted(s)))).sort_values('sell_date')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-1&amp;method=pd-groupby&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    feb = orders.loc[dates.ge('2020-02-01') &amp; dates.lt('2020-03-01')]
+    g = feb.groupby('product_id', as_index=False).agg(unit=('unit', 'sum'))
+    return g.loc[g['unit'].ge(100)].merge(products, on='product_id', how='inner')[['product_name', 'unit']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC262?code=code-LC262-1&amp;method=pd-groupby&amp;line=19">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      262 · Trips and users
+     </strong>
+     <small>
+      Uploaded submission · line 19
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = trips.groupby('request_at').agg(
+        validTotal=('client_id', 'size'),
+        cancelTotal=('status', filter_status)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC601?code=code-LC601-1&amp;method=pd-groupby&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      601 · Human traffic of stadium
+     </strong>
+     <small>
+      Uploaded submission · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    valid_groups = df.groupby(by='groups').agg(
+        valid = ('groups', 'size')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC1158?code=code-LC1158-1&amp;method=pd-groupby&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1158 · Market analysis I
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    orders = orders[(orders.order_date &gt;= '2019-01-01') &amp; (orders.order_date &lt;= '2019-12-31')]
+    df = orders.groupby(by='buyer_id').agg(
+        orders_in_2019 = ('buyer_id', 'size')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC1393?code=code-LC1393-1&amp;method=pd-groupby&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1393 · Capital gain/loss
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return stocks.groupby(by='stock_name').agg(
+        capital_gain_loss = ('price', 'sum')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3220?code=code-LC3220-1&amp;method=pd-groupby&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3220 · Odd and even transactions
+     </strong>
+     <small>
+      Uploaded submission · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">    
+    df = transactions.groupby(by='transaction_date').agg(
+        odd_sum = ('amount_odd', 'sum'),
+        even_sum = ('amount_even', 'sum')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3421?code=code-LC3421-1&amp;method=pd-groupby&amp;line=17">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3421 · Find students who improved
+     </strong>
+     <small>
+      Uploaded submission · line 17
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = scores.groupby(by=['student_id', 'subject']).apply(custom_func).reset_index()
+
+    return df[df.improved == True][['student_id', 'subject', 'first_score', 'latest_score']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3497?code=code-LC3497-1&amp;method=pd-groupby&amp;line=15">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3497 · Analyze subscription conversion
+     </strong>
+     <small>
+      Uploaded submission · line 15
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = user_activity.groupby(by='user_id').apply(custom_func).reset_index()
+
+    return df.dropna()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3521?code=code-LC3521-1&amp;method=pd-groupby&amp;line=12">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3521 · Find product recommendation pairs
+     </strong>
+     <small>
+      Uploaded submission · line 12
+     </small>
+    </div>
+    <pre aria-hidden="true">    
+    df = df.groupby(by=['product1_id', 'product2_id']).agg(
+        customer_count = ('product1_id', 'size')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3564?code=code-LC3564-1&amp;method=pd-groupby&amp;line=16">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3564 · Seasonal sales analysis
+     </strong>
+     <small>
+      Uploaded submission · line 16
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = sales.groupby(by=['season', 'category']).agg(
+        total_quantity = ('quantity', 'sum'),
+        total_revenue = ('revenue', 'sum')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3580?code=code-LC3580-1&amp;method=pd-groupby&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3580 · Find consistently improving employees
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = (
+        performance_reviews
+        .sort_values(by=['employee_id', 'review_date'], ascending=[True, False])
+        .groupby(by='employee_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-04?code=code-squid-04-1&amp;method=pd-groupby&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Rank ten-player teams
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">
+teams = player.groupby('team_id', as_index=False, dropna=False).agg(
+    n_players=('id', 'size'), age_team=('age', 'mean'))
+result = teams.loc[teams['n_players'].eq(10), ['team_id', 'age_team']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-05?code=code-squid-05-1&amp;method=pd-groupby&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Count a player’s closest interactions
+     </strong>
+     <small>
+      Saved walkthrough · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    interactions['player1_id'].ne(456), interactions['player2_id'])
+counts = interactions.groupby('player_id', as_index=False).size().rename(columns={'size': 'counts'})
+counts['target_id'] = 456
+target = player[['id', 'first_name']].rename(columns={'id': 'target_id', 'first_name': 'name_456'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-06?code=code-squid-06-1&amp;method=pd-groupby&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Trace equipment to its first failure
+     </strong>
+     <small>
+      Saved walkthrough · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">if not joined.empty:
+    game_counts = joined.groupby('game_type', dropna=False).size()
+    game_type = game_counts.sort_values(ascending=False).index[0]
+    in_game = joined.loc[joined['game_type'].eq(game_type)]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-08?code=code-squid-08-1&amp;method=pd-groupby&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Find the longest hesitation
+     </strong>
+     <small>
+      Saved walkthrough · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">if not pushed.empty:
+    means = pushed.groupby('game_id')['last_moved_time_seconds'].mean()
+    game_id = means.sort_values(ascending=False).index[0]
+    result = (pushed.loc[pushed['game_id'].eq(game_id)]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B11?code=code-B11-3&amp;method=pd-groupby&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      WHERE versus HAVING
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = employees.groupby('role', dropna=False).size().reset_index(name='employee_count')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B12?code=code-B12-1&amp;method=pd-groupby&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Logical query order
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.groupby('director', dropna=False).size().reset_index(name='movie_count')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B19?code=code-B19-3&amp;method=pd-groupby&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Additional topic · Subqueries
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">mean_revenue = employees.groupby('department')['revenue_generated'].transform('mean')
+result = employees.loc[employees['salary'].gt(mean_revenue)]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (48)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C44?code=code-C44-3&amp;method=pd-groupby&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1581 · Customers who visited without transactions
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = df[df.amount.isna()]
+    return df.groupby(by='customer_id')['amount'].agg(count_no_trans = 'size').reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C46?code=code-C46-3&amp;method=pd-groupby&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1661 · Average processing time per machine
+     </strong>
+     <small>
+      Uploaded submission · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return df.groupby(by='machine_id').mean().round(3).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C48?code=code-C48-3&amp;method=pd-groupby&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1280 · Students and examinations
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    exam_count = examinations.groupby(by=['student_id', 'subject_name']).agg(
+        attended_exams = ('subject_name', 'count')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C49?code=code-C49-3&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      570 · Managers with at least five direct reports
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def find_managers(employee: pd.DataFrame) -&gt; pd.DataFrame:
+    reports = employee.groupby(by='managerId').agg(
+        nReports = ('managerId', 'size')
+    ).reset_index().rename(columns={'managerId': 'id'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C50?code=code-C50-3&amp;method=pd-groupby&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1934 · Confirmation rate
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = df[['user_id', 'confirmation_rate']].groupby(by='user_id').agg(
+        total = ('confirmation_rate', 'size'),
+        positive = ('confirmation_rate', 'sum')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-groupby&amp;line=15">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      My approach · line 15
+     </small>
+    </div>
+    <pre aria-hidden="true">    df['paid'] = df['price'] * df['units']
+    totals = df.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))
+    totals['average_price'] = (totals['paid'] / totals['units'].replace(0, float('nan'))).map(round_half_up)
+    result = prices[['product_id']].drop_duplicates().merge(totals[['product_id', 'average_price']], on='product_id', how='left')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-5&amp;method=pd-groupby&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      Uploaded submission · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">    
+    return df.groupby(by='product_id').apply(
+        lambda x: round(x['paid'].sum() / x['units'].sum(), 2) if x['units'].sum() != 0 else 0
+    ).reset_index(name='average_price')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C08?code=code-C08-3&amp;method=pd-groupby&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1075 · Project employees I
+     </strong>
+     <small>
+      My approach · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    df =   project.merge(employee, on='employee_id', how='left')[['project_id', 'experience_years']]
+    df =   df.groupby(by='project_id').agg(
+        total_years = ('experience_years', 'sum'),
+        n_employees = ('experience_years', 'count'),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C08?code=code-C08-5&amp;method=pd-groupby&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1075 · Project employees I
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = project.merge(employee, on='employee_id', how='left')[['project_id', 'experience_years']]
+    df = df.groupby(by='project_id').agg(
+        total_years = ('experience_years', 'sum'),
+        n_employees = ('experience_years', 'size'),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C09?code=code-C09-3&amp;method=pd-groupby&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1633 · Users registered in a contest
+     </strong>
+     <small>
+      My approach · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    nUsers = len(users.user_id)
+    df =   register.groupby(by='contest_id').agg(
+        nUsersPerTest = ('user_id', 'size')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C09?code=code-C09-5&amp;method=pd-groupby&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1633 · Users registered in a contest
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    nUsers = len(users.user_id)
+    df = register.groupby(by='contest_id').agg(
+        nUsersPerTest = ('user_id', 'size')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C10?code=code-C10-3&amp;method=pd-groupby&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1211 · Queries quality and percentage
+     </strong>
+     <small>
+      My approach · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">    queries['poor'] = (queries['rating'] &lt; 3) * 100
+    df =   queries.groupby(by='query_name', dropna=False).agg(
+        quality = ('quality_ratio', 'mean'),
+        poor_query_percentage   = ('poor',   'mean')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C10?code=code-C10-5&amp;method=pd-groupby&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1211 · Queries quality and percentage
+     </strong>
+     <small>
+      Uploaded submission · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = queries.groupby(by='query_name').agg(
+        quality = ('quality_ratio', 'mean'),
+        poor_query_percentage = ('poor', 'mean')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C11?code=code-C11-3&amp;method=pd-groupby&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      My approach · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    transactions['approved_amount'] =   transactions['approved'] * transactions['amount']
+    return   transactions.groupby(by=['month', 'country'], dropna=False).agg(
+        trans_count = ('amount', 'size'),
+        approved_count = ('approved', 'sum'),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C11?code=code-C11-5&amp;method=pd-groupby&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      Uploaded submission · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return transactions.groupby(by=['month', 'country'], dropna=False).agg(
+        trans_count = ('amount', 'size'),
+        approved_count = ('approved', 'sum'),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C12?code=code-C12-5&amp;method=pd-groupby&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1174 · Immediate first deliveries
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    delivery['immediate'] = delivery['order_date'] == delivery['customer_pref_delivery_date']
+    idx_to_keep = delivery.groupby(by='customer_id')['order_date'].idxmin()
+    return pd.DataFrame({'immediate_percentage': [round(100 * delivery['immediate'][idx_to_keep].mean(), 2)]})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C13?code=code-C13-3&amp;method=pd-groupby&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      550 · Game Play Analysis IV
+     </strong>
+     <small>
+      My approach · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    activity = activity.assign(event_date=pd.to_datetime(activity['event_date']))
+    activity['first_login'] =   activity.groupby(by='player_id')['event_date'].transform('min')
+    activity['valid'] = activity['event_date'] ==   activity['first_login'] + pd.Timedelta(days = 1)
+</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C13?code=code-C13-5&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      550 · Game Play Analysis IV
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def gameplay_analysis(activity: pd.DataFrame) -&gt; pd.DataFrame:
+    activity['first_login'] = activity.groupby(by='player_id')['event_date'].transform('min')
+    activity['valid'] = activity['event_date'] == activity['first_login'] + pd.Timedelta(days = 1)
+    </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C14?code=code-C14-3&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      2356 · Unique subjects per teacher
+     </strong>
+     <small>
+      My approach · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def count_unique_subjects(teacher: pd.DataFrame) -&gt; pd.DataFrame:
+    return   teacher.groupby(by='teacher_id').agg(
+        cnt = ('subject_id', 'nunique')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C14?code=code-C14-5&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      2356 · Unique subjects per teacher
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def count_unique_subjects(teacher: pd.DataFrame) -&gt; pd.DataFrame:
+    return teacher.groupby(by='teacher_id').agg(
+        cnt = ('subject_id', 'nunique')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-3&amp;method=pd-groupby&amp;line=15">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      My approach · line 15
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return df.groupby(by='activity_date').agg(
+        active_users = ('user_id', 'nunique')
+    ).reset_index().rename(columns={'activity_date': 'day'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-5&amp;method=pd-groupby&amp;line=15">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      Uploaded submission · line 15
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return df.groupby(by='activity_date').agg(
+        active_users = ('user_id', 'nunique')
+    ).reset_index().rename(columns={'activity_date': 'day'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C16?code=code-C16-3&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1070 · First-year product sales
+     </strong>
+     <small>
+      My approach · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def sales_analysis(sales: pd.DataFrame) -&gt; pd.DataFrame:
+    sales['year_order'] = sales.groupby(by='product_id')['year'].rank(method='min')
+    sales = sales[sales['year_order'] == 1]
+    sales = sales[['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C16?code=code-C16-5&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1070 · First-year product sales
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def sales_analysis(sales: pd.DataFrame) -&gt; pd.DataFrame:
+    sales['year_order'] = sales.groupby(by='product_id')['year'].rank(method='min')
+    sales = sales[sales['year_order'] == 1]
+    sales = sales[['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C17?code=code-C17-3&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      596 · Classes with at least five students
+     </strong>
+     <small>
+      My approach · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def find_classes(courses: pd.DataFrame) -&gt; pd.DataFrame:
+    df = courses.groupby(by='class').agg(
+        nStudents = ('student', 'nunique')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C17?code=code-C17-5&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      596 · Classes with at least five students
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def find_classes(courses: pd.DataFrame) -&gt; pd.DataFrame:
+    df = courses.groupby(by='class').agg(
+        nStudents = ('student', 'nunique')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C18?code=code-C18-3&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1729 · Followers count
+     </strong>
+     <small>
+      My approach · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def count_followers(followers: pd.DataFrame) -&gt; pd.DataFrame:
+    df =   followers.groupby('user_id').agg(
+        followers_count = ('follower_id', 'nunique')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C18?code=code-C18-5&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1729 · Followers count
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def count_followers(followers: pd.DataFrame) -&gt; pd.DataFrame:
+    df = followers.groupby('user_id').agg(
+        followers_count = ('follower_id', 'nunique')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C19?code=code-C19-5&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      619 · Biggest single number
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def biggest_single_number(my_numbers: pd.DataFrame) -&gt; pd.DataFrame:
+    df = my_numbers.groupby(by='num').agg(
+        freq = ('num', 'size')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C20?code=code-C20-3&amp;method=pd-groupby&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1045 · Customers who bought every product
+     </strong>
+     <small>
+      My approach · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    customer = customer[customer['product_key'].isin(product['product_key'])]
+    df = customer.groupby(by='customer_id').agg(
+        nSold = ('product_key', 'nunique')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C20?code=code-C20-5&amp;method=pd-groupby&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1045 · Customers who bought every product
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = customer.groupby(by='customer_id').agg(
+        nSold = ('product_key', 'nunique')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C21?code=code-C21-3&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1731 · Employees reporting to employees
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def count_employees(employees: pd.DataFrame) -&gt; pd.DataFrame:
+    by_manager = employees.groupby('reports_to', as_index=False).agg(
+        reports_count=('employee_id', 'size'), 
+        average_age=('age', 'mean')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C22?code=code-C22-3&amp;method=pd-groupby&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1789 · Primary department per employee
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">def find_primary_department(employee: pd.DataFrame) -&gt; pd.DataFrame:
+    employee['nDepartments'] =   employee.groupby('employee_id').department_id.transform('count')
+    employee =   employee.query("(primary_flag == 'Y')   | (nDepartments == 1)")
+    return employee[['employee_id', 'department_id']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C22?code=code-C22-5&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1789 · Primary department per employee
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def find_primary_department(employee: pd.DataFrame) -&gt; pd.DataFrame:
+    employee['nDepartments'] = employee.groupby('employee_id').department_id.transform('count')
+    employee = employee.query("(primary_flag == 'Y') | (nDepartments == 1)")
+    return employee[['employee_id', 'department_id']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-3&amp;method=pd-groupby&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      My approach · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    movie_rating = movie_rating.assign(created_at=pd.to_datetime(movie_rating['created_at']))
+    df_users =   movie_rating.groupby(by='user_id').agg(
+        nReviews = ('rating', 'size')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-5&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def movie_rating(movies: pd.DataFrame, users: pd.DataFrame, movie_rating: pd.DataFrame) -&gt; pd.DataFrame:
+    df_users = movie_rating.groupby(by='user_id').agg(
+        nReviews = ('rating', 'size')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-3&amp;method=pd-groupby&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      My approach · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    customer = customer.assign(visited_on=pd.to_datetime(customer['visited_on']))
+    daily = customer.groupby('visited_on')['amount'].sum().sort_index()
+    if daily.empty:
+        return pd.DataFrame(columns=['visited_on', 'amount', 'average_amount'])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-5&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def restaurant_growth(customer: pd.DataFrame) -&gt; pd.DataFrame:
+    customer = customer.groupby(by='visited_on', as_index=False)['amount'].sum()
+
+    nDays = 7</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C34?code=code-C34-3&amp;method=pd-groupby&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      185 · Department top three salaries
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">def top_three_salaries(employee: pd.DataFrame, department: pd.DataFrame) -&gt; pd.DataFrame:
+    employee['ranked'] = employee.groupby(by='departmentId')['salary'].rank(method='dense', ascending=False)
+    employee =   employee[employee.ranked &lt;= 3]
+    df =   employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C34?code=code-C34-5&amp;method=pd-groupby&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      185 · Department top three salaries
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def top_three_salaries(employee: pd.DataFrame, department: pd.DataFrame) -&gt; pd.DataFrame:
+    employee['ranked'] = employee.groupby(by='departmentId')['salary'].rank(method='dense', ascending=False)
+    employee = employee[employee.ranked &lt;= 3]
+    df = employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C39?code=code-C39-3&amp;method=pd-groupby&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1484 · Products sold by date
+     </strong>
+     <small>
+      My approach · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df =   activities.groupby(by='sell_date').agg(
+        num_sold = ('product', 'size'),
+        products = ('product',   concat_string)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C39?code=code-C39-5&amp;method=pd-groupby&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1484 · Products sold by date
+     </strong>
+     <small>
+      Uploaded submission · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    
+    df = activities.groupby(by='sell_date').agg(
+        num_sold = ('product', 'size'),
+        products = ('product', concat_string)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-3&amp;method=pd-groupby&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      My approach · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    orders =   orders[(orders.order_date &gt;= '2020-02-01') &amp; (orders.order_date &lt; '2020-03-01')]
+    df =   orders.groupby(by='product_id').agg(
+        unit = ('unit', 'sum')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-5&amp;method=pd-groupby&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = orders.groupby(by='product_id').agg(
+        unit = ('unit', 'sum')
+    ).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC1393?code=code-LC1393-2&amp;method=pd-groupby&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1393 · Capital gain/loss
+     </strong>
+     <small>
+      Working reference variation · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    df.loc[buy, 'price'] = -df.loc[buy, 'price']
+    return df.groupby('stock_name', as_index=False).agg(
+        capital_gain_loss=('price', 'sum')
+    )</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B10?code=code-B10-5&amp;method=pd-groupby&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Aggregates and GROUP BY
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = employees.groupby('building', dropna=False)['years_employed'].sum(min_count=1).reset_index(name='total_years')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B11?code=code-B11-5&amp;method=pd-groupby&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      WHERE versus HAVING
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">g = employees.groupby('role', dropna=False)['years_employed'].sum(min_count=1).reset_index(name='total_years')
+result = g.loc[g['role'].eq('Engineer')]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B12?code=code-B12-3&amp;method=pd-groupby&amp;line=3">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Logical query order
+     </strong>
+     <small>
+      Study solution · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">m = m.assign(total_sales=m['domestic_sales'] + m['international_sales'])
+result = m.groupby('director', dropna=False)['total_sales'].sum(min_count=1).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · GroupBy. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=GroupBy">
+   <small>
+    ← Browse
+   </small>
+   pandas · GroupBy
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

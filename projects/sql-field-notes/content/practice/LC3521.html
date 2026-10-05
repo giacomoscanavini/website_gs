@@ -1,0 +1,246 @@
+<article class="article" id="LC3521">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Additional problems
+  </span>
+ </div>
+ <h1>
+  3521 · Find product recommendation pairs
+ </h1>
+ <p>
+  Find product pairs occurring together for at least three customers and attach their categories.
+ </p>
+ <h2>
+  My submission
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="archive-3521-panel-0" aria-selected="true" id="archive-3521-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="archive-3521-panel-1" aria-selected="false" id="archive-3521-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="archive-3521-tab-0" class="code-panel" id="archive-3521-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    MySQL
+   </div>
+   <pre id="code-LC3521-0" tabindex="0"><code class="language-sql" data-origin="archive-3521-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">WITH</span><span class="w"> </span>
+<span class="w">    </span><span class="n">BoughtPairs</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span>
+<span class="w">            </span><span class="n">p1</span><span class="p">.</span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">p1</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">product1_id</span><span class="p">,</span><span class="w"> </span>
+<span class="w">            </span><span class="n">p2</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">product2_id</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">ProductPurchases</span><span class="w"> </span><span class="n">p1</span>
+<span class="w">        </span><span class="k">CROSS</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">ProductPurchases</span><span class="w"> </span><span class="n">p2</span>
+<span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">p1</span><span class="p">.</span><span class="n">user_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">user_id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">p1</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">product_id</span>
+<span class="w">    </span><span class="p">),</span><span class="w"> </span>
+<span class="w">    </span><span class="n">ValidPairs</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">product1_id</span><span class="p">,</span><span class="w"> </span><span class="n">product2_id</span><span class="p">,</span><span class="w"> </span><span class="nf">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">customer_count</span>
+<span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">BoughtPairs</span>
+<span class="w">        </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">product1_id</span><span class="p">,</span><span class="w"> </span><span class="n">product2_id</span>
+<span class="w">        </span><span class="k">HAVING</span><span class="w"> </span><span class="nf">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">3</span>
+<span class="w">    </span><span class="p">)</span>
+
+<span class="k">SELECT</span><span class="w"> </span>
+<span class="w">    </span><span class="n">v</span><span class="p">.</span><span class="n">product1_id</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">product2_id</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">p1</span><span class="p">.</span><span class="n">category</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">product1_category</span><span class="p">,</span>
+<span class="w">    </span><span class="n">p2</span><span class="p">.</span><span class="n">category</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">product2_category</span><span class="p">,</span>
+<span class="w">    </span><span class="n">v</span><span class="p">.</span><span class="n">customer_count</span><span class="w"> </span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">ValidPairs</span><span class="w"> </span><span class="n">v</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">ProductInfo</span><span class="w"> </span><span class="n">p1</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">product1_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p1</span><span class="p">.</span><span class="n">product_id</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">ProductInfo</span><span class="w"> </span><span class="n">p2</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">product2_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p2</span><span class="p">.</span><span class="n">product_id</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">customer_count</span><span class="w"> </span><span class="k">DESC</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">product1_id</span><span class="w"> </span><span class="k">ASC</span><span class="p">,</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">product2_id</span><span class="w"> </span><span class="k">ASC</span></code></pre>
+  </div>
+  <div aria-labelledby="archive-3521-tab-1" class="code-panel" id="archive-3521-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-LC3521-1" tabindex="0"><code class="language-python" data-origin="archive-3521-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">find_product_recommendation_pairs</span><span class="p">(</span><span class="n">product_purchases</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">product_info</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">product_purchases</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">product_purchases</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'cross'</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">[</span><span class="s1">'_1'</span><span class="p">,</span> <span class="s1">'_2'</span><span class="p">])</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">user_id_1</span> <span class="o">==</span> <span class="n">df</span><span class="o">.</span><span class="n">user_id_2</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">product_id_1</span> <span class="o">&lt;</span> <span class="n">df</span><span class="o">.</span><span class="n">product_id_2</span><span class="p">)]</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">'product_id_1'</span><span class="p">:</span> <span class="s1">'product1_id'</span><span class="p">,</span>
+        <span class="s1">'product_id_2'</span><span class="p">:</span> <span class="s1">'product2_id'</span><span class="p">,</span>
+    <span class="p">})</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'product1_id'</span><span class="p">,</span> <span class="s1">'product2_id'</span><span class="p">]]</span>
+    
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">'product1_id'</span><span class="p">,</span> <span class="s1">'product2_id'</span><span class="p">])</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="n">customer_count</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'product1_id'</span><span class="p">,</span> <span class="s1">'size'</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">customer_count</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">]</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">product_info</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">'product1_id'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'product_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">'category'</span><span class="p">:</span> <span class="s1">'product1_category'</span><span class="p">})</span>
+    
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">product_info</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">'product2_id'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'product_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+        <span class="s1">'category'</span><span class="p">:</span> <span class="s1">'product2_category'</span><span class="p">})</span>
+
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'product1_id'</span><span class="p">,</span> <span class="s1">'product2_id'</span><span class="p">,</span> <span class="s1">'product1_category'</span><span class="p">,</span> <span class="s1">'product2_category'</span><span class="p">,</span> <span class="s1">'customer_count'</span><span class="p">]]</span>
+    
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">'customer_count'</span><span class="p">,</span> <span class="s1">'product1_id'</span><span class="p">,</span> <span class="s1">'product2_id'</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span>
+    
+</code></pre>
+  </div>
+ </div>
+ <h2>
+  How the submitted approach works
+ </h2>
+ <p>
+  The self cross-join creates candidate pairs for the same user. Requiring product1_id &lt; product2_id removes reversed pairs. Group, count, and join category names.
+ </p>
+ <div class="note warning">
+  <b>
+   Implementation note.
+  </b>
+  COUNT(*) and pandas size count paired rows. Interpreting this as customer_count relies on unique user–product purchase records; duplicate purchases can inflate the result.
+ </div>
+ <details class="reference-details">
+  <summary>
+   Source
+  </summary>
+  <div class="sources-content">
+   <p>
+    SQL.zip / 3521-find-product-recommendation-pairs / submission-1.sql and submission-1.py. These are the submitted files; the summary and implementation notes describe the code, not a replacement official problem statement.
+   </p>
+   <p>
+    <a href="https://leetcode.com/problems/find-product-recommendation-pairs/" rel="noopener noreferrer" target="_blank">
+     Original problem
+    </a>
+   </p>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-and">
+     AND
+    </a>
+    <a href="#m-sql-count">
+     COUNT()
+    </a>
+    <a href="#m-sql-group-by">
+     GROUP BY
+    </a>
+    <a href="#m-sql-having">
+     HAVING
+    </a>
+    <a href="#m-sql-left-join">
+     LEFT JOIN
+    </a>
+    <a href="#m-sql-cross-join">
+     CROSS JOIN
+    </a>
+    <a href="#m-sql-self-join">
+     Self join
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-with">
+     WITH
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+    <a href="#m-sql-order-by">
+     ORDER BY
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-filter">
+     Condition
+    </a>
+    <a href="#m-pd-and">
+     Multiple conditions
+    </a>
+    <a href="#m-pd-sort-values">
+     Sort one column
+    </a>
+    <a href="#m-pd-sort-desc">
+     Descending
+    </a>
+    <a href="#m-pd-sort-multi">
+     Multiple columns
+    </a>
+    <a href="#m-pd-rename">
+     Rename
+    </a>
+    <a href="#m-pd-reset-index">
+     Reset index
+    </a>
+    <a href="#m-pd-merge-left">
+     Left merge
+    </a>
+    <a href="#m-pd-merge-keys">
+     Different keys
+    </a>
+    <a href="#m-pd-size">
+     size
+    </a>
+    <a href="#m-pd-groupby">
+     Basic group
+    </a>
+    <a href="#m-pd-groupby-multi">
+     Multiple groups
+    </a>
+    <a href="#m-pd-agg-named">
+     Named aggregation
+    </a>
+    <a href="#m-pd-group-size">
+     Group size
+    </a>
+    <a href="#m-pd-merge-cross">
+     Cross merge
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#LC3497">
+   <small>
+    ← Previous
+   </small>
+   3497 · Analyze subscription conversion
+  </a>
+  <a href="#LC3564">
+   <small>
+    Next →
+   </small>
+   3564 · Seasonal sales analysis
+  </a>
+ </div>
+</article>

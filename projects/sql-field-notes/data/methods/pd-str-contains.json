@@ -1,0 +1,118 @@
+{
+  "id": "pd-str-contains",
+  "lang": "pd",
+  "category": "Strings",
+  "label": "Contains",
+  "example": "df.name.str.contains('abc')",
+  "description": "Search substring",
+  "source": "image-pandas",
+  "related": [
+    "sql-like",
+    "sql-regexp"
+  ],
+  "note": "str.contains treats the pattern as a regular expression by default. Set regex=False for a literal substring and choose na behavior explicitly.",
+  "doc": "https://pandas.pydata.org/docs/reference/api/pandas.Series.str.contains.html",
+  "aliases": "contains",
+  "uses": [
+    {
+      "page": "C36",
+      "block": "code-C36-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1527 · Patients with a disease",
+      "number": "1527",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def find_patients(patients: pd.DataFrame) -> pd.DataFrame:\n    mask = patients['conditions'].str.contains(r'(?:^| )DIAB1', regex=True, na=False)\n    return patients.loc[mask].copy()",
+      "snippetLine": 3
+    },
+    {
+      "page": "C36",
+      "block": "code-C36-3",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1527 · Patients with a disease",
+      "number": "1527",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def find_patients(patients: pd.DataFrame) -> pd.DataFrame:\n    flag =   patients['conditions'].str.contains(r'^DIAB1| DIAB1', na=False)\n    return   patients[flag]",
+      "snippetLine": 2
+    },
+    {
+      "page": "C36",
+      "block": "code-C36-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1527 · Patients with a disease",
+      "number": "1527",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def find_patients(patients: pd.DataFrame) -> pd.DataFrame:\n    flag = patients['conditions'].str.contains(r'^DIAB1| DIAB1')\n    return patients[flag]",
+      "snippetLine": 3
+    },
+    {
+      "page": "LC262",
+      "block": "code-LC262-1",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "262 · Trips and users",
+      "number": "262",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    def filter_status(x):\n        return x.str.contains('cancelled').sum()\n\n    df = trips.groupby('request_at').agg(",
+      "snippetLine": 16
+    },
+    {
+      "page": "LC3475",
+      "block": "code-LC3475-1",
+      "line": 8,
+      "lines": [
+        8,
+        9
+      ],
+      "title": "3475 · DNA pattern recognition",
+      "number": "3475",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "                           samples.dna_sequence.str.endswith('TGA')).astype('int')\n    samples['has_atat'] = (samples.dna_sequence.str.contains('ATAT')).astype('int')\n    samples['has_ggg'] = (samples.dna_sequence.str.contains('GGG')).astype('int')\n",
+      "snippetLine": 7
+    },
+    {
+      "page": "murder-05",
+      "block": "code-murder-05-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "Cross-check the licence plate",
+      "number": "05",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "joined = drivers_license.merge(people, how='left', left_on='id', right_on='license_id')\nmask = joined['plate_number'].str.contains('H42W', regex=False, na=False)\nresult = joined.loc[mask, ['id', 'age', 'plate_number', 'car_make', 'car_model', 'name']].copy()",
+      "snippetLine": 4
+    },
+    {
+      "page": "B03",
+      "block": "code-B03-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Text constraints and LIKE",
+      "number": "03",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = movies.loc[movies['title'].str.contains(r'^Toy Story', case=False, na=False)].copy()",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 5
+}

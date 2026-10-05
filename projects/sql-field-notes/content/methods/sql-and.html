@@ -1,0 +1,1379 @@
+<article class="article method-page" id="m-sql-and">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=sql&amp;cat=Filtering">
+   MySQL · Filtering
+  </a>
+ </div>
+ <h1>
+  AND
+ </h1>
+ <p class="lead">
+  Both conditions
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    MySQL
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-and"><span class="n">age</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">20</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">city</span><span class="o">=</span><span class="s1">'HK'</span></code></pre>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-pd-and">
+   pandas · Multiple conditions
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C01?code=code-C01-0&amp;method=sql-and&amp;line=1">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     1757 · Recyclable and low-fat products
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">SELECT product_id FROM Products WHERE low_fats = 'Y' AND recyclable = 'Y';</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#murder-01?code=code-murder-01-0&amp;method=sql-and&amp;line=6">
+   <div>
+    <span class="usage-label">
+     Murder City · SQL
+    </span>
+    <strong>
+     Retrieve the crime report
+    </strong>
+    <small>
+     Saved walkthrough · line 6
+    </small>
+   </div>
+   <pre aria-hidden="true">    type = 'murder' 
+    AND city = 'SQL City' 
+    AND date = '20180115'            </pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-01?code=code-squid-01-0&amp;method=sql-and&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Squid Game · SQL
+    </span>
+    <strong>
+     Filter the player pool
+    </strong>
+    <small>
+     Saved walkthrough · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">WHERE 
+    status = 'alive' AND
+    debt &gt; 400000000 AND
+    (age &gt; 65 OR (vice = 'Gambling' AND has_close_family = false))</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#B02?code=code-B02-2&amp;method=sql-and&amp;line=1">
+   <div>
+    <span class="usage-label">
+     SQLBolt · SQL
+    </span>
+    <strong>
+     Numeric constraints
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">SELECT * FROM movies WHERE year BETWEEN 2000 AND 2010;</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C45?code=code-C45-0&amp;method=sql-and&amp;line=3">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     197 · Rising temperature
+    </strong>
+    <small>
+     Study solution · line 3
+    </small>
+   </div>
+   <pre aria-hidden="true">FROM Weather w1, Weather w2
+WHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1 AND w1.temperature &gt; w2.temperature</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C46?code=code-C46-0&amp;method=sql-and&amp;line=15">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     1661 · Average processing time per machine
+    </strong>
+    <small>
+     Study solution · line 15
+    </small>
+   </div>
+   <pre aria-hidden="true">        FROM s
+        JOIN e ON s.machine_id = e.machine_id AND s.process_id = e.process_id
+    )
+SELECT machine_id, ROUND(SUM(processing_time)/COUNT(*), 3) AS processing_time</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   31 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C48?code=code-C48-0&amp;method=sql-and&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1280 · Students and examinations
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">CROSS JOIN Subjects su
+LEFT JOIN Examinations e ON s.student_id = e.student_id AND su.subject_name = e.subject_name
+GROUP BY s.student_id, s.student_name, su.subject_name
+ORDER BY s.student_id, s.student_name, su.subject_name</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C06?code=code-C06-0&amp;method=sql-and&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      620 · Not boring movies
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT id, movie, description, rating FROM Cinema
+WHERE id % 2 = 1 AND description &lt;&gt; 'boring' ORDER BY rating DESC;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-0&amp;method=sql-and&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      Study solution · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Prices p LEFT JOIN UnitsSold u
+  ON p.product_id = u.product_id AND u.purchase_date BETWEEN p.start_date AND p.end_date
+GROUP BY p.product_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C13?code=code-C13-0&amp;method=sql-and&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      550 · Game Play Analysis IV
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    SELECT 1 FROM Activity a
+    WHERE a.player_id = f.player_id AND a.event_date = DATE_ADD(f.first_day, INTERVAL 1 DAY)
+) THEN 1 ELSE 0 END), 2) AS fraction
+FROM first_login f;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-0&amp;method=sql-and&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      Study solution · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Activity
+WHERE activity_date BETWEEN '2019-06-28' AND '2019-07-27'
+  AND activity_type IN ('open_session', 'end_session', 'scroll_down', 'send_message')
+GROUP BY activity_date;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C16?code=code-C16-0&amp;method=sql-and&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1070 · First-year product sales
+     </strong>
+     <small>
+      Study solution · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Sales s JOIN (SELECT product_id, MIN(year) AS first_year FROM Sales GROUP BY product_id) f
+ON s.product_id = f.product_id AND s.year = f.first_year;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C20?code=code-C20-0&amp;method=sql-and&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1045 · Customers who bought every product
+     </strong>
+     <small>
+      Study solution · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">        SELECT 1 FROM Customer bought
+        WHERE bought.customer_id = c.customer_id AND bought.product_key = p.product_key
+    )
+);</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C23?code=code-C23-0&amp;method=sql-and&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      610 · Triangle judgement
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT x, y, z,
+       CASE WHEN x + y &gt; z AND x + z &gt; y AND y + z &gt; x THEN 'Yes' ELSE 'No' END AS triangle
+FROM Triangle;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C24?code=code-C24-0&amp;method=sql-and&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      180 · Consecutive Numbers
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT DISTINCT num AS ConsecutiveNums FROM ordered
+WHERE num = next_num AND num = next_next_num;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C25?code=code-C25-0&amp;method=sql-and&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1164 · Product price at a given date
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT i.product_id, COALESCE(r.new_price, 10) AS price FROM ids i
+LEFT JOIN ranked r ON i.product_id = r.product_id AND r.rn = 1;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C26?code=code-C26-0&amp;method=sql-and&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1204 · Last person to fit in the bus
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH cumulative AS (
+    SELECT person_name, turn, SUM(weight) OVER (ORDER BY turn ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_weight
+    FROM Queue
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C27?code=code-C27-0&amp;method=sql-and&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1907 · Count salary categories
+     </strong>
+     <small>
+      Study solution · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">UNION ALL
+SELECT 'Average Salary', COUNT(*) FROM Accounts WHERE income BETWEEN 20000 AND 50000
+UNION ALL
+SELECT 'High Salary', COUNT(*) FROM Accounts WHERE income &gt; 50000;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C28?code=code-C28-0&amp;method=sql-and&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1978 · Low-salary employees whose manager left
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT e.employee_id FROM Employees e
+WHERE e.salary &lt; 30000 AND e.manager_id IS NOT NULL
+  AND NOT EXISTS (SELECT 1 FROM Employees m WHERE m.employee_id = e.manager_id)
+ORDER BY e.employee_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C29?code=code-C29-2&amp;method=sql-and&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      626 · Exchange seats
+     </strong>
+     <small>
+      My approach · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">        WHEN id % 2 = 0 THEN id-1
+        WHEN id &lt;&gt; (SELECT length FROM   NStudents) AND id % 2 = 1 THEN id+1
+        ELSE id
+    END AS id,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-0&amp;method=sql-and&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    SELECT m.title AS results FROM MovieRating r JOIN Movies m ON r.movie_id = m.movie_id
+    WHERE r.created_at &gt;= '2020-02-01' AND r.created_at &lt; '2020-03-01'
+    GROUP BY m.movie_id, m.title ORDER BY AVG(r.rating) DESC, m.title LIMIT 1
+), combined AS (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-0&amp;method=sql-and&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      Study solution · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    SELECT visited_on,
+           SUM(amount) OVER (ORDER BY visited_on RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW) AS amount,
+           MIN(visited_on) OVER () AS first_day
+    FROM daily</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C33?code=code-C33-0&amp;method=sql-and&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      585 · Investments in 2016
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016 FROM marked
+WHERE value_count &gt; 1 AND location_count = 1;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C37?code=code-C37-0&amp;method=sql-and&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      196 · Delete duplicate emails
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">DELETE p1 FROM Person p1 JOIN Person p2
+ON p1.email = p2.email AND p1.id &gt; p2.id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-0&amp;method=sql-and&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      Study solution · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">JOIN Products p ON o.product_id = p.product_id
+WHERE o.order_date &gt;= '2020-02-01' AND o.order_date &lt; '2020-03-01'
+GROUP BY p.product_id, p.product_name HAVING SUM(o.unit) &gt;= 100;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C41?code=code-C41-4&amp;method=sql-and&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1517 · Users with valid emails
+     </strong>
+     <small>
+      Uploaded submission · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">    mail REGEXP '^[a-zA-Z][a-zA-Z0-9_.-]*@leetcode\\.com$' 
+    AND mail LIKE BINARY '%@leetcode.com'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC262?code=code-LC262-0&amp;method=sql-and&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      262 · Trips and users
+     </strong>
+     <small>
+      Uploaded submission · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">        WHERE 
+            (u1.banned = 'No' AND u2.banned = 'No')
+            AND (t.request_at &gt;= '2013-10-01' AND t.request_at &lt;= '2013-10-03')
+    ),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC1158?code=code-LC1158-0&amp;method=sql-and&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1158 · Market analysis I
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    FROM Orders 
+    WHERE order_date &gt;= '2019-01-01' AND order_date &lt;= '2019-12-31'
+    GROUP BY buyer_id
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3497?code=code-LC3497-0&amp;method=sql-and&amp;line=17">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3497 · Analyze subscription conversion
+     </strong>
+     <small>
+      Uploaded submission · line 17
+     </small>
+    </div>
+    <pre aria-hidden="true">    paid_avg_duration IS NOT NULL
+    AND trial_avg_duration IS NOT NULL</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3521?code=code-LC3521-0&amp;method=sql-and&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3521 · Find product recommendation pairs
+     </strong>
+     <small>
+      Uploaded submission · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">        CROSS JOIN ProductPurchases p2
+        WHERE p1.user_id = p2.user_id AND p1.product_id &lt; p2.product_id
+    ), 
+    ValidPairs AS (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3580?code=code-LC3580-0&amp;method=sql-and&amp;line=34">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3580 · Find consistently improving employees
+     </strong>
+     <small>
+      Uploaded submission · line 34
+     </small>
+    </div>
+    <pre aria-hidden="true">        LEFT JOIN LatestReviews l2 ON l1.ranked = l2.ranked - 1 
+                                    AND l1.employee_id = l2.employee_id
+                                    AND l1.ranked = 1
+        LEFT JOIN LatestReviews l3 ON l2.ranked = l3.ranked - 1 </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-02?code=code-murder-02-0&amp;method=sql-and&amp;line=17">
+    <div>
+     <span class="usage-label">
+      Murder City · SQL
+     </span>
+     <strong>
+      Find the two witnesses
+     </strong>
+     <small>
+      Saved walkthrough · line 17
+     </small>
+    </div>
+    <pre aria-hidden="true">	address_street_name = 'Franklin Ave'
+	AND name LIKE 'Annabel%'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-04?code=code-murder-04-0&amp;method=sql-and&amp;line=19">
+    <div>
+     <span class="usage-label">
+      Murder City · SQL
+     </span>
+     <strong>
+      Follow the gym clue
+     </strong>
+     <small>
+      Saved walkthrough · line 19
+     </small>
+    </div>
+    <pre aria-hidden="true">	g.check_in_date = '20180109' 
+	AND m.membership_status = 'gold'
+	AND m.id LIKE '48Z%'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-09?code=code-murder-09-0&amp;method=sql-and&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Murder City · SQL
+     </span>
+     <strong>
+      Inspect December event check-ins
+     </strong>
+     <small>
+      Saved walkthrough · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">	f.person_id IN (78881, 90700, 99716)
+	AND (f.date &gt; 20171130 AND f.date &lt; 20180101)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-02?code=code-squid-02-0&amp;method=sql-and&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Calculate the ration threshold
+     </strong>
+     <small>
+      Saved walkthrough · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM player
+        WHERE status = 'alive' AND isinsider = false
+    )
+</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-06?code=code-squid-06-0&amp;method=sql-and&amp;line=25">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Trace equipment to its first failure
+     </strong>
+     <small>
+      Saved walkthrough · line 25
+     </small>
+    </div>
+    <pre aria-hidden="true">	  FROM Equipment e, Worst_supplier w, Game_with_highest_failures g
+	  WHERE e.game_type = g.game_type AND e.supplier_id = w.supplier_id
+	),
+	Failed_time AS (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-09?code=code-squid-09-0&amp;method=sql-and&amp;line=13">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Reconstruct access-log overlaps
+     </strong>
+     <small>
+      Saved walkthrough · line 13
+     </small>
+    </div>
+    <pre aria-hidden="true">        WHERE 
+            (m.start_time BETWEEN g.shift_start and g.shift_end) OR 
+            (m.end_time   BETWEEN g.shift_start and g.shift_end) OR 
+            ((g.shift_start BETWEEN m.start_time and m.end_time) AND (g.shift_end BETWEEN m.start_time and m.end_time))</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (30)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C01?code=code-C01-2&amp;method=sql-and&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1757 · Recyclable and low-fat products
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Products
+WHERE low_fats = 'Y' AND recyclable = 'Y';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C01?code=code-C01-4&amp;method=sql-and&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1757 · Recyclable and low-fat products
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Products
+WHERE low_fats = 'Y' AND recyclable = 'Y'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C45?code=code-C45-2&amp;method=sql-and&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      197 · Rising temperature
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Weather w1, Weather w2
+WHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1 AND w1.temperature &gt; w2.temperature</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C46?code=code-C46-2&amp;method=sql-and&amp;line=18">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1661 · Average processing time per machine
+     </strong>
+     <small>
+      Uploaded submission · line 18
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM s
+        JOIN e ON s.machine_id = e.machine_id AND s.process_id = e.process_id
+    )
+</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C48?code=code-C48-2&amp;method=sql-and&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1280 · Students and examinations
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">CROSS JOIN Subjects su
+LEFT JOIN Examinations e ON s.student_id = e.student_id AND su.subject_name = e.subject_name
+GROUP BY s.student_id, s.student_name, su.subject_name
+ORDER BY s.student_id, s.student_name, su.subject_name</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C06?code=code-C06-2&amp;method=sql-and&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      620 · Not boring movies
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Cinema
+WHERE id % 2 = 1 AND description &lt;&gt; 'boring'
+ORDER BY rating DESC;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C06?code=code-C06-4&amp;method=sql-and&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      620 · Not boring movies
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Cinema
+WHERE id % 2 = 1 AND description &lt;&gt; "boring"
+ORDER BY rating DESC</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-2&amp;method=sql-and&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      My approach · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    FROM Prices p
+    LEFT JOIN UnitsSold   u ON (p.product_id = u.product_id) AND (u.purchase_date BETWEEN   p.start_date AND p.end_date)
+)
+SELECT product_id, COALESCE(ROUND(SUM(paid) / NULLIF(SUM(units), 0), 2), 0) AS average_price</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-4&amp;method=sql-and&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">    FROM Prices p
+    LEFT JOIN UnitsSold u ON (p.product_id = u.product_id) AND (u.purchase_date BETWEEN p.start_date AND p.end_date)
+)
+</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C13?code=code-C13-2&amp;method=sql-and&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      550 · Game Play Analysis IV
+     </strong>
+     <small>
+      My approach · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">INNER JOIN   First_login f ON
+    DATEDIFF(a.event_date, f.first_day) = 1 AND
+    a.player_id = f.player_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C13?code=code-C13-4&amp;method=sql-and&amp;line=12">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      550 · Game Play Analysis IV
+     </strong>
+     <small>
+      Uploaded submission · line 12
+     </small>
+    </div>
+    <pre aria-hidden="true">INNER JOIN First_login f ON 
+    DATEDIFF(a.event_date, f.first_day) = 1 AND
+    a.player_id = f.player_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-2&amp;method=sql-and&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      My approach · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">WHERE
+    DATEDIFF('2019-07-27',   activity_date) &lt; 30 AND
+    activity_date   &lt;= '2019-07-27'   AND
+    activity_type   IN ('open_session', 'end_session', 'scroll_down', 'send_message')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-4&amp;method=sql-and&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">WHERE 
+    DATEDIFF('2019-07-27', activity_date) &lt; 30 AND
+    activity_date &lt;= '2019-07-27' AND
+    activity_type IN ('open_session', 'end_session', 'scroll_down', 'send_message')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C24?code=code-C24-2&amp;method=sql-and&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      180 · Consecutive Numbers
+     </strong>
+     <small>
+      My approach · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Nums
+WHERE num = next_num AND next_num = next_next_num;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C24?code=code-C24-4&amp;method=sql-and&amp;line=12">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      180 · Consecutive Numbers
+     </strong>
+     <small>
+      Uploaded submission · line 12
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Nums
+WHERE num = next_num AND next_num = next_next_num</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C27?code=code-C27-2&amp;method=sql-and&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1907 · Count salary categories
+     </strong>
+     <small>
+      My approach · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">                WHEN income &lt; 20000 THEN 'Low Salary'
+                WHEN income &gt;= 20000 AND income &lt;= 50000 THEN 'Average Salary'
+                ELSE 'High Salary'
+            END AS category</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C27?code=code-C27-4&amp;method=sql-and&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1907 · Count salary categories
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">                WHEN income &lt; 20000 THEN 'Low Salary'
+                WHEN income &gt;= 20000 AND income &lt;= 50000 THEN 'Average Salary'
+                ELSE 'High Salary'
+            END AS category</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C28?code=code-C28-2&amp;method=sql-and&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1978 · Low-salary employees whose manager left
+     </strong>
+     <small>
+      My approach · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Employees
+WHERE manager_id IN (SELECT manager_id FROM ManagersLeftID)   AND   salary &lt; 30000
+ORDER BY employee_id   ASC;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C28?code=code-C28-4&amp;method=sql-and&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1978 · Low-salary employees whose manager left
+     </strong>
+     <small>
+      Uploaded submission · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Employees
+WHERE manager_id IN (SELECT manager_id FROM ManagersLeftID) AND salary &lt; 30000
+ORDER BY employee_id ASC</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C29?code=code-C29-4&amp;method=sql-and&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      626 · Exchange seats
+     </strong>
+     <small>
+      Uploaded submission · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">        WHEN id % 2 = 0 THEN id-1
+        WHEN id &lt;&gt; (SELECT length FROM NStudents) AND id % 2 = 1 THEN id+1
+        ELSE id
+    END AS id, </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-2&amp;method=sql-and&amp;line=21">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      My approach · line 21
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM MovieRating
+        WHERE created_at &gt;= '2020-02-01' AND created_at &lt; '2020-03-01'
+        GROUP BY movie_id
+    ),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-4&amp;method=sql-and&amp;line=22">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Uploaded submission · line 22
+     </small>
+    </div>
+    <pre aria-hidden="true">        FROM MovieRating
+        WHERE created_at &gt;= '2020-02-01' AND created_at &lt; '2020-03-01'
+        GROUP BY movie_id
+    ),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-2&amp;method=sql-and&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      My approach · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">        SUM(amount) OVER (
+            ORDER BY visited_on RANGE BETWEEN   INTERVAL 6 DAY   PRECEDING AND CURRENT ROW
+        ) AS rolling_amount,
+        MIN(visited_on) OVER () AS first_date</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-4&amp;method=sql-and&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">        SUM(amount) OVER (
+            ORDER BY visited_on RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW
+        ) AS rolling_amount,
+        MIN(visited_on) OVER () AS first_date</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C33?code=code-C33-2&amp;method=sql-and&amp;line=17">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      585 · Investments in 2016
+     </strong>
+     <small>
+      My approach · line 17
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Insurance
+WHERE pid IN (SELECT pid FROM UniqueCity) AND tiv_2015 IN (SELECT tiv_2015 FROM NonUniqueTIV);</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C33?code=code-C33-4&amp;method=sql-and&amp;line=18">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      585 · Investments in 2016
+     </strong>
+     <small>
+      Uploaded submission · line 18
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Insurance
+WHERE pid IN (SELECT pid FROM UniqueCity) AND tiv_2015 IN (SELECT tiv_2015 FROM NonUniqueTIV)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-2&amp;method=sql-and&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      My approach · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    FROM Orders
+    WHERE order_date &gt;= '2020-02-01' AND order_date &lt; '2020-03-01'
+    GROUP BY product_id
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-4&amp;method=sql-and&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    FROM Orders
+    WHERE order_date &gt; '2020-01-31' AND order_date &lt; '2020-03-01'
+    GROUP BY product_id
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B02?code=code-B02-4&amp;method=sql-and&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Numeric constraints
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT * FROM movies WHERE year NOT BETWEEN 2000 AND 2010;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B02?code=code-B02-6&amp;method=sql-and&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Numeric constraints
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT title, year FROM movies WHERE id BETWEEN 1 AND 5;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    SQL cheat-sheet image · Filtering. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://dev.mysql.com/doc/refman/8.4/en/" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=sql&amp;cat=Filtering">
+   <small>
+    ← Browse
+   </small>
+   MySQL · Filtering
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

@@ -1,0 +1,327 @@
+{
+  "id": "pd-merge-inner",
+  "lang": "pd",
+  "category": "Merge / join",
+  "label": "Inner merge",
+  "example": "a.merge(b, on='id')",
+  "description": "Matching rows",
+  "source": "image-pandas",
+  "related": [
+    "sql-inner-join"
+  ],
+  "note": "Missing keys can match other missing keys in pandas. Use validate when the expected join cardinality matters.",
+  "doc": "https://pandas.pydata.org/docs/reference/api/pandas.merge.html",
+  "aliases": "inner",
+  "uses": [
+    {
+      "page": "C43",
+      "block": "code-C43-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1068 · Product sales analysis I",
+      "number": "1068",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def sales_analysis(sales: pd.DataFrame, product: pd.DataFrame) -> pd.DataFrame:\n    df = sales.merge(product, on='product_id', how='inner')\n    return df[['product_name', 'year', 'price']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df_e = activity[activity.activity_type == 'end']\n    df = df_s.merge(df_e, on=['machine_id', 'process_id'], how='inner', suffixes=('_s', '_e'))\n    df['processing_time'] = df['timestamp_e'] - df['timestamp_s']\n    result = df.groupby('machine_id', as_index=False).agg(processing_time=('processing_time', 'mean'))",
+      "snippetLine": 10
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    u = units_sold.assign(purchase_date=pd.to_datetime(units_sold['purchase_date']))\n    matched = p.merge(u, on='product_id', how='inner')\n    matched = matched.loc[matched['purchase_date'].between(matched['start_date'], matched['end_date'])].copy()\n    matched['paid'] = matched['price'] * matched['units']",
+      "snippetLine": 10
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-1",
+      "line": 5,
+      "lines": [
+        5,
+        8
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    r = movie_rating.assign(created_at=pd.to_datetime(movie_rating['created_at']))\n    users_ranked = r.groupby('user_id').size().reset_index(name='n_reviews').merge(users, on='user_id')\n    first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})\n    feb = r.loc[r['created_at'].ge('2020-02-01') & r['created_at'].lt('2020-03-01')]",
+      "snippetLine": 4
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-1",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    dept = department.rename(columns={'id': 'departmentId', 'name': 'Department'})\n    result = chosen.merge(dept, on='departmentId', how='inner', validate='many_to_one')\n    return result[['Department', 'Employee', 'Salary']]",
+      "snippetLine": 6
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    employee =   employee[employee.ranked <= 3]\n    df =   employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])\n    df = df.rename(columns={\n        'name_x': 'Employee',",
+      "snippetLine": 4
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-5",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    employee = employee[employee.ranked <= 3]\n    df = employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])\n    df = df.rename(columns={\n        'name_x': 'Employee',",
+      "snippetLine": 5
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-1",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    g = feb.groupby('product_id', as_index=False).agg(unit=('unit', 'sum'))\n    return g.loc[g['unit'].ge(100)].merge(products, on='product_id', how='inner')[['product_name', 'unit']]",
+      "snippetLine": 6
+    },
+    {
+      "page": "LC181",
+      "block": "code-LC181-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "181 · Employees earning more than their managers",
+      "number": "181",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def find_employees(employee: pd.DataFrame) -> pd.DataFrame:\n    df = employee.merge(employee, left_on='managerId', right_on='id', suffixes=['_x', '_y'])\n\n    df = df[df.salary_x > df.salary_y]",
+      "snippetLine": 3
+    },
+    {
+      "page": "LC601",
+      "block": "code-LC601-1",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "601 · Human traffic of stadium",
+      "number": "601",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df = df.merge(valid_groups, on='groups', how='inner')\n    return df[['id', 'visit_date', 'people']].sort_values(by='visit_date', ascending=True)",
+      "snippetLine": 12
+    },
+    {
+      "page": "squid-03",
+      "block": "code-squid-03-1",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "Compare hot and cold months",
+      "number": "03",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "games['month_num'], games['year_num'] = dates.dt.month, dates.dt.year\njoined = games.merge(extreme[['month']], left_on='month_num', right_on='month')\nresult = (joined.loc[joined['year_num'].ge(2006)]\n          .groupby(['shape', 'month_num'], as_index=False)",
+      "snippetLine": 8
+    },
+    {
+      "page": "squid-05",
+      "block": "code-squid-05-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "Count a player’s closest interactions",
+      "number": "05",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "other = player[['id', 'first_name', 'status']].rename(columns={'id': 'player_id', 'first_name': 'name_other'})\njoined = counts.merge(target, on='target_id').merge(other, on='player_id')\n# Explicit final sort is an authored addition\nresult = (joined.loc[joined['status'].eq('alive')]",
+      "snippetLine": 10
+    },
+    {
+      "page": "squid-06",
+      "block": "code-squid-06-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "Trace equipment to its first failure",
+      "number": "06",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\njoined = equipment.merge(failure_incidents, left_on='id', right_on='failed_equipment_id',\n                         suffixes=('_equipment', '_incident'))\nresult = pd.DataFrame({'average_lifespan_years': [None]})",
+      "snippetLine": 3
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-1",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "joined = guards.merge(rooms, how='left', left_on='assigned_room_id', right_on='room_id')\njoined = joined.merge(cameras.loc[cameras['guard_spotted_id'].notna()],\n                      left_on='guard_number', right_on='guard_spotted_id')\njoined = joined.loc[joined['isvacant'].eq(True)].copy()",
+      "snippetLine": 8
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-1",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    shifts = shifts.loc[overlaps].rename(columns={'id': 'guard_id'})\n    logs = shifts.merge(daily_door_access_logs.rename(columns={'id': 'log_id'}), on='guard_id')\n    off_post = (logs['assigned_post'].notna() & logs['door_location'].notna()\n                & logs['assigned_post'].ne(logs['door_location']))",
+      "snippetLine": 16
+    },
+    {
+      "page": "B06",
+      "block": "code-B06-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "INNER JOIN",
+      "number": "06",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')\nresult = m[['title', 'domestic_sales', 'international_sales']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B06",
+      "block": "code-B06-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "INNER JOIN",
+      "number": "06",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')\nresult = m.loc[m['international_sales'].gt(m['domestic_sales']), ['title', 'domestic_sales', 'international_sales']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B06",
+      "block": "code-B06-5",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "INNER JOIN",
+      "number": "06",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')\nresult = m.sort_values('rating', ascending=False)[['title', 'rating']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B09",
+      "block": "code-B09-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Expressions and aliases",
+      "number": "09",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')\nresult = m.assign(sales_millions=(m['domestic_sales'] + m['international_sales']) / 1_000_000)[['title', 'sales_millions']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B09",
+      "block": "code-B09-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Expressions and aliases",
+      "number": "09",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')\nresult = m.assign(rating_percent=m['rating'] * 10)[['title', 'rating_percent']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B12",
+      "block": "code-B12-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Logical query order",
+      "number": "12",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')\nm = m.assign(total_sales=m['domestic_sales'] + m['international_sales'])\nresult = m.groupby('director', dropna=False)['total_sales'].sum(min_count=1).reset_index()",
+      "snippetLine": 1
+    },
+    {
+      "page": "B20",
+      "block": "code-B20-5",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Additional topic · Set operations",
+      "number": "20",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = a[['id']].drop_duplicates().merge(b[['id']].drop_duplicates(), on='id')",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 17
+}

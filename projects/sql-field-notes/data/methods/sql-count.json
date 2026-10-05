@@ -1,0 +1,1093 @@
+{
+  "id": "sql-count",
+  "lang": "sql",
+  "category": "Aggregation",
+  "label": "COUNT()",
+  "example": "COUNT(*)",
+  "description": "Count rows",
+  "source": "image-sql",
+  "related": [
+    "pd-count",
+    "pd-size"
+  ],
+  "note": "COUNT(*) counts rows; COUNT(column) counts non-NULL values. In pandas, size and count are different operations.",
+  "doc": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html",
+  "aliases": "COUNT",
+  "uses": [
+    {
+      "page": "C44",
+      "block": "code-C44-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1581 · Customers who visited without transactions",
+      "number": "1581",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT v.customer_id, COUNT(*) AS count_no_trans\nFROM Visits v\nLEFT JOIN Transactions t ON v.visit_id = t.visit_id",
+      "snippetLine": 1
+    },
+    {
+      "page": "C44",
+      "block": "code-C44-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1581 · Customers who visited without transactions",
+      "number": "1581",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nSELECT v.customer_id, COUNT(*) AS count_no_trans\nFROM Visits v\nLEFT JOIN Transactions t ON v.visit_id = t.visit_id",
+      "snippetLine": 1
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-0",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    )\nSELECT machine_id, ROUND(SUM(processing_time)/COUNT(*), 3) AS processing_time\nFROM m\nGROUP BY machine_id",
+      "snippetLine": 16
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-2",
+      "line": 21,
+      "lines": [
+        21
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\nSELECT machine_id, ROUND(SUM(processing_time)/COUNT(*), 3) AS processing_time\nFROM m\nGROUP BY machine_id",
+      "snippetLine": 20
+    },
+    {
+      "page": "C48",
+      "block": "code-C48-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT s.student_id, s.student_name, su.subject_name, COUNT(e.student_id) AS attended_exams\nFROM Students s\nCROSS JOIN Subjects su",
+      "snippetLine": 1
+    },
+    {
+      "page": "C48",
+      "block": "code-C48-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "# Write your MySQL query statement below\nSELECT s.student_id, s.student_name, su.subject_name, COUNT(e.student_id) AS attended_exams\nFROM Students s \nCROSS JOIN Subjects su",
+      "snippetLine": 1
+    },
+    {
+      "page": "C49",
+      "block": "code-C49-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "570 · Managers with at least five direct reports",
+      "number": "570",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH M AS (\n    SELECT managerId, COUNT(*) AS nReports\n    FROM Employee\n    GROUP BY managerId",
+      "snippetLine": 1
+    },
+    {
+      "page": "C49",
+      "block": "code-C49-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "570 · Managers with at least five direct reports",
+      "number": "570",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "WITH M AS (\n    SELECT managerId, COUNT(*) AS nReports\n    FROM Employee\n    GROUP BY managerId",
+      "snippetLine": 2
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-0",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": ")\nSELECT user_id, ROUND(SUM(boolean)/COUNT(boolean), 2) AS confirmation_rate\nFROM Rate\nGROUP BY user_id",
+      "snippetLine": 10
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-2",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\nSELECT user_id, ROUND(SUM(boolean)/COUNT(boolean), 2) AS confirmation_rate\nFROM Rate\nGROUP BY user_id",
+      "snippetLine": 12
+    },
+    {
+      "page": "C08",
+      "block": "code-C08-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    p.project_id,\n    ROUND(SUM(e.experience_years) / COUNT(e.experience_years), 2) AS average_years\nFROM Project p\nLEFT JOIN Employee e   ON p.employee_id = e.employee_id",
+      "snippetLine": 2
+    },
+    {
+      "page": "C08",
+      "block": "code-C08-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    p.project_id, \n    ROUND(SUM(e.experience_years) / COUNT(e.experience_years), 2) AS average_years\nFROM Project p\nLEFT JOIN Employee e ON p.employee_id = e.employee_id",
+      "snippetLine": 3
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT contest_id, ROUND(100.0 * COUNT(*) / (SELECT COUNT(*) FROM Users), 2) AS percentage\nFROM Register GROUP BY contest_id ORDER BY percentage DESC, contest_id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    contest_id,\n    ROUND(COUNT(*)/(SELECT COUNT(user_id) FROM Users) * 100, 2) AS percentage\nFROM Register\nGROUP BY contest_id",
+      "snippetLine": 2
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    contest_id, \n    ROUND(COUNT(*)/(SELECT COUNT(user_id) FROM Users) * 100, 2) AS percentage\nFROM Register\nGROUP BY contest_id",
+      "snippetLine": 3
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-2",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    ROUND(AVG(quality), 2) AS quality,\n    ROUND(100 * SUM(poor_quality)/COUNT(poor_quality), 2) AS poor_query_percentage\nFROM Quality\nGROUP BY query_name;",
+      "snippetLine": 13
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-4",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    ROUND(AVG(quality), 2) AS quality, \n    ROUND(100 * SUM(poor_quality)/COUNT(poor_quality), 2) AS poor_query_percentage\nFROM Quality\nGROUP BY query_name",
+      "snippetLine": 15
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT DATE_FORMAT(trans_date, '%Y-%m') AS month, country,\n       COUNT(*) AS trans_count,\n       SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END) AS approved_count,\n       SUM(amount) AS trans_total_amount,",
+      "snippetLine": 1
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-2",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    country,\n    COUNT(approved) AS trans_count,\n    SUM(approved) AS approved_count,\n    SUM(amount) AS   trans_total_amount,",
+      "snippetLine": 14
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-4",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    country, \n    COUNT(approved) AS trans_count,\n    SUM(approved) AS approved_count, \n    SUM(amount) AS trans_total_amount,",
+      "snippetLine": 16
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-2",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": ")\nSELECT ROUND(100 * SUM(immediate) / COUNT(immediate), 2) AS   immediate_percentage\nFROM Orders\nWHERE number = 1;",
+      "snippetLine": 13
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-4",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\nSELECT ROUND(100 * SUM(immediate) / COUNT(immediate), 2) AS immediate_percentage\nFROM Orders\nWHERE number = 1",
+      "snippetLine": 15
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-2",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": ")\nSELECT ROUND(COUNT(DISTINCT a.player_id) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) AS fraction\nFROM Activity a\nINNER JOIN   First_login f ON",
+      "snippetLine": 6
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-4",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\nSELECT ROUND(COUNT(*) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) AS fraction\nFROM Activity a\nINNER JOIN First_login f ON ",
+      "snippetLine": 8
+    },
+    {
+      "page": "C14",
+      "block": "code-C14-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "2356 · Unique subjects per teacher",
+      "number": "2356",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT teacher_id, COUNT(DISTINCT subject_id) AS cnt FROM Teacher GROUP BY teacher_id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C14",
+      "block": "code-C14-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "2356 · Unique subjects per teacher",
+      "number": "2356",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    teacher_id,\n    COUNT(DISTINCT subject_id)   AS cnt\nFROM Teacher\nGROUP BY teacher_id;",
+      "snippetLine": 2
+    },
+    {
+      "page": "C14",
+      "block": "code-C14-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "2356 · Unique subjects per teacher",
+      "number": "2356",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    teacher_id, \n    COUNT(DISTINCT subject_id) AS cnt\nFROM Teacher\nGROUP BY teacher_id",
+      "snippetLine": 3
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT activity_date AS day, COUNT(DISTINCT user_id) AS active_users\nFROM Activity\nWHERE activity_date BETWEEN '2019-06-28' AND '2019-07-27'",
+      "snippetLine": 1
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    activity_date   AS day,\n    COUNT(DISTINCT user_id) AS active_users\nFROM Activity\nWHERE",
+      "snippetLine": 2
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    activity_date AS day, \n    COUNT(DISTINCT user_id) AS active_users\nFROM Activity \nWHERE ",
+      "snippetLine": 3
+    },
+    {
+      "page": "C17",
+      "block": "code-C17-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "596 · Classes with at least five students",
+      "number": "596",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT class FROM Courses GROUP BY class HAVING COUNT(DISTINCT student) >= 5;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C17",
+      "block": "code-C17-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "596 · Classes with at least five students",
+      "number": "596",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    SELECT\n        COUNT(DISTINCT student) AS nStudents,\n        class\n    FROM Courses",
+      "snippetLine": 2
+    },
+    {
+      "page": "C17",
+      "block": "code-C17-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "596 · Classes with at least five students",
+      "number": "596",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    SELECT \n        COUNT(DISTINCT student) AS nStudents, \n        class\n    FROM Courses",
+      "snippetLine": 3
+    },
+    {
+      "page": "C18",
+      "block": "code-C18-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1729 · Followers count",
+      "number": "1729",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT user_id, COUNT(DISTINCT follower_id) AS followers_count FROM Followers GROUP BY user_id ORDER BY user_id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C18",
+      "block": "code-C18-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1729 · Followers count",
+      "number": "1729",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    user_id,\n    COUNT(DISTINCT   follower_id) AS followers_count\nFROM Followers\nGROUP BY user_id",
+      "snippetLine": 2
+    },
+    {
+      "page": "C18",
+      "block": "code-C18-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1729 · Followers count",
+      "number": "1729",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    user_id, \n    COUNT(DISTINCT follower_id) AS followers_count\nFROM Followers\nGROUP BY user_id",
+      "snippetLine": 3
+    },
+    {
+      "page": "C19",
+      "block": "code-C19-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT MAX(num) AS num FROM (\n    SELECT num FROM MyNumbers GROUP BY num HAVING COUNT(*) = 1\n) singles;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C19",
+      "block": "code-C19-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        num,\n        COUNT(*) AS frequency\n    FROM MyNumbers\n    GROUP BY num",
+      "snippetLine": 3
+    },
+    {
+      "page": "C19",
+      "block": "code-C19-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        num, \n        COUNT(*) AS frequency\n    FROM MyNumbers\n    GROUP BY num",
+      "snippetLine": 4
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "GROUP BY c.customer_id\nHAVING (SELECT COUNT(*) FROM Product) = COUNT(DISTINCT CASE\n    WHEN c.product_key IN (SELECT product_key FROM Product) THEN c.product_key END);",
+      "snippetLine": 3
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "GROUP BY customer_id\nHAVING (SELECT COUNT(product_key) FROM Product) = COUNT(DISTINCT product_key) ",
+      "snippetLine": 4
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    SELECT reports_to AS manager_id,\n           COUNT(*) AS reports_count,\n           ROUND(AVG(age)) AS average_age\n    FROM Employees",
+      "snippetLine": 2
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        reports_to AS manager_id,\n        COUNT(age) AS reports_count,\n        ROUND(AVG(age)) AS average_age\n    FROM Employees",
+      "snippetLine": 4
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH counted AS (\n    SELECT *, COUNT(*) OVER (PARTITION BY employee_id) AS n_departments FROM Employee\n)\nSELECT employee_id, department_id FROM counted WHERE primary_flag = 'Y' OR n_departments = 1;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-2",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "GROUP BY employee_id\nHAVING COUNT(employee_id) = 1;",
+      "snippetLine": 7
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-4",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "GROUP BY employee_id\nHAVING COUNT(employee_id) = 1",
+      "snippetLine": 10
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-0",
+      "line": 1,
+      "lines": [
+        1,
+        3,
+        5
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT 'Low Salary' AS category, COUNT(*) AS accounts_count FROM Accounts WHERE income < 20000\nUNION ALL\nSELECT 'Average Salary', COUNT(*) FROM Accounts WHERE income BETWEEN 20000 AND 50000",
+      "snippetLine": 1
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-2",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    Valid AS (\n        SELECT category, COUNT(category) AS accounts_count\n        FROM Labels\n        GROUP BY category",
+      "snippetLine": 11
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-4",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    Valid AS (\n        SELECT category, COUNT(category) AS accounts_count\n        FROM Labels\n        GROUP BY category",
+      "snippetLine": 12
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "WITH NStudents AS (\n    SELECT COUNT(id) AS length\n    FROM Seat\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-4",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "WITH NStudents AS (\n    SELECT COUNT(id) AS length\n    FROM Seat\n)",
+      "snippetLine": 2
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    SELECT u.name AS results FROM MovieRating r JOIN Users u ON r.user_id = u.user_id\n    GROUP BY u.user_id, u.name ORDER BY COUNT(*) DESC, u.name LIMIT 1\n), movie_winner AS (\n    SELECT m.title AS results FROM MovieRating r JOIN Movies m ON r.movie_id = m.movie_id",
+      "snippetLine": 2
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "      ReviewPerUserID AS (\n        SELECT user_id, COUNT(*) AS nReviews\n        FROM MovieRating\n        GROUP BY user_id",
+      "snippetLine": 2
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    ReviewPerUserID AS (\n        SELECT user_id, COUNT(*) AS nReviews\n        FROM MovieRating\n        GROUP BY user_id",
+      "snippetLine": 3
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": ")\nSELECT id, COUNT(*) AS num FROM endpoints GROUP BY id ORDER BY num DESC, id LIMIT 1;",
+      "snippetLine": 4
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-2",
+      "line": 5,
+      "lines": [
+        5,
+        12
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "              requester_id AS id,\n            COUNT(*) AS askedApproved\n        FROM RequestAccepted\n        GROUP BY   requester_id",
+      "snippetLine": 4
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-4",
+      "line": 6,
+      "lines": [
+        6,
+        13
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            requester_id AS id, \n            COUNT(*) AS askedApproved\n        FROM RequestAccepted\n        GROUP BY requester_id",
+      "snippetLine": 5
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-0",
+      "line": 2,
+      "lines": [
+        2,
+        3
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH marked AS (\n    SELECT *, COUNT(*) OVER (PARTITION BY tiv_2015) AS value_count,\n           COUNT(*) OVER (PARTITION BY lat, lon) AS location_count FROM Insurance\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-2",
+      "line": 6,
+      "lines": [
+        6,
+        12
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        GROUP BY tiv_2015\n        HAVING COUNT(*) > 1\n    ),\n    UniqueCity AS (",
+      "snippetLine": 5
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-4",
+      "line": 7,
+      "lines": [
+        7,
+        13
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        GROUP BY tiv_2015\n        HAVING COUNT(*) > 1\n    ),\n    UniqueCity AS (",
+      "snippetLine": 6
+    },
+    {
+      "page": "C39",
+      "block": "code-C39-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1484 · Products sold by date",
+      "number": "1484",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT sell_date, COUNT(DISTINCT product) AS num_sold,\n       GROUP_CONCAT(DISTINCT product ORDER BY product SEPARATOR ',') AS products\nFROM Activities GROUP BY sell_date ORDER BY sell_date;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C39",
+      "block": "code-C39-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1484 · Products sold by date",
+      "number": "1484",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    sell_date,\n    COUNT(DISTINCT product) AS num_sold,\n    GROUP_CONCAT(\n        DISTINCT product",
+      "snippetLine": 2
+    },
+    {
+      "page": "C39",
+      "block": "code-C39-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1484 · Products sold by date",
+      "number": "1484",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    sell_date,\n    COUNT(DISTINCT product) AS num_sold,\n    GROUP_CONCAT(\n        DISTINCT product ",
+      "snippetLine": 3
+    },
+    {
+      "page": "LC262",
+      "block": "code-LC262-0",
+      "line": 17,
+      "lines": [
+        17,
+        25
+      ],
+      "title": "262 · Trips and users",
+      "number": "262",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            request_at AS Day,\n            COUNT(*) AS valid_cancel\n        FROM ValidTrips\n        WHERE status LIKE 'cancelled%'",
+      "snippetLine": 16
+    },
+    {
+      "page": "LC586",
+      "block": "code-LC586-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "586 · Customer placing the largest number of orders",
+      "number": "586",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "GROUP BY customer_number\nORDER BY COUNT(*) DESC\nLIMIT 1",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC601",
+      "block": "code-LC601-0",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "601 · Human traffic of stadium",
+      "number": "601",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        GROUP BY group_num\n        HAVING COUNT(*) >= 3\n    )\n",
+      "snippetLine": 13
+    },
+    {
+      "page": "LC1158",
+      "block": "code-LC1158-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1158 · Market analysis I",
+      "number": "1158",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "WITH Orders2019 AS (\n    SELECT buyer_id, COUNT(*) AS orders_in_2019\n    FROM Orders \n    WHERE order_date >= '2019-01-01' AND order_date <= '2019-12-31'",
+      "snippetLine": 2
+    },
+    {
+      "page": "LC3521",
+      "block": "code-LC3521-0",
+      "line": 13,
+      "lines": [
+        13,
+        16
+      ],
+      "title": "3521 · Find product recommendation pairs",
+      "number": "3521",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    ValidPairs AS (\n        SELECT product1_id, product2_id, COUNT(*) AS customer_count\n        FROM BoughtPairs\n        GROUP BY product1_id, product2_id",
+      "snippetLine": 12
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-0",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            GROUP BY employee_id\n            HAVING COUNT(*) >= 3\n        )\n    ),",
+      "snippetLine": 14
+    },
+    {
+      "page": "squid-02",
+      "block": "code-squid-02-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "Calculate the ration threshold",
+      "number": "02",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    table_prop AS (\n        SELECT FLOOR( COUNT(*) * 0.9 ) AS portions\n        FROM player\n        WHERE status = 'alive' AND isinsider = false",
+      "snippetLine": 2
+    },
+    {
+      "page": "squid-04",
+      "block": "code-squid-04-0",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "Rank ten-player teams",
+      "number": "04",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "FROM (\n    SELECT team_id, COUNT(*) AS n_players, AVG(age) AS age_team\n    FROM player  \n    GROUP BY team_id",
+      "snippetLine": 10
+    },
+    {
+      "page": "squid-05",
+      "block": "code-squid-05-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "Count a player’s closest interactions",
+      "number": "05",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\tPlayer_interactions AS (\n\t  SELECT t.target_id, t.player_id, COUNT(*) AS counts\n\t  FROM (\n\t\t  SELECT ",
+      "snippetLine": 2
+    },
+    {
+      "page": "squid-06",
+      "block": "code-squid-06-0",
+      "line": 8,
+      "lines": [
+        8,
+        19
+      ],
+      "title": "Trace equipment to its first failure",
+      "number": "06",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\t\tGROUP BY e.game_type\n\t\tORDER BY COUNT(*) DESC\n\t\tLIMIT 1\n\t),",
+      "snippetLine": 7
+    },
+    {
+      "page": "B11",
+      "block": "code-B11-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "WHERE versus HAVING",
+      "number": "11",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT COUNT(*) AS artist_count FROM employees WHERE role = 'Artist';",
+      "snippetLine": 1
+    },
+    {
+      "page": "B11",
+      "block": "code-B11-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "WHERE versus HAVING",
+      "number": "11",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT role, COUNT(*) AS employee_count FROM employees GROUP BY role;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B12",
+      "block": "code-B12-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Logical query order",
+      "number": "12",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT director, COUNT(*) AS movie_count FROM movies GROUP BY director;",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 37
+}

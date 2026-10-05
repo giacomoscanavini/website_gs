@@ -1,0 +1,296 @@
+<article class="article" id="C29">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Problem 626
+  </span>
+ </div>
+ <h1>
+  626 · Exchange seats
+ </h1>
+ <p>
+  Swap adjacent seat IDs and leave an unpaired final odd seat unchanged.
+ </p>
+ <p class="pattern">
+  Pattern: CASE / parity
+ </p>
+ <h2>
+  Example
+ </h2>
+ <p>
+  Students A,B,C in seats 1,2,3 → output seats 1=B, 2=A, 3=C.
+ </p>
+ <h2>
+  Study solution
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-88-panel-0" aria-selected="true" id="example-88-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="example-88-panel-1" aria-selected="false" id="example-88-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-88-tab-0" class="code-panel" id="example-88-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-C29-0" tabindex="0"><code class="language-sql" data-origin="legacy-C29-0"><span class="k">SELECT</span><span class="w"> </span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">            </span><span class="k">WHEN</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Seat</span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span>
+<span class="w">            </span><span class="k">ELSE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">student</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Seat</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-88-tab-1" class="code-panel" id="example-88-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-C29-1" tabindex="0"><code class="language-python" data-origin="legacy-C29-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">exchange_seats</span><span class="p">(</span><span class="n">seat</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">ids</span> <span class="o">=</span> <span class="n">seat</span><span class="p">[</span><span class="s1">'id'</span><span class="p">]</span>
+    <span class="n">swapped</span> <span class="o">=</span> <span class="n">ids</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">ids</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">new_ids</span> <span class="o">=</span> <span class="n">swapped</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="n">ids</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">ids</span><span class="o">.</span><span class="n">max</span><span class="p">())</span> <span class="o">&amp;</span> <span class="n">ids</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span> <span class="n">ids</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">seat</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">new_ids</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'id'</span><span class="p">)</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  Why it works
+ </h2>
+ <p>
+  Even IDs move down one and odd IDs move up one. Restore the last ID when it is odd, then sort by the new seat IDs.
+ </p>
+ <h2>
+  Notes
+ </h2>
+ <p>
+  Seat IDs are contiguous and start at 1. An unpaired final odd seat stays unchanged.
+ </p>
+ <details class="original-details">
+  <summary>
+   My approach
+  </summary>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="approach-C29-panel-0" aria-selected="true" id="approach-C29-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="approach-C29-panel-1" aria-selected="false" id="approach-C29-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="approach-C29-tab-0" class="code-panel" id="approach-C29-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     SQL
+    </div>
+    <pre id="code-C29-2" tabindex="0"><code class="language-sql" data-origin="approach-C29-sql"><span class="k">WITH</span><span class="w"> </span><span class="n">NStudents</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">length</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">Seat</span>
+<span class="p">)</span>
+<span class="k">SELECT</span>
+<span class="w">    </span><span class="k">CASE</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">id</span><span class="o">-</span><span class="mi">1</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">length</span><span class="w"> </span><span class="k">FROM</span><span class="w">   </span><span class="n">NStudents</span><span class="p">)</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">id</span><span class="o">+</span><span class="mi">1</span>
+<span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">id</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span>
+<span class="w">    </span><span class="n">student</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Seat</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">ASC</span><span class="p">;</span></code></pre>
+   </div>
+   <div aria-labelledby="approach-C29-tab-1" class="code-panel" id="approach-C29-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C29-3" tabindex="0"><code class="language-python" data-origin="approach-C29-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">exchange_seats</span><span class="p">(</span><span class="n">seat</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">last_id</span> <span class="o">=</span> <span class="n">seat</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">swap_ids</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">last_id</span><span class="p">:</span> <span class="k">return</span> <span class="n">x</span>
+            <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">seat</span><span class="p">[</span><span class="s1">'id'</span><span class="p">]</span> <span class="o">=</span> <span class="n">seat</span><span class="p">[</span><span class="s1">'id'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">swap_ids</span><span class="p">)</span>
+    <span class="k">return</span>   <span class="n">seat</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Sources
+  </summary>
+  <div class="sources-content">
+   <p>
+    Primary exercise basis: your uploaded Pasted markdown(3).md, exercise 626, line 3. The exercise heading may be abbreviated in the upload; full official problem statements and schemas were not supplied.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     pandas SQL comparison
+    </a>
+    — Projection, filtering, grouping, joins and operations.
+   </p>
+  </div>
+ </details>
+ <details class="original-details archive-submission">
+  <summary>
+   Uploaded submission · SQL.zip
+  </summary>
+  <p class="small">
+   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
+  </p>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="archive-626-panel-0" aria-selected="true" id="archive-626-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="archive-626-panel-1" aria-selected="false" id="archive-626-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="archive-626-tab-0" class="code-panel" id="archive-626-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     MySQL
+    </div>
+    <pre id="code-C29-4" tabindex="0"><code class="language-sql" data-origin="archive-626-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">WITH</span><span class="w"> </span><span class="n">NStudents</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="nf">COUNT</span><span class="p">(</span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">length</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">Seat</span>
+<span class="p">)</span>
+
+<span class="k">SELECT</span>
+<span class="w">    </span><span class="k">CASE</span><span class="w"> </span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">id</span><span class="o">-</span><span class="mi">1</span>
+<span class="w">        </span><span class="k">WHEN</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">NStudents</span><span class="p">)</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="n">id</span><span class="o">+</span><span class="mi">1</span>
+<span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="n">id</span>
+<span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">student</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Seat</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">ASC</span></code></pre>
+   </div>
+   <div aria-labelledby="archive-626-tab-1" class="code-panel" id="archive-626-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C29-5" tabindex="0"><code class="language-python" data-origin="archive-626-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">exchange_seats</span><span class="p">(</span><span class="n">seat</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">last_id</span> <span class="o">=</span> <span class="n">seat</span><span class="o">.</span><span class="n">id</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">swap_ids</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span> <span class="k">return</span> <span class="n">x</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">x</span> <span class="o">==</span> <span class="n">last_id</span><span class="p">:</span> <span class="k">return</span> <span class="n">x</span>
+            <span class="k">else</span><span class="p">:</span> <span class="k">return</span> <span class="n">x</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="n">seat</span><span class="p">[</span><span class="s1">'id'</span><span class="p">]</span> <span class="o">=</span> <span class="n">seat</span><span class="p">[</span><span class="s1">'id'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">swap_ids</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">seat</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-and">
+     AND
+    </a>
+    <a href="#m-sql-count">
+     COUNT()
+    </a>
+    <a href="#m-sql-max">
+     MAX()
+    </a>
+    <a href="#m-sql-case">
+     CASE
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-with">
+     WITH
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+    <a href="#m-sql-order-by">
+     ORDER BY
+    </a>
+    <a href="#m-sql-modulo">
+     % operator
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-and">
+     Multiple conditions
+    </a>
+    <a href="#m-pd-sort-values">
+     Sort one column
+    </a>
+    <a href="#m-pd-new-column">
+     New column
+    </a>
+    <a href="#m-pd-assign">
+     assign()
+    </a>
+    <a href="#m-pd-where">
+     where()
+    </a>
+    <a href="#m-pd-max">
+     max()
+    </a>
+    <a href="#m-pd-transform">
+     Group transform
+    </a>
+    <a href="#m-pd-eq">
+     eq() / ne()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#C28">
+   <small>
+    ← Previous
+   </small>
+   1978 · Low-salary employees whose manager left
+  </a>
+  <a href="#C30">
+   <small>
+    Next →
+   </small>
+   1341 · Movie rating report
+  </a>
+ </div>
+</article>

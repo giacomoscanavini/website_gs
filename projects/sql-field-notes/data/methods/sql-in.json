@@ -1,0 +1,231 @@
+{
+  "id": "sql-in",
+  "lang": "sql",
+  "category": "Filtering",
+  "label": "IN",
+  "example": "city IN ('HK','SG')",
+  "description": "Match set",
+  "source": "image-sql",
+  "related": [
+    "pd-isin"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C15",
+      "block": "code-C15-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WHERE activity_date BETWEEN '2019-06-28' AND '2019-07-27'\n  AND activity_type IN ('open_session', 'end_session', 'scroll_down', 'send_message')\nGROUP BY activity_date;",
+      "snippetLine": 3
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-2",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    activity_date   <= '2019-07-27'   AND\n    activity_type   IN ('open_session', 'end_session', 'scroll_down', 'send_message')\nGROUP BY   activity_date;",
+      "snippetLine": 7
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-4",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    activity_date <= '2019-07-27' AND\n    activity_type IN ('open_session', 'end_session', 'scroll_down', 'send_message')\nGROUP BY activity_date ",
+      "snippetLine": 8
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "HAVING (SELECT COUNT(*) FROM Product) = COUNT(DISTINCT CASE\n    WHEN c.product_key IN (SELECT product_key FROM Product) THEN c.product_key END);",
+      "snippetLine": 4
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-2",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Employees\nWHERE manager_id IN (SELECT manager_id FROM ManagersLeftID)   AND   salary < 30000\nORDER BY employee_id   ASC;",
+      "snippetLine": 7
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-4",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Employees\nWHERE manager_id IN (SELECT manager_id FROM ManagersLeftID) AND salary < 30000\nORDER BY employee_id ASC",
+      "snippetLine": 9
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-2",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Insurance\nWHERE pid IN (SELECT pid FROM UniqueCity) AND tiv_2015 IN (SELECT tiv_2015 FROM NonUniqueTIV);",
+      "snippetLine": 16
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-4",
+      "line": 18,
+      "lines": [
+        18
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Insurance\nWHERE pid IN (SELECT pid FROM UniqueCity) AND tiv_2015 IN (SELECT tiv_2015 FROM NonUniqueTIV)",
+      "snippetLine": 17
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-2",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "DELETE FROM Person\nWHERE id IN (\n    SELECT id\n    FROM Ranked",
+      "snippetLine": 10
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-4",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "DELETE FROM Person\nWHERE id IN (\n    SELECT id\n    FROM Ranked ",
+      "snippetLine": 12
+    },
+    {
+      "page": "LC608",
+      "block": "code-LC608-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "608 · Tree node",
+      "number": "608",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        WHEN p_id IS NULL THEN 'Root'\n        WHEN id IN (SELECT p_id FROM Tree) THEN 'Inner'\n        ELSE 'Leaf'\n    END AS type",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-0",
+      "line": 7,
+      "lines": [
+        7,
+        8,
+        9
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            CASE \n                WHEN MONTH(s.sale_date) IN (12, 1, 2) THEN 'Winter'\n                WHEN MONTH(s.sale_date) IN (3, 4, 5) THEN 'Spring'\n                WHEN MONTH(s.sale_date) IN (6, 7, 8) THEN 'Summer'",
+      "snippetLine": 6
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-0",
+      "line": 11,
+      "lines": [
+        11,
+        21
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        FROM Performance_reviews\n        WHERE employee_id IN (\n            SELECT employee_id\n            FROM Performance_reviews",
+      "snippetLine": 10
+    },
+    {
+      "page": "murder-09",
+      "block": "code-murder-09-0",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "Inspect December event check-ins",
+      "number": "09",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "WHERE \n\tf.person_id IN (78881, 90700, 99716)\n\tAND (f.date > 20171130 AND f.date < 20180101)",
+      "snippetLine": 7
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-0",
+      "line": 39,
+      "lines": [
+        39
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\t   (select end_time from Most_recent_squid_game)) AND\n    (d.door_location IN (select door_location from Suspect))",
+      "snippetLine": 38
+    }
+  ],
+  "pageCount": 10
+}

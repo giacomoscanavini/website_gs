@@ -1,0 +1,853 @@
+<section aria-labelledby="graphs-title" class="page-view lesson-layout" id="graphs">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     35
+    </span>
+    Part 4 · Architectures &amp; information flow
+   </p>
+   <h1 id="graphs-title" tabindex="-1">
+    GNNs, graph attention, and relational bottlenecks
+   </h1>
+   <p class="standfirst">
+    Explain message passing, permutation symmetry, normalization, and why learned edge weights do not remove every graph limitation.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Architectures · PDF pp. 24–28 · §§9–10" data-page="24" data-pdf="arch" type="button">
+     Architectures · PDF pp. 24–28 · §§9–10
+    </button>
+    <button aria-label="Open source: Architectures · PDF p. 32 · §13.3–13.4" data-page="32" data-pdf="arch" type="button">
+     Architectures · PDF p. 32 · §13.3–13.4
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="the-input-includes-relationships" href="#graphs?section=the-input-includes-relationships">
+     The input includes relationships
+    </a>
+    <a data-section="normalized-graph-convolution" href="#graphs?section=normalized-graph-convolution">
+     Normalized graph convolution
+    </a>
+    <a data-section="equivariance-versus-invariance" href="#graphs?section=equivariance-versus-invariance">
+     Equivariance versus invariance
+    </a>
+    <a data-section="depth-brings-both-reach-and-bottlenecks" href="#graphs?section=depth-brings-both-reach-and-bottlenecks">
+     Depth brings both reach and bottlenecks
+    </a>
+    <a data-section="graph-attention-learns-the-neighbor-weights" href="#graphs?section=graph-attention-learns-the-neighbor-weights">
+     Graph attention learns the neighbor weights
+    </a>
+    <a data-section="attention-is-not-a-causal-explanation" href="#graphs?section=attention-is-not-a-causal-explanation">
+     Attention is not a causal explanation
+    </a>
+    <a data-section="evaluate-the-actual-graph-task" href="#graphs?section=evaluate-the-actual-graph-task">
+     Evaluate the actual graph task
+    </a>
+    <a data-section="implementation" href="#graphs?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="the-input-includes-relationships" id="graphs--the-input-includes-relationships">
+    The input includes relationships
+   </h2>
+   <p>
+    A graph
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>G</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>V</mi><mo>,</mo><mi>E</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">G=(V,E)</annotation></semantics></math>
+    specifies entities and their relations. Node neighborhoods can vary in size, and the arbitrary ordering of nodes in a file should not change what a model means. A graph network therefore needs a rule for combining variable-size neighborhoods with appropriate permutation symmetry.
+   </p>
+   <p>
+    The source’s message-passing template is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>m</mi><mi>i</mi><mrow><mo form="prefix" stretchy="true">(</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo>=</mo><msub><mo>AGG</mo><mrow><mi>j</mi><mo>∈</mo><mi>𝒩</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>i</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></msub><msub><mi>ψ</mi><mo>ℓ</mo></msub><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>h</mi><mi>i</mi><mrow><mo form="prefix" stretchy="true">(</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo>,</mo><msubsup><mi>h</mi><mi>j</mi><mrow><mo form="prefix" stretchy="true">(</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo>,</mo><msub><mi>e</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">m_i^{(\ell)}=\operatorname{AGG}_{j\in\mathcal N(i)}
+\psi_\ell(h_i^{(\ell)},h_j^{(\ell)},e_{ij}),</annotation></semantics></math>
+   </div>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>h</mi><mi>i</mi><mrow><mo form="prefix" stretchy="true">(</mo><mo>ℓ</mo><mo>+</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo>=</mo><msub><mi>ϕ</mi><mo>ℓ</mo></msub><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>h</mi><mi>i</mi><mrow><mo form="prefix" stretchy="true">(</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo>,</mo><msubsup><mi>m</mi><mi>i</mi><mrow><mo form="prefix" stretchy="true">(</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">h_i^{(\ell+1)}=\phi_\ell(h_i^{(\ell)},m_i^{(\ell)}).</annotation></semantics></math>
+   </div>
+   <p>
+    A symmetric sum, mean, or max aggregator does not depend on the order in which neighbors are listed. Shared update functions then produce node outputs that reorder consistently when the nodes are permuted.
+   </p>
+   <h2 data-section="normalized-graph-convolution" id="graphs--normalized-graph-convolution">
+    Normalized graph convolution
+   </h2>
+   <p>
+    The guide gives a common GCN propagation rule:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>A</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>A</mi><mo>+</mo><mi>I</mi><mo>,</mo><mspace width="2.0em"></mspace><msub><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mi>i</mi><mi>i</mi></mrow></msub><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mover><mi>A</mi><mo accent="true">̃</mo></mover><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\tilde A=A+I,\qquad\tilde D_{ii}=\sum_j\tilde A_{ij},</annotation></semantics></math>
+   </div>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>H</mi><mrow><mo form="prefix" stretchy="true">(</mo><mo>ℓ</mo><mo>+</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mover><mi>A</mi><mo accent="true">̃</mo></mover><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><msup><mi>H</mi><mrow><mo form="prefix" stretchy="true">(</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">)</mo></mrow></msup><msup><mi>W</mi><mrow><mo form="prefix" stretchy="true">(</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">H^{(\ell+1)}=\sigma\left(\tilde D^{-1/2}\tilde A\tilde D^{-1/2}H^{(\ell)}W^{(\ell)}\right).</annotation></semantics></math>
+   </div>
+   <p>
+    Self-loops include a node’s own representation. Degree normalization controls scale so high-degree neighborhoods do not dominate merely by size. The learned transformation and nonlinear activation then produce the next representation.
+   </p>
+   <p>
+    The source’s simple mean example is deliberately not the full symmetric-normalization formula: with scalar features
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">2,1,4</annotation></semantics></math>
+    , node one averages itself and both neighbors to
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn><mi>/</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">7/3</annotation></semantics></math>
+    . Multiplying by
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math>
+    and applying ReLU gives about
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.17</mn><annotation encoding="application/x-tex">1.17</annotation></semantics></math>
+    . A second node connected only to node one averages to
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.5</mn><annotation encoding="application/x-tex">1.5</annotation></semantics></math>
+    and updates to
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.75</mn><annotation encoding="application/x-tex">0.75</annotation></semantics></math>
+    . The example isolates the information-mixing idea.
+   </p>
+   <details class="derivation" data-derivation="normalized-gcn" id="graphs--derivation-normalized-gcn">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Calculate symmetric graph normalization, not just a neighbor mean
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Use an undirected three-node path
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mspace width="-0.167em"></mspace><mo>−</mo><mi>o</mi><mi>b</mi><mi>r</mi><mi>e</mi><mi>a</mi><mi>k</mi><mi>d</mi><mi>a</mi><mi>s</mi><mi>h</mi><mn>2</mn><mspace width="-0.167em"></mspace><mo>−</mo><mi>o</mi><mi>b</mi><mi>r</mi><mi>e</mi><mi>a</mi><mi>k</mi><mi>d</mi><mi>a</mi><mi>s</mi><mi>h</mi><mn>3</mn></mrow><annotation encoding="application/x-tex">1\!-
+obreakdash 2\!-
+obreakdash 3</annotation></semantics></math>
+      with no initial self-loops. Each node has scalar feature
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>4</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">x=(2,1,4)^\top</annotation></semantics></math>
+      . We will add one self-loop per node and use a scalar feature weight
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">w=0.5</annotation></semantics></math>
+      followed by ReLU.
+     </p>
+     <h4>
+      1 · Write adjacency and add self-loops
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>A</mi><mo accent="true">̃</mo></mover><mo>=</mo><mi>A</mi><mo>+</mo><mi>I</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">A=\begin{bmatrix}0&amp;1&amp;0\\1&amp;0&amp;1\\0&amp;1&amp;0\end{bmatrix},\qquad
+\tilde A=A+I=\begin{bmatrix}1&amp;1&amp;0\\1&amp;1&amp;1\\0&amp;1&amp;1\end{bmatrix}.</annotation></semantics></math>
+     </div>
+     <p>
+      Summing each row gives degrees
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>d</mi><mo accent="true">̃</mo></mover><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo>,</mo><mn>3</mn><mo>,</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\tilde d=(2,3,2)</annotation></semantics></math>
+      , so
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mo>=</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mi>/</mi><msqrt><mn>2</mn></msqrt><mo>,</mo><mn>1</mn><mi>/</mi><msqrt><mn>3</mn></msqrt><mo>,</mo><mn>1</mn><mi>/</mi><msqrt><mn>2</mn></msqrt><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\tilde D^{-1/2}=\operatorname{diag}(1/\sqrt2,1/\sqrt3,1/\sqrt2)</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Multiply the diagonal factors into each edge
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mover><mi>A</mi><mo accent="true">̃</mo></mover><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">S=\tilde D^{-1/2}\tilde A\tilde D^{-1/2}</annotation></semantics></math>
+      , entry
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mi>i</mi><mo>,</mo><mi>j</mi><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(i,j)</annotation></semantics></math>
+      is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>A</mi><mo accent="true">̃</mo></mover><mrow><mi>i</mi><mi>j</mi></mrow></msub><mi>/</mi><msqrt><mrow><msub><mover><mi>d</mi><mo accent="true">̃</mo></mover><mi>i</mi></msub><msub><mover><mi>d</mi><mo accent="true">̃</mo></mover><mi>j</mi></msub></mrow></msqrt></mrow><annotation encoding="application/x-tex">\tilde A_{ij}/\sqrt{\tilde d_i\tilde d_j}</annotation></semantics></math>
+      . Hence
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn><mi>/</mi><mn>2</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn><mi>/</mi><msqrt><mn>6</mn></msqrt></mtd><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn><mi>/</mi><msqrt><mn>6</mn></msqrt></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn><mi>/</mi><mn>3</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn><mi>/</mi><msqrt><mn>6</mn></msqrt></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn><mi>/</mi><msqrt><mn>6</mn></msqrt></mtd><mtd columnalign="center" style="text-align: center"><mn>1</mn><mi>/</mi><mn>2</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">S=\begin{bmatrix}
+1/2&amp;1/\sqrt6&amp;0\\
+1/\sqrt6&amp;1/3&amp;1/\sqrt6\\
+0&amp;1/\sqrt6&amp;1/2
+\end{bmatrix}.</annotation></semantics></math>
+     </div>
+     <p>
+      This matrix is symmetric, but its rows do not generally sum to one.
+     </p>
+     <h4>
+      3 · Aggregate the features explicitly
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mn>1</mn></msub><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mfrac displaystyle="false"><mn>1</mn><msqrt><mn>6</mn></msqrt></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn><mo>+</mo><mfrac displaystyle="false"><mn>1</mn><msqrt><mn>6</mn></msqrt></mfrac><mo>≈</mo><mn>1.408248</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">m_1=\tfrac12(2)+\tfrac1{\sqrt6}(1)=1+\tfrac1{\sqrt6}\approx1.408248,</annotation></semantics></math>
+     </div>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mn>2</mn></msub><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><msqrt><mn>6</mn></msqrt></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mfrac displaystyle="false"><mn>1</mn><mn>3</mn></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mfrac displaystyle="false"><mn>1</mn><msqrt><mn>6</mn></msqrt></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><mn>4</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac displaystyle="false"><mn>6</mn><msqrt><mn>6</mn></msqrt></mfrac><mo>+</mo><mfrac displaystyle="false"><mn>1</mn><mn>3</mn></mfrac><mo>≈</mo><mn>2.782823</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">m_2=\tfrac1{\sqrt6}(2)+\tfrac13(1)+\tfrac1{\sqrt6}(4)
+=\tfrac6{\sqrt6}+\tfrac13\approx2.782823,</annotation></semantics></math>
+     </div>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mn>3</mn></msub><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><msqrt><mn>6</mn></msqrt></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><mn>4</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><msqrt><mn>6</mn></msqrt></mfrac><mo>+</mo><mn>2</mn><mo>≈</mo><mn>2.408248</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">m_3=\tfrac1{\sqrt6}(1)+\tfrac12(4)=\tfrac1{\sqrt6}+2\approx2.408248.</annotation></semantics></math>
+     </div>
+     <p>
+      These are not the ordinary rowwise means
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.5</mn><mo>,</mo><mn>7</mn><mi>/</mi><mn>3</mn><mo>,</mo><mn>2.5</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(1.5,7/3,2.5)</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      4 · Apply the learned feature transformation and activation
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mi>′</mi><mo>=</mo><mo>ReLU</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.5</mn><mi>m</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.704124</mn><mo>,</mo><mn>1.391412</mn><mo>,</mo><mn>1.204124</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">h'=\operatorname{ReLU}(0.5m)\approx(0.704124,1.391412,1.204124)^\top.</annotation></semantics></math>
+     </div>
+     <p>
+      All components are positive in this example. With multiple features,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>W</mi></mrow><annotation encoding="application/x-tex">H W</annotation></semantics></math>
+      transforms feature coordinates while
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math>
+      mixes node coordinates; their roles differ.
+     </p>
+     <h4>
+      5 · State the graph assumptions
+     </h4>
+     <p>
+      This symmetric construction has its usual spectral interpretation for an undirected graph with nonnegative edge weights. Directed graphs need an explicit direction convention and normalization choice. Adding self-loops changes degrees and therefore
+      <strong>
+       all
+      </strong>
+      normalization weights, not only the diagonal entries.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="24" data-pdf="arch" type="button">
+       Chapter source · PDF p. 24
+      </button>
+      <a href="https://arxiv.org/abs/1609.02907" rel="noopener noreferrer" target="_blank">
+       Research reference
+      </a>
+      <a class="calculation-link" href="#graphs?derivation=normalized-gcn">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="equivariance-versus-invariance" id="graphs--equivariance-versus-invariance">
+    Equivariance versus invariance
+   </h2>
+   <p>
+    For node predictions, relabeling nodes should relabel outputs in the same way: permutation
+    <strong>
+     equivariance
+    </strong>
+    . For a single graph-level output, a symmetric readout such as summing final node embeddings produces permutation
+    <strong>
+     invariance
+    </strong>
+    .
+   </p>
+   <p>
+    Those are different requirements. A graph classifier that changes prediction merely because rows were reordered violates the intended invariance. A node classifier must still preserve which output belongs to which node.
+   </p>
+   <details class="derivation" data-derivation="graph-permutation" id="graphs--derivation-graph-permutation">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Prove node equivariance and graph-level invariance
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Let node features be
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math>
+      and symmetrically normalized adjacency be
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>S</mi><annotation encoding="application/x-tex">S</annotation></semantics></math>
+      . A layer is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>H</mi><mo>,</mo><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>S</mi><mi>H</mi><mi>W</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">F(H,A)=\sigma(SHW)</annotation></semantics></math>
+      with shared weights
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>W</mi><annotation encoding="application/x-tex">W</annotation></semantics></math>
+      and elementwise
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>σ</mi><annotation encoding="application/x-tex">\sigma</annotation></semantics></math>
+      . Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>
+      be a permutation matrix relabeling nodes.
+     </p>
+     <h4>
+      1 · Relabel both features and relationships
+     </h4>
+     <p>
+      The relabeled features are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>′</mi><mo>=</mo><mi>P</mi><mi>H</mi></mrow><annotation encoding="application/x-tex">H'=PH</annotation></semantics></math>
+      and adjacency
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>′</mi><mo>=</mo><mi>P</mi><mi>A</mi><msup><mi>P</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">A'=PAP^\top</annotation></semantics></math>
+      . Since
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>I</mi><msup><mi>P</mi><mi>⊤</mi></msup><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">PIP^\top=I</annotation></semantics></math>
+      , self-loop adjacency becomes
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>A</mi><mo accent="true">̃</mo></mover><mi>′</mi><mo>=</mo><mi>P</mi><mover><mi>A</mi><mo accent="true">̃</mo></mover><msup><mi>P</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\tilde A'=P\tilde AP^\top</annotation></semantics></math>
+      . Row sums reorder the degree entries, so
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>D</mi><mo accent="true">̃</mo></mover><mi>′</mi><mo>=</mo><mi>P</mi><mover><mi>D</mi><mo accent="true">̃</mo></mover><msup><mi>P</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\tilde D'=P\tilde DP^\top</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Relabel normalization consistently
+     </h4>
+     <p>
+      For a positive diagonal degree matrix, taking inverse square roots reorders the same diagonal values:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>D</mi><mo accent="true">̃</mo></mover><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mo>=</mo><mi>P</mi><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><msup><mi>P</mi><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">(\tilde D')^{-1/2}=P\tilde D^{-1/2}P^\top.</annotation></semantics></math>
+     </div>
+     <p>
+      Substituting into the normalized adjacency and canceling
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>P</mi><mi>⊤</mi></msup><mi>P</mi><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">P^\top P=I</annotation></semantics></math>
+      gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>′</mi><mo>=</mo><mi>P</mi><mi>S</mi><msup><mi>P</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">S'=PSP^\top</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      3 · Propagate and use shared elementwise operations
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>H</mi><mi>′</mi><mo>,</mo><mi>A</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>S</mi><mi>′</mi><mi>H</mi><mi>′</mi><mi>W</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>P</mi><mi>S</mi><msup><mi>P</mi><mi>⊤</mi></msup><mi>P</mi><mi>H</mi><mi>W</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>P</mi><mi>S</mi><mi>H</mi><mi>W</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">F(H',A')=\sigma(S'H'W)=\sigma(PSP^\top PHW)=\sigma(PSHW).</annotation></semantics></math>
+     </div>
+     <p>
+      A row permutation commutes with the shared elementwise nonlinearity, so
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>H</mi><mi>′</mi><mo>,</mo><mi>A</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>P</mi><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>S</mi><mi>H</mi><mi>W</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>P</mi><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>H</mi><mo>,</mo><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">F(H',A')=P\sigma(SHW)=PF(H,A).</annotation></semantics></math>
+     </div>
+     <p>
+      Outputs reorder with nodes: equivariance. Permuting features without also permuting adjacency would describe a different graph and would not satisfy this calculation.
+     </p>
+     <h4>
+      4 · Pool to get an invariant graph representation
+     </h4>
+     <p>
+      A sum readout is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo>=</mo><msup><mn>𝟏</mn><mi>⊤</mi></msup><msup><mi>H</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>L</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">g=\mathbf1^\top H^{(L)}</annotation></semantics></math>
+      . Under relabeling,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mi>′</mi><mo>=</mo><msup><mn>𝟏</mn><mi>⊤</mi></msup><mi>P</mi><msup><mi>H</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>L</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>=</mo><msup><mn>𝟏</mn><mi>⊤</mi></msup><msup><mi>H</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>L</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>=</mo><mi>g</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">g'=\mathbf1^\top PH^{(L)}=\mathbf1^\top H^{(L)}=g,</annotation></semantics></math>
+     </div>
+     <p>
+      because
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>𝟏</mn><mi>⊤</mi></msup><mi>P</mi><mo>=</mo><msup><mn>𝟏</mn><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\mathbf1^\top P=\mathbf1^\top</annotation></semantics></math>
+      . Mean and componentwise maximum pooling are also invariant to ordering. Shared edge scoring and permutation-symmetric aggregation preserve analogous properties in message-passing models.
+     </p>
+     <h4>
+      5 · Keep symmetry distinct from expressiveness
+     </h4>
+     <p>
+      A model can obey the correct permutation symmetry and still fail to distinguish particular graph structures or long-range relationships. Equivariance is a consistency property under relabeling, not a universal expressiveness guarantee.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="24" data-pdf="arch" type="button">
+       Chapter source · PDF p. 24
+      </button>
+      <a href="https://arxiv.org/abs/1609.02907" rel="noopener noreferrer" target="_blank">
+       Research reference
+      </a>
+      <a class="calculation-link" href="#graphs?derivation=graph-permutation">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="depth-brings-both-reach-and-bottlenecks" id="graphs--depth-brings-both-reach-and-bottlenecks">
+    Depth brings both reach and bottlenecks
+   </h2>
+   <p>
+    After
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
+    local message-passing layers without extra long-range edges, information can travel at most
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
+    graph hops. Repeated propagation can suppress discriminative node directions:
+    <strong>
+     over-smoothing
+    </strong>
+    . In a connected undirected graph, pure row-normalized diffusion approaches a common stationary average, whereas symmetric normalization approaches a degree-weighted dominant subspace. Raw node values need not all become equal; the expandable calculation below makes the distinction explicit.
+   </p>
+   <figure class="source-figure">
+    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="arch-26" type="button">
+     <img alt="The source illustrates feature-variance loss under repeated graph diffusion. Real GNNs also include learned transforms and nonlinearities, so the plot isolates one mechanism." height="556" loading="lazy" src="assets/images/the-source-illustrates-feature-variance-loss-under-repeated-graph-c12b65c140.webp" width="1038"/>
+    </button>
+    <figcaption>
+     The source illustrates feature-variance loss under repeated graph diffusion. Real GNNs also include learned transforms and nonlinearities, so the plot isolates one mechanism.
+     <button aria-label="Open source: Architectures · PDF p. 26" data-page="26" data-pdf="arch" type="button">
+      Architectures · PDF p. 26
+     </button>
+    </figcaption>
+   </figure>
+   <p>
+    <strong>
+     Over-squashing
+    </strong>
+    is different: information from a rapidly growing distant neighborhood must pass through narrow graph bottlenecks into a fixed-width vector. Representations can remain distinct while still failing to convey enough distant information.
+   </p>
+   <p>
+    The source also separates homophily—connected nodes being similar—from heterophily, where neighboring nodes can differ systematically. Naive averaging can be inappropriate when the relation means opposition, complementarity, or a different role rather than similarity.
+   </p>
+   <details class="derivation" data-derivation="diffusion-limit" id="graphs--derivation-diffusion-limit">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive the degree-weighted diffusion limit behind oversmoothing
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Consider repeated
+      <strong>
+       linear
+      </strong>
+      propagation on a connected undirected nonnegative graph with self-loops:
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>H</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>L</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>=</mo><msup><mi>S</mi><mi>L</mi></msup><msup><mi>H</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">H^{(L)}=S^LH^{(0)}</annotation></semantics></math>
+      , where
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mover><mi>A</mi><mo accent="true">̃</mo></mover><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">S=\tilde D^{-1/2}\tilde A\tilde D^{-1/2}</annotation></semantics></math>
+      . Assume the associated random walk is irreducible and aperiodic, so the eigenvalue one is simple and all other eigenvalues have absolute value below one.
+     </p>
+     <h4>
+      1 · Find the leading eigenvector
+     </h4>
+     <p>
+      Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>=</mo><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mn>𝟏</mn></mrow><annotation encoding="application/x-tex">v=\tilde D^{1/2}\mathbf1</annotation></semantics></math>
+      , whose entries are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msqrt><msub><mover><mi>d</mi><mo accent="true">̃</mo></mover><mi>i</mi></msub></msqrt><annotation encoding="application/x-tex">\sqrt{\tilde d_i}</annotation></semantics></math>
+      . Then
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mi>v</mi><mo>=</mo><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mover><mi>A</mi><mo accent="true">̃</mo></mover><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mn>𝟏</mn><mo>=</mo><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mover><mi>A</mi><mo accent="true">̃</mo></mover><mn>𝟏</mn><mo>=</mo><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mn>𝟏</mn><mo>=</mo><mi>v</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">Sv=\tilde D^{-1/2}\tilde A\tilde D^{-1/2}\tilde D^{1/2}\mathbf1
+=\tilde D^{-1/2}\tilde A\mathbf1
+=\tilde D^{-1/2}\tilde D\mathbf1=v.</annotation></semantics></math>
+     </div>
+     <p>
+      Normalize it to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mo>=</mo><mi>v</mi><mi>/</mi><msqrt><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mover><mi>d</mi><mo accent="true">̃</mo></mover><mi>i</mi></msub></mrow></msqrt></mrow><annotation encoding="application/x-tex">u=v/\sqrt{\sum_i\tilde d_i}</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Expand powers in an orthonormal eigenbasis
+     </h4>
+     <p>
+      Symmetry gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mi>U</mi><mi>Λ</mi><msup><mi>U</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">S=U\Lambda U^\top</annotation></semantics></math>
+      , with first column
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\lambda_1=1</annotation></semantics></math>
+      . Thus
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>S</mi><mi>L</mi></msup><mo>=</mo><mi>u</mi><msup><mi>u</mi><mi>⊤</mi></msup><mo>+</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>2</mn></mrow><mi>n</mi></munderover><msubsup><mi>λ</mi><mi>j</mi><mi>L</mi></msubsup><msub><mi>u</mi><mi>j</mi></msub><msubsup><mi>u</mi><mi>j</mi><mi>⊤</mi></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">S^L=uu^\top+\sum_{j=2}^n\lambda_j^L u_ju_j^\top.</annotation></semantics></math>
+     </div>
+     <p>
+      Because
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">|</mo><msub><mi>λ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">|</mo></mrow><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">|\lambda_j|&lt;1</annotation></semantics></math>
+      for
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>≥</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">j\ge2</annotation></semantics></math>
+      , each remaining power tends to zero.
+     </p>
+     <h4>
+      3 · Write the limit explicitly
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>H</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>L</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>→</mo><mi>u</mi><msup><mi>u</mi><mi>⊤</mi></msup><msup><mi>H</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">H^{(L)}\longrightarrow uu^\top H^{(0)}.</annotation></semantics></math>
+     </div>
+     <p>
+      For one scalar feature, the limiting value at node
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+      is
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>h</mi><mi>i</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>∞</mi><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo>=</mo><mfrac><msqrt><msub><mover><mi>d</mi><mo accent="true">̃</mo></mover><mi>i</mi></msub></msqrt><mrow><munder><mo>∑</mo><mi>j</mi></munder><msub><mover><mi>d</mi><mo accent="true">̃</mo></mover><mi>j</mi></msub></mrow></mfrac><munder><mo>∑</mo><mi>j</mi></munder><msqrt><msub><mover><mi>d</mi><mo accent="true">̃</mo></mover><mi>j</mi></msub></msqrt><mspace width="0.167em"></mspace><msubsup><mi>h</mi><mi>j</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">h_i^{(\infty)}=\frac{\sqrt{\tilde d_i}}{\sum_j\tilde d_j}
+\sum_j\sqrt{\tilde d_j}\,h_j^{(0)}.</annotation></semantics></math>
+     </div>
+     <p>
+      The result lies in a one-dimensional node subspace. Nodes need not have identical
+      <strong>
+       raw
+      </strong>
+      values when their degrees differ.
+     </p>
+     <h4>
+      4 · Compare row-normalized diffusion
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><msup><mover><mi>D</mi><mo accent="true">̃</mo></mover><mrow><mi>−</mi><mn>1</mn></mrow></msup><mover><mi>A</mi><mo accent="true">̃</mo></mover></mrow><annotation encoding="application/x-tex">R=\tilde D^{-1}\tilde A</annotation></semantics></math>
+      , the limiting rows are identical stationary-distribution averages:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>R</mi><mi>L</mi></msup><mo>→</mo><mn>𝟏</mn><msup><mi>π</mi><mi>⊤</mi></msup><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>π</mi><mi>i</mi></msub><mo>=</mo><mfrac><msub><mover><mi>d</mi><mo accent="true">̃</mo></mover><mi>i</mi></msub><mrow><munder><mo>∑</mo><mi>j</mi></munder><msub><mover><mi>d</mi><mo accent="true">̃</mo></mover><mi>j</mi></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">R^L\longrightarrow\mathbf1\pi^\top,\qquad
+\pi_i=\frac{\tilde d_i}{\sum_j\tilde d_j}.</annotation></semantics></math>
+     </div>
+     <p>
+      This is why “all nodes approach a common average” is literal for row-normalized connected aperiodic diffusion, but needs a degree-weighted qualification for symmetric normalization.
+     </p>
+     <h4>
+      5 · Separate this mechanism from a full GNN theorem
+     </h4>
+     <p>
+      Learned transformations, nonlinearities, skip connections, disconnected components, and varying layer operators alter the dynamics. A raw feature-variance curve need not decrease monotonically under every such model. This simplified limit explains how repeated propagation can erase discriminative directions; over-squashing is a different limitation involving compression of many distant messages through narrow routes.
+     </p>
+     <figure aria-label="Compare the two diffusion limits" class="interactive-visual" data-visual="graph">
+      <div class="visual-heading">
+       <strong>
+        Compare the two diffusion limits
+       </strong>
+       <button data-reset-visual="" type="button">
+        Reset
+       </button>
+      </div>
+      <div class="visual-controls">
+       <div class="visual-control">
+        <label for="visual-graph-layer">
+         Propagation layers
+        </label>
+        <input aria-describedby="visual-graph-output" data-default="8" data-value="layer" id="visual-graph-layer" max="30" min="0" step="1" type="range" value="8"/>
+        <output data-range-output="layer" for="visual-graph-layer">
+         8
+        </output>
+       </div>
+       <div class="visual-select">
+        <label for="visual-graph-mode">
+         Normalization
+        </label>
+        <select data-default="symmetric" data-value="mode" id="visual-graph-mode">
+         <option selected="" value="symmetric">
+          Symmetric
+         </option>
+         <option value="row">
+          Row-normalized
+         </option>
+        </select>
+       </div>
+      </div>
+      <svg aria-describedby="visual-graph-output" aria-label="Compare the two diffusion limits" role="img" viewbox="0 0 640 300"></svg>
+      <div aria-hidden="true" class="visual-legend">
+       <span style="--series:#356650">
+        Node 1
+       </span>
+       <span style="--series:#92663c">
+        Node 2
+       </span>
+       <span style="--series:#547c99">
+        Node 3
+       </span>
+      </div>
+      <figcaption aria-live="polite" class="visual-output" id="visual-graph-output">
+      </figcaption>
+      <div class="visual-note">
+       Interactive calculation using the assumptions above · computed locally, not fitted performance
+      </div>
+      <noscript>
+       <p class="visual-fallback">
+        The interactive plot needs JavaScript. The complete equations and worked values remain available in the calculation above.
+       </p>
+      </noscript>
+     </figure>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="24" data-pdf="arch" type="button">
+       Chapter source · PDF p. 24
+      </button>
+      <a href="https://arxiv.org/abs/1609.02907" rel="noopener noreferrer" target="_blank">
+       Research reference
+      </a>
+      <a class="calculation-link" href="#graphs?derivation=diffusion-limit">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="graph-attention-learns-the-neighbor-weights" id="graphs--graph-attention-learns-the-neighbor-weights">
+    Graph attention learns the neighbor weights
+   </h2>
+   <p>
+    A GAT transforms node features
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>i</mi></msub><mo>=</mo><mi>W</mi><msub><mi>h</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">z_i=Wh_i</annotation></semantics></math>
+    and computes scores such as
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mo>LeakyReLU</mo><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>a</mi><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>z</mi><mi>i</mi></msub><mo form="postfix" stretchy="false">‖</mo><msub><mi>z</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">e_{ij}=\operatorname{LeakyReLU}(a^\top[z_i\Vert z_j]),</annotation></semantics></math>
+   </div>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mrow><mo>exp</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>e</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><munder><mo>∑</mo><mrow><mi>k</mi><mo>∈</mo><mi>𝒩</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>i</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>∪</mo><mo form="prefix" stretchy="false">{</mo><mi>i</mi><mo form="postfix" stretchy="false">}</mo></mrow></munder><mo>exp</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>e</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>h</mi><msub><mi>′</mi><mi>i</mi></msub><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>∈</mo><mi>𝒩</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>i</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>∪</mo><mo form="prefix" stretchy="false">{</mo><mi>i</mi><mo form="postfix" stretchy="false">}</mo></mrow></munder><msub><mi>α</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>z</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\alpha_{ij}=\frac{\exp(e_{ij})}{\sum_{k\in\mathcal N(i)\cup\{i\}}\exp(e_{ik})},\qquad
+h'_i=\sigma\left(\sum_{j\in\mathcal N(i)\cup\{i\}}\alpha_{ij}z_j\right).</annotation></semantics></math>
+   </div>
+   <p>
+    The weights are normalized separately for each center node’s allowed neighborhood. The guide’s logits
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.81</mn><mo>,</mo><mn>1.85</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>1.06</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(0.81,1.85,0,1.06)</annotation></semantics></math>
+    give approximately
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.18</mn><mo>,</mo><mn>0.51</mn><mo>,</mo><mn>0.08</mn><mo>,</mo><mn>0.23</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(0.18,0.51,0.08,0.23)</annotation></semantics></math>
+    . The largest weight is the largest scalar mixing coefficient, not necessarily the largest contribution in magnitude or the strongest effect on the final prediction: the transformed value vectors and later layers also matter.
+   </p>
+   <figure class="source-figure">
+    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="arch-28" type="button">
+     <img alt="The source’s local GAT attention example. These weights describe one neighborhood and one illustrative score vector." height="513" loading="lazy" src="assets/images/the-source-s-local-gat-attention-example-these-weights-describe-o-c864cd9929.webp" width="1000"/>
+    </button>
+    <figcaption>
+     The source’s local GAT attention example. These weights describe one neighborhood and one illustrative score vector.
+     <button aria-label="Open source: Architectures · PDF p. 28" data-page="28" data-pdf="arch" type="button">
+      Architectures · PDF p. 28
+     </button>
+    </figcaption>
+   </figure>
+   <p>
+    Multiple heads can be concatenated in intermediate layers or averaged at a final layer. Unlike standard dense Transformer attention, a GAT’s interaction set is normally constrained by graph edges. Learned weights do not automatically give arbitrary long-range access.
+   </p>
+   <details class="derivation" data-derivation="gat-weights" id="graphs--derivation-gat-weights">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Normalize graph attention and differentiate the neighbor mixture
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      For a fixed center node
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
+      , transform neighbor features
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>j</mi></msub><mo>=</mo><mi>W</mi><msub><mi>h</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">z_j=Wh_j</annotation></semantics></math>
+      , score permitted neighbors including self using
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mo>LeakyReLU</mo><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>a</mi><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>z</mi><mi>i</mi></msub><mo>;</mo><msub><mi>z</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">e_{ij}=\operatorname{LeakyReLU}(a^\top[z_i;z_j])</annotation></semantics></math>
+      , then use
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><msup><mi>e</mi><msub><mi>e</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></msup><mi>/</mi><msub><mo>∑</mo><mrow><mi>k</mi><mo>∈</mo><msub><mi>𝒩</mi><mi>i</mi></msub></mrow></msub><msup><mi>e</mi><msub><mi>e</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub></msup></mrow><annotation encoding="application/x-tex">\alpha_{ij}=e^{e_{ij}}/\sum_{k\in\mathcal N_i}e^{e_{ik}}</annotation></semantics></math>
+      . Here
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>e</mi><msub><mi>e</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></msup><annotation encoding="application/x-tex">e^{e_{ij}}</annotation></semantics></math>
+      means the exponential of the score, not multiplication by the score symbol.
+     </p>
+     <h4>
+      1 · Calculate the normalization for the supplied scores
+     </h4>
+     <p>
+      The scores are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.81</mn><mo>,</mo><mn>1.85</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>1.06</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(0.81,1.85,0,1.06)</annotation></semantics></math>
+      . Subtract the maximum
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.85</mn><annotation encoding="application/x-tex">1.85</annotation></semantics></math>
+      to obtain
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>1.04</mn><mo>,</mo><mn>0</mn><mo>,</mo><mi>−</mi><mn>1.85</mn><mo>,</mo><mi>−</mi><mn>0.79</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(-1.04,0,-1.85,-0.79)</annotation></semantics></math>
+      . Their exponentials are approximately
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.353455</mn><mo>,</mo><mn>1</mn><mo>,</mo><mn>0.157237</mn><mo>,</mo><mn>0.453845</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(0.353455,1,0.157237,0.453845)</annotation></semantics></math>
+      , with sum
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.964537</mn><annotation encoding="application/x-tex">1.964537</annotation></semantics></math>
+      . Dividing each by that sum gives approximately
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.179918</mn><mo>,</mo><mn>0.509026</mn><mo>,</mo><mn>0.080038</mn><mo>,</mo><mn>0.231019</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(0.179918,0.509026,0.080038,0.231019)</annotation></semantics></math>
+      , agreeing with the source’s rounded
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.18</mn><mo>,</mo><mn>0.51</mn><mo>,</mo><mn>0.08</mn><mo>,</mo><mn>0.23</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(0.18,0.51,0.08,0.23)</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Form the pre-activation neighbor mixture
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mi>i</mi></msub><mo>=</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>∈</mo><msub><mi>𝒩</mi><mi>i</mi></msub></mrow></munder><msub><mi>α</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>z</mi><mi>j</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">m_i=\sum_{j\in\mathcal N_i}\alpha_{ij}z_j.</annotation></semantics></math>
+     </div>
+     <p>
+      Normalization is separate for each center node’s permitted neighborhood. A high score for one edge changes the relative weights of all edges in that same neighborhood.
+     </p>
+     <h4>
+      3 · Differentiate with respect to one edge score
+     </h4>
+     <p>
+      The softmax derivative is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><msub><mi>α</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mi>/</mi><mi>∂</mi><msub><mi>e</mi><mrow><mi>i</mi><mi>r</mi></mrow></msub><mo>=</mo><msub><mi>α</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mn>𝟏</mn><mrow><mi>j</mi><mo>=</mo><mi>r</mi></mrow></msub><mo>−</mo><msub><mi>α</mi><mrow><mi>i</mi><mi>r</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\partial\alpha_{ij}/\partial e_{ir}=\alpha_{ij}(\mathbf1_{j=r}-\alpha_{ir})</annotation></semantics></math>
+      . Holding the transformed values fixed,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msub><mi>m</mi><mi>i</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>e</mi><mrow><mi>i</mi><mi>r</mi></mrow></msub></mrow></mfrac><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>z</mi><mi>j</mi></msub><msub><mi>α</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mn>𝟏</mn><mrow><mi>j</mi><mo>=</mo><mi>r</mi></mrow></msub><mo>−</mo><msub><mi>α</mi><mrow><mi>i</mi><mi>r</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>α</mi><mrow><mi>i</mi><mi>r</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>r</mi></msub><mo>−</mo><msub><mi>m</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial m_i}{\partial e_{ir}}
+=\sum_jz_j\alpha_{ij}(\mathbf1_{j=r}-\alpha_{ir})
+=\alpha_{ir}(z_r-m_i).</annotation></semantics></math>
+     </div>
+     <p>
+      Increasing a score pulls the mixture toward that neighbor’s transformed vector, not toward its raw features.
+     </p>
+     <h4>
+      4 · Contract with a downstream gradient
+     </h4>
+     <p>
+      If
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>i</mi></msub><mo>=</mo><msub><mi>∇</mi><msub><mi>m</mi><mi>i</mi></msub></msub><mi>L</mi></mrow><annotation encoding="application/x-tex">g_i=\nabla_{m_i}L</annotation></semantics></math>
+      , then
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>e</mi><mrow><mi>i</mi><mi>r</mi></mrow></msub></mrow></mfrac><mo>=</mo><msub><mi>α</mi><mrow><mi>i</mi><mi>r</mi></mrow></msub><mspace width="0.167em"></mspace><msubsup><mi>g</mi><mi>i</mi><mi>⊤</mi></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>r</mi></msub><mo>−</mo><msub><mi>m</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial e_{ir}}=\alpha_{ir}\,g_i^\top(z_r-m_i).</annotation></semantics></math>
+     </div>
+     <p>
+      Continue through the LeakyReLU score derivative and its affine transform. A node feature also contributes through the value path
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mi>j</mi></msub><annotation encoding="application/x-tex">z_j</annotation></semantics></math>
+      , so its total gradient combines scoring and value routes, as in ordinary attention.
+     </p>
+     <h4>
+      5 · Avoid interpreting one coefficient as the whole explanation
+     </h4>
+     <p>
+      A coefficient measures a normalized mixing weight at one layer/head. Its predictive effect also depends on the value vector, nonlinearities, other heads, and downstream paths. A large coefficient is therefore neither a causal effect estimate nor a complete measure of feature importance.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="24" data-pdf="arch" type="button">
+       Chapter source · PDF p. 24
+      </button>
+      <a href="https://arxiv.org/abs/1710.10903" rel="noopener noreferrer" target="_blank">
+       Research reference
+      </a>
+      <a class="calculation-link" href="#graphs?derivation=gat-weights">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="attention-is-not-a-causal-explanation" id="graphs--attention-is-not-a-causal-explanation">
+    Attention is not a causal explanation
+   </h2>
+   <p>
+    The source explicitly cautions that a large attention coefficient is not a complete measure of importance or causality. Residual paths, transformed values, other heads, and downstream nonlinearities all influence predictions. A weight visualization is useful evidence about one computation, not a final explanation of a system.
+   </p>
+   <h2 data-section="evaluate-the-actual-graph-task" id="graphs--evaluate-the-actual-graph-task">
+    Evaluate the actual graph task
+   </h2>
+   <p>
+    Node, link, and graph-level prediction require different output and split designs. Random transductive node splits, temporally ordered links, and unseen-graph evaluation answer different questions. Graph construction itself can introduce unavailable future information.
+   </p>
+   <p>
+    The practical resources below are maintained by
+    <strong>
+     PyTorch Geometric
+    </strong>
+    , a separate PyTorch ecosystem library. They include a trained GCN example, an implementation of message passing, and a GAT example. They are not mislabeled as core PyTorch tutorials, and there is no need to create duplicate graph-training code for this reader.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="graphs--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="pygintro">
+     <span class="resource-meta">
+      PyTorch Geometric · GCN training example
+     </span>
+     <a href="https://pytorch-geometric.readthedocs.io/en/latest/get_started/introduction.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Introduction by Example
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Study graph tensors, edge indices and a trained GCN with training masks. PyTorch Geometric is a separate graph-learning library built on PyTorch.
+     </p>
+    </div>
+    <div class="resource" data-resource="messagepassing">
+     <span class="resource-meta">
+      PyTorch Geometric · Layer implementation tutorial
+     </span>
+     <a href="https://pytorch-geometric.readthedocs.io/en/latest/tutorial/create_gnn.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Creating Message Passing Networks
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Follow a message-passing layer from message construction to aggregation. Relate the implementation to the shared-parameter and permutation-symmetry arguments.
+     </p>
+    </div>
+    <div class="resource" data-resource="gat-example">
+     <span class="resource-meta">
+      PyTorch Geometric · GAT training example
+     </span>
+     <a href="https://github.com/pyg-team/pytorch_geometric/blob/master/examples/gat.py" rel="noopener noreferrer" target="_blank">
+      <span>
+       Graph Attention Network: example script
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Inspect GATConv, attention heads, dropout and a full node-classification loop. This is an official PyG example, not a core torch.nn training tutorial.
+     </p>
+    </div>
+   </div>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    What is the difference between over-smoothing and over-squashing?
+   </summary>
+   <p>
+    Over-smoothing makes node representations too similar after repeated propagation. Over-squashing compresses information from many distant nodes through narrow graph pathways into fixed-size vectors. Solving one does not necessarily solve the other.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#transformers">
+    <small>
+     ← Previous
+    </small>
+    Transformers: position, residual paths, and masking
+   </a>
+   <a href="#reinforcement-learning">
+    <small>
+     Next →
+    </small>
+    Reinforcement learning: rewards, values, and policies
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="the-input-includes-relationships" href="#graphs?section=the-input-includes-relationships">
+    The input includes relationships
+   </a>
+   <a data-section="normalized-graph-convolution" href="#graphs?section=normalized-graph-convolution">
+    Normalized graph convolution
+   </a>
+   <a data-section="equivariance-versus-invariance" href="#graphs?section=equivariance-versus-invariance">
+    Equivariance versus invariance
+   </a>
+   <a data-section="depth-brings-both-reach-and-bottlenecks" href="#graphs?section=depth-brings-both-reach-and-bottlenecks">
+    Depth brings both reach and bottlenecks
+   </a>
+   <a data-section="graph-attention-learns-the-neighbor-weights" href="#graphs?section=graph-attention-learns-the-neighbor-weights">
+    Graph attention learns the neighbor weights
+   </a>
+   <a data-section="attention-is-not-a-causal-explanation" href="#graphs?section=attention-is-not-a-causal-explanation">
+    Attention is not a causal explanation
+   </a>
+   <a data-section="evaluate-the-actual-graph-task" href="#graphs?section=evaluate-the-actual-graph-task">
+    Evaluate the actual graph task
+   </a>
+   <a data-section="implementation" href="#graphs?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

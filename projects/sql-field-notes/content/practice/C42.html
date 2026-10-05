@@ -1,0 +1,166 @@
+<article class="article" id="C42">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Problem 1378
+  </span>
+ </div>
+ <h1>
+  1378 · Replace employee ID with the unique identifier
+ </h1>
+ <p>
+  Return each employee’s unique identifier and name, keeping employees without an assigned identifier.
+ </p>
+ <p class="pattern">
+  Pattern: Outer join / preserve unmatched rows
+ </p>
+ <h2>
+  Illustrative example
+ </h2>
+ <p>
+  Employees are Ana (id 1), Bo (id 2) and Cleo (id 3). EmployeeUNI contains only (id 2, unique_id 20). The output keeps all three names: Ana and Cleo have a missing unique_id; Bo has 20.
+ </p>
+ <h2>
+  My solution
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="exercise-1378-panel-0" aria-selected="true" id="exercise-1378-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="exercise-1378-panel-1" aria-selected="false" id="exercise-1378-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="exercise-1378-tab-0" class="code-panel" id="exercise-1378-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-C42-0" tabindex="0"><code class="language-sql" data-origin="supplied-1378-sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">eu</span><span class="p">.</span><span class="n">unique_id</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">EmployeeUNI</span><span class="w"> </span><span class="n">eu</span>
+<span class="k">RIGHT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Employees</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">eu</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">id</span></code></pre>
+  </div>
+  <div aria-labelledby="exercise-1378-tab-1" class="code-panel" id="exercise-1378-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-C42-1" tabindex="0"><code class="language-python" data-origin="supplied-1378-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">replace_employee_id</span><span class="p">(</span><span class="n">employees</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">employee_uni</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">employee_uni</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">employees</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'right'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'unique_id'</span><span class="p">,</span><span class="s1">'name'</span><span class="p">]]</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  Why it works
+ </h2>
+ <p>
+  The RIGHT JOIN keeps the Employees table on the right. The pandas right merge does the same, then both select only unique_id and name.
+ </p>
+ <details class="reference-details">
+  <summary>
+   Source
+  </summary>
+  <div class="sources-content">
+   <p>
+    Based on the submitted SQL and pandas solutions.
+   </p>
+  </div>
+ </details>
+ <details class="original-details archive-submission">
+  <summary>
+   Uploaded submission · SQL.zip
+  </summary>
+  <p class="small">
+   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
+  </p>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="archive-1378-panel-0" aria-selected="true" id="archive-1378-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="archive-1378-panel-1" aria-selected="false" id="archive-1378-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="archive-1378-tab-0" class="code-panel" id="archive-1378-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     MySQL
+    </div>
+    <pre id="code-C42-2" tabindex="0"><code class="language-sql" data-origin="archive-1378-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">eu</span><span class="p">.</span><span class="n">unique_id</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="k">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">EmployeeUNI</span><span class="w"> </span><span class="n">eu</span>
+<span class="k">RIGHT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Employees</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">eu</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">id</span></code></pre>
+   </div>
+   <div aria-labelledby="archive-1378-tab-1" class="code-panel" id="archive-1378-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C42-3" tabindex="0"><code class="language-python" data-origin="archive-1378-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">replace_employee_id</span><span class="p">(</span><span class="n">employees</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">employee_uni</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">employee_uni</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">employees</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'right'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'unique_id'</span><span class="p">,</span><span class="s1">'name'</span><span class="p">]]</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-right-join">
+     RIGHT JOIN
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-merge-right">
+     Right merge
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#C05">
+   <small>
+    ← Previous
+   </small>
+   1683 · Invalid tweets
+  </a>
+  <a href="#C43">
+   <small>
+    Next →
+   </small>
+   1068 · Product sales analysis I
+  </a>
+ </div>
+</article>

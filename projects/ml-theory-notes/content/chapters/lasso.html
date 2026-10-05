@@ -1,0 +1,641 @@
+<section aria-labelledby="lasso-title" class="page-view lesson-layout" id="lasso">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     19
+    </span>
+    Part 3 · Regularization &amp; ensembles
+   </p>
+   <h1 id="lasso-title" tabindex="-1">
+    LASSO, subgradients, and exact zeros
+   </h1>
+   <p class="standfirst">
+    Explain sparsity through both geometry and the soft-thresholding calculation.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Regularization · PDF pp. 9–11 · §4" data-page="9" data-pdf="reg" type="button">
+     Regularization · PDF pp. 9–11 · §4
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="the-objective-changes-the-preference" href="#lasso?section=the-objective-changes-the-preference">
+     The objective changes the preference
+    </a>
+    <a data-section="the-kink-and-the-subgradient" href="#lasso?section=the-kink-and-the-subgradient">
+     The kink and the subgradient
+    </a>
+    <a data-section="derive-soft-thresholding" href="#lasso?section=derive-soft-thresholding">
+     Derive soft thresholding
+    </a>
+    <a data-section="numerical-examples-from-the-pdf" href="#lasso?section=numerical-examples-from-the-pdf">
+     Numerical examples from the PDF
+    </a>
+    <a data-section="coordinate-descent-and-scaling-conventions" href="#lasso?section=coordinate-descent-and-scaling-conventions">
+     Coordinate descent and scaling conventions
+    </a>
+    <a data-section="correlated-predictors-and-interpretation" href="#lasso?section=correlated-predictors-and-interpretation">
+     Correlated predictors and interpretation
+    </a>
+    <a data-section="implementation" href="#lasso?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="the-objective-changes-the-preference" id="lasso--the-objective-changes-the-preference">
+    The objective changes the preference
+   </h2>
+   <p>
+    The LASSO objective in the guide is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>∈</mo><msub><mo>argmin</mo><mi>β</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo form="prefix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msubsup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn><mn>2</mn></msubsup><mo>+</mo><mi>λ</mi><mo form="prefix" stretchy="false">∥</mo><mi>β</mi><msub><mo form="postfix" stretchy="false">∥</mo><mn>1</mn></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mo form="prefix" stretchy="false">∥</mo><mi>β</mi><msub><mo form="postfix" stretchy="false">∥</mo><mn>1</mn></msub><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><mrow><mo form="prefix" stretchy="true">|</mo><msub><mi>β</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">|</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat\beta\in\mathop{\mathrm{argmin}}_\beta\left[\frac12\lVert y-X\beta\rVert_2^2+\lambda\lVert\beta\rVert_1\right],\qquad
+\lVert\beta\rVert_1=\sum_j|\beta_j|.</annotation></semantics></math>
+   </div>
+   <p>
+    Like Ridge, it discourages large coefficients. Its distinguishing feature is that some coefficients can become
+    <strong>
+     exactly zero
+    </strong>
+    , providing variable selection as well as shrinkage.
+   </p>
+   <p>
+    The reason is not merely that absolute values are “stronger” than squares. The shape at zero changes the optimality condition.
+   </p>
+   <h2 data-section="the-kink-and-the-subgradient" id="lasso--the-kink-and-the-subgradient">
+    The kink and the subgradient
+   </h2>
+   <p>
+    For an individual coefficient,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mrow><mo form="prefix" stretchy="true">|</mo><mi>β</mi><mo form="postfix" stretchy="true">|</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mo form="prefix" stretchy="false">{</mo><mn>1</mn><mo form="postfix" stretchy="false">}</mo></mtd><mtd columnalign="left" style="text-align: left"><mi>β</mi><mo>&gt;</mo><mn>0</mn></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"></mtd><mtd columnalign="left" style="text-align: left"><mi>β</mi><mo>=</mo><mn>0</mn></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mo form="prefix" stretchy="false">{</mo><mi>−</mi><mn>1</mn><mo form="postfix" stretchy="false">}</mo></mtd><mtd columnalign="left" style="text-align: left"><mi>β</mi><mo>&lt;</mo><mn>0</mn><mi>.</mi></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\partial|\beta|=\begin{cases}\{1\}&amp;\beta&gt;0\\[-1,1]&amp;\beta=0\\\{-1\}&amp;\beta&lt;0.\end{cases}</annotation></semantics></math>
+   </div>
+   <p>
+    At zero, the penalty’s subgradient is an interval. A small enough data-loss derivative can be balanced by a member of this interval while keeping the coefficient at zero. L2’s smooth derivative does not produce the same zero-valued interval of solutions.
+   </p>
+   <p>
+    The geometric picture is the L1 diamond. A smooth loss contour often first touches it at a corner, where a coordinate is zero. This is an intuition for the algebra, not a substitute for the conditions of a particular problem.
+   </p>
+   <h2 data-section="derive-soft-thresholding" id="lasso--derive-soft-thresholding">
+    Derive soft thresholding
+   </h2>
+   <p>
+    For the guide’s standardized orthogonal one-coordinate problem,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mo>min</mo><mi>β</mi></munder><mspace width="0.222em"></mspace><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>β</mi><mo>−</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>+</mo><mi>λ</mi><mrow><mo form="prefix" stretchy="true">|</mo><mi>β</mi><mo form="postfix" stretchy="true">|</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\min_\beta\ \frac12(\beta-z)^2+\lambda|\beta|,</annotation></semantics></math>
+   </div>
+   <p>
+    consider the positive branch. Differentiation gives
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>−</mo><mi>z</mi><mo>+</mo><mi>λ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\beta-z+\lambda=0</annotation></semantics></math>
+    , so a positive solution is
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><mi>z</mi><mo>−</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">\beta=z-\lambda</annotation></semantics></math>
+    , valid only when
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>&gt;</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">z&gt;\lambda</annotation></semantics></math>
+    . On the negative branch,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>−</mo><mi>z</mi><mo>−</mo><mi>λ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\beta-z-\lambda=0</annotation></semantics></math>
+    , giving
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>β</mi><mo>=</mo><mi>z</mi><mo>+</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">\beta=z+\lambda</annotation></semantics></math>
+    , valid when
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>&lt;</mo><mi>−</mi><mi>λ</mi></mrow><annotation encoding="application/x-tex">z&lt;-\lambda</annotation></semantics></math>
+    . For
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">|</mo><mi>z</mi><mo form="postfix" stretchy="true">|</mo></mrow><mo>≤</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">|z|\le\lambda</annotation></semantics></math>
+    , zero satisfies the subgradient condition.
+   </p>
+   <p>
+    Combining the cases,
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>=</mo><mo>soft</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>,</mo><mi>λ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>sign</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>max</mo><mrow><mo form="prefix" stretchy="true">(</mo><mrow><mo form="prefix" stretchy="true">|</mo><mi>z</mi><mo form="postfix" stretchy="true">|</mo></mrow><mo>−</mo><mi>λ</mi><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat\beta=\operatorname{soft}(z,\lambda)
+=\operatorname{sign}(z)\max(|z|-\lambda,0).</annotation></semantics></math>
+   </div>
+   <p>
+    This derivation makes the difference from hard thresholding clear. Values above the threshold are still shrunk; they are not left unchanged.
+   </p>
+   <details class="derivation" data-derivation="soft-threshold-proof" id="lasso--derivation-soft-threshold-proof">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive the subgradient at zero and all three soft-threshold cases
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Minimize the strictly convex scalar function
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>b</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>b</mi><mo>−</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>+</mo><mi>λ</mi><mrow><mo form="prefix" stretchy="true">|</mo><mi>b</mi><mo form="postfix" stretchy="true">|</mo></mrow></mrow><annotation encoding="application/x-tex">F(b)=\frac12(b-z)^2+\lambda|b|</annotation></semantics></math>
+      , where
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda\ge0</annotation></semantics></math>
+      . Here
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
+      is fixed;
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>
+      is the variable.
+     </p>
+     <h4>
+      1 · Obtain the subgradient of absolute value at zero
+     </h4>
+     <p>
+      A subgradient
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
+      at zero must satisfy
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">|</mo><mi>u</mi><mo form="postfix" stretchy="true">|</mo></mrow><mo>≥</mo><mrow><mo form="prefix" stretchy="true">|</mo><mn>0</mn><mo form="postfix" stretchy="true">|</mo></mrow><mo>+</mo><mi>s</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>u</mi><mo>−</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>s</mi><mi>u</mi></mrow><annotation encoding="application/x-tex">|u|\ge |0|+s(u-0)=su</annotation></semantics></math>
+      for
+      <strong>
+       every
+      </strong>
+      real
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
+      . For positive
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
+      , divide by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
+      to obtain
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>≤</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">s\le1</annotation></semantics></math>
+      . For negative
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
+      , division reverses the inequality and gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>≥</mo><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">s\ge-1</annotation></semantics></math>
+      . Thus
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><msub><mrow><mo form="prefix" stretchy="true">|</mo><mi>b</mi><mo form="postfix" stretchy="true">|</mo></mrow><mrow><mi>b</mi><mo>=</mo><mn>0</mn></mrow></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\partial|b|_{b=0}=[-1,1]</annotation></semantics></math>
+      . Away from zero the ordinary derivatives are
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>+</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">+1</annotation></semantics></math>
+      for
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">b&gt;0</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">-1</annotation></semantics></math>
+      for
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">b&lt;0</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      2 · Solve the positive branch
+     </h4>
+     <p>
+      When
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">b&gt;0</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>b</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>b</mi><mo>−</mo><mi>z</mi><mo>+</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">F'(b)=b-z+\lambda</annotation></semantics></math>
+      . Setting it to zero gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><mi>z</mi><mo>−</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">b=z-\lambda</annotation></semantics></math>
+      . This belongs to the assumed positive branch only when
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>&gt;</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">z&gt;\lambda</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      3 · Solve the negative branch
+     </h4>
+     <p>
+      When
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">b&lt;0</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>b</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>b</mi><mo>−</mo><mi>z</mi><mo>−</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">F'(b)=b-z-\lambda</annotation></semantics></math>
+      . Setting it to zero gives
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><mi>z</mi><mo>+</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">b=z+\lambda</annotation></semantics></math>
+      , which is negative only when
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>&lt;</mo><mi>−</mi><mi>λ</mi></mrow><annotation encoding="application/x-tex">z&lt;-\lambda</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      4 · Test zero using the whole subgradient interval
+     </h4>
+     <p>
+      At
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">b=0</annotation></semantics></math>
+      , stationarity means
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>∈</mo><mi>−</mi><mi>z</mi><mo>+</mo><mi>λ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">0\in-z+\lambda[-1,1]</annotation></semantics></math>
+      . For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda&gt;0</annotation></semantics></math>
+      this is equivalent to
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mi>/</mi><mi>λ</mi><mo>∈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">z/\lambda\in[-1,1]</annotation></semantics></math>
+      , or
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">|</mo><mi>z</mi><mo form="postfix" stretchy="true">|</mo></mrow><mo>≤</mo><mi>λ</mi></mrow><annotation encoding="application/x-tex">|z|\le\lambda</annotation></semantics></math>
+      . The
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda=0</annotation></semantics></math>
+      case reduces to minimizing a quadratic, with solution
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">b=z</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      5 · Assemble the unique minimizer
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>b</mi><mo>*</mo></msup><mo>=</mo><mrow><mo form="prefix" stretchy="true">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mi>z</mi><mo>−</mo><mi>λ</mi></mtd><mtd columnalign="left" style="text-align: left"><mi>z</mi><mo>&gt;</mo><mi>λ</mi><mo>,</mo></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mn>0</mn></mtd><mtd columnalign="left" style="text-align: left"><mrow><mo form="prefix" stretchy="true">|</mo><mi>z</mi><mo form="postfix" stretchy="true">|</mo></mrow><mo>≤</mo><mi>λ</mi><mo>,</mo></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mi>z</mi><mo>+</mo><mi>λ</mi></mtd><mtd columnalign="left" style="text-align: left"><mi>z</mi><mo>&lt;</mo><mi>−</mi><mi>λ</mi><mo>,</mo></mtd></mtr></mtable></mrow><mo>=</mo><mo>sign</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>max</mo><mrow><mo form="prefix" stretchy="true">(</mo><mrow><mo form="prefix" stretchy="true">|</mo><mi>z</mi><mo form="postfix" stretchy="true">|</mo></mrow><mo>−</mo><mi>λ</mi><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">b^*=\begin{cases}z-\lambda&amp;z&gt;\lambda,\\0&amp;|z|\le\lambda,\\z+\lambda&amp;z&lt;-\lambda,\end{cases}
+=\operatorname{sign}(z)\max(|z|-\lambda,0).</annotation></semantics></math>
+     </div>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0.7</mn></mrow><annotation encoding="application/x-tex">\lambda=0.7</annotation></semantics></math>
+      , the inputs
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2.4</mn><annotation encoding="application/x-tex">2.4</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math>
+      , and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.1</mn></mrow><annotation encoding="application/x-tex">-1.1</annotation></semantics></math>
+      produce
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.7</mn><annotation encoding="application/x-tex">1.7</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>
+      , and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.4</mn></mrow><annotation encoding="application/x-tex">-0.4</annotation></semantics></math>
+      . At
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mi>±</mi><mi>λ</mi></mrow><annotation encoding="application/x-tex">z=\pm\lambda</annotation></semantics></math>
+      , both adjacent formulas meet at zero.
+     </p>
+     <h4>
+      6 · Relate the result to an optimization step
+     </h4>
+     <p>
+      A proximal-gradient step on
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>λ</mi><mo form="postfix" stretchy="false">∥</mo><mi>β</mi><msub><mo form="postfix" stretchy="false">∥</mo><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">f(\beta)+\lambda\|\beta\|_1</annotation></semantics></math>
+      first sets
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mi>β</mi><mo>−</mo><mi>η</mi><mi>∇</mi><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">z=\beta-\eta\nabla f(\beta)</annotation></semantics></math>
+      , then minimizes
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>b</mi><mo>−</mo><mi>z</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>η</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>λ</mi><mo form="postfix" stretchy="false">∥</mo><mi>b</mi><msub><mo form="postfix" stretchy="false">∥</mo><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\|b-z\|^2/(2\eta)+\lambda\|b\|_1</annotation></semantics></math>
+      . Multiplying by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>η</mi><annotation encoding="application/x-tex">\eta</annotation></semantics></math>
+      shows that each coordinate uses threshold
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mi>λ</mi></mrow><annotation encoding="application/x-tex">\eta\lambda</annotation></semantics></math>
+      . An arbitrary SGD or Adam step on an L1 subgradient is not the same operation and need not produce exact zeros.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="9" data-pdf="reg" type="button">
+       Chapter source · PDF p. 9
+      </button>
+      <a class="calculation-link" href="#lasso?derivation=soft-threshold-proof">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="numerical-examples-from-the-pdf" id="lasso--numerical-examples-from-the-pdf">
+    Numerical examples from the PDF
+   </h2>
+   <p>
+    For
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><mn>0.7</mn></mrow><annotation encoding="application/x-tex">\lambda=0.7</annotation></semantics></math>
+    , the unregularized values
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2.4</mn><annotation encoding="application/x-tex">2.4</annotation></semantics></math>
+    ,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math>
+    , and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1.1</mn></mrow><annotation encoding="application/x-tex">-1.1</annotation></semantics></math>
+    become
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.7</mn><annotation encoding="application/x-tex">1.7</annotation></semantics></math>
+    ,
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0</mn><annotation encoding="application/x-tex">0</annotation></semantics></math>
+    , and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.4</mn></mrow><annotation encoding="application/x-tex">-0.4</annotation></semantics></math>
+    . The small coordinate is removed and the surviving coordinates are reduced in magnitude.
+   </p>
+   <figure class="source-figure">
+    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="reg-10" type="button">
+     <img alt="The source’s illustrative LASSO paths. Several coefficients reach zero as the penalty becomes stronger; the exact path depends on the data and parameterization." height="522" loading="lazy" src="assets/images/the-source-s-illustrative-lasso-paths-several-coefficients-reach--ae3ee0187d.webp" width="760"/>
+    </button>
+    <figcaption>
+     The source’s illustrative LASSO paths. Several coefficients reach zero as the penalty becomes stronger; the exact path depends on the data and parameterization.
+     <button aria-label="Open source: Regularization · PDF p. 10" data-page="10" data-pdf="reg" type="button">
+      Regularization · PDF p. 10
+     </button>
+    </figcaption>
+   </figure>
+   <h2 data-section="coordinate-descent-and-scaling-conventions" id="lasso--coordinate-descent-and-scaling-conventions">
+    Coordinate descent and scaling conventions
+   </h2>
+   <p>
+    A coordinate-descent update forms a residual excluding feature
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+    , then solves a one-coordinate penalized problem. For a
+    <em>
+     mean
+    </em>
+    squared-error objective
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>n</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>λ</mi><mo form="prefix" stretchy="false">∥</mo><mi>β</mi><msub><mo form="postfix" stretchy="false">∥</mo><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\lVert y-X\beta\rVert^2/(2n)+\lambda\lVert\beta\rVert_1</annotation></semantics></math>
+    , one convenient form is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>j</mi></msub><mo>←</mo><mfrac><mrow><mo>soft</mo><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>x</mi><mi>j</mi><mi>⊤</mi></msubsup><msub><mi>r</mi><mrow><mi>−</mi><mi>j</mi></mrow></msub><mi>/</mi><mi>n</mi><mo>,</mo><mi>λ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><msubsup><mi>x</mi><mi>j</mi><mi>⊤</mi></msubsup><msub><mi>x</mi><mi>j</mi></msub><mi>/</mi><mi>n</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\beta_j\leftarrow
+\frac{\operatorname{soft}(x_j^\top r_{-j}/n,\lambda)}{x_j^\top x_j/n}.</annotation></semantics></math>
+   </div>
+   <p>
+    The PDF switches from the unnormalized objective to this mean-scaled coordinate expression. The two describe the same type of method, but the numerical
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
+    must change with the loss normalization. This convention is made explicit rather than treated as an identical coefficient across all formulas.
+   </p>
+   <p>
+    The official scikit-learn path example already implements coordinate-based LASSO and Elastic Net calculations and plots their paths. It is labeled as a classical-ML implementation, not a PyTorch tutorial. The local companion only checks the source’s simple orthogonal calculation.
+   </p>
+   <details class="derivation" data-derivation="coordinate-descent" id="lasso--derivation-coordinate-descent">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Derive a coordinate update without hiding the loss normalization
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Minimize
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo form="postfix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>n</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>λ</mi><msub><mo>∑</mo><mi>k</mi></msub><mrow><mo form="prefix" stretchy="true">|</mo><msub><mi>β</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">|</mo></mrow></mrow><annotation encoding="application/x-tex">J(\beta)=\|y-X\beta\|^2/(2n)+\lambda\sum_k|\beta_k|</annotation></semantics></math>
+      . Hold every coefficient except
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>j</mi></msub><mo>=</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">\beta_j=b</annotation></semantics></math>
+      fixed. Assume
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>j</mi></msub><mo>=</mo><msubsup><mi>x</mi><mi>j</mi><mi>⊤</mi></msubsup><msub><mi>x</mi><mi>j</mi></msub><mi>/</mi><mi>n</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">a_j=x_j^\top x_j/n&gt;0</annotation></semantics></math>
+      , where
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>j</mi></msub><annotation encoding="application/x-tex">x_j</annotation></semantics></math>
+      is column
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+      of
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      1 · Separate the coefficient being updated
+     </h4>
+     <p>
+      Define
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mi>j</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>=</mo><mi>y</mi><mo>−</mo><msub><mo>∑</mo><mrow><mi>k</mi><mo>≠</mo><mi>j</mi></mrow></msub><msub><mi>x</mi><mi>k</mi></msub><msub><mi>β</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">r^{(-j)}=y-\sum_{k\ne j}x_k\beta_k</annotation></semantics></math>
+      . The residual involving
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>
+      is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mi>j</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>−</mo><msub><mi>x</mi><mi>j</mi></msub><mi>b</mi></mrow><annotation encoding="application/x-tex">r^{(-j)}-x_jb</annotation></semantics></math>
+      . Penalties for the other coefficients are constant during this update.
+     </p>
+     <h4>
+      2 · Expand the square explicitly
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mi>j</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>−</mo><msub><mi>x</mi><mi>j</mi></msub><mi>b</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mi>j</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>−</mo><msub><mi>x</mi><mi>j</mi></msub><mi>b</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mi>r</mi><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mi>j</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></mrow></msup><msup><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mi>j</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>−</mo><mn>2</mn><mi>b</mi><msubsup><mi>x</mi><mi>j</mi><mi>⊤</mi></msubsup><msup><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mi>j</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup><msubsup><mi>x</mi><mi>j</mi><mi>⊤</mi></msubsup><msub><mi>x</mi><mi>j</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">(r^{(-j)}-x_jb)^\top(r^{(-j)}-x_jb)
+=r^{(-j)\top}r^{(-j)}-2b x_j^\top r^{(-j)}+b^2x_j^\top x_j.</annotation></semantics></math>
+     </div>
+     <p>
+      Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>j</mi></msub><mo>=</mo><msubsup><mi>x</mi><mi>j</mi><mi>⊤</mi></msubsup><msup><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mi>j</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">z_j=x_j^\top r^{(-j)}/n</annotation></semantics></math>
+      . After dropping only constants independent of
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>
+      , the objective is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>j</mi></msub><msup><mi>b</mi><mn>2</mn></msup><mi>/</mi><mn>2</mn><mo>−</mo><msub><mi>z</mi><mi>j</mi></msub><mi>b</mi><mo>+</mo><mi>λ</mi><mrow><mo form="prefix" stretchy="true">|</mo><mi>b</mi><mo form="postfix" stretchy="true">|</mo></mrow></mrow><annotation encoding="application/x-tex">a_jb^2/2-z_jb+\lambda|b|</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      3 · Complete the square
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><msub><mi>a</mi><mi>j</mi></msub><mn>2</mn></mfrac><msup><mi>b</mi><mn>2</mn></msup><mo>−</mo><msub><mi>z</mi><mi>j</mi></msub><mi>b</mi><mo>=</mo><mfrac><msub><mi>a</mi><mi>j</mi></msub><mn>2</mn></mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>b</mi><mo>−</mo><mfrac><msub><mi>z</mi><mi>j</mi></msub><msub><mi>a</mi><mi>j</mi></msub></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>−</mo><mfrac><msubsup><mi>z</mi><mi>j</mi><mn>2</mn></msubsup><mrow><mn>2</mn><msub><mi>a</mi><mi>j</mi></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{a_j}{2}b^2-z_jb=\frac{a_j}{2}\left(b-\frac{z_j}{a_j}\right)^2-\frac{z_j^2}{2a_j}.</annotation></semantics></math>
+     </div>
+     <p>
+      The final term is constant. Divide the objective by positive
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mi>j</mi></msub><annotation encoding="application/x-tex">a_j</annotation></semantics></math>
+      and apply the scalar proof with center
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>j</mi></msub><mi>/</mi><msub><mi>a</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">z_j/a_j</annotation></semantics></math>
+      and threshold
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mi>/</mi><msub><mi>a</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\lambda/a_j</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      4 · Simplify the update
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>j</mi></msub><mo>←</mo><mo>soft</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><msub><mi>z</mi><mi>j</mi></msub><msub><mi>a</mi><mi>j</mi></msub></mfrac><mo>,</mo><mfrac><mi>λ</mi><msub><mi>a</mi><mi>j</mi></msub></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><mo>soft</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo>,</mo><mi>λ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><msub><mi>a</mi><mi>j</mi></msub></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\beta_j\leftarrow\operatorname{soft}\left(\frac{z_j}{a_j},\frac\lambda{a_j}\right)
+=\frac{\operatorname{soft}(z_j,\lambda)}{a_j}.</annotation></semantics></math>
+     </div>
+     <p>
+      The last equality follows by pulling the positive factor
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><msub><mi>a</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">1/a_j</annotation></semantics></math>
+      through both
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">|</mo><mi>⋅</mi><mo form="postfix" stretchy="true">|</mo></mrow><annotation encoding="application/x-tex">|\cdot|</annotation></semantics></math>
+      and the maximum. For unit empirical mean-square columns,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">a_j=1</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      5 · Translate to the sum-loss convention
+     </h4>
+     <p>
+      For
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>/</mi><mn>2</mn><mo>+</mo><msub><mi>λ</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">m</mi></mrow></msub><mo form="postfix" stretchy="false">∥</mo><mi>β</mi><msub><mo form="postfix" stretchy="false">∥</mo><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\|y-X\beta\|^2/2+\lambda_{\mathrm{sum}}\|\beta\|_1</annotation></semantics></math>
+      , use
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>x</mi><mi>j</mi><mi>⊤</mi></msubsup><msub><mi>x</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">x_j^\top x_j</annotation></semantics></math>
+      and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>x</mi><mi>j</mi><mi>⊤</mi></msubsup><msup><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mi>j</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">x_j^\top r^{(-j)}</annotation></semantics></math>
+      without
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+      in their definitions. Equivalent objectives require
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mrow><mi mathvariant="normal">s</mi><mi mathvariant="normal">u</mi><mi mathvariant="normal">m</mi></mrow></msub><mo>=</mo><mi>n</mi><mi>λ</mi></mrow><annotation encoding="application/x-tex">\lambda_{\mathrm{sum}}=n\lambda</annotation></semantics></math>
+      . Keeping the same numerical penalty while changing only the loss reduction changes the fitted model.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="9" data-pdf="reg" type="button">
+       Chapter source · PDF p. 9
+      </button>
+      <a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.Lasso.html" rel="noopener noreferrer" target="_blank">
+       Library reference
+      </a>
+      <a class="calculation-link" href="#lasso?derivation=coordinate-descent">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="correlated-predictors-and-interpretation" id="lasso--correlated-predictors-and-interpretation">
+    Correlated predictors and interpretation
+   </h2>
+   <p>
+    If two inputs nearly duplicate one another, LASSO may keep one and remove the other. Small changes in the sample can switch which is selected. A sparse coefficient vector therefore does not automatically identify a unique causal set of variables. It can be a compact predictive representation with unstable membership.
+   </p>
+   <p>
+    The guide’s Bayesian interpretation associates LASSO with a Laplace prior and Ridge with a Gaussian prior in a compatible likelihood/MAP formulation. This is a preference over parameters, not an argument that a zero coefficient proves an irrelevant real-world mechanism. Elastic Net addresses part of the correlated-feature instability by combining L1 with L2.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="lasso--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="lassopath">
+     <span class="resource-meta">
+      scikit-learn · Official experiment + plots
+     </span>
+     <a href="https://scikit-learn.org/stable/auto_examples/linear_model/plot_lasso_lasso_lars_elasticnet_path.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       LASSO and Elastic Net coefficient paths
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Compare the paths and coordinate-descent implementations. Track the library’s alpha/l1_ratio definitions rather than equating them blindly with the PDF’s symbols.
+     </p>
+    </div>
+   </div>
+   <details class="local-example">
+    <summary>
+     Check the regularization identities
+     <small>
+      Local worked example · Python / PyTorch
+     </small>
+    </summary>
+    <p class="local-description">
+     An authored companion for the source’s orthogonal Ridge, LASSO threshold and fixed dropout-mask examples. A seeded Monte Carlo calculation checks the Gaussian input-noise identity approximately. Run locally; Python is not executed by this webpage.
+    </p>
+    <div class="code-wrap">
+     <div class="code-tools">
+      <span>
+       regularization_identities.py
+      </span>
+      <div>
+       <button data-action="copy" data-example="regularization_identities" type="button">
+        Copy
+       </button>
+       <button data-action="download" data-example="regularization_identities" type="button">
+        Save .py
+       </button>
+      </div>
+     </div>
+     <pre tabindex="0"><code><span class="sd">"""Small numerical checks for regularization identities from the supplied guide"""</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">set_num_threads</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Generator</span><span class="p">()</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="mi">41</span><span class="p">)</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">float64</span>
+
+    <span class="c1"># Orthogonal Ridge example with the source's unnormalized objective</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">3.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">ridge</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">x</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_close</span><span class="p">(</span><span class="n">ridge</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Orthogonal Ridge coefficients:"</span><span class="p">,</span> <span class="n">ridge</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+    <span class="c1"># The LASSO soft threshold is exact for this orthogonal scalar subproblem</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">2.4</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">lasso</span> <span class="o">=</span> <span class="n">z</span><span class="o">.</span><span class="n">sign</span><span class="p">()</span> <span class="o">*</span> <span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">-</span> <span class="mf">0.7</span><span class="p">)</span><span class="o">.</span><span class="n">clamp_min</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_close</span><span class="p">(</span><span class="n">lasso</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.7</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.4</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Soft-thresholded coefficients:"</span><span class="p">,</span> <span class="n">lasso</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+    <span class="c1"># Verify the Gaussian input-noise identity approximately by Monte Carlo</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="n">generator</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.6</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">x</span> <span class="o">@</span> <span class="n">beta</span> <span class="o">+</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">sigma</span> <span class="o">=</span> <span class="mf">0.2</span>
+    <span class="n">perturbations</span> <span class="o">=</span> <span class="n">sigma</span> <span class="o">*</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100_000</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="n">generator</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">noisy_losses</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">perturbations</span><span class="p">)</span> <span class="o">@</span> <span class="n">beta</span><span class="p">)</span><span class="o">.</span><span class="n">square</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">empirical</span> <span class="o">=</span> <span class="n">noisy_losses</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+    <span class="n">analytical</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">-</span> <span class="n">x</span> <span class="o">@</span> <span class="n">beta</span><span class="p">)</span><span class="o">.</span><span class="n">square</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">*</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">beta</span><span class="o">.</span><span class="n">square</span><span class="p">()</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">standard_error</span> <span class="o">=</span> <span class="n">noisy_losses</span><span class="o">.</span><span class="n">std</span><span class="p">()</span> <span class="o">/</span> <span class="n">noisy_losses</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span><span class="o">**</span><span class="mf">0.5</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">empirical</span> <span class="o">-</span> <span class="n">analytical</span><span class="p">)</span><span class="o">.</span><span class="n">abs</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">6</span> <span class="o">*</span> <span class="n">standard_error</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Expected noisy squared loss: </span><span class="si">{</span><span class="n">analytical</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Monte Carlo estimate: </span><span class="si">{</span><span class="n">empirical</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="n">standard_error</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2"> SE"</span><span class="p">)</span>
+
+    <span class="c1"># Reproduce the fixed-mask inverted-dropout example</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">masked</span> <span class="o">=</span> <span class="n">mask</span> <span class="o">*</span> <span class="n">h</span> <span class="o">/</span> <span class="mf">0.5</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">assert_close</span><span class="p">(</span><span class="n">masked</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">6.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Inverted dropout under the illustrated mask:"</span><span class="p">,</span> <span class="n">masked</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Exact checks passed; the noise expectation is a finite-sample approximation"</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre>
+    </div>
+    <details class="recorded-result">
+     <summary>
+      Recorded CPU output
+     </summary>
+     <pre>Orthogonal Ridge coefficients: [1.5, -1.0, 0.25]
+Soft-thresholded coefficients: [1.7, 0.0, -0.40000000000000013]
+Expected noisy squared loss: 0.408000
+Monte Carlo estimate: 0.406796 ± 0.000719 SE
+Inverted dropout under the illustrated mask: [4.0, 0.0, -6.0, 0.0]
+Exact checks passed; the noise expectation is a finite-sample approximation
+</pre>
+    </details>
+   </details>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Why does L1 create exact zeros while L2 usually does not?
+   </summary>
+   <p>
+    The absolute-value penalty has a subgradient interval at zero. A range of data-loss gradients can be balanced without moving the coefficient away from zero. Soft thresholding makes that interval explicit. L2 has a smooth derivative that continuously shrinks rather than creating the same threshold region.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#ridge">
+    <small>
+     ← Previous
+    </small>
+    OLS, Ridge, and spectral shrinkage
+   </a>
+   <a href="#elastic-net">
+    <small>
+     Next →
+    </small>
+    Elastic Net and correlated predictors
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="the-objective-changes-the-preference" href="#lasso?section=the-objective-changes-the-preference">
+    The objective changes the preference
+   </a>
+   <a data-section="the-kink-and-the-subgradient" href="#lasso?section=the-kink-and-the-subgradient">
+    The kink and the subgradient
+   </a>
+   <a data-section="derive-soft-thresholding" href="#lasso?section=derive-soft-thresholding">
+    Derive soft thresholding
+   </a>
+   <a data-section="numerical-examples-from-the-pdf" href="#lasso?section=numerical-examples-from-the-pdf">
+    Numerical examples from the PDF
+   </a>
+   <a data-section="coordinate-descent-and-scaling-conventions" href="#lasso?section=coordinate-descent-and-scaling-conventions">
+    Coordinate descent and scaling conventions
+   </a>
+   <a data-section="correlated-predictors-and-interpretation" href="#lasso?section=correlated-predictors-and-interpretation">
+    Correlated predictors and interpretation
+   </a>
+   <a data-section="implementation" href="#lasso?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

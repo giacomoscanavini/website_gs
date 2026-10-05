@@ -1,0 +1,275 @@
+<article class="article" id="murder-02">
+ <div class="breadcrumb">
+  <a href="#murder-city">
+   SQL Murder City
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Step 2
+  </span>
+ </div>
+ <h1>
+  Find the two witnesses
+ </h1>
+ <p class="lead">
+  Combine an ordered address search with a name-and-street filter.
+ </p>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-102-panel-0" aria-selected="true" id="example-102-tab-0" role="tab" tabindex="0" type="button">
+     My SQL
+    </button>
+    <button aria-controls="example-102-panel-1" aria-selected="false" id="example-102-tab-1" role="tab" tabindex="-1" type="button">
+     pandas alternative
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-102-tab-0" class="code-panel" id="example-102-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    My SQL
+   </div>
+   <pre id="code-murder-02-0" tabindex="0"><code class="language-sql" data-origin="murder-cell-3"><span class="c1">-- Find more information about the witnesses (note that ORDER BY and LIMIT would have been applied to the same SELECT statement as UNION so we have to separate them)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span>
+<span class="k">FROM</span><span class="w"> </span><span class="p">(</span>
+<span class="w">  	</span><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span>
+<span class="w">  	</span><span class="k">FROM</span><span class="w"> </span><span class="n">Person</span>
+<span class="w">	</span><span class="k">WHERE</span><span class="w"> </span><span class="n">address_street_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Northwestern Dr'</span>
+<span class="w">	</span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">address_number</span><span class="w"> </span><span class="k">DESC</span>
+<span class="w">	</span><span class="k">LIMIT</span><span class="w"> </span><span class="mi">1</span>
+<span class="p">)</span>
+
+<span class="k">UNION</span><span class="w"> </span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span>
+<span class="k">WHERE</span><span class="w"> </span>
+<span class="w">	</span><span class="n">address_street_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Franklin Ave'</span>
+<span class="w">	</span><span class="k">AND</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'Annabel%'</span></code></pre>
+  </div>
+  <div aria-labelledby="example-102-tab-1" class="code-panel" id="example-102-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas alternative
+   </div>
+   <pre id="code-murder-02-1" tabindex="0"><code class="language-python" data-origin="murder-02-pandas"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">first</span> <span class="o">=</span> <span class="p">(</span><span class="n">person</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">person</span><span class="p">[</span><span class="s1">'address_street_name'</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="s1">'Northwestern Dr'</span><span class="p">)]</span>
+         <span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'address_number'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+<span class="n">second</span> <span class="o">=</span> <span class="n">person</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+    <span class="n">person</span><span class="p">[</span><span class="s1">'address_street_name'</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="s1">'Franklin Ave'</span><span class="p">)</span>
+    <span class="o">&amp;</span> <span class="n">person</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'Annabel'</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="p">]</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span></code></pre>
+   <p class="panel-note">
+    Added translation ·
+    <a href="#murder-city">
+     DataFrame assumptions
+    </a>
+   </p>
+  </div>
+ </div>
+ <h2>
+  Recorded result
+ </h2>
+ <div aria-label="Scrollable data table" class="table-scroll" role="region" tabindex="0">
+  <table>
+   <thead>
+    <tr>
+     <th>
+      id
+     </th>
+     <th>
+      name
+     </th>
+     <th>
+      license_id
+     </th>
+     <th>
+      address_number
+     </th>
+     <th>
+      address_street_name
+     </th>
+     <th>
+      ssn
+     </th>
+    </tr>
+   </thead>
+   <tbody>
+    <tr>
+     <td>
+      14887
+     </td>
+     <td>
+      Morty Schapiro
+     </td>
+     <td>
+      118009
+     </td>
+     <td>
+      4919
+     </td>
+     <td>
+      Northwestern Dr
+     </td>
+     <td>
+      111564949
+     </td>
+    </tr>
+    <tr>
+     <td>
+      16371
+     </td>
+     <td>
+      Annabel Miller
+     </td>
+     <td>
+      490173
+     </td>
+     <td>
+      103
+     </td>
+     <td>
+      Franklin Ave
+     </td>
+     <td>
+      318771143
+     </td>
+    </tr>
+   </tbody>
+  </table>
+ </div>
+ <h2>
+  How it works
+ </h2>
+ <p>
+  The first branch takes the highest address_number on Northwestern Dr. The second finds names beginning with Annabel on Franklin Ave. Wrapping the first branch makes its ORDER BY and LIMIT local to that branch; UNION combines the two result sets.
+ </p>
+ <div class="note warning">
+  <b>
+   Source-aware note.
+  </b>
+  The pandas version uses concat followed by drop_duplicates to mirror UNION rather than UNION ALL. No row ordering is promised by the final SQL UNION.
+ </div>
+ <details class="reference-details">
+  <summary>
+   Sources and original files
+  </summary>
+  <div class="sources-content">
+   <div class="source-note">
+    <b>
+     Source:
+    </b>
+    <code>
+     sql_murder_city.ipynb
+    </code>
+    , notebook cell 4 (one-based). Original code is reproduced unchanged. Explanations and pandas panels are additions to the website edition.
+   </div>
+   <p class="small">
+    Source:
+    <a href="#murder-city">
+     original notebook and casebook overview
+    </a>
+    . Original cell 4 and recorded Markdown cell 5.
+   </p>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-and">
+     AND
+    </a>
+    <a href="#m-sql-like">
+     LIKE
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-union">
+     UNION
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+    <a href="#m-sql-order-by">
+     ORDER BY
+    </a>
+    <a href="#m-sql-limit">
+     LIMIT / OFFSET
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-loc">
+     Rows by label
+    </a>
+    <a href="#m-pd-head">
+     First rows
+    </a>
+    <a href="#m-pd-filter">
+     Condition
+    </a>
+    <a href="#m-pd-and">
+     Multiple conditions
+    </a>
+    <a href="#m-pd-sort-values">
+     Sort one column
+    </a>
+    <a href="#m-pd-sort-desc">
+     Descending
+    </a>
+    <a href="#m-pd-loc-label">
+     Access label
+    </a>
+    <a href="#m-pd-drop-duplicates">
+     Drop duplicates
+    </a>
+    <a href="#m-pd-concat-rows">
+     Concatenate rows
+    </a>
+    <a href="#m-pd-str-startswith">
+     Starts with
+    </a>
+    <a href="#m-pd-eq">
+     eq() / ne()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#murder-01">
+   <small>
+    ← Previous
+   </small>
+   Retrieve the crime report
+  </a>
+  <a href="#murder-03">
+   <small>
+    Next →
+   </small>
+   Read the witness interviews
+  </a>
+ </div>
+</article>

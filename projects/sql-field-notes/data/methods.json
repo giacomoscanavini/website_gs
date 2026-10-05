@@ -1,0 +1,3918 @@
+[
+  {
+    "id": "sql-where",
+    "lang": "sql",
+    "category": "Filtering",
+    "label": "WHERE",
+    "example": "WHERE age > 30",
+    "description": "Filter rows",
+    "source": "image-sql",
+    "related": [
+      "pd-filter"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "WHERE",
+    "pageCount": 73
+  },
+  {
+    "id": "sql-and",
+    "lang": "sql",
+    "category": "Filtering",
+    "label": "AND",
+    "example": "age > 20 AND city='HK'",
+    "description": "Both conditions",
+    "source": "image-sql",
+    "related": [
+      "pd-and"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "AND",
+    "pageCount": 37
+  },
+  {
+    "id": "sql-or",
+    "lang": "sql",
+    "category": "Filtering",
+    "label": "OR",
+    "example": "city='HK' OR city='SG'",
+    "description": "Either condition",
+    "source": "image-sql",
+    "related": [
+      "pd-or"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "OR",
+    "pageCount": 11
+  },
+  {
+    "id": "sql-not",
+    "lang": "sql",
+    "category": "Filtering",
+    "label": "NOT",
+    "example": "NOT age > 30",
+    "description": "Negate condition",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "NOT",
+    "pageCount": 11
+  },
+  {
+    "id": "sql-in",
+    "lang": "sql",
+    "category": "Filtering",
+    "label": "IN",
+    "example": "city IN ('HK','SG')",
+    "description": "Match set",
+    "source": "image-sql",
+    "related": [
+      "pd-isin"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "",
+    "pageCount": 10
+  },
+  {
+    "id": "sql-not-in",
+    "lang": "sql",
+    "category": "Filtering",
+    "label": "NOT IN",
+    "example": "id NOT IN (1,2)",
+    "description": "Exclude set",
+    "source": "image-sql",
+    "related": [
+      "pd-not-isin"
+    ],
+    "note": "NULLs in the comparison set can make NOT IN unknown rather than true. Excluding missing values or using a suitable NOT EXISTS pattern can be necessary.",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/comparison-operators.html",
+    "aliases": "NOT IN",
+    "pageCount": 4
+  },
+  {
+    "id": "sql-between",
+    "lang": "sql",
+    "category": "Filtering",
+    "label": "BETWEEN",
+    "example": "age BETWEEN 20 AND 30",
+    "description": "Inclusive range",
+    "source": "image-sql",
+    "related": [
+      "pd-between"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "BETWEEN",
+    "pageCount": 7
+  },
+  {
+    "id": "sql-like",
+    "lang": "sql",
+    "category": "Filtering",
+    "label": "LIKE",
+    "example": "name LIKE 'A%'",
+    "description": "Pattern match",
+    "source": "image-sql",
+    "related": [
+      "pd-str-contains"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "LIKE",
+    "pageCount": 8
+  },
+  {
+    "id": "sql-regexp",
+    "lang": "sql",
+    "category": "Filtering",
+    "label": "REGEXP",
+    "example": "name REGEXP '^A'",
+    "description": "Regex match",
+    "source": "image-sql",
+    "related": [
+      "pd-str-contains"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "REGEXP",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-is-null",
+    "lang": "sql",
+    "category": "Filtering",
+    "label": "IS NULL",
+    "example": "score IS NULL",
+    "description": "Check null",
+    "source": "image-sql",
+    "related": [
+      "pd-isna"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "IS NULL",
+    "pageCount": 5
+  },
+  {
+    "id": "sql-is-not-null",
+    "lang": "sql",
+    "category": "Filtering",
+    "label": "IS NOT NULL",
+    "example": "score IS NOT NULL",
+    "description": "Check non-null",
+    "source": "image-sql",
+    "related": [
+      "pd-filter-notnull"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "IS NOT NULL",
+    "pageCount": 6
+  },
+  {
+    "id": "sql-count",
+    "lang": "sql",
+    "category": "Aggregation",
+    "label": "COUNT()",
+    "example": "COUNT(*)",
+    "description": "Count rows",
+    "source": "image-sql",
+    "related": [
+      "pd-count",
+      "pd-size"
+    ],
+    "note": "COUNT(*) counts rows; COUNT(column) counts non-NULL values. In pandas, size and count are different operations.",
+    "doc": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html",
+    "aliases": "COUNT",
+    "pageCount": 37
+  },
+  {
+    "id": "sql-count-distinct",
+    "lang": "sql",
+    "category": "Aggregation",
+    "label": "COUNT(DISTINCT)",
+    "example": "COUNT(DISTINCT id)",
+    "description": "Count unique values",
+    "source": "image-sql",
+    "related": [
+      "pd-nunique"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+    "aliases": "",
+    "pageCount": 7
+  },
+  {
+    "id": "sql-sum",
+    "lang": "sql",
+    "category": "Aggregation",
+    "label": "SUM()",
+    "example": "SUM(sales)",
+    "description": "Sum",
+    "source": "image-sql",
+    "related": [
+      "pd-sum"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+    "aliases": "SUM",
+    "pageCount": 17
+  },
+  {
+    "id": "sql-avg",
+    "lang": "sql",
+    "category": "Aggregation",
+    "label": "AVG()",
+    "example": "AVG(score)",
+    "description": "Average",
+    "source": "image-sql",
+    "related": [
+      "pd-mean"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+    "aliases": "AVG",
+    "pageCount": 13
+  },
+  {
+    "id": "sql-min",
+    "lang": "sql",
+    "category": "Aggregation",
+    "label": "MIN()",
+    "example": "MIN(price)",
+    "description": "Minimum",
+    "source": "image-sql",
+    "related": [
+      "pd-min"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+    "aliases": "MIN",
+    "pageCount": 7
+  },
+  {
+    "id": "sql-max",
+    "lang": "sql",
+    "category": "Aggregation",
+    "label": "MAX()",
+    "example": "MAX(price)",
+    "description": "Maximum",
+    "source": "image-sql",
+    "related": [
+      "pd-max"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+    "aliases": "MAX",
+    "pageCount": 5
+  },
+  {
+    "id": "sql-group-by",
+    "lang": "sql",
+    "category": "Aggregation",
+    "label": "GROUP BY",
+    "example": "GROUP BY city",
+    "description": "Aggregate by group",
+    "source": "image-sql",
+    "related": [
+      "pd-groupby"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+    "aliases": "GROUP BY",
+    "pageCount": 45
+  },
+  {
+    "id": "sql-having",
+    "lang": "sql",
+    "category": "Aggregation",
+    "label": "HAVING",
+    "example": "HAVING COUNT(*) > 5",
+    "description": "Filter groups",
+    "source": "image-sql",
+    "related": [
+      "pd-group-filter"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+    "aliases": "HAVING",
+    "pageCount": 11
+  },
+  {
+    "id": "sql-group-concat",
+    "lang": "sql",
+    "category": "Aggregation",
+    "label": "GROUP_CONCAT()",
+    "example": "GROUP_CONCAT(name)",
+    "description": "Join grouped strings",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+    "aliases": "GROUP_CONCAT",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-inner-join",
+    "lang": "sql",
+    "category": "Joins",
+    "label": "INNER JOIN",
+    "example": "A JOIN B ON A.id=B.id",
+    "description": "Matching rows",
+    "source": "image-sql",
+    "related": [
+      "pd-merge-inner"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/join.html",
+    "aliases": "",
+    "pageCount": 18
+  },
+  {
+    "id": "sql-left-join",
+    "lang": "sql",
+    "category": "Joins",
+    "label": "LEFT JOIN",
+    "example": "A LEFT JOIN B ON ...",
+    "description": "All left rows",
+    "source": "image-sql",
+    "related": [
+      "pd-merge-left"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/join.html",
+    "aliases": "LEFT JOIN",
+    "pageCount": 29
+  },
+  {
+    "id": "sql-right-join",
+    "lang": "sql",
+    "category": "Joins",
+    "label": "RIGHT JOIN",
+    "example": "A RIGHT JOIN B ON ...",
+    "description": "All right rows",
+    "source": "image-sql",
+    "related": [
+      "pd-merge-right"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/join.html",
+    "aliases": "RIGHT JOIN",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-cross-join",
+    "lang": "sql",
+    "category": "Joins",
+    "label": "CROSS JOIN",
+    "example": "A CROSS JOIN B",
+    "description": "Cartesian product",
+    "source": "image-sql",
+    "related": [
+      "pd-merge-cross"
+    ],
+    "note": "The SQL sheet also notes that MySQL has no native FULL OUTER JOIN. A pandas outer merge is not a MySQL syntax example.",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/join.html",
+    "aliases": "CROSS JOIN",
+    "pageCount": 2
+  },
+  {
+    "id": "sql-self-join",
+    "lang": "sql",
+    "category": "Joins",
+    "label": "Self join",
+    "example": "users a JOIN users b",
+    "description": "Join table to itself",
+    "source": "image-sql",
+    "related": [
+      "pd-merge-keys"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/join.html",
+    "aliases": "",
+    "pageCount": 6
+  },
+  {
+    "id": "sql-using",
+    "lang": "sql",
+    "category": "Joins",
+    "label": "USING()",
+    "example": "JOIN B USING(id)",
+    "description": "Join on same-named column",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/join.html",
+    "aliases": "USING",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-case",
+    "lang": "sql",
+    "category": "Conditional / NULL handling",
+    "label": "CASE",
+    "example": "CASE WHEN x>0 THEN 'Y' ELSE 'N' END",
+    "description": "Conditional logic",
+    "source": "image-sql",
+    "related": [
+      "pd-where",
+      "pd-np-where"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/flow-control-functions.html",
+    "aliases": "CASE",
+    "pageCount": 16
+  },
+  {
+    "id": "sql-if",
+    "lang": "sql",
+    "category": "Conditional / NULL handling",
+    "label": "IF()",
+    "example": "IF(x>0,'Y','N')",
+    "description": "Simple condition",
+    "source": "image-sql",
+    "related": [
+      "pd-np-where"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/flow-control-functions.html",
+    "aliases": "IF",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-ifnull",
+    "lang": "sql",
+    "category": "Conditional / NULL handling",
+    "label": "IFNULL()",
+    "example": "IFNULL(x,0)",
+    "description": "Replace null",
+    "source": "image-sql",
+    "related": [
+      "pd-fillna"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/flow-control-functions.html",
+    "aliases": "IFNULL",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-coalesce",
+    "lang": "sql",
+    "category": "Conditional / NULL handling",
+    "label": "COALESCE()",
+    "example": "COALESCE(a,b,0)",
+    "description": "First non-null",
+    "source": "image-sql",
+    "related": [
+      "pd-combine-first",
+      "pd-fillna"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/flow-control-functions.html",
+    "aliases": "COALESCE",
+    "pageCount": 6
+  },
+  {
+    "id": "sql-nullif",
+    "lang": "sql",
+    "category": "Conditional / NULL handling",
+    "label": "NULLIF()",
+    "example": "NULLIF(a,b)",
+    "description": "NULL if equal",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/flow-control-functions.html",
+    "aliases": "NULLIF",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-insert",
+    "lang": "sql",
+    "category": "Data modification",
+    "label": "INSERT",
+    "example": "INSERT INTO users VALUES (...)",
+    "description": "Add rows",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "INSERT",
+    "pageCount": 3
+  },
+  {
+    "id": "sql-update",
+    "lang": "sql",
+    "category": "Data modification",
+    "label": "UPDATE",
+    "example": "UPDATE users SET age=30",
+    "description": "Modify rows",
+    "source": "image-sql",
+    "related": [
+      "pd-assign"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "UPDATE",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-delete",
+    "lang": "sql",
+    "category": "Data modification",
+    "label": "DELETE",
+    "example": "DELETE FROM users WHERE id=1",
+    "description": "Delete rows",
+    "source": "image-sql",
+    "related": [
+      "pd-drop-row"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "DELETE",
+    "pageCount": 2
+  },
+  {
+    "id": "sql-replace-rows",
+    "lang": "sql",
+    "category": "Data modification",
+    "label": "REPLACE",
+    "example": "REPLACE INTO users ...",
+    "description": "Insert or replace row",
+    "source": "image-sql",
+    "related": [],
+    "note": "REPLACE INTO is a row-write statement, not the string REPLACE() function. The reference example is a syntax fragment, not a safe update recipe.",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/replace.html",
+    "aliases": "REPLACE INTO",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-create-table",
+    "lang": "sql",
+    "category": "Table operations",
+    "label": "CREATE TABLE",
+    "example": "CREATE TABLE users (...)",
+    "description": "Create table",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "CREATE TABLE",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-alter-table",
+    "lang": "sql",
+    "category": "Table operations",
+    "label": "ALTER TABLE",
+    "example": "ALTER TABLE users ADD age INT",
+    "description": "Modify structure",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "ALTER TABLE",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-drop-table",
+    "lang": "sql",
+    "category": "Table operations",
+    "label": "DROP TABLE",
+    "example": "DROP TABLE users",
+    "description": "Delete table",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "DROP TABLE",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-truncate-table",
+    "lang": "sql",
+    "category": "Table operations",
+    "label": "TRUNCATE",
+    "example": "TRUNCATE TABLE users",
+    "description": "Remove all rows",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "TRUNCATE TABLE",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-create-index",
+    "lang": "sql",
+    "category": "Table operations",
+    "label": "CREATE INDEX",
+    "example": "CREATE INDEX idx ON users(id)",
+    "description": "Create index",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "CREATE INDEX",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-drop-index",
+    "lang": "sql",
+    "category": "Table operations",
+    "label": "DROP INDEX",
+    "example": "DROP INDEX idx ON users",
+    "description": "Remove index",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "DROP INDEX",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-conditional-count",
+    "lang": "sql",
+    "category": "Useful LeetCode patterns",
+    "label": "Conditional count",
+    "example": "SUM(status='yes')",
+    "description": "Count true rows",
+    "source": "image-sql",
+    "related": [
+      "pd-conditional-count"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-conditional-sum",
+    "lang": "sql",
+    "category": "Useful LeetCode patterns",
+    "label": "Conditional sum",
+    "example": "SUM(CASE WHEN ... THEN 1 ELSE 0 END)",
+    "description": "Conditional aggregation",
+    "source": "image-sql",
+    "related": [
+      "pd-conditional-group-count"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-safe-division",
+    "lang": "sql",
+    "category": "Useful LeetCode patterns",
+    "label": "Safe division",
+    "example": "a / NULLIF(b,0)",
+    "description": "Avoid divide-by-zero",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-previous-row",
+    "lang": "sql",
+    "category": "Useful LeetCode patterns",
+    "label": "Previous row",
+    "example": "LAG(x) OVER (...)",
+    "description": "Compare sequential rows",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "LAG",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-first-row",
+    "lang": "sql",
+    "category": "Useful LeetCode patterns",
+    "label": "First row per group",
+    "example": "ROW_NUMBER() OVER(PARTITION BY id ORDER BY d)",
+    "description": "Identify first row",
+    "source": "image-sql",
+    "related": [
+      "pd-first-group"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "",
+    "pageCount": 6
+  },
+  {
+    "id": "sql-anti-join",
+    "lang": "sql",
+    "category": "Useful LeetCode patterns",
+    "label": "Anti-join",
+    "example": "LEFT JOIN ... WHERE b.id IS NULL",
+    "description": "Find unmatched rows",
+    "source": "image-sql",
+    "related": [
+      "pd-anti-join"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "",
+    "pageCount": 2
+  },
+  {
+    "id": "sql-top-n",
+    "lang": "sql",
+    "category": "Useful LeetCode patterns",
+    "label": "Top N per group",
+    "example": "ROW_NUMBER() OVER(PARTITION BY g ORDER BY x DESC)",
+    "description": "Rank within group",
+    "source": "image-sql",
+    "related": [
+      "pd-rank-group"
+    ],
+    "note": "ROW_NUMBER picks rows. DENSE_RANK picks distinct ranks and can retain extra tied rows. Choose the rule the question asks for.",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+    "aliases": "",
+    "pageCount": 3
+  },
+  {
+    "id": "sql-concat",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "CONCAT()",
+    "example": "CONCAT(first,' ',last)",
+    "description": "Join strings",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "CONCAT",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-concat-ws",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "CONCAT_WS()",
+    "example": "CONCAT_WS('-',a,b)",
+    "description": "Join with separator",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "CONCAT_WS",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-lower",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "LOWER()",
+    "example": "LOWER(name)",
+    "description": "Lowercase",
+    "source": "image-sql",
+    "related": [
+      "pd-str-lower"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "LOWER",
+    "pageCount": 2
+  },
+  {
+    "id": "sql-upper",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "UPPER()",
+    "example": "UPPER(name)",
+    "description": "Uppercase",
+    "source": "image-sql",
+    "related": [
+      "pd-str-upper"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "UPPER",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-length",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "LENGTH()",
+    "example": "LENGTH(name)",
+    "description": "Byte length",
+    "source": "image-sql",
+    "related": [],
+    "note": "MySQL LENGTH measures bytes, not characters. Use CHAR_LENGTH for a character count.",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "LENGTH",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-char-length",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "CHAR_LENGTH()",
+    "example": "CHAR_LENGTH(name)",
+    "description": "Character count",
+    "source": "image-sql",
+    "related": [
+      "pd-str-len"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "CHAR_LENGTH",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-substring",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "SUBSTRING()",
+    "example": "SUBSTRING(name,1,3)",
+    "description": "Extract substring",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "SUBSTRING",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-left",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "LEFT()",
+    "example": "LEFT(name,3)",
+    "description": "First characters",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "LEFT",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-right",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "RIGHT()",
+    "example": "RIGHT(name,3)",
+    "description": "Last characters",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "RIGHT",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-trim",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "TRIM()",
+    "example": "TRIM(name)",
+    "description": "Remove outer spaces",
+    "source": "image-sql",
+    "related": [
+      "pd-str-strip"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "TRIM",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-ltrim",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "LTRIM()",
+    "example": "LTRIM(name)",
+    "description": "Remove left spaces",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "LTRIM",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-rtrim",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "RTRIM()",
+    "example": "RTRIM(name)",
+    "description": "Remove right spaces",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "RTRIM",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-replace",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "REPLACE()",
+    "example": "REPLACE(name,'a','b')",
+    "description": "Replace text",
+    "source": "image-sql",
+    "related": [
+      "pd-str-replace"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "REPLACE",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-locate",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "LOCATE()",
+    "example": "LOCATE('a',name)",
+    "description": "Find substring",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "LOCATE",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-instr",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "INSTR()",
+    "example": "INSTR(name,'a')",
+    "description": "Find substring",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "INSTR",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-lpad",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "LPAD()",
+    "example": "LPAD(x,5,'0')",
+    "description": "Pad left",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "LPAD",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-rpad",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "RPAD()",
+    "example": "RPAD(x,5,'0')",
+    "description": "Pad right",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "RPAD",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-reverse",
+    "lang": "sql",
+    "category": "String functions",
+    "label": "REVERSE()",
+    "example": "REVERSE(name)",
+    "description": "Reverse string",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/string-functions.html",
+    "aliases": "REVERSE",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-round",
+    "lang": "sql",
+    "category": "Numeric functions",
+    "label": "ROUND()",
+    "example": "ROUND(x,2)",
+    "description": "Round",
+    "source": "image-sql",
+    "related": [
+      "pd-round"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html",
+    "aliases": "ROUND",
+    "pageCount": 14
+  },
+  {
+    "id": "sql-ceil",
+    "lang": "sql",
+    "category": "Numeric functions",
+    "label": "CEIL()",
+    "example": "CEIL(x)",
+    "description": "Round up",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html",
+    "aliases": "CEIL",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-floor",
+    "lang": "sql",
+    "category": "Numeric functions",
+    "label": "FLOOR()",
+    "example": "FLOOR(x)",
+    "description": "Round down",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html",
+    "aliases": "FLOOR",
+    "pageCount": 2
+  },
+  {
+    "id": "sql-truncate",
+    "lang": "sql",
+    "category": "Numeric functions",
+    "label": "TRUNCATE()",
+    "example": "TRUNCATE(x,2)",
+    "description": "Cut decimals",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html",
+    "aliases": "TRUNCATE",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-abs",
+    "lang": "sql",
+    "category": "Numeric functions",
+    "label": "ABS()",
+    "example": "ABS(x)",
+    "description": "Absolute value",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html",
+    "aliases": "ABS",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-mod",
+    "lang": "sql",
+    "category": "Numeric functions",
+    "label": "MOD()",
+    "example": "MOD(x,2)",
+    "description": "Remainder",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html",
+    "aliases": "MOD",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-power",
+    "lang": "sql",
+    "category": "Numeric functions",
+    "label": "POWER()",
+    "example": "POWER(x,2)",
+    "description": "Exponent",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html",
+    "aliases": "POWER",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-sqrt",
+    "lang": "sql",
+    "category": "Numeric functions",
+    "label": "SQRT()",
+    "example": "SQRT(x)",
+    "description": "Square root",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html",
+    "aliases": "SQRT",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-sign",
+    "lang": "sql",
+    "category": "Numeric functions",
+    "label": "SIGN()",
+    "example": "SIGN(x)",
+    "description": "Sign of value",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html",
+    "aliases": "SIGN",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-rand",
+    "lang": "sql",
+    "category": "Numeric functions",
+    "label": "RAND()",
+    "example": "RAND()",
+    "description": "Random number",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html",
+    "aliases": "RAND",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-curdate",
+    "lang": "sql",
+    "category": "Date/time functions",
+    "label": "CURDATE()",
+    "example": "CURDATE()",
+    "description": "Current date",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html",
+    "aliases": "CURDATE",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-now",
+    "lang": "sql",
+    "category": "Date/time functions",
+    "label": "NOW()",
+    "example": "NOW()",
+    "description": "Current datetime",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html",
+    "aliases": "NOW",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-year",
+    "lang": "sql",
+    "category": "Date/time functions",
+    "label": "YEAR()",
+    "example": "YEAR(date)",
+    "description": "Extract year",
+    "source": "image-sql",
+    "related": [
+      "pd-dt-year"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html",
+    "aliases": "YEAR",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-month",
+    "lang": "sql",
+    "category": "Date/time functions",
+    "label": "MONTH()",
+    "example": "MONTH(date)",
+    "description": "Extract month",
+    "source": "image-sql",
+    "related": [
+      "pd-dt-month"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html",
+    "aliases": "MONTH",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-day",
+    "lang": "sql",
+    "category": "Date/time functions",
+    "label": "DAY()",
+    "example": "DAY(date)",
+    "description": "Extract day",
+    "source": "image-sql",
+    "related": [
+      "pd-dt-day"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html",
+    "aliases": "DAY",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-dayname",
+    "lang": "sql",
+    "category": "Date/time functions",
+    "label": "DAYNAME()",
+    "example": "DAYNAME(date)",
+    "description": "Day name",
+    "source": "image-sql",
+    "related": [
+      "pd-dt-dayname"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html",
+    "aliases": "DAYNAME",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-datediff",
+    "lang": "sql",
+    "category": "Date/time functions",
+    "label": "DATEDIFF()",
+    "example": "DATEDIFF(d1,d2)",
+    "description": "Difference in days",
+    "source": "image-sql",
+    "related": [
+      "pd-dt-days"
+    ],
+    "note": "DATEDIFF(d1,d2) is d1 minus d2 using date parts. TIMESTAMPDIFF(unit,d1,d2) uses d2 minus d1.",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html",
+    "aliases": "DATEDIFF",
+    "pageCount": 3
+  },
+  {
+    "id": "sql-timestampdiff",
+    "lang": "sql",
+    "category": "Date/time functions",
+    "label": "TIMESTAMPDIFF()",
+    "example": "TIMESTAMPDIFF(DAY,d1,d2)",
+    "description": "Difference in chosen unit",
+    "source": "image-sql",
+    "related": [],
+    "note": "The result is the difference from the second argument to the third, in the requested unit. This reverses the operand order compared with DATEDIFF.",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html",
+    "aliases": "TIMESTAMPDIFF",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-date-add",
+    "lang": "sql",
+    "category": "Date/time functions",
+    "label": "DATE_ADD()",
+    "example": "DATE_ADD(d, INTERVAL 7 DAY)",
+    "description": "Add time",
+    "source": "image-sql",
+    "related": [
+      "pd-timedelta"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html",
+    "aliases": "DATE_ADD",
+    "pageCount": 2
+  },
+  {
+    "id": "sql-date-sub",
+    "lang": "sql",
+    "category": "Date/time functions",
+    "label": "DATE_SUB()",
+    "example": "DATE_SUB(d, INTERVAL 7 DAY)",
+    "description": "Subtract time",
+    "source": "image-sql",
+    "related": [
+      "pd-timedelta"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html",
+    "aliases": "DATE_SUB",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-last-day",
+    "lang": "sql",
+    "category": "Date/time functions",
+    "label": "LAST_DAY()",
+    "example": "LAST_DAY(d)",
+    "description": "Last day of month",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html",
+    "aliases": "LAST_DAY",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-date-format",
+    "lang": "sql",
+    "category": "Date/time functions",
+    "label": "DATE_FORMAT()",
+    "example": "DATE_FORMAT(d,'%Y-%m')",
+    "description": "Format date",
+    "source": "image-sql",
+    "related": [
+      "pd-strftime"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html",
+    "aliases": "DATE_FORMAT",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-str-to-date",
+    "lang": "sql",
+    "category": "Date/time functions",
+    "label": "STR_TO_DATE()",
+    "example": "STR_TO_DATE(s,'%Y-%m-%d')",
+    "description": "String → date",
+    "source": "image-sql",
+    "related": [
+      "pd-to-datetime"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html",
+    "aliases": "STR_TO_DATE",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-row-number",
+    "lang": "sql",
+    "category": "Window functions",
+    "label": "ROW_NUMBER()",
+    "example": "ROW_NUMBER() OVER (...)",
+    "description": "Sequential number",
+    "source": "image-sql",
+    "related": [
+      "pd-cumcount"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+    "aliases": "ROW_NUMBER",
+    "pageCount": 7
+  },
+  {
+    "id": "sql-rank",
+    "lang": "sql",
+    "category": "Window functions",
+    "label": "RANK()",
+    "example": "RANK() OVER (...)",
+    "description": "Rank with gaps",
+    "source": "image-sql",
+    "related": [
+      "pd-rank"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+    "aliases": "RANK",
+    "pageCount": 2
+  },
+  {
+    "id": "sql-dense-rank",
+    "lang": "sql",
+    "category": "Window functions",
+    "label": "DENSE_RANK()",
+    "example": "DENSE_RANK() OVER (...)",
+    "description": "Rank without gaps",
+    "source": "image-sql",
+    "related": [
+      "pd-rank-dense"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+    "aliases": "DENSE_RANK",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-ntile",
+    "lang": "sql",
+    "category": "Window functions",
+    "label": "NTILE()",
+    "example": "NTILE(4) OVER (...)",
+    "description": "Split into buckets",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+    "aliases": "NTILE",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-lag",
+    "lang": "sql",
+    "category": "Window functions",
+    "label": "LAG()",
+    "example": "LAG(score) OVER (...)",
+    "description": "Previous row",
+    "source": "image-sql",
+    "related": [
+      "pd-shift"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+    "aliases": "LAG",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-lead",
+    "lang": "sql",
+    "category": "Window functions",
+    "label": "LEAD()",
+    "example": "LEAD(score) OVER (...)",
+    "description": "Next row",
+    "source": "image-sql",
+    "related": [
+      "pd-lead"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+    "aliases": "LEAD",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-first-value",
+    "lang": "sql",
+    "category": "Window functions",
+    "label": "FIRST_VALUE()",
+    "example": "FIRST_VALUE(x) OVER (...)",
+    "description": "First window value",
+    "source": "image-sql",
+    "related": [
+      "pd-first-group"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+    "aliases": "FIRST_VALUE",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-last-value",
+    "lang": "sql",
+    "category": "Window functions",
+    "label": "LAST_VALUE()",
+    "example": "LAST_VALUE(x) OVER (...)",
+    "description": "Last window value",
+    "source": "image-sql",
+    "related": [
+      "pd-last-group"
+    ],
+    "note": "LAST_VALUE uses the current window frame. To read the final value of the whole partition, an explicit frame ending at UNBOUNDED FOLLOWING is often required.",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-functions-frames.html",
+    "aliases": "LAST_VALUE",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-sum-over",
+    "lang": "sql",
+    "category": "Window functions",
+    "label": "SUM() OVER",
+    "example": "SUM(x) OVER (...)",
+    "description": "Window/running sum",
+    "source": "image-sql",
+    "related": [
+      "pd-cumsum"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+    "aliases": "SUM",
+    "pageCount": 2
+  },
+  {
+    "id": "sql-avg-over",
+    "lang": "sql",
+    "category": "Window functions",
+    "label": "AVG() OVER",
+    "example": "AVG(x) OVER (...)",
+    "description": "Window average",
+    "source": "image-sql",
+    "related": [
+      "pd-transform"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+    "aliases": "AVG",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-count-over",
+    "lang": "sql",
+    "category": "Window functions",
+    "label": "COUNT() OVER",
+    "example": "COUNT(*) OVER (...)",
+    "description": "Window count",
+    "source": "image-sql",
+    "related": [
+      "pd-transform"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+    "aliases": "COUNT",
+    "pageCount": 2
+  },
+  {
+    "id": "sql-partition-by",
+    "lang": "sql",
+    "category": "Window functions",
+    "label": "PARTITION BY",
+    "example": "OVER(PARTITION BY id)",
+    "description": "Define groups",
+    "source": "image-sql",
+    "related": [
+      "pd-groupby"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+    "aliases": "PARTITION BY",
+    "pageCount": 12
+  },
+  {
+    "id": "sql-window-order",
+    "lang": "sql",
+    "category": "Window functions",
+    "label": "ORDER BY",
+    "example": "OVER(ORDER BY date)",
+    "description": "Define order",
+    "source": "image-sql",
+    "related": [
+      "pd-sort-values"
+    ],
+    "note": "This row is the ORDER BY inside OVER. Final result ordering is a separate ORDER BY on the outer query.",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-functions-frames.html",
+    "aliases": "",
+    "pageCount": 14
+  },
+  {
+    "id": "sql-subquery",
+    "lang": "sql",
+    "category": "Subqueries and CTEs",
+    "label": "Subquery",
+    "example": "WHERE id IN (SELECT id...)",
+    "description": "Query inside query",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/with.html",
+    "aliases": "",
+    "pageCount": 52
+  },
+  {
+    "id": "sql-with",
+    "lang": "sql",
+    "category": "Subqueries and CTEs",
+    "label": "WITH",
+    "example": "WITH temp AS (...)",
+    "description": "CTE",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/with.html",
+    "aliases": "",
+    "pageCount": 44
+  },
+  {
+    "id": "sql-recursive",
+    "lang": "sql",
+    "category": "Subqueries and CTEs",
+    "label": "Recursive CTE",
+    "example": "WITH RECURSIVE ...",
+    "description": "Recursive query",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/with.html",
+    "aliases": "WITH RECURSIVE",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-exists",
+    "lang": "sql",
+    "category": "Subqueries and CTEs",
+    "label": "EXISTS",
+    "example": "WHERE EXISTS (...)",
+    "description": "Check row exist",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/with.html",
+    "aliases": "",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-not-exists",
+    "lang": "sql",
+    "category": "Subqueries and CTEs",
+    "label": "NOT EXISTS",
+    "example": "WHERE NOT EXISTS (...)",
+    "description": "Check no row exist",
+    "source": "image-sql",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/with.html",
+    "aliases": "NOT EXISTS",
+    "pageCount": 2
+  },
+  {
+    "id": "sql-union",
+    "lang": "sql",
+    "category": "Set operations",
+    "label": "UNION",
+    "example": "SELECT ... UNION SELECT ...",
+    "description": "Combine, remove duplicates",
+    "source": "image-sql",
+    "related": [
+      "pd-concat-rows"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "",
+    "pageCount": 7
+  },
+  {
+    "id": "sql-union-all",
+    "lang": "sql",
+    "category": "Set operations",
+    "label": "UNION ALL",
+    "example": "SELECT ... UNION ALL SELECT ...",
+    "description": "Combine, keep duplicates",
+    "source": "image-sql",
+    "related": [
+      "pd-concat-rows"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "UNION ALL",
+    "pageCount": 4
+  },
+  {
+    "id": "pd-select-column",
+    "lang": "pd",
+    "category": "DataFrame basics",
+    "label": "Select column",
+    "example": "df['age']",
+    "description": "Get one column",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 86
+  },
+  {
+    "id": "pd-select-columns",
+    "lang": "pd",
+    "category": "DataFrame basics",
+    "label": "Select columns",
+    "example": "df[['name','age']]",
+    "description": "Get multiple columns",
+    "source": "image-pandas",
+    "related": [
+      "sql-select"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 55
+  },
+  {
+    "id": "pd-loc",
+    "lang": "pd",
+    "category": "DataFrame basics",
+    "label": "Rows by label",
+    "example": "df.loc[0:3]",
+    "description": "Select by labels",
+    "source": "image-pandas",
+    "related": [],
+    "note": "Label slicing includes the stop label when present. Positional iloc slicing excludes the stop position.",
+    "doc": "https://pandas.pydata.org/docs/user_guide/indexing.html",
+    "aliases": "loc",
+    "pageCount": 54
+  },
+  {
+    "id": "pd-iloc",
+    "lang": "pd",
+    "category": "DataFrame basics",
+    "label": "Rows by position",
+    "example": "df.iloc[0:3]",
+    "description": "Select by positions",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "iloc",
+    "pageCount": 8
+  },
+  {
+    "id": "pd-shape",
+    "lang": "pd",
+    "category": "DataFrame basics",
+    "label": "Shape",
+    "example": "df.shape",
+    "description": "(rows, columns)",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "shape",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-columns",
+    "lang": "pd",
+    "category": "DataFrame basics",
+    "label": "Columns",
+    "example": "df.columns",
+    "description": "Column names",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "columns",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-dtypes",
+    "lang": "pd",
+    "category": "DataFrame basics",
+    "label": "Types",
+    "example": "df.dtypes",
+    "description": "Column data types",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "dtypes",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-head",
+    "lang": "pd",
+    "category": "DataFrame basics",
+    "label": "First rows",
+    "example": "df.head()",
+    "description": "Preview top rows",
+    "source": "image-pandas",
+    "related": [
+      "sql-limit"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "head",
+    "pageCount": 9
+  },
+  {
+    "id": "pd-tail",
+    "lang": "pd",
+    "category": "DataFrame basics",
+    "label": "Last rows",
+    "example": "df.tail()",
+    "description": "Preview bottom rows",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "tail",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-filter",
+    "lang": "pd",
+    "category": "Filtering",
+    "label": "Condition",
+    "example": "df[df['age'] > 30]",
+    "description": "Filter rows",
+    "source": "image-pandas",
+    "related": [
+      "sql-where"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 34
+  },
+  {
+    "id": "pd-and",
+    "lang": "pd",
+    "category": "Filtering",
+    "label": "Multiple conditions",
+    "example": "df[(df.age > 20) & (df.city == 'HK')]",
+    "description": "AND",
+    "source": "image-pandas",
+    "related": [
+      "sql-and"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "BitAnd",
+    "pageCount": 26
+  },
+  {
+    "id": "pd-or",
+    "lang": "pd",
+    "category": "Filtering",
+    "label": "OR",
+    "example": "df[(df.city == 'HK') | (df.city == 'SG')]",
+    "description": "OR",
+    "source": "image-pandas",
+    "related": [
+      "sql-or"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "BitOr",
+    "pageCount": 10
+  },
+  {
+    "id": "pd-isin",
+    "lang": "pd",
+    "category": "Filtering",
+    "label": "Membership",
+    "example": "df[df.city.isin(['HK','SG'])]",
+    "description": "Match set",
+    "source": "image-pandas",
+    "related": [
+      "sql-in"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "isin",
+    "pageCount": 10
+  },
+  {
+    "id": "pd-not-isin",
+    "lang": "pd",
+    "category": "Filtering",
+    "label": "Not membership",
+    "example": "df[~df.city.isin(['HK'])]",
+    "description": "Exclude values",
+    "source": "image-pandas",
+    "related": [
+      "sql-not-in"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 5
+  },
+  {
+    "id": "pd-between",
+    "lang": "pd",
+    "category": "Filtering",
+    "label": "Range",
+    "example": "df[df.age.between(20,30)]",
+    "description": "Inclusive range",
+    "source": "image-pandas",
+    "related": [
+      "sql-between"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "between",
+    "pageCount": 5
+  },
+  {
+    "id": "pd-filter-null",
+    "lang": "pd",
+    "category": "Filtering",
+    "label": "Missing",
+    "example": "df[df.score.isna()]",
+    "description": "Null rows",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "isna",
+    "pageCount": 18
+  },
+  {
+    "id": "pd-filter-notnull",
+    "lang": "pd",
+    "category": "Filtering",
+    "label": "Non-missing",
+    "example": "df[df.score.notna()]",
+    "description": "Non-null rows",
+    "source": "image-pandas",
+    "related": [
+      "sql-is-not-null"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "notna",
+    "pageCount": 7
+  },
+  {
+    "id": "pd-filter-string",
+    "lang": "pd",
+    "category": "Filtering",
+    "label": "String match",
+    "example": "df[df.name.str.contains('Ann')]",
+    "description": "Match text",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "contains",
+    "pageCount": 5
+  },
+  {
+    "id": "pd-sort-values",
+    "lang": "pd",
+    "category": "Sorting",
+    "label": "Sort one column",
+    "example": "df.sort_values('age')",
+    "description": "Ascending sort",
+    "source": "image-pandas",
+    "related": [
+      "sql-window-order",
+      "sql-order-by"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "sort_values",
+    "pageCount": 33
+  },
+  {
+    "id": "pd-sort-desc",
+    "lang": "pd",
+    "category": "Sorting",
+    "label": "Descending",
+    "example": "df.sort_values('age', ascending=False)",
+    "description": "Descending",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 18
+  },
+  {
+    "id": "pd-sort-multi",
+    "lang": "pd",
+    "category": "Sorting",
+    "label": "Multiple columns",
+    "example": "df.sort_values(['age','name'])",
+    "description": "Multi-column sort",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 8
+  },
+  {
+    "id": "pd-sort-index",
+    "lang": "pd",
+    "category": "Sorting",
+    "label": "Sort index",
+    "example": "df.sort_index()",
+    "description": "Sort row index",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "sort_index",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-new-column",
+    "lang": "pd",
+    "category": "Creating / modifying columns",
+    "label": "New column",
+    "example": "df['x'] = df['a'] + df['b']",
+    "description": "Create column",
+    "source": "image-pandas",
+    "related": [],
+    "note": "Assign through the DataFrame itself. Chained assignment such as df[\"x\"][mask] = value does not update the parent under Copy-on-Write.",
+    "doc": "https://pandas.pydata.org/docs/user_guide/copy_on_write.html",
+    "aliases": "",
+    "pageCount": 39
+  },
+  {
+    "id": "pd-conditional-column",
+    "lang": "pd",
+    "category": "Creating / modifying columns",
+    "label": "Conditional column",
+    "example": "df['flag'] = df.age > 30",
+    "description": "Boolean column",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 5
+  },
+  {
+    "id": "pd-assign",
+    "lang": "pd",
+    "category": "Creating / modifying columns",
+    "label": "assign()",
+    "example": "df.assign(x=df.a + df.b)",
+    "description": "Return modified copy",
+    "source": "image-pandas",
+    "related": [
+      "sql-update"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "assign",
+    "pageCount": 14
+  },
+  {
+    "id": "pd-rename",
+    "lang": "pd",
+    "category": "Creating / modifying columns",
+    "label": "Rename",
+    "example": "df.rename(columns={'a':'x'})",
+    "description": "Rename columns",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "rename",
+    "pageCount": 18
+  },
+  {
+    "id": "pd-drop-column",
+    "lang": "pd",
+    "category": "Creating / modifying columns",
+    "label": "Drop column",
+    "example": "df.drop(columns='a')",
+    "description": "Remove column",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-drop-row",
+    "lang": "pd",
+    "category": "Creating / modifying columns",
+    "label": "Drop rows",
+    "example": "df.drop(index=[0,1])",
+    "description": "Remove rows",
+    "source": "image-pandas",
+    "related": [
+      "sql-delete"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-replace",
+    "lang": "pd",
+    "category": "Creating / modifying columns",
+    "label": "Replace values",
+    "example": "df['x'].replace({0:1})",
+    "description": "Replace values",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "replace",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-where",
+    "lang": "pd",
+    "category": "Conditional logic",
+    "label": "where()",
+    "example": "df.x.where(df.x > 0, 0)",
+    "description": "Keep or replace",
+    "source": "image-pandas",
+    "related": [
+      "sql-case"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "where",
+    "pageCount": 3
+  },
+  {
+    "id": "pd-mask",
+    "lang": "pd",
+    "category": "Conditional logic",
+    "label": "mask()",
+    "example": "df.x.mask(df.x < 0, 0)",
+    "description": "Replace where true",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "mask",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-np-where",
+    "lang": "pd",
+    "category": "Conditional logic",
+    "label": "np.where()",
+    "example": "np.where(df.x > 0, 'Y','N')",
+    "description": "Vectorized if/else",
+    "source": "image-pandas",
+    "related": [
+      "sql-case",
+      "sql-if"
+    ],
+    "note": "This is a NumPy function, used alongside pandas. It returns an array rather than a labeled Series.",
+    "doc": "https://numpy.org/doc/stable/reference/generated/numpy.where.html",
+    "aliases": "where",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-map",
+    "lang": "pd",
+    "category": "Conditional logic",
+    "label": "map()",
+    "example": "df.status.map({'A':1,'B':2})",
+    "description": "Map values",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "map",
+    "pageCount": 10
+  },
+  {
+    "id": "pd-apply",
+    "lang": "pd",
+    "category": "Conditional logic",
+    "label": "apply()",
+    "example": "df['x'].apply(func)",
+    "description": "Custom function on Series",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "apply",
+    "pageCount": 7
+  },
+  {
+    "id": "pd-set-index",
+    "lang": "pd",
+    "category": "Index operations",
+    "label": "Set index",
+    "example": "df.set_index('id')",
+    "description": "Make column index",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "set_index",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-reset-index",
+    "lang": "pd",
+    "category": "Index operations",
+    "label": "Reset index",
+    "example": "df.reset_index()",
+    "description": "Restore normal index",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "reset_index",
+    "pageCount": 35
+  },
+  {
+    "id": "pd-reset-drop",
+    "lang": "pd",
+    "category": "Index operations",
+    "label": "Drop old index",
+    "example": "df.reset_index(drop=True)",
+    "description": "Reset cleanly",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 2
+  },
+  {
+    "id": "pd-loc-label",
+    "lang": "pd",
+    "category": "Index operations",
+    "label": "Access label",
+    "example": "df.loc[5]",
+    "description": "Row by index label",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "loc",
+    "pageCount": 54
+  },
+  {
+    "id": "pd-first-group",
+    "lang": "pd",
+    "category": "Very common interview / LeetCode patterns",
+    "label": "First row per group",
+    "example": "df.sort_values('date').groupby('id').first()",
+    "description": "Earliest row",
+    "source": "image-pandas",
+    "related": [
+      "sql-first-value",
+      "sql-first-row"
+    ],
+    "note": "The image labels this “first row”, but groupby.first() takes the first non-missing value in each column by default. With missing data, those values can come from different rows. Sort and use groupby.head(1) when you need an intact row.",
+    "doc": "https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.first.html",
+    "aliases": "",
+    "pageCount": 2
+  },
+  {
+    "id": "pd-last-group",
+    "lang": "pd",
+    "category": "Very common interview / LeetCode patterns",
+    "label": "Last row per group",
+    "example": "df.sort_values('date').groupby('id').last()",
+    "description": "Latest row",
+    "source": "image-pandas",
+    "related": [
+      "sql-last-value"
+    ],
+    "note": "The source pattern uses groupby.last(). Its default skips missing values per column, so the result need not be one intact source row. Sort and use groupby.tail(1) for the last complete row selection.",
+    "doc": "https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.api.typing.DataFrameGroupBy.last.html",
+    "aliases": "",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-shift-group",
+    "lang": "pd",
+    "category": "Very common interview / LeetCode patterns",
+    "label": "Previous row within group",
+    "example": "df.groupby('id')['x'].shift()",
+    "description": "Grouped lag",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-rank-group",
+    "lang": "pd",
+    "category": "Very common interview / LeetCode patterns",
+    "label": "Group rank",
+    "example": "df.groupby('g')['x'].rank(method='dense')",
+    "description": "Rank within group",
+    "source": "image-pandas",
+    "related": [
+      "sql-top-n"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 2
+  },
+  {
+    "id": "pd-cumsum-group",
+    "lang": "pd",
+    "category": "Very common interview / LeetCode patterns",
+    "label": "Group cumulative sum",
+    "example": "df.groupby('id')['x'].cumsum()",
+    "description": "Running total per group",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-demean-group",
+    "lang": "pd",
+    "category": "Very common interview / LeetCode patterns",
+    "label": "Group mean subtraction",
+    "example": "df.x - df.groupby('g').x.transform('mean')",
+    "description": "Demean by group",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-anti-join",
+    "lang": "pd",
+    "category": "Very common interview / LeetCode patterns",
+    "label": "Anti-join",
+    "example": "a.merge(b, how='left', indicator=True).query('_merge==\"left_only\"')",
+    "description": "Rows only in left",
+    "source": "image-pandas",
+    "related": [
+      "sql-anti-join"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-conditional-count",
+    "lang": "pd",
+    "category": "Very common interview / LeetCode patterns",
+    "label": "Conditional count",
+    "example": "(df.status == 'yes').sum()",
+    "description": "Count matching rows",
+    "source": "image-pandas",
+    "related": [
+      "sql-conditional-count"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-conditional-group-count",
+    "lang": "pd",
+    "category": "Very common interview / LeetCode patterns",
+    "label": "Conditional group count",
+    "example": "df.assign(flag=df.x>0).groupby('g').flag.sum()",
+    "description": "Count condition by group",
+    "source": "image-pandas",
+    "related": [
+      "sql-conditional-sum"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 2
+  },
+  {
+    "id": "pd-endpoints",
+    "lang": "pd",
+    "category": "Very common interview / LeetCode patterns",
+    "label": "First/last score",
+    "example": "df.sort_values('date').groupby('id').agg(first=('x','first'), last=('x','last'))",
+    "description": "Compare endpoints",
+    "source": "image-pandas",
+    "related": [
+      "sql-nth-value"
+    ],
+    "note": "first and last aggregation skip missing values by default. Define tie-breaking and missing-score behavior when comparing dated endpoints.",
+    "doc": "https://pandas.pydata.org/docs/reference/api/pandas.api.typing.DataFrameGroupBy.first.html",
+    "aliases": "",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-explode",
+    "lang": "pd",
+    "category": "Less common but useful",
+    "label": "explode()",
+    "example": "df.explode('items')",
+    "description": "List items → rows",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "explode",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-pivot",
+    "lang": "pd",
+    "category": "Less common but useful",
+    "label": "pivot()",
+    "example": "df.pivot(index='id', columns='type', values='x')",
+    "description": "Reshape long → wide",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "pivot",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-pivot-table",
+    "lang": "pd",
+    "category": "Less common but useful",
+    "label": "pivot_table()",
+    "example": "pd.pivot_table(df, values='x', index='id', aggfunc='mean')",
+    "description": "Pivot + aggregation",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "pivot_table",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-melt",
+    "lang": "pd",
+    "category": "Less common but useful",
+    "label": "melt()",
+    "example": "df.melt(id_vars='id')",
+    "description": "Wide → long",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "melt",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-stack",
+    "lang": "pd",
+    "category": "Less common but useful",
+    "label": "stack()",
+    "example": "df.stack()",
+    "description": "Columns → index",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "stack",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-unstack",
+    "lang": "pd",
+    "category": "Less common but useful",
+    "label": "unstack()",
+    "example": "df.unstack()",
+    "description": "Index → columns",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "unstack",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-cut",
+    "lang": "pd",
+    "category": "Less common but useful",
+    "label": "cut()",
+    "example": "pd.cut(df.age, bins=[0,20,40,60])",
+    "description": "Numeric bins",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "cut",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-qcut",
+    "lang": "pd",
+    "category": "Less common but useful",
+    "label": "qcut()",
+    "example": "pd.qcut(df.score, 4)",
+    "description": "Quantile bins",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "qcut",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-sample",
+    "lang": "pd",
+    "category": "Less common but useful",
+    "label": "sample()",
+    "example": "df.sample(n=10)",
+    "description": "Random rows",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "sample",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-query",
+    "lang": "pd",
+    "category": "Less common but useful",
+    "label": "query()",
+    "example": "df.query('age > 30')",
+    "description": "SQL-like filtering",
+    "source": "image-pandas",
+    "related": [],
+    "note": "query and eval accept expressions, not arbitrary SQL. Do not construct them from untrusted user input.",
+    "doc": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.query.html",
+    "aliases": "query",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-eval",
+    "lang": "pd",
+    "category": "Less common but useful",
+    "label": "eval()",
+    "example": "df.eval('x = a + b')",
+    "description": "Evaluate expression",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "eval",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-combine-first",
+    "lang": "pd",
+    "category": "Less common but useful",
+    "label": "combine_first()",
+    "example": "a.combine_first(b)",
+    "description": "Fill missing from another object",
+    "source": "image-pandas",
+    "related": [
+      "sql-coalesce"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "combine_first",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-isna",
+    "lang": "pd",
+    "category": "Missing values",
+    "label": "Check null",
+    "example": "df.isna()",
+    "description": "Boolean null mask",
+    "source": "image-pandas",
+    "related": [
+      "sql-is-null"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "isna",
+    "pageCount": 18
+  },
+  {
+    "id": "pd-count-null",
+    "lang": "pd",
+    "category": "Missing values",
+    "label": "Count nulls",
+    "example": "df.isna().sum()",
+    "description": "Missing per column",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-fillna",
+    "lang": "pd",
+    "category": "Missing values",
+    "label": "Fill null",
+    "example": "df.fillna(0)",
+    "description": "Replace missing values",
+    "source": "image-pandas",
+    "related": [
+      "sql-ifnull",
+      "sql-coalesce"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "fillna",
+    "pageCount": 8
+  },
+  {
+    "id": "pd-ffill",
+    "lang": "pd",
+    "category": "Missing values",
+    "label": "Forward fill",
+    "example": "df.ffill()",
+    "description": "Previous value",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "ffill",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-bfill",
+    "lang": "pd",
+    "category": "Missing values",
+    "label": "Backward fill",
+    "example": "df.bfill()",
+    "description": "Next value",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "bfill",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-dropna",
+    "lang": "pd",
+    "category": "Missing values",
+    "label": "Drop null rows",
+    "example": "df.dropna()",
+    "description": "Remove incomplete rows",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "dropna",
+    "pageCount": 7
+  },
+  {
+    "id": "pd-dropna-subset",
+    "lang": "pd",
+    "category": "Missing values",
+    "label": "Drop if column null",
+    "example": "df.dropna(subset=['score'])",
+    "description": "Require specific column",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-duplicated",
+    "lang": "pd",
+    "category": "Duplicates",
+    "label": "Find duplicates",
+    "example": "df.duplicated()",
+    "description": "Duplicate mask",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "duplicated",
+    "pageCount": 2
+  },
+  {
+    "id": "pd-drop-duplicates",
+    "lang": "pd",
+    "category": "Duplicates",
+    "label": "Drop duplicates",
+    "example": "df.drop_duplicates()",
+    "description": "Remove duplicates",
+    "source": "image-pandas",
+    "related": [
+      "sql-distinct"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "drop_duplicates",
+    "pageCount": 14
+  },
+  {
+    "id": "pd-dedup-subset",
+    "lang": "pd",
+    "category": "Duplicates",
+    "label": "By columns",
+    "example": "df.drop_duplicates(['id'])",
+    "description": "Unique by selected columns",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 3
+  },
+  {
+    "id": "pd-dedup-last",
+    "lang": "pd",
+    "category": "Duplicates",
+    "label": "Keep last",
+    "example": "df.drop_duplicates('id', keep='last')",
+    "description": "Keep latest duplicate",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-merge-inner",
+    "lang": "pd",
+    "category": "Merge / join",
+    "label": "Inner merge",
+    "example": "a.merge(b, on='id')",
+    "description": "Matching rows",
+    "source": "image-pandas",
+    "related": [
+      "sql-inner-join"
+    ],
+    "note": "Missing keys can match other missing keys in pandas. Use validate when the expected join cardinality matters.",
+    "doc": "https://pandas.pydata.org/docs/reference/api/pandas.merge.html",
+    "aliases": "inner",
+    "pageCount": 17
+  },
+  {
+    "id": "pd-merge-left",
+    "lang": "pd",
+    "category": "Merge / join",
+    "label": "Left merge",
+    "example": "a.merge(b, on='id', how='left')",
+    "description": "Keep all left",
+    "source": "image-pandas",
+    "related": [
+      "sql-left-join"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "left",
+    "pageCount": 26
+  },
+  {
+    "id": "pd-merge-right",
+    "lang": "pd",
+    "category": "Merge / join",
+    "label": "Right merge",
+    "example": "a.merge(b, on='id', how='right')",
+    "description": "Keep all right",
+    "source": "image-pandas",
+    "related": [
+      "sql-right-join"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "right",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-merge-outer",
+    "lang": "pd",
+    "category": "Merge / join",
+    "label": "Outer merge",
+    "example": "a.merge(b, on='id', how='outer')",
+    "description": "Keep all rows",
+    "source": "image-pandas",
+    "related": [],
+    "note": "pandas can match null merge keys to each other, unlike ordinary SQL equality joins. Also check whether the keys cause one-to-many or many-to-many matches.",
+    "doc": "https://pandas.pydata.org/docs/reference/api/pandas.merge.html",
+    "aliases": "outer",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-merge-keys",
+    "lang": "pd",
+    "category": "Merge / join",
+    "label": "Different keys",
+    "example": "a.merge(b, left_on='x', right_on='y')",
+    "description": "Join different names",
+    "source": "image-pandas",
+    "related": [
+      "sql-self-join"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 17
+  },
+  {
+    "id": "pd-concat-rows",
+    "lang": "pd",
+    "category": "Merge / join",
+    "label": "Concatenate rows",
+    "example": "pd.concat([a,b])",
+    "description": "Stack rows",
+    "source": "image-pandas",
+    "related": [
+      "sql-union",
+      "sql-union-all"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 7
+  },
+  {
+    "id": "pd-concat-cols",
+    "lang": "pd",
+    "category": "Merge / join",
+    "label": "Concatenate columns",
+    "example": "pd.concat([a,b], axis=1)",
+    "description": "Stack columns",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-sum",
+    "lang": "pd",
+    "category": "Aggregation",
+    "label": "sum()",
+    "example": "df['sales'].sum()",
+    "description": "Sum",
+    "source": "image-pandas",
+    "related": [
+      "sql-sum"
+    ],
+    "note": "Use min_count=1 when an all-missing input should stay missing instead of becoming zero, as discussed in the saved SQL/pandas comparison.",
+    "doc": "https://pandas.pydata.org/docs/user_guide/missing_data.html",
+    "aliases": "sum",
+    "pageCount": 16
+  },
+  {
+    "id": "pd-mean",
+    "lang": "pd",
+    "category": "Aggregation",
+    "label": "mean()",
+    "example": "df['score'].mean()",
+    "description": "Mean",
+    "source": "image-pandas",
+    "related": [
+      "sql-avg"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "mean",
+    "pageCount": 14
+  },
+  {
+    "id": "pd-median",
+    "lang": "pd",
+    "category": "Aggregation",
+    "label": "median()",
+    "example": "df['score'].median()",
+    "description": "Median",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "median",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-min",
+    "lang": "pd",
+    "category": "Aggregation",
+    "label": "min()",
+    "example": "df['score'].min()",
+    "description": "Minimum",
+    "source": "image-pandas",
+    "related": [
+      "sql-min"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "min",
+    "pageCount": 5
+  },
+  {
+    "id": "pd-max",
+    "lang": "pd",
+    "category": "Aggregation",
+    "label": "max()",
+    "example": "df['score'].max()",
+    "description": "Maximum",
+    "source": "image-pandas",
+    "related": [
+      "sql-max"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "max",
+    "pageCount": 5
+  },
+  {
+    "id": "pd-count",
+    "lang": "pd",
+    "category": "Aggregation",
+    "label": "count()",
+    "example": "df['score'].count()",
+    "description": "Non-null count",
+    "source": "image-pandas",
+    "related": [
+      "sql-count"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "count",
+    "pageCount": 3
+  },
+  {
+    "id": "pd-size",
+    "lang": "pd",
+    "category": "Aggregation",
+    "label": "size",
+    "example": "len(df)",
+    "description": "Number of rows",
+    "source": "image-pandas",
+    "related": [
+      "sql-count"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 26
+  },
+  {
+    "id": "pd-nunique",
+    "lang": "pd",
+    "category": "Aggregation",
+    "label": "nunique()",
+    "example": "df['id'].nunique()",
+    "description": "Unique count",
+    "source": "image-pandas",
+    "related": [
+      "sql-count-distinct"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "nunique",
+    "pageCount": 5
+  },
+  {
+    "id": "pd-value-counts",
+    "lang": "pd",
+    "category": "Aggregation",
+    "label": "value_counts()",
+    "example": "df.city.value_counts()",
+    "description": "Frequency table",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "value_counts",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-describe",
+    "lang": "pd",
+    "category": "Aggregation",
+    "label": "describe()",
+    "example": "df.describe()",
+    "description": "Summary statistics",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "describe",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-groupby",
+    "lang": "pd",
+    "category": "GroupBy",
+    "label": "Basic group",
+    "example": "df.groupby('city')['sales'].sum()",
+    "description": "Aggregate by group",
+    "source": "image-pandas",
+    "related": [
+      "sql-group-by",
+      "sql-partition-by"
+    ],
+    "note": "pandas drops missing grouping keys by default; use dropna=False when those rows must form a group.",
+    "doc": "https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html",
+    "aliases": "groupby",
+    "pageCount": 45
+  },
+  {
+    "id": "pd-groupby-multi",
+    "lang": "pd",
+    "category": "GroupBy",
+    "label": "Multiple groups",
+    "example": "df.groupby(['city','year'])",
+    "description": "Group by several columns",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 6
+  },
+  {
+    "id": "pd-agg-named",
+    "lang": "pd",
+    "category": "GroupBy",
+    "label": "Named aggregation",
+    "example": "df.groupby('city').agg(avg=('score','mean'))",
+    "description": "Named output",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 30
+  },
+  {
+    "id": "pd-agg-multi",
+    "lang": "pd",
+    "category": "GroupBy",
+    "label": "Multiple aggregations",
+    "example": "df.groupby('city').agg({'score':['mean','max']})",
+    "description": "Several stats",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-group-size",
+    "lang": "pd",
+    "category": "GroupBy",
+    "label": "Group size",
+    "example": "df.groupby('city').size()",
+    "description": "Rows per group",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 22
+  },
+  {
+    "id": "pd-group-count",
+    "lang": "pd",
+    "category": "GroupBy",
+    "label": "Group count",
+    "example": "df.groupby('city')['score'].count()",
+    "description": "Non-null count",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 3
+  },
+  {
+    "id": "pd-transform",
+    "lang": "pd",
+    "category": "GroupBy",
+    "label": "Group transform",
+    "example": "df.groupby('city')['x'].transform('mean')",
+    "description": "Return value per original row",
+    "source": "image-pandas",
+    "related": [
+      "sql-avg-over",
+      "sql-count-over"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "transform",
+    "pageCount": 7
+  },
+  {
+    "id": "pd-group-filter",
+    "lang": "pd",
+    "category": "GroupBy",
+    "label": "Group filter",
+    "example": "df.groupby('city').filter(lambda x: len(x)>5)",
+    "description": "Keep entire groups",
+    "source": "image-pandas",
+    "related": [
+      "sql-having"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "filter",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-group-apply",
+    "lang": "pd",
+    "category": "GroupBy",
+    "label": "Group apply",
+    "example": "df.groupby('city').apply(func)",
+    "description": "Custom group logic",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 3
+  },
+  {
+    "id": "pd-shift",
+    "lang": "pd",
+    "category": "Window-like operations",
+    "label": "Previous row",
+    "example": "df['x'].shift(1)",
+    "description": "Lag",
+    "source": "image-pandas",
+    "related": [
+      "sql-lag"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-lead",
+    "lang": "pd",
+    "category": "Window-like operations",
+    "label": "Next row",
+    "example": "df['x'].shift(-1)",
+    "description": "Lead",
+    "source": "image-pandas",
+    "related": [
+      "sql-lead"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 2
+  },
+  {
+    "id": "pd-diff",
+    "lang": "pd",
+    "category": "Window-like operations",
+    "label": "Difference",
+    "example": "df['x'].diff()",
+    "description": "Current − previous",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "diff",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-pct-change",
+    "lang": "pd",
+    "category": "Window-like operations",
+    "label": "Percent change",
+    "example": "df['x'].pct_change()",
+    "description": "Relative change",
+    "source": "image-pandas",
+    "related": [],
+    "note": "Despite its name, pct_change returns fractional change. Multiply by 100 to express a percentage; handle missing values explicitly.",
+    "doc": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.pct_change.html",
+    "aliases": "pct_change",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-cumsum",
+    "lang": "pd",
+    "category": "Window-like operations",
+    "label": "Cumulative sum",
+    "example": "df['x'].cumsum()",
+    "description": "Running sum",
+    "source": "image-pandas",
+    "related": [
+      "sql-sum-over"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "cumsum",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-cummax",
+    "lang": "pd",
+    "category": "Window-like operations",
+    "label": "Cumulative max",
+    "example": "df['x'].cummax()",
+    "description": "Running maximum",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "cummax",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-rolling",
+    "lang": "pd",
+    "category": "Window-like operations",
+    "label": "Rolling mean",
+    "example": "df['x'].rolling(5).mean()",
+    "description": "Moving average",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "rolling",
+    "pageCount": 2
+  },
+  {
+    "id": "pd-expanding",
+    "lang": "pd",
+    "category": "Window-like operations",
+    "label": "Expanding mean",
+    "example": "df['x'].expanding().mean()",
+    "description": "All history mean",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "expanding",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-str-lower",
+    "lang": "pd",
+    "category": "Strings",
+    "label": "Lowercase",
+    "example": "df.name.str.lower()",
+    "description": "Lowercase",
+    "source": "image-pandas",
+    "related": [
+      "sql-lower"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "lower",
+    "pageCount": 2
+  },
+  {
+    "id": "pd-str-upper",
+    "lang": "pd",
+    "category": "Strings",
+    "label": "Uppercase",
+    "example": "df.name.str.upper()",
+    "description": "Uppercase",
+    "source": "image-pandas",
+    "related": [
+      "sql-upper"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "upper",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-str-contains",
+    "lang": "pd",
+    "category": "Strings",
+    "label": "Contains",
+    "example": "df.name.str.contains('abc')",
+    "description": "Search substring",
+    "source": "image-pandas",
+    "related": [
+      "sql-like",
+      "sql-regexp"
+    ],
+    "note": "str.contains treats the pattern as a regular expression by default. Set regex=False for a literal substring and choose na behavior explicitly.",
+    "doc": "https://pandas.pydata.org/docs/reference/api/pandas.Series.str.contains.html",
+    "aliases": "contains",
+    "pageCount": 5
+  },
+  {
+    "id": "pd-str-startswith",
+    "lang": "pd",
+    "category": "Strings",
+    "label": "Starts with",
+    "example": "df.name.str.startswith('A')",
+    "description": "Prefix",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "startswith",
+    "pageCount": 3
+  },
+  {
+    "id": "pd-str-endswith",
+    "lang": "pd",
+    "category": "Strings",
+    "label": "Ends with",
+    "example": "df.name.str.endswith('.com')",
+    "description": "Suffix",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "endswith",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-str-split",
+    "lang": "pd",
+    "category": "Strings",
+    "label": "Split",
+    "example": "df.name.str.split(' ')",
+    "description": "Split strings",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "split",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-str-replace",
+    "lang": "pd",
+    "category": "Strings",
+    "label": "Replace",
+    "example": "df.name.str.replace('a','b')",
+    "description": "Replace substring",
+    "source": "image-pandas",
+    "related": [
+      "sql-replace"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "replace",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-str-strip",
+    "lang": "pd",
+    "category": "Strings",
+    "label": "Strip",
+    "example": "df.name.str.strip()",
+    "description": "Remove spaces",
+    "source": "image-pandas",
+    "related": [
+      "sql-trim"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "strip",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-str-len",
+    "lang": "pd",
+    "category": "Strings",
+    "label": "Length",
+    "example": "df.name.str.len()",
+    "description": "String length",
+    "source": "image-pandas",
+    "related": [
+      "sql-char-length"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "len",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-to-datetime",
+    "lang": "pd",
+    "category": "Dates",
+    "label": "Convert date",
+    "example": "pd.to_datetime(df['date'])",
+    "description": "Parse datetime",
+    "source": "image-pandas",
+    "related": [
+      "sql-str-to-date"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "to_datetime",
+    "pageCount": 13
+  },
+  {
+    "id": "pd-dt-year",
+    "lang": "pd",
+    "category": "Dates",
+    "label": "Year",
+    "example": "df.date.dt.year",
+    "description": "Extract year",
+    "source": "image-pandas",
+    "related": [
+      "sql-year"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "year",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-dt-month",
+    "lang": "pd",
+    "category": "Dates",
+    "label": "Month",
+    "example": "df.date.dt.month",
+    "description": "Extract month",
+    "source": "image-pandas",
+    "related": [
+      "sql-month"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "month",
+    "pageCount": 2
+  },
+  {
+    "id": "pd-dt-day",
+    "lang": "pd",
+    "category": "Dates",
+    "label": "Day",
+    "example": "df.date.dt.day",
+    "description": "Extract day",
+    "source": "image-pandas",
+    "related": [
+      "sql-day"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "day",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-dt-dayname",
+    "lang": "pd",
+    "category": "Dates",
+    "label": "Day name",
+    "example": "df.date.dt.day_name()",
+    "description": "Weekday",
+    "source": "image-pandas",
+    "related": [
+      "sql-dayname"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "day_name",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-dt-days",
+    "lang": "pd",
+    "category": "Dates",
+    "label": "Date difference",
+    "example": "(df.end - df.start).dt.days",
+    "description": "Difference in days",
+    "source": "image-pandas",
+    "related": [
+      "sql-datediff"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "days",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-timedelta",
+    "lang": "pd",
+    "category": "Dates",
+    "label": "Add days",
+    "example": "df.date + pd.Timedelta(days=7)",
+    "description": "Shift date",
+    "source": "image-pandas",
+    "related": [
+      "sql-date-add",
+      "sql-date-sub"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "Timedelta",
+    "pageCount": 4
+  },
+  {
+    "id": "pd-dt-normalize",
+    "lang": "pd",
+    "category": "Dates",
+    "label": "Normalize date",
+    "example": "df.date.dt.normalize()",
+    "description": "Remove time part",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "normalize",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-rank",
+    "lang": "pd",
+    "category": "Ranking / ordering",
+    "label": "Rank",
+    "example": "df['x'].rank()",
+    "description": "Rank values",
+    "source": "image-pandas",
+    "related": [
+      "sql-rank"
+    ],
+    "note": "pandas rank() defaults to average ranks for ties. SQL RANK uses the minimum tied rank; rank(method=\"min\") is the closer counterpart.",
+    "doc": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rank.html",
+    "aliases": "rank",
+    "pageCount": 3
+  },
+  {
+    "id": "pd-rank-dense",
+    "lang": "pd",
+    "category": "Ranking / ordering",
+    "label": "Dense rank",
+    "example": "df['x'].rank(method='dense')",
+    "description": "Rank without gaps",
+    "source": "image-pandas",
+    "related": [
+      "sql-dense-rank"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-rank-percent",
+    "lang": "pd",
+    "category": "Ranking / ordering",
+    "label": "Percentile rank",
+    "example": "df['x'].rank(pct=True)",
+    "description": "Rank in (0,1]",
+    "source": "image-pandas",
+    "related": [],
+    "note": "pct=True scales pandas ranks; it is not generally the same formula as SQL PERCENT_RANK(). The source range is (0,1] for non-missing ranks.",
+    "doc": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rank.html",
+    "aliases": "",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-nlargest",
+    "lang": "pd",
+    "category": "Ranking / ordering",
+    "label": "Largest N",
+    "example": "df.nlargest(5,'score')",
+    "description": "Top rows",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "nlargest",
+    "pageCount": 0
+  },
+  {
+    "id": "pd-nsmallest",
+    "lang": "pd",
+    "category": "Ranking / ordering",
+    "label": "Smallest N",
+    "example": "df.nsmallest(5,'score')",
+    "description": "Bottom rows",
+    "source": "image-pandas",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "nsmallest",
+    "pageCount": 0
+  },
+  {
+    "id": "sql-select",
+    "lang": "sql",
+    "category": "Also used in these notes",
+    "label": "SELECT",
+    "example": "SELECT id, name FROM users;",
+    "description": "Select output columns",
+    "source": "saved-code",
+    "related": [
+      "pd-select-columns"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "SELECT",
+    "pageCount": 98
+  },
+  {
+    "id": "sql-distinct",
+    "lang": "sql",
+    "category": "Also used in these notes",
+    "label": "DISTINCT",
+    "example": "SELECT DISTINCT id FROM users;",
+    "description": "Remove duplicate result rows",
+    "source": "saved-code",
+    "related": [
+      "pd-drop-duplicates"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "DISTINCT",
+    "pageCount": 18
+  },
+  {
+    "id": "sql-order-by",
+    "lang": "sql",
+    "category": "Also used in these notes",
+    "label": "ORDER BY",
+    "example": "ORDER BY score DESC, id",
+    "description": "Sort the output rows",
+    "source": "saved-code",
+    "related": [
+      "pd-sort-values"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "ORDER BY",
+    "pageCount": 40
+  },
+  {
+    "id": "sql-limit",
+    "lang": "sql",
+    "category": "Also used in these notes",
+    "label": "LIMIT / OFFSET",
+    "example": "LIMIT 5 OFFSET 10",
+    "description": "Select a page of sorted results",
+    "source": "saved-code",
+    "related": [
+      "pd-head"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "LIMIT",
+    "pageCount": 12
+  },
+  {
+    "id": "sql-nth-value",
+    "lang": "sql",
+    "category": "Also used in these notes",
+    "label": "NTH_VALUE()",
+    "example": "NTH_VALUE(score, 1) OVER (PARTITION BY student_id ORDER BY exam_date)",
+    "description": "Read the nth value in a window frame",
+    "source": "saved-code",
+    "related": [
+      "pd-endpoints"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "NTH_VALUE",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-regexp-like",
+    "lang": "sql",
+    "category": "Also used in these notes",
+    "label": "REGEXP_LIKE()",
+    "example": "REGEXP_LIKE(mail, pattern, 'c')",
+    "description": "Match using a regular expression",
+    "source": "saved-code",
+    "related": [
+      "pd-str-fullmatch"
+    ],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "REGEXP_LIKE",
+    "pageCount": 1
+  },
+  {
+    "id": "sql-extract",
+    "lang": "sql",
+    "category": "Also used in these notes",
+    "label": "EXTRACT()",
+    "example": "EXTRACT(MONTH FROM date)",
+    "description": "Extract a date or time field",
+    "source": "saved-code",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "EXTRACT",
+    "pageCount": 2
+  },
+  {
+    "id": "sql-modulo",
+    "lang": "sql",
+    "category": "Also used in these notes",
+    "label": "% operator",
+    "example": "amount % 2 = 0",
+    "description": "Test an integer remainder",
+    "source": "saved-code",
+    "related": [],
+    "note": "",
+    "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+    "aliases": "",
+    "pageCount": 4
+  },
+  {
+    "id": "pd-merge-cross",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "Cross merge",
+    "example": "a.merge(b, how='cross')",
+    "description": "Every pair of rows",
+    "source": "saved-code",
+    "related": [
+      "sql-cross-join"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "cross",
+    "pageCount": 2
+  },
+  {
+    "id": "pd-round",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "round()",
+    "example": "df['score'].round(2)",
+    "description": "Round numeric values",
+    "source": "saved-code",
+    "related": [
+      "sql-round"
+    ],
+    "note": "The source uses pandas rounding. Halfway behavior can differ from MySQL exact-value rounding; the saved setup page includes a half-up helper.",
+    "doc": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.round.html",
+    "aliases": "round",
+    "pageCount": 10
+  },
+  {
+    "id": "pd-astype",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "astype()",
+    "example": "df['count'].astype(int)",
+    "description": "Convert a data type",
+    "source": "saved-code",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "astype",
+    "pageCount": 8
+  },
+  {
+    "id": "pd-unique",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "unique()",
+    "example": "df['id'].unique()",
+    "description": "Distinct values as an array",
+    "source": "saved-code",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "unique",
+    "pageCount": 4
+  },
+  {
+    "id": "pd-idxmin",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "idxmin()",
+    "example": "df.groupby('id')['date'].idxmin()",
+    "description": "Label of the minimum value",
+    "source": "saved-code",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "idxmin",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-argmin",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "argmin()",
+    "example": "df['date'].argmin()",
+    "description": "Position of the minimum value",
+    "source": "saved-code",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "argmin",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-argmax",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "argmax()",
+    "example": "df['date'].argmax()",
+    "description": "Position of the maximum value",
+    "source": "saved-code",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "argmax",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-mode",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "mode()",
+    "example": "df['id'].mode()",
+    "description": "Most frequent values, including ties",
+    "source": "saved-code",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "mode",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-to-frame",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "to_frame()",
+    "example": "df['id'].to_frame()",
+    "description": "Convert a Series to a DataFrame",
+    "source": "saved-code",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "to_frame",
+    "pageCount": 2
+  },
+  {
+    "id": "pd-str-fullmatch",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "str.fullmatch()",
+    "example": "df.mail.str.fullmatch(pattern, na=False)",
+    "description": "Match an entire string",
+    "source": "saved-code",
+    "related": [
+      "sql-regexp-like"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "fullmatch",
+    "pageCount": 2
+  },
+  {
+    "id": "pd-str-match",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "str.match()",
+    "example": "df.mail.str.match(pattern, na=False)",
+    "description": "Match from the start of a string",
+    "source": "saved-code",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "match",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-strftime",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "dt.strftime()",
+    "example": "df.date.dt.strftime('%Y-%m')",
+    "description": "Format a datetime as text",
+    "source": "saved-code",
+    "related": [
+      "sql-date-format"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "strftime",
+    "pageCount": 1
+  },
+  {
+    "id": "pd-eq",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "eq() / ne()",
+    "example": "df['x'].eq(1)",
+    "description": "Elementwise equality or inequality",
+    "source": "saved-code",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "eq,ne",
+    "pageCount": 36
+  },
+  {
+    "id": "pd-compare",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "gt() / ge() / lt() / le()",
+    "example": "df['x'].gt(3)",
+    "description": "Elementwise comparisons",
+    "source": "saved-code",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "gt,ge,lt,le",
+    "pageCount": 21
+  },
+  {
+    "id": "pd-copy",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "copy()",
+    "example": "df.copy()",
+    "description": "Create a separate object",
+    "source": "saved-code",
+    "related": [],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "copy",
+    "pageCount": 32
+  },
+  {
+    "id": "pd-cumcount",
+    "lang": "pd",
+    "category": "Also used in these notes",
+    "label": "cumcount()",
+    "example": "df.groupby('g').cumcount() + 1",
+    "description": "Number rows within each group",
+    "source": "saved-code",
+    "related": [
+      "sql-row-number"
+    ],
+    "note": "",
+    "doc": "https://pandas.pydata.org/docs/reference/index.html",
+    "aliases": "cumcount",
+    "pageCount": 0
+  }
+]

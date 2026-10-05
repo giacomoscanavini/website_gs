@@ -1,0 +1,60 @@
+{
+  "id": "sql-anti-join",
+  "lang": "sql",
+  "category": "Useful LeetCode patterns",
+  "label": "Anti-join",
+  "example": "LEFT JOIN ... WHERE b.id IS NULL",
+  "description": "Find unmatched rows",
+  "source": "image-sql",
+  "related": [
+    "pd-anti-join"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C44",
+      "block": "code-C44-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1581 · Customers who visited without transactions",
+      "number": "1581",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "LEFT JOIN Transactions t ON v.visit_id = t.visit_id\nWHERE t.transaction_id IS NULL\nGROUP BY v.customer_id;",
+      "snippetLine": 3
+    },
+    {
+      "page": "C44",
+      "block": "code-C44-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1581 · Customers who visited without transactions",
+      "number": "1581",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "LEFT JOIN Transactions t ON v.visit_id = t.visit_id\nWHERE t.amount IS NULL\nGROUP BY v.customer_id",
+      "snippetLine": 4
+    },
+    {
+      "page": "B08",
+      "block": "code-B08-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "NULL and unmatched rows",
+      "number": "08",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT b.building_name FROM buildings b\nLEFT JOIN employees e ON b.building_name = e.building WHERE e.building IS NULL;",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 2
+}

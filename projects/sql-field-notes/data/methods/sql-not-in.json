@@ -1,0 +1,116 @@
+{
+  "id": "sql-not-in",
+  "lang": "sql",
+  "category": "Filtering",
+  "label": "NOT IN",
+  "example": "id NOT IN (1,2)",
+  "description": "Exclude set",
+  "source": "image-sql",
+  "related": [
+    "pd-not-isin"
+  ],
+  "note": "NULLs in the comparison set can make NOT IN unknown rather than true. Excluding missing values or using a suitable NOT EXISTS pattern can be necessary.",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/comparison-operators.html",
+  "aliases": "NOT IN",
+  "uses": [
+    {
+      "page": "C25",
+      "block": "code-C25-2",
+      "line": 21,
+      "lines": [
+        21
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Products\nWHERE product_id NOT IN (SELECT product_id FROM Valid);",
+      "snippetLine": 20
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-4",
+      "line": 25,
+      "lines": [
+        25
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Products\nWHERE product_id NOT IN (SELECT product_id FROM Valid)",
+      "snippetLine": 24
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-2",
+      "line": 26,
+      "lines": [
+        26
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Categories\nWHERE category NOT IN (SELECT category FROM Valid);",
+      "snippetLine": 25
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-4",
+      "line": 30,
+      "lines": [
+        30
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Categories\nWHERE category NOT IN (SELECT category FROM Valid)",
+      "snippetLine": 29
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    FROM Employees\n    WHERE manager_id NOT IN (SELECT employee_id FROM Employees)\n)\nSELECT employee_id",
+      "snippetLine": 3
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    FROM Employees\n    WHERE manager_id NOT IN (SELECT employee_id FROM Employees)\n)\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC607",
+      "block": "code-LC607-0",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "607 · Sales person",
+      "number": "607",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM SalesPerson\nWHERE sales_id NOT IN (\n    SELECT sales_id\n    FROM IdToExclude",
+      "snippetLine": 10
+    }
+  ],
+  "pageCount": 4
+}

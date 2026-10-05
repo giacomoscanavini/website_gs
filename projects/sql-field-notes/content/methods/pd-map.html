@@ -1,0 +1,356 @@
+<article class="article method-page" id="m-pd-map">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=Conditional%20logic">
+   pandas · Conditional logic
+  </a>
+ </div>
+ <h1>
+  map()
+ </h1>
+ <p class="lead">
+  Map values
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-map"><span class="n">df</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">map</span><span class="p">({</span><span class="s1">'A'</span><span class="p">:</span><span class="mi">1</span><span class="p">,</span><span class="s1">'B'</span><span class="p">:</span><span class="mi">2</span><span class="p">})</span></code></pre>
+ </div>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C46?code=code-C46-1&amp;method=pd-map&amp;line=14">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1661 · Average processing time per machine
+    </strong>
+    <small>
+     Study solution · line 14
+    </small>
+   </div>
+   <pre aria-hidden="true">    result = df.groupby('machine_id', as_index=False).agg(processing_time=('processing_time', 'mean'))
+    result['processing_time'] = result['processing_time'].map(lambda x: round_half_up(x, 3))
+    return result</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-02?code=code-squid-02-1&amp;method=pd-map&amp;line=8">
+   <div>
+    <span class="usage-label">
+     Squid Game · pandas
+    </span>
+    <strong>
+     Calculate the ration threshold
+    </strong>
+    <small>
+     Saved walkthrough · line 8
+    </small>
+   </div>
+   <pre aria-hidden="true">insufficient = result['amount'].lt(portions).fillna(False)
+result['amount'] = insufficient.map({True: 'False', False: 'True'})
+result = result[['portions', 'amount']]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C50?code=code-C50-1&amp;method=pd-map&amp;line=15">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1934 · Confirmation rate
+    </strong>
+    <small>
+     Study solution · line 15
+    </small>
+   </div>
+   <pre aria-hidden="true">    )
+    df['confirmation_rate'] = (df['positive'] / df['total']).map(round_half_up)
+    return df[['user_id', 'confirmation_rate']]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C07?code=code-C07-1&amp;method=pd-map&amp;line=15">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1251 · Average selling price
+    </strong>
+    <small>
+     Study solution · line 15
+    </small>
+   </div>
+   <pre aria-hidden="true">    g = matched.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))
+    g['average_price'] = (g['paid'] / g['units'].replace(0, float('nan'))).map(round_half_up)
+    result = p[['product_id']].drop_duplicates().merge(g[['product_id', 'average_price']], on='product_id', how='left')
+    result['average_price'] = result['average_price'].fillna(0)</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C08?code=code-C08-1&amp;method=pd-map&amp;line=11">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1075 · Project employees I
+    </strong>
+    <small>
+     Study solution · line 11
+    </small>
+   </div>
+   <pre aria-hidden="true">    g = m.groupby('project_id', as_index=False).agg(average_years=('experience_years', 'mean'))
+    g['average_years'] = g['average_years'].map(round_half_up)
+    return g</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C09?code=code-C09-1&amp;method=pd-map&amp;line=10">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1633 · Users registered in a contest
+    </strong>
+    <small>
+     Study solution · line 10
+    </small>
+   </div>
+   <pre aria-hidden="true">    g = register.groupby('contest_id').size().reset_index(name='participants')
+    g['percentage'] = (100 * g['participants'] / len(users)).map(round_half_up)
+    return g[['contest_id', 'percentage']].sort_values(['percentage', 'contest_id'], ascending=[False, True])</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   4 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C10?code=code-C10-1&amp;method=pd-map&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1211 · Queries quality and percentage
+     </strong>
+     <small>
+      Study solution · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">    g = q.groupby('query_name', dropna=False, as_index=False).agg(quality=('quality_ratio', 'mean'), poor_query_percentage=('poor', 'mean'))
+    g['quality'] = g['quality'].map(round_half_up)
+    g['poor_query_percentage'] = (100 * g['poor_query_percentage']).map(round_half_up)
+    return g</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C20?code=code-C20-1&amp;method=pd-map&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1045 · Customers who bought every product
+     </strong>
+     <small>
+      Study solution · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">    ids = customer[['customer_id']].drop_duplicates()
+    mask = ids['customer_id'].map(counts).fillna(0).eq(len(keys))
+    return ids.loc[mask].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C23?code=code-C23-1&amp;method=pd-map&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      610 · Triangle judgement
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    valid = (t['x'] + t['y'] &gt; t['z']) &amp; (t['x'] + t['z'] &gt; t['y']) &amp; (t['y'] + t['z'] &gt; t['x'])
+    t['triangle'] = valid.map({True: 'Yes', False: 'No'})
+    return t</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-1&amp;method=pd-map&amp;line=16">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      Study solution · line 16
+     </small>
+    </div>
+    <pre aria-hidden="true">    result = rolled.rename('amount').reset_index()
+    result['average_amount'] = (result['amount'] / 7).map(round_half_up)
+    return result</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (4)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-map&amp;line=16">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      My approach · line 16
+     </small>
+    </div>
+    <pre aria-hidden="true">    totals = df.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))
+    totals['average_price'] = (totals['paid'] / totals['units'].replace(0, float('nan'))).map(round_half_up)
+    result = prices[['product_id']].drop_duplicates().merge(totals[['product_id', 'average_price']], on='product_id', how='left')
+    result['average_price'] = result['average_price'].fillna(0)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C08?code=code-C08-3&amp;method=pd-map&amp;line=14">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1075 · Project employees I
+     </strong>
+     <small>
+      My approach · line 14
+     </small>
+    </div>
+    <pre aria-hidden="true">    ).reset_index()
+    df['average_years'] =   (df['total_years'] / df['n_employees']).map(round_half_up)
+    return df[['project_id', 'average_years']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C09?code=code-C09-3&amp;method=pd-map&amp;line=13">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1633 · Users registered in a contest
+     </strong>
+     <small>
+      My approach · line 13
+     </small>
+    </div>
+    <pre aria-hidden="true">    ).reset_index()
+    df['percentage'] = (100 * df['nUsersPerTest'] / nUsers).map(round_half_up)
+    return df[['contest_id', 'percentage']].sort_values(by=['percentage', 'contest_id'], ascending=[False, True])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-3&amp;method=pd-map&amp;line=16">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      My approach · line 16
+     </small>
+    </div>
+    <pre aria-hidden="true">    result = total.rename('amount').reset_index()
+    result['average_amount'] = (result['amount'] / 7).map(round_half_up)
+    return result</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · Conditional logic. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=Conditional%20logic">
+   <small>
+    ← Browse
+   </small>
+   pandas · Conditional logic
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

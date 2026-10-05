@@ -1,0 +1,536 @@
+<section aria-labelledby="learning-objective-title" class="page-view lesson-layout" id="learning-objective">
+ <article class="lesson">
+  <header>
+   <p class="part-label">
+    <span class="number">
+     01
+    </span>
+    Part 1 · Neural-network foundations
+   </p>
+   <h1 id="learning-objective-title" tabindex="-1">
+    What does a model learn?
+   </h1>
+   <p class="standfirst">
+    Separate the function, the objective, the learning procedure, and the question of generalization.
+   </p>
+   <div class="source-bar">
+    <span>
+     Source reading
+    </span>
+    <button aria-label="Open source: Neural networks · PDF pp. 12–13 · §§11–14" data-page="12" data-pdf="basics" type="button">
+     Neural networks · PDF pp. 12–13 · §§11–14
+    </button>
+    <button aria-label="Open source: Optimization · PDF pp. 4–5 · §§1–2.1" data-page="4" data-pdf="optim" type="button">
+     Optimization · PDF pp. 4–5 · §§1–2.1
+    </button>
+    <button aria-label="Open source: Regularization · PDF pp. 5–6 · §§1–2" data-page="5" data-pdf="reg" type="button">
+     Regularization · PDF pp. 5–6 · §§1–2
+    </button>
+   </div>
+  </header>
+  <details class="mobile-onpage">
+   <summary>
+    In this chapter
+   </summary>
+   <nav aria-label="On this page">
+    <a data-section="the-model-is-a-function-training-chooses-the-function" href="#learning-objective?section=the-model-is-a-function-training-chooses-the-function">
+     The model is a function; training chooses the function
+    </a>
+    <a data-section="four-choices-that-should-not-be-confused" href="#learning-objective?section=four-choices-that-should-not-be-confused">
+     Four choices that should not be confused
+    </a>
+    <a data-section="fitting-observed-data-versus-learning-stable-structure" href="#learning-objective?section=fitting-observed-data-versus-learning-stable-structure">
+     Fitting observed data versus learning stable structure
+    </a>
+    <a data-section="a-practical-case-from-the-regularization-guide" href="#learning-objective?section=a-practical-case-from-the-regularization-guide">
+     A practical case from the regularization guide
+    </a>
+    <a data-section="what-to-establish-before-interpreting-a-result" href="#learning-objective?section=what-to-establish-before-interpreting-a-result">
+     What to establish before interpreting a result
+    </a>
+    <a data-section="implementation" href="#learning-objective?section=implementation">
+     See it implemented
+    </a>
+   </nav>
+  </details>
+  <div class="lesson-body">
+   <h2 data-section="the-model-is-a-function-training-chooses-the-function" id="learning-objective--the-model-is-a-function-training-chooses-the-function">
+    The model is a function; training chooses the function
+   </h2>
+   <p>
+    Write a predictor as
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>=</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\hat y=f_\theta(x)</annotation></semantics></math>
+    . The input
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
+    is an observed example, the output
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>y</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat y</annotation></semantics></math>
+    is a prediction, and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
+    collects the parameters that training can change. In a dense neural network those parameters are primarily weight matrices and bias vectors. A forward pass evaluates this function at the
+    <strong>
+     current
+    </strong>
+    parameter values; it does not itself learn anything.
+   </p>
+   <p>
+    A loss
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>ℓ</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>y</mi><mo>,</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\ell(y,f_\theta(x))</annotation></semantics></math>
+    says which prediction errors matter. For
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>
+    examples, the empirical objective in the optimization guide is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mo>ℓ</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>,</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msup><mi>θ</mi><mo>*</mo></msup><mo>∈</mo><msub><mo>argmin</mo><mi>θ</mi></msub><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">J(\theta)=\frac{1}{N}\sum_{i=1}^{N}\ell(y_i,f_\theta(x_i)),\qquad
+\theta^*\in\mathop{\mathrm{argmin}}_{\theta}J(\theta).</annotation></semantics></math>
+   </div>
+   <p>
+    “Empirical” means that the average is over the observed training sample. The network is not given the true relationship everywhere in the input space. It must infer a useful function from finitely many examples. That is why a procedure can become very good at its training objective without becoming equally good at the task we actually care about.
+   </p>
+   <details class="derivation" data-derivation="likelihood-to-risk" id="learning-objective--derivation-likelihood-to-risk">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      From independent observations to empirical risk
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Condition on the observed inputs
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>x</mi><mi>N</mi></msub></mrow><annotation encoding="application/x-tex">x_1,\ldots,x_N</annotation></semantics></math>
+      . Assume the targets are conditionally independent under a model
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>y</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p_\theta(y\mid x)</annotation></semantics></math>
+      . All logarithms here are natural logarithms.
+     </p>
+     <h4>
+      1 · Write the probability of the complete target sample
+     </h4>
+     <p>
+      Conditional independence makes the joint likelihood a product:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>y</mi><mi>N</mi></msub><mo>∣</mo><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>x</mi><mi>N</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>∣</mo><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">p_\theta(y_1,\ldots,y_N\mid x_1,\ldots,x_N)=\prod_{i=1}^N p_\theta(y_i\mid x_i).</annotation></semantics></math>
+     </div>
+     <p>
+      This is a modeling assumption, not an identity for dependent observations. Sequence models use a conditional factorization instead.
+     </p>
+     <h4>
+      2 · Take a logarithm
+     </h4>
+     <p>
+      The logarithm is increasing, so maximizing the likelihood is equivalent to maximizing its logarithm. Applying
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mi>b</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>log</mo><mi>a</mi><mo>+</mo><mo>log</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">\log(ab)=\log a+\log b</annotation></semantics></math>
+      repeatedly gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><munderover><mo>∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>∣</mo><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>∣</mo><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\log\prod_{i=1}^N p_\theta(y_i\mid x_i)=\sum_{i=1}^N\log p_\theta(y_i\mid x_i).</annotation></semantics></math>
+     </div>
+     <h4>
+      3 · Turn maximization into minimization
+     </h4>
+     <p>
+      Define the per-observation negative log-likelihood
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>ℓ</mo><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>∣</mo><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\ell_i(\theta)=-\log p_\theta(y_i\mid x_i)</annotation></semantics></math>
+      . Multiplication by the negative constant
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mi>N</mi></mrow><annotation encoding="application/x-tex">-1/N</annotation></semantics></math>
+      reverses maximization to minimization but does not change which parameter values optimize it:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>∣</mo><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mo>ℓ</mo><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">J(\theta)=-\frac1N\sum_{i=1}^N\log p_\theta(y_i\mid x_i)=\frac1N\sum_{i=1}^N\ell_i(\theta).</annotation></semantics></math>
+     </div>
+     <p>
+      Thus mean squared error and cross entropy can arise from different likelihood assumptions, rather than being unrelated recipes. Not every useful loss needs a likelihood interpretation.
+     </p>
+     <h4>
+      4 · Differentiate the finite sum
+     </h4>
+     <p>
+      For parameter coordinate
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>θ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\theta_j</annotation></semantics></math>
+      , constants leave derivatives and finite sums differentiate term by term:
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>J</mi></mrow><mrow><mi>∂</mi><msub><mi>θ</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><mfrac><mrow><mi>∂</mi><msub><mo>ℓ</mo><mi>i</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>θ</mi><mi>j</mi></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial J}{\partial\theta_j}=\frac1N\sum_{i=1}^N\frac{\partial\ell_i}{\partial\theta_j}.</annotation></semantics></math>
+     </div>
+     <p>
+      Collect these coordinates into
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>θ</mi></msub><mi>J</mi></mrow><annotation encoding="application/x-tex">\nabla_\theta J</annotation></semantics></math>
+      . The equality requires derivatives at the evaluation point; nonsmooth functions need a specified subgradient or software convention.
+     </p>
+     <h4>
+      5 · Separate a population quantity from its estimate
+     </h4>
+     <p>
+      The prediction objective for a fresh pair
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mi>X</mi><mo>,</mo><mi>Y</mi><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(X,Y)</annotation></semantics></math>
+      is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>Y</mi><mo>,</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>X</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">R(\theta)=\mathbb E[\ell(Y,f_\theta(X))]</annotation></semantics></math>
+      . For independent identically distributed observations and a
+      <strong>
+       fixed
+      </strong>
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
+      chosen independently of them,
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mo>ℓ</mo><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>R</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[J(\theta)]=\frac1N\sum_i\mathbb E[\ell_i(\theta)]=R(\theta).</annotation></semantics></math>
+     </div>
+     <p>
+      After fitting
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>θ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\theta</annotation></semantics></math>
+      on the same data,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>θ</mi><mo accent="true">̂</mo></mover><annotation encoding="application/x-tex">\hat\theta</annotation></semantics></math>
+      is no longer independent of those losses. The fixed-parameter equality does not establish that
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">J(\hat\theta)</annotation></semantics></math>
+      is an unbiased estimate of its fresh-data risk. That is why evaluation must be separated from fitting.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="12" data-pdf="basics" type="button">
+       Chapter source · PDF p. 12
+      </button>
+      <a class="calculation-link" href="#learning-objective?derivation=likelihood-to-risk">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="four-choices-that-should-not-be-confused" id="learning-objective--four-choices-that-should-not-be-confused">
+    Four choices that should not be confused
+   </h2>
+   <p>
+    The
+    <strong>
+     architecture
+    </strong>
+    determines the family of functions available: an affine model, a composition of nonlinear layers, a recurrent state transition, or a graph-based computation. The
+    <strong>
+     loss
+    </strong>
+    defines what is rewarded.
+    <strong>
+     Backpropagation
+    </strong>
+    computes the sensitivity of that loss to the parameters. The
+    <strong>
+     optimizer
+    </strong>
+    turns those sensitivities into a parameter update.
+   </p>
+   <p>
+    For instance, a nonlinear regressor and a linear regressor can minimize the same squared-error loss while expressing very different functions. Two identical networks can use SGD and Adam and therefore follow different paths through parameter space. Neither “Adam” nor “cross entropy” is an architecture.
+   </p>
+   <p>
+    The useful sequence is
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mspace width="0.222em"></mspace><mo>→</mo><mspace width="0.222em"></mspace><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mspace width="0.222em"></mspace><mo>→</mo><mspace width="0.222em"></mspace><mo>ℓ</mo><mspace width="0.222em"></mspace><mo>→</mo><mspace width="0.222em"></mspace><msub><mi>∇</mi><mi>θ</mi></msub><mi>J</mi><mspace width="0.222em"></mspace><mo>→</mo><mspace width="0.222em"></mspace><msub><mi>θ</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">x\ \longrightarrow\ f_\theta(x)\ \longrightarrow\ \ell\ \longrightarrow\ \nabla_\theta J\ \longrightarrow\ \theta_{\mathrm{new}}.</annotation></semantics></math>
+   </div>
+   <p>
+    The derivative tells us what a small local change would do. It is not a certificate that the model has discovered a causal relationship, nor that the chosen change improves unseen-data performance.
+   </p>
+   <h2 data-section="fitting-observed-data-versus-learning-stable-structure" id="learning-objective--fitting-observed-data-versus-learning-stable-structure">
+    Fitting observed data versus learning stable structure
+   </h2>
+   <p>
+    The regularization guide distinguishes stable signal from sampling noise, idiosyncratic outliers, nuisance variation, and spurious interactions. A flexible model can lower empirical loss by fitting all of them. Regularization deliberately makes some solutions harder to obtain:
+   </p>
+   <div class="math-display" tabindex="0">
+    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>∈</mo><msub><mo>argmin</mo><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>λ</mi><mi>Ω</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat\theta\in\mathop{\mathrm{argmin}}_\theta\left[J(\theta)+\lambda\Omega(\theta)\right].</annotation></semantics></math>
+   </div>
+   <p>
+    Here
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Ω</mi><annotation encoding="application/x-tex">\Omega</annotation></semantics></math>
+    is a penalty and
+    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
+    controls its strength. But the guide’s definition is broader than penalties. Augmentation changes the inputs seen during training; early stopping restricts how far optimization proceeds; dropout changes the effective network during a training pass; ensembles combine predictions. These methods intervene at different stages of the learning process.
+   </p>
+   <p>
+    The question is therefore not simply “How can I minimize the training loss faster?” It is also “Which solutions and procedures are likely to retain useful behavior outside the training sample?” The
+    <a href="#bias-variance">
+     bias–variance chapter
+    </a>
+    makes that distinction mathematical.
+   </p>
+   <details class="derivation" data-derivation="map-penalties" id="learning-objective--derivation-map-penalties">
+    <summary>
+     <span class="derivation-summary">
+      <small>
+       Step by step
+      </small>
+      Why a prior becomes a regularization penalty
+     </span>
+    </summary>
+    <div class="derivation-body">
+     <p>
+      <strong>
+       Setting.
+      </strong>
+      Let
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>
+      be the training data and
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p(\theta)</annotation></semantics></math>
+      a prior density. Maximum a posteriori estimation selects a posterior
+      <strong>
+       mode
+      </strong>
+      , not a posterior mean.
+     </p>
+     <h4>
+      1 · Start from Bayes’ rule
+     </h4>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>∣</mo><mi>D</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>D</mi><mo>∣</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>D</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">p(\theta\mid D)=\frac{p(D\mid\theta)p(\theta)}{p(D)}.</annotation></semantics></math>
+     </div>
+     <p>
+      When optimizing over
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
+      ,
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>D</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p(D)</annotation></semantics></math>
+      is constant. Taking a negative logarithm therefore gives the same optimizer as
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mo>log</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>D</mi><mo>∣</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mo>log</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">-\log p(D\mid\theta)-\log p(\theta).</annotation></semantics></math>
+     </div>
+     <h4>
+      2 · Expand a Gaussian observation model
+     </h4>
+     <p>
+      Suppose
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>∣</mo><msub><mi>x</mi><mi>i</mi></msub><mo>,</mo><mi>β</mi><mo>∼</mo><mi>𝒩</mi><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>x</mi><mi>i</mi><mi>⊤</mi></msubsup><mi>β</mi><mo>,</mo><msup><mi>σ</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">y_i\mid x_i,\beta\sim\mathcal N(x_i^\top\beta,\sigma^2)</annotation></semantics></math>
+      with known
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sigma^2&gt;0</annotation></semantics></math>
+      . Its density is
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><msqrt><mrow><mn>2</mn><mi>π</mi><msup><mi>σ</mi><mn>2</mn></msup></mrow></msqrt></mfrac><mo>exp</mo><mspace width="-0.167em"></mspace><mrow><mo form="prefix" stretchy="true">[</mo><mi>−</mi><mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>i</mi></msub><mo>−</mo><msubsup><mi>x</mi><mi>i</mi><mi>⊤</mi></msubsup><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mrow><mn>2</mn><msup><mi>σ</mi><mn>2</mn></msup></mrow></mfrac><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac1{\sqrt{2\pi\sigma^2}}\exp\!\left[-\frac{(y_i-x_i^\top\beta)^2}{2\sigma^2}\right].</annotation></semantics></math>
+     </div>
+     <p>
+      Taking the negative log and summing gives
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>N</mi><mn>2</mn></mfrac><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>π</mi><msup><mi>σ</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mfrac><mn>1</mn><mrow><mn>2</mn><msup><mi>σ</mi><mn>2</mn></msup></mrow></mfrac><mo form="postfix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac N2\log(2\pi\sigma^2)+\frac1{2\sigma^2}\|y-X\beta\|^2.</annotation></semantics></math>
+     </div>
+     <p>
+      The first term does not depend on
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>β</mi><annotation encoding="application/x-tex">\beta</annotation></semantics></math>
+      and may be dropped
+      <strong>
+       only for this optimization
+      </strong>
+      .
+     </p>
+     <h4>
+      3 · Expand a Gaussian prior
+     </h4>
+     <p>
+      Independent
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>j</mi></msub><mo>∼</mo><mi>𝒩</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><msup><mi>τ</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\beta_j\sim\mathcal N(0,\tau^2)</annotation></semantics></math>
+      give
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mo>log</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><mo form="postfix" stretchy="false">∥</mo><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup></mrow><mrow><mn>2</mn><msup><mi>τ</mi><mn>2</mn></msup></mrow></mfrac><mo>+</mo><mtext mathvariant="normal">constant</mtext><mi>.</mi></mrow><annotation encoding="application/x-tex">-\log p(\beta)=\frac{\|\beta\|^2}{2\tau^2}+\text{constant}.</annotation></semantics></math>
+     </div>
+     <p>
+      Multiply the remaining objective by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
+      to obtain
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mn>2</mn></mfrac><mo form="postfix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>+</mo><mfrac><msup><mi>σ</mi><mn>2</mn></msup><mrow><mn>2</mn><msup><mi>τ</mi><mn>2</mn></msup></mrow></mfrac><mo form="postfix" stretchy="false">∥</mo><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac12\|y-X\beta\|^2+\frac{\sigma^2}{2\tau^2}\|\beta\|^2.</annotation></semantics></math>
+     </div>
+     <p>
+      This is Ridge with
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mi>/</mi><msup><mi>τ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\lambda=\sigma^2/\tau^2</annotation></semantics></math>
+      for the half-summed-loss convention. With a mean loss, the matching coefficient is
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>N</mi><msup><mi>τ</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\sigma^2/(N\tau^2)</annotation></semantics></math>
+      .
+     </p>
+     <h4>
+      4 · Replace the prior with a Laplace density
+     </h4>
+     <p>
+      An independent Laplace prior with scale
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">b&gt;0</annotation></semantics></math>
+      has
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>β</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>b</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>exp</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mrow><mo form="prefix" stretchy="true">|</mo><msub><mi>β</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">|</mo></mrow><mi>/</mi><mi>b</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p(\beta_j)=(2b)^{-1}\exp(-|\beta_j|/b)</annotation></semantics></math>
+      . Hence
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mo>log</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>β</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mi>b</mi></mfrac><munder><mo>∑</mo><mi>j</mi></munder><mrow><mo form="prefix" stretchy="true">|</mo><msub><mi>β</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">|</mo></mrow><mo>+</mo><mtext mathvariant="normal">constant</mtext><mi>.</mi></mrow><annotation encoding="application/x-tex">-\log p(\beta)=\frac1b\sum_j|\beta_j|+\text{constant}.</annotation></semantics></math>
+     </div>
+     <p>
+      Using the same likelihood and multiplying by
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
+      yields
+     </p>
+     <div class="math-display" tabindex="0">
+      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mn>2</mn></mfrac><mo form="postfix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>+</mo><mfrac><msup><mi>σ</mi><mn>2</mn></msup><mi>b</mi></mfrac><mo form="postfix" stretchy="false">∥</mo><mi>β</mi><msub><mo form="postfix" stretchy="false">∥</mo><mn>1</mn></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac12\|y-X\beta\|^2+\frac{\sigma^2}{b}\|\beta\|_1.</annotation></semantics></math>
+     </div>
+     <p>
+      This is the LASSO objective. A continuous prior assigning zero probability to the exact event
+      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\beta_j=0</annotation></semantics></math>
+      can nevertheless have a posterior
+      <strong>
+       mode
+      </strong>
+      at zero; density and point probability are different quantities.
+     </p>
+     <h4>
+      5 · Keep the interpretation conditional
+     </h4>
+     <p>
+      A penalty can be useful without believing that the stated prior is literally the data-generating distribution. Different units, noise scales, and loss reductions change the implied prior strength. An unpenalized intercept must be handled separately from the coefficient prior.
+     </p>
+     <div class="derivation-footer">
+      <span>
+       Expanded derivation
+      </span>
+      <button data-page="12" data-pdf="basics" type="button">
+       Chapter source · PDF p. 12
+      </button>
+      <a class="calculation-link" href="#learning-objective?derivation=map-penalties">
+       Link to this calculation ↗
+      </a>
+     </div>
+    </div>
+   </details>
+   <h2 data-section="a-practical-case-from-the-regularization-guide" id="learning-objective--a-practical-case-from-the-regularization-guide">
+    A practical case from the regularization guide
+   </h2>
+   <p>
+    Consider its hypothetical dataset with 500 observations, 200 standardized predictors, correlated groups, and approximately 25 genuinely informative variables. A flexible network may represent the signal well but also fit unstable interactions. Ridge would stabilize coefficient estimates; LASSO could remove variables; Elastic Net could combine selection with correlated-feature stability. A neural network could instead combine modest penalties, valid augmentation, and early stopping.
+   </p>
+   <p>
+    These are not interchangeable recipes with a guaranteed winner. They impose different preferences. The hypothetical case illustrates how to match the intervention to the suspected failure rather than add complexity by default.
+   </p>
+   <h2 data-section="what-to-establish-before-interpreting-a-result" id="learning-objective--what-to-establish-before-interpreting-a-result">
+    What to establish before interpreting a result
+   </h2>
+   <p>
+    A training measurement describes how well the fitted function explains observations used for learning. A validation measurement guides choices such as regularization strength, architecture, or stopping time. Once a dataset repeatedly influences those choices, it participates in model selection. The guides explicitly warn against using the final test set for those decisions and against breaking chronology in temporal applications.
+   </p>
+   <p>
+    For now, keep one distinction in mind:
+    <strong>
+     capacity determines what could be represented; optimization determines what is reached; generalization determines how well it transfers to unseen data.
+    </strong>
+    The next chapters develop the first two before returning to generalization in detail.
+   </p>
+  </div>
+  <section class="implementation">
+   <h2 data-section="implementation" id="learning-objective--implementation">
+    See it implemented
+   </h2>
+   <p class="section-intro">
+    Practical support for the ideas above. The labels distinguish complete examples from API references.
+   </p>
+   <div class="resource-list">
+    <div class="resource" data-resource="optimization">
+     <span class="resource-meta">
+      PyTorch · Tutorial + code
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Optimizing Model Parameters
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Follow separate training and test loops. Identify the forward calculation, loss, backward pass and optimizer update rather than treating training as one operation.
+     </p>
+    </div>
+    <div class="resource" data-resource="build">
+     <span class="resource-meta">
+      PyTorch · Tutorial + code
+     </span>
+     <a href="https://docs.pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Build the Neural Network
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Inspect how Flatten, Linear, ReLU and Sequential implement a feed-forward model, and how its parameters and tensor dimensions are exposed.
+     </p>
+    </div>
+    <div class="resource" data-resource="biasvariance">
+     <span class="resource-meta">
+      scikit-learn · Official experiment + plots
+     </span>
+     <a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_bias_variance.html" rel="noopener noreferrer" target="_blank">
+      <span>
+       Single estimator versus bagging: bias–variance decomposition
+      </span>
+      <span aria-hidden="true">
+       ↗
+      </span>
+     </a>
+     <p>
+      Inspect the repeated-dataset experiment and its bias, variance and error curves. This is a classical-ML demonstration in scikit-learn, not a PyTorch tutorial.
+     </p>
+    </div>
+   </div>
+  </section>
+  <details class="recall">
+   <summary>
+    <strong>
+     Check your understanding
+    </strong>
+    Why can a lower training loss give a worse model?
+   </summary>
+   <p>
+    The training objective measures fit to the observed sample. Additional flexibility or optimization can fit accidental sample structure, increasing error on unseen observations. Optimization success and generalization are distinct; validation and regularization address the latter.
+   </p>
+  </details>
+  <nav aria-label="Chapter navigation" class="prev-next">
+   <a href="#contents">
+    <small>
+     Contents
+    </small>
+    All parts
+   </a>
+   <a href="#neurons-and-layers">
+    <small>
+     Next →
+    </small>
+    Neurons, layers, and model capacity
+   </a>
+  </nav>
+ </article>
+ <aside aria-label="On this page" class="onpage">
+  <p>
+   In this chapter
+  </p>
+  <nav>
+   <a data-section="the-model-is-a-function-training-chooses-the-function" href="#learning-objective?section=the-model-is-a-function-training-chooses-the-function">
+    The model is a function; training chooses the function
+   </a>
+   <a data-section="four-choices-that-should-not-be-confused" href="#learning-objective?section=four-choices-that-should-not-be-confused">
+    Four choices that should not be confused
+   </a>
+   <a data-section="fitting-observed-data-versus-learning-stable-structure" href="#learning-objective?section=fitting-observed-data-versus-learning-stable-structure">
+    Fitting observed data versus learning stable structure
+   </a>
+   <a data-section="a-practical-case-from-the-regularization-guide" href="#learning-objective?section=a-practical-case-from-the-regularization-guide">
+    A practical case from the regularization guide
+   </a>
+   <a data-section="what-to-establish-before-interpreting-a-result" href="#learning-objective?section=what-to-establish-before-interpreting-a-result">
+    What to establish before interpreting a result
+   </a>
+   <a data-section="implementation" href="#learning-objective?section=implementation">
+    See it implemented
+   </a>
+  </nav>
+ </aside>
+</section>

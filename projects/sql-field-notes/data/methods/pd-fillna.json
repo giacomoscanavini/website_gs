@@ -1,0 +1,174 @@
+{
+  "id": "pd-fillna",
+  "lang": "pd",
+  "category": "Missing values",
+  "label": "Fill null",
+  "example": "df.fillna(0)",
+  "description": "Replace missing values",
+  "source": "image-pandas",
+  "related": [
+    "sql-ifnull",
+    "sql-coalesce"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "fillna",
+  "uses": [
+    {
+      "page": "C48",
+      "block": "code-C48-1",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left')\n    df['attended_exams'] = df['attended_exams'].fillna(0).astype(int)\n    return df[['student_id', 'student_name', 'subject_name', 'attended_exams']].sort_values(['student_id', 'subject_name'])",
+      "snippetLine": 6
+    },
+    {
+      "page": "C48",
+      "block": "code-C48-3",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left').fillna(0)\n    return df.sort_values(['student_id', 'subject_name'])",
+      "snippetLine": 9
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-1",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df = signups.merge(confirmations, on='user_id', how='left')[['user_id', 'action']]\n    df['confirmation_rate'] = df.action.eq('confirmed').fillna(False)\n    df = df.groupby('user_id', as_index=False).agg(\n        total=('confirmation_rate', 'size'),",
+      "snippetLine": 9
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-1",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    result = p[['product_id']].drop_duplicates().merge(g[['product_id', 'average_price']], on='product_id', how='left')\n    result['average_price'] = result['average_price'].fillna(0)\n    return result",
+      "snippetLine": 16
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-3",
+      "line": 18,
+      "lines": [
+        18
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    result = prices[['product_id']].drop_duplicates().merge(totals[['product_id', 'average_price']], on='product_id', how='left')\n    result['average_price'] = result['average_price'].fillna(0)\n    return result",
+      "snippetLine": 17
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-1",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    ids = customer[['customer_id']].drop_duplicates()\n    mask = ids['customer_id'].map(counts).fillna(0).eq(len(keys))\n    return ids.loc[mask].copy()",
+      "snippetLine": 7
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-3",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    ).reset_index()\n    df = customer_ids.merge(df, on='customer_id', how='left').fillna({'nSold': 0})\n    return df[df.nSold == nProducts][['customer_id']]",
+      "snippetLine": 9
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-1",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    result = p[['product_id']].drop_duplicates().merge(latest[['product_id', 'new_price']], on='product_id', how='left')\n    result['price'] = result['new_price'].fillna(10)\n    return result[['product_id', 'price']]",
+      "snippetLine": 7
+    },
+    {
+      "page": "LC1158",
+      "block": "code-LC1158-1",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "1158 · Market analysis I",
+      "number": "1158",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    \n    return df.fillna(0)\n    ",
+      "snippetLine": 12
+    },
+    {
+      "page": "squid-01",
+      "block": "code-squid-01-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "Filter the player pool",
+      "number": "01",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "           | (player['vice'].eq('Gambling') & player['has_close_family'].eq(False))))\nresult = player.loc[mask.fillna(False)].copy()",
+      "snippetLine": 5
+    },
+    {
+      "page": "squid-02",
+      "block": "code-squid-02-1",
+      "line": 4,
+      "lines": [
+        4,
+        7
+      ],
+      "title": "Calculate the ration threshold",
+      "number": "02",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "eligible = player['status'].eq('alive') & player['isinsider'].eq(False)\nportions = int(eligible.fillna(False).sum()) * 9 // 10\nresult = rations[['amount']].copy()\nresult['portions'] = portions",
+      "snippetLine": 3
+    }
+  ],
+  "pageCount": 8
+}

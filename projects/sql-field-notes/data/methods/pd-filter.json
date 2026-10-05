@@ -1,0 +1,870 @@
+{
+  "id": "pd-filter",
+  "lang": "pd",
+  "category": "Filtering",
+  "label": "Condition",
+  "example": "df[df['age'] > 30]",
+  "description": "Filter rows",
+  "source": "image-pandas",
+  "related": [
+    "sql-where"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C01",
+      "block": "code-C01-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1757 · Recyclable and low-fat products",
+      "number": "1757",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def find_products(products: pd.DataFrame) -> pd.DataFrame:\n    df =   products[(products.low_fats == 'Y') & (products.recyclable == 'Y')]\n    return df[['product_id']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C01",
+      "block": "code-C01-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1757 · Recyclable and low-fat products",
+      "number": "1757",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def find_products(products: pd.DataFrame) -> pd.DataFrame:\n    df = products[(products.low_fats == 'Y') & (products.recyclable == 'Y')]\n    return df[['product_id']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C02",
+      "block": "code-C02-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def find_customer_referee(customer: pd.DataFrame) -> pd.DataFrame:\n    df =   customer[(customer.referee_id != 2) | (customer.referee_id.isna())]\n    return df[['name']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C02",
+      "block": "code-C02-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def find_customer_referee(customer: pd.DataFrame) -> pd.DataFrame:\n    df = customer[(customer.referee_id != 2) | (customer.referee_id.isna())]\n    return df[['name']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C03",
+      "block": "code-C03-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "595 · Big countries",
+      "number": "595",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def big_countries(world: pd.DataFrame) -> pd.DataFrame:\n    df =   world[(world.area >= 3000000) | (world.population >= 25000000)]\n    return df[['name', 'population', 'area']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C03",
+      "block": "code-C03-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "595 · Big countries",
+      "number": "595",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def big_countries(world: pd.DataFrame) -> pd.DataFrame:\n    df = world[(world.area >= 3000000) | (world.population >= 25000000)]\n    return df[['name', 'population', 'area']]\n    ",
+      "snippetLine": 3
+    },
+    {
+      "page": "C04",
+      "block": "code-C04-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1148 · Article Views I",
+      "number": "1148",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def article_views(views: pd.DataFrame) -> pd.DataFrame:\n    ids = sorted(views[views.author_id   == views.viewer_id].author_id.unique())\n    return   pd.DataFrame({'id': ids})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C04",
+      "block": "code-C04-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1148 · Article Views I",
+      "number": "1148",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def article_views(views: pd.DataFrame) -> pd.DataFrame:\n    ids = sorted(views[views.author_id == views.viewer_id].author_id.unique())\n    return pd.DataFrame({'id': ids})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C05",
+      "block": "code-C05-3",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "1683 · Invalid tweets",
+      "number": "1683",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    \"\"\"\n    df =   tweets[tweets.valid == False]\n    return df[['tweet_id']]",
+      "snippetLine": 11
+    },
+    {
+      "page": "C05",
+      "block": "code-C05-5",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "1683 · Invalid tweets",
+      "number": "1683",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    \"\"\"\n    df = tweets[tweets.valid == False]\n    return df[['tweet_id']]",
+      "snippetLine": 12
+    },
+    {
+      "page": "C45",
+      "block": "code-C45-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "197 · Rising temperature",
+      "number": "197",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    weather = weather.sort_values('recordDate')\n    df = weather[(weather.recordDate.diff().eq(pd.Timedelta(days=1))) & (weather.temperature.diff() > 0)]\n    return df[['id']]",
+      "snippetLine": 5
+    },
+    {
+      "page": "C45",
+      "block": "code-C45-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "197 · Rising temperature",
+      "number": "197",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    weather.sort_values(by='recordDate', inplace=True)\n    df = weather[(weather.recordDate.diff().dt.days == 1) & (weather.temperature.diff() > 0)]\n    return df[['id']]",
+      "snippetLine": 4
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-1",
+      "line": 9,
+      "lines": [
+        9,
+        10
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def get_average_time(activity: pd.DataFrame) -> pd.DataFrame:\n    df_s = activity[activity.activity_type == 'start']\n    df_e = activity[activity.activity_type == 'end']\n    df = df_s.merge(df_e, on=['machine_id', 'process_id'], how='inner', suffixes=('_s', '_e'))",
+      "snippetLine": 8
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-3",
+      "line": 4,
+      "lines": [
+        4,
+        5
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def get_average_time(activity: pd.DataFrame) -> pd.DataFrame:\n    df_s = activity[activity.activity_type == 'start']\n    df_e = activity[activity.activity_type == 'end']\n    df = df_s.merge(df_e, on=['machine_id', 'process_id'], how='left', suffixes=('_s', '_e'))",
+      "snippetLine": 3
+    },
+    {
+      "page": "C47",
+      "block": "code-C47-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "577 · Employee bonus",
+      "number": "577",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df = employee.merge(bonus, on='empId', how='left')\n    return df[(df.bonus < 1000) | (df.bonus.isna())][['name', 'bonus']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C47",
+      "block": "code-C47-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "577 · Employee bonus",
+      "number": "577",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = employee.merge(bonus, on='empId', how='left')\n    return df[(df.bonus < 1000) | (df.bonus.isna())][['name', 'bonus']]",
+      "snippetLine": 4
+    },
+    {
+      "page": "C49",
+      "block": "code-C49-1",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "570 · Managers with at least five direct reports",
+      "number": "570",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df = employee.merge(reports, on='id', how='left')\n    return df[df.nReports >= 5][['name']]",
+      "snippetLine": 6
+    },
+    {
+      "page": "C49",
+      "block": "code-C49-3",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "570 · Managers with at least five direct reports",
+      "number": "570",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return df[df.nReports >= 5][['name']]",
+      "snippetLine": 9
+    },
+    {
+      "page": "C06",
+      "block": "code-C06-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "620 · Not boring movies",
+      "number": "620",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def not_boring_movies(cinema: pd.DataFrame) -> pd.DataFrame:\n    df =   cinema[(cinema.id % 2 == 1) & (cinema.description.notna()) & (cinema.description != 'boring')]\n    return   df.sort_values('rating', ascending=False)",
+      "snippetLine": 3
+    },
+    {
+      "page": "C06",
+      "block": "code-C06-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "620 · Not boring movies",
+      "number": "620",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def not_boring_movies(cinema: pd.DataFrame) -> pd.DataFrame:\n    df = cinema[(cinema.id % 2 == 1) & (cinema.description != 'boring')]\n    return df.sort_values('rating', ascending=False)",
+      "snippetLine": 3
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-3",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df = prices.merge(units_sold, on='product_id', how='left')\n    df = df[df.purchase_date.isna() | df.purchase_date.between(df.start_date, df.end_date)].copy()\n    df['paid'] = df['price'] * df['units']\n    totals = df.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))",
+      "snippetLine": 12
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = prices.merge(units_sold, on='product_id', how='left')\n    df = df[df.purchase_date.isna() | ((df.end_date >= df.purchase_date) & (df.purchase_date >= df.start_date))]\n    df['paid'] = df['price'] * df['units']\n    ",
+      "snippetLine": 4
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    sales['year_order'] = sales.groupby(by='product_id')['year'].rank(method='min')\n    sales = sales[sales['year_order'] == 1]\n    sales = sales[['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})\n    return sales",
+      "snippetLine": 4
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    sales['year_order'] = sales.groupby(by='product_id')['year'].rank(method='min')\n    sales = sales[sales['year_order'] == 1]\n    sales = sales[['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})\n    return sales",
+      "snippetLine": 4
+    },
+    {
+      "page": "C17",
+      "block": "code-C17-3",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "596 · Classes with at least five students",
+      "number": "596",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    ).reset_index()\n    return   df[df.nStudents >= 5][['class']]",
+      "snippetLine": 6
+    },
+    {
+      "page": "C17",
+      "block": "code-C17-5",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "596 · Classes with at least five students",
+      "number": "596",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return df[df.nStudents >= 5][['class']]",
+      "snippetLine": 7
+    },
+    {
+      "page": "C19",
+      "block": "code-C19-3",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    ).reset_index()\n    return   pd.DataFrame({'num': df[df.freq == 1][['num']].max()})",
+      "snippetLine": 6
+    },
+    {
+      "page": "C19",
+      "block": "code-C19-5",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return pd.DataFrame({'num': df[df.freq == 1][['num']].max()})",
+      "snippetLine": 7
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-3",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df = customer_ids.merge(df, on='customer_id', how='left').fillna({'nSold': 0})\n    return df[df.nSold == nProducts][['customer_id']]",
+      "snippetLine": 10
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-5",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return df[df.nSold == nProducts][['customer_id']]",
+      "snippetLine": 9
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    logs['var'] = logs['num'].rolling(window=3).var()\n    return pd.DataFrame({'ConsecutiveNums': logs[logs['var']==0]['num'].unique()})",
+      "snippetLine": 4
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-3",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    ids = set(products.product_id)\n    df = products[products['change_date'] <= '2019-08-16']\n    df = df.sort_values(by=['product_id', 'change_date'], ascending=[True, False]).drop_duplicates('product_id').rename(columns={'new_price': 'price'})\n",
+      "snippetLine": 5
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-5",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df = products[products['change_date'] <= '2019-08-16']\n    df = df.sort_values(by=['product_id', 'change_date'], ascending=[True, False]).drop_duplicates('product_id').rename(columns={'new_price': 'price'})\n    ",
+      "snippetLine": 5
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-3",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    queue['cumsum_weight'] = queue['weight'].cumsum()\n    return   queue[queue.cumsum_weight <= 1000].tail(1)[['person_name']]",
+      "snippetLine": 5
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-5",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    queue['cumsum_weight'] = queue['weight'].cumsum()\n    return queue[queue.cumsum_weight <= 1000].tail(1)[['person_name']]",
+      "snippetLine": 5
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-3",
+      "line": 6,
+      "lines": [
+        6,
+        7,
+        8
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "                        'accounts_count': [\n                        accounts[accounts.income < 20000].shape[0],\n                        accounts[(accounts.income >= 20000) &   (accounts.income <= 50000)].shape[0],\n                        accounts[accounts.income > 50000].shape[0]],",
+      "snippetLine": 5
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-5",
+      "line": 6,
+      "lines": [
+        6,
+        7,
+        8
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "                      'accounts_count': [\n                        accounts[accounts.income < 20000].shape[0],\n                        accounts[(accounts.income >= 20000) & (accounts.income <= 50000)].shape[0],\n                        accounts[accounts.income > 50000].shape[0]],",
+      "snippetLine": 5
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-1",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})\n    feb = r.loc[r['created_at'].ge('2020-02-01') & r['created_at'].lt('2020-03-01')]\n    movies_ranked = feb.groupby('movie_id', as_index=False).agg(avg_rating=('rating', 'mean')).merge(movies, on='movie_id')\n    second = movies_ranked.sort_values(['avg_rating', 'title'], ascending=[False, True]).head(1)[['title']].rename(columns={'title': 'results'})",
+      "snippetLine": 6
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-3",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df_users =   df_users.merge(users, on='user_id', how='left').sort_values(by=['nReviews', 'name'], ascending=[False, True])[['name', 'nReviews']]\n    df_movies =   movie_rating[(movie_rating.created_at >=   '2020-02-01') & (movie_rating.created_at < '2020-03-01')]\n    df_movies = df_movies.groupby(by='movie_id').agg(\n        avgRating = ('rating', 'mean')",
+      "snippetLine": 8
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-5",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df_movies = movie_rating[(movie_rating.created_at >= '2020-02-01') & (movie_rating.created_at < '2020-03-01')]\n    df_movies = df_movies.groupby(by='movie_id').agg(\n        avgRating = ('rating', 'mean')",
+      "snippetLine": 8
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-1",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    rolled = daily.rolling('7D', closed='right').sum()\n    rolled = rolled.loc[rolled.index >= daily.index.min() + pd.Timedelta(days=6)]\n    result = rolled.rename('amount').reset_index()\n    result['average_amount'] = (result['amount'] / 7).map(round_half_up)",
+      "snippetLine": 13
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-3",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    total = daily.rolling('7D').sum()\n    total = total[total.index >= daily.index.min() + pd.Timedelta(days=6)]\n    result = total.rename('amount').reset_index()\n    result['average_amount'] = (result['amount'] / 7).map(round_half_up)",
+      "snippetLine": 13
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-3",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "\n    df =   insurance[flag_nonunique_tiv & flag_unique_city]\n    return pd.DataFrame({'tiv_2016': [round_half_up(df['tiv_2016'].sum(min_count=1))]})",
+      "snippetLine": 10
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-5",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    \n    df = insurance[flag_nonunique_tiv & flag_unique_city]\n    return df[['tiv_2016']].sum().to_frame('tiv_2016').round(2)",
+      "snippetLine": 6
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    employee['ranked'] = employee.groupby(by='departmentId')['salary'].rank(method='dense', ascending=False)\n    employee =   employee[employee.ranked <= 3]\n    df =   employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])\n    df = df.rename(columns={",
+      "snippetLine": 3
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    employee['ranked'] = employee.groupby(by='departmentId')['salary'].rank(method='dense', ascending=False)\n    employee = employee[employee.ranked <= 3]\n    df = employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])\n    df = df.rename(columns={",
+      "snippetLine": 4
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    dates = pd.to_datetime(orders['order_date'])\n    feb = orders.loc[dates.ge('2020-02-01') & dates.lt('2020-03-01')]\n    g = feb.groupby('product_id', as_index=False).agg(unit=('unit', 'sum'))\n    return g.loc[g['unit'].ge(100)].merge(products, on='product_id', how='inner')[['product_name', 'unit']]",
+      "snippetLine": 4
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-3",
+      "line": 4,
+      "lines": [
+        4,
+        8
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    orders = orders.assign(order_date=pd.to_datetime(orders['order_date']))\n    orders =   orders[(orders.order_date >= '2020-02-01') & (orders.order_date < '2020-03-01')]\n    df =   orders.groupby(by='product_id').agg(\n        unit = ('unit', 'sum')",
+      "snippetLine": 3
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-5",
+      "line": 4,
+      "lines": [
+        4,
+        10
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def list_products(products: pd.DataFrame, orders: pd.DataFrame) -> pd.DataFrame:\n    orders = orders[(orders.order_date > '2020-01-31') & (orders.order_date < '2020-03-01')]\n\n    df = orders.groupby(by='product_id').agg(",
+      "snippetLine": 3
+    },
+    {
+      "page": "LC181",
+      "block": "code-LC181-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "181 · Employees earning more than their managers",
+      "number": "181",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df = df[df.salary_x > df.salary_y]\n    df = df.rename(columns={'name_x': 'Employee'})\n    return df[['Employee']]",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC262",
+      "block": "code-LC262-1",
+      "line": 6,
+      "lines": [
+        6,
+        11
+      ],
+      "title": "262 · Trips and users",
+      "number": "262",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    trips = trips[\n        ~trips['client_id'].isin(banned_ids) &\n        ~trips['driver_id'].isin(banned_ids)",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC601",
+      "block": "code-LC601-1",
+      "line": 4,
+      "lines": [
+        4,
+        11
+      ],
+      "title": "601 · Human traffic of stadium",
+      "number": "601",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def human_traffic(stadium: pd.DataFrame) -> pd.DataFrame:\n    df = stadium[stadium.people >= 100]\n    df = df.reset_index(drop=True)\n    df['groups'] = df['id'] - (df.index + 1)",
+      "snippetLine": 3
+    },
+    {
+      "page": "LC1158",
+      "block": "code-LC1158-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1158 · Market analysis I",
+      "number": "1158",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def market_analysis(users: pd.DataFrame, orders: pd.DataFrame, items: pd.DataFrame) -> pd.DataFrame:\n    orders = orders[(orders.order_date >= '2019-01-01') & (orders.order_date <= '2019-12-31')]\n    df = orders.groupby(by='buyer_id').agg(\n        orders_in_2019 = ('buyer_id', 'size')",
+      "snippetLine": 3
+    },
+    {
+      "page": "LC3421",
+      "block": "code-LC3421-1",
+      "line": 19,
+      "lines": [
+        19
+      ],
+      "title": "3421 · Find students who improved",
+      "number": "3421",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return df[df.improved == True][['student_id', 'subject', 'first_score', 'latest_score']]\n\n",
+      "snippetLine": 18
+    },
+    {
+      "page": "LC3521",
+      "block": "code-LC3521-1",
+      "line": 5,
+      "lines": [
+        5,
+        16
+      ],
+      "title": "3521 · Find product recommendation pairs",
+      "number": "3521",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = product_purchases.merge(product_purchases, how='cross', suffixes=['_1', '_2'])\n    df = df[(df.user_id_1 == df.user_id_2) & (df.product_id_1 < df.product_id_2)]\n    df = df.rename(columns={\n        'product_id_1': 'product1_id',",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-1",
+      "line": 12,
+      "lines": [
+        12,
+        17
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df['nRating'] = df.groupby(by='employee_id').rating.transform('size')\n    df = df[df.nRating >= 3]\n\n    df['rating2'] = df['rating'].shift(-1)",
+      "snippetLine": 11
+    },
+    {
+      "page": "murder-02",
+      "block": "code-murder-02-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "Find the two witnesses",
+      "number": "02",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "         .sort_values('address_number', ascending=False).head(1))\nsecond = person.loc[\n    person['address_street_name'].eq('Franklin Ave')\n    & person['name'].str.startswith('Annabel', na=False)",
+      "snippetLine": 4
+    },
+    {
+      "page": "B02",
+      "block": "code-B02-5",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Numeric constraints",
+      "number": "02",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = movies.loc[movies['year'].notna() & ~movies['year'].between(2000, 2010)].copy()",
+      "snippetLine": 1
+    },
+    {
+      "page": "B15",
+      "block": "code-B15-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DELETE rows",
+      "number": "15",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies = movies.loc[movies['year'].isna() | movies['year'].ge(2005)].copy()",
+      "snippetLine": 1
+    },
+    {
+      "page": "B15",
+      "block": "code-B15-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DELETE rows",
+      "number": "15",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies = movies.loc[movies['director'].isna() | movies['director'].ne('Andrew Stanton')].copy()",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 34
+}

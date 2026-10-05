@@ -1,0 +1,58 @@
+{
+  "id": "sql-group-concat",
+  "lang": "sql",
+  "category": "Aggregation",
+  "label": "GROUP_CONCAT()",
+  "example": "GROUP_CONCAT(name)",
+  "description": "Join grouped strings",
+  "source": "image-sql",
+  "related": [],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+  "aliases": "GROUP_CONCAT",
+  "uses": [
+    {
+      "page": "C39",
+      "block": "code-C39-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1484 · Products sold by date",
+      "number": "1484",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT sell_date, COUNT(DISTINCT product) AS num_sold,\n       GROUP_CONCAT(DISTINCT product ORDER BY product SEPARATOR ',') AS products\nFROM Activities GROUP BY sell_date ORDER BY sell_date;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C39",
+      "block": "code-C39-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1484 · Products sold by date",
+      "number": "1484",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    COUNT(DISTINCT product) AS num_sold,\n    GROUP_CONCAT(\n        DISTINCT product\n        ORDER BY product ASC",
+      "snippetLine": 3
+    },
+    {
+      "page": "C39",
+      "block": "code-C39-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1484 · Products sold by date",
+      "number": "1484",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    COUNT(DISTINCT product) AS num_sold,\n    GROUP_CONCAT(\n        DISTINCT product \n        ORDER BY product ASC ",
+      "snippetLine": 4
+    }
+  ],
+  "pageCount": 1
+}

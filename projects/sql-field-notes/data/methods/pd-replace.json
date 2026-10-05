@@ -1,0 +1,44 @@
+{
+  "id": "pd-replace",
+  "lang": "pd",
+  "category": "Creating / modifying columns",
+  "label": "Replace values",
+  "example": "df['x'].replace({0:1})",
+  "description": "Replace values",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "replace",
+  "uses": [
+    {
+      "page": "C07",
+      "block": "code-C07-1",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    g = matched.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))\n    g['average_price'] = (g['paid'] / g['units'].replace(0, float('nan'))).map(round_half_up)\n    result = p[['product_id']].drop_duplicates().merge(g[['product_id', 'average_price']], on='product_id', how='left')\n    result['average_price'] = result['average_price'].fillna(0)",
+      "snippetLine": 14
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-3",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    totals = df.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))\n    totals['average_price'] = (totals['paid'] / totals['units'].replace(0, float('nan'))).map(round_half_up)\n    result = prices[['product_id']].drop_duplicates().merge(totals[['product_id', 'average_price']], on='product_id', how='left')\n    result['average_price'] = result['average_price'].fillna(0)",
+      "snippetLine": 15
+    }
+  ],
+  "pageCount": 1
+}

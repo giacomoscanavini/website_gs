@@ -1,0 +1,60 @@
+{
+  "id": "sql-rank",
+  "lang": "sql",
+  "category": "Window functions",
+  "label": "RANK()",
+  "example": "RANK() OVER (...)",
+  "description": "Rank with gaps",
+  "source": "image-sql",
+  "related": [
+    "pd-rank"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+  "aliases": "RANK",
+  "uses": [
+    {
+      "page": "C16",
+      "block": "code-C16-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        year,\n        RANK() OVER (\n            PARTITION BY   product_id\n            ORDER BY year ASC",
+      "snippetLine": 4
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-4",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        year,\n        RANK() OVER (\n            PARTITION BY product_id\n            ORDER BY year ASC",
+      "snippetLine": 5
+    },
+    {
+      "page": "squid-04",
+      "block": "code-squid-04-0",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "Rank ten-player teams",
+      "number": "04",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    END AS age_group,\n    RANK() OVER (ORDER BY age_team DESC) AS rank\nFROM (\n    SELECT team_id, COUNT(*) AS n_players, AVG(age) AS age_team",
+      "snippetLine": 8
+    }
+  ],
+  "pageCount": 2
+}

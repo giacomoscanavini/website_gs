@@ -1,0 +1,328 @@
+{
+  "id": "sql-partition-by",
+  "lang": "sql",
+  "category": "Window functions",
+  "label": "PARTITION BY",
+  "example": "OVER(PARTITION BY id)",
+  "description": "Define groups",
+  "source": "image-sql",
+  "related": [
+    "pd-groupby"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+  "aliases": "PARTITION BY",
+  "uses": [
+    {
+      "page": "C12",
+      "block": "code-C12-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ranked AS (\n    SELECT *, ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS rn\n    FROM Delivery\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-2",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        ROW_NUMBER() OVER (\n            PARTITION BY   customer_id\n            ORDER BY order_date ASC\n        ) AS number",
+      "snippetLine": 8
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-4",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        ROW_NUMBER() OVER (\n            PARTITION BY customer_id\n            ORDER BY order_date ASC\n        ) AS number",
+      "snippetLine": 9
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        DISTINCT player_id,\n        MIN(event_date) OVER (PARTITION BY   player_id) AS first_day\n    FROM Activity\n)",
+      "snippetLine": 3
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-4",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        DISTINCT player_id,\n        MIN(event_date) OVER (PARTITION BY player_id) AS first_day\n    FROM Activity\n)",
+      "snippetLine": 4
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        RANK() OVER (\n            PARTITION BY   product_id\n            ORDER BY year ASC\n        ) AS year_order,",
+      "snippetLine": 5
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-4",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        RANK() OVER (\n            PARTITION BY product_id\n            ORDER BY year ASC\n        ) AS year_order, ",
+      "snippetLine": 6
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH counted AS (\n    SELECT *, COUNT(*) OVER (PARTITION BY employee_id) AS n_departments FROM Employee\n)\nSELECT employee_id, department_id FROM counted WHERE primary_flag = 'Y' OR n_departments = 1;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ranked AS (\n    SELECT product_id, new_price, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY change_date DESC) AS rn\n    FROM Products WHERE change_date <= '2019-08-16'\n), ids AS (SELECT DISTINCT product_id FROM Products)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "            ROW_NUMBER() OVER (\n                PARTITION BY   product_id ORDER BY change_date DESC\n            ) AS latest\n        FROM Products",
+      "snippetLine": 5
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-4",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            ROW_NUMBER() OVER (\n                PARTITION BY product_id ORDER BY change_date DESC\n            ) AS latest\n        FROM Products ",
+      "snippetLine": 6
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-0",
+      "line": 2,
+      "lines": [
+        2,
+        3
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH marked AS (\n    SELECT *, COUNT(*) OVER (PARTITION BY tiv_2015) AS value_count,\n           COUNT(*) OVER (PARTITION BY lat, lon) AS location_count FROM Insurance\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ranked AS (\n    SELECT *, DENSE_RANK() OVER (PARTITION BY departmentId ORDER BY salary DESC) AS salary_rank FROM Employee\n)\nSELECT d.name AS Department, r.name AS Employee, r.salary AS Salary",
+      "snippetLine": 1
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        DENSE_RANK() OVER (\n            PARTITION BY   departmentId ORDER BY salary DESC\n        ) AS ranked\n    FROM Employee",
+      "snippetLine": 4
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-4",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        DENSE_RANK() OVER (\n            PARTITION BY departmentId ORDER BY salary DESC\n        ) AS ranked\n    FROM Employee",
+      "snippetLine": 5
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        ROW_NUMBER() OVER (\n            PARTITION BY email ORDER BY id\n        ) AS ranked\n    FROM Person",
+      "snippetLine": 5
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-4",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        ROW_NUMBER() OVER (\n            PARTITION BY email ORDER BY id\n        ) AS ranked\n    FROM Person",
+      "snippetLine": 6
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "            salary,\n            ROW_NUMBER() OVER (PARTITION BY salary)   AS   ranks\n        FROM Employee\n        WHERE salary IS NOT NULL",
+      "snippetLine": 4
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-4",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            salary, \n            ROW_NUMBER() OVER (PARTITION BY salary) AS ranks\n        FROM Employee\n    ),",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC3421",
+      "block": "code-LC3421-0",
+      "line": 7,
+      "lines": [
+        7,
+        11
+      ],
+      "title": "3421 · Find students who improved",
+      "number": "3421",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        NTH_VALUE(score, 1) OVER (\n            PARTITION BY student_id, subject\n            ORDER BY exam_date ASC\n        ) AS first_score,",
+      "snippetLine": 6
+    },
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-0",
+      "line": 31,
+      "lines": [
+        31
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            ROW_NUMBER() OVER (\n                PARTITION BY season \n                ORDER BY total_quantity DESC, total_revenue DESC\n            ) AS ranked",
+      "snippetLine": 30
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-0",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            ROW_NUMBER() OVER (\n                PARTITION BY employee_id \n                ORDER BY review_id DESC\n            ) AS ranked",
+      "snippetLine": 6
+    }
+  ],
+  "pageCount": 12
+}

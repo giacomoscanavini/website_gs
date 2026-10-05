@@ -1,0 +1,292 @@
+<article class="article" id="C21">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Problem 1731
+  </span>
+ </div>
+ <h1>
+  1731 · Employees reporting to employees
+ </h1>
+ <p>
+  For each manager, return direct-report count and rounded average report age.
+ </p>
+ <p class="pattern">
+  Pattern: Self join / aggregation
+ </p>
+ <h2>
+  Example
+ </h2>
+ <p>
+  Manager 1 has reports aged 20 and 21 → reports_count 2 and average_age 21.
+ </p>
+ <h2>
+  My solution
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-80-panel-0" aria-selected="true" id="example-80-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="example-80-panel-1" aria-selected="false" id="example-80-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-80-tab-0" class="code-panel" id="example-80-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-C21-0" tabindex="0"><code class="language-sql" data-origin="legacy-C21-0"><span class="k">WITH</span><span class="w"> </span><span class="n">Reports</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">reports_to</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_id</span><span class="p">,</span>
+<span class="w">           </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reports_count</span><span class="p">,</span>
+<span class="w">           </span><span class="n">ROUND</span><span class="p">(</span><span class="k">AVG</span><span class="p">(</span><span class="n">age</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">average_age</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">Employees</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">reports_to</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">reports_to</span>
+<span class="p">)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">manager_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">reports_count</span><span class="p">,</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">average_age</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Reports</span><span class="w"> </span><span class="n">r</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Employees</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">manager_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">employee_id</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">manager_id</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-80-tab-1" class="code-panel" id="example-80-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-C21-1" tabindex="0"><code class="language-python" data-origin="legacy-C21-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">count_employees</span><span class="p">(</span><span class="n">employees</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">by_manager</span> <span class="o">=</span> <span class="n">employees</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'reports_to'</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="n">reports_count</span><span class="o">=</span><span class="p">(</span><span class="s1">'employee_id'</span><span class="p">,</span> <span class="s1">'size'</span><span class="p">),</span>
+        <span class="n">average_age</span><span class="o">=</span><span class="p">(</span><span class="s1">'age'</span><span class="p">,</span> <span class="s1">'mean'</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">by_manager</span><span class="p">[</span><span class="s1">'average_age'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">by_manager</span><span class="p">[</span><span class="s1">'average_age'</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">by_manager</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">employees</span><span class="p">[[</span><span class="s1">'employee_id'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">]],</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">,</span>
+                          <span class="n">left_on</span><span class="o">=</span><span class="s1">'reports_to'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'employee_id'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'employee_id'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">,</span> <span class="s1">'reports_count'</span><span class="p">,</span> <span class="s1">'average_age'</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'employee_id'</span><span class="p">)</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  Why it works
+ </h2>
+ <p>
+  Aggregate the report rows by reports_to, then attach the manager’s name. Employees without reports are excluded.
+ </p>
+ <h2>
+  Notes
+ </h2>
+ <p>
+  Only direct reports are counted. Return managers ordered by employee_id.
+ </p>
+ <details class="reference-details">
+  <summary>
+   Sources
+  </summary>
+  <div class="sources-content">
+   <p>
+    <a href="https://leetcode.com/problems/the-number-of-employees-which-report-to-each-employee/" rel="noopener noreferrer" target="_blank">
+     LeetCode 1731 — Employees reporting to each employee
+    </a>
+   </p>
+   <p>
+    Primary exercise basis: your uploaded Pasted markdown(3).md, exercise 1731, line 7. The exercise heading may be abbreviated in the upload; full official problem statements and schemas were not supplied.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     pandas SQL comparison
+    </a>
+    — Projection, filtering, grouping, joins and operations.
+   </p>
+   <p>
+    <a href="https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html" rel="noopener noreferrer" target="_blank">
+     MySQL rounding
+    </a>
+    — Exact versus approximate numeric rounding.
+   </p>
+  </div>
+ </details>
+ <details class="original-details archive-submission">
+  <summary>
+   Uploaded submission · SQL.zip
+  </summary>
+  <p class="small">
+   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
+  </p>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="archive-1731-panel-0" aria-selected="true" id="archive-1731-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="archive-1731-panel-1" aria-selected="false" id="archive-1731-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="archive-1731-tab-0" class="code-panel" id="archive-1731-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     MySQL
+    </div>
+    <pre id="code-C21-2" tabindex="0"><code class="language-sql" data-origin="archive-1731-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">WITH</span><span class="w"> </span><span class="n">Reports</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span>
+<span class="w">        </span><span class="n">reports_to</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">manager_id</span><span class="p">,</span>
+<span class="w">        </span><span class="nf">COUNT</span><span class="p">(</span><span class="n">age</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">reports_count</span><span class="p">,</span>
+<span class="w">        </span><span class="nf">ROUND</span><span class="p">(</span><span class="k">AVG</span><span class="p">(</span><span class="n">age</span><span class="p">))</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">average_age</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">Employees</span>
+<span class="w">    </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">reports_to</span>
+<span class="w">    </span><span class="k">HAVING</span><span class="w"> </span><span class="n">reports_to</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="no">NULL</span>
+<span class="p">)</span>
+
+<span class="k">SELECT</span><span class="w"> </span>
+<span class="w">    </span><span class="n">r</span><span class="p">.</span><span class="n">manager_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">employee_id</span><span class="p">,</span>
+<span class="w">    </span><span class="n">e</span><span class="p">.</span><span class="k">name</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">r</span><span class="p">.</span><span class="n">reports_count</span><span class="p">,</span>
+<span class="w">    </span><span class="n">r</span><span class="p">.</span><span class="n">average_age</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Reports</span><span class="w"> </span><span class="n">r</span>
+<span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Employees</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">manager_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">employee_id</span>
+<span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">r</span><span class="p">.</span><span class="n">manager_id</span></code></pre>
+   </div>
+   <div aria-labelledby="archive-1731-tab-1" class="code-panel" id="archive-1731-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C21-3" tabindex="0"><code class="language-python" data-origin="archive-1731-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">count_employees</span><span class="p">(</span><span class="n">employees</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">by_manager</span> <span class="o">=</span> <span class="n">employees</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'reports_to'</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="n">reports_count</span><span class="o">=</span><span class="p">(</span><span class="s1">'employee_id'</span><span class="p">,</span> <span class="s1">'size'</span><span class="p">),</span> 
+        <span class="n">average_age</span><span class="o">=</span><span class="p">(</span><span class="s1">'age'</span><span class="p">,</span> <span class="s1">'mean'</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">by_manager</span><span class="p">[</span><span class="s1">'average_age'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">by_manager</span><span class="p">[</span><span class="s1">'average_age'</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1e-12</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">by_manager</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">employees</span><span class="p">[[</span><span class="s1">'employee_id'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">]],</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">'reports_to'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'employee_id'</span><span class="p">)</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'employee_id_y'</span><span class="p">:</span> <span class="s1">'employee_id'</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'employee_id'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">,</span> <span class="s1">'reports_count'</span><span class="p">,</span> <span class="s1">'average_age'</span><span class="p">]]</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-not">
+     NOT
+    </a>
+    <a href="#m-sql-is-not-null">
+     IS NOT NULL
+    </a>
+    <a href="#m-sql-count">
+     COUNT()
+    </a>
+    <a href="#m-sql-avg">
+     AVG()
+    </a>
+    <a href="#m-sql-group-by">
+     GROUP BY
+    </a>
+    <a href="#m-sql-having">
+     HAVING
+    </a>
+    <a href="#m-sql-left-join">
+     LEFT JOIN
+    </a>
+    <a href="#m-sql-round">
+     ROUND()
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-with">
+     WITH
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+    <a href="#m-sql-order-by">
+     ORDER BY
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-sort-values">
+     Sort one column
+    </a>
+    <a href="#m-pd-new-column">
+     New column
+    </a>
+    <a href="#m-pd-rename">
+     Rename
+    </a>
+    <a href="#m-pd-merge-left">
+     Left merge
+    </a>
+    <a href="#m-pd-merge-keys">
+     Different keys
+    </a>
+    <a href="#m-pd-mean">
+     mean()
+    </a>
+    <a href="#m-pd-size">
+     size
+    </a>
+    <a href="#m-pd-groupby">
+     Basic group
+    </a>
+    <a href="#m-pd-agg-named">
+     Named aggregation
+    </a>
+    <a href="#m-pd-group-size">
+     Group size
+    </a>
+    <a href="#m-pd-round">
+     round()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#C20">
+   <small>
+    ← Previous
+   </small>
+   1045 · Customers who bought every product
+  </a>
+  <a href="#C22">
+   <small>
+    Next →
+   </small>
+   1789 · Primary department per employee
+  </a>
+ </div>
+</article>

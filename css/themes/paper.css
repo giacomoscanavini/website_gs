@@ -1,0 +1,53 @@
+/* Recolor the story's surrounding interface, not its published figure artwork */
+html[data-palette] body { background: linear-gradient(180deg, var(--site-canvas), var(--site-canvas-end)); }
+html[data-palette] .hero { background: transparent; }
+html[data-palette] :is(.panel,.top-nav,.chapter-visual,.wide-visual-chapter,.hero-note,.future-card,.ant-networks div) {
+  background: var(--site-surface); border-color: var(--site-line);
+}
+html[data-palette] :is(.system-card,.stat-card,.ant-stage,.why-card) {
+  background: linear-gradient(180deg, var(--site-surface), var(--site-surface-alt));
+}
+html[data-palette] .hero h1,
+html[data-palette] .hero-copy h1 { color: var(--site-ink); }
+html[data-palette] .chapter-number { background: var(--site-accent); box-shadow: none; }
+html[data-palette] .mechanism { background: var(--site-accent-soft); }
+html[data-palette] .footer { background: var(--site-surface); border-color: var(--site-line); }
+html[data-palette] .secondary-link { background: var(--site-surface); }
+
+/* Finish the same palette across every publication section */
+html[data-palette] .dek { color: var(--site-ink); }
+html[data-palette] :is(.panel-inner, .question-panel .panel-inner, .figure-gallery, blockquote, .button-ghost) {
+  background: var(--site-surface);
+  border-color: var(--site-line);
+}
+html[data-palette] .gcs-figure.severity-card {
+  background: linear-gradient(180deg, var(--site-surface), var(--site-surface-alt));
+}
+html[data-palette] .chapter-index {
+  background: var(--site-accent);
+  color: var(--site-on-accent);
+  box-shadow: 0 10px 28px rgba(var(--site-shadow-rgb), .1);
+}
+html[data-palette] .button-dark {
+  background: var(--site-accent);
+  color: var(--site-on-accent);
+  box-shadow: 0 8px 24px rgba(var(--site-shadow-rgb), .12);
+}
+html[data-palette] .button-dark:hover { background: var(--site-accent-hover); }
+html[data-palette] :is(.top-nav a:hover, .top-nav a.is-active) {
+  background: var(--site-accent);
+  color: var(--site-on-accent);
+}
+html[data-palette] .hero-visual::after { background: none; }
+html[data-palette] .pupil-icon {
+  background: radial-gradient(circle, var(--site-surface) 0 24%, var(--site-accent-soft) 25% 58%, var(--site-surface) 59%);
+}
+html[data-palette] .erp-guide.target { stroke: rgba(var(--site-accent-rgb), .38); }
+html[data-palette] :is(figure, .future-card, .top-nav) {
+  box-shadow: 0 12px 34px rgba(var(--site-shadow-rgb), .08);
+}
+html[data-palette] .top-nav { max-width: calc(100vw - 28px); overflow-x: auto; }
+@media(max-width:720px) {
+  html[data-palette] .top-nav { justify-content: flex-start; }
+  html[data-palette] .top-nav a { white-space: nowrap; }
+}

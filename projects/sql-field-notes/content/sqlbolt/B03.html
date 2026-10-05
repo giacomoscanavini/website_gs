@@ -1,0 +1,242 @@
+<article class="article" id="B03">
+ <div class="breadcrumb">
+  <a href="#sqlbolt">
+   SQLBolt
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Lesson 3
+  </span>
+ </div>
+ <h1>
+  Text constraints and LIKE
+ </h1>
+ <p>
+  LIKE patterns use % for zero or more characters and _ for exactly one character. Equality matches a complete value. NOT LIKE excludes matching non-NULL values.
+ </p>
+ <p>
+  <b>
+   Note.
+  </b>
+  SQLBolt describes LIKE as case-insensitive in its environment. This is not a universal SQL rule: engine and collation matter. Pandas patterns below deliberately use case=False for LIKE; equality uses the supplied capitalization.
+ </p>
+ <h2>
+  01 · Toy Story titles
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-10-panel-0" aria-selected="true" id="example-10-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-10-panel-1" aria-selected="false" id="example-10-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-10-tab-0" class="code-panel" id="example-10-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B03-0" tabindex="0"><code class="language-sql" data-origin="legacy-B03-0"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'Toy Story%'</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-10-tab-1" class="code-panel" id="example-10-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B03-1" tabindex="0"><code class="language-python" data-origin="legacy-B03-1"><span class="n">result</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">movies</span><span class="p">[</span><span class="s1">'title'</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="sa">r</span><span class="s1">'^Toy Story'</span><span class="p">,</span> <span class="n">case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  02 · Movies by John Lasseter
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-11-panel-0" aria-selected="true" id="example-11-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-11-panel-1" aria-selected="false" id="example-11-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-11-tab-0" class="code-panel" id="example-11-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B03-2" tabindex="0"><code class="language-sql" data-origin="legacy-B03-2"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">director</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'John Lasseter'</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-11-tab-1" class="code-panel" id="example-11-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B03-3" tabindex="0"><code class="language-python" data-origin="legacy-B03-3"><span class="n">result</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">movies</span><span class="p">[</span><span class="s1">'director'</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="s1">'John Lasseter'</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  03 · Movies by other directors
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-12-panel-0" aria-selected="true" id="example-12-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-12-panel-1" aria-selected="false" id="example-12-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-12-tab-0" class="code-panel" id="example-12-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B03-4" tabindex="0"><code class="language-sql" data-origin="legacy-B03-4"><span class="k">SELECT</span><span class="w"> </span><span class="n">title</span><span class="p">,</span><span class="w"> </span><span class="n">director</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">director</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s1">'John Lasseter'</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-12-tab-1" class="code-panel" id="example-12-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B03-5" tabindex="0"><code class="language-python" data-origin="legacy-B03-5"><span class="n">mask</span> <span class="o">=</span> <span class="n">movies</span><span class="p">[</span><span class="s1">'director'</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">movies</span><span class="p">[</span><span class="s1">'director'</span><span class="p">]</span><span class="o">.</span><span class="n">ne</span><span class="p">(</span><span class="s1">'John Lasseter'</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="p">[</span><span class="s1">'title'</span><span class="p">,</span> <span class="s1">'director'</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  04 · WALL- followed by one character
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-13-panel-0" aria-selected="true" id="example-13-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-13-panel-1" aria-selected="false" id="example-13-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-13-tab-0" class="code-panel" id="example-13-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B03-6" tabindex="0"><code class="language-sql" data-origin="legacy-B03-6"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">title</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">'WALL-_'</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-13-tab-1" class="code-panel" id="example-13-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B03-7" tabindex="0"><code class="language-python" data-origin="legacy-B03-7"><span class="n">result</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">movies</span><span class="p">[</span><span class="s1">'title'</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">fullmatch</span><span class="p">(</span><span class="sa">r</span><span class="s1">'WALL-.'</span><span class="p">,</span> <span class="n">case</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">na</span><span class="o">=</span><span class="kc">False</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+  </div>
+ </div>
+ <p>
+  The lesson’s WALL-* wording is implemented using the SQL single-character wildcard _. For an unrestricted suffix, use WALL-%.
+ </p>
+ <details class="reference-details">
+  <summary>
+   Sources
+  </summary>
+  <div class="sources-content">
+   <p>
+    The worked examples and pandas translations are study alternatives, not an official answer key. Shared DataFrame setup is listed under Reference.
+   </p>
+   <p>
+    <a href="https://sqlbolt.com/lesson/select_queries_with_constraints_pt_2" rel="noopener noreferrer" target="_blank">
+     SQLBolt — Text constraints and LIKE
+    </a>
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     pandas SQL comparison
+    </a>
+    — Projection, filtering, grouping, joins and operations.
+   </p>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-like">
+     LIKE
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-loc">
+     Rows by label
+    </a>
+    <a href="#m-pd-and">
+     Multiple conditions
+    </a>
+    <a href="#m-pd-filter-notnull">
+     Non-missing
+    </a>
+    <a href="#m-pd-filter-string">
+     String match
+    </a>
+    <a href="#m-pd-loc-label">
+     Access label
+    </a>
+    <a href="#m-pd-str-contains">
+     Contains
+    </a>
+    <a href="#m-pd-str-fullmatch">
+     str.fullmatch()
+    </a>
+    <a href="#m-pd-eq">
+     eq() / ne()
+    </a>
+    <a href="#m-pd-copy">
+     copy()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#B02">
+   <small>
+    ← Previous
+   </small>
+   Numeric constraints
+  </a>
+  <a href="#B04">
+   <small>
+    Next →
+   </small>
+   DISTINCT, sorting and pagination
+  </a>
+ </div>
+</article>

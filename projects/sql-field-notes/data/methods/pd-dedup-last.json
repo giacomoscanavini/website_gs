@@ -1,0 +1,30 @@
+{
+  "id": "pd-dedup-last",
+  "lang": "pd",
+  "category": "Duplicates",
+  "label": "Keep last",
+  "example": "df.drop_duplicates('id', keep='last')",
+  "description": "Keep latest duplicate",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C25",
+      "block": "code-C25-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    valid = p.loc[p['change_date'].le(pd.Timestamp('2019-08-16'))]\n    latest = valid.sort_values('change_date').drop_duplicates('product_id', keep='last')\n    result = p[['product_id']].drop_duplicates().merge(latest[['product_id', 'new_price']], on='product_id', how='left')\n    result['price'] = result['new_price'].fillna(10)",
+      "snippetLine": 5
+    }
+  ],
+  "pageCount": 1
+}

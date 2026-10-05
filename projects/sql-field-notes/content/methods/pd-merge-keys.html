@@ -1,0 +1,525 @@
+<article class="article method-page" id="m-pd-merge-keys">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=Merge%20/%20join">
+   pandas · Merge / join
+  </a>
+ </div>
+ <h1>
+  Different keys
+ </h1>
+ <p class="lead">
+  Join different names
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-merge-keys"><span class="n">a</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">'x'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'y'</span><span class="p">)</span></code></pre>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-sql-self-join">
+   SQL · Self join
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C21?code=code-C21-1&amp;method=pd-merge-keys&amp;line=9">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1731 · Employees reporting to employees
+    </strong>
+    <small>
+     Study solution · line 9
+    </small>
+   </div>
+   <pre aria-hidden="true">    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)
+    df = by_manager.merge(employees[['employee_id', 'name']], how='left',
+                          left_on='reports_to', right_on='employee_id')
+    return df[['employee_id', 'name', 'reports_count', 'average_age']].sort_values('employee_id')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#murder-03?code=code-murder-03-1&amp;method=pd-merge-keys&amp;line=3">
+   <div>
+    <span class="usage-label">
+     Murder City · pandas
+    </span>
+    <strong>
+     Read the witness interviews
+    </strong>
+    <small>
+     Saved walkthrough · line 3
+    </small>
+   </div>
+   <pre aria-hidden="true">
+joined = interview.merge(person[['id', 'name']], how='left',
+                         left_on='person_id', right_on='id')
+result = joined.loc[joined['id'].isin([14887, 16371]),</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-merge-keys&amp;line=9">
+   <div>
+    <span class="usage-label">
+     Squid Game · pandas
+    </span>
+    <strong>
+     Compare hot and cold months
+    </strong>
+    <small>
+     Saved walkthrough · line 9
+    </small>
+   </div>
+   <pre aria-hidden="true">games['month_num'], games['year_num'] = dates.dt.month, dates.dt.year
+joined = games.merge(extreme[['month']], left_on='month_num', right_on='month')
+result = (joined.loc[joined['year_num'].ge(2006)]
+          .groupby(['shape', 'month_num'], as_index=False)</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#B06?code=code-B06-1&amp;method=pd-merge-keys&amp;line=1">
+   <div>
+    <span class="usage-label">
+     SQLBolt · pandas
+    </span>
+    <strong>
+     INNER JOIN
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+result = m[['title', 'domestic_sales', 'international_sales']]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C34?code=code-C34-3&amp;method=pd-merge-keys&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     185 · Department top three salaries
+    </strong>
+    <small>
+     My approach · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">    employee =   employee[employee.ranked &lt;= 3]
+    df =   employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])
+    df = df.rename(columns={
+        'name_x': 'Employee',</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#LC181?code=code-LC181-1&amp;method=pd-merge-keys&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     181 · Employees earning more than their managers
+    </strong>
+    <small>
+     Uploaded submission · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">def find_employees(employee: pd.DataFrame) -&gt; pd.DataFrame:
+    df = employee.merge(employee, left_on='managerId', right_on='id', suffixes=['_x', '_y'])
+
+    df = df[df.salary_x &gt; df.salary_y]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   11 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#LC1158?code=code-LC1158-1&amp;method=pd-merge-keys&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1158 · Market analysis I
+     </strong>
+     <small>
+      Uploaded submission · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = users.merge(df, left_on='user_id', right_on='buyer_id', how='left')
+    df = df[['user_id', 'join_date', 'orders_in_2019']]
+    df = df.rename(columns={'user_id': 'buyer_id'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3521?code=code-LC3521-1&amp;method=pd-merge-keys&amp;line=18">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3521 · Find product recommendation pairs
+     </strong>
+     <small>
+      Uploaded submission · line 18
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = df.merge(product_info, left_on='product1_id', right_on='product_id', how='left').rename(columns={
+        'category': 'product1_category'})
+    </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-04?code=code-murder-04-1&amp;method=pd-merge-keys&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Murder City · pandas
+     </span>
+     <strong>
+      Follow the gym clue
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">
+joined = get_fit_now_check_in.merge(get_fit_now_member, how='left',
+                                   left_on='membership_id', right_on='id')
+mask = (joined['check_in_date'].astype('string').eq('20180109')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-05?code=code-murder-05-1&amp;method=pd-merge-keys&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Murder City · pandas
+     </span>
+     <strong>
+      Cross-check the licence plate
+     </strong>
+     <small>
+      Saved walkthrough · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">people = person[['license_id', 'name']]
+joined = drivers_license.merge(people, how='left', left_on='id', right_on='license_id')
+mask = joined['plate_number'].str.contains('H42W', regex=False, na=False)
+result = joined.loc[mask, ['id', 'age', 'plate_number', 'car_make', 'car_model', 'name']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-07?code=code-murder-07-1&amp;method=pd-merge-keys&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Murder City · pandas
+     </span>
+     <strong>
+      Follow the second interview
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">
+joined = person[['id', 'name']].merge(interview, how='left',
+                                     left_on='id', right_on='person_id')
+result = joined.loc[joined['person_id'].eq(67318), ['id', 'name', 'transcript']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-09?code=code-murder-09-1&amp;method=pd-merge-keys&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Murder City · pandas
+     </span>
+     <strong>
+      Inspect December event check-ins
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">
+joined = facebook_event_checkin.merge(person[['id', 'name']], how='left',
+                                      left_on='person_id', right_on='id')
+dates = pd.to_numeric(joined['date'], errors='coerce')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-06?code=code-squid-06-1&amp;method=pd-merge-keys&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Trace equipment to its first failure
+     </strong>
+     <small>
+      Saved walkthrough · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">
+joined = equipment.merge(failure_incidents, left_on='id', right_on='failed_equipment_id',
+                         suffixes=('_equipment', '_incident'))
+result = pd.DataFrame({'average_lifespan_years': [None]})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-merge-keys&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Join room checks and camera sightings
+     </strong>
+     <small>
+      Saved walkthrough · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">                                 'location': 'spotted_outside_room_location'})
+joined = guards.merge(rooms, how='left', left_on='assigned_room_id', right_on='room_id')
+joined = joined.merge(cameras.loc[cameras['guard_spotted_id'].notna()],
+                      left_on='guard_number', right_on='guard_spotted_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B07?code=code-B07-5&amp;method=pd-merge-keys&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      OUTER JOINs
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">m = buildings.merge(employees, left_on='building_name', right_on='building', how='left')
+result = m[['building_name', 'role']].drop_duplicates()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B09?code=code-B09-1&amp;method=pd-merge-keys&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Expressions and aliases
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+result = m.assign(sales_millions=(m['domestic_sales'] + m['international_sales']) / 1_000_000)[['title', 'sales_millions']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B12?code=code-B12-3&amp;method=pd-merge-keys&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Logical query order
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+m = m.assign(total_sales=m['domestic_sales'] + m['international_sales'])
+result = m.groupby('director', dropna=False)['total_sales'].sum(min_count=1).reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (5)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C21?code=code-C21-3&amp;method=pd-merge-keys&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1731 · Employees reporting to employees
+     </strong>
+     <small>
+      Uploaded submission · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)
+    df = by_manager.merge(employees[['employee_id', 'name']], how='left', left_on='reports_to', right_on='employee_id')
+    df.rename(columns={'employee_id_y': 'employee_id'}, inplace=True)
+    return df[['employee_id', 'name', 'reports_count', 'average_age']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C34?code=code-C34-5&amp;method=pd-merge-keys&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      185 · Department top three salaries
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    employee = employee[employee.ranked &lt;= 3]
+    df = employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])
+    df = df.rename(columns={
+        'name_x': 'Employee',</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B06?code=code-B06-3&amp;method=pd-merge-keys&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      INNER JOIN
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+result = m.loc[m['international_sales'].gt(m['domestic_sales']), ['title', 'domestic_sales', 'international_sales']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B06?code=code-B06-5&amp;method=pd-merge-keys&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      INNER JOIN
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+result = m.sort_values('rating', ascending=False)[['title', 'rating']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B09?code=code-B09-3&amp;method=pd-merge-keys&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Expressions and aliases
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+result = m.assign(rating_percent=m['rating'] * 10)[['title', 'rating_percent']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · Merge / join. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=Merge%20/%20join">
+   <small>
+    ← Browse
+   </small>
+   pandas · Merge / join
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

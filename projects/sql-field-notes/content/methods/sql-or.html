@@ -1,0 +1,427 @@
+<article class="article method-page" id="m-sql-or">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=sql&amp;cat=Filtering">
+   MySQL · Filtering
+  </a>
+ </div>
+ <h1>
+  OR
+ </h1>
+ <p class="lead">
+  Either condition
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    MySQL
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-or"><span class="n">city</span><span class="o">=</span><span class="s1">'HK'</span><span class="w"> </span><span class="k">OR</span><span class="w"> </span><span class="n">city</span><span class="o">=</span><span class="s1">'SG'</span></code></pre>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-pd-or">
+   pandas · OR
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C02?code=code-C02-0&amp;method=sql-or&amp;line=1">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     584 · Find customer referee
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">SELECT name FROM Customer WHERE referee_id &lt;&gt; 2 OR referee_id IS NULL;</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#murder-03?code=code-murder-03-0&amp;method=sql-or&amp;line=8">
+   <div>
+    <span class="usage-label">
+     Murder City · SQL
+    </span>
+    <strong>
+     Read the witness interviews
+    </strong>
+    <small>
+     Saved walkthrough · line 8
+    </small>
+   </div>
+   <pre aria-hidden="true">LEFT JOIN Person p ON i.person_id = p.id
+WHERE p.id = 14887 OR p.id = 16371</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-01?code=code-squid-01-0&amp;method=sql-or&amp;line=6">
+   <div>
+    <span class="usage-label">
+     Squid Game · SQL
+    </span>
+    <strong>
+     Filter the player pool
+    </strong>
+    <small>
+     Saved walkthrough · line 6
+    </small>
+   </div>
+   <pre aria-hidden="true">    debt &gt; 400000000 AND
+    (age &gt; 65 OR (vice = 'Gambling' AND has_close_family = false))</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C03?code=code-C03-0&amp;method=sql-or&amp;line=1">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     595 · Big countries
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">SELECT name, population, area FROM World WHERE area &gt;= 3000000 OR population &gt;= 25000000;</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C47?code=code-C47-0&amp;method=sql-or&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     577 · Employee bonus
+    </strong>
+    <small>
+     Study solution · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">LEFT JOIN Bonus b ON e.empId = b.empId
+WHERE b.bonus &lt; 1000 OR b.bonus IS NULL</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C22?code=code-C22-0&amp;method=sql-or&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     1789 · Primary department per employee
+    </strong>
+    <small>
+     Study solution · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">)
+SELECT employee_id, department_id FROM counted WHERE primary_flag = 'Y' OR n_departments = 1;</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   5 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C36?code=code-C36-0&amp;method=sql-or&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1527 · Patients with a disease
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT patient_id, patient_name, conditions FROM Patients
+WHERE conditions LIKE 'DIAB1%' OR conditions LIKE '% DIAB1%';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3475?code=code-LC3475-0&amp;method=sql-or&amp;line=12">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3475 · DNA pattern recognition
+     </strong>
+     <small>
+      Uploaded submission · line 12
+     </small>
+    </div>
+    <pre aria-hidden="true">        WHEN dna_sequence LIKE '%TAA' 
+             OR dna_sequence LIKE '%TAG' 
+             OR dna_sequence LIKE '%TGA' THEN 1
+        ELSE 0</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-05?code=code-murder-05-0&amp;method=sql-or&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Murder City · SQL
+     </span>
+     <strong>
+      Cross-check the licence plate
+     </strong>
+     <small>
+      Saved walkthrough · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">	d.plate_number LIKE 'H42W%'
+	OR d.plate_number LIKE '%H42W'
+	OR d.plate_number LIKE '%H42W%'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-05?code=code-squid-05-0&amp;method=sql-or&amp;line=16">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Count a player’s closest interactions
+     </strong>
+     <small>
+      Saved walkthrough · line 16
+     </small>
+    </div>
+    <pre aria-hidden="true">		  FROM Daily_interactions
+		  WHERE player1_id = 456 OR player2_id = 456
+	  ) AS t
+	  GROUP BY t.target_id, t.player_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-09?code=code-squid-09-0&amp;method=sql-or&amp;line=13">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Reconstruct access-log overlaps
+     </strong>
+     <small>
+      Saved walkthrough · line 13
+     </small>
+    </div>
+    <pre aria-hidden="true">        WHERE 
+            (m.start_time BETWEEN g.shift_start and g.shift_end) OR 
+            (m.end_time   BETWEEN g.shift_start and g.shift_end) OR 
+            ((g.shift_start BETWEEN m.start_time and m.end_time) AND (g.shift_end BETWEEN m.start_time and m.end_time))</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (7)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C02?code=code-C02-2&amp;method=sql-or&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      584 · Find customer referee
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Customer
+WHERE referee_id IS NULL OR   referee_id &lt;&gt; 2;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C02?code=code-C02-4&amp;method=sql-or&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      584 · Find customer referee
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Customer
+WHERE referee_id IS NULL OR referee_id &lt;&gt; 2</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C03?code=code-C03-2&amp;method=sql-or&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      595 · Big countries
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM World
+WHERE area &gt;= 3000000 OR population &gt;= 25000000;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C03?code=code-C03-4&amp;method=sql-or&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      595 · Big countries
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM World
+WHERE area &gt;= 3000000 OR population &gt;= 25000000</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C47?code=code-C47-2&amp;method=sql-or&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      577 · Employee bonus
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">LEFT JOIN Bonus b ON e.empId = b.empId
+WHERE b.bonus &lt; 1000 OR b.bonus IS NULL</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C36?code=code-C36-2&amp;method=sql-or&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1527 · Patients with a disease
+     </strong>
+     <small>
+      My approach · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Patients
+WHERE conditions LIKE 'DIAB1%' OR conditions LIKE '% DIAB1%';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C36?code=code-C36-4&amp;method=sql-or&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1527 · Patients with a disease
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">FROM Patients
+WHERE conditions LIKE 'DIAB1%' OR conditions LIKE '%DIAB1%'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    SQL cheat-sheet image · Filtering. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://dev.mysql.com/doc/refman/8.4/en/" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=sql&amp;cat=Filtering">
+   <small>
+    ← Browse
+   </small>
+   MySQL · Filtering
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

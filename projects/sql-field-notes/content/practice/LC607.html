@@ -1,0 +1,176 @@
+<article class="article" id="LC607">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Additional problems
+  </span>
+ </div>
+ <h1>
+  607 · Sales person
+ </h1>
+ <p>
+  Find salespeople who have no order associated with the company named RED.
+ </p>
+ <h2>
+  My submission
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="archive-607-panel-0" aria-selected="true" id="archive-607-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="archive-607-panel-1" aria-selected="false" id="archive-607-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="archive-607-tab-0" class="code-panel" id="archive-607-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    MySQL
+   </div>
+   <pre id="code-LC607-0" tabindex="0"><code class="language-sql" data-origin="archive-607-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">WITH</span><span class="w"> </span><span class="n">IdToExclude</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">sales_id</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">Orders</span><span class="w"> </span><span class="n">o</span>
+<span class="w">    </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Company</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">com_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">com_id</span>
+<span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="k">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'RED'</span>
+<span class="p">)</span>
+
+<span class="k">SELECT</span><span class="w"> </span><span class="k">name</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">SalesPerson</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">sales_id</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span>
+<span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">sales_id</span>
+<span class="w">    </span><span class="k">FROM</span><span class="w"> </span><span class="n">IdToExclude</span>
+<span class="p">)</span></code></pre>
+  </div>
+  <div aria-labelledby="archive-607-tab-1" class="code-panel" id="archive-607-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-LC607-1" tabindex="0"><code class="language-python" data-origin="archive-607-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">sales_person</span><span class="p">(</span><span class="n">sales_person</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">company</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">orders</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">orders</span> <span class="o">=</span> <span class="n">orders</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">company</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'com_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span>
+    <span class="n">orders</span> <span class="o">=</span> <span class="n">orders</span><span class="p">[</span><span class="n">orders</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="s1">'RED'</span><span class="p">)]</span>
+    <span class="n">idexlude</span> <span class="o">=</span> <span class="n">orders</span><span class="p">[</span><span class="s1">'sales_id'</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
+
+    <span class="n">flag</span> <span class="o">=</span> <span class="o">~</span><span class="n">sales_person</span><span class="p">[</span><span class="s1">'sales_id'</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">idexlude</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">sales_person</span><span class="p">[</span><span class="n">flag</span><span class="p">][[</span><span class="s1">'name'</span><span class="p">]]</span>
+    </code></pre>
+  </div>
+ </div>
+ <h2>
+  How the submitted approach works
+ </h2>
+ <p>
+  Join orders to company names, obtain sales IDs associated with RED, then exclude those IDs from SalesPerson.
+ </p>
+ <div class="note warning">
+  <b>
+   Implementation note.
+  </b>
+  The SQL NOT IN approach assumes the excluded sales IDs are not NULL.
+ </div>
+ <details class="reference-details">
+  <summary>
+   Source
+  </summary>
+  <div class="sources-content">
+   <p>
+    SQL.zip / 607-sales-person / submission-1.sql and submission-1.py. These are the submitted files; the summary and implementation notes describe the code, not a replacement official problem statement.
+   </p>
+   <p>
+    <a href="https://leetcode.com/problems/sales-person/" rel="noopener noreferrer" target="_blank">
+     Original problem
+    </a>
+   </p>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-not">
+     NOT
+    </a>
+    <a href="#m-sql-not-in">
+     NOT IN
+    </a>
+    <a href="#m-sql-left-join">
+     LEFT JOIN
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-with">
+     WITH
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+    <a href="#m-sql-distinct">
+     DISTINCT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-isin">
+     Membership
+    </a>
+    <a href="#m-pd-not-isin">
+     Not membership
+    </a>
+    <a href="#m-pd-merge-left">
+     Left merge
+    </a>
+    <a href="#m-pd-unique">
+     unique()
+    </a>
+    <a href="#m-pd-eq">
+     eq() / ne()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#LC601">
+   <small>
+    ← Previous
+   </small>
+   601 · Human traffic of stadium
+  </a>
+  <a href="#LC608">
+   <small>
+    Next →
+   </small>
+   608 · Tree node
+  </a>
+ </div>
+</article>

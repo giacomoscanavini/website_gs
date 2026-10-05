@@ -1,0 +1,144 @@
+{
+  "id": "pd-max",
+  "lang": "pd",
+  "category": "Aggregation",
+  "label": "max()",
+  "example": "df['score'].max()",
+  "description": "Maximum",
+  "source": "image-pandas",
+  "related": [
+    "sql-max"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "max",
+  "uses": [
+    {
+      "page": "C19",
+      "block": "code-C19-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    s = my_numbers.loc[~my_numbers['num'].duplicated(keep=False), 'num'].dropna()\n    return pd.DataFrame({'num': [s.max() if not s.empty else None]})",
+      "snippetLine": 4
+    },
+    {
+      "page": "C19",
+      "block": "code-C19-3",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    ).reset_index()\n    return   pd.DataFrame({'num': df[df.freq == 1][['num']].max()})",
+      "snippetLine": 6
+    },
+    {
+      "page": "C19",
+      "block": "code-C19-5",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return pd.DataFrame({'num': df[df.freq == 1][['num']].max()})",
+      "snippetLine": 7
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    swapped = ids + 2 * ids.mod(2) - 1\n    new_ids = swapped.where(~(ids.eq(ids.max()) & ids.mod(2).eq(1)), ids)\n    return seat.assign(id=new_ids).sort_values('id')",
+      "snippetLine": 5
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-3",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def exchange_seats(seat: pd.DataFrame) -> pd.DataFrame:\n    last_id = seat.id.max()\n    def swap_ids(x):\n        if x % 2 == 0: return x - 1",
+      "snippetLine": 2
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def exchange_seats(seat: pd.DataFrame) -> pd.DataFrame:\n    last_id = seat.id.max()\n\n    def swap_ids(x):",
+      "snippetLine": 3
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-1",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "                                    'movement_detected_time'].astype('string'))\njoined['time_range_first_last_detection'] = times.max() - times.min()\nresult = joined.sort_values('guard_number')[[\n    'guard_number', 'code_name', 'status', 'last_seen_in_room',",
+      "snippetLine": 16
+    },
+    {
+      "page": "B10",
+      "block": "code-B10-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Aggregates and GROUP BY",
+      "number": "10",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = pd.DataFrame({'max_years': [employees['years_employed'].max()]})",
+      "snippetLine": 1
+    },
+    {
+      "page": "B13",
+      "block": "code-B13-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "INSERT rows",
+      "number": "13",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "new_id = int(movies['id'].max()) + 1 if not movies.empty else 1\nnew_movie = pd.DataFrame([{'id': new_id, 'title': 'Toy Story 4', 'director': 'Example Director', 'year': 2019, 'length_minutes': 100}])\nmovies = pd.concat([movies, new_movie], ignore_index=True)",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 5
+}

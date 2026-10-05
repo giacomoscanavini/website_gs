@@ -1,0 +1,2027 @@
+{
+  "id": "sql-where",
+  "lang": "sql",
+  "category": "Filtering",
+  "label": "WHERE",
+  "example": "WHERE age > 30",
+  "description": "Filter rows",
+  "source": "image-sql",
+  "related": [
+    "pd-filter"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "aliases": "WHERE",
+  "uses": [
+    {
+      "page": "C01",
+      "block": "code-C01-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1757 · Recyclable and low-fat products",
+      "number": "1757",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT product_id FROM Products WHERE low_fats = 'Y' AND recyclable = 'Y';",
+      "snippetLine": 1
+    },
+    {
+      "page": "C01",
+      "block": "code-C01-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1757 · Recyclable and low-fat products",
+      "number": "1757",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Products\nWHERE low_fats = 'Y' AND recyclable = 'Y';",
+      "snippetLine": 2
+    },
+    {
+      "page": "C01",
+      "block": "code-C01-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1757 · Recyclable and low-fat products",
+      "number": "1757",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Products\nWHERE low_fats = 'Y' AND recyclable = 'Y'",
+      "snippetLine": 3
+    },
+    {
+      "page": "C02",
+      "block": "code-C02-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT name FROM Customer WHERE referee_id <> 2 OR referee_id IS NULL;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C02",
+      "block": "code-C02-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Customer\nWHERE referee_id IS NULL OR   referee_id <> 2;",
+      "snippetLine": 2
+    },
+    {
+      "page": "C02",
+      "block": "code-C02-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Customer\nWHERE referee_id IS NULL OR referee_id <> 2",
+      "snippetLine": 3
+    },
+    {
+      "page": "C03",
+      "block": "code-C03-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "595 · Big countries",
+      "number": "595",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT name, population, area FROM World WHERE area >= 3000000 OR population >= 25000000;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C03",
+      "block": "code-C03-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "595 · Big countries",
+      "number": "595",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM World\nWHERE area >= 3000000 OR population >= 25000000;",
+      "snippetLine": 2
+    },
+    {
+      "page": "C03",
+      "block": "code-C03-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "595 · Big countries",
+      "number": "595",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM World\nWHERE area >= 3000000 OR population >= 25000000",
+      "snippetLine": 3
+    },
+    {
+      "page": "C04",
+      "block": "code-C04-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1148 · Article Views I",
+      "number": "1148",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT DISTINCT author_id AS id FROM Views WHERE author_id = viewer_id ORDER BY id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C04",
+      "block": "code-C04-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1148 · Article Views I",
+      "number": "1148",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Views\nWHERE author_id = viewer_id\nORDER BY id ASC;",
+      "snippetLine": 2
+    },
+    {
+      "page": "C04",
+      "block": "code-C04-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1148 · Article Views I",
+      "number": "1148",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Views\nWHERE author_id = viewer_id\nORDER BY id ASC",
+      "snippetLine": 3
+    },
+    {
+      "page": "C05",
+      "block": "code-C05-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1683 · Invalid tweets",
+      "number": "1683",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT tweet_id FROM Tweets WHERE CHAR_LENGTH(content) > 15;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C05",
+      "block": "code-C05-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1683 · Invalid tweets",
+      "number": "1683",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Tweets\nWHERE CHAR_LENGTH(content)   > 15;",
+      "snippetLine": 2
+    },
+    {
+      "page": "C05",
+      "block": "code-C05-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1683 · Invalid tweets",
+      "number": "1683",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Tweets\nWHERE LENGTH(content) > 15",
+      "snippetLine": 3
+    },
+    {
+      "page": "C44",
+      "block": "code-C44-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1581 · Customers who visited without transactions",
+      "number": "1581",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "LEFT JOIN Transactions t ON v.visit_id = t.visit_id\nWHERE t.transaction_id IS NULL\nGROUP BY v.customer_id;",
+      "snippetLine": 3
+    },
+    {
+      "page": "C44",
+      "block": "code-C44-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1581 · Customers who visited without transactions",
+      "number": "1581",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "LEFT JOIN Transactions t ON v.visit_id = t.visit_id\nWHERE t.amount IS NULL\nGROUP BY v.customer_id",
+      "snippetLine": 4
+    },
+    {
+      "page": "C45",
+      "block": "code-C45-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "197 · Rising temperature",
+      "number": "197",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "FROM Weather w1, Weather w2\nWHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1 AND w1.temperature > w2.temperature",
+      "snippetLine": 2
+    },
+    {
+      "page": "C45",
+      "block": "code-C45-2",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "197 · Rising temperature",
+      "number": "197",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Weather w1, Weather w2\nWHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1 AND w1.temperature > w2.temperature",
+      "snippetLine": 3
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-0",
+      "line": 5,
+      "lines": [
+        5,
+        10
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "        FROM Activity\n        WHERE activity_type = 'start'\n    ),\n    e AS (",
+      "snippetLine": 4
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-2",
+      "line": 6,
+      "lines": [
+        6,
+        12
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        FROM Activity\n        WHERE activity_type = 'start'\n    ),\n",
+      "snippetLine": 5
+    },
+    {
+      "page": "C47",
+      "block": "code-C47-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "577 · Employee bonus",
+      "number": "577",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "LEFT JOIN Bonus b ON e.empId = b.empId\nWHERE b.bonus < 1000 OR b.bonus IS NULL",
+      "snippetLine": 3
+    },
+    {
+      "page": "C47",
+      "block": "code-C47-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "577 · Employee bonus",
+      "number": "577",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "LEFT JOIN Bonus b ON e.empId = b.empId\nWHERE b.bonus < 1000 OR b.bonus IS NULL",
+      "snippetLine": 5
+    },
+    {
+      "page": "C49",
+      "block": "code-C49-0",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "570 · Managers with at least five direct reports",
+      "number": "570",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "LEFT JOIN M ON e.id = M.managerId\nWHERE M.nReports >= 5",
+      "snippetLine": 8
+    },
+    {
+      "page": "C49",
+      "block": "code-C49-2",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "570 · Managers with at least five direct reports",
+      "number": "570",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "LEFT JOIN M ON e.id = M.managerId\nWHERE M.nReports >= 5",
+      "snippetLine": 10
+    },
+    {
+      "page": "C06",
+      "block": "code-C06-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "620 · Not boring movies",
+      "number": "620",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT id, movie, description, rating FROM Cinema\nWHERE id % 2 = 1 AND description <> 'boring' ORDER BY rating DESC;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C06",
+      "block": "code-C06-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "620 · Not boring movies",
+      "number": "620",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Cinema\nWHERE id % 2 = 1 AND description <> 'boring'\nORDER BY rating DESC;",
+      "snippetLine": 2
+    },
+    {
+      "page": "C06",
+      "block": "code-C06-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "620 · Not boring movies",
+      "number": "620",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Cinema\nWHERE id % 2 = 1 AND description <> \"boring\"\nORDER BY rating DESC",
+      "snippetLine": 3
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-0",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "       AS immediate_percentage\nFROM ranked WHERE rn = 1;",
+      "snippetLine": 6
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-2",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Orders\nWHERE number = 1;",
+      "snippetLine": 15
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-4",
+      "line": 18,
+      "lines": [
+        18
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Orders\nWHERE number = 1",
+      "snippetLine": 17
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    SELECT 1 FROM Activity a\n    WHERE a.player_id = f.player_id AND a.event_date = DATE_ADD(f.first_day, INTERVAL 1 DAY)\n) THEN 1 ELSE 0 END), 2) AS fraction\nFROM first_login f;",
+      "snippetLine": 5
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "FROM Activity\nWHERE activity_date BETWEEN '2019-06-28' AND '2019-07-27'\n  AND activity_type IN ('open_session', 'end_session', 'scroll_down', 'send_message')\nGROUP BY activity_date;",
+      "snippetLine": 2
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Activity\nWHERE\n    DATEDIFF('2019-07-27',   activity_date) < 30 AND\n    activity_date   <= '2019-07-27'   AND",
+      "snippetLine": 4
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-4",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Activity \nWHERE \n    DATEDIFF('2019-07-27', activity_date) < 30 AND\n    activity_date <= '2019-07-27' AND",
+      "snippetLine": 5
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-2",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM SalesII\nWHERE year_order = 1;",
+      "snippetLine": 14
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-4",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM SalesII\nWHERE year_order = 1",
+      "snippetLine": 16
+    },
+    {
+      "page": "C17",
+      "block": "code-C17-2",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "596 · Classes with at least five students",
+      "number": "596",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Classes\nWHERE nStudents >= 5;",
+      "snippetLine": 9
+    },
+    {
+      "page": "C17",
+      "block": "code-C17-4",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "596 · Classes with at least five students",
+      "number": "596",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Classes\nWHERE nStudents >= 5",
+      "snippetLine": 11
+    },
+    {
+      "page": "C19",
+      "block": "code-C19-2",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Frequency\nWHERE frequency = 1;",
+      "snippetLine": 9
+    },
+    {
+      "page": "C19",
+      "block": "code-C19-4",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "619 · Biggest single number",
+      "number": "619",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Frequency\nWHERE frequency = 1",
+      "snippetLine": 11
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-0",
+      "line": 2,
+      "lines": [
+        2,
+        3,
+        5
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT DISTINCT c.customer_id FROM Customer c\nWHERE NOT EXISTS (\n    SELECT 1 FROM Product p WHERE NOT EXISTS (\n        SELECT 1 FROM Customer bought",
+      "snippetLine": 1
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    FROM Employees\n    WHERE reports_to IS NOT NULL\n    GROUP BY reports_to\n)",
+      "snippetLine": 5
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": ")\nSELECT employee_id, department_id FROM counted WHERE primary_flag = 'Y' OR n_departments = 1;",
+      "snippetLine": 3
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Employee\nWHERE primary_flag = 'Y'\nUNION\nSELECT employee_id, MIN(department_id) AS department_id",
+      "snippetLine": 2
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-4",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Employee\nWHERE primary_flag = 'Y'\n\nUNION",
+      "snippetLine": 3
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT DISTINCT num AS ConsecutiveNums FROM ordered\nWHERE num = next_num AND num = next_next_num;",
+      "snippetLine": 5
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-2",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Nums\nWHERE num = next_num AND next_num = next_next_num;",
+      "snippetLine": 9
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-4",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Nums\nWHERE num = next_num AND next_num = next_next_num",
+      "snippetLine": 11
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    SELECT product_id, new_price, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY change_date DESC) AS rn\n    FROM Products WHERE change_date <= '2019-08-16'\n), ids AS (SELECT DISTINCT product_id FROM Products)\nSELECT i.product_id, COALESCE(r.new_price, 10) AS price FROM ids i",
+      "snippetLine": 2
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-2",
+      "line": 9,
+      "lines": [
+        9,
+        14,
+        21
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        FROM Products\n        WHERE change_date <= '2019-08-16'\n    ),\n    Valid AS (",
+      "snippetLine": 8
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-4",
+      "line": 10,
+      "lines": [
+        10,
+        15,
+        25
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        FROM Products \n        WHERE change_date <= '2019-08-16'\n    ),\n    Valid AS (",
+      "snippetLine": 9
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": ")\nSELECT person_name FROM cumulative WHERE running_weight <= 1000 ORDER BY turn DESC LIMIT 1;",
+      "snippetLine": 4
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-2",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Cumulative\nWHERE cumsum_weight <= 1000\nORDER BY turn DESC\nLIMIT 1;",
+      "snippetLine": 9
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-4",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Cumulative\nWHERE cumsum_weight <= 1000\nORDER BY turn DESC\nLIMIT 1",
+      "snippetLine": 11
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-0",
+      "line": 1,
+      "lines": [
+        1,
+        3,
+        5
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT 'Low Salary' AS category, COUNT(*) AS accounts_count FROM Accounts WHERE income < 20000\nUNION ALL\nSELECT 'Average Salary', COUNT(*) FROM Accounts WHERE income BETWEEN 20000 AND 50000",
+      "snippetLine": 1
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-2",
+      "line": 26,
+      "lines": [
+        26
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Categories\nWHERE category NOT IN (SELECT category FROM Valid);",
+      "snippetLine": 25
+    },
+    {
+      "page": "C27",
+      "block": "code-C27-4",
+      "line": 30,
+      "lines": [
+        30
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Categories\nWHERE category NOT IN (SELECT category FROM Valid)",
+      "snippetLine": 29
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-0",
+      "line": 2,
+      "lines": [
+        2,
+        3
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT e.employee_id FROM Employees e\nWHERE e.salary < 30000 AND e.manager_id IS NOT NULL\n  AND NOT EXISTS (SELECT 1 FROM Employees m WHERE m.employee_id = e.manager_id)\nORDER BY e.employee_id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-2",
+      "line": 4,
+      "lines": [
+        4,
+        8
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    FROM Employees\n    WHERE manager_id NOT IN (SELECT employee_id FROM Employees)\n)\nSELECT employee_id",
+      "snippetLine": 3
+    },
+    {
+      "page": "C28",
+      "block": "code-C28-4",
+      "line": 5,
+      "lines": [
+        5,
+        10
+      ],
+      "title": "1978 · Low-salary employees whose manager left",
+      "number": "1978",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    FROM Employees\n    WHERE manager_id NOT IN (SELECT employee_id FROM Employees)\n)\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    SELECT m.title AS results FROM MovieRating r JOIN Movies m ON r.movie_id = m.movie_id\n    WHERE r.created_at >= '2020-02-01' AND r.created_at < '2020-03-01'\n    GROUP BY m.movie_id, m.title ORDER BY AVG(r.rating) DESC, m.title LIMIT 1\n), combined AS (",
+      "snippetLine": 5
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-2",
+      "line": 21,
+      "lines": [
+        21
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        FROM MovieRating\n        WHERE created_at >= '2020-02-01' AND created_at < '2020-03-01'\n        GROUP BY movie_id\n    ),",
+      "snippetLine": 20
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-4",
+      "line": 22,
+      "lines": [
+        22
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        FROM MovieRating\n        WHERE created_at >= '2020-02-01' AND created_at < '2020-03-01'\n        GROUP BY movie_id\n    ),",
+      "snippetLine": 21
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-0",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT visited_on, amount, ROUND(amount / 7.0, 2) AS average_amount\nFROM rolled WHERE visited_on >= DATE_ADD(first_day, INTERVAL 6 DAY) ORDER BY visited_on;",
+      "snippetLine": 9
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-2",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Rolling\nWHERE visited_on >= DATE_ADD(first_date, INTERVAL 6 DAY)\nORDER BY visited_on;",
+      "snippetLine": 14
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-4",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Rolling\nWHERE visited_on >= first_date + 6",
+      "snippetLine": 16
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016 FROM marked\nWHERE value_count > 1 AND location_count = 1;",
+      "snippetLine": 5
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-2",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Insurance\nWHERE pid IN (SELECT pid FROM UniqueCity) AND tiv_2015 IN (SELECT tiv_2015 FROM NonUniqueTIV);",
+      "snippetLine": 16
+    },
+    {
+      "page": "C33",
+      "block": "code-C33-4",
+      "line": 18,
+      "lines": [
+        18
+      ],
+      "title": "585 · Investments in 2016",
+      "number": "585",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Insurance\nWHERE pid IN (SELECT pid FROM UniqueCity) AND tiv_2015 IN (SELECT tiv_2015 FROM NonUniqueTIV)",
+      "snippetLine": 17
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT d.name AS Department, r.name AS Employee, r.salary AS Salary\nFROM ranked r JOIN Department d ON r.departmentId = d.id WHERE r.salary_rank <= 3;",
+      "snippetLine": 4
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-2",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "JOIN Department   d ON r.departmentId = d.id\nWHERE r.ranked <= 3;",
+      "snippetLine": 15
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-4",
+      "line": 18,
+      "lines": [
+        18
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "LEFT JOIN Department d ON r.departmentId = d.id \nWHERE r.ranked <= 3",
+      "snippetLine": 17
+    },
+    {
+      "page": "C36",
+      "block": "code-C36-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1527 · Patients with a disease",
+      "number": "1527",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT patient_id, patient_name, conditions FROM Patients\nWHERE conditions LIKE 'DIAB1%' OR conditions LIKE '% DIAB1%';",
+      "snippetLine": 1
+    },
+    {
+      "page": "C36",
+      "block": "code-C36-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1527 · Patients with a disease",
+      "number": "1527",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Patients\nWHERE conditions LIKE 'DIAB1%' OR conditions LIKE '% DIAB1%';",
+      "snippetLine": 5
+    },
+    {
+      "page": "C36",
+      "block": "code-C36-4",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1527 · Patients with a disease",
+      "number": "1527",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Patients\nWHERE conditions LIKE 'DIAB1%' OR conditions LIKE '%DIAB1%'",
+      "snippetLine": 6
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-2",
+      "line": 11,
+      "lines": [
+        11,
+        14
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "DELETE FROM Person\nWHERE id IN (\n    SELECT id\n    FROM Ranked",
+      "snippetLine": 10
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-4",
+      "line": 13,
+      "lines": [
+        13,
+        16
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "DELETE FROM Person\nWHERE id IN (\n    SELECT id\n    FROM Ranked ",
+      "snippetLine": 12
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT MAX(salary) AS SecondHighestSalary FROM Employee WHERE salary < (SELECT MAX(salary) FROM Employee);",
+      "snippetLine": 1
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-2",
+      "line": 7,
+      "lines": [
+        7,
+        12,
+        23
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        FROM Employee\n        WHERE salary IS NOT NULL\n    ),\n    UniqueRanks AS (",
+      "snippetLine": 6
+    },
+    {
+      "page": "C38",
+      "block": "code-C38-4",
+      "line": 12,
+      "lines": [
+        12,
+        24
+      ],
+      "title": "176 · Second highest salary",
+      "number": "176",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        FROM Ranked \n        WHERE ranks = 1\n    ),\n    Numbered AS (",
+      "snippetLine": 11
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "JOIN Products p ON o.product_id = p.product_id\nWHERE o.order_date >= '2020-02-01' AND o.order_date < '2020-03-01'\nGROUP BY p.product_id, p.product_name HAVING SUM(o.unit) >= 100;",
+      "snippetLine": 2
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-2",
+      "line": 6,
+      "lines": [
+        6,
+        14
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    FROM Orders\n    WHERE order_date >= '2020-02-01' AND order_date < '2020-03-01'\n    GROUP BY product_id\n)",
+      "snippetLine": 5
+    },
+    {
+      "page": "C40",
+      "block": "code-C40-4",
+      "line": 7,
+      "lines": [
+        7,
+        16
+      ],
+      "title": "1327 · Products with at least 100 February units",
+      "number": "1327",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    FROM Orders\n    WHERE order_date > '2020-01-31' AND order_date < '2020-03-01'\n    GROUP BY product_id\n)",
+      "snippetLine": 6
+    },
+    {
+      "page": "C41",
+      "block": "code-C41-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1517 · Users with valid emails",
+      "number": "1517",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT user_id, name, mail FROM Users\nWHERE REGEXP_LIKE(mail, '^[A-Za-z][A-Za-z0-9_.-]*@leetcode[.]com$', 'c');",
+      "snippetLine": 1
+    },
+    {
+      "page": "C41",
+      "block": "code-C41-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1517 · Users with valid emails",
+      "number": "1517",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "FROM Users\nWHERE REGEXP_LIKE(mail, '^[A-Za-z][A-Za-z0-9_.-]*@leetcode[.]com$', 'c');",
+      "snippetLine": 2
+    },
+    {
+      "page": "C41",
+      "block": "code-C41-4",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1517 · Users with valid emails",
+      "number": "1517",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Users\nWHERE \n    mail REGEXP '^[a-zA-Z][a-zA-Z0-9_.-]*@leetcode\\\\.com$' \n    AND mail LIKE BINARY '%@leetcode.com'",
+      "snippetLine": 6
+    },
+    {
+      "page": "LC181",
+      "block": "code-LC181-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "181 · Employees earning more than their managers",
+      "number": "181",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "LEFT JOIN Employee e2 ON e1.managerId = e2.id\nWHERE e1.salary > e2.salary",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC262",
+      "block": "code-LC262-0",
+      "line": 10,
+      "lines": [
+        10,
+        19
+      ],
+      "title": "262 · Trips and users",
+      "number": "262",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        LEFT JOIN Users u2 ON t.driver_id = u2.users_id\n        WHERE \n            (u1.banned = 'No' AND u2.banned = 'No')\n            AND (t.request_at >= '2013-10-01' AND t.request_at <= '2013-10-03')",
+      "snippetLine": 9
+    },
+    {
+      "page": "LC601",
+      "block": "code-LC601-0",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "601 · Human traffic of stadium",
+      "number": "601",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        FROM Stadium \n        WHERE people >= 100\n    ),\n    ValidGroups AS (",
+      "snippetLine": 7
+    },
+    {
+      "page": "LC607",
+      "block": "code-LC607-0",
+      "line": 6,
+      "lines": [
+        6,
+        11
+      ],
+      "title": "607 · Sales person",
+      "number": "607",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    LEFT JOIN Company c ON o.com_id = c.com_id\n    WHERE c.name = 'RED'\n)\n",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC1158",
+      "block": "code-LC1158-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1158 · Market analysis I",
+      "number": "1158",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    FROM Orders \n    WHERE order_date >= '2019-01-01' AND order_date <= '2019-12-31'\n    GROUP BY buyer_id\n)",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC3220",
+      "block": "code-LC3220-0",
+      "line": 12,
+      "lines": [
+        12,
+        20
+      ],
+      "title": "3220 · Odd and even transactions",
+      "number": "3220",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        FROM Transactions\n        WHERE amount % 2 = 0\n        GROUP BY transaction_date\n    ),",
+      "snippetLine": 11
+    },
+    {
+      "page": "LC3421",
+      "block": "code-LC3421-0",
+      "line": 19,
+      "lines": [
+        19
+      ],
+      "title": "3421 · Find students who improved",
+      "number": "3421",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM Comparison\nWHERE first_score < latest_score",
+      "snippetLine": 18
+    },
+    {
+      "page": "LC3497",
+      "block": "code-LC3497-0",
+      "line": 8,
+      "lines": [
+        8,
+        15
+      ],
+      "title": "3497 · Analyze subscription conversion",
+      "number": "3497",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    FROM UserActivity\n    WHERE activity_type <> 'cancelled'\n    GROUP BY user_id\n    ORDER BY user_id ASC",
+      "snippetLine": 7
+    },
+    {
+      "page": "LC3521",
+      "block": "code-LC3521-0",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "3521 · Find product recommendation pairs",
+      "number": "3521",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        CROSS JOIN ProductPurchases p2\n        WHERE p1.user_id = p2.user_id AND p1.product_id < p2.product_id\n    ), \n    ValidPairs AS (",
+      "snippetLine": 9
+    },
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-0",
+      "line": 39,
+      "lines": [
+        39
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "FROM OrderedSales\nWHERE ranked = 1\n",
+      "snippetLine": 38
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-0",
+      "line": 11,
+      "lines": [
+        11,
+        21,
+        39,
+        48
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        FROM Performance_reviews\n        WHERE employee_id IN (\n            SELECT employee_id\n            FROM Performance_reviews",
+      "snippetLine": 10
+    },
+    {
+      "page": "murder-01",
+      "block": "code-murder-01-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "Retrieve the crime report",
+      "number": "01",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "FROM Crime_scene_report\nWHERE \n    type = 'murder' \n    AND city = 'SQL City' ",
+      "snippetLine": 3
+    },
+    {
+      "page": "murder-02",
+      "block": "code-murder-02-0",
+      "line": 6,
+      "lines": [
+        6,
+        15
+      ],
+      "title": "Find the two witnesses",
+      "number": "02",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "  \tFROM Person\n\tWHERE address_street_name = 'Northwestern Dr'\n\tORDER BY address_number DESC\n\tLIMIT 1",
+      "snippetLine": 5
+    },
+    {
+      "page": "murder-03",
+      "block": "code-murder-03-0",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "Read the witness interviews",
+      "number": "03",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "LEFT JOIN Person p ON i.person_id = p.id\nWHERE p.id = 14887 OR p.id = 16371",
+      "snippetLine": 7
+    },
+    {
+      "page": "murder-04",
+      "block": "code-murder-04-0",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "Follow the gym clue",
+      "number": "04",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "LEFT JOIN Get_fit_now_member m ON g.membership_id = m.id\nWHERE \n\tg.check_in_date = '20180109' \n\tAND m.membership_status = 'gold'",
+      "snippetLine": 16
+    },
+    {
+      "page": "murder-05",
+      "block": "code-murder-05-0",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "Cross-check the licence plate",
+      "number": "05",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "LEFT JOIN Person p ON d.id = p.license_id\nWHERE \n\td.plate_number LIKE 'H42W%'\n\tOR d.plate_number LIKE '%H42W'",
+      "snippetLine": 6
+    },
+    {
+      "page": "murder-07",
+      "block": "code-murder-07-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "Follow the second interview",
+      "number": "07",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "LEFT JOIN Interview i ON p.id = i.person_id\nWHERE i.person_id = 67318",
+      "snippetLine": 4
+    },
+    {
+      "page": "murder-09",
+      "block": "code-murder-09-0",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "Inspect December event check-ins",
+      "number": "09",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "LEFT JOIN Person p ON f.person_id = p.id\nWHERE \n\tf.person_id IN (78881, 90700, 99716)\n\tAND (f.date > 20171130 AND f.date < 20180101)",
+      "snippetLine": 6
+    },
+    {
+      "page": "squid-01",
+      "block": "code-squid-01-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "Filter the player pool",
+      "number": "01",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "FROM player\nWHERE \n    status = 'alive' AND\n    debt > 400000000 AND",
+      "snippetLine": 2
+    },
+    {
+      "page": "squid-02",
+      "block": "code-squid-02-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "Calculate the ration threshold",
+      "number": "02",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "        FROM player\n        WHERE status = 'alive' AND isinsider = false\n    )\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "squid-03",
+      "block": "code-squid-03-0",
+      "line": 38,
+      "lines": [
+        38
+      ],
+      "title": "Compare hot and cold months",
+      "number": "03",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    ON e.month = h.month_num\nWHERE h.year_num >= 2006\nGROUP BY h.shape, h.month_num\nORDER BY avg_temp ASC",
+      "snippetLine": 37
+    },
+    {
+      "page": "squid-04",
+      "block": "code-squid-04-0",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "Rank ten-player teams",
+      "number": "04",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": ") t\nWHERE t.n_players = 10",
+      "snippetLine": 14
+    },
+    {
+      "page": "squid-05",
+      "block": "code-squid-05-0",
+      "line": 16,
+      "lines": [
+        16,
+        31
+      ],
+      "title": "Count a player’s closest interactions",
+      "number": "05",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\t\t  FROM Daily_interactions\n\t\t  WHERE player1_id = 456 OR player2_id = 456\n\t  ) AS t\n\t  GROUP BY t.target_id, t.player_id",
+      "snippetLine": 15
+    },
+    {
+      "page": "squid-06",
+      "block": "code-squid-06-0",
+      "line": 25,
+      "lines": [
+        25
+      ],
+      "title": "Trace equipment to its first failure",
+      "number": "06",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\t  FROM Equipment e, Worst_supplier w, Game_with_highest_failures g\n\t  WHERE e.game_type = g.game_type AND e.supplier_id = w.supplier_id\n\t),\n\tFailed_time AS (",
+      "snippetLine": 24
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-0",
+      "line": 11,
+      "lines": [
+        11,
+        17
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "     FROM Camera\n     WHERE Camera.guard_spotted_id IS NOT NULL) AS time_range_first_last_detection\nFROM Guard g\nLEFT JOIN Room r",
+      "snippetLine": 10
+    },
+    {
+      "page": "squid-08",
+      "block": "code-squid-08-0",
+      "line": 5,
+      "lines": [
+        5,
+        19
+      ],
+      "title": "Find the longest hesitation",
+      "number": "08",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "        FROM Player\n        WHERE death_description = 'pushed'\n        GROUP BY game_id\n        ORDER BY AVG(last_moved_time_seconds) DESC",
+      "snippetLine": 4
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-0",
+      "line": 5,
+      "lines": [
+        5,
+        12,
+        28,
+        35
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "        FROM Game_schedule\n        WHERE LOWER(type) = 'squid game'\n        ORDER BY date DESC\n        LIMIT 1",
+      "snippetLine": 4
+    },
+    {
+      "page": "B02",
+      "block": "code-B02-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Numeric constraints",
+      "number": "02",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies WHERE id = 6;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B02",
+      "block": "code-B02-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Numeric constraints",
+      "number": "02",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies WHERE year BETWEEN 2000 AND 2010;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B02",
+      "block": "code-B02-4",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Numeric constraints",
+      "number": "02",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies WHERE year NOT BETWEEN 2000 AND 2010;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B02",
+      "block": "code-B02-6",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Numeric constraints",
+      "number": "02",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT title, year FROM movies WHERE id BETWEEN 1 AND 5;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B03",
+      "block": "code-B03-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Text constraints and LIKE",
+      "number": "03",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies WHERE title LIKE 'Toy Story%';",
+      "snippetLine": 1
+    },
+    {
+      "page": "B03",
+      "block": "code-B03-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Text constraints and LIKE",
+      "number": "03",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies WHERE director = 'John Lasseter';",
+      "snippetLine": 1
+    },
+    {
+      "page": "B03",
+      "block": "code-B03-4",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Text constraints and LIKE",
+      "number": "03",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT title, director FROM movies WHERE director <> 'John Lasseter';",
+      "snippetLine": 1
+    },
+    {
+      "page": "B03",
+      "block": "code-B03-6",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Text constraints and LIKE",
+      "number": "03",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM movies WHERE title LIKE 'WALL-_';",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT city, population FROM north_american_cities WHERE country = 'Canada';",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT city FROM north_american_cities WHERE country = 'United States' ORDER BY latitude DESC;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-4",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT city FROM north_american_cities\nWHERE longitude < (SELECT longitude FROM north_american_cities WHERE city = 'Chicago')\nORDER BY longitude;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-6",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT city, population FROM north_american_cities\nWHERE country = 'Mexico' ORDER BY population DESC LIMIT 2;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-8",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT city, population FROM north_american_cities\nWHERE country = 'United States' ORDER BY population DESC LIMIT 2 OFFSET 2;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B06",
+      "block": "code-B06-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "INNER JOIN",
+      "number": "06",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "FROM movies m JOIN boxoffice b ON m.id = b.movie_id\nWHERE b.international_sales > b.domestic_sales;",
+      "snippetLine": 2
+    },
+    {
+      "page": "B07",
+      "block": "code-B07-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "OUTER JOINs",
+      "number": "07",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT DISTINCT building FROM employees WHERE building IS NOT NULL;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B08",
+      "block": "code-B08-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "NULL and unmatched rows",
+      "number": "08",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT name, role FROM employees WHERE building IS NULL;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B08",
+      "block": "code-B08-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "NULL and unmatched rows",
+      "number": "08",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT b.building_name FROM buildings b\nLEFT JOIN employees e ON b.building_name = e.building WHERE e.building IS NULL;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B09",
+      "block": "code-B09-4",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Expressions and aliases",
+      "number": "09",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT title, year FROM movies WHERE year % 2 = 0;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B11",
+      "block": "code-B11-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "WHERE versus HAVING",
+      "number": "11",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT COUNT(*) AS artist_count FROM employees WHERE role = 'Artist';",
+      "snippetLine": 1
+    },
+    {
+      "page": "B13",
+      "block": "code-B13-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "INSERT rows",
+      "number": "13",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "INSERT INTO boxoffice (movie_id, rating, domestic_sales, international_sales)\nSELECT id, 8.7, 340000000, 270000000 FROM movies WHERE title = 'Toy Story 4';",
+      "snippetLine": 1
+    },
+    {
+      "page": "B14",
+      "block": "code-B14-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "UPDATE rows",
+      "number": "14",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "UPDATE movies SET director = 'John Lasseter' WHERE title = 'A Bug''s Life';",
+      "snippetLine": 1
+    },
+    {
+      "page": "B14",
+      "block": "code-B14-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "UPDATE rows",
+      "number": "14",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "UPDATE movies SET year = 1999 WHERE title = 'Toy Story 2';",
+      "snippetLine": 1
+    },
+    {
+      "page": "B14",
+      "block": "code-B14-4",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "UPDATE rows",
+      "number": "14",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "UPDATE movies SET title = 'Toy Story 3', director = 'Lee Unkrich' WHERE title = 'Toy Story 8';",
+      "snippetLine": 1
+    },
+    {
+      "page": "B15",
+      "block": "code-B15-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DELETE rows",
+      "number": "15",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "DELETE FROM movies WHERE year < 2005;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B15",
+      "block": "code-B15-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DELETE rows",
+      "number": "15",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "DELETE FROM movies WHERE director = 'Andrew Stanton';",
+      "snippetLine": 1
+    },
+    {
+      "page": "B19",
+      "block": "code-B19-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "Additional topic · Subqueries",
+      "number": "19",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM sales_associates\nWHERE salary > (SELECT AVG(revenue_generated) FROM sales_associates);",
+      "snippetLine": 1
+    },
+    {
+      "page": "B19",
+      "block": "code-B19-2",
+      "line": 2,
+      "lines": [
+        2,
+        3
+      ],
+      "title": "Additional topic · Subqueries",
+      "number": "19",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT e.* FROM employees e\nWHERE e.salary > (SELECT AVG(d.revenue_generated) FROM employees d\n                  WHERE d.department = e.department);",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 73
+}

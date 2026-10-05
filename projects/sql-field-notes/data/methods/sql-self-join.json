@@ -1,0 +1,116 @@
+{
+  "id": "sql-self-join",
+  "lang": "sql",
+  "category": "Joins",
+  "label": "Self join",
+  "example": "users a JOIN users b",
+  "description": "Join table to itself",
+  "source": "image-sql",
+  "related": [
+    "pd-merge-keys"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/join.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C45",
+      "block": "code-C45-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "197 · Rising temperature",
+      "number": "197",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT w1.id\nFROM Weather w1, Weather w2\nWHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1 AND w1.temperature > w2.temperature",
+      "snippetLine": 1
+    },
+    {
+      "page": "C45",
+      "block": "code-C45-2",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "197 · Rising temperature",
+      "number": "197",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "SELECT w1.id\nFROM Weather w1, Weather w2\nWHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1 AND w1.temperature > w2.temperature",
+      "snippetLine": 2
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "DELETE p1 FROM Person p1 JOIN Person p2\nON p1.email = p2.email AND p1.id > p2.id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "LC181",
+      "block": "code-LC181-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "181 · Employees earning more than their managers",
+      "number": "181",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "SELECT e1.name AS Employee\nFROM Employee e1\nLEFT JOIN Employee e2 ON e1.managerId = e2.id\nWHERE e1.salary > e2.salary",
+      "snippetLine": 2
+    },
+    {
+      "page": "LC3521",
+      "block": "code-LC3521-0",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "3521 · Find product recommendation pairs",
+      "number": "3521",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            p2.product_id AS product2_id\n        FROM ProductPurchases p1\n        CROSS JOIN ProductPurchases p2\n        WHERE p1.user_id = p2.user_id AND p1.product_id < p2.product_id",
+      "snippetLine": 7
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-0",
+      "line": 32,
+      "lines": [
+        32
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            l3.rating AS rating3\n        FROM LatestReviews l1\n        LEFT JOIN LatestReviews l2 ON l1.ranked = l2.ranked - 1 \n                                    AND l1.employee_id = l2.employee_id",
+      "snippetLine": 31
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-0",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\t(SELECT MAX(Camera.movement_detected_time) - MIN(Camera.movement_detected_time)\n     FROM Camera\n     WHERE Camera.guard_spotted_id IS NOT NULL) AS time_range_first_last_detection\nFROM Guard g",
+      "snippetLine": 9
+    }
+  ],
+  "pageCount": 6
+}

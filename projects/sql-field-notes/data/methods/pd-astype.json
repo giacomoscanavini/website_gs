@@ -1,0 +1,135 @@
+{
+  "id": "pd-astype",
+  "lang": "pd",
+  "category": "Also used in these notes",
+  "label": "astype()",
+  "example": "df['count'].astype(int)",
+  "description": "Convert a data type",
+  "source": "saved-code",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "astype",
+  "uses": [
+    {
+      "page": "C48",
+      "block": "code-C48-1",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left')\n    df['attended_exams'] = df['attended_exams'].fillna(0).astype(int)\n    return df[['student_id', 'student_name', 'subject_name', 'attended_exams']].sort_values(['student_id', 'subject_name'])",
+      "snippetLine": 6
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-1",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def queries_stats(queries: pd.DataFrame) -> pd.DataFrame:\n    q = queries.assign(quality_ratio=queries['rating'] / queries['position'], poor=queries['rating'].lt(3).astype(int))\n    g = q.groupby('query_name', dropna=False, as_index=False).agg(quality=('quality_ratio', 'mean'), poor_query_percentage=('poor', 'mean'))\n    g['quality'] = g['quality'].map(round_half_up)",
+      "snippetLine": 8
+    },
+    {
+      "page": "LC3475",
+      "block": "code-LC3475-1",
+      "line": 4,
+      "lines": [
+        4,
+        5,
+        8,
+        9
+      ],
+      "title": "3475 · DNA pattern recognition",
+      "number": "3475",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def analyze_dna_patterns(samples: pd.DataFrame) -> pd.DataFrame:\n    samples['has_start'] = (samples.dna_sequence.str.startswith('ATG')).astype('int')\n    samples['has_stop'] = (samples.dna_sequence.str.endswith('TAA') | \n                           samples.dna_sequence.str.endswith('TAG') | ",
+      "snippetLine": 3
+    },
+    {
+      "page": "murder-01",
+      "block": "code-murder-01-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "Retrieve the crime report",
+      "number": "01",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "        & crime_scene_report['city'].eq('SQL City')\n        & crime_scene_report['date'].astype('string').eq('20180115'))\nresult = crime_scene_report.loc[mask].copy()",
+      "snippetLine": 4
+    },
+    {
+      "page": "murder-04",
+      "block": "code-murder-04-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "Follow the gym clue",
+      "number": "04",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "                                   left_on='membership_id', right_on='id')\nmask = (joined['check_in_date'].astype('string').eq('20180109')\n        & joined['membership_status'].eq('gold')\n        & joined['id'].str.startswith('48Z', na=False))",
+      "snippetLine": 4
+    },
+    {
+      "page": "squid-04",
+      "block": "code-squid-04-1",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "Rank ten-player teams",
+      "number": "04",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "result.loc[result['age_team'].gt(50), 'age_group'] = 'Elderly'\nresult['rank'] = result['age_team'].rank(method='min', ascending=False).astype('Int64')",
+      "snippetLine": 8
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-1",
+      "line": 12,
+      "lines": [
+        12,
+        13,
+        15
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "joined = joined.loc[joined['isvacant'].eq(True)].copy()\nseen = pd.to_timedelta(joined['spotted_outside_room_time'].astype('string'))\nchecked = pd.to_timedelta(joined['last_seen_in_room'].astype('string'))\njoined['time_between_room_and_outside'] = seen - checked",
+      "snippetLine": 11
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-1",
+      "line": 11,
+      "lines": [
+        11,
+        12,
+        21
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    shifts = guard.copy()\n    a = pd.to_timedelta(shifts['shift_start'].astype('string'))\n    b = pd.to_timedelta(shifts['shift_end'].astype('string'))\n    # Literal same-day overlap logic from the supplied SQL",
+      "snippetLine": 10
+    }
+  ],
+  "pageCount": 8
+}

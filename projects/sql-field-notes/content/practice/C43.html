@@ -1,0 +1,173 @@
+<article class="article" id="C43">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Problem 1068
+  </span>
+ </div>
+ <h1>
+  1068 · Product sales analysis I
+ </h1>
+ <p>
+  Attach the product name to each sale and return product_name, year and price.
+ </p>
+ <p class="pattern">
+  Pattern: Join / column selection
+ </p>
+ <h2>
+  Illustrative example
+ </h2>
+ <p>
+  Product 10 is a Keyboard. Sales for product 10 in 2024 at price 50 and in 2025 at price 55 become (Keyboard, 2024, 50) and (Keyboard, 2025, 55).
+ </p>
+ <h2>
+  My solution
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="exercise-1068-panel-0" aria-selected="true" id="exercise-1068-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="exercise-1068-panel-1" aria-selected="false" id="exercise-1068-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="exercise-1068-tab-0" class="code-panel" id="exercise-1068-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-C43-0" tabindex="0"><code class="language-sql" data-origin="supplied-1068-sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">product_name</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="k">year</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">price</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Sales</span><span class="w"> </span><span class="n">s</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">Product</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">product_id</span></code></pre>
+  </div>
+  <div aria-labelledby="exercise-1068-tab-1" class="code-panel" id="exercise-1068-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-C43-1" tabindex="0"><code class="language-python" data-origin="supplied-1068-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">sales_analysis</span><span class="p">(</span><span class="n">sales</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">product</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">sales</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'product_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'inner'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'product_name'</span><span class="p">,</span> <span class="s1">'year'</span><span class="p">,</span> <span class="s1">'price'</span><span class="p">]]</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  Why it works
+ </h2>
+ <p>
+  The product_id join adds the name to each sales row without grouping the sales. Selecting three columns gives the requested output shape.
+ </p>
+ <div class="note">
+  Each sale is matched to its product before selecting the requested columns.
+ </div>
+ <details class="reference-details">
+  <summary>
+   Source
+  </summary>
+  <div class="sources-content">
+   <p>
+    Based on the submitted SQL and pandas solutions.
+   </p>
+  </div>
+ </details>
+ <details class="original-details archive-submission">
+  <summary>
+   Uploaded submission · SQL.zip
+  </summary>
+  <p class="small">
+   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
+  </p>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="archive-1068-panel-0" aria-selected="true" id="archive-1068-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="archive-1068-panel-1" aria-selected="false" id="archive-1068-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="archive-1068-tab-0" class="code-panel" id="archive-1068-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     MySQL
+    </div>
+    <pre id="code-C43-2" tabindex="0"><code class="language-sql" data-origin="archive-1068-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">product_name</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="kt">year</span><span class="p">,</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">price</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Sales</span><span class="w"> </span><span class="n">s</span>
+<span class="k">JOIN</span><span class="w"> </span><span class="n">Product</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">product_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">product_id</span></code></pre>
+   </div>
+   <div aria-labelledby="archive-1068-tab-1" class="code-panel" id="archive-1068-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C43-3" tabindex="0"><code class="language-python" data-origin="archive-1068-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">sales_analysis</span><span class="p">(</span><span class="n">sales</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">product</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">sales</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">product</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'product_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'product_name'</span><span class="p">,</span> <span class="s1">'year'</span><span class="p">,</span> <span class="s1">'price'</span><span class="p">]]</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-inner-join">
+     INNER JOIN
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-columns">
+     Select columns
+    </a>
+    <a href="#m-pd-merge-inner">
+     Inner merge
+    </a>
+    <a href="#m-pd-merge-left">
+     Left merge
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#C42">
+   <small>
+    ← Previous
+   </small>
+   1378 · Replace employee ID with the unique identifier
+  </a>
+  <a href="#C44">
+   <small>
+    Next →
+   </small>
+   1581 · Customers who visited without transactions
+  </a>
+ </div>
+</article>

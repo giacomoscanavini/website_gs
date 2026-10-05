@@ -1,0 +1,88 @@
+{
+  "id": "sql-top-n",
+  "lang": "sql",
+  "category": "Useful LeetCode patterns",
+  "label": "Top N per group",
+  "example": "ROW_NUMBER() OVER(PARTITION BY g ORDER BY x DESC)",
+  "description": "Rank within group",
+  "source": "image-sql",
+  "related": [
+    "pd-rank-group"
+  ],
+  "note": "ROW_NUMBER picks rows. DENSE_RANK picks distinct ranks and can retain extra tied rows. Choose the rule the question asks for.",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C25",
+      "block": "code-C25-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ranked AS (\n    SELECT product_id, new_price, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY change_date DESC) AS rn\n    FROM Products WHERE change_date <= '2019-08-16'\n), ids AS (SELECT DISTINCT product_id FROM Products)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "            *,\n            ROW_NUMBER() OVER (\n                PARTITION BY   product_id ORDER BY change_date DESC\n            ) AS latest",
+      "snippetLine": 4
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-4",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            *,\n            ROW_NUMBER() OVER (\n                PARTITION BY product_id ORDER BY change_date DESC\n            ) AS latest",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-0",
+      "line": 30,
+      "lines": [
+        30
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            season, category, total_quantity, total_revenue,\n            ROW_NUMBER() OVER (\n                PARTITION BY season \n                ORDER BY total_quantity DESC, total_revenue DESC",
+      "snippetLine": 29
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-0",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "            review_id, employee_id, rating, \n            ROW_NUMBER() OVER (\n                PARTITION BY employee_id \n                ORDER BY review_id DESC",
+      "snippetLine": 5
+    }
+  ],
+  "pageCount": 3
+}

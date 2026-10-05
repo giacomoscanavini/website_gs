@@ -1,0 +1,131 @@
+{
+  "id": "pd-timedelta",
+  "lang": "pd",
+  "category": "Dates",
+  "label": "Add days",
+  "example": "df.date + pd.Timedelta(days=7)",
+  "description": "Shift date",
+  "source": "image-pandas",
+  "related": [
+    "sql-date-add",
+    "sql-date-sub"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "Timedelta",
+  "uses": [
+    {
+      "page": "C45",
+      "block": "code-C45-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "197 · Rising temperature",
+      "number": "197",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    weather = weather.sort_values('recordDate')\n    df = weather[(weather.recordDate.diff().eq(pd.Timedelta(days=1))) & (weather.temperature.diff() > 0)]\n    return df[['id']]",
+      "snippetLine": 5
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    first = a.groupby('player_id')['event_date'].transform('min')\n    valid = a['event_date'].eq(first + pd.Timedelta(days=1))\n    fraction = valid.groupby(a['player_id']).any().mean()\n    return pd.DataFrame({'fraction': [round_half_up(fraction)]})",
+      "snippetLine": 10
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-3",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    activity['first_login'] =   activity.groupby(by='player_id')['event_date'].transform('min')\n    activity['valid'] = activity['event_date'] ==   activity['first_login'] + pd.Timedelta(days = 1)\n\n    return   pd.DataFrame({",
+      "snippetLine": 10
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    activity['first_login'] = activity.groupby(by='player_id')['event_date'].transform('min')\n    activity['valid'] = activity['event_date'] == activity['first_login'] + pd.Timedelta(days = 1)\n    \n    return pd.DataFrame({",
+      "snippetLine": 4
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-3",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    end_date = pd.Timestamp('2019-07-27')\n    start_date = end_date - pd.Timedelta(days=29)\n    bool_activity_date = activity['activity_date'].between(start_date, end_date)\n",
+      "snippetLine": 8
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-5",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    end_date = pd.Timestamp('2019-07-27')\n    start_date = end_date - pd.Timedelta(days=29)\n    bool_activity_date = activity['activity_date'].between(start_date, end_date)\n",
+      "snippetLine": 8
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-1",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    rolled = daily.rolling('7D', closed='right').sum()\n    rolled = rolled.loc[rolled.index >= daily.index.min() + pd.Timedelta(days=6)]\n    result = rolled.rename('amount').reset_index()\n    result['average_amount'] = (result['amount'] / 7).map(round_half_up)",
+      "snippetLine": 13
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-3",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    total = daily.rolling('7D').sum()\n    total = total[total.index >= daily.index.min() + pd.Timedelta(days=6)]\n    result = total.rename('amount').reset_index()\n    result['average_amount'] = (result['amount'] / 7).map(round_half_up)",
+      "snippetLine": 13
+    }
+  ],
+  "pageCount": 4
+}

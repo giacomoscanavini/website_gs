@@ -1,0 +1,44 @@
+{
+  "id": "pd-diff",
+  "lang": "pd",
+  "category": "Window-like operations",
+  "label": "Difference",
+  "example": "df['x'].diff()",
+  "description": "Current − previous",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "diff",
+  "uses": [
+    {
+      "page": "C45",
+      "block": "code-C45-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "197 · Rising temperature",
+      "number": "197",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    weather = weather.sort_values('recordDate')\n    df = weather[(weather.recordDate.diff().eq(pd.Timedelta(days=1))) & (weather.temperature.diff() > 0)]\n    return df[['id']]",
+      "snippetLine": 5
+    },
+    {
+      "page": "C45",
+      "block": "code-C45-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "197 · Rising temperature",
+      "number": "197",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    weather.sort_values(by='recordDate', inplace=True)\n    df = weather[(weather.recordDate.diff().dt.days == 1) & (weather.temperature.diff() > 0)]\n    return df[['id']]",
+      "snippetLine": 4
+    }
+  ],
+  "pageCount": 1
+}

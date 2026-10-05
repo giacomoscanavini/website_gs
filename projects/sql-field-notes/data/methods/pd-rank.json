@@ -1,0 +1,102 @@
+{
+  "id": "pd-rank",
+  "lang": "pd",
+  "category": "Ranking / ordering",
+  "label": "Rank",
+  "example": "df['x'].rank()",
+  "description": "Rank values",
+  "source": "image-pandas",
+  "related": [
+    "sql-rank"
+  ],
+  "note": "pandas rank() defaults to average ranks for ties. SQL RANK uses the minimum tied rank; rank(method=\"min\") is the closer counterpart.",
+  "doc": "https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.rank.html",
+  "aliases": "rank",
+  "uses": [
+    {
+      "page": "C16",
+      "block": "code-C16-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def sales_analysis(sales: pd.DataFrame) -> pd.DataFrame:\n    sales['year_order'] = sales.groupby(by='product_id')['year'].rank(method='min')\n    sales = sales[sales['year_order'] == 1]\n    sales = sales[['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def sales_analysis(sales: pd.DataFrame) -> pd.DataFrame:\n    sales['year_order'] = sales.groupby(by='product_id')['year'].rank(method='min')\n    sales = sales[sales['year_order'] == 1]\n    sales = sales[['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def top_three_salaries(employee: pd.DataFrame, department: pd.DataFrame) -> pd.DataFrame:\n    rank = employee.groupby('departmentId')['salary'].rank(method='dense', ascending=False)\n    chosen = employee.loc[rank.le(3)].rename(columns={'name': 'Employee', 'salary': 'Salary'})\n    dept = department.rename(columns={'id': 'departmentId', 'name': 'Department'})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-3",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def top_three_salaries(employee: pd.DataFrame, department: pd.DataFrame) -> pd.DataFrame:\n    employee['ranked'] = employee.groupby(by='departmentId')['salary'].rank(method='dense', ascending=False)\n    employee =   employee[employee.ranked <= 3]\n    df =   employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])",
+      "snippetLine": 2
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def top_three_salaries(employee: pd.DataFrame, department: pd.DataFrame) -> pd.DataFrame:\n    employee['ranked'] = employee.groupby(by='departmentId')['salary'].rank(method='dense', ascending=False)\n    employee = employee[employee.ranked <= 3]\n    df = employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])",
+      "snippetLine": 3
+    },
+    {
+      "page": "squid-04",
+      "block": "code-squid-04-1",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "Rank ten-player teams",
+      "number": "04",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "result.loc[result['age_team'].gt(50), 'age_group'] = 'Elderly'\nresult['rank'] = result['age_team'].rank(method='min', ascending=False).astype('Int64')",
+      "snippetLine": 8
+    }
+  ],
+  "pageCount": 3
+}

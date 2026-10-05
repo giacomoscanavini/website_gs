@@ -1,0 +1,4289 @@
+<article class="article method-page" id="m-sql-select">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=sql&amp;cat=Also%20used%20in%20these%20notes">
+   MySQL · Also used in these notes
+  </a>
+ </div>
+ <h1>
+  SELECT
+ </h1>
+ <p class="lead">
+  Select output columns
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    MySQL
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-select"><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="k">name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">users</span><span class="p">;</span></code></pre>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-pd-select-columns">
+   pandas · Select columns
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C01?code=code-C01-0&amp;method=sql-select&amp;line=1">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     1757 · Recyclable and low-fat products
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">SELECT product_id FROM Products WHERE low_fats = 'Y' AND recyclable = 'Y';</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#murder-01?code=code-murder-01-0&amp;method=sql-select&amp;line=2">
+   <div>
+    <span class="usage-label">
+     Murder City · SQL
+    </span>
+    <strong>
+     Retrieve the crime report
+    </strong>
+    <small>
+     Saved walkthrough · line 2
+    </small>
+   </div>
+   <pre aria-hidden="true">-- Find more information regarding the murder by reading the crime report
+SELECT * 
+FROM Crime_scene_report
+WHERE </pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-01?code=code-squid-01-0&amp;method=sql-select&amp;line=1">
+   <div>
+    <span class="usage-label">
+     Squid Game · SQL
+    </span>
+    <strong>
+     Filter the player pool
+    </strong>
+    <small>
+     Saved walkthrough · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">SELECT *
+FROM player
+WHERE </pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#B01?code=code-B01-0&amp;method=sql-select&amp;line=1">
+   <div>
+    <span class="usage-label">
+     SQLBolt · SQL
+    </span>
+    <strong>
+     SELECT queries 101
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">SELECT title FROM movies;</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C02?code=code-C02-0&amp;method=sql-select&amp;line=1">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     584 · Find customer referee
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">SELECT name FROM Customer WHERE referee_id &lt;&gt; 2 OR referee_id IS NULL;</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C03?code=code-C03-0&amp;method=sql-select&amp;line=1">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     595 · Big countries
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">SELECT name, population, area FROM World WHERE area &gt;= 3000000 OR population &gt;= 25000000;</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   92 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C04?code=code-C04-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1148 · Article Views I
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT DISTINCT author_id AS id FROM Views WHERE author_id = viewer_id ORDER BY id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C05?code=code-C05-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1683 · Invalid tweets
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT tweet_id FROM Tweets WHERE CHAR_LENGTH(content) &gt; 15;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C42?code=code-C42-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1378 · Replace employee ID with the unique identifier
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT eu.unique_id, e.name
+FROM EmployeeUNI eu
+RIGHT JOIN Employees e ON eu.id = e.id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C43?code=code-C43-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1068 · Product sales analysis I
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT p.product_name, s.year, s.price
+FROM Sales s
+JOIN Product p ON s.product_id = p.product_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C44?code=code-C44-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1581 · Customers who visited without transactions
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT v.customer_id, COUNT(*) AS count_no_trans
+FROM Visits v
+LEFT JOIN Transactions t ON v.visit_id = t.visit_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C45?code=code-C45-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      197 · Rising temperature
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT w1.id
+FROM Weather w1, Weather w2
+WHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1 AND w1.temperature &gt; w2.temperature</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C46?code=code-C46-0&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1661 · Average processing time per machine
+     </strong>
+     <small>
+      Study solution · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">    s AS (
+        SELECT machine_id, process_id, timestamp
+        FROM Activity
+        WHERE activity_type = 'start'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C47?code=code-C47-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      577 · Employee bonus
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT e.name, b.bonus
+FROM Employee e
+LEFT JOIN Bonus b ON e.empId = b.empId</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C48?code=code-C48-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1280 · Students and examinations
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT s.student_id, s.student_name, su.subject_name, COUNT(e.student_id) AS attended_exams
+FROM Students s
+CROSS JOIN Subjects su</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C49?code=code-C49-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      570 · Managers with at least five direct reports
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH M AS (
+    SELECT managerId, COUNT(*) AS nReports
+    FROM Employee
+    GROUP BY managerId</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C50?code=code-C50-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1934 · Confirmation rate
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Rate AS (
+    SELECT
+        s.user_id,
+        CASE</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C06?code=code-C06-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      620 · Not boring movies
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT id, movie, description, rating FROM Cinema
+WHERE id % 2 = 1 AND description &lt;&gt; 'boring' ORDER BY rating DESC;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT p.product_id,
+       COALESCE(ROUND(SUM(p.price * u.units) / NULLIF(SUM(u.units), 0), 2), 0) AS average_price
+FROM Prices p LEFT JOIN UnitsSold u</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C08?code=code-C08-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1075 · Project employees I
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT p.project_id, ROUND(AVG(e.experience_years), 2) AS average_years
+FROM Project p LEFT JOIN Employee e ON p.employee_id = e.employee_id
+GROUP BY p.project_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C09?code=code-C09-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1633 · Users registered in a contest
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT contest_id, ROUND(100.0 * COUNT(*) / (SELECT COUNT(*) FROM Users), 2) AS percentage
+FROM Register GROUP BY contest_id ORDER BY percentage DESC, contest_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C10?code=code-C10-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1211 · Queries quality and percentage
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT query_name, ROUND(AVG(rating / position), 2) AS quality,
+       ROUND(100.0 * AVG(CASE WHEN rating &lt; 3 THEN 1 ELSE 0 END), 2) AS poor_query_percentage
+FROM Queries GROUP BY query_name;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C11?code=code-C11-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT DATE_FORMAT(trans_date, '%Y-%m') AS month, country,
+       COUNT(*) AS trans_count,
+       SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END) AS approved_count,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C12?code=code-C12-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1174 · Immediate first deliveries
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH ranked AS (
+    SELECT *, ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY order_date) AS rn
+    FROM Delivery
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C13?code=code-C13-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      550 · Game Play Analysis IV
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH first_login AS (
+    SELECT player_id, MIN(event_date) AS first_day FROM Activity GROUP BY player_id
+)
+SELECT ROUND(AVG(CASE WHEN EXISTS (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C14?code=code-C14-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      2356 · Unique subjects per teacher
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT teacher_id, COUNT(DISTINCT subject_id) AS cnt FROM Teacher GROUP BY teacher_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT activity_date AS day, COUNT(DISTINCT user_id) AS active_users
+FROM Activity
+WHERE activity_date BETWEEN '2019-06-28' AND '2019-07-27'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C16?code=code-C16-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1070 · First-year product sales
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT s.product_id, s.year AS first_year, s.quantity, s.price
+FROM Sales s JOIN (SELECT product_id, MIN(year) AS first_year FROM Sales GROUP BY product_id) f
+ON s.product_id = f.product_id AND s.year = f.first_year;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C17?code=code-C17-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      596 · Classes with at least five students
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT class FROM Courses GROUP BY class HAVING COUNT(DISTINCT student) &gt;= 5;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C18?code=code-C18-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1729 · Followers count
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT user_id, COUNT(DISTINCT follower_id) AS followers_count FROM Followers GROUP BY user_id ORDER BY user_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C19?code=code-C19-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      619 · Biggest single number
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT MAX(num) AS num FROM (
+    SELECT num FROM MyNumbers GROUP BY num HAVING COUNT(*) = 1
+) singles;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C20?code=code-C20-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1045 · Customers who bought every product
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT DISTINCT c.customer_id FROM Customer c
+WHERE NOT EXISTS (
+    SELECT 1 FROM Product p WHERE NOT EXISTS (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C21?code=code-C21-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1731 · Employees reporting to employees
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Reports AS (
+    SELECT reports_to AS manager_id,
+           COUNT(*) AS reports_count,
+           ROUND(AVG(age)) AS average_age</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C22?code=code-C22-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1789 · Primary department per employee
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH counted AS (
+    SELECT *, COUNT(*) OVER (PARTITION BY employee_id) AS n_departments FROM Employee
+)
+SELECT employee_id, department_id FROM counted WHERE primary_flag = 'Y' OR n_departments = 1;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C23?code=code-C23-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      610 · Triangle judgement
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT x, y, z,
+       CASE WHEN x + y &gt; z AND x + z &gt; y AND y + z &gt; x THEN 'Yes' ELSE 'No' END AS triangle
+FROM Triangle;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C24?code=code-C24-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      180 · Consecutive Numbers
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH ordered AS (
+    SELECT num, LEAD(num, 1) OVER (ORDER BY id) AS next_num,
+           LEAD(num, 2) OVER (ORDER BY id) AS next_next_num FROM Logs
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C25?code=code-C25-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1164 · Product price at a given date
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH ranked AS (
+    SELECT product_id, new_price, ROW_NUMBER() OVER (PARTITION BY product_id ORDER BY change_date DESC) AS rn
+    FROM Products WHERE change_date &lt;= '2019-08-16'
+), ids AS (SELECT DISTINCT product_id FROM Products)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C26?code=code-C26-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1204 · Last person to fit in the bus
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH cumulative AS (
+    SELECT person_name, turn, SUM(weight) OVER (ORDER BY turn ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_weight
+    FROM Queue
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C27?code=code-C27-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1907 · Count salary categories
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT 'Low Salary' AS category, COUNT(*) AS accounts_count FROM Accounts WHERE income &lt; 20000
+UNION ALL
+SELECT 'Average Salary', COUNT(*) FROM Accounts WHERE income BETWEEN 20000 AND 50000</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C28?code=code-C28-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1978 · Low-salary employees whose manager left
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT e.employee_id FROM Employees e
+WHERE e.salary &lt; 30000 AND e.manager_id IS NOT NULL
+  AND NOT EXISTS (SELECT 1 FROM Employees m WHERE m.employee_id = e.manager_id)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C29?code=code-C29-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      626 · Exchange seats
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT CASE WHEN id % 2 = 0 THEN id - 1
+            WHEN id &lt; (SELECT MAX(id) FROM Seat) THEN id + 1
+            ELSE id END AS id, student</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH user_winner AS (
+    SELECT u.name AS results FROM MovieRating r JOIN Users u ON r.user_id = u.user_id
+    GROUP BY u.user_id, u.name ORDER BY COUNT(*) DESC, u.name LIMIT 1
+), movie_winner AS (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH daily AS (
+    SELECT visited_on, SUM(amount) AS amount FROM Customer GROUP BY visited_on
+), rolled AS (
+    SELECT visited_on,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C32?code=code-C32-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      602 · Most accepted friends
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH endpoints AS (
+    SELECT requester_id AS id FROM RequestAccepted
+    UNION ALL SELECT accepter_id FROM RequestAccepted
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C33?code=code-C33-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      585 · Investments in 2016
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH marked AS (
+    SELECT *, COUNT(*) OVER (PARTITION BY tiv_2015) AS value_count,
+           COUNT(*) OVER (PARTITION BY lat, lon) AS location_count FROM Insurance
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C34?code=code-C34-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      185 · Department top three salaries
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH ranked AS (
+    SELECT *, DENSE_RANK() OVER (PARTITION BY departmentId ORDER BY salary DESC) AS salary_rank FROM Employee
+)
+SELECT d.name AS Department, r.name AS Employee, r.salary AS Salary</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C35?code=code-C35-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1667 · Fix names in a table
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT user_id, CONCAT(UPPER(SUBSTRING(name, 1, 1)), LOWER(SUBSTRING(name, 2))) AS name FROM Users ORDER BY user_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C36?code=code-C36-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1527 · Patients with a disease
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT patient_id, patient_name, conditions FROM Patients
+WHERE conditions LIKE 'DIAB1%' OR conditions LIKE '% DIAB1%';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C37?code=code-C37-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      196 · Delete duplicate emails
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Ranked AS (
+    SELECT
+        id,
+        email,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C38?code=code-C38-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      176 · Second highest salary
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT MAX(salary) AS SecondHighestSalary FROM Employee WHERE salary &lt; (SELECT MAX(salary) FROM Employee);</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C39?code=code-C39-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1484 · Products sold by date
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT sell_date, COUNT(DISTINCT product) AS num_sold,
+       GROUP_CONCAT(DISTINCT product ORDER BY product SEPARATOR ',') AS products
+FROM Activities GROUP BY sell_date ORDER BY sell_date;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT p.product_name, SUM(o.unit) AS unit FROM Orders o
+JOIN Products p ON o.product_id = p.product_id
+WHERE o.order_date &gt;= '2020-02-01' AND o.order_date &lt; '2020-03-01'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C41?code=code-C41-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1517 · Users with valid emails
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT user_id, name, mail FROM Users
+WHERE REGEXP_LIKE(mail, '^[A-Za-z][A-Za-z0-9_.-]*@leetcode[.]com$', 'c');</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC181?code=code-LC181-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      181 · Employees earning more than their managers
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT e1.name AS Employee
+FROM Employee e1
+LEFT JOIN Employee e2 ON e1.managerId = e2.id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC262?code=code-LC262-0&amp;method=sql-select&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      262 · Trips and users
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    ValidTrips AS (
+        SELECT 
+            t.client_id, t.driver_id, t.status, t.request_at,
+            u1.banned AS client_banned, u2.banned AS driver_banned</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC586?code=code-LC586-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      586 · Customer placing the largest number of orders
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT customer_number
+FROM Orders
+GROUP BY customer_number</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC601?code=code-LC601-0&amp;method=sql-select&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      601 · Human traffic of stadium
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    CrowdedDays AS (
+        SELECT  
+            id, visit_date, people,
+            id - ROW_NUMBER() OVER (ORDER BY id) AS group_num</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC607?code=code-LC607-0&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      607 · Sales person
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH IdToExclude AS (
+    SELECT DISTINCT o.sales_id
+    FROM Orders o
+    LEFT JOIN Company c ON o.com_id = c.com_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC608?code=code-LC608-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      608 · Tree node
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT 
+    id, 
+    CASE</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC1158?code=code-LC1158-0&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1158 · Market analysis I
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Orders2019 AS (
+    SELECT buyer_id, COUNT(*) AS orders_in_2019
+    FROM Orders 
+    WHERE order_date &gt;= '2019-01-01' AND order_date &lt;= '2019-12-31'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC1393?code=code-LC1393-0&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1393 · Capital gain/loss
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Operations AS (
+    SELECT 
+        stock_name,  
+        CASE </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3220?code=code-LC3220-0&amp;method=sql-select&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3220 · Odd and even transactions
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    Days AS (
+        SELECT DISTINCT transaction_date
+        FROM Transactions
+    ),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3421?code=code-LC3421-0&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3421 · Find students who improved
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Comparison AS (
+    SELECT 
+        student_id,
+        subject,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3475?code=code-LC3475-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3475 · DNA pattern recognition
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT 
+    sample_id,
+    dna_sequence,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3497?code=code-LC3497-0&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3497 · Analyze subscription conversion
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Payments AS (
+    SELECT 
+        user_id, 
+        ROUND(AVG(IF(activity_type='free_trial', activity_duration, NULL)), 2) AS trial_avg_duration,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3521?code=code-LC3521-0&amp;method=sql-select&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3521 · Find product recommendation pairs
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    BoughtPairs AS (
+        SELECT 
+            p1.user_id, 
+            p1.product_id AS product1_id, </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3564?code=code-LC3564-0&amp;method=sql-select&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3564 · Seasonal sales analysis
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    SeasonSales AS (
+        SELECT 
+            s.product_id, 
+            CASE </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3580?code=code-LC3580-0&amp;method=sql-select&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3580 · Find consistently improving employees
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    ValidReviews AS (
+        SELECT 
+            review_id, employee_id, rating, 
+            ROW_NUMBER() OVER (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-02?code=code-murder-02-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Murder City · SQL
+     </span>
+     <strong>
+      Find the two witnesses
+     </strong>
+     <small>
+      Saved walkthrough · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">-- Find more information about the witnesses (note that ORDER BY and LIMIT would have been applied to the same SELECT statement as UNION so we have to separate them)
+SELECT * 
+FROM (
+  	SELECT * </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-03?code=code-murder-03-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Murder City · SQL
+     </span>
+     <strong>
+      Read the witness interviews
+     </strong>
+     <small>
+      Saved walkthrough · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">-- Have these people been interviewed? If so, what have they reported?
+SELECT 
+	p.id,
+	p.name,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-04?code=code-murder-04-0&amp;method=sql-select&amp;line=12">
+    <div>
+     <span class="usage-label">
+      Murder City · SQL
+     </span>
+     <strong>
+      Follow the gym clue
+     </strong>
+     <small>
+      Saved walkthrough · line 12
+     </small>
+    </div>
+    <pre aria-hidden="true">-- Gold membership at the gym on the reported day by Annabel
+SELECT 
+	g.membership_id, g.check_in_date,
+	m.person_id, m.name, m.membership_status</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-05?code=code-murder-05-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Murder City · SQL
+     </span>
+     <strong>
+      Cross-check the licence plate
+     </strong>
+     <small>
+      Saved walkthrough · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">-- People associated to cars with plate matching the reported piece
+SELECT 
+	d.id, d.age, d.plate_number, d.car_make, d.car_model,
+	p.name</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-06?code=code-murder-06-0&amp;method=sql-select&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Murder City · SQL
+     </span>
+     <strong>
+      Submit the first identification
+     </strong>
+     <small>
+      Saved walkthrough · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">        
+SELECT value FROM solution;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-07?code=code-murder-07-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Murder City · SQL
+     </span>
+     <strong>
+      Follow the second interview
+     </strong>
+     <small>
+      Saved walkthrough · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">-- Let's see if Jeremy Bowers has releasted any interview statement
+SELECT p.id, p.name, i.transcript
+FROM Person p
+LEFT JOIN Interview i ON p.id = i.person_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-09?code=code-murder-09-0&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Murder City · SQL
+     </span>
+     <strong>
+      Inspect December event check-ins
+     </strong>
+     <small>
+      Saved walkthrough · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">-- Need to find who attended the SQL symphony city concerts
+SELECT 
+	p.id, p.name, 
+	f.event_name, f.date</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-10?code=code-murder-10-0&amp;method=sql-select&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Murder City · SQL
+     </span>
+     <strong>
+      Submit the final identification
+     </strong>
+     <small>
+      Saved walkthrough · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">
+SELECT value FROM solution;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-02?code=code-squid-02-0&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Calculate the ration threshold
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">    table_prop AS (
+        SELECT FLOOR( COUNT(*) * 0.9 ) AS portions
+        FROM player
+        WHERE status = 'alive' AND isinsider = false</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-03?code=code-squid-03-0&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Compare hot and cold months
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">    Extrama_month AS (
+        SELECT *
+        FROM (
+            SELECT * </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-04?code=code-squid-04-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Rank ten-player teams
+     </strong>
+     <small>
+      Saved walkthrough · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT 
+    t.team_id, 
+    t.age_team,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-05?code=code-squid-05-0&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Count a player’s closest interactions
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">	Player_interactions AS (
+	  SELECT t.target_id, t.player_id, COUNT(*) AS counts
+	  FROM (
+		  SELECT </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-06?code=code-squid-06-0&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Trace equipment to its first failure
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">	Game_with_highest_failures AS (
+	  	SELECT e.game_type
+		FROM Equipment e
+		INNER JOIN Failure_incidents f</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-07?code=code-squid-07-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Join room checks and camera sightings
+     </strong>
+     <small>
+      Saved walkthrough · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT 
+	g.id AS guard_number,
+	g.code_name AS code_name, </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-08?code=code-squid-08-0&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Find the longest hesitation
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">    Hesitation_game AS (
+        SELECT game_id
+        FROM Player
+        WHERE death_description = 'pushed'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-09?code=code-squid-09-0&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Squid Game · SQL
+     </span>
+     <strong>
+      Reconstruct access-log overlaps
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">	Most_recent_squid_game AS (
+        SELECT start_time, end_time
+        FROM Game_schedule
+        WHERE LOWER(type) = 'squid game'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B02?code=code-B02-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Numeric constraints
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT * FROM movies WHERE id = 6;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B03?code=code-B03-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Text constraints and LIKE
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT * FROM movies WHERE title LIKE 'Toy Story%';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B04?code=code-B04-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      DISTINCT, sorting and pagination
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT DISTINCT director FROM movies ORDER BY director;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B05?code=code-B05-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Review · Simple SELECT queries
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT city, population FROM north_american_cities WHERE country = 'Canada';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B06?code=code-B06-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      INNER JOIN
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT m.title, b.domestic_sales, b.international_sales
+FROM movies m JOIN boxoffice b ON m.id = b.movie_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B07?code=code-B07-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      OUTER JOINs
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT DISTINCT building FROM employees WHERE building IS NOT NULL;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B08?code=code-B08-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      NULL and unmatched rows
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT name, role FROM employees WHERE building IS NULL;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B09?code=code-B09-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Expressions and aliases
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT m.title, (b.domestic_sales + b.international_sales) / 1000000.0 AS sales_millions
+FROM movies m JOIN boxoffice b ON m.id = b.movie_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B10?code=code-B10-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Aggregates and GROUP BY
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT MAX(years_employed) AS max_years FROM employees;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B11?code=code-B11-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      WHERE versus HAVING
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT COUNT(*) AS artist_count FROM employees WHERE role = 'Artist';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B12?code=code-B12-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Logical query order
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT director, COUNT(*) AS movie_count FROM movies GROUP BY director;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B13?code=code-B13-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      INSERT rows
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">INSERT INTO boxoffice (movie_id, rating, domestic_sales, international_sales)
+SELECT id, 8.7, 340000000, 270000000 FROM movies WHERE title = 'Toy Story 4';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B19?code=code-B19-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Additional topic · Subqueries
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT * FROM sales_associates
+WHERE salary &gt; (SELECT AVG(revenue_generated) FROM sales_associates);</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B20?code=code-B20-0&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Additional topic · Set operations
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT id FROM a UNION ALL SELECT id FROM b;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (122)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C01?code=code-C01-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1757 · Recyclable and low-fat products
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT product_id
+FROM Products
+WHERE low_fats = 'Y' AND recyclable = 'Y';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C01?code=code-C01-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1757 · Recyclable and low-fat products
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT product_id
+FROM Products
+WHERE low_fats = 'Y' AND recyclable = 'Y'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C02?code=code-C02-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      584 · Find customer referee
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT   name
+FROM Customer
+WHERE referee_id IS NULL OR   referee_id &lt;&gt; 2;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C02?code=code-C02-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      584 · Find customer referee
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT name
+FROM Customer
+WHERE referee_id IS NULL OR referee_id &lt;&gt; 2</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C03?code=code-C03-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      595 · Big countries
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT name, population, area
+FROM World
+WHERE area &gt;= 3000000 OR population &gt;= 25000000;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C03?code=code-C03-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      595 · Big countries
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT name, population, area
+FROM World
+WHERE area &gt;= 3000000 OR population &gt;= 25000000</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C04?code=code-C04-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1148 · Article Views I
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT DISTINCT   author_id AS id
+FROM Views
+WHERE author_id = viewer_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C04?code=code-C04-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1148 · Article Views I
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT DISTINCT author_id AS id 
+FROM Views
+WHERE author_id = viewer_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C05?code=code-C05-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1683 · Invalid tweets
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT tweet_id
+FROM Tweets
+WHERE CHAR_LENGTH(content)   &gt; 15;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C05?code=code-C05-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1683 · Invalid tweets
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT tweet_id
+FROM Tweets
+WHERE LENGTH(content) &gt; 15</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C42?code=code-C42-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1378 · Replace employee ID with the unique identifier
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT eu.unique_id, e.name
+FROM EmployeeUNI eu
+RIGHT JOIN Employees e ON eu.id = e.id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C43?code=code-C43-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1068 · Product sales analysis I
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT p.product_name, s.year, s.price
+FROM Sales s
+JOIN Product p ON s.product_id = p.product_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C44?code=code-C44-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1581 · Customers who visited without transactions
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT v.customer_id, COUNT(*) AS count_no_trans
+FROM Visits v
+LEFT JOIN Transactions t ON v.visit_id = t.visit_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C45?code=code-C45-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      197 · Rising temperature
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT w1.id
+FROM Weather w1, Weather w2
+WHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1 AND w1.temperature &gt; w2.temperature</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C46?code=code-C46-2&amp;method=sql-select&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1661 · Average processing time per machine
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    s AS (
+        SELECT machine_id, process_id, timestamp
+        FROM Activity
+        WHERE activity_type = 'start'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C47?code=code-C47-2&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      577 · Employee bonus
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">
+SELECT e.name, b.bonus
+FROM Employee e
+LEFT JOIN Bonus b ON e.empId = b.empId</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C48?code=code-C48-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1280 · Students and examinations
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT s.student_id, s.student_name, su.subject_name, COUNT(e.student_id) AS attended_exams
+FROM Students s 
+CROSS JOIN Subjects su</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C49?code=code-C49-2&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      570 · Managers with at least five direct reports
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH M AS (
+    SELECT managerId, COUNT(*) AS nReports
+    FROM Employee
+    GROUP BY managerId</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C50?code=code-C50-2&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1934 · Confirmation rate
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Rate AS (
+    SELECT 
+        s.user_id, 
+        CASE</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C06?code=code-C06-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      620 · Not boring movies
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT id, movie, description, rating
+FROM Cinema
+WHERE id % 2 = 1 AND description &lt;&gt; 'boring'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C06?code=code-C06-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      620 · Not boring movies
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT id, movie, description, rating
+FROM Cinema
+WHERE id % 2 = 1 AND description &lt;&gt; "boring"</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Sold AS (
+    SELECT p.product_id, u.units, p.price * u.units AS paid
+    FROM Prices p
+    LEFT JOIN UnitsSold   u ON (p.product_id = u.product_id) AND (u.purchase_date BETWEEN   p.start_date AND p.end_date)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Sold AS (
+    SELECT p.product_id, u.units, p.price * u.units AS paid
+    FROM Prices p
+    LEFT JOIN UnitsSold u ON (p.product_id = u.product_id) AND (u.purchase_date BETWEEN p.start_date AND p.end_date)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C08?code=code-C08-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1075 · Project employees I
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT
+    p.project_id,
+    ROUND(SUM(e.experience_years) / COUNT(e.experience_years), 2) AS average_years</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C08?code=code-C08-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1075 · Project employees I
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT 
+    p.project_id, 
+    ROUND(SUM(e.experience_years) / COUNT(e.experience_years), 2) AS average_years</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C09?code=code-C09-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1633 · Users registered in a contest
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT
+    contest_id,
+    ROUND(COUNT(*)/(SELECT COUNT(user_id) FROM Users) * 100, 2) AS percentage</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C09?code=code-C09-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1633 · Users registered in a contest
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT 
+    contest_id, 
+    ROUND(COUNT(*)/(SELECT COUNT(user_id) FROM Users) * 100, 2) AS percentage</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C10?code=code-C10-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1211 · Queries quality and percentage
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Quality AS (
+    SELECT
+        *,
+        (rating / position) AS quality,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C10?code=code-C10-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1211 · Queries quality and percentage
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Quality AS (
+    SELECT 
+        *,
+        (rating / position) AS quality,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C11?code=code-C11-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH T AS (
+    SELECT
+        DATE_FORMAT(trans_date,   '%Y-%m')   AS month,
+        country,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C11?code=code-C11-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH T AS (
+    SELECT 
+        DATE_FORMAT(trans_date, '%Y-%m') AS month,
+        country, </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C12?code=code-C12-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1174 · Immediate first deliveries
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Orders AS (
+    SELECT
+        customer_id,
+        CASE</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C12?code=code-C12-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1174 · Immediate first deliveries
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Orders AS (
+    SELECT 
+        customer_id,
+        CASE</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C13?code=code-C13-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      550 · Game Play Analysis IV
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH First_login AS (
+    SELECT
+        DISTINCT player_id,
+        MIN(event_date) OVER (PARTITION BY   player_id) AS first_day</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C13?code=code-C13-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      550 · Game Play Analysis IV
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH First_login AS (
+    SELECT 
+        DISTINCT player_id,
+        MIN(event_date) OVER (PARTITION BY player_id) AS first_day</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C14?code=code-C14-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      2356 · Unique subjects per teacher
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT
+    teacher_id,
+    COUNT(DISTINCT subject_id)   AS cnt</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C14?code=code-C14-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      2356 · Unique subjects per teacher
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT 
+    teacher_id, 
+    COUNT(DISTINCT subject_id) AS cnt</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT
+    activity_date   AS day,
+    COUNT(DISTINCT user_id) AS active_users</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT
+    activity_date AS day, 
+    COUNT(DISTINCT user_id) AS active_users</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C16?code=code-C16-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1070 · First-year product sales
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH SalesII AS (
+    SELECT
+        product_id,
+        year,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C16?code=code-C16-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1070 · First-year product sales
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH SalesII AS (
+    SELECT 
+        product_id, 
+        year,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C17?code=code-C17-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      596 · Classes with at least five students
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Classes AS (
+    SELECT
+        COUNT(DISTINCT student) AS nStudents,
+        class</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C17?code=code-C17-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      596 · Classes with at least five students
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Classes AS (
+    SELECT 
+        COUNT(DISTINCT student) AS nStudents, 
+        class</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C18?code=code-C18-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1729 · Followers count
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT
+    user_id,
+    COUNT(DISTINCT   follower_id) AS followers_count</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C18?code=code-C18-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1729 · Followers count
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT 
+    user_id, 
+    COUNT(DISTINCT follower_id) AS followers_count</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C19?code=code-C19-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      619 · Biggest single number
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Frequency AS (
+    SELECT
+        num,
+        COUNT(*) AS frequency</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C19?code=code-C19-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      619 · Biggest single number
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Frequency AS (
+    SELECT
+        num, 
+        COUNT(*) AS frequency</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C20?code=code-C20-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1045 · Customers who bought every product
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT c.customer_id
+FROM Customer c
+GROUP BY c.customer_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C20?code=code-C20-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1045 · Customers who bought every product
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT customer_id
+FROM Customer
+GROUP BY customer_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C21?code=code-C21-2&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1731 · Employees reporting to employees
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Reports AS (
+    SELECT 
+        reports_to AS manager_id,
+        COUNT(age) AS reports_count,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C22?code=code-C22-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1789 · Primary department per employee
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT employee_id,   department_id
+FROM Employee
+WHERE primary_flag = 'Y'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C22?code=code-C22-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1789 · Primary department per employee
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT employee_id, department_id
+FROM Employee
+WHERE primary_flag = 'Y'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C23?code=code-C23-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      610 · Triangle judgement
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT
+    x, y, z,
+    CASE</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C23?code=code-C23-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      610 · Triangle judgement
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT 
+    x, y, z, 
+    CASE </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C24?code=code-C24-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      180 · Consecutive Numbers
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Nums AS (
+    SELECT
+        num,
+        LEAD(num, 1) OVER (ORDER BY id) AS next_num,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C24?code=code-C24-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      180 · Consecutive Numbers
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Nums AS (
+    SELECT 
+        num, 
+        LEAD(num, 1) OVER () AS next_num,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C25?code=code-C25-2&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1164 · Product price at a given date
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">    Latest AS (
+        SELECT
+            *,
+            ROW_NUMBER() OVER (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C25?code=code-C25-4&amp;method=sql-select&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1164 · Product price at a given date
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    Latest AS (
+        SELECT 
+            *,
+            ROW_NUMBER() OVER (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C26?code=code-C26-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1204 · Last person to fit in the bus
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Cumulative AS (
+    SELECT
+        person_name,
+        turn,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C26?code=code-C26-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1204 · Last person to fit in the bus
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Cumulative AS (
+    SELECT 
+        person_name, 
+        turn,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C27?code=code-C27-2&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1907 · Count salary categories
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">    Labels AS (
+        SELECT
+            CASE
+                WHEN income &lt; 20000 THEN 'Low Salary'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C27?code=code-C27-4&amp;method=sql-select&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1907 · Count salary categories
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    Labels AS (
+        SELECT 
+            CASE
+                WHEN income &lt; 20000 THEN 'Low Salary'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C28?code=code-C28-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1978 · Low-salary employees whose manager left
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH ManagersLeftID AS (
+    SELECT manager_id
+    FROM Employees
+    WHERE manager_id NOT IN (SELECT employee_id FROM Employees)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C28?code=code-C28-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1978 · Low-salary employees whose manager left
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH ManagersLeftID AS (
+    SELECT manager_id
+    FROM Employees
+    WHERE manager_id NOT IN (SELECT employee_id FROM Employees)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C29?code=code-C29-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      626 · Exchange seats
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH NStudents AS (
+    SELECT COUNT(id) AS length
+    FROM Seat
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C29?code=code-C29-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      626 · Exchange seats
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH NStudents AS (
+    SELECT COUNT(id) AS length
+    FROM Seat
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-2&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">      ReviewPerUserID AS (
+        SELECT user_id, COUNT(*) AS nReviews
+        FROM MovieRating
+        GROUP BY user_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-4&amp;method=sql-select&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    ReviewPerUserID AS (
+        SELECT user_id, COUNT(*) AS nReviews
+        FROM MovieRating
+        GROUP BY user_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Rolling AS (
+    SELECT
+        DISTINCT visited_on,
+        SUM(amount) OVER (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Rolling AS (
+    SELECT 
+        DISTINCT visited_on, 
+        SUM(amount) OVER (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C32?code=code-C32-2&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      602 · Most accepted friends
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">    TableRequest AS (
+        SELECT
+              requester_id AS id,
+            COUNT(*) AS askedApproved</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C32?code=code-C32-4&amp;method=sql-select&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      602 · Most accepted friends
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    TableRequest AS (
+        SELECT 
+            requester_id AS id, 
+            COUNT(*) AS askedApproved</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C33?code=code-C33-2&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      585 · Investments in 2016
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">    NonUniqueTIV AS (
+        SELECT tiv_2015
+        FROM Insurance
+        GROUP BY tiv_2015</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C33?code=code-C33-4&amp;method=sql-select&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      585 · Investments in 2016
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    NonUniqueTIV AS (
+        SELECT tiv_2015
+        FROM Insurance
+        GROUP BY tiv_2015</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C34?code=code-C34-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      185 · Department top three salaries
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Ranked AS (
+    SELECT
+        id, name, salary,   departmentId,
+        DENSE_RANK() OVER (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C34?code=code-C34-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      185 · Department top three salaries
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Ranked AS (
+    SELECT 
+        id, name, salary, departmentId,
+        DENSE_RANK() OVER (</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C35?code=code-C35-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1667 · Fix names in a table
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT
+    user_id,
+    CONCAT(UPPER(SUBSTRING(name, 1, 1)), LOWER(SUBSTRING(name, 2))) AS name</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C35?code=code-C35-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1667 · Fix names in a table
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT
+    user_id, 
+    CONCAT(UPPER(SUBSTRING(name, 1, 1)), LOWER(SUBSTRING(name, 2))) AS name</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C36?code=code-C36-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1527 · Patients with a disease
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT
+    patient_id,
+    patient_name,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C36?code=code-C36-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1527 · Patients with a disease
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT 
+    patient_id, 
+    patient_name, </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C37?code=code-C37-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      196 · Delete duplicate emails
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Ranked AS (
+    SELECT 
+        id, 
+        email, </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C38?code=code-C38-2&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      176 · Second highest salary
+     </strong>
+     <small>
+      My approach · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">    Ranked AS (
+        SELECT
+            salary,
+            ROW_NUMBER() OVER (PARTITION BY salary)   AS   ranks</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C38?code=code-C38-4&amp;method=sql-select&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      176 · Second highest salary
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    Ranked AS (
+        SELECT 
+            salary, 
+            ROW_NUMBER() OVER (PARTITION BY salary) AS ranks</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C39?code=code-C39-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1484 · Products sold by date
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT
+    sell_date,
+    COUNT(DISTINCT product) AS num_sold,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C39?code=code-C39-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1484 · Products sold by date
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT 
+    sell_date,
+    COUNT(DISTINCT product) AS num_sold,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-2&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      My approach · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Quantities AS (
+    SELECT
+        product_id,
+        SUM(unit) AS unit</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-4&amp;method=sql-select&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      Uploaded submission · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH Quantities AS (
+    SELECT 
+        product_id, 
+        SUM(unit) AS unit</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C41?code=code-C41-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1517 · Users with valid emails
+     </strong>
+     <small>
+      My approach · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT user_id, name, mail
+FROM Users
+WHERE REGEXP_LIKE(mail, '^[A-Za-z][A-Za-z0-9_.-]*@leetcode[.]com$', 'c');</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C41?code=code-C41-4&amp;method=sql-select&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1517 · Users with valid emails
+     </strong>
+     <small>
+      Uploaded submission · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true"># Write your MySQL query statement below
+SELECT 
+    user_id, 
+    name, </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B01?code=code-B01-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      SELECT queries 101
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT director FROM movies;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B01?code=code-B01-4&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      SELECT queries 101
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT title, director FROM movies;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B01?code=code-B01-6&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      SELECT queries 101
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT title, year FROM movies;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B01?code=code-B01-8&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      SELECT queries 101
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT * FROM movies;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B02?code=code-B02-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Numeric constraints
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT * FROM movies WHERE year BETWEEN 2000 AND 2010;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B02?code=code-B02-4&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Numeric constraints
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT * FROM movies WHERE year NOT BETWEEN 2000 AND 2010;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B02?code=code-B02-6&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Numeric constraints
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT title, year FROM movies WHERE id BETWEEN 1 AND 5;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B03?code=code-B03-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Text constraints and LIKE
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT * FROM movies WHERE director = 'John Lasseter';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B03?code=code-B03-4&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Text constraints and LIKE
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT title, director FROM movies WHERE director &lt;&gt; 'John Lasseter';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B03?code=code-B03-6&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Text constraints and LIKE
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT * FROM movies WHERE title LIKE 'WALL-_';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B04?code=code-B04-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      DISTINCT, sorting and pagination
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT * FROM movies ORDER BY year DESC LIMIT 4;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B04?code=code-B04-4&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      DISTINCT, sorting and pagination
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT * FROM movies ORDER BY title LIMIT 5;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B04?code=code-B04-6&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      DISTINCT, sorting and pagination
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT * FROM movies ORDER BY title LIMIT 5 OFFSET 5;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B05?code=code-B05-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Review · Simple SELECT queries
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT city FROM north_american_cities WHERE country = 'United States' ORDER BY latitude DESC;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B05?code=code-B05-4&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Review · Simple SELECT queries
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT city FROM north_american_cities
+WHERE longitude &lt; (SELECT longitude FROM north_american_cities WHERE city = 'Chicago')
+ORDER BY longitude;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B05?code=code-B05-6&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Review · Simple SELECT queries
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT city, population FROM north_american_cities
+WHERE country = 'Mexico' ORDER BY population DESC LIMIT 2;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B05?code=code-B05-8&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Review · Simple SELECT queries
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT city, population FROM north_american_cities
+WHERE country = 'United States' ORDER BY population DESC LIMIT 2 OFFSET 2;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B06?code=code-B06-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      INNER JOIN
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT m.title, b.domestic_sales, b.international_sales
+FROM movies m JOIN boxoffice b ON m.id = b.movie_id
+WHERE b.international_sales &gt; b.domestic_sales;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B06?code=code-B06-4&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      INNER JOIN
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT m.title, b.rating FROM movies m
+JOIN boxoffice b ON m.id = b.movie_id ORDER BY b.rating DESC;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B07?code=code-B07-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      OUTER JOINs
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT building_name, capacity FROM buildings;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B07?code=code-B07-4&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      OUTER JOINs
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT DISTINCT b.building_name, e.role FROM buildings b
+LEFT JOIN employees e ON b.building_name = e.building;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B08?code=code-B08-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      NULL and unmatched rows
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT b.building_name FROM buildings b
+LEFT JOIN employees e ON b.building_name = e.building WHERE e.building IS NULL;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B09?code=code-B09-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Expressions and aliases
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT m.title, b.rating * 10.0 AS rating_percent
+FROM movies m JOIN boxoffice b ON m.id = b.movie_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B09?code=code-B09-4&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Expressions and aliases
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT title, year FROM movies WHERE year % 2 = 0;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B10?code=code-B10-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Aggregates and GROUP BY
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT role, AVG(years_employed) AS average_years FROM employees GROUP BY role;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B10?code=code-B10-4&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Aggregates and GROUP BY
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT building, SUM(years_employed) AS total_years FROM employees GROUP BY building;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B11?code=code-B11-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      WHERE versus HAVING
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT role, COUNT(*) AS employee_count FROM employees GROUP BY role;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B11?code=code-B11-4&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      WHERE versus HAVING
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT role, SUM(years_employed) AS total_years
+FROM employees GROUP BY role HAVING role = 'Engineer';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B12?code=code-B12-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Logical query order
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT m.director, SUM(b.domestic_sales + b.international_sales) AS total_sales
+FROM movies m JOIN boxoffice b ON m.id = b.movie_id GROUP BY m.director;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B19?code=code-B19-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Additional topic · Subqueries
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT e.* FROM employees e
+WHERE e.salary &gt; (SELECT AVG(d.revenue_generated) FROM employees d
+                  WHERE d.department = e.department);</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B20?code=code-B20-2&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Additional topic · Set operations
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT id FROM a UNION SELECT id FROM b;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B20?code=code-B20-4&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Additional topic · Set operations
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT id FROM a INTERSECT SELECT id FROM b;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B20?code=code-B20-6&amp;method=sql-select&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Additional topic · Set operations
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT id FROM a EXCEPT SELECT id FROM b;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    Methods present in the supplied code, added to the image-based index · Also used in these notes. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://dev.mysql.com/doc/refman/8.4/en/" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=sql&amp;cat=Also%20used%20in%20these%20notes">
+   <small>
+    ← Browse
+   </small>
+   MySQL · Also used in these notes
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

@@ -1,0 +1,1047 @@
+{
+  "id": "pd-new-column",
+  "lang": "pd",
+  "category": "Creating / modifying columns",
+  "label": "New column",
+  "example": "df['x'] = df['a'] + df['b']",
+  "description": "Create column",
+  "source": "image-pandas",
+  "related": [],
+  "note": "Assign through the DataFrame itself. Chained assignment such as df[\"x\"][mask] = value does not update the parent under Copy-on-Write.",
+  "doc": "https://pandas.pydata.org/docs/user_guide/copy_on_write.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C05",
+      "block": "code-C05-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1683 · Invalid tweets",
+      "number": "1683",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def invalid_tweets(tweets: pd.DataFrame) -> pd.DataFrame:\n    tweets['valid'] = tweets['content'].str.len()   <= 15\n    \"\"\"\n    Alternative using APPLY method",
+      "snippetLine": 3
+    },
+    {
+      "page": "C05",
+      "block": "code-C05-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1683 · Invalid tweets",
+      "number": "1683",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def invalid_tweets(tweets: pd.DataFrame) -> pd.DataFrame:\n    tweets['valid'] = tweets['content'].str.len() <= 15\n    \"\"\"\n    Alternative using APPLY method",
+      "snippetLine": 3
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-1",
+      "line": 12,
+      "lines": [
+        12,
+        14
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df = df_s.merge(df_e, on=['machine_id', 'process_id'], how='inner', suffixes=('_s', '_e'))\n    df['processing_time'] = df['timestamp_e'] - df['timestamp_s']\n    result = df.groupby('machine_id', as_index=False).agg(processing_time=('processing_time', 'mean'))\n    result['processing_time'] = result['processing_time'].map(lambda x: round_half_up(x, 3))",
+      "snippetLine": 11
+    },
+    {
+      "page": "C46",
+      "block": "code-C46-3",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1661 · Average processing time per machine",
+      "number": "1661",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = df_s.merge(df_e, on=['machine_id', 'process_id'], how='left', suffixes=('_s', '_e'))\n    df['processing_time'] = df['timestamp_e'] - df['timestamp_s']\n    df = df.drop(columns=['process_id', 'activity_type_s', 'activity_type_e', 'timestamp_s', 'timestamp_e'])\n",
+      "snippetLine": 6
+    },
+    {
+      "page": "C48",
+      "block": "code-C48-1",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left')\n    df['attended_exams'] = df['attended_exams'].fillna(0).astype(int)\n    return df[['student_id', 'student_name', 'subject_name', 'attended_exams']].sort_values(['student_id', 'subject_name'])",
+      "snippetLine": 6
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-1",
+      "line": 10,
+      "lines": [
+        10,
+        15
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df = signups.merge(confirmations, on='user_id', how='left')[['user_id', 'action']]\n    df['confirmation_rate'] = df.action.eq('confirmed').fillna(False)\n    df = df.groupby('user_id', as_index=False).agg(\n        total=('confirmation_rate', 'size'),",
+      "snippetLine": 9
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-3",
+      "line": 5,
+      "lines": [
+        5,
+        12
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = signups.merge(confirmations, on='user_id', how='left')[['user_id', 'action']]\n    df['confirmation_rate'] = df.action == 'confirmed'\n\n    df = df[['user_id', 'confirmation_rate']].groupby(by='user_id').agg(",
+      "snippetLine": 4
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-1",
+      "line": 13,
+      "lines": [
+        13,
+        15,
+        17
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    matched = matched.loc[matched['purchase_date'].between(matched['start_date'], matched['end_date'])].copy()\n    matched['paid'] = matched['price'] * matched['units']\n    g = matched.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))\n    g['average_price'] = (g['paid'] / g['units'].replace(0, float('nan'))).map(round_half_up)",
+      "snippetLine": 12
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-3",
+      "line": 14,
+      "lines": [
+        14,
+        16,
+        18
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df = df[df.purchase_date.isna() | df.purchase_date.between(df.start_date, df.end_date)].copy()\n    df['paid'] = df['price'] * df['units']\n    totals = df.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))\n    totals['average_price'] = (totals['paid'] / totals['units'].replace(0, float('nan'))).map(round_half_up)",
+      "snippetLine": 13
+    },
+    {
+      "page": "C07",
+      "block": "code-C07-5",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = df[df.purchase_date.isna() | ((df.end_date >= df.purchase_date) & (df.purchase_date >= df.start_date))]\n    df['paid'] = df['price'] * df['units']\n    \n    return df.groupby(by='product_id').apply(",
+      "snippetLine": 5
+    },
+    {
+      "page": "C08",
+      "block": "code-C08-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    g = m.groupby('project_id', as_index=False).agg(average_years=('experience_years', 'mean'))\n    g['average_years'] = g['average_years'].map(round_half_up)\n    return g",
+      "snippetLine": 10
+    },
+    {
+      "page": "C08",
+      "block": "code-C08-3",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    ).reset_index()\n    df['average_years'] =   (df['total_years'] / df['n_employees']).map(round_half_up)\n    return df[['project_id', 'average_years']]",
+      "snippetLine": 13
+    },
+    {
+      "page": "C08",
+      "block": "code-C08-5",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df['average_years'] = (df['total_years'] / df['n_employees']).round(2)\n\n    return df[['project_id', 'average_years']]",
+      "snippetLine": 9
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-1",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    g = register.groupby('contest_id').size().reset_index(name='participants')\n    g['percentage'] = (100 * g['participants'] / len(users)).map(round_half_up)\n    return g[['contest_id', 'percentage']].sort_values(['percentage', 'contest_id'], ascending=[False, True])",
+      "snippetLine": 9
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-3",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    ).reset_index()\n    df['percentage'] = (100 * df['nUsersPerTest'] / nUsers).map(round_half_up)\n    return df[['contest_id', 'percentage']].sort_values(by=['percentage', 'contest_id'], ascending=[False, True])",
+      "snippetLine": 12
+    },
+    {
+      "page": "C09",
+      "block": "code-C09-5",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1633 · Users registered in a contest",
+      "number": "1633",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df['percentage'] = (100 * df['nUsersPerTest'] / nUsers).round(2)\n\n    return df[['contest_id', 'percentage']].sort_values(by=['percentage', 'contest_id'], ascending=[False, True])",
+      "snippetLine": 8
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-1",
+      "line": 11,
+      "lines": [
+        11,
+        12
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    g = q.groupby('query_name', dropna=False, as_index=False).agg(quality=('quality_ratio', 'mean'), poor_query_percentage=('poor', 'mean'))\n    g['quality'] = g['quality'].map(round_half_up)\n    g['poor_query_percentage'] = (100 * g['poor_query_percentage']).map(round_half_up)\n    return g",
+      "snippetLine": 10
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-3",
+      "line": 9,
+      "lines": [
+        9,
+        10,
+        16,
+        17
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def queries_stats(queries: pd.DataFrame) -> pd.DataFrame:\n    queries['quality_ratio'] =   queries['rating'] / queries['position']\n    queries['poor'] = (queries['rating'] < 3) * 100\n    df =   queries.groupby(by='query_name', dropna=False).agg(",
+      "snippetLine": 8
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-5",
+      "line": 4,
+      "lines": [
+        4,
+        5,
+        14,
+        15
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def queries_stats(queries: pd.DataFrame) -> pd.DataFrame:\n    queries['quality_ratio'] = queries['rating'] / queries['position']\n    queries['poor'] = queries['rating'].apply(\n        lambda x: 1 if x < 3 else 0",
+      "snippetLine": 3
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-1",
+      "line": 5,
+      "lines": [
+        5,
+        6
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    t = transactions.assign(month=pd.to_datetime(transactions['trans_date']).dt.strftime('%Y-%m'))\n    t['approved'] = t['state'].eq('approved')\n    t['approved_amount'] = t['amount'].where(t['approved'], 0)\n    return t.groupby(['month', 'country'], dropna=False, as_index=False).agg(",
+      "snippetLine": 4
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-3",
+      "line": 4,
+      "lines": [
+        4,
+        5,
+        6
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def monthly_transactions(transactions: pd.DataFrame) -> pd.DataFrame:\n    transactions['approved'] =   transactions.state == 'approved'\n    transactions['month'] =   pd.to_datetime(transactions['trans_date']).dt.strftime(\"%Y-%m\")\n    transactions['approved_amount'] =   transactions['approved'] * transactions['amount']",
+      "snippetLine": 3
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-5",
+      "line": 4,
+      "lines": [
+        4,
+        5,
+        6
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def monthly_transactions(transactions: pd.DataFrame) -> pd.DataFrame:\n    transactions['approved'] = transactions.state == 'approved'\n    transactions['month'] = transactions.trans_date.dt.strftime(\"%Y-%m\")\n    transactions['approved_amount'] = transactions['approved'] * transactions['amount']",
+      "snippetLine": 3
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-3",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "                               customer_pref_delivery_date=pd.to_datetime(delivery['customer_pref_delivery_date'])).reset_index(drop=True)\n    delivery['immediate'] =   delivery['order_date'] == delivery['customer_pref_delivery_date']\n    idx_to_keep =   delivery.groupby(by='customer_id')['order_date'].idxmin()\n    return   pd.DataFrame({'immediate_percentage': [round_half_up(100 * delivery['immediate'][idx_to_keep].mean(), 2)]})",
+      "snippetLine": 10
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def immediate_food_delivery(delivery: pd.DataFrame) -> pd.DataFrame:\n    delivery['immediate'] = delivery['order_date'] == delivery['customer_pref_delivery_date']\n    idx_to_keep = delivery.groupby(by='customer_id')['order_date'].idxmin()\n    return pd.DataFrame({'immediate_percentage': [round(100 * delivery['immediate'][idx_to_keep].mean(), 2)]})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-3",
+      "line": 10,
+      "lines": [
+        10,
+        11
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    activity = activity.assign(event_date=pd.to_datetime(activity['event_date']))\n    activity['first_login'] =   activity.groupby(by='player_id')['event_date'].transform('min')\n    activity['valid'] = activity['event_date'] ==   activity['first_login'] + pd.Timedelta(days = 1)\n",
+      "snippetLine": 9
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-5",
+      "line": 4,
+      "lines": [
+        4,
+        5
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def gameplay_analysis(activity: pd.DataFrame) -> pd.DataFrame:\n    activity['first_login'] = activity.groupby(by='player_id')['event_date'].transform('min')\n    activity['valid'] = activity['event_date'] == activity['first_login'] + pd.Timedelta(days = 1)\n    ",
+      "snippetLine": 3
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-3",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "\n    activity['activity_date'] =   pd.to_datetime(activity['activity_date'])\n    end_date = pd.Timestamp('2019-07-27')\n    start_date = end_date - pd.Timedelta(days=29)",
+      "snippetLine": 6
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-5",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    activity['activity_date'] = pd.to_datetime(activity['activity_date'])\n    end_date = pd.Timestamp('2019-07-27')\n    start_date = end_date - pd.Timedelta(days=29)",
+      "snippetLine": 6
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def sales_analysis(sales: pd.DataFrame) -> pd.DataFrame:\n    sales['year_order'] = sales.groupby(by='product_id')['year'].rank(method='min')\n    sales = sales[sales['year_order'] == 1]\n    sales = sales[['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def sales_analysis(sales: pd.DataFrame) -> pd.DataFrame:\n    sales['year_order'] = sales.groupby(by='product_id')['year'].rank(method='min')\n    sales = sales[sales['year_order'] == 1]\n    sales = sales[['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-1",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    )\n    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)\n    df = by_manager.merge(employees[['employee_id', 'name']], how='left',\n                          left_on='reports_to', right_on='employee_id')",
+      "snippetLine": 7
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-3",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    )\n    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)\n    df = by_manager.merge(employees[['employee_id', 'name']], how='left', left_on='reports_to', right_on='employee_id')\n    df.rename(columns={'employee_id_y': 'employee_id'}, inplace=True)",
+      "snippetLine": 7
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-3",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def find_primary_department(employee: pd.DataFrame) -> pd.DataFrame:\n    employee['nDepartments'] =   employee.groupby('employee_id').department_id.transform('count')\n    employee =   employee.query(\"(primary_flag == 'Y')   | (nDepartments == 1)\")\n    return employee[['employee_id', 'department_id']]",
+      "snippetLine": 2
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def find_primary_department(employee: pd.DataFrame) -> pd.DataFrame:\n    employee['nDepartments'] = employee.groupby('employee_id').department_id.transform('count')\n    employee = employee.query(\"(primary_flag == 'Y') | (nDepartments == 1)\")\n    return employee[['employee_id', 'department_id']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C23",
+      "block": "code-C23-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "610 · Triangle judgement",
+      "number": "610",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    valid = (t['x'] + t['y'] > t['z']) & (t['x'] + t['z'] > t['y']) & (t['y'] + t['z'] > t['x'])\n    t['triangle'] = valid.map({True: 'Yes', False: 'No'})\n    return t",
+      "snippetLine": 5
+    },
+    {
+      "page": "C23",
+      "block": "code-C23-3",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "610 · Triangle judgement",
+      "number": "610",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        else: return 'Yes'\n    triangle['triangle'] =   triangle.apply(triangle_check, axis=1)\n    return triangle",
+      "snippetLine": 8
+    },
+    {
+      "page": "C23",
+      "block": "code-C23-5",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "610 · Triangle judgement",
+      "number": "610",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    triangle['triangle'] = triangle.apply(triangle_check, axis=1)\n    return triangle",
+      "snippetLine": 9
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def consecutive_numbers(logs: pd.DataFrame) -> pd.DataFrame:\n    logs['var'] = logs['num'].rolling(window=3).var()\n    return pd.DataFrame({'ConsecutiveNums': logs[logs['var']==0]['num'].unique()})",
+      "snippetLine": 3
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-1",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    result = p[['product_id']].drop_duplicates().merge(latest[['product_id', 'new_price']], on='product_id', how='left')\n    result['price'] = result['new_price'].fillna(10)\n    return result[['product_id', 'price']]",
+      "snippetLine": 7
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    queue.sort_values(by='turn', ascending=True, inplace=True)\n    queue['cumsum_weight'] = queue['weight'].cumsum()\n    return   queue[queue.cumsum_weight <= 1000].tail(1)[['person_name']]",
+      "snippetLine": 4
+    },
+    {
+      "page": "C26",
+      "block": "code-C26-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1204 · Last person to fit in the bus",
+      "number": "1204",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    queue.sort_values(by='turn', ascending=True, inplace=True)\n    queue['cumsum_weight'] = queue['weight'].cumsum()\n    return queue[queue.cumsum_weight <= 1000].tail(1)[['person_name']]",
+      "snippetLine": 4
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-3",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "            else: return x + 1\n    seat['id'] = seat['id'].transform(swap_ids)\n    return   seat.sort_values(by='id', ascending=True)",
+      "snippetLine": 8
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-5",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    seat['id'] = seat['id'].transform(swap_ids)\n    return seat.sort_values(by='id', ascending=True)",
+      "snippetLine": 11
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-1",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    result = rolled.rename('amount').reset_index()\n    result['average_amount'] = (result['amount'] / 7).map(round_half_up)\n    return result",
+      "snippetLine": 15
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-3",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    result = total.rename('amount').reset_index()\n    result['average_amount'] = (result['amount'] / 7).map(round_half_up)\n    return result",
+      "snippetLine": 15
+    },
+    {
+      "page": "C31",
+      "block": "code-C31-5",
+      "line": 7,
+      "lines": [
+        7,
+        8
+      ],
+      "title": "1321 · Restaurant growth",
+      "number": "1321",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    nDays = 7\n    customer['amount'] = customer.amount.rolling(nDays).sum()\n    customer['average_amount'] = (customer.amount / nDays).round(2)\n",
+      "snippetLine": 6
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-3",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def top_three_salaries(employee: pd.DataFrame, department: pd.DataFrame) -> pd.DataFrame:\n    employee['ranked'] = employee.groupby(by='departmentId')['salary'].rank(method='dense', ascending=False)\n    employee =   employee[employee.ranked <= 3]\n    df =   employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])",
+      "snippetLine": 2
+    },
+    {
+      "page": "C34",
+      "block": "code-C34-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "185 · Department top three salaries",
+      "number": "185",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def top_three_salaries(employee: pd.DataFrame, department: pd.DataFrame) -> pd.DataFrame:\n    employee['ranked'] = employee.groupby(by='departmentId')['salary'].rank(method='dense', ascending=False)\n    employee = employee[employee.ranked <= 3]\n    df = employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])",
+      "snippetLine": 3
+    },
+    {
+      "page": "C35",
+      "block": "code-C35-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1667 · Fix names in a table",
+      "number": "1667",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    result = users.copy()\n    result['name'] = result['name'].str[:1].str.upper() + result['name'].str[1:].str.lower()\n    return result.sort_values('user_id')",
+      "snippetLine": 4
+    },
+    {
+      "page": "C35",
+      "block": "code-C35-3",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "1667 · Fix names in a table",
+      "number": "1667",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        else: return x[0].upper()\n    users['name'] = users['name'].transform(fix_string)\n\n    return   users.sort_values(by='user_id')",
+      "snippetLine": 8
+    },
+    {
+      "page": "C35",
+      "block": "code-C35-5",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1667 · Fix names in a table",
+      "number": "1667",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    users['name'] = users['name'].transform(fix_string)\n    \n    return users.sort_values(by='user_id')",
+      "snippetLine": 7
+    },
+    {
+      "page": "LC262",
+      "block": "code-LC262-1",
+      "line": 24,
+      "lines": [
+        24
+      ],
+      "title": "262 · Trips and users",
+      "number": "262",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df['Cancellation Rate'] = (df['cancelTotal'] / df['validTotal']).round(2)\n    df = df.rename(columns={'request_at': 'Day'})\n",
+      "snippetLine": 23
+    },
+    {
+      "page": "LC601",
+      "block": "code-LC601-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "601 · Human traffic of stadium",
+      "number": "601",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = df.reset_index(drop=True)\n    df['groups'] = df['id'] - (df.index + 1)\n\n    valid_groups = df.groupby(by='groups').agg(",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC608",
+      "block": "code-LC608-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "608 · Tree node",
+      "number": "608",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": " \n    tree['type'] = tree.apply(classify, axis=1)\n\n    return tree[['id', 'type']]",
+      "snippetLine": 10
+    },
+    {
+      "page": "LC1393",
+      "block": "code-LC1393-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1393 · Capital gain/loss",
+      "number": "1393",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    flag = stocks['operation'] == 'Buy'\n    stocks['price'][flag] = -1 * stocks['price']\n\n    return stocks.groupby(by='stock_name').agg(",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC1393",
+      "block": "code-LC1393-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1393 · Capital gain/loss",
+      "number": "1393",
+      "group": "practice",
+      "context": "Working reference variation",
+      "snippet": "    buy = df['operation'].eq('Buy')\n    df.loc[buy, 'price'] = -df.loc[buy, 'price']\n    return df.groupby('stock_name', as_index=False).agg(\n        capital_gain_loss=('price', 'sum')",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC3220",
+      "block": "code-LC3220-1",
+      "line": 5,
+      "lines": [
+        5,
+        6
+      ],
+      "title": "3220 · Odd and even transactions",
+      "number": "3220",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    flag_even = transactions['amount'] % 2 == 0\n    transactions['amount_odd'] = ~flag_even * transactions['amount']\n    transactions['amount_even'] = flag_even * transactions['amount']\n    ",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC3475",
+      "block": "code-LC3475-1",
+      "line": 4,
+      "lines": [
+        4,
+        5,
+        8,
+        9
+      ],
+      "title": "3475 · DNA pattern recognition",
+      "number": "3475",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def analyze_dna_patterns(samples: pd.DataFrame) -> pd.DataFrame:\n    samples['has_start'] = (samples.dna_sequence.str.startswith('ATG')).astype('int')\n    samples['has_stop'] = (samples.dna_sequence.str.endswith('TAA') | \n                           samples.dna_sequence.str.endswith('TAG') | ",
+      "snippetLine": 3
+    },
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-1",
+      "line": 10,
+      "lines": [
+        10,
+        11
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    sales['season'] = sales['sale_date'].dt.month.apply(season)\n    sales['revenue'] = (sales['quantity'] * sales['price']).round(2)\n    sales = sales.merge(products, on='product_id', how='left')",
+      "snippetLine": 9
+    },
+    {
+      "page": "LC3580",
+      "block": "code-LC3580-1",
+      "line": 11,
+      "lines": [
+        11,
+        14,
+        15,
+        18
+      ],
+      "title": "3580 · Find consistently improving employees",
+      "number": "3580",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df['nRating'] = df.groupby(by='employee_id').rating.transform('size')\n    df = df[df.nRating >= 3]\n",
+      "snippetLine": 10
+    },
+    {
+      "page": "squid-02",
+      "block": "code-squid-02-1",
+      "line": 6,
+      "lines": [
+        6,
+        8
+      ],
+      "title": "Calculate the ration threshold",
+      "number": "02",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "result = rations[['amount']].copy()\nresult['portions'] = portions\ninsufficient = result['amount'].lt(portions).fillna(False)\nresult['amount'] = insufficient.map({True: 'False', False: 'True'})",
+      "snippetLine": 5
+    },
+    {
+      "page": "squid-04",
+      "block": "code-squid-04-1",
+      "line": 6,
+      "lines": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "title": "Rank ten-player teams",
+      "number": "04",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "result = teams.loc[teams['n_players'].eq(10), ['team_id', 'age_team']].copy()\nresult['age_group'] = 'Grizzled'\nresult.loc[result['age_team'].lt(40), 'age_group'] = 'Fit'\nresult.loc[result['age_team'].gt(50), 'age_group'] = 'Elderly'",
+      "snippetLine": 5
+    },
+    {
+      "page": "squid-05",
+      "block": "code-squid-05-1",
+      "line": 5,
+      "lines": [
+        5,
+        8
+      ],
+      "title": "Count a player’s closest interactions",
+      "number": "05",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "interactions = daily_interactions.loc[mask].copy()\ninteractions['player_id'] = interactions['player1_id'].where(\n    interactions['player1_id'].ne(456), interactions['player2_id'])\ncounts = interactions.groupby('player_id', as_index=False).size().rename(columns={'size': 'counts'})",
+      "snippetLine": 4
+    },
+    {
+      "page": "squid-06",
+      "block": "code-squid-06-1",
+      "line": 13,
+      "lines": [
+        13,
+        14
+      ],
+      "title": "Trace equipment to its first failure",
+      "number": "06",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    failures = in_game.loc[in_game['supplier_id'].eq(supplier_id)].copy()\n    failures['installation_date'] = pd.to_datetime(failures['installation_date'])\n    failures['failure_date'] = pd.to_datetime(failures['failure_date'])\n    first = failures.groupby('failed_equipment_id').agg(",
+      "snippetLine": 12
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-1",
+      "line": 14,
+      "lines": [
+        14,
+        17
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "checked = pd.to_timedelta(joined['last_seen_in_room'].astype('string'))\njoined['time_between_room_and_outside'] = seen - checked\ntimes = pd.to_timedelta(camera.loc[camera['guard_spotted_id'].notna(),\n                                    'movement_detected_time'].astype('string'))",
+      "snippetLine": 13
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "games = game_schedule.loc[game_schedule['type'].str.lower().eq('squid game')].copy()\ngames['date'] = pd.to_datetime(games['date'])\nresult = pd.DataFrame(columns=['id', 'access_time'])\nif not games.empty:",
+      "snippetLine": 3
+    },
+    {
+      "page": "B14",
+      "block": "code-B14-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "UPDATE rows",
+      "number": "14",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies.loc[movies['title'].eq(\"A Bug's Life\"), 'director'] = 'John Lasseter'",
+      "snippetLine": 1
+    },
+    {
+      "page": "B14",
+      "block": "code-B14-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "UPDATE rows",
+      "number": "14",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies.loc[movies['title'].eq('Toy Story 2'), 'year'] = 1999",
+      "snippetLine": 1
+    },
+    {
+      "page": "B14",
+      "block": "code-B14-5",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "UPDATE rows",
+      "number": "14",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies.loc[movies['title'].eq('Toy Story 8'), ['title', 'director']] = ['Toy Story 3', 'Lee Unkrich']",
+      "snippetLine": 1
+    },
+    {
+      "page": "B17",
+      "block": "code-B17-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "ALTER TABLE",
+      "number": "17",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies['aspect_ratio'] = pd.Series(pd.NA, index=movies.index, dtype='Float64')",
+      "snippetLine": 1
+    },
+    {
+      "page": "B17",
+      "block": "code-B17-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "ALTER TABLE",
+      "number": "17",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies['language'] = 'English'",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 39
+}

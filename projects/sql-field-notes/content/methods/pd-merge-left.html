@@ -1,0 +1,849 @@
+<article class="article method-page" id="m-pd-merge-left">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=Merge%20/%20join">
+   pandas · Merge / join
+  </a>
+ </div>
+ <h1>
+  Left merge
+ </h1>
+ <p class="lead">
+  Keep all left
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-merge-left"><span class="n">a</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span></code></pre>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-sql-left-join">
+   SQL · LEFT JOIN
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C43?code=code-C43-3&amp;method=pd-merge-left&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1068 · Product sales analysis I
+    </strong>
+    <small>
+     Uploaded submission · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">def sales_analysis(sales: pd.DataFrame, product: pd.DataFrame) -&gt; pd.DataFrame:
+    df = sales.merge(product, on='product_id', how='left')
+    return df[['product_name', 'year', 'price']]</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#murder-03?code=code-murder-03-1&amp;method=pd-merge-left&amp;line=3">
+   <div>
+    <span class="usage-label">
+     Murder City · pandas
+    </span>
+    <strong>
+     Read the witness interviews
+    </strong>
+    <small>
+     Saved walkthrough · line 3
+    </small>
+   </div>
+   <pre aria-hidden="true">
+joined = interview.merge(person[['id', 'name']], how='left',
+                         left_on='person_id', right_on='id')
+result = joined.loc[joined['id'].isin([14887, 16371]),</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-merge-left&amp;line=8">
+   <div>
+    <span class="usage-label">
+     Squid Game · pandas
+    </span>
+    <strong>
+     Join room checks and camera sightings
+    </strong>
+    <small>
+     Saved walkthrough · line 8
+    </small>
+   </div>
+   <pre aria-hidden="true">                                 'location': 'spotted_outside_room_location'})
+joined = guards.merge(rooms, how='left', left_on='assigned_room_id', right_on='room_id')
+joined = joined.merge(cameras.loc[cameras['guard_spotted_id'].notna()],
+                      left_on='guard_number', right_on='guard_spotted_id')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#B07?code=code-B07-5&amp;method=pd-merge-left&amp;line=1">
+   <div>
+    <span class="usage-label">
+     SQLBolt · pandas
+    </span>
+    <strong>
+     OUTER JOINs
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">m = buildings.merge(employees, left_on='building_name', right_on='building', how='left')
+result = m[['building_name', 'role']].drop_duplicates()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C44?code=code-C44-1&amp;method=pd-merge-left&amp;line=4">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1581 · Customers who visited without transactions
+    </strong>
+    <small>
+     Study solution · line 4
+    </small>
+   </div>
+   <pre aria-hidden="true">def find_customers(visits: pd.DataFrame, transactions: pd.DataFrame) -&gt; pd.DataFrame:
+    df = visits.merge(transactions, on='visit_id', how='left')
+    df = df[df.transaction_id.isna()]
+    return df.groupby('customer_id').size().reset_index(name='count_no_trans')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C46?code=code-C46-3&amp;method=pd-merge-left&amp;line=6">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1661 · Average processing time per machine
+    </strong>
+    <small>
+     Uploaded submission · line 6
+    </small>
+   </div>
+   <pre aria-hidden="true">    df_e = activity[activity.activity_type == 'end']
+    df = df_s.merge(df_e, on=['machine_id', 'process_id'], how='left', suffixes=('_s', '_e'))
+    df['processing_time'] = df['timestamp_e'] - df['timestamp_s']
+    df = df.drop(columns=['process_id', 'activity_type_s', 'activity_type_e', 'timestamp_s', 'timestamp_e'])</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   20 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C47?code=code-C47-1&amp;method=pd-merge-left&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      577 · Employee bonus
+     </strong>
+     <small>
+      Study solution · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">def employee_bonus(employee: pd.DataFrame, bonus: pd.DataFrame) -&gt; pd.DataFrame:
+    df = employee.merge(bonus, on='empId', how='left')
+    return df[(df.bonus &lt; 1000) | (df.bonus.isna())][['name', 'bonus']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C48?code=code-C48-1&amp;method=pd-merge-left&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1280 · Students and examinations
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    exam_count = examinations.groupby(['student_id', 'subject_name']).size().reset_index(name='attended_exams')
+    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left')
+    df['attended_exams'] = df['attended_exams'].fillna(0).astype(int)
+    return df[['student_id', 'student_name', 'subject_name', 'attended_exams']].sort_values(['student_id', 'subject_name'])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C49?code=code-C49-1&amp;method=pd-merge-left&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      570 · Managers with at least five direct reports
+     </strong>
+     <small>
+      Study solution · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">    ).reset_index().rename(columns={'managerId': 'id'})
+    df = employee.merge(reports, on='id', how='left')
+    return df[df.nReports &gt;= 5][['name']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C50?code=code-C50-1&amp;method=pd-merge-left&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1934 · Confirmation rate
+     </strong>
+     <small>
+      Study solution · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">def confirmation_rate(signups: pd.DataFrame, confirmations: pd.DataFrame) -&gt; pd.DataFrame:
+    df = signups.merge(confirmations, on='user_id', how='left')[['user_id', 'action']]
+    df['confirmation_rate'] = df.action.eq('confirmed').fillna(False)
+    df = df.groupby('user_id', as_index=False).agg(</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-1&amp;method=pd-merge-left&amp;line=16">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      Study solution · line 16
+     </small>
+    </div>
+    <pre aria-hidden="true">    g['average_price'] = (g['paid'] / g['units'].replace(0, float('nan'))).map(round_half_up)
+    result = p[['product_id']].drop_duplicates().merge(g[['product_id', 'average_price']], on='product_id', how='left')
+    result['average_price'] = result['average_price'].fillna(0)
+    return result</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C08?code=code-C08-1&amp;method=pd-merge-left&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1075 · Project employees I
+     </strong>
+     <small>
+      Study solution · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">def project_employees_i(project: pd.DataFrame, employee: pd.DataFrame) -&gt; pd.DataFrame:
+    m = project.merge(employee, on='employee_id', how='left', validate='many_to_one')
+    g = m.groupby('project_id', as_index=False).agg(average_years=('experience_years', 'mean'))
+    g['average_years'] = g['average_years'].map(round_half_up)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C20?code=code-C20-3&amp;method=pd-merge-left&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1045 · Customers who bought every product
+     </strong>
+     <small>
+      My approach · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    ).reset_index()
+    df = customer_ids.merge(df, on='customer_id', how='left').fillna({'nSold': 0})
+    return df[df.nSold == nProducts][['customer_id']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C21?code=code-C21-1&amp;method=pd-merge-left&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1731 · Employees reporting to employees
+     </strong>
+     <small>
+      Study solution · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)
+    df = by_manager.merge(employees[['employee_id', 'name']], how='left',
+                          left_on='reports_to', right_on='employee_id')
+    return df[['employee_id', 'name', 'reports_count', 'average_age']].sort_values('employee_id')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C25?code=code-C25-1&amp;method=pd-merge-left&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1164 · Product price at a given date
+     </strong>
+     <small>
+      Study solution · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    latest = valid.sort_values('change_date').drop_duplicates('product_id', keep='last')
+    result = p[['product_id']].drop_duplicates().merge(latest[['product_id', 'new_price']], on='product_id', how='left')
+    result['price'] = result['new_price'].fillna(10)
+    return result[['product_id', 'price']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-3&amp;method=pd-merge-left&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      My approach · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">    ).reset_index()
+    df_users =   df_users.merge(users, on='user_id', how='left').sort_values(by=['nReviews', 'name'], ascending=[False, True])[['name', 'nReviews']]
+    df_movies =   movie_rating[(movie_rating.created_at &gt;=   '2020-02-01') &amp; (movie_rating.created_at &lt; '2020-03-01')]
+    df_movies = df_movies.groupby(by='movie_id').agg(</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-3&amp;method=pd-merge-left&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      My approach · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">    df =   df[df.unit &gt;= 100]
+    df =   df.merge(products, on='product_id', how='left')
+    return df[['product_name', 'unit']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC607?code=code-LC607-1&amp;method=pd-merge-left&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      607 · Sales person
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def sales_person(sales_person: pd.DataFrame, company: pd.DataFrame, orders: pd.DataFrame) -&gt; pd.DataFrame:
+    orders = orders.merge(company, on='com_id', how='left')
+    orders = orders[orders.name.eq('RED')]
+    idexlude = orders['sales_id'].unique()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC1158?code=code-LC1158-1&amp;method=pd-merge-left&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1158 · Market analysis I
+     </strong>
+     <small>
+      Uploaded submission · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = users.merge(df, left_on='user_id', right_on='buyer_id', how='left')
+    df = df[['user_id', 'join_date', 'orders_in_2019']]
+    df = df.rename(columns={'user_id': 'buyer_id'})</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3521?code=code-LC3521-1&amp;method=pd-merge-left&amp;line=18">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3521 · Find product recommendation pairs
+     </strong>
+     <small>
+      Uploaded submission · line 18
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = df.merge(product_info, left_on='product1_id', right_on='product_id', how='left').rename(columns={
+        'category': 'product1_category'})
+    </pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3564?code=code-LC3564-1&amp;method=pd-merge-left&amp;line=12">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3564 · Seasonal sales analysis
+     </strong>
+     <small>
+      Uploaded submission · line 12
+     </small>
+    </div>
+    <pre aria-hidden="true">    sales['revenue'] = (sales['quantity'] * sales['price']).round(2)
+    sales = sales.merge(products, on='product_id', how='left')
+
+    sales = sales[['season', 'category', 'quantity', 'revenue']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3580?code=code-LC3580-1&amp;method=pd-merge-left&amp;line=20">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      3580 · Find consistently improving employees
+     </strong>
+     <small>
+      Uploaded submission · line 20
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = df.merge(employees, on='employee_id', how='left')
+    
+    return df.sort_values(by=['improvement_score', 'name'], ascending=[False, True])[['employee_id', 'name', 'improvement_score']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-04?code=code-murder-04-1&amp;method=pd-merge-left&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Murder City · pandas
+     </span>
+     <strong>
+      Follow the gym clue
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">
+joined = get_fit_now_check_in.merge(get_fit_now_member, how='left',
+                                   left_on='membership_id', right_on='id')
+mask = (joined['check_in_date'].astype('string').eq('20180109')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-05?code=code-murder-05-1&amp;method=pd-merge-left&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Murder City · pandas
+     </span>
+     <strong>
+      Cross-check the licence plate
+     </strong>
+     <small>
+      Saved walkthrough · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">people = person[['license_id', 'name']]
+joined = drivers_license.merge(people, how='left', left_on='id', right_on='license_id')
+mask = joined['plate_number'].str.contains('H42W', regex=False, na=False)
+result = joined.loc[mask, ['id', 'age', 'plate_number', 'car_make', 'car_model', 'name']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-07?code=code-murder-07-1&amp;method=pd-merge-left&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Murder City · pandas
+     </span>
+     <strong>
+      Follow the second interview
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">
+joined = person[['id', 'name']].merge(interview, how='left',
+                                     left_on='id', right_on='person_id')
+result = joined.loc[joined['person_id'].eq(67318), ['id', 'name', 'transcript']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#murder-09?code=code-murder-09-1&amp;method=pd-merge-left&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Murder City · pandas
+     </span>
+     <strong>
+      Inspect December event check-ins
+     </strong>
+     <small>
+      Saved walkthrough · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">
+joined = facebook_event_checkin.merge(person[['id', 'name']], how='left',
+                                      left_on='person_id', right_on='id')
+dates = pd.to_numeric(joined['date'], errors='coerce')</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (12)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C44?code=code-C44-3&amp;method=pd-merge-left&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1581 · Customers who visited without transactions
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def find_customers(visits: pd.DataFrame, transactions: pd.DataFrame) -&gt; pd.DataFrame:
+    df = visits.merge(transactions, on='visit_id', how='left')
+    df = df[df.amount.isna()]
+    return df.groupby(by='customer_id')['amount'].agg(count_no_trans = 'size').reset_index()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C47?code=code-C47-3&amp;method=pd-merge-left&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      577 · Employee bonus
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def employee_bonus(employee: pd.DataFrame, bonus: pd.DataFrame) -&gt; pd.DataFrame:
+    df = employee.merge(bonus, on='empId', how='left')
+    return df[(df.bonus &lt; 1000) | (df.bonus.isna())][['name', 'bonus']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C48?code=code-C48-3&amp;method=pd-merge-left&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1280 · Students and examinations
+     </strong>
+     <small>
+      Uploaded submission · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left').fillna(0)
+    return df.sort_values(['student_id', 'subject_name'])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C49?code=code-C49-3&amp;method=pd-merge-left&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      570 · Managers with at least five direct reports
+     </strong>
+     <small>
+      Uploaded submission · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    df = employee.merge(reports, on='id', how='left')
+
+    return df[df.nReports &gt;= 5][['name']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C50?code=code-C50-3&amp;method=pd-merge-left&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1934 · Confirmation rate
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def confirmation_rate(signups: pd.DataFrame, confirmations: pd.DataFrame) -&gt; pd.DataFrame:
+    df = signups.merge(confirmations, on='user_id', how='left')[['user_id', 'action']]
+    df['confirmation_rate'] = df.action == 'confirmed'
+</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-merge-left&amp;line=12">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      My approach · line 12
+     </small>
+    </div>
+    <pre aria-hidden="true">    units_sold = units_sold.assign(purchase_date=pd.to_datetime(units_sold['purchase_date']))
+    df = prices.merge(units_sold, on='product_id', how='left')
+    df = df[df.purchase_date.isna() | df.purchase_date.between(df.start_date, df.end_date)].copy()
+    df['paid'] = df['price'] * df['units']</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-5&amp;method=pd-merge-left&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def average_selling_price(prices: pd.DataFrame, units_sold: pd.DataFrame) -&gt; pd.DataFrame:
+    df = prices.merge(units_sold, on='product_id', how='left')
+    df = df[df.purchase_date.isna() | ((df.end_date &gt;= df.purchase_date) &amp; (df.purchase_date &gt;= df.start_date))]
+    df['paid'] = df['price'] * df['units']</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C08?code=code-C08-3&amp;method=pd-merge-left&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1075 · Project employees I
+     </strong>
+     <small>
+      My approach · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">def project_employees_i(project: pd.DataFrame, employee: pd.DataFrame) -&gt; pd.DataFrame:
+    df =   project.merge(employee, on='employee_id', how='left')[['project_id', 'experience_years']]
+    df =   df.groupby(by='project_id').agg(
+        total_years = ('experience_years', 'sum'),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C08?code=code-C08-5&amp;method=pd-merge-left&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1075 · Project employees I
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">def project_employees_i(project: pd.DataFrame, employee: pd.DataFrame) -&gt; pd.DataFrame:
+    df = project.merge(employee, on='employee_id', how='left')[['project_id', 'experience_years']]
+    df = df.groupby(by='project_id').agg(
+        total_years = ('experience_years', 'sum'),</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C21?code=code-C21-3&amp;method=pd-merge-left&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1731 · Employees reporting to employees
+     </strong>
+     <small>
+      Uploaded submission · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)
+    df = by_manager.merge(employees[['employee_id', 'name']], how='left', left_on='reports_to', right_on='employee_id')
+    df.rename(columns={'employee_id_y': 'employee_id'}, inplace=True)
+    return df[['employee_id', 'name', 'reports_count', 'average_age']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C30?code=code-C30-5&amp;method=pd-merge-left&amp;line=7">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      Uploaded submission · line 7
+     </small>
+    </div>
+    <pre aria-hidden="true">    ).reset_index()
+    df_users = df_users.merge(users, on='user_id', how='left').sort_values(by=['nReviews', 'name'], ascending=[False, True])[['name', 'nReviews']]
+
+    df_movies = movie_rating[(movie_rating.created_at &gt;= '2020-02-01') &amp; (movie_rating.created_at &lt; '2020-03-01')]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-5&amp;method=pd-merge-left&amp;line=11">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      Uploaded submission · line 11
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = df[df.unit &gt;= 100]
+    df = df.merge(products, on='product_id', how='left')
+
+    return df[['product_name', 'unit']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · Merge / join. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=Merge%20/%20join">
+   <small>
+    ← Browse
+   </small>
+   pandas · Merge / join
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

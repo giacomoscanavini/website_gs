@@ -1,0 +1,183 @@
+<article class="article" id="B19">
+ <div class="breadcrumb">
+  <a href="#sqlbolt">
+   SQLBolt
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Topic 19
+  </span>
+ </div>
+ <h1>
+  Additional topic · Subqueries
+ </h1>
+ <p>
+  A subquery supplies a scalar, a list or a derived table to another query. A correlated subquery refers to the current outer row. IN and NOT IN can test membership in query results.
+ </p>
+ <p>
+  <b>
+   Note.
+  </b>
+  No interactive tasks are listed on this SQLBolt topic page. The examples below are authored equivalents of its sales-associate and department scenarios. SQL NOT IN requires care if the subquery can return NULL.
+ </p>
+ <p>
+  This topic has no interactive task list. The following authored examples illustrate the source scenarios and operators.
+ </p>
+ <h2>
+  01 · Salary above company-average generated revenue
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-54-panel-0" aria-selected="true" id="example-54-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-54-panel-1" aria-selected="false" id="example-54-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-54-tab-0" class="code-panel" id="example-54-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B19-0" tabindex="0"><code class="language-sql" data-origin="legacy-B19-0"><span class="k">SELECT</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">sales_associates</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">salary</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">revenue_generated</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">sales_associates</span><span class="p">);</span></code></pre>
+  </div>
+  <div aria-labelledby="example-54-tab-1" class="code-panel" id="example-54-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B19-1" tabindex="0"><code class="language-python" data-origin="legacy-B19-1"><span class="n">threshold</span> <span class="o">=</span> <span class="n">sales_associates</span><span class="p">[</span><span class="s1">'revenue_generated'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">sales_associates</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">sales_associates</span><span class="p">[</span><span class="s1">'salary'</span><span class="p">]</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">threshold</span><span class="p">)]</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  02 · Salary above own-department average revenue
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-55-panel-0" aria-selected="true" id="example-55-tab-0" role="tab" tabindex="0" type="button">
+     SQL
+    </button>
+    <button aria-controls="example-55-panel-1" aria-selected="false" id="example-55-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-55-tab-0" class="code-panel" id="example-55-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-B19-2" tabindex="0"><code class="language-sql" data-origin="legacy-B19-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="o">*</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">employees</span><span class="w"> </span><span class="n">e</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">salary</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">revenue_generated</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">employees</span><span class="w"> </span><span class="n">d</span>
+<span class="w">                  </span><span class="k">WHERE</span><span class="w"> </span><span class="n">d</span><span class="p">.</span><span class="n">department</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">department</span><span class="p">);</span></code></pre>
+  </div>
+  <div aria-labelledby="example-55-tab-1" class="code-panel" id="example-55-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-B19-3" tabindex="0"><code class="language-python" data-origin="legacy-B19-3"><span class="n">mean_revenue</span> <span class="o">=</span> <span class="n">employees</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'department'</span><span class="p">)[</span><span class="s1">'revenue_generated'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">'mean'</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">employees</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">employees</span><span class="p">[</span><span class="s1">'salary'</span><span class="p">]</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="n">mean_revenue</span><span class="p">)]</span></code></pre>
+  </div>
+ </div>
+ <p>
+  transform broadcasts a group statistic back to the original rows. This example uses the topic’s employee schema, not the earlier studio employee schema.
+ </p>
+ <details class="reference-details">
+  <summary>
+   Sources
+  </summary>
+  <div class="sources-content">
+   <p>
+    The worked examples and pandas translations are study alternatives, not an official answer key. Shared DataFrame setup is listed under Reference.
+   </p>
+   <p>
+    <a href="https://sqlbolt.com/topic/subqueries" rel="noopener noreferrer" target="_blank">
+     SQLBolt — Additional topic · Subqueries
+    </a>
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     pandas SQL comparison
+    </a>
+    — Projection, filtering, grouping, joins and operations.
+   </p>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-avg">
+     AVG()
+    </a>
+    <a href="#m-sql-subquery">
+     Subquery
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-loc">
+     Rows by label
+    </a>
+    <a href="#m-pd-loc-label">
+     Access label
+    </a>
+    <a href="#m-pd-mean">
+     mean()
+    </a>
+    <a href="#m-pd-groupby">
+     Basic group
+    </a>
+    <a href="#m-pd-transform">
+     Group transform
+    </a>
+    <a href="#m-pd-compare">
+     gt() / ge() / lt() / le()
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#B18">
+   <small>
+    ← Previous
+   </small>
+   DROP TABLE
+  </a>
+  <a href="#B20">
+   <small>
+    Next →
+   </small>
+   Additional topic · Set operations
+  </a>
+ </div>
+</article>

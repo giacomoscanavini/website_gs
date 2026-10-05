@@ -1,0 +1,552 @@
+<section class="page-view index-view" id="contents">
+ <p class="part-label">
+  The study reader
+ </p>
+ <h1 tabindex="-1">
+  Machine Learning
+  <br/>
+  Theory Notes
+ </h1>
+ <p class="index-intro">
+  Understand the mechanism, work through the mathematics, and connect it to a real implementation. Four source-led parts, followed by a short reinforcement-learning supplement.
+ </p>
+ <section class="book-part">
+  <h2>
+   <span>
+    01
+   </span>
+   Neural-network foundations
+  </h2>
+  <p class="part-intro">
+   From a parameterized function to activations, losses and a complete forward and backward pass.
+  </p>
+  <ol class="chapter-list">
+   <li>
+    <a href="#learning-objective">
+     <span class="list-num">
+      01
+     </span>
+     <span class="list-title">
+      What does a model learn?
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#neurons-and-layers">
+     <span class="list-num">
+      02
+     </span>
+     <span class="list-title">
+      Neurons, layers, and model capacity
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#activations">
+     <span class="list-num">
+      03
+     </span>
+     <span class="list-title">
+      Activations and their derivatives
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#forward-pass">
+     <span class="list-num">
+      04
+     </span>
+     <span class="list-title">
+      A complete forward pass
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#losses-and-outputs">
+     <span class="list-num">
+      05
+     </span>
+     <span class="list-title">
+      Regression, classification, and the loss
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#backpropagation">
+     <span class="list-num">
+      06
+     </span>
+     <span class="list-title">
+      Backpropagation, worked all the way through
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#training-cycle">
+     <span class="list-num">
+      07
+     </span>
+     <span class="list-title">
+      Training cycles, mini-batches, and autograd
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#gradient-flow">
+     <span class="list-num">
+      08
+     </span>
+     <span class="list-title">
+      Gradient flow and initialization
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+  </ol>
+ </section>
+ <section class="book-part">
+  <h2>
+   <span>
+    02
+   </span>
+   Optimization
+  </h2>
+  <p class="part-intro">
+   How gradient information becomes an update, from stochastic descent to approximate curvature.
+  </p>
+  <ol class="chapter-list">
+   <li>
+    <a href="#sgd">
+     <span class="list-num">
+      09
+     </span>
+     <span class="list-title">
+      SGD, gradient noise, and learning rates
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#momentum">
+     <span class="list-num">
+      10
+     </span>
+     <span class="list-title">
+      Momentum and Nesterov acceleration
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#adaptive-scaling">
+     <span class="list-num">
+      11
+     </span>
+     <span class="list-title">
+      AdaGrad and RMSProp: adaptive scaling
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#adam-adamw">
+     <span class="list-num">
+      12
+     </span>
+     <span class="list-title">
+      Adam, bias correction, and AdamW
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#curvature">
+     <span class="list-num">
+      13
+     </span>
+     <span class="list-title">
+      Curvature, conditioning, and preconditioning
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#conjugate-gradient">
+     <span class="list-num">
+      14
+     </span>
+     <span class="list-title">
+      Conjugate Gradient: directions that do not repeat work
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#bfgs-lbfgs">
+     <span class="list-num">
+      15
+     </span>
+     <span class="list-title">
+      BFGS, L-BFGS, and line search
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#training-diagnosis">
+     <span class="list-num">
+      16
+     </span>
+     <span class="list-title">
+      Diagnosing optimization versus generalization
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+  </ol>
+ </section>
+ <section class="book-part">
+  <h2>
+   <span>
+    03
+   </span>
+   Regularization &amp; ensembles
+  </h2>
+  <p class="part-intro">
+   Why fitting is not generalization: shrinkage, perturbation, stopping and complementary errors.
+  </p>
+  <ol class="chapter-list">
+   <li>
+    <a href="#bias-variance">
+     <span class="list-num">
+      17
+     </span>
+     <span class="list-title">
+      Generalization and the bias–variance trade-off
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#ridge">
+     <span class="list-num">
+      18
+     </span>
+     <span class="list-title">
+      OLS, Ridge, and spectral shrinkage
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#lasso">
+     <span class="list-num">
+      19
+     </span>
+     <span class="list-title">
+      LASSO, subgradients, and exact zeros
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#elastic-net">
+     <span class="list-num">
+      20
+     </span>
+     <span class="list-title">
+      Elastic Net and correlated predictors
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#augmentation-noise">
+     <span class="list-num">
+      21
+     </span>
+     <span class="list-title">
+      Augmentation, invariance, and noise injection
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#early-stopping">
+     <span class="list-num">
+      22
+     </span>
+     <span class="list-title">
+      Early stopping as spectral regularization
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#sparsity-and-dropout">
+     <span class="list-num">
+      23
+     </span>
+     <span class="list-title">
+      Sparse representations and dropout
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#bagging">
+     <span class="list-num">
+      24
+     </span>
+     <span class="list-title">
+      Bagging, random forests, and out-of-bag evaluation
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#ensembles">
+     <span class="list-num">
+      25
+     </span>
+     <span class="list-title">
+      Averaging, covariance weights, and stacking
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+  </ol>
+ </section>
+ <section class="book-part">
+  <h2>
+   <span>
+    04
+   </span>
+   Architectures &amp; information flow
+  </h2>
+  <p class="part-intro">
+   How recurrence, latent codes, attention and graph structure determine what a model can represent.
+  </p>
+  <ol class="chapter-list">
+   <li>
+    <a href="#architecture-map">
+     <span class="list-num">
+      26
+     </span>
+     <span class="list-title">
+      Architectures as information flow
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#rnn">
+     <span class="list-num">
+      27
+     </span>
+     <span class="list-title">
+      Recurrent networks and backpropagation through time
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#lstm">
+     <span class="list-num">
+      28
+     </span>
+     <span class="list-title">
+      LSTM gates and memory timescales
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#gru">
+     <span class="list-num">
+      29
+     </span>
+     <span class="list-title">
+      GRUs and gate conventions
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#encoder-decoder">
+     <span class="list-num">
+      30
+     </span>
+     <span class="list-title">
+      Encoders, decoders, and teacher forcing
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#autoencoders">
+     <span class="list-num">
+      31
+     </span>
+     <span class="list-title">
+      Autoencoders, bottlenecks, and denoising
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#vae">
+     <span class="list-num">
+      32
+     </span>
+     <span class="list-title">
+      Variational autoencoders and the ELBO
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#attention">
+     <span class="list-num">
+      33
+     </span>
+     <span class="list-title">
+      Attention: queries, keys, values, and weights
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#transformers">
+     <span class="list-num">
+      34
+     </span>
+     <span class="list-title">
+      Transformers: position, residual paths, and masking
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+   <li>
+    <a href="#graphs">
+     <span class="list-num">
+      35
+     </span>
+     <span class="list-title">
+      GNNs, graph attention, and relational bottlenecks
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+  </ol>
+ </section>
+ <section class="book-part">
+  <h2>
+   <span>
+    05
+   </span>
+   Reinforcement learning
+  </h2>
+  <p class="part-intro">
+   A short supplement on decisions, delayed rewards, and learning from interaction.
+  </p>
+  <ol class="chapter-list">
+   <li>
+    <a href="#reinforcement-learning">
+     <span class="list-num">
+      36
+     </span>
+     <span class="list-title">
+      Reinforcement learning: rewards, values, and policies
+     </span>
+     <span aria-hidden="true" class="list-arrow">
+      →
+     </span>
+    </a>
+   </li>
+  </ol>
+ </section>
+ <p class="guide-scope">
+  The first four parts follow your supplied guides, with their numerical examples and existing figures. The reinforcement-learning supplement uses external primary references. Additional derivations and library-specific details are identified in the text.
+  <a href="#sources">
+   Read about the sources →
+  </a>
+ </p>
+</section>

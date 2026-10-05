@@ -1,0 +1,103 @@
+{
+  "id": "sql-union-all",
+  "lang": "sql",
+  "category": "Set operations",
+  "label": "UNION ALL",
+  "example": "SELECT ... UNION ALL SELECT ...",
+  "description": "Combine, keep duplicates",
+  "source": "image-sql",
+  "related": [
+    "pd-concat-rows"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/",
+  "aliases": "UNION ALL",
+  "uses": [
+    {
+      "page": "C27",
+      "block": "code-C27-0",
+      "line": 2,
+      "lines": [
+        2,
+        4
+      ],
+      "title": "1907 · Count salary categories",
+      "number": "1907",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT 'Low Salary' AS category, COUNT(*) AS accounts_count FROM Accounts WHERE income < 20000\nUNION ALL\nSELECT 'Average Salary', COUNT(*) FROM Accounts WHERE income BETWEEN 20000 AND 50000\nUNION ALL",
+      "snippetLine": 1
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-0",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    SELECT 1 AS sequence_no, results FROM user_winner\n    UNION ALL SELECT 2, results FROM movie_winner\n)\nSELECT results FROM combined ORDER BY sequence_no;",
+      "snippetLine": 9
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-2",
+      "line": 38,
+      "lines": [
+        38
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    SELECT 1 AS sequence_no, results FROM FirstUserName\n    UNION ALL\n    SELECT 2, results FROM FirstMovieName\n) AS combined",
+      "snippetLine": 37
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-4",
+      "line": 40,
+      "lines": [
+        40
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\nUNION ALL\n\nSELECT results",
+      "snippetLine": 39
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-0",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    SELECT requester_id AS id FROM RequestAccepted\n    UNION ALL SELECT accepter_id FROM RequestAccepted\n)\nSELECT id, COUNT(*) AS num FROM endpoints GROUP BY id ORDER BY num DESC, id LIMIT 1;",
+      "snippetLine": 2
+    },
+    {
+      "page": "B20",
+      "block": "code-B20-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Additional topic · Set operations",
+      "number": "20",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT id FROM a UNION ALL SELECT id FROM b;",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 4
+}

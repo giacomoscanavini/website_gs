@@ -1,0 +1,114 @@
+{
+  "id": "pd-dedup-subset",
+  "lang": "pd",
+  "category": "Duplicates",
+  "label": "By columns",
+  "example": "df.drop_duplicates(['id'])",
+  "description": "Unique by selected columns",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C12",
+      "block": "code-C12-1",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    d = delivery.assign(order_date=pd.to_datetime(delivery['order_date']), customer_pref_delivery_date=pd.to_datetime(delivery['customer_pref_delivery_date']))\n    first = d.sort_values('order_date').drop_duplicates('customer_id', keep='first')\n    value = 100 * first['order_date'].eq(first['customer_pref_delivery_date']).mean()\n    return pd.DataFrame({'immediate_percentage': [round_half_up(value)]})",
+      "snippetLine": 9
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    valid = p.loc[p['change_date'].le(pd.Timestamp('2019-08-16'))]\n    latest = valid.sort_values('change_date').drop_duplicates('product_id', keep='last')\n    result = p[['product_id']].drop_duplicates().merge(latest[['product_id', 'new_price']], on='product_id', how='left')\n    result['price'] = result['new_price'].fillna(10)",
+      "snippetLine": 5
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-3",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df = products[products['change_date'] <= '2019-08-16']\n    df = df.sort_values(by=['product_id', 'change_date'], ascending=[True, False]).drop_duplicates('product_id').rename(columns={'new_price': 'price'})\n\n    updated_ids = set(df.product_id)",
+      "snippetLine": 6
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-5",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = products[products['change_date'] <= '2019-08-16']\n    df = df.sort_values(by=['product_id', 'change_date'], ascending=[True, False]).drop_duplicates('product_id').rename(columns={'new_price': 'price'})\n    \n    updated_ids = set(df.product_id)",
+      "snippetLine": 6
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    person.sort_values('id', inplace=True)\n    person.drop_duplicates(subset='email', keep='first', inplace=True)",
+      "snippetLine": 4
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-3",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    person.sort_values(by='id', ascending=True, inplace=True)\n    person.drop_duplicates(subset='email', keep='first', inplace=True)",
+      "snippetLine": 3
+    },
+    {
+      "page": "C37",
+      "block": "code-C37-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "196 · Delete duplicate emails",
+      "number": "196",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    person.sort_values(by='id', ascending=True, inplace=True)\n    person.drop_duplicates(subset='email', keep='first', inplace=True)",
+      "snippetLine": 4
+    }
+  ],
+  "pageCount": 3
+}

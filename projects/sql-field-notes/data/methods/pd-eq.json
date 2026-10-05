@@ -1,0 +1,656 @@
+{
+  "id": "pd-eq",
+  "lang": "pd",
+  "category": "Also used in these notes",
+  "label": "eq() / ne()",
+  "example": "df['x'].eq(1)",
+  "description": "Elementwise equality or inequality",
+  "source": "saved-code",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "eq,ne",
+  "uses": [
+    {
+      "page": "C01",
+      "block": "code-C01-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1757 · Recyclable and low-fat products",
+      "number": "1757",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def find_products(products: pd.DataFrame) -> pd.DataFrame:\n    mask = products['low_fats'].eq('Y') & products['recyclable'].eq('Y')\n    return products.loc[mask, ['product_id']].copy()",
+      "snippetLine": 3
+    },
+    {
+      "page": "C02",
+      "block": "code-C02-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "584 · Find customer referee",
+      "number": "584",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def find_customer_referee(customer: pd.DataFrame) -> pd.DataFrame:\n    mask = customer['referee_id'].isna() | customer['referee_id'].ne(2)\n    return customer.loc[mask, ['name']].copy()",
+      "snippetLine": 3
+    },
+    {
+      "page": "C04",
+      "block": "code-C04-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1148 · Article Views I",
+      "number": "1148",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def article_views(views: pd.DataFrame) -> pd.DataFrame:\n    result = views.loc[views['author_id'].eq(views['viewer_id']), ['author_id']]\n    return result.drop_duplicates().rename(columns={'author_id': 'id'}).sort_values('id')",
+      "snippetLine": 3
+    },
+    {
+      "page": "C45",
+      "block": "code-C45-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "197 · Rising temperature",
+      "number": "197",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    weather = weather.sort_values('recordDate')\n    df = weather[(weather.recordDate.diff().eq(pd.Timedelta(days=1))) & (weather.temperature.diff() > 0)]\n    return df[['id']]",
+      "snippetLine": 5
+    },
+    {
+      "page": "C50",
+      "block": "code-C50-1",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1934 · Confirmation rate",
+      "number": "1934",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df = signups.merge(confirmations, on='user_id', how='left')[['user_id', 'action']]\n    df['confirmation_rate'] = df.action.eq('confirmed').fillna(False)\n    df = df.groupby('user_id', as_index=False).agg(\n        total=('confirmation_rate', 'size'),",
+      "snippetLine": 9
+    },
+    {
+      "page": "C06",
+      "block": "code-C06-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "620 · Not boring movies",
+      "number": "620",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def not_boring_movies(cinema: pd.DataFrame) -> pd.DataFrame:\n    mask = cinema['id'].mod(2).eq(1) & cinema['description'].notna() & cinema['description'].ne('boring')\n    return cinema.loc[mask].sort_values('rating', ascending=False)",
+      "snippetLine": 3
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    t = transactions.assign(month=pd.to_datetime(transactions['trans_date']).dt.strftime('%Y-%m'))\n    t['approved'] = t['state'].eq('approved')\n    t['approved_amount'] = t['amount'].where(t['approved'], 0)\n    return t.groupby(['month', 'country'], dropna=False, as_index=False).agg(",
+      "snippetLine": 4
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    first = d.sort_values('order_date').drop_duplicates('customer_id', keep='first')\n    value = 100 * first['order_date'].eq(first['customer_pref_delivery_date']).mean()\n    return pd.DataFrame({'immediate_percentage': [round_half_up(value)]})",
+      "snippetLine": 10
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    first = a.groupby('player_id')['event_date'].transform('min')\n    valid = a['event_date'].eq(first + pd.Timedelta(days=1))\n    fraction = valid.groupby(a['player_id']).any().mean()\n    return pd.DataFrame({'fraction': [round_half_up(fraction)]})",
+      "snippetLine": 10
+    },
+    {
+      "page": "C16",
+      "block": "code-C16-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1070 · First-year product sales",
+      "number": "1070",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    first_year = sales.groupby('product_id')['year'].transform('min')\n    return sales.loc[sales['year'].eq(first_year), ['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})",
+      "snippetLine": 4
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-1",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    ids = customer[['customer_id']].drop_duplicates()\n    mask = ids['customer_id'].map(counts).fillna(0).eq(len(keys))\n    return ids.loc[mask].copy()",
+      "snippetLine": 7
+    },
+    {
+      "page": "C22",
+      "block": "code-C22-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1789 · Primary department per employee",
+      "number": "1789",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    n = employee.groupby('employee_id')['department_id'].transform('size')\n    mask = employee['primary_flag'].eq('Y') | n.eq(1)\n    return employee.loc[mask, ['employee_id', 'department_id']].copy()",
+      "snippetLine": 4
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    n = ordered['num']\n    mask = n.eq(n.shift(-1)) & n.eq(n.shift(-2))\n    return ordered.loc[mask, ['num']].drop_duplicates().rename(columns={'num': 'ConsecutiveNums'})",
+      "snippetLine": 5
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-3",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    numbers = logs['num']\n    repeated = numbers.eq(numbers.shift(1)) & numbers.eq(numbers.shift(2))\n    return pd.DataFrame({'ConsecutiveNums': logs.loc[repeated, 'num'].unique()})",
+      "snippetLine": 5
+    },
+    {
+      "page": "C29",
+      "block": "code-C29-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "626 · Exchange seats",
+      "number": "626",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    swapped = ids + 2 * ids.mod(2) - 1\n    new_ids = swapped.where(~(ids.eq(ids.max()) & ids.mod(2).eq(1)), ids)\n    return seat.assign(id=new_ids).sort_values('id')",
+      "snippetLine": 5
+    },
+    {
+      "page": "LC607",
+      "block": "code-LC607-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "607 · Sales person",
+      "number": "607",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    orders = orders.merge(company, on='com_id', how='left')\n    orders = orders[orders.name.eq('RED')]\n    idexlude = orders['sales_id'].unique()\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "LC1393",
+      "block": "code-LC1393-2",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1393 · Capital gain/loss",
+      "number": "1393",
+      "group": "practice",
+      "context": "Working reference variation",
+      "snippet": "    df = stocks.copy()\n    buy = df['operation'].eq('Buy')\n    df.loc[buy, 'price'] = -df.loc[buy, 'price']\n    return df.groupby('stock_name', as_index=False).agg(",
+      "snippetLine": 4
+    },
+    {
+      "page": "murder-01",
+      "block": "code-murder-01-1",
+      "line": 3,
+      "lines": [
+        3,
+        4,
+        5
+      ],
+      "title": "Retrieve the crime report",
+      "number": "01",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "\nmask = (crime_scene_report['type'].eq('murder')\n        & crime_scene_report['city'].eq('SQL City')\n        & crime_scene_report['date'].astype('string').eq('20180115'))",
+      "snippetLine": 2
+    },
+    {
+      "page": "murder-02",
+      "block": "code-murder-02-1",
+      "line": 3,
+      "lines": [
+        3,
+        6
+      ],
+      "title": "Find the two witnesses",
+      "number": "02",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "\nfirst = (person.loc[person['address_street_name'].eq('Northwestern Dr')]\n         .sort_values('address_number', ascending=False).head(1))\nsecond = person.loc[",
+      "snippetLine": 2
+    },
+    {
+      "page": "murder-04",
+      "block": "code-murder-04-1",
+      "line": 5,
+      "lines": [
+        5,
+        6
+      ],
+      "title": "Follow the gym clue",
+      "number": "04",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "                                   left_on='membership_id', right_on='id')\nmask = (joined['check_in_date'].astype('string').eq('20180109')\n        & joined['membership_status'].eq('gold')\n        & joined['id'].str.startswith('48Z', na=False))",
+      "snippetLine": 4
+    },
+    {
+      "page": "murder-07",
+      "block": "code-murder-07-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "Follow the second interview",
+      "number": "07",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "                                     left_on='id', right_on='person_id')\nresult = joined.loc[joined['person_id'].eq(67318), ['id', 'name', 'transcript']].copy()",
+      "snippetLine": 4
+    },
+    {
+      "page": "squid-01",
+      "block": "code-squid-01-1",
+      "line": 3,
+      "lines": [
+        3,
+        5
+      ],
+      "title": "Filter the player pool",
+      "number": "01",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\nmask = (player['status'].eq('alive') & player['debt'].gt(400000000)\n        & (player['age'].gt(65)\n           | (player['vice'].eq('Gambling') & player['has_close_family'].eq(False))))",
+      "snippetLine": 2
+    },
+    {
+      "page": "squid-02",
+      "block": "code-squid-02-1",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "Calculate the ration threshold",
+      "number": "02",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\neligible = player['status'].eq('alive') & player['isinsider'].eq(False)\nportions = int(eligible.fillna(False).sum()) * 9 // 10\nresult = rations[['amount']].copy()",
+      "snippetLine": 2
+    },
+    {
+      "page": "squid-04",
+      "block": "code-squid-04-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "Rank ten-player teams",
+      "number": "04",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    n_players=('id', 'size'), age_team=('age', 'mean'))\nresult = teams.loc[teams['n_players'].eq(10), ['team_id', 'age_team']].copy()\nresult['age_group'] = 'Grizzled'\nresult.loc[result['age_team'].lt(40), 'age_group'] = 'Fit'",
+      "snippetLine": 4
+    },
+    {
+      "page": "squid-05",
+      "block": "code-squid-05-1",
+      "line": 3,
+      "lines": [
+        3,
+        6,
+        13
+      ],
+      "title": "Count a player’s closest interactions",
+      "number": "05",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\nmask = daily_interactions['player1_id'].eq(456) | daily_interactions['player2_id'].eq(456)\ninteractions = daily_interactions.loc[mask].copy()\ninteractions['player_id'] = interactions['player1_id'].where(",
+      "snippetLine": 2
+    },
+    {
+      "page": "squid-06",
+      "block": "code-squid-06-1",
+      "line": 10,
+      "lines": [
+        10,
+        12
+      ],
+      "title": "Trace equipment to its first failure",
+      "number": "06",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    game_type = game_counts.sort_values(ascending=False).index[0]\n    in_game = joined.loc[joined['game_type'].eq(game_type)]\n    supplier_id = in_game.groupby('supplier_id').size().sort_values(ascending=False).index[0]\n    failures = in_game.loc[in_game['supplier_id'].eq(supplier_id)].copy()",
+      "snippetLine": 9
+    },
+    {
+      "page": "squid-07",
+      "block": "code-squid-07-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "Join room checks and camera sightings",
+      "number": "07",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "                      left_on='guard_number', right_on='guard_spotted_id')\njoined = joined.loc[joined['isvacant'].eq(True)].copy()\nseen = pd.to_timedelta(joined['spotted_outside_room_time'].astype('string'))\nchecked = pd.to_timedelta(joined['last_seen_in_room'].astype('string'))",
+      "snippetLine": 10
+    },
+    {
+      "page": "squid-08",
+      "block": "code-squid-08-1",
+      "line": 3,
+      "lines": [
+        3,
+        8
+      ],
+      "title": "Find the longest hesitation",
+      "number": "08",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\npushed = player.loc[player['death_description'].eq('pushed')].copy()\nresult = pushed.iloc[:0][['id', 'first_name', 'last_name', 'last_moved_time_seconds']]\nif not pushed.empty:",
+      "snippetLine": 2
+    },
+    {
+      "page": "squid-09",
+      "block": "code-squid-09-1",
+      "line": 3,
+      "lines": [
+        3,
+        19
+      ],
+      "title": "Reconstruct access-log overlaps",
+      "number": "09",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\ngames = game_schedule.loc[game_schedule['type'].str.lower().eq('squid game')].copy()\ngames['date'] = pd.to_datetime(games['date'])\nresult = pd.DataFrame(columns=['id', 'access_time'])",
+      "snippetLine": 2
+    },
+    {
+      "page": "B02",
+      "block": "code-B02-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Numeric constraints",
+      "number": "02",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = movies.loc[movies['id'].eq(6)].copy()",
+      "snippetLine": 1
+    },
+    {
+      "page": "B03",
+      "block": "code-B03-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Text constraints and LIKE",
+      "number": "03",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = movies.loc[movies['director'].eq('John Lasseter')].copy()",
+      "snippetLine": 1
+    },
+    {
+      "page": "B03",
+      "block": "code-B03-5",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Text constraints and LIKE",
+      "number": "03",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "mask = movies['director'].notna() & movies['director'].ne('John Lasseter')\nresult = movies.loc[mask, ['title', 'director']].copy()",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = north_american_cities.loc[north_american_cities['country'].eq('Canada'), ['city', 'population']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = north_american_cities.loc[north_american_cities['country'].eq('United States')].sort_values('latitude', ascending=False)[['city']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-5",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "chicago_lon = north_american_cities.loc[north_american_cities['city'].eq('Chicago'), 'longitude'].iloc[0]\nresult = north_american_cities.loc[north_american_cities['longitude'].lt(chicago_lon)].sort_values('longitude')[['city']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-7",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = north_american_cities.loc[north_american_cities['country'].eq('Mexico')].sort_values('population', ascending=False).head(2)[['city', 'population']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B05",
+      "block": "code-B05-9",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Review · Simple SELECT queries",
+      "number": "05",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = north_american_cities.loc[north_american_cities['country'].eq('United States')].sort_values('population', ascending=False).iloc[2:4][['city', 'population']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B09",
+      "block": "code-B09-5",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Expressions and aliases",
+      "number": "09",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = movies.loc[movies['year'].mod(2).eq(0), ['title', 'year']]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B11",
+      "block": "code-B11-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "WHERE versus HAVING",
+      "number": "11",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = pd.DataFrame({'artist_count': [int(employees['role'].eq('Artist').sum())]})",
+      "snippetLine": 1
+    },
+    {
+      "page": "B11",
+      "block": "code-B11-5",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "WHERE versus HAVING",
+      "number": "11",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "g = employees.groupby('role', dropna=False)['years_employed'].sum(min_count=1).reset_index(name='total_years')\nresult = g.loc[g['role'].eq('Engineer')]",
+      "snippetLine": 1
+    },
+    {
+      "page": "B13",
+      "block": "code-B13-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "INSERT rows",
+      "number": "13",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movie_id = movies.loc[movies['title'].eq('Toy Story 4'), 'id'].iloc[0]\nnew_sales = pd.DataFrame([{'movie_id': movie_id, 'rating': 8.7, 'domestic_sales': 340_000_000, 'international_sales': 270_000_000}])\nboxoffice = pd.concat([boxoffice, new_sales], ignore_index=True)",
+      "snippetLine": 1
+    },
+    {
+      "page": "B14",
+      "block": "code-B14-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "UPDATE rows",
+      "number": "14",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies.loc[movies['title'].eq(\"A Bug's Life\"), 'director'] = 'John Lasseter'",
+      "snippetLine": 1
+    },
+    {
+      "page": "B14",
+      "block": "code-B14-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "UPDATE rows",
+      "number": "14",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies.loc[movies['title'].eq('Toy Story 2'), 'year'] = 1999",
+      "snippetLine": 1
+    },
+    {
+      "page": "B14",
+      "block": "code-B14-5",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "UPDATE rows",
+      "number": "14",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies.loc[movies['title'].eq('Toy Story 8'), ['title', 'director']] = ['Toy Story 3', 'Lee Unkrich']",
+      "snippetLine": 1
+    },
+    {
+      "page": "B15",
+      "block": "code-B15-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "DELETE rows",
+      "number": "15",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "movies = movies.loc[movies['director'].isna() | movies['director'].ne('Andrew Stanton')].copy()",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 36
+}

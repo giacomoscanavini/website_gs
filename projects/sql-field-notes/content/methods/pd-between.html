@@ -1,0 +1,279 @@
+<article class="article method-page" id="m-pd-between">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=Filtering">
+   pandas · Filtering
+  </a>
+ </div>
+ <h1>
+  Range
+ </h1>
+ <p class="lead">
+  Inclusive range
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-between"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">age</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">30</span><span class="p">)]</span></code></pre>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-sql-between">
+   SQL · BETWEEN
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C07?code=code-C07-1&amp;method=pd-between&amp;line=12">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1251 · Average selling price
+    </strong>
+    <small>
+     Study solution · line 12
+    </small>
+   </div>
+   <pre aria-hidden="true">    matched = p.merge(u, on='product_id', how='inner')
+    matched = matched.loc[matched['purchase_date'].between(matched['start_date'], matched['end_date'])].copy()
+    matched['paid'] = matched['price'] * matched['units']
+    g = matched.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C15?code=code-C15-1&amp;method=pd-between&amp;line=6">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1141 · User activity in a 30-day window
+    </strong>
+    <small>
+     Study solution · line 6
+    </small>
+   </div>
+   <pre aria-hidden="true">    kinds = ['open_session', 'end_session', 'scroll_down', 'send_message']
+    mask = a['activity_date'].between('2019-06-28', '2019-07-27') &amp; a['activity_type'].isin(kinds)
+    return a.loc[mask].groupby('activity_date', as_index=False).agg(active_users=('user_id', 'nunique')).rename(columns={'activity_date': 'day'})</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C27?code=code-C27-1&amp;method=pd-between&amp;line=6">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1907 · Count salary categories
+    </strong>
+    <small>
+     Study solution · line 6
+    </small>
+   </div>
+   <pre aria-hidden="true">    return pd.DataFrame({'category': ['Low Salary', 'Average Salary', 'High Salary'],
+                         'accounts_count': [int(s.lt(20000).sum()), int(s.between(20000, 50000).sum()), int(s.gt(50000).sum())]})</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-between&amp;line=15">
+   <div>
+    <span class="usage-label">
+     Squid Game · pandas
+    </span>
+    <strong>
+     Reconstruct access-log overlaps
+    </strong>
+    <small>
+     Saved walkthrough · line 15
+    </small>
+   </div>
+   <pre aria-hidden="true">    overlaps = ((a.le(start) &amp; b.ge(start)) | (a.le(end) &amp; b.ge(end))
+                | (a.between(start, end) &amp; b.between(start, end)))
+    shifts = shifts.loc[overlaps].rename(columns={'id': 'guard_id'})
+    logs = shifts.merge(daily_door_access_logs.rename(columns={'id': 'log_id'}), on='guard_id')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#B02?code=code-B02-3&amp;method=pd-between&amp;line=1">
+   <div>
+    <span class="usage-label">
+     SQLBolt · pandas
+    </span>
+    <strong>
+     Numeric constraints
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">result = movies.loc[movies['year'].between(2000, 2010)].copy()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (5)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-between&amp;line=13">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      My approach · line 13
+     </small>
+    </div>
+    <pre aria-hidden="true">    df = prices.merge(units_sold, on='product_id', how='left')
+    df = df[df.purchase_date.isna() | df.purchase_date.between(df.start_date, df.end_date)].copy()
+    df['paid'] = df['price'] * df['units']
+    totals = df.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-3&amp;method=pd-between&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      My approach · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    start_date = end_date - pd.Timedelta(days=29)
+    bool_activity_date = activity['activity_date'].between(start_date, end_date)
+
+    bool_flag = bool_activity_type   &amp;   bool_activity_date</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C15?code=code-C15-5&amp;method=pd-between&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1141 · User activity in a 30-day window
+     </strong>
+     <small>
+      Uploaded submission · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">    start_date = end_date - pd.Timedelta(days=29)
+    bool_activity_date = activity['activity_date'].between(start_date, end_date)
+
+    bool_flag = bool_activity_type &amp; bool_activity_date</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B02?code=code-B02-5&amp;method=pd-between&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Numeric constraints
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.loc[movies['year'].notna() &amp; ~movies['year'].between(2000, 2010)].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B02?code=code-B02-7&amp;method=pd-between&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Numeric constraints
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.loc[movies['id'].between(1, 5), ['title', 'year']].copy()</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · Filtering. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=Filtering">
+   <small>
+    ← Browse
+   </small>
+   pandas · Filtering
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

@@ -1,0 +1,63 @@
+{
+  "id": "sql-lead",
+  "lang": "sql",
+  "category": "Window functions",
+  "label": "LEAD()",
+  "example": "LEAD(score) OVER (...)",
+  "description": "Next row",
+  "source": "image-sql",
+  "related": [
+    "pd-lead"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html",
+  "aliases": "LEAD",
+  "uses": [
+    {
+      "page": "C24",
+      "block": "code-C24-0",
+      "line": 2,
+      "lines": [
+        2,
+        3
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "WITH ordered AS (\n    SELECT num, LEAD(num, 1) OVER (ORDER BY id) AS next_num,\n           LEAD(num, 2) OVER (ORDER BY id) AS next_next_num FROM Logs\n)",
+      "snippetLine": 1
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-2",
+      "line": 4,
+      "lines": [
+        4,
+        5
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        num,\n        LEAD(num, 1) OVER (ORDER BY id) AS next_num,\n        LEAD(num, 2) OVER (ORDER BY id) AS next_next_num\n    FROM Logs",
+      "snippetLine": 3
+    },
+    {
+      "page": "C24",
+      "block": "code-C24-4",
+      "line": 5,
+      "lines": [
+        5,
+        6
+      ],
+      "title": "180 · Consecutive Numbers",
+      "number": "180",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        num, \n        LEAD(num, 1) OVER () AS next_num,\n        LEAD(num, 2) OVER () AS next_next_num\n    FROM Logs",
+      "snippetLine": 4
+    }
+  ],
+  "pageCount": 1
+}

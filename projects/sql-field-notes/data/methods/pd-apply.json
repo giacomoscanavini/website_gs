@@ -1,0 +1,143 @@
+{
+  "id": "pd-apply",
+  "lang": "pd",
+  "category": "Conditional logic",
+  "label": "apply()",
+  "example": "df['x'].apply(func)",
+  "description": "Custom function on Series",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "apply",
+  "uses": [
+    {
+      "page": "C07",
+      "block": "code-C07-5",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1251 · Average selling price",
+      "number": "1251",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    \n    return df.groupby(by='product_id').apply(\n        lambda x: round(x['paid'].sum() / x['units'].sum(), 2) if x['units'].sum() != 0 else 0\n    ).reset_index(name='average_price')",
+      "snippetLine": 7
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-3",
+      "line": 16,
+      "lines": [
+        16,
+        17
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    round2 = round_half_up\n    df['quality'] = df['quality'].apply(round2)\n    df['poor_query_percentage']   = df['poor_query_percentage'].apply(round2)\n    return df[['query_name', 'quality', 'poor_query_percentage']]",
+      "snippetLine": 15
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    queries['quality_ratio'] = queries['rating'] / queries['position']\n    queries['poor'] = queries['rating'].apply(\n        lambda x: 1 if x < 3 else 0\n    )",
+      "snippetLine": 4
+    },
+    {
+      "page": "C23",
+      "block": "code-C23-3",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "610 · Triangle judgement",
+      "number": "610",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "        else: return 'Yes'\n    triangle['triangle'] =   triangle.apply(triangle_check, axis=1)\n    return triangle",
+      "snippetLine": 8
+    },
+    {
+      "page": "C23",
+      "block": "code-C23-5",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "610 · Triangle judgement",
+      "number": "610",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    triangle['triangle'] = triangle.apply(triangle_check, axis=1)\n    return triangle",
+      "snippetLine": 9
+    },
+    {
+      "page": "LC608",
+      "block": "code-LC608-1",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "608 · Tree node",
+      "number": "608",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": " \n    tree['type'] = tree.apply(classify, axis=1)\n\n    return tree[['id', 'type']]",
+      "snippetLine": 10
+    },
+    {
+      "page": "LC3421",
+      "block": "code-LC3421-1",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "3421 · Find students who improved",
+      "number": "3421",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df = scores.groupby(by=['student_id', 'subject']).apply(custom_func).reset_index()\n\n    return df[df.improved == True][['student_id', 'subject', 'first_score', 'latest_score']]",
+      "snippetLine": 16
+    },
+    {
+      "page": "LC3497",
+      "block": "code-LC3497-1",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "3497 · Analyze subscription conversion",
+      "number": "3497",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df = user_activity.groupby(by='user_id').apply(custom_func).reset_index()\n\n    return df.dropna()",
+      "snippetLine": 14
+    },
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-1",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    sales['season'] = sales['sale_date'].dt.month.apply(season)\n    sales['revenue'] = (sales['quantity'] * sales['price']).round(2)\n    sales = sales.merge(products, on='product_id', how='left')",
+      "snippetLine": 9
+    }
+  ],
+  "pageCount": 7
+}

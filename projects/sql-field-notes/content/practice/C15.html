@@ -1,0 +1,320 @@
+<article class="article" id="C15">
+ <div class="breadcrumb">
+  <a href="#practice">
+   Leetcode problems
+  </a>
+  <span aria-hidden="true" class="separator">
+   /
+  </span>
+  <span>
+   Problem 1141
+  </span>
+ </div>
+ <h1>
+  1141 · User activity in a 30-day window
+ </h1>
+ <p>
+  Count daily unique users over the inclusive 30-day interval ending 2019-07-27.
+ </p>
+ <p class="pattern">
+  Pattern: Date filtering / distinct count
+ </p>
+ <h2>
+  Example
+ </h2>
+ <p>
+  June 28 and July 27 are included; June 27 and July 28 are excluded.
+ </p>
+ <h2>
+  Study solution
+ </h2>
+ <div class="code-pair">
+  <div class="pair-head">
+   <div aria-label="Solution language" class="code-tabs" role="tablist">
+    <button aria-controls="example-74-panel-0" aria-selected="true" id="example-74-tab-0" role="tab" tabindex="0" type="button">
+     MySQL
+    </button>
+    <button aria-controls="example-74-panel-1" aria-selected="false" id="example-74-tab-1" role="tab" tabindex="-1" type="button">
+     pandas
+    </button>
+   </div>
+   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <div aria-labelledby="example-74-tab-0" class="code-panel" id="example-74-panel-0" role="tabpanel">
+   <div class="no-script-label">
+    SQL
+   </div>
+   <pre id="code-C15-0" tabindex="0"><code class="language-sql" data-origin="legacy-C15-0"><span class="k">SELECT</span><span class="w"> </span><span class="n">activity_date</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">day</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">user_id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">active_users</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Activity</span>
+<span class="k">WHERE</span><span class="w"> </span><span class="n">activity_date</span><span class="w"> </span><span class="k">BETWEEN</span><span class="w"> </span><span class="s1">'2019-06-28'</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="s1">'2019-07-27'</span>
+<span class="w">  </span><span class="k">AND</span><span class="w"> </span><span class="n">activity_type</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'open_session'</span><span class="p">,</span><span class="w"> </span><span class="s1">'end_session'</span><span class="p">,</span><span class="w"> </span><span class="s1">'scroll_down'</span><span class="p">,</span><span class="w"> </span><span class="s1">'send_message'</span><span class="p">)</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">activity_date</span><span class="p">;</span></code></pre>
+  </div>
+  <div aria-labelledby="example-74-tab-1" class="code-panel" id="example-74-panel-1" role="tabpanel">
+   <div class="no-script-label">
+    pandas
+   </div>
+   <pre id="code-C15-1" tabindex="0"><code class="language-python" data-origin="legacy-C15-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">user_activity</span><span class="p">(</span><span class="n">activity</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">activity</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">activity_date</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">activity</span><span class="p">[</span><span class="s1">'activity_date'</span><span class="p">]))</span>
+    <span class="n">kinds</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'open_session'</span><span class="p">,</span> <span class="s1">'end_session'</span><span class="p">,</span> <span class="s1">'scroll_down'</span><span class="p">,</span> <span class="s1">'send_message'</span><span class="p">]</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s1">'activity_date'</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="s1">'2019-06-28'</span><span class="p">,</span> <span class="s1">'2019-07-27'</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">a</span><span class="p">[</span><span class="s1">'activity_type'</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">kinds</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">a</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'activity_date'</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">active_users</span><span class="o">=</span><span class="p">(</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="s1">'nunique'</span><span class="p">))</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'activity_date'</span><span class="p">:</span> <span class="s1">'day'</span><span class="p">})</span></code></pre>
+  </div>
+ </div>
+ <h2>
+  Why it works
+ </h2>
+ <p>
+  Thirty inclusive dates means end minus 29 days. Group only after filtering, then count each user at most once per day.
+ </p>
+ <h2>
+  Notes
+ </h2>
+ <p>
+  The range includes 28 June through 27 July. For timestamps, use an exclusive upper bound of 28 July.
+ </p>
+ <details class="original-details">
+  <summary>
+   My approach
+  </summary>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="approach-C15-panel-0" aria-selected="true" id="approach-C15-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="approach-C15-panel-1" aria-selected="false" id="approach-C15-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="approach-C15-tab-0" class="code-panel" id="approach-C15-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     SQL
+    </div>
+    <pre id="code-C15-2" tabindex="0"><code class="language-sql" data-origin="approach-C15-sql"><span class="k">SELECT</span>
+<span class="w">    </span><span class="n">activity_date</span><span class="w">   </span><span class="k">AS</span><span class="w"> </span><span class="k">day</span><span class="p">,</span>
+<span class="w">    </span><span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">user_id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">active_users</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Activity</span>
+<span class="k">WHERE</span>
+<span class="w">    </span><span class="n">DATEDIFF</span><span class="p">(</span><span class="s1">'2019-07-27'</span><span class="p">,</span><span class="w">   </span><span class="n">activity_date</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="k">AND</span>
+<span class="w">    </span><span class="n">activity_date</span><span class="w">   </span><span class="o">&lt;=</span><span class="w"> </span><span class="s1">'2019-07-27'</span><span class="w">   </span><span class="k">AND</span>
+<span class="w">    </span><span class="n">activity_type</span><span class="w">   </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'open_session'</span><span class="p">,</span><span class="w"> </span><span class="s1">'end_session'</span><span class="p">,</span><span class="w"> </span><span class="s1">'scroll_down'</span><span class="p">,</span><span class="w"> </span><span class="s1">'send_message'</span><span class="p">)</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w">   </span><span class="n">activity_date</span><span class="p">;</span></code></pre>
+   </div>
+   <div aria-labelledby="approach-C15-tab-1" class="code-panel" id="approach-C15-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C15-3" tabindex="0"><code class="language-python" data-origin="approach-C15-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">user_activity</span><span class="p">(</span><span class="n">activity</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">good_activity</span>   <span class="o">=</span> <span class="p">[</span><span class="s1">'open_session'</span><span class="p">,</span> <span class="s1">'end_session'</span><span class="p">,</span> <span class="s1">'scroll_down'</span><span class="p">,</span> <span class="s1">'send_message'</span><span class="p">]</span>
+    <span class="n">bool_activity_type</span> <span class="o">=</span> <span class="n">activity</span><span class="p">[</span><span class="s1">'activity_type'</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">good_activity</span><span class="p">)</span>
+
+    <span class="n">activity</span><span class="p">[</span><span class="s1">'activity_date'</span><span class="p">]</span> <span class="o">=</span>   <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">activity</span><span class="p">[</span><span class="s1">'activity_date'</span><span class="p">])</span>
+    <span class="n">end_date</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">'2019-07-27'</span><span class="p">)</span>
+    <span class="n">start_date</span> <span class="o">=</span> <span class="n">end_date</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">29</span><span class="p">)</span>
+    <span class="n">bool_activity_date</span> <span class="o">=</span> <span class="n">activity</span><span class="p">[</span><span class="s1">'activity_date'</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+
+    <span class="n">bool_flag</span> <span class="o">=</span> <span class="n">bool_activity_type</span>   <span class="o">&amp;</span>   <span class="n">bool_activity_date</span>
+    <span class="n">df</span> <span class="o">=</span>   <span class="n">activity</span><span class="p">[</span><span class="n">bool_flag</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'activity_date'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="n">active_users</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="s1">'nunique'</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'activity_date'</span><span class="p">:</span> <span class="s1">'day'</span><span class="p">})</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Sources
+  </summary>
+  <div class="sources-content">
+   <p>
+    Primary exercise basis: your uploaded Pasted markdown(3).md, exercise 1141, line 5. The exercise heading may be abbreviated in the upload; full official problem statements and schemas were not supplied.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     pandas SQL comparison
+    </a>
+    — Projection, filtering, grouping, joins and operations.
+   </p>
+  </div>
+ </details>
+ <details class="original-details archive-submission">
+  <summary>
+   Uploaded submission · SQL.zip
+  </summary>
+  <p class="small">
+   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
+  </p>
+  <div class="code-pair">
+   <div class="pair-head">
+    <div aria-label="Solution language" class="code-tabs" role="tablist">
+     <button aria-controls="archive-1141-panel-0" aria-selected="true" id="archive-1141-tab-0" role="tab" tabindex="0" type="button">
+      MySQL
+     </button>
+     <button aria-controls="archive-1141-panel-1" aria-selected="false" id="archive-1141-tab-1" role="tab" tabindex="-1" type="button">
+      pandas
+     </button>
+    </div>
+    <button class="copy-button" data-copy="" type="button">
+     Copy
+    </button>
+   </div>
+   <div aria-labelledby="archive-1141-tab-0" class="code-panel" id="archive-1141-panel-0" role="tabpanel">
+    <div class="no-script-label">
+     MySQL
+    </div>
+    <pre id="code-C15-4" tabindex="0"><code class="language-sql" data-origin="archive-1141-sql"><span class="c1"># Write your MySQL query statement below</span>
+<span class="k">SELECT</span>
+<span class="w">    </span><span class="n">activity_date</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="k">day</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="nf">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">user_id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">active_users</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">Activity</span><span class="w"> </span>
+<span class="k">WHERE</span><span class="w"> </span>
+<span class="w">    </span><span class="nf">DATEDIFF</span><span class="p">(</span><span class="s1">'2019-07-27'</span><span class="p">,</span><span class="w"> </span><span class="n">activity_date</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">30</span><span class="w"> </span><span class="k">AND</span>
+<span class="w">    </span><span class="n">activity_date</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="s1">'2019-07-27'</span><span class="w"> </span><span class="k">AND</span>
+<span class="w">    </span><span class="n">activity_type</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'open_session'</span><span class="p">,</span><span class="w"> </span><span class="s1">'end_session'</span><span class="p">,</span><span class="w"> </span><span class="s1">'scroll_down'</span><span class="p">,</span><span class="w"> </span><span class="s1">'send_message'</span><span class="p">)</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">activity_date</span><span class="w"> </span></code></pre>
+   </div>
+   <div aria-labelledby="archive-1141-tab-1" class="code-panel" id="archive-1141-panel-1" role="tabpanel">
+    <div class="no-script-label">
+     pandas
+    </div>
+    <pre id="code-C15-5" tabindex="0"><code class="language-python" data-origin="archive-1141-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">user_activity</span><span class="p">(</span><span class="n">activity</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">good_activity</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'open_session'</span><span class="p">,</span> <span class="s1">'end_session'</span><span class="p">,</span> <span class="s1">'scroll_down'</span><span class="p">,</span> <span class="s1">'send_message'</span><span class="p">]</span>
+    <span class="n">bool_activity_type</span> <span class="o">=</span> <span class="n">activity</span><span class="p">[</span><span class="s1">'activity_type'</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">good_activity</span><span class="p">)</span>
+
+    <span class="n">activity</span><span class="p">[</span><span class="s1">'activity_date'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">activity</span><span class="p">[</span><span class="s1">'activity_date'</span><span class="p">])</span>
+    <span class="n">end_date</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="s1">'2019-07-27'</span><span class="p">)</span>
+    <span class="n">start_date</span> <span class="o">=</span> <span class="n">end_date</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">29</span><span class="p">)</span>
+    <span class="n">bool_activity_date</span> <span class="o">=</span> <span class="n">activity</span><span class="p">[</span><span class="s1">'activity_date'</span><span class="p">]</span><span class="o">.</span><span class="n">between</span><span class="p">(</span><span class="n">start_date</span><span class="p">,</span> <span class="n">end_date</span><span class="p">)</span>
+
+    <span class="n">bool_flag</span> <span class="o">=</span> <span class="n">bool_activity_type</span> <span class="o">&amp;</span> <span class="n">bool_activity_date</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">activity</span><span class="p">[</span><span class="n">bool_flag</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'activity_date'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="n">active_users</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'user_id'</span><span class="p">,</span> <span class="s1">'nunique'</span><span class="p">)</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'activity_date'</span><span class="p">:</span> <span class="s1">'day'</span><span class="p">})</span></code></pre>
+   </div>
+  </div>
+ </details>
+ <details class="used-methods">
+  <summary>
+   Explore methods in these solutions
+  </summary>
+  <div class="method-chip-group">
+   <span>
+    SQL
+   </span>
+   <div>
+    <a href="#m-sql-where">
+     WHERE
+    </a>
+    <a href="#m-sql-and">
+     AND
+    </a>
+    <a href="#m-sql-in">
+     IN
+    </a>
+    <a href="#m-sql-between">
+     BETWEEN
+    </a>
+    <a href="#m-sql-count">
+     COUNT()
+    </a>
+    <a href="#m-sql-count-distinct">
+     COUNT(DISTINCT)
+    </a>
+    <a href="#m-sql-group-by">
+     GROUP BY
+    </a>
+    <a href="#m-sql-datediff">
+     DATEDIFF()
+    </a>
+    <a href="#m-sql-select">
+     SELECT
+    </a>
+    <a href="#m-sql-distinct">
+     DISTINCT
+    </a>
+   </div>
+  </div>
+  <div class="method-chip-group">
+   <span>
+    pandas
+   </span>
+   <div>
+    <a href="#m-pd-select-column">
+     Select column
+    </a>
+    <a href="#m-pd-loc">
+     Rows by label
+    </a>
+    <a href="#m-pd-and">
+     Multiple conditions
+    </a>
+    <a href="#m-pd-isin">
+     Membership
+    </a>
+    <a href="#m-pd-between">
+     Range
+    </a>
+    <a href="#m-pd-new-column">
+     New column
+    </a>
+    <a href="#m-pd-assign">
+     assign()
+    </a>
+    <a href="#m-pd-rename">
+     Rename
+    </a>
+    <a href="#m-pd-reset-index">
+     Reset index
+    </a>
+    <a href="#m-pd-loc-label">
+     Access label
+    </a>
+    <a href="#m-pd-nunique">
+     nunique()
+    </a>
+    <a href="#m-pd-groupby">
+     Basic group
+    </a>
+    <a href="#m-pd-agg-named">
+     Named aggregation
+    </a>
+    <a href="#m-pd-to-datetime">
+     Convert date
+    </a>
+    <a href="#m-pd-timedelta">
+     Add days
+    </a>
+   </div>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#C14">
+   <small>
+    ← Previous
+   </small>
+   2356 · Unique subjects per teacher
+  </a>
+  <a href="#C16">
+   <small>
+    Next →
+   </small>
+   1070 · First-year product sales
+  </a>
+ </div>
+</article>

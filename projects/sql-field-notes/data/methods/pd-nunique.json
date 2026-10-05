@@ -1,0 +1,230 @@
+{
+  "id": "pd-nunique",
+  "lang": "pd",
+  "category": "Aggregation",
+  "label": "nunique()",
+  "example": "df['id'].nunique()",
+  "description": "Unique count",
+  "source": "image-pandas",
+  "related": [
+    "sql-count-distinct"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "nunique",
+  "uses": [
+    {
+      "page": "C14",
+      "block": "code-C14-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "2356 · Unique subjects per teacher",
+      "number": "2356",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def count_unique_subjects(teacher: pd.DataFrame) -> pd.DataFrame:\n    return teacher.groupby('teacher_id', as_index=False).agg(cnt=('subject_id', 'nunique'))",
+      "snippetLine": 3
+    },
+    {
+      "page": "C14",
+      "block": "code-C14-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "2356 · Unique subjects per teacher",
+      "number": "2356",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    return   teacher.groupby(by='teacher_id').agg(\n        cnt = ('subject_id', 'nunique')\n    ).reset_index()",
+      "snippetLine": 4
+    },
+    {
+      "page": "C14",
+      "block": "code-C14-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "2356 · Unique subjects per teacher",
+      "number": "2356",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    return teacher.groupby(by='teacher_id').agg(\n        cnt = ('subject_id', 'nunique')\n    ).reset_index()",
+      "snippetLine": 4
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-1",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    mask = a['activity_date'].between('2019-06-28', '2019-07-27') & a['activity_type'].isin(kinds)\n    return a.loc[mask].groupby('activity_date', as_index=False).agg(active_users=('user_id', 'nunique')).rename(columns={'activity_date': 'day'})",
+      "snippetLine": 6
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-3",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    return df.groupby(by='activity_date').agg(\n        active_users = ('user_id', 'nunique')\n    ).reset_index().rename(columns={'activity_date': 'day'})",
+      "snippetLine": 15
+    },
+    {
+      "page": "C15",
+      "block": "code-C15-5",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "1141 · User activity in a 30-day window",
+      "number": "1141",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    return df.groupby(by='activity_date').agg(\n        active_users = ('user_id', 'nunique')\n    ).reset_index().rename(columns={'activity_date': 'day'})",
+      "snippetLine": 15
+    },
+    {
+      "page": "C17",
+      "block": "code-C17-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "596 · Classes with at least five students",
+      "number": "596",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def find_classes(courses: pd.DataFrame) -> pd.DataFrame:\n    g = courses.groupby('class', as_index=False).agg(n_students=('student', 'nunique'))\n    return g.loc[g['n_students'].ge(5), ['class']]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C17",
+      "block": "code-C17-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "596 · Classes with at least five students",
+      "number": "596",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df = courses.groupby(by='class').agg(\n        nStudents = ('student', 'nunique')\n    ).reset_index()\n    return   df[df.nStudents >= 5][['class']]",
+      "snippetLine": 4
+    },
+    {
+      "page": "C17",
+      "block": "code-C17-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "596 · Classes with at least five students",
+      "number": "596",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = courses.groupby(by='class').agg(\n        nStudents = ('student', 'nunique')\n    ).reset_index()\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C18",
+      "block": "code-C18-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1729 · Followers count",
+      "number": "1729",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def count_followers(followers: pd.DataFrame) -> pd.DataFrame:\n    return followers.groupby('user_id', as_index=False).agg(followers_count=('follower_id', 'nunique')).sort_values('user_id')",
+      "snippetLine": 3
+    },
+    {
+      "page": "C18",
+      "block": "code-C18-3",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1729 · Followers count",
+      "number": "1729",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df =   followers.groupby('user_id').agg(\n        followers_count = ('follower_id', 'nunique')\n    ).reset_index()\n    return df.sort_values('user_id')",
+      "snippetLine": 4
+    },
+    {
+      "page": "C18",
+      "block": "code-C18-5",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1729 · Followers count",
+      "number": "1729",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    df = followers.groupby('user_id').agg(\n        followers_count = ('follower_id', 'nunique')\n    ).reset_index()\n",
+      "snippetLine": 4
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-1",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    eligible = customer.loc[customer['product_key'].isin(keys)]\n    counts = eligible.groupby('customer_id')['product_key'].nunique()\n    ids = customer[['customer_id']].drop_duplicates()\n    mask = ids['customer_id'].map(counts).fillna(0).eq(len(keys))",
+      "snippetLine": 5
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-3",
+      "line": 4,
+      "lines": [
+        4,
+        8
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def find_customers(customer: pd.DataFrame, product: pd.DataFrame) -> pd.DataFrame:\n    nProducts = product['product_key'].nunique()\n    customer_ids = customer[['customer_id']].drop_duplicates()\n    customer = customer[customer['product_key'].isin(product['product_key'])]",
+      "snippetLine": 3
+    },
+    {
+      "page": "C20",
+      "block": "code-C20-5",
+      "line": 4,
+      "lines": [
+        4,
+        7
+      ],
+      "title": "1045 · Customers who bought every product",
+      "number": "1045",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def find_customers(customer: pd.DataFrame, product: pd.DataFrame) -> pd.DataFrame:\n    nProducts = product['product_key'].nunique()\n\n    df = customer.groupby(by='customer_id').agg(",
+      "snippetLine": 3
+    }
+  ],
+  "pageCount": 5
+}

@@ -1,0 +1,46 @@
+{
+  "id": "pd-dt-month",
+  "lang": "pd",
+  "category": "Dates",
+  "label": "Month",
+  "example": "df.date.dt.month",
+  "description": "Extract month",
+  "source": "image-pandas",
+  "related": [
+    "sql-month"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "month",
+  "uses": [
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-1",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    sales['season'] = sales['sale_date'].dt.month.apply(season)\n    sales['revenue'] = (sales['quantity'] * sales['price']).round(2)\n    sales = sales.merge(products, on='product_id', how='left')",
+      "snippetLine": 9
+    },
+    {
+      "page": "squid-03",
+      "block": "code-squid-03-1",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "Compare hot and cold months",
+      "number": "03",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "dates = pd.to_datetime(games['date'])\ngames['month_num'], games['year_num'] = dates.dt.month, dates.dt.year\njoined = games.merge(extreme[['month']], left_on='month_num', right_on='month')\nresult = (joined.loc[joined['year_num'].ge(2006)]",
+      "snippetLine": 7
+    }
+  ],
+  "pageCount": 2
+}

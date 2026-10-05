@@ -1,0 +1,769 @@
+<article class="article method-page" id="m-sql-sum">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=sql&amp;cat=Aggregation">
+   MySQL · Aggregation
+  </a>
+ </div>
+ <h1>
+  SUM()
+ </h1>
+ <p class="lead">
+  Sum
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    MySQL
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-sum"><span class="nf">SUM</span><span class="p">(</span><span class="n">sales</span><span class="p">)</span></code></pre>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-pd-sum">
+   pandas · sum()
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C46?code=code-C46-0&amp;method=sql-sum&amp;line=17">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     1661 · Average processing time per machine
+    </strong>
+    <small>
+     Study solution · line 17
+    </small>
+   </div>
+   <pre aria-hidden="true">    )
+SELECT machine_id, ROUND(SUM(processing_time)/COUNT(*), 3) AS processing_time
+FROM m
+GROUP BY machine_id</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#B10?code=code-B10-4&amp;method=sql-sum&amp;line=1">
+   <div>
+    <span class="usage-label">
+     SQLBolt · SQL
+    </span>
+    <strong>
+     Aggregates and GROUP BY
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">SELECT building, SUM(years_employed) AS total_years FROM employees GROUP BY building;</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C50?code=code-C50-0&amp;method=sql-sum&amp;line=11">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     1934 · Confirmation rate
+    </strong>
+    <small>
+     Study solution · line 11
+    </small>
+   </div>
+   <pre aria-hidden="true">)
+SELECT user_id, ROUND(SUM(boolean)/COUNT(boolean), 2) AS confirmation_rate
+FROM Rate
+GROUP BY user_id</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C07?code=code-C07-0&amp;method=sql-sum&amp;line=2">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     1251 · Average selling price
+    </strong>
+    <small>
+     Study solution · line 2
+    </small>
+   </div>
+   <pre aria-hidden="true">SELECT p.product_id,
+       COALESCE(ROUND(SUM(p.price * u.units) / NULLIF(SUM(u.units), 0), 2), 0) AS average_price
+FROM Prices p LEFT JOIN UnitsSold u
+  ON p.product_id = u.product_id AND u.purchase_date BETWEEN p.start_date AND p.end_date</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C08?code=code-C08-2&amp;method=sql-sum&amp;line=3">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     1075 · Project employees I
+    </strong>
+    <small>
+     My approach · line 3
+    </small>
+   </div>
+   <pre aria-hidden="true">    p.project_id,
+    ROUND(SUM(e.experience_years) / COUNT(e.experience_years), 2) AS average_years
+FROM Project p
+LEFT JOIN Employee e   ON p.employee_id = e.employee_id</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C10?code=code-C10-2&amp;method=sql-sum&amp;line=14">
+   <div>
+    <span class="usage-label">
+     Leetcode · MySQL
+    </span>
+    <strong>
+     1211 · Queries quality and percentage
+    </strong>
+    <small>
+     My approach · line 14
+    </small>
+   </div>
+   <pre aria-hidden="true">    ROUND(AVG(quality), 2) AS quality,
+    ROUND(100 * SUM(poor_quality)/COUNT(poor_quality), 2) AS poor_query_percentage
+FROM Quality
+GROUP BY query_name;</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   11 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C11?code=code-C11-0&amp;method=sql-sum&amp;line=3">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      Study solution · line 3
+     </small>
+    </div>
+    <pre aria-hidden="true">       COUNT(*) AS trans_count,
+       SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END) AS approved_count,
+       SUM(amount) AS trans_total_amount,
+       SUM(CASE WHEN state = 'approved' THEN amount ELSE 0 END) AS approved_total_amount</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C12?code=code-C12-2&amp;method=sql-sum&amp;line=14">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1174 · Immediate first deliveries
+     </strong>
+     <small>
+      My approach · line 14
+     </small>
+    </div>
+    <pre aria-hidden="true">)
+SELECT ROUND(100 * SUM(immediate) / COUNT(immediate), 2) AS   immediate_percentage
+FROM Orders
+WHERE number = 1;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C26?code=code-C26-0&amp;method=sql-sum&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1204 · Last person to fit in the bus
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH cumulative AS (
+    SELECT person_name, turn, SUM(weight) OVER (ORDER BY turn ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW) AS running_weight
+    FROM Queue
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-0&amp;method=sql-sum&amp;line=2">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      Study solution · line 2
+     </small>
+    </div>
+    <pre aria-hidden="true">WITH daily AS (
+    SELECT visited_on, SUM(amount) AS amount FROM Customer GROUP BY visited_on
+), rolled AS (
+    SELECT visited_on,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C33?code=code-C33-0&amp;method=sql-sum&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      585 · Investments in 2016
+     </strong>
+     <small>
+      Study solution · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">)
+SELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016 FROM marked
+WHERE value_count &gt; 1 AND location_count = 1;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-0&amp;method=sql-sum&amp;line=1">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT p.product_name, SUM(o.unit) AS unit FROM Orders o
+JOIN Products p ON o.product_id = p.product_id
+WHERE o.order_date &gt;= '2020-02-01' AND o.order_date &lt; '2020-03-01'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC1393?code=code-LC1393-0&amp;method=sql-sum&amp;line=12">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1393 · Capital gain/loss
+     </strong>
+     <small>
+      Uploaded submission · line 12
+     </small>
+    </div>
+    <pre aria-hidden="true">
+SELECT stock_name, SUM(capital_gain_loss) AS capital_gain_loss
+FROM Operations
+GROUP BY stock_name</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3220?code=code-LC3220-0&amp;method=sql-sum&amp;line=10">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3220 · Odd and even transactions
+     </strong>
+     <small>
+      Uploaded submission · line 10
+     </small>
+    </div>
+    <pre aria-hidden="true">            transaction_date, 
+            SUM(amount) AS even_sum
+        FROM Transactions
+        WHERE amount % 2 = 0</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#LC3564?code=code-LC3564-0&amp;method=sql-sum&amp;line=21">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      3564 · Seasonal sales analysis
+     </strong>
+     <small>
+      Uploaded submission · line 21
+     </small>
+    </div>
+    <pre aria-hidden="true">            season, category, 
+            SUM(quantity) AS total_quantity, 
+            ROUND(SUM(revenue), 2) AS total_revenue
+        FROM SeasonSales</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B11?code=code-B11-4&amp;method=sql-sum&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      WHERE versus HAVING
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT role, SUM(years_employed) AS total_years
+FROM employees GROUP BY role HAVING role = 'Engineer';</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B12?code=code-B12-2&amp;method=sql-sum&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · SQL
+     </span>
+     <strong>
+      Logical query order
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">SELECT m.director, SUM(b.domestic_sales + b.international_sales) AS total_sales
+FROM movies m JOIN boxoffice b ON m.id = b.movie_id GROUP BY m.director;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (17)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C46?code=code-C46-2&amp;method=sql-sum&amp;line=21">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1661 · Average processing time per machine
+     </strong>
+     <small>
+      Uploaded submission · line 21
+     </small>
+    </div>
+    <pre aria-hidden="true">
+SELECT machine_id, ROUND(SUM(processing_time)/COUNT(*), 3) AS processing_time
+FROM m
+GROUP BY machine_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C50?code=code-C50-2&amp;method=sql-sum&amp;line=13">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1934 · Confirmation rate
+     </strong>
+     <small>
+      Uploaded submission · line 13
+     </small>
+    </div>
+    <pre aria-hidden="true">
+SELECT user_id, ROUND(SUM(boolean)/COUNT(boolean), 2) AS confirmation_rate
+FROM Rate
+GROUP BY user_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-2&amp;method=sql-sum&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      My approach · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">)
+SELECT product_id, COALESCE(ROUND(SUM(paid) / NULLIF(SUM(units), 0), 2), 0) AS average_price
+FROM Sold
+GROUP BY product_id;</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C07?code=code-C07-4&amp;method=sql-sum&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1251 · Average selling price
+     </strong>
+     <small>
+      Uploaded submission · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">
+SELECT product_id, COALESCE(ROUND(SUM(paid) / SUM(units), 2), 0) AS average_price
+FROM Sold
+GROUP BY product_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C08?code=code-C08-4&amp;method=sql-sum&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1075 · Project employees I
+     </strong>
+     <small>
+      Uploaded submission · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">    p.project_id, 
+    ROUND(SUM(e.experience_years) / COUNT(e.experience_years), 2) AS average_years
+FROM Project p
+LEFT JOIN Employee e ON p.employee_id = e.employee_id</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C10?code=code-C10-4&amp;method=sql-sum&amp;line=16">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1211 · Queries quality and percentage
+     </strong>
+     <small>
+      Uploaded submission · line 16
+     </small>
+    </div>
+    <pre aria-hidden="true">    ROUND(AVG(quality), 2) AS quality, 
+    ROUND(100 * SUM(poor_quality)/COUNT(poor_quality), 2) AS poor_query_percentage
+FROM Quality
+GROUP BY query_name</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C11?code=code-C11-2&amp;method=sql-sum&amp;line=16">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      My approach · line 16
+     </small>
+    </div>
+    <pre aria-hidden="true">    COUNT(approved) AS trans_count,
+    SUM(approved) AS approved_count,
+    SUM(amount) AS   trans_total_amount,
+    SUM(amount * approved) AS   approved_total_amount</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C11?code=code-C11-4&amp;method=sql-sum&amp;line=18">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1193 · Monthly transactions I
+     </strong>
+     <small>
+      Uploaded submission · line 18
+     </small>
+    </div>
+    <pre aria-hidden="true">    COUNT(approved) AS trans_count,
+    SUM(approved) AS approved_count, 
+    SUM(amount) AS trans_total_amount,
+    SUM(amount * approved) AS approved_total_amount</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C12?code=code-C12-4&amp;method=sql-sum&amp;line=16">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1174 · Immediate first deliveries
+     </strong>
+     <small>
+      Uploaded submission · line 16
+     </small>
+    </div>
+    <pre aria-hidden="true">
+SELECT ROUND(100 * SUM(immediate) / COUNT(immediate), 2) AS immediate_percentage
+FROM Orders
+WHERE number = 1</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C26?code=code-C26-2&amp;method=sql-sum&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1204 · Last person to fit in the bus
+     </strong>
+     <small>
+      My approach · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">        turn,
+        SUM(weight) OVER (ORDER BY turn ASC) AS cumsum_weight
+    FROM Queue
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C26?code=code-C26-4&amp;method=sql-sum&amp;line=6">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1204 · Last person to fit in the bus
+     </strong>
+     <small>
+      Uploaded submission · line 6
+     </small>
+    </div>
+    <pre aria-hidden="true">        turn,
+        SUM(weight) OVER (ORDER BY turn ASC) AS cumsum_weight
+    FROM Queue
+)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-2&amp;method=sql-sum&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      My approach · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">        DISTINCT visited_on,
+        SUM(amount) OVER (
+            ORDER BY visited_on RANGE BETWEEN   INTERVAL 6 DAY   PRECEDING AND CURRENT ROW
+        ) AS rolling_amount,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C31?code=code-C31-4&amp;method=sql-sum&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1321 · Restaurant growth
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">        DISTINCT visited_on, 
+        SUM(amount) OVER (
+            ORDER BY visited_on RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW
+        ) AS rolling_amount,</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C33?code=code-C33-2&amp;method=sql-sum&amp;line=15">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      585 · Investments in 2016
+     </strong>
+     <small>
+      My approach · line 15
+     </small>
+    </div>
+    <pre aria-hidden="true">
+SELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016
+FROM Insurance
+WHERE pid IN (SELECT pid FROM UniqueCity) AND tiv_2015 IN (SELECT tiv_2015 FROM NonUniqueTIV);</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C33?code=code-C33-4&amp;method=sql-sum&amp;line=16">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      585 · Investments in 2016
+     </strong>
+     <small>
+      Uploaded submission · line 16
+     </small>
+    </div>
+    <pre aria-hidden="true">    
+SELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016
+FROM Insurance
+WHERE pid IN (SELECT pid FROM UniqueCity) AND tiv_2015 IN (SELECT tiv_2015 FROM NonUniqueTIV)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-2&amp;method=sql-sum&amp;line=4">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      My approach · line 4
+     </small>
+    </div>
+    <pre aria-hidden="true">        product_id,
+        SUM(unit) AS unit
+    FROM Orders
+    WHERE order_date &gt;= '2020-02-01' AND order_date &lt; '2020-03-01'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C40?code=code-C40-4&amp;method=sql-sum&amp;line=5">
+    <div>
+     <span class="usage-label">
+      Leetcode · MySQL
+     </span>
+     <strong>
+      1327 · Products with at least 100 February units
+     </strong>
+     <small>
+      Uploaded submission · line 5
+     </small>
+    </div>
+    <pre aria-hidden="true">        product_id, 
+        SUM(unit) AS unit
+    FROM Orders
+    WHERE order_date &gt; '2020-01-31' AND order_date &lt; '2020-03-01'</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    SQL cheat-sheet image · Aggregation. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=sql&amp;cat=Aggregation">
+   <small>
+    ← Browse
+   </small>
+   MySQL · Aggregation
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

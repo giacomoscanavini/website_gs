@@ -1,0 +1,286 @@
+{
+  "id": "sql-avg",
+  "lang": "sql",
+  "category": "Aggregation",
+  "label": "AVG()",
+  "example": "AVG(score)",
+  "description": "Average",
+  "source": "image-sql",
+  "related": [
+    "pd-mean"
+  ],
+  "note": "",
+  "doc": "https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html",
+  "aliases": "AVG",
+  "uses": [
+    {
+      "page": "C08",
+      "block": "code-C08-0",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "1075 · Project employees I",
+      "number": "1075",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT p.project_id, ROUND(AVG(e.experience_years), 2) AS average_years\nFROM Project p LEFT JOIN Employee e ON p.employee_id = e.employee_id\nGROUP BY p.project_id;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-0",
+      "line": 1,
+      "lines": [
+        1,
+        2
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "SELECT query_name, ROUND(AVG(rating / position), 2) AS quality,\n       ROUND(100.0 * AVG(CASE WHEN rating < 3 THEN 1 ELSE 0 END), 2) AS poor_query_percentage\nFROM Queries GROUP BY query_name;",
+      "snippetLine": 1
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-2",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    query_name,\n    ROUND(AVG(quality), 2) AS quality,\n    ROUND(100 * SUM(poor_quality)/COUNT(poor_quality), 2) AS poor_query_percentage\nFROM Quality",
+      "snippetLine": 12
+    },
+    {
+      "page": "C10",
+      "block": "code-C10-4",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "1211 · Queries quality and percentage",
+      "number": "1211",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    query_name, \n    ROUND(AVG(quality), 2) AS quality, \n    ROUND(100 * SUM(poor_quality)/COUNT(poor_quality), 2) AS poor_query_percentage\nFROM Quality",
+      "snippetLine": 14
+    },
+    {
+      "page": "C12",
+      "block": "code-C12-0",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1174 · Immediate first deliveries",
+      "number": "1174",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": ")\nSELECT ROUND(100.0 * AVG(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END), 2)\n       AS immediate_percentage\nFROM ranked WHERE rn = 1;",
+      "snippetLine": 4
+    },
+    {
+      "page": "C13",
+      "block": "code-C13-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "550 · Game Play Analysis IV",
+      "number": "550",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": ")\nSELECT ROUND(AVG(CASE WHEN EXISTS (\n    SELECT 1 FROM Activity a\n    WHERE a.player_id = f.player_id AND a.event_date = DATE_ADD(f.first_day, INTERVAL 1 DAY)",
+      "snippetLine": 3
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-0",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "           COUNT(*) AS reports_count,\n           ROUND(AVG(age)) AS average_age\n    FROM Employees\n    WHERE reports_to IS NOT NULL",
+      "snippetLine": 3
+    },
+    {
+      "page": "C21",
+      "block": "code-C21-2",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1731 · Employees reporting to employees",
+      "number": "1731",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        COUNT(age) AS reports_count,\n        ROUND(AVG(age)) AS average_age\n    FROM Employees\n    GROUP BY reports_to",
+      "snippetLine": 5
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-0",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    WHERE r.created_at >= '2020-02-01' AND r.created_at < '2020-03-01'\n    GROUP BY m.movie_id, m.title ORDER BY AVG(r.rating) DESC, m.title LIMIT 1\n), combined AS (\n    SELECT 1 AS sequence_no, results FROM user_winner",
+      "snippetLine": 6
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-2",
+      "line": 19,
+      "lines": [
+        19
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "      MovieAvgRatingFeb AS (\n        SELECT movie_id, AVG(rating) AS avgRating\n        FROM MovieRating\n        WHERE created_at >= '2020-02-01' AND created_at < '2020-03-01'",
+      "snippetLine": 18
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-4",
+      "line": 20,
+      "lines": [
+        20
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    MovieAvgRatingFeb AS (\n        SELECT movie_id, AVG(rating) AS avgRating\n        FROM MovieRating\n        WHERE created_at >= '2020-02-01' AND created_at < '2020-03-01'",
+      "snippetLine": 19
+    },
+    {
+      "page": "LC3497",
+      "block": "code-LC3497-0",
+      "line": 5,
+      "lines": [
+        5,
+        6
+      ],
+      "title": "3497 · Analyze subscription conversion",
+      "number": "3497",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "        user_id, \n        ROUND(AVG(IF(activity_type='free_trial', activity_duration, NULL)), 2) AS trial_avg_duration,\n        ROUND(AVG(IF(activity_type='paid', activity_duration, NULL)), 2) AS paid_avg_duration\n    FROM UserActivity",
+      "snippetLine": 4
+    },
+    {
+      "page": "squid-03",
+      "block": "code-squid-03-0",
+      "line": 34,
+      "lines": [
+        34
+      ],
+      "title": "Compare hot and cold months",
+      "number": "03",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "    h.month_num,\n    AVG(h.average_completion_time) AS avg_temp\nFROM Honeycomb_game_extended h \nINNER JOIN Extrama_month e",
+      "snippetLine": 33
+    },
+    {
+      "page": "squid-04",
+      "block": "code-squid-04-0",
+      "line": 11,
+      "lines": [
+        11
+      ],
+      "title": "Rank ten-player teams",
+      "number": "04",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "FROM (\n    SELECT team_id, COUNT(*) AS n_players, AVG(age) AS age_team\n    FROM player  \n    GROUP BY team_id",
+      "snippetLine": 10
+    },
+    {
+      "page": "squid-06",
+      "block": "code-squid-06-0",
+      "line": 39,
+      "lines": [
+        39
+      ],
+      "title": "Trace equipment to its first failure",
+      "number": "06",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "\t\t   \nSELECT FLOOR(AVG(time_to_first_failure))\nFROM Failed_time\n                ",
+      "snippetLine": 38
+    },
+    {
+      "page": "squid-08",
+      "block": "code-squid-08-0",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "Find the longest hesitation",
+      "number": "08",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "        GROUP BY game_id\n        ORDER BY AVG(last_moved_time_seconds) DESC\n        LIMIT 1\n    )",
+      "snippetLine": 6
+    },
+    {
+      "page": "B10",
+      "block": "code-B10-2",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Aggregates and GROUP BY",
+      "number": "10",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT role, AVG(years_employed) AS average_years FROM employees GROUP BY role;",
+      "snippetLine": 1
+    },
+    {
+      "page": "B19",
+      "block": "code-B19-0",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "Additional topic · Subqueries",
+      "number": "19",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT * FROM sales_associates\nWHERE salary > (SELECT AVG(revenue_generated) FROM sales_associates);",
+      "snippetLine": 1
+    },
+    {
+      "page": "B19",
+      "block": "code-B19-2",
+      "line": 2,
+      "lines": [
+        2
+      ],
+      "title": "Additional topic · Subqueries",
+      "number": "19",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "SELECT e.* FROM employees e\nWHERE e.salary > (SELECT AVG(d.revenue_generated) FROM employees d\n                  WHERE d.department = e.department);",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 13
+}

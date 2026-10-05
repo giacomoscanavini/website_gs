@@ -1,0 +1,142 @@
+{
+  "id": "pd-groupby-multi",
+  "lang": "pd",
+  "category": "GroupBy",
+  "label": "Multiple groups",
+  "example": "df.groupby(['city','year'])",
+  "description": "Group by several columns",
+  "source": "image-pandas",
+  "related": [],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C48",
+      "block": "code-C48-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    df = students.merge(subjects, how='cross')\n    exam_count = examinations.groupby(['student_id', 'subject_name']).size().reset_index(name='attended_exams')\n    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left')\n    df['attended_exams'] = df['attended_exams'].fillna(0).astype(int)",
+      "snippetLine": 4
+    },
+    {
+      "page": "C48",
+      "block": "code-C48-3",
+      "line": 6,
+      "lines": [
+        6
+      ],
+      "title": "1280 · Students and examinations",
+      "number": "1280",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    exam_count = examinations.groupby(by=['student_id', 'subject_name']).agg(\n        attended_exams = ('subject_name', 'count')\n    ).reset_index()",
+      "snippetLine": 5
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-1",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    t['approved_amount'] = t['amount'].where(t['approved'], 0)\n    return t.groupby(['month', 'country'], dropna=False, as_index=False).agg(\n        trans_count=('amount', 'size'), approved_count=('approved', 'sum'),\n        trans_total_amount=('amount', 'sum'), approved_total_amount=('approved_amount', 'sum'))",
+      "snippetLine": 6
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-3",
+      "line": 7,
+      "lines": [
+        7
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    transactions['approved_amount'] =   transactions['approved'] * transactions['amount']\n    return   transactions.groupby(by=['month', 'country'], dropna=False).agg(\n        trans_count = ('amount', 'size'),\n        approved_count = ('approved', 'sum'),",
+      "snippetLine": 6
+    },
+    {
+      "page": "C11",
+      "block": "code-C11-5",
+      "line": 8,
+      "lines": [
+        8
+      ],
+      "title": "1193 · Monthly transactions I",
+      "number": "1193",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return transactions.groupby(by=['month', 'country'], dropna=False).agg(\n        trans_count = ('amount', 'size'),\n        approved_count = ('approved', 'sum'),",
+      "snippetLine": 7
+    },
+    {
+      "page": "LC3421",
+      "block": "code-LC3421-1",
+      "line": 17,
+      "lines": [
+        17
+      ],
+      "title": "3421 · Find students who improved",
+      "number": "3421",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df = scores.groupby(by=['student_id', 'subject']).apply(custom_func).reset_index()\n\n    return df[df.improved == True][['student_id', 'subject', 'first_score', 'latest_score']]",
+      "snippetLine": 16
+    },
+    {
+      "page": "LC3521",
+      "block": "code-LC3521-1",
+      "line": 12,
+      "lines": [
+        12
+      ],
+      "title": "3521 · Find product recommendation pairs",
+      "number": "3521",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "    \n    df = df.groupby(by=['product1_id', 'product2_id']).agg(\n        customer_count = ('product1_id', 'size')\n    ).reset_index()",
+      "snippetLine": 11
+    },
+    {
+      "page": "LC3564",
+      "block": "code-LC3564-1",
+      "line": 16,
+      "lines": [
+        16
+      ],
+      "title": "3564 · Seasonal sales analysis",
+      "number": "3564",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    df = sales.groupby(by=['season', 'category']).agg(\n        total_quantity = ('quantity', 'sum'),\n        total_revenue = ('revenue', 'sum')",
+      "snippetLine": 15
+    },
+    {
+      "page": "squid-03",
+      "block": "code-squid-03-1",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "Compare hot and cold months",
+      "number": "03",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "joined = games.merge(extreme[['month']], left_on='month_num', right_on='month')\nresult = (joined.loc[joined['year_num'].ge(2006)]\n          .groupby(['shape', 'month_num'], as_index=False)\n          .agg(avg_temp=('average_completion_time', 'mean'))",
+      "snippetLine": 9
+    }
+  ],
+  "pageCount": 6
+}

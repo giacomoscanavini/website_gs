@@ -1,0 +1,106 @@
+<article class="article" id="A02">
+ <div class="breadcrumb">
+  <a href="#reference">
+   Reference
+  </a>
+ </div>
+ <h1>
+  Setup and conventions
+ </h1>
+ <h2>
+  One problem at a time
+ </h2>
+ <p>
+  Every exercise has its own tables. SQLBolt examples use its tutorial schema; the Leetcode SQL targets MySQL 8 or later. Do not combine unrelated examples into one database script.
+ </p>
+ <h2>
+  pandas
+ </h2>
+ <p>
+  The function examples accept DataFrames with the same column names as the exercise tables. Each practice implementation includes its imports. SQLBolt snippets assume
+  <code>
+   import pandas as pd
+  </code>
+  and lowercase DataFrame names matching their tables.
+ </p>
+ <p>
+  Create the input DataFrames from the exercise data before calling a function. Date operations require datetime-like columns; use
+  <code>
+   pd.to_datetime
+  </code>
+  when loading dates as strings.
+ </p>
+ <h2>
+  Dates and order
+ </h2>
+ <p>
+  A previous row is not necessarily the previous calendar day. Sort before shifting or rolling, and use calendar-date comparisons when the task asks for days. A half-open month interval includes the start date and excludes the first day of the following month.
+ </p>
+ <h2>
+  Rounding
+ </h2>
+ <p>
+  Python and pandas normally round exact halfway values to the nearest even result. MySQL exact-value rounding uses halves away from zero. Where needed, the examples include this half-up helper.
+ </p>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button aria-label="Copy PYTHON" data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre id="code-A02-0" tabindex="0"><code class="language-python" data-origin="legacy-A02-3"><span class="sd">"""Authored pandas study alternatives; see the corresponding pages for assumptions.</span>
+<span class="sd">Requires pandas. All functions return a new result except delete_duplicate_emails,</span>
+<span class="sd">which intentionally mutates its input. Synthetic tests are in ../tests/.</span>
+<span class="sd">"""</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">round_half_up</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">digits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Round the decimal representation of value; preserve missing values.</span>
+
+<span class="sd">    This does not recover precision already lost in binary floating-point arithmetic.</span>
+<span class="sd">    For exact financial arithmetic, retain Decimal or integer minor units upstream.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s1">'nan'</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">))</span><span class="o">.</span><span class="n">quantize</span><span class="p">(</span><span class="n">Decimal</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">scaleb</span><span class="p">(</span><span class="o">-</span><span class="n">digits</span><span class="p">),</span> <span class="n">rounding</span><span class="o">=</span><span class="n">ROUND_HALF_UP</span><span class="p">))</span></code></pre>
+ </div>
+ <p>
+  The helper rounds the decimal representation of its input. It does not undo floating-point precision loss; retain Decimal values or integer minor units when exact decimal arithmetic is required.
+ </p>
+ <details class="reference-details">
+  <summary>
+   Sources
+  </summary>
+  <div class="sources-content">
+   <p>
+    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+     pandas SQL comparison
+    </a>
+   </p>
+   <p>
+    <a href="https://dev.mysql.com/doc/refman/8.4/en/precision-math-rounding.html" rel="noopener noreferrer" target="_blank">
+     MySQL rounding behavior
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#A01">
+   <small>
+    ← Previous
+   </small>
+   SQL ↔ pandas translation sheet
+  </a>
+  <a href="#home">
+   <small>
+    Contents
+   </small>
+   All sections
+  </a>
+ </div>
+</article>

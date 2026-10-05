@@ -1,0 +1,343 @@
+<article class="article method-page" id="m-pd-head">
+ <div class="breadcrumb">
+  <a href="#methods">
+   Method explorer
+  </a>
+  <span class="separator">
+   /
+  </span>
+  <a href="#methods?lang=pd&amp;cat=DataFrame%20basics">
+   pandas · DataFrame basics
+  </a>
+ </div>
+ <h1>
+  First rows
+ </h1>
+ <p class="lead">
+  Preview top rows
+ </p>
+ <h2>
+  Quick syntax
+ </h2>
+ <div class="codebox">
+  <div class="codehead">
+   <span>
+    pandas
+   </span>
+   <button data-copy="" type="button">
+    Copy
+   </button>
+  </div>
+  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-head"><span class="n">df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span></code></pre>
+ </div>
+ <div class="counterparts">
+  <span>
+   Compare with
+  </span>
+  <a href="#m-sql-limit">
+   SQL · LIMIT / OFFSET
+  </a>
+ </div>
+ <p class="small">
+  Related operations; row order, missing values and tie handling can differ.
+ </p>
+ <h2>
+  See it in a solution
+ </h2>
+ <p class="small">
+  Open a link to reveal the matching language and code block.
+ </p>
+ <div class="usage-list">
+  <a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-head&amp;line=6">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     1341 · Movie rating report
+    </strong>
+    <small>
+     Study solution · line 6
+    </small>
+   </div>
+   <pre aria-hidden="true">    users_ranked = r.groupby('user_id').size().reset_index(name='n_reviews').merge(users, on='user_id')
+    first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})
+    feb = r.loc[r['created_at'].ge('2020-02-01') &amp; r['created_at'].lt('2020-03-01')]
+    movies_ranked = feb.groupby('movie_id', as_index=False).agg(avg_rating=('rating', 'mean')).merge(movies, on='movie_id')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#murder-02?code=code-murder-02-1&amp;method=pd-head&amp;line=3">
+   <div>
+    <span class="usage-label">
+     Murder City · pandas
+    </span>
+    <strong>
+     Find the two witnesses
+    </strong>
+    <small>
+     Saved walkthrough · line 3
+    </small>
+   </div>
+   <pre aria-hidden="true">
+first = (person.loc[person['address_street_name'].eq('Northwestern Dr')]
+         .sort_values('address_number', ascending=False).head(1))
+second = person.loc[</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-head&amp;line=3">
+   <div>
+    <span class="usage-label">
+     Squid Game · pandas
+    </span>
+    <strong>
+     Compare hot and cold months
+    </strong>
+    <small>
+     Saved walkthrough · line 3
+    </small>
+   </div>
+   <pre aria-hidden="true">
+cold = monthly_temperatures.sort_values('avg_temperature').head(1)
+hot = monthly_temperatures.sort_values('avg_temperature', ascending=False).head(1)
+extreme = pd.concat([cold, hot], ignore_index=True).drop_duplicates()</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#B04?code=code-B04-3&amp;method=pd-head&amp;line=1">
+   <div>
+    <span class="usage-label">
+     SQLBolt · pandas
+    </span>
+    <strong>
+     DISTINCT, sorting and pagination
+    </strong>
+    <small>
+     Study solution · line 1
+    </small>
+   </div>
+   <pre aria-hidden="true">result = movies.sort_values('year', ascending=False).head(4)</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#C32?code=code-C32-1&amp;method=pd-head&amp;line=6">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     602 · Most accepted friends
+    </strong>
+    <small>
+     Study solution · line 6
+    </small>
+   </div>
+   <pre aria-hidden="true">    counts = ids.value_counts().rename_axis('id').reset_index(name='num')
+    return counts.sort_values(['num', 'id'], ascending=[False, True]).head(1)</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+  <a class="usage-link" href="#LC3580?code=code-LC3580-1&amp;method=pd-head&amp;line=5">
+   <div>
+    <span class="usage-label">
+     Leetcode · pandas
+    </span>
+    <strong>
+     3580 · Find consistently improving employees
+    </strong>
+    <small>
+     Uploaded submission · line 5
+    </small>
+   </div>
+   <pre aria-hidden="true">    df = (
+        performance_reviews
+        .sort_values(by=['employee_id', 'review_date'], ascending=[True, False])
+        .groupby(by='employee_id')</pre>
+   <span aria-hidden="true" class="usage-arrow">
+    ↗
+   </span>
+  </a>
+ </div>
+ <details class="more-uses">
+  <summary>
+   3 more matching notes
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#squid-05?code=code-squid-05-1&amp;method=pd-head&amp;line=13">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Count a player’s closest interactions
+     </strong>
+     <small>
+      Saved walkthrough · line 13
+     </small>
+    </div>
+    <pre aria-hidden="true"># Explicit final sort is an authored addition
+result = (joined.loc[joined['status'].eq('alive')]
+          .sort_values('counts', ascending=False).head(1)
+          [['name_456', 'name_other', 'counts']])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#squid-08?code=code-squid-08-1&amp;method=pd-head&amp;line=8">
+    <div>
+     <span class="usage-label">
+      Squid Game · pandas
+     </span>
+     <strong>
+      Find the longest hesitation
+     </strong>
+     <small>
+      Saved walkthrough · line 8
+     </small>
+    </div>
+    <pre aria-hidden="true">    game_id = means.sort_values(ascending=False).index[0]
+    result = (pushed.loc[pushed['game_id'].eq(game_id)]
+              .sort_values('last_moved_time_seconds', ascending=False).head(1)
+              [['id', 'first_name', 'last_name', 'last_moved_time_seconds']])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B05?code=code-B05-7&amp;method=pd-head&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      Review · Simple SELECT queries
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = north_american_cities.loc[north_american_cities['country'].eq('Mexico')].sort_values('population', ascending=False).head(2)[['city', 'population']]</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="more-uses">
+  <summary>
+   Other saved implementations (4)
+  </summary>
+  <div class="usage-list">
+   <a class="usage-link" href="#C30?code=code-C30-3&amp;method=pd-head&amp;line=14">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      1341 · Movie rating report
+     </strong>
+     <small>
+      My approach · line 14
+     </small>
+    </div>
+    <pre aria-hidden="true">    df_movies =   df_movies.merge(movies, on='movie_id', how='left').sort_values(by=['avgRating', 'title'], ascending=[False, True])[['title', 'avgRating']]
+    return   pd.concat([df_users.head(1)[['name']].rename(columns={'name': 'results'}),
+                        df_movies.head(1)[['title']].rename(columns={'title': 'results'}),
+                    ])</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C32?code=code-C32-3&amp;method=pd-head&amp;line=9">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      602 · Most accepted friends
+     </strong>
+     <small>
+      My approach · line 9
+     </small>
+    </div>
+    <pre aria-hidden="true">    df.columns = ['id', 'num']
+    return df.sort_values(['num', 'id'], ascending=[False, True]).head(1)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#C32?code=code-C32-5&amp;method=pd-head&amp;line=12">
+    <div>
+     <span class="usage-label">
+      Leetcode · pandas
+     </span>
+     <strong>
+      602 · Most accepted friends
+     </strong>
+     <small>
+      Uploaded submission · line 12
+     </small>
+    </div>
+    <pre aria-hidden="true">
+    return df.head(1)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+   <a class="usage-link" href="#B04?code=code-B04-5&amp;method=pd-head&amp;line=1">
+    <div>
+     <span class="usage-label">
+      SQLBolt · pandas
+     </span>
+     <strong>
+      DISTINCT, sorting and pagination
+     </strong>
+     <small>
+      Study solution · line 1
+     </small>
+    </div>
+    <pre aria-hidden="true">result = movies.sort_values('title').head(5)</pre>
+    <span aria-hidden="true" class="usage-arrow">
+     ↗
+    </span>
+   </a>
+  </div>
+ </details>
+ <details class="reference-details">
+  <summary>
+   Source and scope
+  </summary>
+  <div class="sources-content">
+   <p>
+    pandas cheat-sheet image · DataFrame basics. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
+   </p>
+   <p>
+    Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
+   </p>
+   <p>
+    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+     Language documentation ↗
+    </a>
+   </p>
+  </div>
+ </details>
+ <div class="prev-next">
+  <a href="#methods?lang=pd&amp;cat=DataFrame%20basics">
+   <small>
+    ← Browse
+   </small>
+   pandas · DataFrame basics
+  </a>
+  <a href="#A01">
+   <small>
+    Compare
+   </small>
+   SQL ↔ pandas
+  </a>
+ </div>
+</article>

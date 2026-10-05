@@ -1,0 +1,215 @@
+{
+  "id": "pd-concat-rows",
+  "lang": "pd",
+  "category": "Merge / join",
+  "label": "Concatenate rows",
+  "example": "pd.concat([a,b])",
+  "description": "Stack rows",
+  "source": "image-pandas",
+  "related": [
+    "sql-union",
+    "sql-union-all"
+  ],
+  "note": "",
+  "doc": "https://pandas.pydata.org/docs/reference/index.html",
+  "aliases": "",
+  "uses": [
+    {
+      "page": "C25",
+      "block": "code-C25-3",
+      "line": 13,
+      "lines": [
+        13
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "                        'price': [10 for x in to_update]})\n    return   pd.concat([df[['product_id', 'price']], df1])",
+      "snippetLine": 12
+    },
+    {
+      "page": "C25",
+      "block": "code-C25-5",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1164 · Product price at a given date",
+      "number": "1164",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return pd.concat([df[['product_id', 'price']], df1])",
+      "snippetLine": 13
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-1",
+      "line": 10,
+      "lines": [
+        10
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "    second = movies_ranked.sort_values(['avg_rating', 'title'], ascending=[False, True]).head(1)[['title']].rename(columns={'title': 'results'})\n    return pd.concat([first, second], ignore_index=True)",
+      "snippetLine": 9
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-3",
+      "line": 14,
+      "lines": [
+        14
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "    df_movies =   df_movies.merge(movies, on='movie_id', how='left').sort_values(by=['avgRating', 'title'], ascending=[False, True])[['title', 'avgRating']]\n    return   pd.concat([df_users.head(1)[['name']].rename(columns={'name': 'results'}),\n                        df_movies.head(1)[['title']].rename(columns={'title': 'results'}),\n                    ])",
+      "snippetLine": 13
+    },
+    {
+      "page": "C30",
+      "block": "code-C30-5",
+      "line": 15,
+      "lines": [
+        15
+      ],
+      "title": "1341 · Movie rating report",
+      "number": "1341",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "\n    return pd.concat([df_users.iloc[[0]][['name']].rename(columns={'name': 'results'}),\n                      df_movies.iloc[[0]][['title']].rename(columns={'title': 'results'}),\n                    ])",
+      "snippetLine": 14
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-1",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Study solution",
+      "snippet": "def most_friends(request_accepted: pd.DataFrame) -> pd.DataFrame:\n    ids = pd.concat([request_accepted['requester_id'], request_accepted['accepter_id']], ignore_index=True)\n    counts = ids.value_counts().rename_axis('id').reset_index(name='num')\n    return counts.sort_values(['num', 'id'], ascending=[False, True]).head(1)",
+      "snippetLine": 3
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-3",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "My approach",
+      "snippet": "def most_friends(request_accepted: pd.DataFrame) -> pd.DataFrame:\n    friends = pd.concat([\n        request_accepted['requester_id'],\n        request_accepted['accepter_id']",
+      "snippetLine": 2
+    },
+    {
+      "page": "C32",
+      "block": "code-C32-5",
+      "line": 4,
+      "lines": [
+        4
+      ],
+      "title": "602 · Most accepted friends",
+      "number": "602",
+      "group": "practice",
+      "context": "Uploaded submission",
+      "snippet": "def most_friends(request_accepted: pd.DataFrame) -> pd.DataFrame:\n    friends = pd.concat([\n        request_accepted['requester_id'], \n        request_accepted['accepter_id']",
+      "snippetLine": 3
+    },
+    {
+      "page": "murder-02",
+      "block": "code-murder-02-1",
+      "line": 9,
+      "lines": [
+        9
+      ],
+      "title": "Find the two witnesses",
+      "number": "02",
+      "group": "murder",
+      "context": "Saved walkthrough",
+      "snippet": "]\nresult = pd.concat([first, second], ignore_index=True).drop_duplicates()",
+      "snippetLine": 8
+    },
+    {
+      "page": "squid-03",
+      "block": "code-squid-03-1",
+      "line": 5,
+      "lines": [
+        5
+      ],
+      "title": "Compare hot and cold months",
+      "number": "03",
+      "group": "squid",
+      "context": "Saved walkthrough",
+      "snippet": "hot = monthly_temperatures.sort_values('avg_temperature', ascending=False).head(1)\nextreme = pd.concat([cold, hot], ignore_index=True).drop_duplicates()\ngames = honeycomb_game.copy()\ndates = pd.to_datetime(games['date'])",
+      "snippetLine": 4
+    },
+    {
+      "page": "B13",
+      "block": "code-B13-1",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "INSERT rows",
+      "number": "13",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "new_movie = pd.DataFrame([{'id': new_id, 'title': 'Toy Story 4', 'director': 'Example Director', 'year': 2019, 'length_minutes': 100}])\nmovies = pd.concat([movies, new_movie], ignore_index=True)",
+      "snippetLine": 2
+    },
+    {
+      "page": "B13",
+      "block": "code-B13-3",
+      "line": 3,
+      "lines": [
+        3
+      ],
+      "title": "INSERT rows",
+      "number": "13",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "new_sales = pd.DataFrame([{'movie_id': movie_id, 'rating': 8.7, 'domestic_sales': 340_000_000, 'international_sales': 270_000_000}])\nboxoffice = pd.concat([boxoffice, new_sales], ignore_index=True)",
+      "snippetLine": 2
+    },
+    {
+      "page": "B20",
+      "block": "code-B20-1",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Additional topic · Set operations",
+      "number": "20",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = pd.concat([a[['id']], b[['id']]], ignore_index=True)",
+      "snippetLine": 1
+    },
+    {
+      "page": "B20",
+      "block": "code-B20-3",
+      "line": 1,
+      "lines": [
+        1
+      ],
+      "title": "Additional topic · Set operations",
+      "number": "20",
+      "group": "sqlbolt",
+      "context": "Study solution",
+      "snippet": "result = pd.concat([a[['id']], b[['id']]], ignore_index=True).drop_duplicates()",
+      "snippetLine": 1
+    }
+  ],
+  "pageCount": 7
+}
