@@ -1,90 +1,55 @@
 <section aria-labelledby="bias-variance-title" class="page-view lesson-layout" id="bias-variance">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      17
     </span>
     Part 3 · Regularization &amp; ensembles
    </p>
-   <h1 id="bias-variance-title" tabindex="-1">
+<h1 id="bias-variance-title" tabindex="-1">
     Generalization and the bias–variance trade-off
    </h1>
-   <p class="standfirst">
-    Explain why fitting harder can hurt, and why different regularizers constrain different parts of learning.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Regularization · PDF pp. 5–6 · §1" data-page="5" data-pdf="reg" type="button">
-     Regularization · PDF pp. 5–6 · §1
-    </button>
-    <button aria-label="Open source: Regularization · PDF pp. 26–29 · §§20–25" data-page="26" data-pdf="reg" type="button">
-     Regularization · PDF pp. 26–29 · §§20–25
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<p class="standfirst">Prediction error under squared loss separates into irreducible noise, squared bias, and estimator variance. Regularization can reduce total error by trading some bias for a larger reduction in variance.</p>
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="generalization-is-not-the-same-as-fitting" href="#bias-variance?section=generalization-is-not-the-same-as-fitting">
-     Generalization is not the same as fitting
-    </a>
-    <a data-section="the-squared-error-decomposition" href="#bias-variance?section=the-squared-error-decomposition">
-     The squared-error decomposition
-    </a>
-    <a data-section="why-accepting-bias-can-reduce-total-error" href="#bias-variance?section=why-accepting-bias-can-reduce-total-error">
-     Why accepting bias can reduce total error
-    </a>
-    <a data-section="several-mechanisms-several-objects-being-constrained" href="#bias-variance?section=several-mechanisms-several-objects-being-constrained">
-     Several mechanisms, several objects being constrained
-    </a>
-    <a data-section="a-data-dependent-diagnosis" href="#bias-variance?section=a-data-dependent-diagnosis">
-     A data-dependent diagnosis
-    </a>
-    <a data-section="why-validation-belongs-inside-the-explanation" href="#bias-variance?section=why-validation-belongs-inside-the-explanation">
-     Why validation belongs inside the explanation
-    </a>
-    <a data-section="implementation" href="#bias-variance?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="generalization-is-not-the-same-as-fitting" id="bias-variance--generalization-is-not-the-same-as-fitting">
+<nav aria-label="On this page">
+<a data-section="generalization-is-not-the-same-as-fitting" href="#bias-variance?section=generalization-is-not-the-same-as-fitting">Generalization is not the same as fitting</a>
+<a data-section="the-squared-error-decomposition" href="#bias-variance?section=the-squared-error-decomposition">The squared-error decomposition</a>
+<a data-section="why-accepting-bias-can-reduce-total-error" href="#bias-variance?section=why-accepting-bias-can-reduce-total-error">Why accepting bias can reduce total error</a>
+<a data-section="several-mechanisms-several-objects-being-constrained" href="#bias-variance?section=several-mechanisms-several-objects-being-constrained">Several mechanisms, several objects being constrained</a>
+<a data-section="a-data-dependent-diagnosis" href="#bias-variance?section=a-data-dependent-diagnosis">A data-dependent diagnosis</a>
+<a data-section="why-validation-belongs-inside-the-explanation" href="#bias-variance?section=why-validation-belongs-inside-the-explanation">Validation and model selection</a>
+<a data-section="implementation" href="#bias-variance?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="generalization-is-not-the-same-as-fitting" id="bias-variance--generalization-is-not-the-same-as-fitting">
     Generalization is not the same as fitting
    </h2>
-   <p>
-    The regularization guide asks how to constrain, perturb, average, or stop a learning algorithm so that it behaves better on unseen data. Its starting observation is that flexible models can fit accidental sample structure alongside stable signal.
-   </p>
-   <p>
+<p>A flexible model can fit stable signal and accidental sample structure at the same time. Regularization changes the fitted solution or training procedure to reduce sensitivity to those sample-specific patterns.</p>
+<p>
     A penalty makes this preference explicit:
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>∈</mo><msub><mo>argmin</mo><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mo>ℓ</mo><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>λ</mi><mi>Ω</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat\theta\in\mathop{\mathrm{argmin}}_\theta\left[\frac1n\sum_{i=1}^n\ell_i(\theta)+\lambda\Omega(\theta)\right].</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>θ</mi><mo accent="true">̂</mo></mover><mo>∈</mo><msub><mo>argmin</mo><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><msub><mo>ℓ</mo><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>λ</mi><mi>Ω</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat\theta\in\mathop{\mathrm{argmin}}_\theta\left[\frac1n\sum_{i=1}^n\ell_i(\theta)+\lambda\Omega(\theta)\right].</annotation></semantics></math>
+</div>
+<p>
     A large penalty discourages a region of parameter space; it does not prove that the retained functions are the correct ones. The statistical usefulness depends on whether the preference matches the problem.
    </p>
-   <h2 data-section="the-squared-error-decomposition" id="bias-variance--the-squared-error-decomposition">
+<h2 data-section="the-squared-error-decomposition" id="bias-variance--the-squared-error-decomposition">
     The squared-error decomposition
    </h2>
-   <p>
-    At a fixed input
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
-    , write
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>=</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">Y=f(x)+\epsilon</annotation></semantics></math>
-    . Under the usual zero-mean noise assumptions, the source gives
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mrow><mi>D</mi><mo>,</mo><mi>ϵ</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>Y</mi><mo>−</mo><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msubsup><mi>σ</mi><mi>ϵ</mi><mn>2</mn></msubsup><mo>+</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>𝔼</mi><mi>D</mi></msub><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>+</mo><msub><mo>Var</mo><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E_{D,\epsilon}\left[(Y-\hat f_D(x))^2\right]
+<p>At a fixed input <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>, write <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>=</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">Y=f(x)+\epsilon</annotation></semantics></math>. Under the usual zero-mean noise assumptions, expected prediction error decomposes as</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mrow><mi>D</mi><mo>,</mo><mi>ϵ</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>Y</mi><mo>−</mo><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msubsup><mi>σ</mi><mi>ϵ</mi><mn>2</mn></msubsup><mo>+</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>𝔼</mi><mi>D</mi></msub><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>+</mo><msub><mo>Var</mo><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E_{D,\epsilon}\left[(Y-\hat f_D(x))^2\right]
 =\sigma_\epsilon^2+\left(\mathbb E_D\hat f_D(x)-f(x)\right)^2+
 \operatorname{Var}_D\left(\hat f_D(x)\right).</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<p>
     The dataset
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>
     is random in this thought experiment: imagine repeatedly collecting a training set and refitting the procedure.
@@ -97,34 +62,27 @@
     </strong>
     measures how much the fitted prediction changes across those datasets. Irreducible noise is uncertainty in the outcome even if the function were known.
    </p>
-   <p>
-    An expanded derivation adds and subtracts
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>D</mi></msub><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbb E_D\hat f_D(x)</annotation></semantics></math>
-    inside the squared error. The centered estimator term has expectation zero; with the stated noise assumptions, the cross terms vanish. The remaining terms are precisely noise, squared bias, and estimator variance. This is a decomposition for squared-error prediction, not an identical additive formula for every classification metric.
-   </p>
-   <figure class="source-figure">
-    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="reg-5" type="button">
-     <img alt="The supplied guide’s illustrative bias–variance curve. It is a conceptual example of competing effects, not a universal shape or a rule for selecting λ without validation." height="527" loading="lazy" src="assets/images/the-supplied-guide-s-illustrative-bias-variance-curve-it-is-a-con-0b4060a956.webp" width="760"/>
-    </button>
-    <figcaption>
-     The supplied guide’s illustrative bias–variance curve. It is a conceptual example of competing effects, not a universal shape or a rule for selecting λ without validation.
-     <button aria-label="Open source: Regularization · PDF p. 5" data-page="5" data-pdf="reg" type="button">
+<p>Adding and subtracting <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>D</mi></msub><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbb E_D\hat f_D(x)</annotation></semantics></math> inside the squared error separates the fitted prediction into its mean and a centered fluctuation. The centered estimator term has expectation zero; with the stated noise assumptions, the cross terms vanish. The remaining terms are precisely noise, squared bias, and estimator variance. This is a decomposition for squared-error prediction, not an identical additive formula for every classification metric.</p>
+<figure class="source-figure">
+<button aria-label="Enlarge source figure" class="figure-frame" data-figure="reg-5" type="button">
+<img alt="An illustrative bias–variance trade-off as regularization increases. The curves show competing contributions to expected prediction error; their shapes and the best penalty strength depend on the problem." height="527" loading="lazy" src="assets/images/the-supplied-guide-s-illustrative-bias-variance-curve-it-is-a-con-0b4060a956.webp" width="760"/>
+</button>
+<figcaption>An illustrative bias–variance trade-off as regularization increases. The curves show competing contributions to expected prediction error; their shapes and the best penalty strength depend on the problem. <button aria-label="Open source: Regularization · PDF p. 5" data-page="5" data-pdf="reg" type="button">
       Regularization · PDF p. 5
-     </button>
-    </figcaption>
-   </figure>
-   <details class="derivation" data-derivation="error-decomposition" id="bias-variance--derivation-error-decomposition">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+     </button></figcaption>
+</figure>
+<details class="derivation" data-derivation="error-decomposition" id="bias-variance--derivation-error-decomposition">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Expand prediction error into noise, bias, and variance
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Fix an input
@@ -145,44 +103,44 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>D</mi><annotation encoding="application/x-tex">D</annotation></semantics></math>
       also include any randomization used to fit the model.
      </p>
-     <h4>
+<h4>
       1 · Insert the mean fitted prediction
      </h4>
-     <p>
+<p>
       Let
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>𝔼</mi><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mu(x)=\mathbb E_D[\hat f_D(x)]</annotation></semantics></math>
       . Add and subtract
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\mu(x)</annotation></semantics></math>
       :
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>−</mo><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>ε</mi><mo>+</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>+</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">Y-\hat f_D(x)=\varepsilon+[f(x)-\mu(x)]+[\mu(x)-\hat f_D(x)].</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>−</mo><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>ε</mi><mo>+</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>+</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">Y-\hat f_D(x)=\varepsilon+[f(x)-\mu(x)]+[\mu(x)-\hat f_D(x)].</annotation></semantics></math>
+</div>
+<p>
       The middle term is fixed once
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
       and the training procedure are fixed. The final term varies with the training sample and has mean zero.
      </p>
-     <h4>
+<h4>
       2 · Expand all six terms of the square
      </h4>
-     <p>
+<p>
       Abbreviate
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">b=f(x)-\mu(x)</annotation></semantics></math>
       and
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>=</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">v=\mu(x)-\hat f_D(x)</annotation></semantics></math>
       . Then
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>ε</mi><mo>+</mo><mi>b</mi><mo>+</mo><mi>v</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>=</mo><msup><mi>ε</mi><mn>2</mn></msup><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup><mo>+</mo><msup><mi>v</mi><mn>2</mn></msup><mo>+</mo><mn>2</mn><mi>ε</mi><mi>b</mi><mo>+</mo><mn>2</mn><mi>ε</mi><mi>v</mi><mo>+</mo><mn>2</mn><mi>b</mi><mi>v</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">(\varepsilon+b+v)^2=\varepsilon^2+b^2+v^2+2\varepsilon b+2\varepsilon v+2bv.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>ε</mi><mo>+</mo><mi>b</mi><mo>+</mo><mi>v</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>=</mo><msup><mi>ε</mi><mn>2</mn></msup><mo>+</mo><msup><mi>b</mi><mn>2</mn></msup><mo>+</mo><msup><mi>v</mi><mn>2</mn></msup><mo>+</mo><mn>2</mn><mi>ε</mi><mi>b</mi><mo>+</mo><mn>2</mn><mi>ε</mi><mi>v</mi><mo>+</mo><mn>2</mn><mi>b</mi><mi>v</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">(\varepsilon+b+v)^2=\varepsilon^2+b^2+v^2+2\varepsilon b+2\varepsilon v+2bv.</annotation></semantics></math>
+</div>
+<p>
       None of the cross terms may simply be dropped before checking its expectation.
      </p>
-     <h4>
+<h4>
       3 · Evaluate the cross terms separately
      </h4>
-     <p>
+<p>
       Because
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>b</mi><annotation encoding="application/x-tex">b</annotation></semantics></math>
       is fixed and
@@ -197,265 +155,232 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>ε</mi><mi>v</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>ε</mi><mo form="postfix" stretchy="true">]</mo></mrow><msub><mi>𝔼</mi><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mi>v</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mathbb E[\varepsilon v]=\mathbb E[\varepsilon]\mathbb E_D[v]=0</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       4 · Recognize the three remaining expectations
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mrow><mi>D</mi><mo>,</mo><mi>ε</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>Y</mi><mo>−</mo><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msup><mrow><mo form="prefix" stretchy="true">[</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mn>2</mn></msup><mo>+</mo><msub><mi>𝔼</mi><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E_{D,\varepsilon}[(Y-\hat f_D(x))^2]=\sigma^2(x)+[\mu(x)-f(x)]^2+\mathbb E_D[(\hat f_D(x)-\mu(x))^2].</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mrow><mi>D</mi><mo>,</mo><mi>ε</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>Y</mi><mo>−</mo><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msup><mrow><mo form="prefix" stretchy="true">[</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mn>2</mn></msup><mo>+</mo><msub><mi>𝔼</mi><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>D</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E_{D,\varepsilon}[(Y-\hat f_D(x))^2]=\sigma^2(x)+[\mu(x)-f(x)]^2+\mathbb E_D[(\hat f_D(x)-\mu(x))^2].</annotation></semantics></math>
+</div>
+<p>
       The last term is the variance of the fitted prediction. The squared middle term is squared bias; its sign does not matter because it is squared.
      </p>
-     <h4>
+<h4>
       5 · State the scope of the identity
      </h4>
-     <p>
+<p>
       This is an identity for squared error at a fixed input, assuming the stated moments exist. Integrating it over a test-input distribution gives an average-risk decomposition. It is not the same formula for zero–one classification error, and it is not valid to treat training residuals as independent new-outcome errors. Increasing regularization does not force every individual term to change monotonically in every model.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="5" data-pdf="reg" type="button">
-       Chapter source · PDF p. 5
-      </button>
-      <a class="calculation-link" href="#bias-variance?derivation=error-decomposition">
+<div class="derivation-footer">
+<button data-page="5" data-pdf="reg" type="button">Reference · PDF p. 5</button>
+<a class="calculation-link" href="#bias-variance?derivation=error-decomposition">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="why-accepting-bias-can-reduce-total-error" id="bias-variance--why-accepting-bias-can-reduce-total-error">
+</div>
+</div>
+</details>
+<h2 data-section="why-accepting-bias-can-reduce-total-error" id="bias-variance--why-accepting-bias-can-reduce-total-error">
     Why accepting bias can reduce total error
    </h2>
-   <p>
+<p>
     An unregularized estimator can respond strongly to a small change in the training sample. Shrinkage can move its average prediction away from the true function slightly while reducing its fluctuations more substantially. Expected test error can then fall even though training fit worsens.
    </p>
-   <p>
+<p>
     That explains why lower training error is not a reliable comparison criterion for regularized models. Conversely, if the model already misses important signal, adding stronger penalties may increase bias without a useful variance reduction.
    </p>
-   <h2 data-section="several-mechanisms-several-objects-being-constrained" id="bias-variance--several-mechanisms-several-objects-being-constrained">
+<h2 data-section="several-mechanisms-several-objects-being-constrained" id="bias-variance--several-mechanisms-several-objects-being-constrained">
     Several mechanisms, several objects being constrained
    </h2>
-   <div aria-label="Scrollable calculation table" class="table-scroll" role="region" tabindex="0">
-    <table>
-     <colgroup>
-      <col style="width: 33%"/>
-      <col style="width: 33%"/>
-      <col style="width: 33%"/>
-     </colgroup>
-     <thead>
-      <tr class="header">
-       <th>
+<div aria-label="Scrollable calculation table" class="table-scroll" role="region" tabindex="0">
+<table>
+<colgroup>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+</colgroup>
+<thead>
+<tr class="header">
+<th>
         Mechanism
        </th>
-       <th>
-        What the guide says it changes
-       </th>
-       <th>
+<th>What it changes</th>
+<th>
         Main intuition
        </th>
-      </tr>
-     </thead>
-     <tbody>
-      <tr class="odd">
-       <td>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>
         Ridge, LASSO, Elastic Net
        </td>
-       <td>
+<td>
         Parameters
        </td>
-       <td>
+<td>
         Prefer smaller or sparse coefficients
        </td>
-      </tr>
-      <tr class="even">
-       <td>
+</tr>
+<tr class="even">
+<td>
         Augmentation
        </td>
-       <td>
+<td>
         Effective training distribution
        </td>
-       <td>
+<td>
         Encourage valid invariances
        </td>
-      </tr>
-      <tr class="odd">
-       <td>
+</tr>
+<tr class="odd">
+<td>
         Noise injection
        </td>
-       <td>
+<td>
         Inputs or internal computations
        </td>
-       <td>
+<td>
         Encourage local stability
        </td>
-      </tr>
-      <tr class="even">
-       <td>
+</tr>
+<tr class="even">
+<td>
         Early stopping
        </td>
-       <td>
+<td>
         Optimization duration
        </td>
-       <td>
+<td>
         Restrict the reachable fitted solution
        </td>
-      </tr>
-      <tr class="odd">
-       <td>
+</tr>
+<tr class="odd">
+<td>
         Sparse representations
        </td>
-       <td>
+<td>
         Codes or hidden activations
        </td>
-       <td>
+<td>
         Use only a few latent factors
        </td>
-      </tr>
-      <tr class="even">
-       <td>
+</tr>
+<tr class="even">
+<td>
         Dropout
        </td>
-       <td>
+<td>
         Temporary subnetworks
        </td>
-       <td>
+<td>
         Reduce reliance on always-present units
        </td>
-      </tr>
-      <tr class="odd">
-       <td>
+</tr>
+<tr class="odd">
+<td>
         Bagging and ensembles
        </td>
-       <td>
+<td>
         Prediction combination
        </td>
-       <td>
+<td>
         Average complementary fluctuations
        </td>
-      </tr>
-     </tbody>
-    </table>
-   </div>
-   <p>
+</tr>
+</tbody>
+</table>
+</div>
+<p>
     There is no single “regularization knob” that captures all of these. Two interventions can be complementary, or jointly so strong that useful structure is never learned.
    </p>
-   <h2 data-section="a-data-dependent-diagnosis" id="bias-variance--a-data-dependent-diagnosis">
+<h2 data-section="a-data-dependent-diagnosis" id="bias-variance--a-data-dependent-diagnosis">
     A data-dependent diagnosis
    </h2>
-   <p>
-    The source describes strong training performance and weak validation as the classic overfitting pattern. Weak performance on both can instead indicate underfitting, optimization trouble, inadequate inputs, or excessive regularization.
-   </p>
-   <p>
+<p>Strong training performance with weak validation performance is consistent with overfitting. Weak results on both can instead reflect underfitting, optimization problems, inadequate inputs, or excessive regularization.</p>
+<p>
     Selected LASSO features changing across folds can indicate collinearity and weak identification rather than failure of the optimizer. An ensemble that barely improves can indicate highly correlated component errors. These observations suggest different remedies because they arise from different statistical structures.
    </p>
-   <h2 data-section="why-validation-belongs-inside-the-explanation" id="bias-variance--why-validation-belongs-inside-the-explanation">
-    Why validation belongs inside the explanation
-   </h2>
-   <p>
-    Choosing
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
-    , dropout rate, augmentation strength, stopping time, or ensemble weights changes the learning procedure. The source explicitly warns against selecting them using the final test set. For temporal data, chronology and the relevant prediction horizon constrain both validation and resampling.
-   </p>
-   <p>
-    The point is not that one penalty is universally best. It is to make the preference explicit, identify which failure it is intended to reduce, and evaluate the complete selected procedure on data that genuinely plays the role of unseen data.
-   </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="bias-variance--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="biasvariance">
-     <span class="resource-meta">
+<h2 data-section="why-validation-belongs-inside-the-explanation" id="bias-variance--why-validation-belongs-inside-the-explanation">Validation and model selection</h2>
+<p>Choosing <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>, dropout rate, augmentation strength, stopping time, or ensemble weights changes the learning procedure. The final test set must not be used to select them. For temporal data, chronology and the relevant prediction horizon constrain both validation and resampling.</p>
+<p>Evaluate the entire selected procedure on observations that were excluded from training and model selection. A penalty is useful when its restriction improves this out-of-sample behavior, not simply because it makes coefficients smaller.</p>
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="bias-variance--implementation">Implementation examples</h2>
+<div class="resource-list">
+<div class="resource" data-resource="biasvariance">
+<span class="resource-meta">
       scikit-learn · Official experiment + plots
      </span>
-     <a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_bias_variance.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_bias_variance.html" rel="noopener noreferrer" target="_blank">
+<span>
        Single estimator versus bagging: bias–variance decomposition
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect the repeated-dataset experiment and its bias, variance and error curves. This is a classical-ML demonstration in scikit-learn, not a PyTorch tutorial.
-     </p>
-    </div>
-    <div class="resource" data-resource="optimization">
-     <span class="resource-meta">
+</a>
+<p>A repeated-dataset experiment comparing a single estimator with bagging, including bias, variance, and prediction-error plots.</p>
+</div>
+<div class="resource" data-resource="optimization">
+<span class="resource-meta">
       PyTorch · Tutorial + code
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Optimizing Model Parameters
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Follow separate training and test loops. Identify the forward calculation, loss, backward pass and optimizer update rather than treating training as one operation.
-     </p>
-    </div>
-   </div>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</a>
+<p>A complete training and evaluation loop with separate forward, loss, backward, and optimizer steps.</p>
+</div>
+</div>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
     </strong>
     Does regularization always improve generalization?
    </summary>
-   <p>
+<p>
     No. It imposes preferences that may reduce sensitivity to the sample but can also exclude useful signal or stop learning too early. Under squared loss, the familiar intuition is accepting some additional bias for a larger variance reduction. Excessive regularization can make both training and validation poor.
    </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#training-diagnosis">
-    <small>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+<button aria-label="Open source: Regularization · PDF pp. 5–6 · §1" data-page="5" data-pdf="reg" type="button">
+     Regularization · PDF pp. 5–6 · §1
+    </button>
+<button aria-label="Open source: Regularization · PDF pp. 26–29 · §§20–25" data-page="26" data-pdf="reg" type="button">
+     Regularization · PDF pp. 26–29 · §§20–25
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#training-diagnosis">
+<small>
      ← Previous
     </small>
-    Diagnosing optimization versus generalization
-   </a>
-   <a href="#ridge">
-    <small>
+Diagnosing optimization versus generalization
+</a>
+<a href="#ridge">
+<small>
      Next →
     </small>
-    OLS, Ridge, and spectral shrinkage
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+OLS, Ridge, and spectral shrinkage
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="generalization-is-not-the-same-as-fitting" href="#bias-variance?section=generalization-is-not-the-same-as-fitting">
-    Generalization is not the same as fitting
-   </a>
-   <a data-section="the-squared-error-decomposition" href="#bias-variance?section=the-squared-error-decomposition">
-    The squared-error decomposition
-   </a>
-   <a data-section="why-accepting-bias-can-reduce-total-error" href="#bias-variance?section=why-accepting-bias-can-reduce-total-error">
-    Why accepting bias can reduce total error
-   </a>
-   <a data-section="several-mechanisms-several-objects-being-constrained" href="#bias-variance?section=several-mechanisms-several-objects-being-constrained">
-    Several mechanisms, several objects being constrained
-   </a>
-   <a data-section="a-data-dependent-diagnosis" href="#bias-variance?section=a-data-dependent-diagnosis">
-    A data-dependent diagnosis
-   </a>
-   <a data-section="why-validation-belongs-inside-the-explanation" href="#bias-variance?section=why-validation-belongs-inside-the-explanation">
-    Why validation belongs inside the explanation
-   </a>
-   <a data-section="implementation" href="#bias-variance?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="generalization-is-not-the-same-as-fitting" href="#bias-variance?section=generalization-is-not-the-same-as-fitting">Generalization is not the same as fitting</a>
+<a data-section="the-squared-error-decomposition" href="#bias-variance?section=the-squared-error-decomposition">The squared-error decomposition</a>
+<a data-section="why-accepting-bias-can-reduce-total-error" href="#bias-variance?section=why-accepting-bias-can-reduce-total-error">Why accepting bias can reduce total error</a>
+<a data-section="several-mechanisms-several-objects-being-constrained" href="#bias-variance?section=several-mechanisms-several-objects-being-constrained">Several mechanisms, several objects being constrained</a>
+<a data-section="a-data-dependent-diagnosis" href="#bias-variance?section=a-data-dependent-diagnosis">A data-dependent diagnosis</a>
+<a data-section="why-validation-belongs-inside-the-explanation" href="#bias-variance?section=why-validation-belongs-inside-the-explanation">Validation and model selection</a>
+<a data-section="implementation" href="#bias-variance?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>

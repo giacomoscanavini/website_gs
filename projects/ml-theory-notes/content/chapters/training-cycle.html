@@ -1,91 +1,54 @@
 <section aria-labelledby="training-cycle-title" class="page-view lesson-layout" id="training-cycle">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      07
     </span>
     Part 1 · Neural-network foundations
    </p>
-   <h1 id="training-cycle-title" tabindex="-1">
+<h1 id="training-cycle-title" tabindex="-1">
     Training cycles, mini-batches, and autograd
    </h1>
-   <p class="standfirst">
-    Distinguish the mathematical training cycle from bookkeeping, batch aggregation, and evaluation.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Neural networks · PDF pp. 17–18 · §§20–22" data-page="17" data-pdf="basics" type="button">
-     Neural networks · PDF pp. 17–18 · §§20–22
-    </button>
-    <button aria-label="Open source: Neural networks · PDF pp. 22–24 · §§30–36" data-page="22" data-pdf="basics" type="button">
-     Neural networks · PDF pp. 22–24 · §§30–36
-    </button>
-    <button aria-label="Open source: Optimization · PDF pp. 25–26 · §23" data-page="25" data-pdf="optim" type="button">
-     Optimization · PDF pp. 25–26 · §23
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<p class="standfirst">Training alternates prediction, loss evaluation, differentiation, and parameter updates. Mini-batching changes how observations are combined, while autograd records and differentiates the computation.</p>
+
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="the-cycle-has-distinct-stages" href="#training-cycle?section=the-cycle-has-distinct-stages">
-     The cycle has distinct stages
-    </a>
-    <a data-section="mini-batches-are-averages-of-objectives" href="#training-cycle?section=mini-batches-are-averages-of-objectives">
-     Mini-batches are averages of objectives
-    </a>
-    <a data-section="epochs-iterations-and-data-passes" href="#training-cycle?section=epochs-iterations-and-data-passes">
-     Epochs, iterations, and data passes
-    </a>
-    <a data-section="autograd-implements-the-derivative-graph" href="#training-cycle?section=autograd-implements-the-derivative-graph">
-     Autograd implements the derivative graph
-    </a>
-    <a data-section="implementation-distinctions-worth-knowing" href="#training-cycle?section=implementation-distinctions-worth-knowing">
-     Implementation distinctions worth knowing
-    </a>
-    <a data-section="reading-learning-curves" href="#training-cycle?section=reading-learning-curves">
-     Reading learning curves
-    </a>
-    <a data-section="implementation" href="#training-cycle?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="the-cycle-has-distinct-stages" id="training-cycle--the-cycle-has-distinct-stages">
-    The cycle has distinct stages
-   </h2>
-   <p>
-    The source’s cycle is forward pass, loss, backward pass, and parameter update. The forward pass computes what the current model predicts. The loss translates prediction quality into a scalar. Backpropagation computes local sensitivities with respect to the parameters. The optimizer makes an update using those sensitivities and possibly stored history.
-   </p>
-   <p>
+<nav aria-label="On this page">
+<a data-section="the-cycle-has-distinct-stages" href="#training-cycle?section=the-cycle-has-distinct-stages">Prediction, differentiation, and parameter updates</a>
+<a data-section="mini-batches-are-averages-of-objectives" href="#training-cycle?section=mini-batches-are-averages-of-objectives">Mini-batches are averages of objectives</a>
+<a data-section="epochs-iterations-and-data-passes" href="#training-cycle?section=epochs-iterations-and-data-passes">Epochs, iterations, and data passes</a>
+<a data-section="autograd-implements-the-derivative-graph" href="#training-cycle?section=autograd-implements-the-derivative-graph">Autograd implements the derivative graph</a>
+<a data-section="implementation-distinctions-worth-knowing" href="#training-cycle?section=implementation-distinctions-worth-knowing">Implementation distinctions worth knowing</a>
+<a data-section="reading-learning-curves" href="#training-cycle?section=reading-learning-curves">Reading learning curves</a>
+<a data-section="implementation" href="#training-cycle?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="the-cycle-has-distinct-stages" id="training-cycle--the-cycle-has-distinct-stages">Prediction, differentiation, and parameter updates</h2>
+<p>A training iteration has four stages: a forward pass computes predictions, the loss measures their fit to the targets, backpropagation computes parameter gradients, and the optimizer updates the parameters using those gradients and any stored optimizer state.</p>
+<p>
     This division matters when diagnosing a failure. A wrong target shape is a problem with the objective being computed. A detached activation is a problem with derivative connectivity. A learning rate that is too large is a problem with update magnitude. Changing the optimizer will not repair all three.
    </p>
-   <h2 data-section="mini-batches-are-averages-of-objectives" id="training-cycle--mini-batches-are-averages-of-objectives">
+<h2 data-section="mini-batches-are-averages-of-objectives" id="training-cycle--mini-batches-are-averages-of-objectives">
     Mini-batches are averages of objectives
    </h2>
-   <p>
-    For
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math>
-    examples, the guide defines
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>B</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mi>B</mi></mfrac><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>B</mi></mrow></munder><msub><mi>L</mi><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>∇</mi><mi>θ</mi></msub><msub><mi>L</mi><mi>B</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>B</mi></mfrac><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>B</mi></mrow></munder><msub><mi>∇</mi><mi>θ</mi></msub><msub><mi>L</mi><mi>i</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">L_B(\theta)=\frac1B\sum_{i\in B}L_i(\theta),\qquad
+<p>For <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>B</mi><annotation encoding="application/x-tex">B</annotation></semantics></math> examples, the mean batch loss and its gradient are</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>B</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mi>B</mi></mfrac><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>B</mi></mrow></munder><msub><mi>L</mi><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>∇</mi><mi>θ</mi></msub><msub><mi>L</mi><mi>B</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>B</mi></mfrac><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><mi>B</mi></mrow></munder><msub><mi>∇</mi><mi>θ</mi></msub><msub><mi>L</mi><mi>i</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">L_B(\theta)=\frac1B\sum_{i\in B}L_i(\theta),\qquad
 \nabla_\theta L_B=\frac1B\sum_{i\in B}\nabla_\theta L_i.</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<p>
     Linearity of differentiation gives the second equality. The batch gradient is not the gradient at the average input; for a nonlinear model, averaging inputs and then differentiating is a different calculation. We average the individual losses or gradients evaluated at the
     <strong>
      same parameters
     </strong>
     . Equating separately computed per-example or microbatch gradients to one full batch additionally assumes the forward computation is separable across observations. Training BatchNorm, for example, depends on the other batch members and can break that equivalence.
    </p>
-   <p>
+<p>
     A batch tensor
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>B</mi><mo>×</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">X\in\mathbb R^{B\times d}</annotation></semantics></math>
     stores
@@ -94,18 +57,18 @@
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>
     features. Parameters do not acquire a separate copy for each row. Matrix operations let many evaluations share the same weights efficiently.
    </p>
-   <details class="derivation" data-derivation="batch-accumulation" id="training-cycle--derivation-batch-accumulation">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<details class="derivation" data-derivation="batch-accumulation" id="training-cycle--derivation-batch-accumulation">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Why unequal micro-batches need weighted gradient accumulation
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Parameters stay fixed during accumulation. Each observation has a separable loss, with consistent reduction and no batch-dependent forward behavior. Partition
@@ -118,35 +81,35 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><msub><mo>∑</mo><mi>k</mi></msub><msub><mi>b</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">N=\sum_k b_k</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       1 · Express the desired large-batch objective
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mo>ℓ</mo><mi>i</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munder><mo>∑</mo><mi>k</mi></munder><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>C</mi><mi>k</mi></msub></mrow></munder><msub><mo>ℓ</mo><mi>i</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">L=\frac1N\sum_{i=1}^N\ell_i=\frac1N\sum_k\sum_{i\in C_k}\ell_i.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>N</mi></munderover><msub><mo>ℓ</mo><mi>i</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>N</mi></mfrac><munder><mo>∑</mo><mi>k</mi></munder><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>C</mi><mi>k</mi></msub></mrow></munder><msub><mo>ℓ</mo><mi>i</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">L=\frac1N\sum_{i=1}^N\ell_i=\frac1N\sum_k\sum_{i\in C_k}\ell_i.</annotation></semantics></math>
+</div>
+<p>
       Define the mean micro-batch loss
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>k</mi></msub><mo>=</mo><msubsup><mi>b</mi><mi>k</mi><mrow><mi>−</mi><mn>1</mn></mrow></msubsup><msub><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>C</mi><mi>k</mi></msub></mrow></msub><msub><mo>ℓ</mo><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">L_k=b_k^{-1}\sum_{i\in C_k}\ell_i</annotation></semantics></math>
       , hence
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>C</mi><mi>k</mi></msub></mrow></msub><msub><mo>ℓ</mo><mi>i</mi></msub><mo>=</mo><msub><mi>b</mi><mi>k</mi></msub><msub><mi>L</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\sum_{i\in C_k}\ell_i=b_kL_k</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       2 · Substitute and differentiate
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><munder><mo>∑</mo><mi>k</mi></munder><mfrac><msub><mi>b</mi><mi>k</mi></msub><mi>N</mi></mfrac><msub><mi>L</mi><mi>k</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mi>∇</mi><mi>L</mi><mo>=</mo><munder><mo>∑</mo><mi>k</mi></munder><mfrac><msub><mi>b</mi><mi>k</mi></msub><mi>N</mi></mfrac><mi>∇</mi><msub><mi>L</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">L=\sum_k\frac{b_k}{N}L_k,\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><munder><mo>∑</mo><mi>k</mi></munder><mfrac><msub><mi>b</mi><mi>k</mi></msub><mi>N</mi></mfrac><msub><mi>L</mi><mi>k</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mi>∇</mi><mi>L</mi><mo>=</mo><munder><mo>∑</mo><mi>k</mi></munder><mfrac><msub><mi>b</mi><mi>k</mi></msub><mi>N</mi></mfrac><mi>∇</mi><msub><mi>L</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">L=\sum_k\frac{b_k}{N}L_k,\qquad
 \nabla L=\sum_k\frac{b_k}{N}\nabla L_k.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       A backward call on
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>b</mi><mi>k</mi></msub><mi>/</mi><mi>N</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>L</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">(b_k/N)L_k</annotation></semantics></math>
       adds exactly the required contribution when gradients accumulate. Step the optimizer once, after all contributions have been accumulated.
      </p>
-     <h4>
+<h4>
       3 · See why an unweighted average can be wrong
      </h4>
-     <p>
+<p>
       For sizes
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mn>1</mn></msub><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">b_1=4</annotation></semantics></math>
       and
@@ -161,10 +124,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>5</mn></mrow><annotation encoding="application/x-tex">1/5</annotation></semantics></math>
       . Dividing by the number of micro-batches is correct only when their mean-loss denominators are equal.
      </p>
-     <h4>
+<h4>
       4 · Account for output elements and masked tokens
      </h4>
-     <p>
+<p>
       For an elementwise mean over unequal numbers
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>m</mi><mi>k</mi></msub><annotation encoding="application/x-tex">m_k</annotation></semantics></math>
       of valid outputs, replace
@@ -173,78 +136,56 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>m</mi><mi>k</mi></msub><annotation encoding="application/x-tex">m_k</annotation></semantics></math>
       . Padding, ignored labels, class-weighted means, and variable-length sequences can change the denominator. Weight by the actual quantity averaged, not automatically the number of input rows.
      </p>
-     <h4>
+<h4>
       5 · State the equivalence boundaries
      </h4>
-     <p>
+<p>
       An optimizer step between micro-batches changes the parameters and breaks this algebra. BatchNorm using micro-batch statistics changes the forward function; dropout draws may also differ from a monolithic run. Even in the separable case, floating-point summation order can cause small differences. An explicit penalty added to every micro-batch must receive weights summing to one so it is not inadvertently counted multiple times.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="17" data-pdf="basics" type="button">
-       Chapter source · PDF p. 17
-      </button>
-      <a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" rel="noopener noreferrer" target="_blank">
+<div class="derivation-footer">
+
+<button data-page="17" data-pdf="basics" type="button">Reference · PDF p. 17</button>
+<a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" rel="noopener noreferrer" target="_blank">
        Automatic Differentiation with torch.autograd
       </a>
-      <a class="calculation-link" href="#training-cycle?derivation=batch-accumulation">
+<a class="calculation-link" href="#training-cycle?derivation=batch-accumulation">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="epochs-iterations-and-data-passes" id="training-cycle--epochs-iterations-and-data-passes">
+</div>
+</div>
+</details>
+<h2 data-section="epochs-iterations-and-data-passes" id="training-cycle--epochs-iterations-and-data-passes">
     Epochs, iterations, and data passes
    </h2>
-   <p>
-    With 60,000 observations and batches of 100, the guide counts 600 optimizer updates per epoch. Twenty epochs yield about 12,000 updates. An epoch measures exposure to data; an iteration measures an update. This distinction becomes important when comparing runs with different batch sizes: the same number of epochs can imply a different number of updates.
-   </p>
-   <p>
+<p>With 60,000 observations and batches of 100, there are 600 optimizer updates per epoch. Twenty epochs yield about 12,000 updates. An epoch measures exposure to data; an iteration measures an update. This distinction becomes important when comparing runs with different batch sizes: the same number of epochs can imply a different number of updates.</p>
+<p>
     Changing from a sum to a mean loss also changes scale. If every per-example loss is identical, the summed gradient grows with batch size while the mean gradient does not. Penalties added outside that average must be scaled intentionally; otherwise changing batch size or reduction can change the effective amount of regularization.
    </p>
-   <h2 data-section="autograd-implements-the-derivative-graph" id="training-cycle--autograd-implements-the-derivative-graph">
+<h2 data-section="autograd-implements-the-derivative-graph" id="training-cycle--autograd-implements-the-derivative-graph">
     Autograd implements the derivative graph
    </h2>
-   <p>
-    The computational graph records operations connecting parameters to the loss. In the simple source example
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mi>w</mi><mi>x</mi><mo>+</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">z=wx+b</annotation></semantics></math>
-    and
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><msup><mi>z</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">L=z^2</annotation></semantics></math>
-    , the graph reuses the local derivatives
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>z</mi></mrow><annotation encoding="application/x-tex">2z</annotation></semantics></math>
-    and
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
-    to obtain
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>z</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">2zx</annotation></semantics></math>
-    for
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">\partial L/\partial w</annotation></semantics></math>
-    . A large model applies the same principle to many operations.
-   </p>
-   <p>
-    The official autograd tutorial provides a concrete graph, differentiation examples, and a demonstration of turning gradient tracking off. The purpose of that link is to connect the derivative you can derive by hand with the framework’s execution—not to make tensor-method memorization the center of the chapter.
-   </p>
-   <details class="derivation" data-derivation="reverse-mode" id="training-cycle--derivation-reverse-mode">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<p>The computational graph records operations connecting parameters to the loss. For example, with <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mi>w</mi><mi>x</mi><mo>+</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">z=wx+b</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><msup><mi>z</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">L=z^2</annotation></semantics></math>, the graph reuses the local derivatives <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>z</mi></mrow><annotation encoding="application/x-tex">2z</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math> to obtain <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>z</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">2zx</annotation></semantics></math> for <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><mi>w</mi></mrow><annotation encoding="application/x-tex">\partial L/\partial w</annotation></semantics></math>. A large model applies the same principle to many operations.</p>
+<p>Autograd traverses this graph backward and accumulates the contribution of each path to a parameter. Disabling gradient tracking changes which operations are recorded; it does not change the forward calculation itself.</p>
+<details class="derivation" data-derivation="reverse-mode" id="training-cycle--derivation-reverse-mode">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive reverse-mode accumulation on a branching graph
      </span>
-    </summary>
-    <div class="derivation-body">
-     <h4>
+</summary>
+<div class="derivation-body">
+<h4>
       1 · Make every intermediate operation explicit
      </h4>
-     <p>
+<p>
       Take a scalar example
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mo>=</mo><mi>w</mi><mi>x</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>v</mi><mo>=</mo><mi>u</mi><mo>+</mo><mi>b</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>r</mi><mo>=</mo><msup><mi>u</mi><mn>2</mn></msup><mo>,</mo><mspace width="2.0em"></mspace><mi>L</mi><mo>=</mo><msup><mi>v</mi><mn>2</mn></msup><mo>+</mo><mi>r</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">u=wx,\qquad v=u+b,\qquad r=u^2,\qquad L=v^2+r.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mo>=</mo><mi>w</mi><mi>x</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>v</mi><mo>=</mo><mi>u</mi><mo>+</mo><mi>b</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>r</mi><mo>=</mo><msup><mi>u</mi><mn>2</mn></msup><mo>,</mo><mspace width="2.0em"></mspace><mi>L</mi><mo>=</mo><msup><mi>v</mi><mn>2</mn></msup><mo>+</mo><mi>r</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">u=wx,\qquad v=u+b,\qquad r=u^2,\qquad L=v^2+r.</annotation></semantics></math>
+</div>
+<p>
       The intermediate
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
       feeds both
@@ -253,10 +194,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>
       . Its influence cannot be captured by following only one branch.
      </p>
-     <h4>
+<h4>
       2 · Start with the scalar objective
      </h4>
-     <p>
+<p>
       Define an adjoint
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>a</mi><mo accent="true">‾</mo></mover><mo>=</mo><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><mi>a</mi></mrow><annotation encoding="application/x-tex">\bar a=\partial L/\partial a</annotation></semantics></math>
       . Initially
@@ -271,10 +212,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>r</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\bar r=1</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       3 · Add all contributions entering the shared variable
      </h4>
-     <p>
+<p>
       The route through
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>v</mi><annotation encoding="application/x-tex">v</annotation></semantics></math>
       contributes
@@ -285,85 +226,69 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>r</mi><mo accent="true">‾</mo></mover><mspace width="0.167em"></mspace><mi>∂</mi><mi>r</mi><mi>/</mi><mi>∂</mi><mi>u</mi><mo>=</mo><mn>2</mn><mi>u</mi></mrow><annotation encoding="application/x-tex">\bar r\,\partial r/\partial u=2u</annotation></semantics></math>
       . Therefore
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>u</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>2</mn><mi>v</mi><mo>+</mo><mn>2</mn><mi>u</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar u=2v+2u.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>u</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>2</mn><mi>v</mi><mo>+</mo><mn>2</mn><mi>u</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar u=2v+2u.</annotation></semantics></math>
+</div>
+<p>
       This addition is the reverse-mode rule at a branch junction.
      </p>
-     <h4>
+<h4>
       4 · Propagate to parameters and input
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>w</mi></mrow></mfrac><mo>=</mo><mover><mi>u</mi><mo accent="true">‾</mo></mover><mspace width="0.167em"></mspace><mi>x</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>v</mi><mo>+</mo><mn>2</mn><mi>u</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>x</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial w}=\bar u\,x=(2v+2u)x,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>b</mi></mrow></mfrac><mo>=</mo><mover><mi>v</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>2</mn><mi>v</mi><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>x</mi></mrow></mfrac><mo>=</mo><mover><mi>u</mi><mo accent="true">‾</mo></mover><mspace width="0.167em"></mspace><mi>w</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial b}=\bar v=2v,\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>w</mi></mrow></mfrac><mo>=</mo><mover><mi>u</mi><mo accent="true">‾</mo></mover><mspace width="0.167em"></mspace><mi>x</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>v</mi><mo>+</mo><mn>2</mn><mi>u</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>x</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial w}=\bar u\,x=(2v+2u)x,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>b</mi></mrow></mfrac><mo>=</mo><mover><mi>v</mi><mo accent="true">‾</mo></mover><mo>=</mo><mn>2</mn><mi>v</mi><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>x</mi></mrow></mfrac><mo>=</mo><mover><mi>u</mi><mo accent="true">‾</mo></mover><mspace width="0.167em"></mspace><mi>w</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial b}=\bar v=2v,\qquad
 \frac{\partial L}{\partial x}=\bar u\,w.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       Check by eliminating intermediates:
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>w</mi><mi>x</mi><mo>+</mo><mi>b</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>w</mi><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">L=(wx+b)^2+(wx)^2</annotation></semantics></math>
       . Direct differentiation gives
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>w</mi><mi>x</mi><mo>+</mo><mi>b</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>x</mi><mo>+</mo><mn>2</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>w</mi><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">2(wx+b)x+2(wx)x</annotation></semantics></math>
       for the weight, the same expression.
      </p>
-     <h4>
+<h4>
       5 · Generalize the rule
      </h4>
-     <p>
+<p>
       For a graph node
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
       with immediate downstream nodes
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>
       , the total sensitivity is
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>a</mi><mo accent="true">‾</mo></mover><mo>=</mo><munder><mo>∑</mo><mrow><mi>c</mi><mo>:</mo><mspace width="0.167em"></mspace><mi>a</mi><mo>→</mo><mi>c</mi></mrow></munder><mover><mi>c</mi><mo accent="true">‾</mo></mover><mfrac><mrow><mi>∂</mi><mi>c</mi></mrow><mrow><mi>∂</mi><mi>a</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar a=\sum_{c:\,a\to c}\bar c\frac{\partial c}{\partial a}.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>a</mi><mo accent="true">‾</mo></mover><mo>=</mo><munder><mo>∑</mo><mrow><mi>c</mi><mo>:</mo><mspace width="0.167em"></mspace><mi>a</mi><mo>→</mo><mi>c</mi></mrow></munder><mover><mi>c</mi><mo accent="true">‾</mo></mover><mfrac><mrow><mi>∂</mi><mi>c</mi></mrow><mrow><mi>∂</mi><mi>a</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar a=\sum_{c:\,a\to c}\bar c\frac{\partial c}{\partial a}.</annotation></semantics></math>
+</div>
+<p>
       Process nodes in reverse dependency order, using forward-pass values to evaluate the local derivatives. Reusing the accumulated adjoint is why reverse mode does not require one complete loss reevaluation per parameter.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="17" data-pdf="basics" type="button">
-       Chapter source · PDF p. 17
-      </button>
-      <a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" rel="noopener noreferrer" target="_blank">
+<div class="derivation-footer">
+
+<button data-page="17" data-pdf="basics" type="button">Reference · PDF p. 17</button>
+<a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" rel="noopener noreferrer" target="_blank">
        Automatic Differentiation with torch.autograd
       </a>
-      <a class="calculation-link" href="#training-cycle?derivation=reverse-mode">
+<a class="calculation-link" href="#training-cycle?derivation=reverse-mode">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="implementation-distinctions-worth-knowing" id="training-cycle--implementation-distinctions-worth-knowing">
+</div>
+</div>
+</details>
+<h2 data-section="implementation-distinctions-worth-knowing" id="training-cycle--implementation-distinctions-worth-knowing">
     Implementation distinctions worth knowing
    </h2>
-   <p>
-    The following are
-    <strong>
-     official PyTorch implementation notes
-    </strong>
-    , supplementing the PDFs. Gradients normally accumulate in parameter
-    <code>
+<p>Gradients normally accumulate in parameter <code>
      .grad
-    </code>
-    fields. For ordinary independent mini-batch updates, the training loop clears old gradients, computes the new loss, calls
-    <code>
+    </code> fields. For ordinary independent mini-batch updates, the training loop clears old gradients, computes the new loss, calls <code>
      .backward()
-    </code>
-    , and then calls
-    <code>
+    </code>, and then calls <code>
      .step()
-    </code>
-    .
-   </p>
-   <p>
-    <code>
+    </code>.</p>
+<p>
+<code>
      model.train()
     </code>
     and
@@ -376,130 +301,113 @@
     </code>
     changes graph recording, not dropout’s train/evaluation mode. Validation generally needs both the intended evaluation behavior and no unnecessary gradient recording.
    </p>
-   <p>
+<p>
     The same separation helps with checkpointing. A checkpoint of parameters is a saved model state. An optimizer can also have state—momentum or moment estimates—that influences the next update. These are distinct objects even though both participate in training.
    </p>
-   <h2 data-section="reading-learning-curves" id="training-cycle--reading-learning-curves">
+<h2 data-section="reading-learning-curves" id="training-cycle--reading-learning-curves">
     Reading learning curves
    </h2>
-   <p>
-    Compare training and validation quantities measured consistently. Training can include random augmentation, dropout, or explicit penalties that validation does not. A raw difference between two differently defined losses does not by itself diagnose overfitting. The guides’ essential distinction is whether poor behavior reflects optimization, insufficient representation, or generalization; the
-    <a href="#training-diagnosis">
+<p>Compare training and validation quantities measured consistently. Training can include random augmentation, dropout, or explicit penalties that validation does not. A raw difference between two differently defined losses does not by itself diagnose overfitting. Poor behavior may reflect optimization, insufficient representation, or generalization; the <a href="#training-diagnosis">
      diagnosis chapter
-    </a>
-    develops that interpretation.
-   </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="training-cycle--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="optimization">
-     <span class="resource-meta">
+    </a> develops that interpretation.</p>
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="training-cycle--implementation">Implementation examples</h2>
+
+<div class="resource-list">
+<div class="resource" data-resource="optimization">
+<span class="resource-meta">
       PyTorch · Tutorial + code
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Optimizing Model Parameters
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Follow separate training and test loops. Identify the forward calculation, loss, backward pass and optimizer update rather than treating training as one operation.
-     </p>
-    </div>
-    <div class="resource" data-resource="autograd">
-     <span class="resource-meta">
+</a>
+<p>A complete training and evaluation loop with separate forward, loss, backward, and optimizer steps.</p>
+</div>
+<div class="resource" data-resource="autograd">
+<span class="resource-meta">
       PyTorch · Tutorial + diagram
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Automatic Differentiation with torch.autograd
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Trace the computation graph and run the gradient example. Compare the role of requires_grad, backward and disabled gradient tracking.
-     </p>
-    </div>
-    <div class="resource" data-resource="tensorboard">
-     <span class="resource-meta">
+</a>
+<p>A worked computation graph covering requires_grad, backward, accumulated gradients, and disabling gradient tracking.</p>
+</div>
+<div class="resource" data-resource="tensorboard">
+<span class="resource-meta">
       PyTorch · Tutorial + visualization
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/tensorboard_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/tensorboard_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Visualizing Models, Data, and Training with TensorBoard
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect a model graph, data and training curves in a complete example. TensorBoard is a separate visualization dependency; the theory reader does not require it.
-     </p>
-    </div>
-   </div>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</a>
+<p>Model-graph, data, and training-curve visualization in TensorBoard, which is a separate dependency.</p>
+</div>
+</div>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
     </strong>
     Is one epoch one optimizer update?
    </summary>
-   <p>
+<p>
     Usually not. An epoch is one traversal of the training data. With N examples and batch size B, there are approximately N/B updates per epoch, subject to the final partial batch and the chosen accumulation procedure.
    </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#backpropagation">
-    <small>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+
+<button aria-label="Open source: Neural networks · PDF pp. 17–18 · §§20–22" data-page="17" data-pdf="basics" type="button">
+     Neural networks · PDF pp. 17–18 · §§20–22
+    </button>
+<button aria-label="Open source: Neural networks · PDF pp. 22–24 · §§30–36" data-page="22" data-pdf="basics" type="button">
+     Neural networks · PDF pp. 22–24 · §§30–36
+    </button>
+<button aria-label="Open source: Optimization · PDF pp. 25–26 · §23" data-page="25" data-pdf="optim" type="button">
+     Optimization · PDF pp. 25–26 · §23
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#backpropagation">
+<small>
      ← Previous
     </small>
-    Backpropagation, worked all the way through
-   </a>
-   <a href="#gradient-flow">
-    <small>
+Backpropagation and parameter updates
+</a>
+<a href="#gradient-flow">
+<small>
      Next →
     </small>
-    Gradient flow and initialization
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+Gradient flow and initialization
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="the-cycle-has-distinct-stages" href="#training-cycle?section=the-cycle-has-distinct-stages">
-    The cycle has distinct stages
-   </a>
-   <a data-section="mini-batches-are-averages-of-objectives" href="#training-cycle?section=mini-batches-are-averages-of-objectives">
-    Mini-batches are averages of objectives
-   </a>
-   <a data-section="epochs-iterations-and-data-passes" href="#training-cycle?section=epochs-iterations-and-data-passes">
-    Epochs, iterations, and data passes
-   </a>
-   <a data-section="autograd-implements-the-derivative-graph" href="#training-cycle?section=autograd-implements-the-derivative-graph">
-    Autograd implements the derivative graph
-   </a>
-   <a data-section="implementation-distinctions-worth-knowing" href="#training-cycle?section=implementation-distinctions-worth-knowing">
-    Implementation distinctions worth knowing
-   </a>
-   <a data-section="reading-learning-curves" href="#training-cycle?section=reading-learning-curves">
-    Reading learning curves
-   </a>
-   <a data-section="implementation" href="#training-cycle?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="the-cycle-has-distinct-stages" href="#training-cycle?section=the-cycle-has-distinct-stages">Prediction, differentiation, and parameter updates</a>
+<a data-section="mini-batches-are-averages-of-objectives" href="#training-cycle?section=mini-batches-are-averages-of-objectives">Mini-batches are averages of objectives</a>
+<a data-section="epochs-iterations-and-data-passes" href="#training-cycle?section=epochs-iterations-and-data-passes">Epochs, iterations, and data passes</a>
+<a data-section="autograd-implements-the-derivative-graph" href="#training-cycle?section=autograd-implements-the-derivative-graph">Autograd implements the derivative graph</a>
+<a data-section="implementation-distinctions-worth-knowing" href="#training-cycle?section=implementation-distinctions-worth-knowing">Implementation distinctions worth knowing</a>
+<a data-section="reading-learning-curves" href="#training-cycle?section=reading-learning-curves">Reading learning curves</a>
+<a data-section="implementation" href="#training-cycle?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>

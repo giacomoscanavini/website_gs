@@ -1,128 +1,91 @@
 <section aria-labelledby="lstm-title" class="page-view lesson-layout" id="lstm">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      28
     </span>
     Part 4 · Architectures &amp; information flow
    </p>
-   <h1 id="lstm-title" tabindex="-1">
+<h1 id="lstm-title" tabindex="-1">
     LSTM gates and memory timescales
    </h1>
-   <p class="standfirst">
-    Understand the additive cell path, each gate’s role, and the limits of the memory analogy.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Architectures · PDF pp. 9–11 · §3" data-page="9" data-pdf="arch" type="button">
-     Architectures · PDF pp. 9–11 · §3
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<p class="standfirst">An LSTM separates cell memory from the exposed hidden state. Forget, input, and output gates control how information is retained, written, and passed onward.</p>
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="two-states-with-different-roles" href="#lstm?section=two-states-with-different-roles">
-     Two states with different roles
-    </a>
-    <a data-section="why-the-additive-path-matters" href="#lstm?section=why-the-additive-path-matters">
-     Why the additive path matters
-    </a>
-    <a data-section="read-a-memory-timescale-from-the-gate" href="#lstm?section=read-a-memory-timescale-from-the-gate">
-     Read a memory timescale from the gate
-    </a>
-    <a data-section="the-worked-gate-calculation" href="#lstm?section=the-worked-gate-calculation">
-     The worked gate calculation
-    </a>
-    <a data-section="parameter-counts-and-library-conventions" href="#lstm?section=parameter-counts-and-library-conventions">
-     Parameter counts and library conventions
-    </a>
-    <a data-section="where-the-architecture-is-appropriate" href="#lstm?section=where-the-architecture-is-appropriate">
-     Where the architecture is appropriate
-    </a>
-    <a data-section="implementation" href="#lstm?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="two-states-with-different-roles" id="lstm--two-states-with-different-roles">
+<nav aria-label="On this page">
+<a data-section="two-states-with-different-roles" href="#lstm?section=two-states-with-different-roles">Two states with different roles</a>
+<a data-section="why-the-additive-path-matters" href="#lstm?section=why-the-additive-path-matters">Why the additive path matters</a>
+<a data-section="read-a-memory-timescale-from-the-gate" href="#lstm?section=read-a-memory-timescale-from-the-gate">Read a memory timescale from the gate</a>
+<a data-section="the-worked-gate-calculation" href="#lstm?section=the-worked-gate-calculation">The worked gate calculation</a>
+<a data-section="parameter-counts-and-library-conventions" href="#lstm?section=parameter-counts-and-library-conventions">Parameter counts and library conventions</a>
+<a data-section="where-the-architecture-is-appropriate" href="#lstm?section=where-the-architecture-is-appropriate">Where the architecture is appropriate</a>
+<a data-section="implementation" href="#lstm?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="two-states-with-different-roles" id="lstm--two-states-with-different-roles">
     Two states with different roles
    </h2>
-   <p>
+<p>
     An LSTM introduces a cell state
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>c</mi><mi>t</mi></msub><annotation encoding="application/x-tex">c_t</annotation></semantics></math>
     in addition to the hidden output
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>h</mi><mi>t</mi></msub><annotation encoding="application/x-tex">h_t</annotation></semantics></math>
     . The cell provides an additive route for storing and modifying information. The hidden state exposes a gated transformation of that cell to the rest of the network.
    </p>
-   <p>
-    For concatenated input
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>;</mo><msub><mi>x</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">u_t=[h_{t-1};x_t]</annotation></semantics></math>
-    , the source defines
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>t</mi></msub><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>f</mi></msub><msub><mi>u</mi><mi>t</mi></msub><mo>+</mo><msub><mi>b</mi><mi>f</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>i</mi><mi>t</mi></msub><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>i</mi></msub><msub><mi>u</mi><mi>t</mi></msub><mo>+</mo><msub><mi>b</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">f_t=\sigma(W_fu_t+b_f),\qquad i_t=\sigma(W_iu_t+b_i),</annotation></semantics></math>
-   </div>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>c</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>=</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>c</mi></msub><msub><mi>u</mi><mi>t</mi></msub><mo>+</mo><msub><mi>b</mi><mi>c</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>c</mi><mi>t</mi></msub><mo>=</mo><msub><mi>f</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi>c</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>i</mi><mi>t</mi></msub><mo>⊙</mo><msub><mover><mi>c</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\tilde c_t=\tanh(W_cu_t+b_c),\qquad
+<p>For concatenated input <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>;</mo><msub><mi>x</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">u_t=[h_{t-1};x_t]</annotation></semantics></math>, the gate and state updates are</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>t</mi></msub><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>f</mi></msub><msub><mi>u</mi><mi>t</mi></msub><mo>+</mo><msub><mi>b</mi><mi>f</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>i</mi><mi>t</mi></msub><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>i</mi></msub><msub><mi>u</mi><mi>t</mi></msub><mo>+</mo><msub><mi>b</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">f_t=\sigma(W_fu_t+b_f),\qquad i_t=\sigma(W_iu_t+b_i),</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>c</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>=</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>c</mi></msub><msub><mi>u</mi><mi>t</mi></msub><mo>+</mo><msub><mi>b</mi><mi>c</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>c</mi><mi>t</mi></msub><mo>=</mo><msub><mi>f</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi>c</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>i</mi><mi>t</mi></msub><mo>⊙</mo><msub><mover><mi>c</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\tilde c_t=\tanh(W_cu_t+b_c),\qquad
 c_t=f_t\odot c_{t-1}+i_t\odot\tilde c_t,</annotation></semantics></math>
-   </div>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mi>t</mi></msub><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>o</mi></msub><msub><mi>u</mi><mi>t</mi></msub><mo>+</mo><msub><mi>b</mi><mi>o</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>h</mi><mi>t</mi></msub><mo>=</mo><msub><mi>o</mi><mi>t</mi></msub><mo>⊙</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>c</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">o_t=\sigma(W_ou_t+b_o),\qquad h_t=o_t\odot\tanh(c_t).</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mi>t</mi></msub><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>o</mi></msub><msub><mi>u</mi><mi>t</mi></msub><mo>+</mo><msub><mi>b</mi><mi>o</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>h</mi><mi>t</mi></msub><mo>=</mo><msub><mi>o</mi><mi>t</mi></msub><mo>⊙</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>c</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">o_t=\sigma(W_ou_t+b_o),\qquad h_t=o_t\odot\tanh(c_t).</annotation></semantics></math>
+</div>
+<p>
     The forget gate retains or attenuates old cell content. The input gate controls new candidate content. The output gate controls how much transformed cell content is exposed as the hidden state. These sigmoid-valued gates are continuous controls, not discrete instructions or class probabilities.
    </p>
-   <h2 data-section="why-the-additive-path-matters" id="lstm--why-the-additive-path-matters">
+<h2 data-section="why-the-additive-path-matters" id="lstm--why-the-additive-path-matters">
     Why the additive path matters
    </h2>
-   <p>
+<p>
     A vanilla recurrent state repeatedly passes through a full nonlinear transformation. The LSTM cell instead contains a direct additive term from the previous cell. For a standard cell without peepholes, hold the previous hidden-state coordinate
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">h_{t-1}</annotation></semantics></math>
     fixed while differentiating the cell-state coordinate. The direct block is
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mfrac><mrow><mi>∂</mi><msub><mi>c</mi><mi>t</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>c</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow></mfrac><mo form="postfix" stretchy="true">|</mo></mrow><mrow><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mspace width="0.222em"></mspace><mrow><mi mathvariant="normal">f</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">x</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">d</mi></mrow></mrow></msub><mo>=</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>f</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\left.\frac{\partial c_t}{\partial c_{t-1}}\right|_{h_{t-1}\ \mathrm{fixed}}=\operatorname{diag}(f_t).</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mfrac><mrow><mi>∂</mi><msub><mi>c</mi><mi>t</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>c</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow></mfrac><mo form="postfix" stretchy="true">|</mo></mrow><mrow><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mspace width="0.222em"></mspace><mrow><mi mathvariant="normal">f</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">x</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">d</mi></mrow></mrow></msub><mo>=</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>f</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\left.\frac{\partial c_t}{\partial c_{t-1}}\right|_{h_{t-1}\ \mathrm{fixed}}=\operatorname{diag}(f_t).</annotation></semantics></math>
+</div>
+<p>
     Over several steps, that particular direct path scales coordinatewise as a product of the realized forget gates. When those values stay close to one, the path can retain useful sensitivity rather than repeatedly crush it through saturation.
    </p>
-   <p>
-    The qualification is essential: the
-    <strong>
-     total
-    </strong>
-    derivative contains additional paths because the gates depend on recurrent variables. The source’s approximation isolates the memory-path intuition; the block form above makes that scope precise. It is not the full Jacobian of the joint cell and hidden state.
-   </p>
-   <figure class="source-figure">
-    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="arch-10" type="button">
-     <img alt="The source’s constant-forget-gate illustration. A gate near one retains a much larger fraction over time than a small gate; real gates vary with input and state." height="526" loading="lazy" src="assets/images/the-source-s-constant-forget-gate-illustration-a-gate-near-one-re-6f892fa5ff.webp" width="925"/>
-    </button>
-    <figcaption>
-     The source’s constant-forget-gate illustration. A gate near one retains a much larger fraction over time than a small gate; real gates vary with input and state.
-     <button aria-label="Open source: Architectures · PDF p. 10" data-page="10" data-pdf="arch" type="button">
+<p>This direct cell-state block is not the total derivative of the recurrent system. Gate values depend on recurrent variables, creating additional paths through the hidden state. The full Jacobian must account for both the cell and hidden coordinates.</p>
+<figure class="source-figure">
+<button aria-label="Enlarge source figure" class="figure-frame" data-figure="arch-10" type="button">
+<img alt="Retention under a constant forget gate. Values close to one preserve more of an earlier cell contribution; actual forget gates vary with input and state." height="526" loading="lazy" src="assets/images/the-source-s-constant-forget-gate-illustration-a-gate-near-one-re-6f892fa5ff.webp" width="925"/>
+</button>
+<figcaption>Retention under a constant forget gate. Values close to one preserve more of an earlier cell contribution; actual forget gates vary with input and state. <button aria-label="Open source: Architectures · PDF p. 10" data-page="10" data-pdf="arch" type="button">
       Architectures · PDF p. 10
-     </button>
-    </figcaption>
-   </figure>
-   <details class="derivation" data-derivation="cell-jacobian" id="lstm--derivation-cell-jacobian">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+     </button></figcaption>
+</figure>
+<details class="derivation" data-derivation="cell-jacobian" id="lstm--derivation-cell-jacobian">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive the direct cell-state path and the full state Jacobian
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Consider a standard LSTM without peephole connections. At a fixed input, gates
@@ -133,10 +96,10 @@ c_t=f_t\odot c_{t-1}+i_t\odot\tilde c_t,</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
       , while
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mi>′</mi><mo>=</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><mi>c</mi><mo>+</mo><mi>i</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><mi>g</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>h</mi><mi>′</mi><mo>=</mo><mi>o</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>c</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">c'=f(h)\odot c+i(h)\odot g(h),\qquad h'=o(h)\odot\tanh(c').</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mi>′</mi><mo>=</mo><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><mi>c</mi><mo>+</mo><mi>i</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><mi>g</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>h</mi><mi>′</mi><mo>=</mo><mi>o</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>c</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">c'=f(h)\odot c+i(h)\odot g(h),\qquad h'=o(h)\odot\tanh(c').</annotation></semantics></math>
+</div>
+<p>
       Treat previous cell
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>
       and hidden state
@@ -145,10 +108,10 @@ c_t=f_t\odot c_{t-1}+i_t\odot\tilde c_t,</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>c</mi><mo>,</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">s=(c,h)</annotation></semantics></math>
       when forming its local Jacobian.
      </p>
-     <h4>
+<h4>
       1 · Hold the hidden-state coordinate fixed
      </h4>
-     <p>
+<p>
       If
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
       is fixed, the gate values do not change when
@@ -157,10 +120,10 @@ c_t=f_t\odot c_{t-1}+i_t\odot\tilde c_t,</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>,</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">j,k</annotation></semantics></math>
       ,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>c</mi><msub><mi>′</mi><mi>j</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>c</mi><mi>k</mi></msub></mrow></mfrac><mo>=</mo><msub><mi>f</mi><mi>j</mi></msub><mspace width="0.167em"></mspace><msub><mn>𝟏</mn><mrow><mi>j</mi><mo>=</mo><mi>k</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial c'_j}{\partial c_k}=f_j\,\mathbf1_{j=k}.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>c</mi><msub><mi>′</mi><mi>j</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>c</mi><mi>k</mi></msub></mrow></mfrac><mo>=</mo><msub><mi>f</mi><mi>j</mi></msub><mspace width="0.167em"></mspace><msub><mn>𝟏</mn><mrow><mi>j</mi><mo>=</mo><mi>k</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial c'_j}{\partial c_k}=f_j\,\mathbf1_{j=k}.</annotation></semantics></math>
+</div>
+<p>
       Therefore the
       <strong>
        direct cell-to-cell block
@@ -171,78 +134,73 @@ c_t=f_t\odot c_{t-1}+i_t\odot\tilde c_t,</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>
       itself.
      </p>
-     <h4>
+<h4>
       2 · Include the routes through the gates
      </h4>
-     <p>
+<p>
       Let
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>J</mi><mi>f</mi></msub><mo>=</mo><mi>∂</mi><mi>f</mi><mi>/</mi><mi>∂</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">J_f=\partial f/\partial h</annotation></semantics></math>
       , with analogous definitions for
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>,</mo><mi>g</mi><mo>,</mo><mi>o</mi></mrow><annotation encoding="application/x-tex">i,g,o</annotation></semantics></math>
       . The product rule gives
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mfrac><mrow><mi>∂</mi><mi>c</mi><mi>′</mi></mrow><mrow><mi>∂</mi><mi>h</mi></mrow></mfrac><mo>=</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>c</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>J</mi><mi>f</mi></msub><mo>+</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>g</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>J</mi><mi>i</mi></msub><mo>+</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>i</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>J</mi><mi>g</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">A=\frac{\partial c'}{\partial h}
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mfrac><mrow><mi>∂</mi><mi>c</mi><mi>′</mi></mrow><mrow><mi>∂</mi><mi>h</mi></mrow></mfrac><mo>=</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>c</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>J</mi><mi>f</mi></msub><mo>+</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>g</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>J</mi><mi>i</mi></msub><mo>+</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>i</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>J</mi><mi>g</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">A=\frac{\partial c'}{\partial h}
 =\operatorname{diag}(c)J_f+\operatorname{diag}(g)J_i+\operatorname{diag}(i)J_g.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       These terms exist because changing the previous hidden state changes forgetting, writing, and candidate content.
      </p>
-     <h4>
+<h4>
       3 · Differentiate the exposed hidden state
      </h4>
-     <p>
+<p>
       Let
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>=</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>o</mi><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>−</mo><msup><mo>tanh</mo><mn>2</mn></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>c</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">T=\operatorname{diag}(o\odot[1-\tanh^2(c')])</annotation></semantics></math>
       . Then
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>h</mi><mi>′</mi></mrow><mrow><mi>∂</mi><mi>c</mi></mrow></mfrac><mo>=</mo><mi>T</mi><mi>F</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\frac{\partial h'}{\partial c}=TF,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>h</mi><mi>′</mi></mrow><mrow><mi>∂</mi><mi>h</mi></mrow></mfrac><mo>=</mo><mi>T</mi><mi>A</mi><mo>+</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>c</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>J</mi><mi>o</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial h'}{\partial h}=TA+\operatorname{diag}(\tanh(c'))J_o.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>h</mi><mi>′</mi></mrow><mrow><mi>∂</mi><mi>c</mi></mrow></mfrac><mo>=</mo><mi>T</mi><mi>F</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\frac{\partial h'}{\partial c}=TF,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>h</mi><mi>′</mi></mrow><mrow><mi>∂</mi><mi>h</mi></mrow></mfrac><mo>=</mo><mi>T</mi><mi>A</mi><mo>+</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>c</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>J</mi><mi>o</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial h'}{\partial h}=TA+\operatorname{diag}(\tanh(c'))J_o.</annotation></semantics></math>
+</div>
+<p>
       The first contribution passes through the updated cell; the second passes directly through the output gate.
      </p>
-     <h4>
+<h4>
       4 · Assemble the full transition Jacobian
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>c</mi><mi>′</mi><mo>,</mo><mi>h</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><mi>∂</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>c</mi><mo>,</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>F</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>A</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>T</mi><mi>F</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>T</mi><mi>A</mi><mo>+</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>c</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>J</mi><mi>o</mi></msub></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial(c',h')}{\partial(c,h)}=
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>c</mi><mi>′</mi><mo>,</mo><mi>h</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><mi>∂</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>c</mi><mo>,</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>F</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>A</mi></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>T</mi><mi>F</mi></mtd><mtd columnalign="center" style="text-align: center"><mi>T</mi><mi>A</mi><mo>+</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>c</mi><mi>′</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>J</mi><mi>o</mi></msub></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial(c',h')}{\partial(c,h)}=
 \begin{bmatrix}
 F&amp;A\\ TF&amp;TA+\operatorname{diag}(\tanh(c'))J_o
 \end{bmatrix}.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       Across time, gradients involve products of these full block matrices. The product of forget gates describes one additive cell path, not the entire derivative of the recurrent computation.
      </p>
-     <h4>
+<h4>
       5 · Interpret the benefit without overclaiming
      </h4>
-     <p>
+<p>
       Along the direct path, factors near one can preserve sensitivity without repeatedly multiplying by an arbitrary recurrent matrix and a tanh derivative. This eases a particular source of vanishing gradients. Other paths, saturation, gate dynamics, and optimization still matter, so an LSTM does not guarantee nonvanishing total gradients or unlimited memory.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="9" data-pdf="arch" type="button">
-       Chapter source · PDF p. 9
-      </button>
-      <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.LSTM.html" rel="noopener noreferrer" target="_blank">
+<div class="derivation-footer">
+<button data-page="9" data-pdf="arch" type="button">Reference · PDF p. 9</button>
+<a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.LSTM.html" rel="noopener noreferrer" target="_blank">
        Library reference
       </a>
-      <a class="calculation-link" href="#lstm?derivation=cell-jacobian">
+<a class="calculation-link" href="#lstm?derivation=cell-jacobian">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="read-a-memory-timescale-from-the-gate" id="lstm--read-a-memory-timescale-from-the-gate">
+</div>
+</div>
+</details>
+<h2 data-section="read-a-memory-timescale-from-the-gate" id="lstm--read-a-memory-timescale-from-the-gate">
     Read a memory timescale from the gate
    </h2>
-   <p>
+<p>
     For an approximately constant scalar forget gate
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>f</mi><annotation encoding="application/x-tex">f</annotation></semantics></math>
     , old content contributes proportionally to
@@ -255,21 +213,21 @@ F&amp;A\\ TF&amp;TA+\operatorname{diag}(\tanh(c'))J_o
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math>
     .
    </p>
-   <p>
+<p>
     Different hidden coordinates can learn different gate values and therefore different effective timescales. This is more informative than saying an LSTM “remembers long-term information”: it learns what to retain, overwrite, and expose, coordinate by coordinate and step by step.
    </p>
-   <details class="derivation" data-derivation="memory-and-gates" id="lstm--derivation-memory-and-gates">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<details class="derivation" data-derivation="memory-and-gates" id="lstm--derivation-memory-and-gates">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Unroll cell memory, derive its half-life, and differentiate a gate update
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       First use scalar cell updates
@@ -278,25 +236,25 @@ F&amp;A\\ TF&amp;TA+\operatorname{diag}(\tanh(c'))J_o
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mi>t</mi></msub><mo>=</mo><msub><mi>i</mi><mi>t</mi></msub><msub><mi>g</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">u_t=i_tg_t</annotation></semantics></math>
       is the newly written content. Treat the realized gates as given for the direct-path calculation.
      </p>
-     <h4>
+<h4>
       1 · Unroll the first two updates
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mn>1</mn></msub><mo>=</mo><msub><mi>f</mi><mn>1</mn></msub><msub><mi>c</mi><mn>0</mn></msub><mo>+</mo><msub><mi>u</mi><mn>1</mn></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">c_1=f_1c_0+u_1,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mn>2</mn></msub><mo>=</mo><msub><mi>f</mi><mn>2</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>f</mi><mn>1</mn></msub><msub><mi>c</mi><mn>0</mn></msub><mo>+</mo><msub><mi>u</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>u</mi><mn>2</mn></msub><mo>=</mo><msub><mi>f</mi><mn>2</mn></msub><msub><mi>f</mi><mn>1</mn></msub><msub><mi>c</mi><mn>0</mn></msub><mo>+</mo><msub><mi>f</mi><mn>2</mn></msub><msub><mi>u</mi><mn>1</mn></msub><mo>+</mo><msub><mi>u</mi><mn>2</mn></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">c_2=f_2(f_1c_0+u_1)+u_2=f_2f_1c_0+f_2u_1+u_2.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mn>1</mn></msub><mo>=</mo><msub><mi>f</mi><mn>1</mn></msub><msub><mi>c</mi><mn>0</mn></msub><mo>+</mo><msub><mi>u</mi><mn>1</mn></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">c_1=f_1c_0+u_1,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mn>2</mn></msub><mo>=</mo><msub><mi>f</mi><mn>2</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>f</mi><mn>1</mn></msub><msub><mi>c</mi><mn>0</mn></msub><mo>+</mo><msub><mi>u</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>u</mi><mn>2</mn></msub><mo>=</mo><msub><mi>f</mi><mn>2</mn></msub><msub><mi>f</mi><mn>1</mn></msub><msub><mi>c</mi><mn>0</mn></msub><mo>+</mo><msub><mi>f</mi><mn>2</mn></msub><msub><mi>u</mi><mn>1</mn></msub><mo>+</mo><msub><mi>u</mi><mn>2</mn></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">c_2=f_2(f_1c_0+u_1)+u_2=f_2f_1c_0+f_2u_1+u_2.</annotation></semantics></math>
+</div>
+<p>
       At step
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
       , continuing the substitution gives
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><munderover><mo>∏</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>t</mi></munderover><msub><mi>f</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>c</mi><mn>0</mn></msub><mo>+</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>t</mi></munderover><mrow><mo form="prefix" stretchy="true">(</mo><munderover><mo>∏</mo><mrow><mi>j</mi><mo>=</mo><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mi>t</mi></munderover><msub><mi>f</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>u</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">c_t=\left(\prod_{j=1}^tf_j\right)c_0+
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><munderover><mo>∏</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>t</mi></munderover><msub><mi>f</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>c</mi><mn>0</mn></msub><mo>+</mo><munderover><mo>∑</mo><mrow><mi>k</mi><mo>=</mo><mn>1</mn></mrow><mi>t</mi></munderover><mrow><mo form="prefix" stretchy="true">(</mo><munderover><mo>∏</mo><mrow><mi>j</mi><mo>=</mo><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mi>t</mi></munderover><msub><mi>f</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>u</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">c_t=\left(\prod_{j=1}^tf_j\right)c_0+
 \sum_{k=1}^t\left(\prod_{j=k+1}^tf_j\right)u_k.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       The empty product for
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mi>t</mi></mrow><annotation encoding="application/x-tex">k=t</annotation></semantics></math>
       is one. Each write is discounted by the forget gates encountered
@@ -305,10 +263,10 @@ F&amp;A\\ TF&amp;TA+\operatorname{diag}(\tanh(c'))J_o
       </strong>
       it was written.
      </p>
-     <h4>
+<h4>
       2 · Solve a constant-gate retention question
      </h4>
-     <p>
+<p>
       If all
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>j</mi></msub><mo>=</mo><mi>f</mi></mrow><annotation encoding="application/x-tex">f_j=f</annotation></semantics></math>
       with
@@ -321,11 +279,11 @@ F&amp;A\\ TF&amp;TA+\operatorname{diag}(\tanh(c'))J_o
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>∈</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">r\in(0,1)</annotation></semantics></math>
       , solve
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>f</mi><mi>k</mi></msup><mo>=</mo><mi>r</mi><mspace width="1.0em"></mspace><mo>⇒</mo><mspace width="1.0em"></mspace><mi>k</mi><mo>log</mo><mi>f</mi><mo>=</mo><mo>log</mo><mi>r</mi><mspace width="1.0em"></mspace><mo>⇒</mo><mspace width="1.0em"></mspace><mi>k</mi><mo>=</mo><mfrac><mrow><mo>log</mo><mi>r</mi></mrow><mrow><mo>log</mo><mi>f</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">f^k=r\quad\Rightarrow\quad k\log f=\log r\quad\Rightarrow\quad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>f</mi><mi>k</mi></msup><mo>=</mo><mi>r</mi><mspace width="1.0em"></mspace><mo>⇒</mo><mspace width="1.0em"></mspace><mi>k</mi><mo>log</mo><mi>f</mi><mo>=</mo><mo>log</mo><mi>r</mi><mspace width="1.0em"></mspace><mo>⇒</mo><mspace width="1.0em"></mspace><mi>k</mi><mo>=</mo><mfrac><mrow><mo>log</mo><mi>r</mi></mrow><mrow><mo>log</mo><mi>f</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">f^k=r\quad\Rightarrow\quad k\log f=\log r\quad\Rightarrow\quad
 k=\frac{\log r}{\log f}.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       The half-life is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>k</mi><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msub><mo>=</mo><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mi>/</mi><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mo>log</mo><mi>f</mi></mrow><annotation encoding="application/x-tex">k_{1/2}=\log(1/2)/\log f</annotation></semantics></math>
       : approximately
@@ -342,10 +300,10 @@ k=\frac{\log r}{\log f}.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.99</mn><annotation encoding="application/x-tex">0.99</annotation></semantics></math>
       . This is a direct-path timescale, not an empirical memory guarantee.
      </p>
-     <h4>
+<h4>
       3 · Differentiate the local gate operations
      </h4>
-     <p>
+<p>
       Suppose the incoming reverse gradients are
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mover><mi>h</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><annotation encoding="application/x-tex">\bar h_t</annotation></semantics></math>
       through
@@ -354,117 +312,100 @@ k=\frac{\log r}{\log f}.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mover><mi>c</mi><mo accent="true">‾</mo></mover><mi>t</mi><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">h</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi></mrow></msubsup><annotation encoding="application/x-tex">\bar c_t^{\mathrm{other}}</annotation></semantics></math>
       through other downstream cell routes. Add their contributions:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>c</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><msubsup><mover><mi>c</mi><mo accent="true">‾</mo></mover><mi>t</mi><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">h</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi></mrow></msubsup><mo>+</mo><msub><mover><mi>h</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>o</mi><mi>t</mi></msub><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>−</mo><msup><mo>tanh</mo><mn>2</mn></msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>c</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar c_t=\bar c_t^{\mathrm{other}}+\bar h_t\odot o_t\odot[1-\tanh^2(c_t)].</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>c</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><msubsup><mover><mi>c</mi><mo accent="true">‾</mo></mover><mi>t</mi><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">t</mi><mi mathvariant="normal">h</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">r</mi></mrow></msubsup><mo>+</mo><msub><mover><mi>h</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>o</mi><mi>t</mi></msub><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>−</mo><msup><mo>tanh</mo><mn>2</mn></msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>c</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar c_t=\bar c_t^{\mathrm{other}}+\bar h_t\odot o_t\odot[1-\tanh^2(c_t)].</annotation></semantics></math>
+</div>
+<p>
       The elementwise product rule then gives
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>f</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><msub><mover><mi>c</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>c</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mover><mi>i</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><msub><mover><mi>c</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>g</mi><mi>t</mi></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mover><mi>g</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><msub><mover><mi>c</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>i</mi><mi>t</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\bar f_t=\bar c_t\odot c_{t-1},\quad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>f</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><msub><mover><mi>c</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>c</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mover><mi>i</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><msub><mover><mi>c</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>g</mi><mi>t</mi></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mover><mi>g</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><msub><mover><mi>c</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>i</mi><mi>t</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\bar f_t=\bar c_t\odot c_{t-1},\quad
 \bar i_t=\bar c_t\odot g_t,\quad
 \bar g_t=\bar c_t\odot i_t,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>o</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><msub><mover><mi>h</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>c</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msubsup><mover><mi>c</mi><mo accent="true">‾</mo></mover><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">t</mi></mrow></msubsup><mo>=</mo><msub><mover><mi>c</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>f</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar o_t=\bar h_t\odot\tanh(c_t),\qquad
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>o</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>=</mo><msub><mover><mi>h</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>c</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msubsup><mover><mi>c</mi><mo accent="true">‾</mo></mover><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow><mrow><mi mathvariant="normal">d</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">t</mi></mrow></msubsup><mo>=</mo><msub><mover><mi>c</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>f</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar o_t=\bar h_t\odot\tanh(c_t),\qquad
 \bar c_{t-1}^{\mathrm{direct}}=\bar c_t\odot f_t.</annotation></semantics></math>
-     </div>
-     <h4>
+</div>
+<h4>
       4 · Continue through each gate nonlinearity
      </h4>
-     <p>
+<p>
       For sigmoid gate pre-activations
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>f</mi></msub><mo>,</mo><msub><mi>a</mi><mi>i</mi></msub><mo>,</mo><msub><mi>a</mi><mi>o</mi></msub></mrow><annotation encoding="application/x-tex">a_f,a_i,a_o</annotation></semantics></math>
       and tanh candidate
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mi>g</mi></msub><annotation encoding="application/x-tex">a_g</annotation></semantics></math>
       ,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>a</mi><mo accent="true">‾</mo></mover><mi>f</mi></msub><mo>=</mo><msub><mover><mi>f</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>f</mi><mi>t</mi></msub><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>f</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msub><mover><mi>a</mi><mo accent="true">‾</mo></mover><mi>i</mi></msub><mo>=</mo><msub><mover><mi>i</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>i</mi><mi>t</mi></msub><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>i</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\bar a_f=\bar f_t\odot f_t\odot(1-f_t),\quad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>a</mi><mo accent="true">‾</mo></mover><mi>f</mi></msub><mo>=</mo><msub><mover><mi>f</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>f</mi><mi>t</mi></msub><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>f</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msub><mover><mi>a</mi><mo accent="true">‾</mo></mover><mi>i</mi></msub><mo>=</mo><msub><mover><mi>i</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>i</mi><mi>t</mi></msub><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>i</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\bar a_f=\bar f_t\odot f_t\odot(1-f_t),\quad
 \bar a_i=\bar i_t\odot i_t\odot(1-i_t),</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>a</mi><mo accent="true">‾</mo></mover><mi>o</mi></msub><mo>=</mo><msub><mover><mi>o</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>o</mi><mi>t</mi></msub><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>o</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msub><mover><mi>a</mi><mo accent="true">‾</mo></mover><mi>g</mi></msub><mo>=</mo><msub><mover><mi>g</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msubsup><mi>g</mi><mi>t</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar a_o=\bar o_t\odot o_t\odot(1-o_t),\quad
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>a</mi><mo accent="true">‾</mo></mover><mi>o</mi></msub><mo>=</mo><msub><mover><mi>o</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><msub><mi>o</mi><mi>t</mi></msub><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>o</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msub><mover><mi>a</mi><mo accent="true">‾</mo></mover><mi>g</mi></msub><mo>=</mo><msub><mover><mi>g</mi><mo accent="true">‾</mo></mover><mi>t</mi></msub><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msubsup><mi>g</mi><mi>t</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar a_o=\bar o_t\odot o_t\odot(1-o_t),\quad
 \bar a_g=\bar g_t\odot(1-g_t^2).</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       Their affine weight gradients are outer products of these signals with the corresponding concatenated input. Their contributions to
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">h_{t-1}</annotation></semantics></math>
       are summed. These are the same local chain-rule operations as in an ordinary feed-forward network, arranged around an additive memory path.
      </p>
-     <figure aria-label="Change the memory timescale" class="interactive-visual" data-visual="memory">
-      <div class="visual-heading">
-       <strong>
+<figure aria-label="Change the memory timescale" class="interactive-visual" data-visual="memory">
+<div class="visual-heading">
+<strong>
         Change the memory timescale
        </strong>
-       <button data-reset-visual="" type="button">
+<button data-reset-visual="" type="button">
         Reset
        </button>
-      </div>
-      <div class="visual-controls">
-       <div class="visual-control">
-        <label for="visual-memory-f">
+</div>
+<div class="visual-controls">
+<div class="visual-control">
+<label for="visual-memory-f">
          Forget gate f
         </label>
-        <input aria-describedby="visual-memory-output" data-default="0.9" data-value="f" id="visual-memory-f" max="0.999" min="0.05" step="0.001" type="range" value="0.9"/>
-        <output data-range-output="f" for="visual-memory-f">
+<input aria-describedby="visual-memory-output" data-default="0.9" data-value="f" id="visual-memory-f" max="0.999" min="0.05" step="0.001" type="range" value="0.9"/>
+<output data-range-output="f" for="visual-memory-f">
          0.9
         </output>
-       </div>
-      </div>
-      <svg aria-describedby="visual-memory-output" aria-label="Change the memory timescale" role="img" viewbox="0 0 640 300"></svg>
-      <div aria-hidden="true" class="visual-legend">
-       <span style="--series:#356650">
+</div>
+</div>
+<svg aria-describedby="visual-memory-output" aria-label="Change the memory timescale" role="img" viewbox="0 0 640 300"></svg>
+<div aria-hidden="true" class="visual-legend">
+<span style="--series:#356650">
         Direct-path retention
        </span>
-      </div>
-      <figcaption aria-live="polite" class="visual-output" id="visual-memory-output">
-      </figcaption>
-      <div class="visual-note">
+</div>
+<figcaption aria-live="polite" class="visual-output" id="visual-memory-output">
+</figcaption>
+<div class="visual-note">
        Interactive calculation using the assumptions above · computed locally, not fitted performance
       </div>
-      <noscript>
-       <p class="visual-fallback">
+<noscript>
+<p class="visual-fallback">
         The interactive plot needs JavaScript. The complete equations and worked values remain available in the calculation above.
        </p>
-      </noscript>
-     </figure>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="9" data-pdf="arch" type="button">
-       Chapter source · PDF p. 9
-      </button>
-      <a class="calculation-link" href="#lstm?derivation=memory-and-gates">
+</noscript>
+</figure>
+<div class="derivation-footer">
+<button data-page="9" data-pdf="arch" type="button">Reference · PDF p. 9</button>
+<a class="calculation-link" href="#lstm?derivation=memory-and-gates">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="the-worked-gate-calculation" id="lstm--the-worked-gate-calculation">
+</div>
+</div>
+</details>
+<h2 data-section="the-worked-gate-calculation" id="lstm--the-worked-gate-calculation">
     The worked gate calculation
    </h2>
-   <p>
-    The source gives
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.4</mn></mrow><annotation encoding="application/x-tex">c_{t-1}=0.4</annotation></semantics></math>
-    ,
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>t</mi></msub><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">f_t=0.9</annotation></semantics></math>
-    ,
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>i</mi><mi>t</mi></msub><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">i_t=0.3</annotation></semantics></math>
-    ,
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>c</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">\tilde c_t=0.5</annotation></semantics></math>
-    , and
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mi>t</mi></msub><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">o_t=0.8</annotation></semantics></math>
-    . Then
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>t</mi></msub><mo>=</mo><mn>0.9</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.4</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0.3</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.5</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.51</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">c_t=0.9(0.4)+0.3(0.5)=0.51,</annotation></semantics></math>
-   </div>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>t</mi></msub><mo>=</mo><mn>0.8</mn><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.51</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mn>0.376</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">h_t=0.8\tanh(0.51)\approx0.376.</annotation></semantics></math>
-   </div>
-   <p>
+<p>Take <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.4</mn></mrow><annotation encoding="application/x-tex">c_{t-1}=0.4</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>f</mi><mi>t</mi></msub><mo>=</mo><mn>0.9</mn></mrow><annotation encoding="application/x-tex">f_t=0.9</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>i</mi><mi>t</mi></msub><mo>=</mo><mn>0.3</mn></mrow><annotation encoding="application/x-tex">i_t=0.3</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>c</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">\tilde c_t=0.5</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mi>t</mi></msub><mo>=</mo><mn>0.8</mn></mrow><annotation encoding="application/x-tex">o_t=0.8</annotation></semantics></math>. Then</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>t</mi></msub><mo>=</mo><mn>0.9</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.4</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0.3</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.5</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.51</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">c_t=0.9(0.4)+0.3(0.5)=0.51,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>t</mi></msub><mo>=</mo><mn>0.8</mn><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.51</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mn>0.376</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">h_t=0.8\tanh(0.51)\approx0.376.</annotation></semantics></math>
+</div>
+<p>
     The cell kept
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.36</mn><annotation encoding="application/x-tex">0.36</annotation></semantics></math>
     of old content and added
@@ -475,46 +416,31 @@ k=\frac{\log r}{\log f}.</annotation></semantics></math>
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>h</mi><mi>t</mi></msub><annotation encoding="application/x-tex">h_t</annotation></semantics></math>
     hides this distinction.
    </p>
-   <h2 data-section="parameter-counts-and-library-conventions" id="lstm--parameter-counts-and-library-conventions">
+<h2 data-section="parameter-counts-and-library-conventions" id="lstm--parameter-counts-and-library-conventions">
     Parameter counts and library conventions
    </h2>
-   <p>
-    With input width
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>d</mi><mi>x</mi></msub><annotation encoding="application/x-tex">d_x</annotation></semantics></math>
-    and hidden width
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>d</mi><mi>h</mi></msub><annotation encoding="application/x-tex">d_h</annotation></semantics></math>
-    , the PDF’s single-bias concatenated formulation has approximately
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><msub><mi>d</mi><mi>h</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>d</mi><mi>x</mi></msub><mo>+</mo><msub><mi>d</mi><mi>h</mi></msub><mo>+</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">4d_h(d_x+d_h+1)</annotation></semantics></math>
-   </div>
-   <p>
+<p>With input width <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>d</mi><mi>x</mi></msub><annotation encoding="application/x-tex">d_x</annotation></semantics></math> and hidden width <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>d</mi><mi>h</mi></msub><annotation encoding="application/x-tex">d_h</annotation></semantics></math>, a concatenated formulation with one bias per gate has approximately</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><msub><mi>d</mi><mi>h</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>d</mi><mi>x</mi></msub><mo>+</mo><msub><mi>d</mi><mi>h</mi></msub><mo>+</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">4d_h(d_x+d_h+1)</annotation></semantics></math>
+</div>
+<p>
     parameters before output layers. There are four affine maps: three gates plus a candidate transformation.
    </p>
-   <p>
-    <strong>
-     Official PyTorch supplement.
-    </strong>
-    A standard unprojected single-layer, single-direction
-    <code>
+<p>A standard unprojected, single-layer, single-direction <code>
      nn.LSTM
-    </code>
-    stores separate input and recurrent biases, giving
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><msub><mi>d</mi><mi>h</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>d</mi><mi>x</mi></msub><mo>+</mo><msub><mi>d</mi><mi>h</mi></msub><mo>+</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">4d_h(d_x+d_h+2)</annotation></semantics></math>
-    parameters with biases enabled. This is a storage/parameterization distinction from the source’s formula, not an unexplained change to it. Stacking, bidirectionality, and projections require their own counts.
-   </p>
-   <details class="derivation" data-derivation="recurrent-parameter-count" id="lstm--derivation-recurrent-parameter-count">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+    </code> stores separate input and recurrent biases. With biases enabled, its count is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><msub><mi>d</mi><mi>h</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>d</mi><mi>x</mi></msub><mo>+</mo><msub><mi>d</mi><mi>h</mi></msub><mo>+</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">4d_h(d_x+d_h+2)</annotation></semantics></math>. The extra bias vectors explain the difference from the single-bias formulation. Stacking, bidirectionality, and projection layers change the count further.</p>
+<details class="derivation" data-derivation="recurrent-parameter-count" id="lstm--derivation-recurrent-parameter-count">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Count recurrent weights and distinguish one bias from two
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       A single unidirectional, unprojected LSTM layer has input width
@@ -523,10 +449,10 @@ k=\frac{\log r}{\log f}.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
       . It computes four affine transformations: input, forget, candidate, and output.
      </p>
-     <h4>
+<h4>
       1 · Count one transformation in the mathematical convention
      </h4>
-     <p>
+<p>
       A transformation of concatenated
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>;</mo><msub><mi>x</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>h</mi><mo>+</mo><mi>d</mi></mrow></msup></mrow><annotation encoding="application/x-tex">[h_{t-1};x_t]\in\mathbb R^{h+d}</annotation></semantics></math>
       to
@@ -537,16 +463,14 @@ k=\frac{\log r}{\log f}.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
       biases. Four transformations therefore have
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mrow><mo form="prefix" stretchy="true">[</mo><mi>h</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo>+</mo><mi>d</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>h</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mn>4</mn><mi>h</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>d</mi><mo>+</mo><mi>h</mi><mo>+</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">4[h(h+d)+h]=4h(d+h+1)</annotation></semantics></math>
-     </div>
-     <p>
-      parameters in the single-bias convention used by the source.
-     </p>
-     <h4>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mrow><mo form="prefix" stretchy="true">[</mo><mi>h</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo>+</mo><mi>d</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>h</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mn>4</mn><mi>h</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>d</mi><mo>+</mo><mi>h</mi><mo>+</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">4[h(h+d)+h]=4h(d+h+1)</annotation></semantics></math>
+</div>
+<p> parameters in the single-bias formulation. </p>
+<h4>
       2 · Count the tensors in the PyTorch convention
      </h4>
-     <p>
+<p>
       For one layer, the input weight tensor has shape
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>4</mn><mi>h</mi><mo>,</mo><mi>d</mi><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(4h,d)</annotation></semantics></math>
       and contains
@@ -559,16 +483,16 @@ k=\frac{\log r}{\log f}.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mi>h</mi></mrow><annotation encoding="application/x-tex">4h</annotation></semantics></math>
       . Hence
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mn>4</mn><mi>h</mi><mi>d</mi><mo>+</mo><mn>4</mn><msup><mi>h</mi><mn>2</mn></msup><mo>+</mo><mn>8</mn><mi>h</mi><mo>=</mo><mn>4</mn><mi>h</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>d</mi><mo>+</mo><mi>h</mi><mo>+</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">N=4hd+4h^2+8h=4h(d+h+2).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><mn>4</mn><mi>h</mi><mi>d</mi><mo>+</mo><mn>4</mn><msup><mi>h</mi><mn>2</mn></msup><mo>+</mo><mn>8</mn><mi>h</mi><mo>=</mo><mn>4</mn><mi>h</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>d</mi><mo>+</mo><mi>h</mi><mo>+</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">N=4hd+4h^2+8h=4h(d+h+2).</annotation></semantics></math>
+</div>
+<p>
       Adding the two bias vectors is functionally equivalent to one effective bias, but the library stores two trainable tensors.
      </p>
-     <h4>
+<h4>
       3 · Verify a small example
      </h4>
-     <p>
+<p>
       For
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>3</mn><mo>,</mo><mi>h</mi><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">d=3,h=5</annotation></semantics></math>
       , the four counts are
@@ -587,148 +511,119 @@ k=\frac{\log r}{\log f}.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>20</mn><annotation encoding="application/x-tex">20</annotation></semantics></math>
       -element bias vector.
      </p>
-     <h4>
+<h4>
       4 · State what is outside this formula
      </h4>
-     <p>
+<p>
       An output head adds its own parameters. Stacked layers receive the previous layer’s output width; bidirectionality changes that width and adds a second direction; an LSTM projection changes recurrent shapes and adds projection weights. Sequence length and batch size do not multiply the number of shared parameters. The vanilla RNN and GRU analogues replace four affine blocks with one and three, respectively, under the same assumptions.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="9" data-pdf="arch" type="button">
-       Chapter source · PDF p. 9
-      </button>
-      <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.LSTM.html" rel="noopener noreferrer" target="_blank">
+<div class="derivation-footer">
+<button data-page="9" data-pdf="arch" type="button">Reference · PDF p. 9</button>
+<a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.LSTM.html" rel="noopener noreferrer" target="_blank">
        Library reference
       </a>
-      <a class="calculation-link" href="#lstm?derivation=recurrent-parameter-count">
+<a class="calculation-link" href="#lstm?derivation=recurrent-parameter-count">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="where-the-architecture-is-appropriate" id="lstm--where-the-architecture-is-appropriate">
+</div>
+</div>
+</details>
+<h2 data-section="where-the-architecture-is-appropriate" id="lstm--where-the-architecture-is-appropriate">
     Where the architecture is appropriate
    </h2>
-   <p>
-    The guide associates LSTMs with moderate-length sequences, forecasting, biosignals, speech, and streaming settings. Bidirectional variants use future as well as past context and are inappropriate when that future information would be unavailable at inference.
-   </p>
-   <p>
-    The official sequence-model tutorial includes an LSTM part-of-speech tagger. The time-sequence example includes a prediction plot. Use those existing implementations to examine state shapes and training, while keeping the architecture’s central question in view: which information must persist, for how long, and under what prediction-time constraints?
-   </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="lstm--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="sequence">
-     <span class="resource-meta">
+<p>LSTMs are useful candidates for moderate-length sequences, forecasting, biosignals, speech, and streaming tasks. A bidirectional LSTM uses both past and future context, so it is unsuitable when those future observations are unavailable at inference.</p>
+<p>The part-of-speech tagging example produces a prediction at each sequence position. The time-sequence example predicts values over time. In both cases, the required memory and the information available at prediction time determine how state is passed through the model.</p>
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="lstm--implementation">Implementation examples</h2>
+<div class="resource-list">
+<div class="resource" data-resource="sequence">
+<span class="resource-meta">
       PyTorch · LSTM tagging example
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/nlp/sequence_models_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/nlp/sequence_models_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Sequence Models and Long Short-Term Memory Networks
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Follow the LSTM shape examples and a part-of-speech tagger. Distinguish per-token outputs from a single prediction for the entire sequence.
-     </p>
-    </div>
-    <div class="resource" data-resource="lstm-api">
-     <span class="resource-meta">
+</a>
+<p>LSTM tensor shapes and a part-of-speech tagger that produces one prediction per token.</p>
+</div>
+<div class="resource" data-resource="lstm-api">
+<span class="resource-meta">
       PyTorch · API + shape example
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.LSTM.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.LSTM.html" rel="noopener noreferrer" target="_blank">
+<span>
        LSTM: equations, shapes and parameters
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect gate equations and the separate input and recurrent biases. Check hidden/cell shapes, bidirectionality and the effect of batch_first.
-     </p>
-    </div>
-    <div class="resource" data-resource="sequence-example">
-     <span class="resource-meta">
+</a>
+<p>Gate equations, input and recurrent biases, hidden and cell shapes, bidirectionality, and batch_first.</p>
+</div>
+<div class="resource" data-resource="sequence-example">
+<span class="resource-meta">
       PyTorch examples · Official example code
      </span>
-     <a href="https://github.com/pytorch/examples/blob/main/time_sequence_prediction/train.py" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://github.com/pytorch/examples/blob/main/time_sequence_prediction/train.py" rel="noopener noreferrer" target="_blank">
+<span>
        Time Sequence Prediction: training script
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect LSTMCell recurrence and an L-BFGS closure in a small sequence-prediction application. It illustrates implementation mechanics, not a complete production forecasting-validation protocol.
-     </p>
-    </div>
-   </div>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</a>
+<p>A synthetic sequence-prediction model using LSTMCell and an L-BFGS closure, with prediction plots. Its evaluation setup is an illustration, not a full forecasting protocol.</p>
+</div>
+</div>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
     </strong>
     Why does the LSTM cell state help with long-range gradients?
    </summary>
-   <p>
+<p>
     Its additive update contains a direct path scaled by the forget gate. Holding gate dependencies aside, the derivative along that path is the product of forget gates. Values near one can preserve sensitivity longer, but the full derivative includes other paths and useful memory is not guaranteed.
    </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#rnn">
-    <small>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+<button aria-label="Open source: Architectures · PDF pp. 9–11 · §3" data-page="9" data-pdf="arch" type="button">
+     Architectures · PDF pp. 9–11 · §3
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#rnn">
+<small>
      ← Previous
     </small>
-    Recurrent networks and backpropagation through time
-   </a>
-   <a href="#gru">
-    <small>
+Recurrent networks and backpropagation through time
+</a>
+<a href="#gru">
+<small>
      Next →
     </small>
-    GRUs and gate conventions
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+GRUs and gate conventions
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="two-states-with-different-roles" href="#lstm?section=two-states-with-different-roles">
-    Two states with different roles
-   </a>
-   <a data-section="why-the-additive-path-matters" href="#lstm?section=why-the-additive-path-matters">
-    Why the additive path matters
-   </a>
-   <a data-section="read-a-memory-timescale-from-the-gate" href="#lstm?section=read-a-memory-timescale-from-the-gate">
-    Read a memory timescale from the gate
-   </a>
-   <a data-section="the-worked-gate-calculation" href="#lstm?section=the-worked-gate-calculation">
-    The worked gate calculation
-   </a>
-   <a data-section="parameter-counts-and-library-conventions" href="#lstm?section=parameter-counts-and-library-conventions">
-    Parameter counts and library conventions
-   </a>
-   <a data-section="where-the-architecture-is-appropriate" href="#lstm?section=where-the-architecture-is-appropriate">
-    Where the architecture is appropriate
-   </a>
-   <a data-section="implementation" href="#lstm?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="two-states-with-different-roles" href="#lstm?section=two-states-with-different-roles">Two states with different roles</a>
+<a data-section="why-the-additive-path-matters" href="#lstm?section=why-the-additive-path-matters">Why the additive path matters</a>
+<a data-section="read-a-memory-timescale-from-the-gate" href="#lstm?section=read-a-memory-timescale-from-the-gate">Read a memory timescale from the gate</a>
+<a data-section="the-worked-gate-calculation" href="#lstm?section=the-worked-gate-calculation">The worked gate calculation</a>
+<a data-section="parameter-counts-and-library-conventions" href="#lstm?section=parameter-counts-and-library-conventions">Parameter counts and library conventions</a>
+<a data-section="where-the-architecture-is-appropriate" href="#lstm?section=where-the-architecture-is-appropriate">Where the architecture is appropriate</a>
+<a data-section="implementation" href="#lstm?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>
+

@@ -1,43 +1,43 @@
 <article class="article" id="LC601">
- <div class="breadcrumb">
-  <a href="#practice">
+<div class="breadcrumb">
+<a href="#practice">
    Leetcode problems
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Additional problems
   </span>
- </div>
- <h1>
+</div>
+<h1>
   601 · Human traffic of stadium
  </h1>
- <p>
+<p>
   Keep crowded stadium records that belong to runs of at least three consecutive IDs.
  </p>
- <h2>
+<h2>
   My submission
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="archive-601-panel-0" aria-selected="true" id="archive-601-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="archive-601-panel-0" aria-selected="true" id="archive-601-tab-0" role="tab" tabindex="0" type="button">
      MySQL
     </button>
-    <button aria-controls="archive-601-panel-1" aria-selected="false" id="archive-601-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="archive-601-panel-1" aria-selected="false" id="archive-601-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button class="copy-button" data-copy="" type="button">
+</div>
+<button class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="archive-601-tab-0" class="code-panel" id="archive-601-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-601-tab-0" class="code-panel" id="archive-601-panel-0" role="tabpanel">
+<div class="no-script-label">
     MySQL
    </div>
-   <pre id="code-LC601-0" tabindex="0"><code class="language-sql" data-origin="archive-601-sql"><span class="c1"># Write your MySQL query statement below</span>
+<pre id="code-LC601-0" tabindex="0"><code class="language-sql" data-origin="archive-601-sql"><span class="c1"># Write your MySQL query statement below</span>
 <span class="k">WITH</span><span class="w"> </span>
 <span class="w">    </span><span class="n">CrowdedDays</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">        </span><span class="k">SELECT</span><span class="w">  </span>
@@ -60,12 +60,12 @@
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">c</span><span class="p">.</span><span class="n">visit_date</span><span class="w"> </span><span class="k">ASC</span>
 
 </code></pre>
-  </div>
-  <div aria-labelledby="archive-601-tab-1" class="code-panel" id="archive-601-panel-1" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-601-tab-1" class="code-panel" id="archive-601-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-LC601-1" tabindex="0"><code class="language-python" data-origin="archive-601-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-LC601-1" tabindex="0"><code class="language-python" data-origin="archive-601-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">human_traffic</span><span class="p">(</span><span class="n">stadium</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">stadium</span><span class="p">[</span><span class="n">stadium</span><span class="o">.</span><span class="n">people</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">]</span>
@@ -79,132 +79,132 @@
 
     <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">valid_groups</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'groups'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'inner'</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'visit_date'</span><span class="p">,</span> <span class="s1">'people'</span><span class="p">]]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'visit_date'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></code></pre>
-  </div>
- </div>
- <h2>
+</div>
+</div>
+<h2>
   How the submitted approach works
  </h2>
- <p>
+<p>
   After filtering people &gt;= 100, subtract a sequential row number from id. Consecutive IDs share the same difference. Retain groups with at least three rows.
  </p>
- <div class="note warning">
-  <b>
+<div class="note warning">
+<b>
    Implementation note.
   </b>
   The pandas submission uses current row order to construct groups. It requires the input to already be sorted by id; the SQL explicitly orders by id.
  </div>
- <details class="reference-details">
-  <summary>
+<details class="reference-details">
+<summary>
    Source
   </summary>
-  <div class="sources-content">
-   <p>
+<div class="sources-content">
+<p>
     SQL.zip / 601-human-traffic-of-stadium / submission-1.sql and submission-1.py. These are the submitted files; the summary and implementation notes describe the code, not a replacement official problem statement.
    </p>
-   <p>
-    <a href="https://leetcode.com/problems/human-traffic-of-stadium/" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://leetcode.com/problems/human-traffic-of-stadium/" rel="noopener noreferrer" target="_blank">
      Original problem
     </a>
-   </p>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</p>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-count">
+<a href="#m-sql-count">
      COUNT()
     </a>
-    <a href="#m-sql-group-by">
+<a href="#m-sql-group-by">
      GROUP BY
     </a>
-    <a href="#m-sql-having">
+<a href="#m-sql-having">
      HAVING
     </a>
-    <a href="#m-sql-inner-join">
+<a href="#m-sql-inner-join">
      INNER JOIN
     </a>
-    <a href="#m-sql-row-number">
+<a href="#m-sql-row-number">
      ROW_NUMBER()
     </a>
-    <a href="#m-sql-window-order">
+<a href="#m-sql-window-order">
      ORDER BY
     </a>
-    <a href="#m-sql-subquery">
+<a href="#m-sql-subquery">
      Subquery
     </a>
-    <a href="#m-sql-with">
+<a href="#m-sql-with">
      WITH
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-select-columns">
+<a href="#m-pd-select-columns">
      Select columns
     </a>
-    <a href="#m-pd-filter">
+<a href="#m-pd-filter">
      Condition
     </a>
-    <a href="#m-pd-sort-values">
+<a href="#m-pd-sort-values">
      Sort one column
     </a>
-    <a href="#m-pd-new-column">
+<a href="#m-pd-new-column">
      New column
     </a>
-    <a href="#m-pd-reset-index">
+<a href="#m-pd-reset-index">
      Reset index
     </a>
-    <a href="#m-pd-reset-drop">
+<a href="#m-pd-reset-drop">
      Drop old index
     </a>
-    <a href="#m-pd-merge-inner">
+<a href="#m-pd-merge-inner">
      Inner merge
     </a>
-    <a href="#m-pd-size">
+<a href="#m-pd-size">
      size
     </a>
-    <a href="#m-pd-groupby">
+<a href="#m-pd-groupby">
      Basic group
     </a>
-    <a href="#m-pd-agg-named">
+<a href="#m-pd-agg-named">
      Named aggregation
     </a>
-    <a href="#m-pd-group-size">
+<a href="#m-pd-group-size">
      Group size
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#LC586">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#LC586">
+<small>
     ← Previous
    </small>
    586 · Customer placing the largest number of orders
   </a>
-  <a href="#LC607">
-   <small>
+<a href="#LC607">
+<small>
     Next →
    </small>
    607 · Sales person
   </a>
- </div>
+</div>
 </article>

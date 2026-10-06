@@ -1,93 +1,93 @@
 <article class="article" id="C17">
- <div class="breadcrumb">
-  <a href="#practice">
+<div class="breadcrumb">
+<a href="#practice">
    Leetcode problems
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Problem 596
   </span>
- </div>
- <h1>
+</div>
+<h1>
   596 · Classes with at least five students
  </h1>
- <p>
+<p>
   Return classes with five or more unique students.
  </p>
- <p class="pattern">
+<p class="pattern">
   Pattern: HAVING
  </p>
- <h2>
+<h2>
   Example
  </h2>
- <p>
+<p>
   Class A with five unique students qualifies; class B with four does not.
  </p>
- <h2>
+<h2>
   Study solution
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-76-panel-0" aria-selected="true" id="example-76-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-76-panel-0" aria-selected="true" id="example-76-tab-0" role="tab" tabindex="0" type="button">
      MySQL
     </button>
-    <button aria-controls="example-76-panel-1" aria-selected="false" id="example-76-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-76-panel-1" aria-selected="false" id="example-76-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-76-tab-0" class="code-panel" id="example-76-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-76-tab-0" class="code-panel" id="example-76-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-C17-0" tabindex="0"><code class="language-sql" data-origin="legacy-C17-0"><span class="k">SELECT</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Courses</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="k">HAVING</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">student</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-76-tab-1" class="code-panel" id="example-76-panel-1" role="tabpanel">
-   <div class="no-script-label">
+<pre id="code-C17-0" tabindex="0"><code class="language-sql" data-origin="legacy-C17-0"><span class="k">SELECT</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Courses</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="k">HAVING</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">student</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></code></pre>
+</div>
+<div aria-labelledby="example-76-tab-1" class="code-panel" id="example-76-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-C17-1" tabindex="0"><code class="language-python" data-origin="legacy-C17-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C17-1" tabindex="0"><code class="language-python" data-origin="legacy-C17-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">find_classes</span><span class="p">(</span><span class="n">courses</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">g</span> <span class="o">=</span> <span class="n">courses</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'class'</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">n_students</span><span class="o">=</span><span class="p">(</span><span class="s1">'student'</span><span class="p">,</span> <span class="s1">'nunique'</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">g</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">g</span><span class="p">[</span><span class="s1">'n_students'</span><span class="p">]</span><span class="o">.</span><span class="n">ge</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span> <span class="p">[</span><span class="s1">'class'</span><span class="p">]]</span></code></pre>
-  </div>
- </div>
- <h2>
+</div>
+</div>
+<h2>
   Why it works
  </h2>
- <p>
+<p>
   HAVING filters group counts. In pandas, first create the aggregated frame and then filter it.
  </p>
- <details class="original-details">
-  <summary>
+<details class="original-details">
+<summary>
    My approach
   </summary>
-  <div class="code-pair">
-   <div class="pair-head">
-    <div aria-label="Solution language" class="code-tabs" role="tablist">
-     <button aria-controls="approach-C17-panel-0" aria-selected="true" id="approach-C17-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="approach-C17-panel-0" aria-selected="true" id="approach-C17-tab-0" role="tab" tabindex="0" type="button">
       MySQL
      </button>
-     <button aria-controls="approach-C17-panel-1" aria-selected="false" id="approach-C17-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="approach-C17-panel-1" aria-selected="false" id="approach-C17-tab-1" role="tab" tabindex="-1" type="button">
       pandas
      </button>
-    </div>
-    <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
      Copy
     </button>
-   </div>
-   <div aria-labelledby="approach-C17-tab-0" class="code-panel" id="approach-C17-panel-0" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="approach-C17-tab-0" class="code-panel" id="approach-C17-panel-0" role="tabpanel">
+<div class="no-script-label">
      SQL
     </div>
-    <pre id="code-C17-2" tabindex="0"><code class="language-sql" data-origin="approach-C17-sql"><span class="k">WITH</span><span class="w"> </span><span class="n">Classes</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<pre id="code-C17-2" tabindex="0"><code class="language-sql" data-origin="approach-C17-sql"><span class="k">WITH</span><span class="w"> </span><span class="n">Classes</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span>
 <span class="w">        </span><span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">student</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">nStudents</span><span class="p">,</span>
 <span class="w">        </span><span class="k">class</span>
@@ -97,63 +97,57 @@
 <span class="k">SELECT</span><span class="w"> </span><span class="k">class</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Classes</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">nStudents</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span></code></pre>
-   </div>
-   <div aria-labelledby="approach-C17-tab-1" class="code-panel" id="approach-C17-panel-1" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="approach-C17-tab-1" class="code-panel" id="approach-C17-panel-1" role="tabpanel">
+<div class="no-script-label">
      pandas
     </div>
-    <pre id="code-C17-3" tabindex="0"><code class="language-python" data-origin="approach-C17-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C17-3" tabindex="0"><code class="language-python" data-origin="approach-C17-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">find_classes</span><span class="p">(</span><span class="n">courses</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">courses</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'class'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
         <span class="n">nStudents</span> <span class="o">=</span> <span class="p">(</span><span class="s1">'student'</span><span class="p">,</span> <span class="s1">'nunique'</span><span class="p">)</span>
     <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
     <span class="k">return</span>   <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">nStudents</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">][[</span><span class="s1">'class'</span><span class="p">]]</span></code></pre>
-   </div>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
+</div>
+</div>
+</details>
+<details class="reference-details">
+<summary>
    Sources
   </summary>
-  <div class="sources-content">
-   <p>
-    Primary exercise basis: your uploaded Pasted markdown(3).md, exercise 596, line 5. The exercise heading may be abbreviated in the upload; full official problem statements and schemas were not supplied.
-   </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+<div class="sources-content">
+<p> Exercise source: Pasted markdown(3).md, problem 596, line 5. </p>
+<p>
+<a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
      pandas SQL comparison
     </a>
     — Projection, filtering, grouping, joins and operations.
    </p>
-  </div>
- </details>
- <details class="original-details archive-submission">
-  <summary>
-   Uploaded submission · SQL.zip
-  </summary>
-  <p class="small">
-   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
-  </p>
-  <div class="code-pair">
-   <div class="pair-head">
-    <div aria-label="Solution language" class="code-tabs" role="tablist">
-     <button aria-controls="archive-596-panel-0" aria-selected="true" id="archive-596-tab-0" role="tab" tabindex="0" type="button">
+</div>
+</details>
+<details class="original-details archive-submission">
+<summary> Original submission </summary>
+<p class="small"> Archived submissions. These may differ from the reference implementation above. </p>
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="archive-596-panel-0" aria-selected="true" id="archive-596-tab-0" role="tab" tabindex="0" type="button">
       MySQL
      </button>
-     <button aria-controls="archive-596-panel-1" aria-selected="false" id="archive-596-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="archive-596-panel-1" aria-selected="false" id="archive-596-tab-1" role="tab" tabindex="-1" type="button">
       pandas
      </button>
-    </div>
-    <button class="copy-button" data-copy="" type="button">
+</div>
+<button class="copy-button" data-copy="" type="button">
      Copy
     </button>
-   </div>
-   <div aria-labelledby="archive-596-tab-0" class="code-panel" id="archive-596-panel-0" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-596-tab-0" class="code-panel" id="archive-596-panel-0" role="tabpanel">
+<div class="no-script-label">
      MySQL
     </div>
-    <pre id="code-C17-4" tabindex="0"><code class="language-sql" data-origin="archive-596-sql"><span class="c1"># Write your MySQL query statement below</span>
+<pre id="code-C17-4" tabindex="0"><code class="language-sql" data-origin="archive-596-sql"><span class="c1"># Write your MySQL query statement below</span>
 <span class="k">WITH</span><span class="w"> </span><span class="n">Classes</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span>
 <span class="w">        </span><span class="nf">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">student</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">nStudents</span><span class="p">,</span><span class="w"> </span>
@@ -165,12 +159,12 @@
 <span class="k">SELECT</span><span class="w"> </span><span class="n">class</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Classes</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">nStudents</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">5</span></code></pre>
-   </div>
-   <div aria-labelledby="archive-596-tab-1" class="code-panel" id="archive-596-panel-1" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-596-tab-1" class="code-panel" id="archive-596-panel-1" role="tabpanel">
+<div class="no-script-label">
      pandas
     </div>
-    <pre id="code-C17-5" tabindex="0"><code class="language-python" data-origin="archive-596-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C17-5" tabindex="0"><code class="language-python" data-origin="archive-596-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">find_classes</span><span class="p">(</span><span class="n">courses</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">courses</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'class'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
@@ -178,97 +172,97 @@
     <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">nStudents</span> <span class="o">&gt;=</span> <span class="mi">5</span><span class="p">][[</span><span class="s1">'class'</span><span class="p">]]</span></code></pre>
-   </div>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</div>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-count">
+<a href="#m-sql-count">
      COUNT()
     </a>
-    <a href="#m-sql-count-distinct">
+<a href="#m-sql-count-distinct">
      COUNT(DISTINCT)
     </a>
-    <a href="#m-sql-group-by">
+<a href="#m-sql-group-by">
      GROUP BY
     </a>
-    <a href="#m-sql-having">
+<a href="#m-sql-having">
      HAVING
     </a>
-    <a href="#m-sql-subquery">
+<a href="#m-sql-subquery">
      Subquery
     </a>
-    <a href="#m-sql-with">
+<a href="#m-sql-with">
      WITH
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-    <a href="#m-sql-distinct">
+<a href="#m-sql-distinct">
      DISTINCT
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-select-columns">
+<a href="#m-pd-select-columns">
      Select columns
     </a>
-    <a href="#m-pd-loc">
+<a href="#m-pd-loc">
      Rows by label
     </a>
-    <a href="#m-pd-filter">
+<a href="#m-pd-filter">
      Condition
     </a>
-    <a href="#m-pd-reset-index">
+<a href="#m-pd-reset-index">
      Reset index
     </a>
-    <a href="#m-pd-loc-label">
+<a href="#m-pd-loc-label">
      Access label
     </a>
-    <a href="#m-pd-nunique">
+<a href="#m-pd-nunique">
      nunique()
     </a>
-    <a href="#m-pd-groupby">
+<a href="#m-pd-groupby">
      Basic group
     </a>
-    <a href="#m-pd-agg-named">
+<a href="#m-pd-agg-named">
      Named aggregation
     </a>
-    <a href="#m-pd-compare">
+<a href="#m-pd-compare">
      gt() / ge() / lt() / le()
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#C16">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#C16">
+<small>
     ← Previous
    </small>
    1070 · First-year product sales
   </a>
-  <a href="#C18">
-   <small>
+<a href="#C18">
+<small>
     Next →
    </small>
    1729 · Followers count
   </a>
- </div>
+</div>
 </article>

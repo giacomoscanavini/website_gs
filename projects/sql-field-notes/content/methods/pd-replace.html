@@ -1,120 +1,118 @@
 <article class="article method-page" id="m-pd-replace">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=Creating%20/%20modifying%20columns">
+<a href="#methods?lang=pd&amp;cat=Creating%20/%20modifying%20columns">
    pandas · Creating / modifying columns
   </a>
- </div>
- <h1>
+</div>
+<h1>
   Replace values
  </h1>
- <p class="lead">
+<p class="lead">
   Replace values
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-replace"><span class="n">df</span><span class="p">[</span><span class="s1">'x'</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span></code></pre>
- </div>
- <h2>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-replace"><span class="n">df</span><span class="p">[</span><span class="s1">'x'</span><span class="p">]</span><span class="o">.</span><span class="n">replace</span><span class="p">({</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">})</span></code></pre>
+</div>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C07?code=code-C07-1&amp;method=pd-replace&amp;line=15">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C07?code=code-C07-1&amp;method=pd-replace&amp;line=15">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1251 · Average selling price
     </strong>
-    <small>
+<small>
      Study solution · line 15
     </small>
-   </div>
-   <pre aria-hidden="true">    g = matched.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))
+</div>
+<pre aria-hidden="true">    g = matched.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))
     g['average_price'] = (g['paid'] / g['units'].replace(0, float('nan'))).map(round_half_up)
     result = p[['product_id']].drop_duplicates().merge(g[['product_id', 'average_price']], on='product_id', how='left')
     result['average_price'] = result['average_price'].fillna(0)</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    Other saved implementations (1)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-replace&amp;line=16">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-replace&amp;line=16">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1251 · Average selling price
      </strong>
-     <small>
+<small>
       My approach · line 16
      </small>
-    </div>
-    <pre aria-hidden="true">    totals = df.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))
+</div>
+<pre aria-hidden="true">    totals = df.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))
     totals['average_price'] = (totals['paid'] / totals['units'].replace(0, float('nan'))).map(round_half_up)
     result = prices[['product_id']].drop_duplicates().merge(totals[['product_id', 'average_price']], on='product_id', how='left')
     result['average_price'] = result['average_price'].fillna(0)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     pandas cheat-sheet image · Creating / modifying columns. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=Creating%20/%20modifying%20columns">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=Creating%20/%20modifying%20columns">
+<small>
     ← Browse
    </small>
    pandas · Creating / modifying columns
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

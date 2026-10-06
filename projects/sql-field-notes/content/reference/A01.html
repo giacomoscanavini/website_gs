@@ -1,404 +1,402 @@
 <article class="article" id="A01">
- <div class="breadcrumb">
-  <a href="#reference">
+<div class="breadcrumb">
+<a href="#reference">
    Reference
   </a>
- </div>
- <h1>
+</div>
+<h1>
   SQL ↔ pandas translation sheet
  </h1>
- <p class="small">
-  <a href="#methods">
+<p class="small">
+<a href="#methods">
    Browse every method and its linked examples →
   </a>
- </p>
- <h2>
+</p>
+<h2>
   Translate the operation, not just the syntax
  </h2>
- <p>
-  This is an authored cross-reference to the patterns used throughout SQLBolt and the supplied exercises. A similar-looking pandas expression is not automatically equivalent: row grain, missing values, duplicates and order must agree.
- </p>
- <div aria-label="Scrollable data table" class="table-scroll" role="region" tabindex="0">
-  <table>
-   <tr>
-    <th scope="col">
-     <b>
+<p>SQL and pandas expressions are equivalent only when they return the same rows and columns, with the same treatment of missing values, duplicates, and ordering. Compare the operation’s behavior, not just its syntax.</p>
+<div aria-label="Scrollable data table" class="table-scroll" role="region" tabindex="0">
+<table>
+<tr>
+<th scope="col">
+<b>
       SQL
      </b>
-    </th>
-    <th scope="col">
-     <b>
+</th>
+<th scope="col">
+<b>
       pandas pattern
      </b>
-    </th>
-    <th scope="col">
-     <b>
+</th>
+<th scope="col">
+<b>
       Watch for
      </b>
-    </th>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-select">
+</th>
+</tr>
+<tr>
+<td>
+<a href="#m-sql-select">
       SELECT a, b
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-select-columns">
+</td>
+<td>
+<a href="#m-pd-select-columns">
       df[['a', 'b']]
      </a>
-    </td>
-    <td>
+</td>
+<td>
      A list preserves a DataFrame; projection does not deduplicate.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-where">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-where">
       WHERE a &gt; 3 AND b = 1
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-filter">
+</td>
+<td>
+<a href="#m-pd-filter">
       df.loc[df['a'].gt(3) &amp; df['b'].eq(1)]
      </a>
-    </td>
-    <td>
+</td>
+<td>
      Use elementwise &amp; / |, not Python and / or.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-is-null">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-is-null">
       IS NULL / IS NOT NULL
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-isna">
+</td>
+<td>
+<a href="#m-pd-isna">
       s.isna() / s.notna()
      </a>
-    </td>
-    <td>
+</td>
+<td>
      Never test SQL NULL using = NULL.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-in">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-in">
       IN ('A','B')
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-isin">
+</td>
+<td>
+<a href="#m-pd-isin">
       s.isin(['A','B'])
      </a>
-    </td>
-    <td>
+</td>
+<td>
      NOT IN and missing values require explicit care.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-distinct">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-distinct">
       SELECT DISTINCT a
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-drop-duplicates">
+</td>
+<td>
+<a href="#m-pd-drop-duplicates">
       df[['a']].drop_duplicates()
      </a>
-    </td>
-    <td>
+</td>
+<td>
      Deduplicate only the columns that form the result.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-order-by">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-order-by">
       ORDER BY a DESC, b
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-sort-multi">
+</td>
+<td>
+<a href="#m-pd-sort-multi">
       df.sort_values(['a','b'], ascending=[False,True])
      </a>
-    </td>
-    <td>
+</td>
+<td>
      Add a unique tie-break when a single deterministic row is required.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-limit">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-limit">
       LIMIT 5 OFFSET 10
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-iloc">
+</td>
+<td>
+<a href="#m-pd-iloc">
       sorted_df.iloc[10:15]
      </a>
-    </td>
-    <td>
+</td>
+<td>
      Sort before selecting a page.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-left-join">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-left-join">
       INNER / LEFT JOIN
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-merge-left">
+</td>
+<td>
+<a href="#m-pd-merge-left">
       left.merge(right, on='id', how='inner'/'left')
      </a>
-    </td>
-    <td>
+</td>
+<td>
      Validate expected one-to-one or many-to-one cardinality.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-count">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-count">
       COUNT(*) / COUNT(x)
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-count">
+</td>
+<td>
+<a href="#m-pd-count">
       groupby.size() / groupby[x].count()
      </a>
-    </td>
-    <td>
+</td>
+<td>
      size counts rows; count ignores missing x.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-count-distinct">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-count-distinct">
       COUNT(DISTINCT x)
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-nunique">
+</td>
+<td>
+<a href="#m-pd-nunique">
       groupby['x'].nunique()
      </a>
-    </td>
-    <td>
+</td>
+<td>
      Distinct nonmissing values.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-sum">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-sum">
       SUM(x)
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-sum">
+</td>
+<td>
+<a href="#m-pd-sum">
       groupby['x'].sum(min_count=1)
      </a>
-    </td>
-    <td>
+</td>
+<td>
      Use min_count=1 when an all-missing group must stay missing.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-group-by">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-group-by">
       GROUP BY k
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-groupby">
+</td>
+<td>
+<a href="#m-pd-groupby">
       df.groupby('k', dropna=False)
      </a>
-    </td>
-    <td>
+</td>
+<td>
      SQL retains a NULL grouping key; default pandas groupby drops it.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-having">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-having">
       HAVING SUM(x) &gt; 0
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-group-filter">
+</td>
+<td>
+<a href="#m-pd-group-filter">
       Aggregate, then filter the aggregated frame.
      </a>
-    </td>
-    <td>
+</td>
+<td>
      Do not confuse this with a pre-aggregation WHERE.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-min">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-min">
       MIN(x) OVER (PARTITION BY k)
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-transform">
+</td>
+<td>
+<a href="#m-pd-transform">
       df.groupby('k')['x'].transform('min')
      </a>
-    </td>
-    <td>
+</td>
+<td>
      transform broadcasts the statistic to every source row.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-dense-rank">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-dense-rank">
       DENSE_RANK() OVER (...)
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-rank-dense">
+</td>
+<td>
+<a href="#m-pd-rank-dense">
       groupby['x'].rank(method='dense', ascending=False)
      </a>
-    </td>
-    <td>
+</td>
+<td>
      Use the ranking method that preserves the intended ties.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-lag">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-lag">
       LAG / LEAD with ORDER BY
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-shift">
+</td>
+<td>
+<a href="#m-pd-shift">
       Sort, then groupby.shift(1) / shift(-1).
      </a>
-    </td>
-    <td>
+</td>
+<td>
      A previous row is not necessarily the previous calendar day.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-sum-over">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-sum-over">
       SUM(x) OVER (ORDER BY t ROWS ...)
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-cumsum">
+</td>
+<td>
+<a href="#m-pd-cumsum">
       Sort, then cumsum().
      </a>
-    </td>
-    <td>
+</td>
+<td>
      A cumulative total differs from a grouped total.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-union">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-union">
       UNION ALL / UNION
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-concat-rows">
+</td>
+<td>
+<a href="#m-pd-concat-rows">
       concat(...) / concat(...).drop_duplicates()
      </a>
-    </td>
-    <td>
+</td>
+<td>
      Align selected columns; SQL uses positions and pandas uses names.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-case">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-case">
       CASE WHEN condition ...
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-where">
+</td>
+<td>
+<a href="#m-pd-where">
       Boolean masks with where/map.
      </a>
-    </td>
-    <td>
+</td>
+<td>
      Keep NULL behavior and labels explicit.
     </td>
-   </tr>
-   <tr>
-    <td>
-     <a href="#m-sql-update">
+</tr>
+<tr>
+<td>
+<a href="#m-sql-update">
       UPDATE / DELETE
      </a>
-    </td>
-    <td>
-     <a href="#m-pd-assign">
+</td>
+<td>
+<a href="#m-pd-assign">
       Assign with .loc / retain the complement mask.
      </a>
-    </td>
-    <td>
+</td>
+<td>
      A DataFrame change does not update the database.
     </td>
-   </tr>
-  </table>
- </div>
- <h2>
+</tr>
+</table>
+</div>
+<h2>
   A tiny aggregation example
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button aria-label="Copy PANDAS" data-copy="" type="button">
+<button aria-label="Copy PANDAS" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre id="code-A01-0" tabindex="0"><code class="language-python" data-origin="legacy-A01-0"><span class="n">visits</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'shop'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'A'</span><span class="p">,</span> <span class="s1">'A'</span><span class="p">,</span> <span class="s1">'B'</span><span class="p">],</span> <span class="s1">'amount'</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="kc">None</span><span class="p">]})</span>
+</div>
+<pre id="code-A01-0" tabindex="0"><code class="language-python" data-origin="legacy-A01-0"><span class="n">visits</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'shop'</span><span class="p">:</span> <span class="p">[</span><span class="s1">'A'</span><span class="p">,</span> <span class="s1">'A'</span><span class="p">,</span> <span class="s1">'B'</span><span class="p">],</span> <span class="s1">'amount'</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="kc">None</span><span class="p">]})</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">visits</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'shop'</span><span class="p">,</span> <span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="s1">'amount'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">min_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span></code></pre>
- </div>
- <p>
+</div>
+<p>
   Result: shop A has 30; shop B remains missing. Without min_count=1, the all-missing B group would become zero, unlike SQL SUM.
  </p>
- <h2>
+<h2>
   Three important non-equivalences
  </h2>
- <p>
+<p>
   Missing merge keys: pandas can match missing keys to each other; SQL equality joins do not. Group keys: SQL groups NULL keys together, while pandas needs dropna=False to retain them. Logical complements: NOT(condition) in SQL can still be unknown for a NULL row, whereas a pandas negation may include it depending on dtype and expression.
  </p>
- <p>
-  <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
    pandas SQL comparison
   </a>
   — Projection, filtering, grouping, joins and operations.
  </p>
- <p>
-  <a href="https://pandas.pydata.org/docs/reference/api/pandas.merge.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/api/pandas.merge.html" rel="noopener noreferrer" target="_blank">
    pandas merge
   </a>
   — Join modes, cardinality validation and missing-key behavior.
  </p>
- <p>
-  <a href="https://pandas.pydata.org/docs/user_guide/groupby.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/user_guide/groupby.html" rel="noopener noreferrer" target="_blank">
    pandas groupby
   </a>
   — Aggregation, transform and missing groups.
  </p>
- <p>
-  <a href="https://dev.mysql.com/doc/refman/8.4/en/window-functions-usage.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/window-functions-usage.html" rel="noopener noreferrer" target="_blank">
    MySQL windows
   </a>
   — Ordering and window expressions.
  </p>
- <div class="prev-next">
-  <a href="#A00">
-   <small>
+<div class="prev-next">
+<a href="#A00">
+<small>
     ← Previous
    </small>
    About these notes
   </a>
-  <a href="#A02">
-   <small>
+<a href="#A02">
+<small>
     Next →
    </small>
    Setup and conventions
   </a>
- </div>
+</div>
 </article>

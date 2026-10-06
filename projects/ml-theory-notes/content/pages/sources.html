@@ -1,929 +1,749 @@
 <section class="page-view sources-view" id="sources">
- <p class="part-label">
+<p class="part-label">
   Reading &amp; implementation
  </p>
- <h1 tabindex="-1">
-  Sources and examples
- </h1>
- <p class="index-intro">
-  The PDFs supply the theoretical structure. Official tutorials and example repositories supply most of the practical implementation layer.
- </p>
- <div class="source-books">
-  <section class="source-book">
-   <small>
+<h1 tabindex="-1">References and examples</h1>
+<p class="index-intro">Reference documents, original papers, and official implementations grouped by topic.</p>
+<div class="source-books">
+<section class="source-book">
+<small>
     PART 1 · 26 PDF PAGES
    </small>
-   <h2>
+<h2>
     Activations, Feed-Forward &amp; Backpropagation
    </h2>
-   <p>
+<p>
     From a parameterized function to activations, losses and a complete forward and backward pass.
    </p>
-   <button data-page="1" data-pdf="basics" type="button">
-    Read original PDF ↗
-   </button>
-   <button data-download="1" data-pdf="basics" type="button">
-    Save PDF
-   </button>
-  </section>
-  <section class="source-book">
-   <small>
+<button data-page="1" data-pdf="basics" type="button">Open PDF ↗</button>
+<button data-download="1" data-pdf="basics" type="button">Download PDF</button>
+</section>
+<section class="source-book">
+<small>
     PART 2 · 28 PDF PAGES
    </small>
-   <h2>
+<h2>
     Optimization Algorithms for Neural Networks
    </h2>
-   <p>
+<p>
     How gradient information becomes an update, from stochastic descent to approximate curvature.
    </p>
-   <button data-page="1" data-pdf="optim" type="button">
-    Read original PDF ↗
-   </button>
-   <button data-download="1" data-pdf="optim" type="button">
-    Save PDF
-   </button>
-  </section>
-  <section class="source-book">
-   <small>
+<button data-page="1" data-pdf="optim" type="button">Open PDF ↗</button>
+<button data-download="1" data-pdf="optim" type="button">Download PDF</button>
+</section>
+<section class="source-book">
+<small>
     PART 3 · 30 PDF PAGES
    </small>
-   <h2>
+<h2>
     Regularization and Ensemble Methods
    </h2>
-   <p>
+<p>
     Why fitting is not generalization: shrinkage, perturbation, stopping and complementary errors.
    </p>
-   <button data-page="1" data-pdf="reg" type="button">
-    Read original PDF ↗
-   </button>
-   <button data-download="1" data-pdf="reg" type="button">
-    Save PDF
-   </button>
-  </section>
-  <section class="source-book">
-   <small>
+<button data-page="1" data-pdf="reg" type="button">Open PDF ↗</button>
+<button data-download="1" data-pdf="reg" type="button">Download PDF</button>
+</section>
+<section class="source-book">
+<small>
     PART 4 · 34 PDF PAGES
    </small>
-   <h2>
+<h2>
     Neural Network Architectures
    </h2>
-   <p>
+<p>
     How recurrence, latent codes, attention and graph structure determine what a model can represent.
    </p>
-   <button data-page="1" data-pdf="arch" type="button">
-    Read original PDF ↗
-   </button>
-   <button data-download="1" data-pdf="arch" type="button">
-    Save PDF
-   </button>
-  </section>
- </div>
- <details class="audit-notes">
-  <summary>
-   Reinforcement-learning supplement
-  </summary>
-  <p>
-   The RL chapter is an external-source addition, not extracted from the four PDFs. Standard concepts are grounded in Spinning Up, the original PPO paper, and official PyTorch, TorchRL and Gymnasium material. The four derivations and deterministic return illustration are authored additions.
-  </p>
-  <p>
-   Complete DQN and PPO training programs remain in the linked official material. Those environment-training runs were not rerun for this update. Numerical tests check returns, Bellman consistency, terminal masks, the policy-gradient identity, baseline cancellation and PPO clipping.
-  </p>
- </details>
- <details class="audit-notes">
-  <summary>
-   Verification and expanded calculations
-  </summary>
-  <p>
-   The original audit covers the 35 source-led chapters and their 73 mathematical walkthroughs. A separate reinforcement-learning supplement adds chapter 36 and four expandable derivations, bringing the reader to 77 calculations. Its formulas and worked values have targeted checks recorded separately in the bundle. The walkthroughs are authored expansions, not quotations from the PDFs; the four original PDF files remain unchanged.
-  </p>
-  <h3>
-   Clarifications in the reader
-  </h3>
-  <p>
-   The RNN gradient now writes noncommuting Jacobians in explicit order. The LSTM memory formula is identified as a direct cell-state block, not the total state derivative. Initialization distinguishes second moments from centered variance. Sampling assumptions, loss reductions, attention-mask conventions, and zero-gradient clipping are explicit.
-  </p>
-  <p>
-   The graph discussion separates symmetric normalization’s degree-weighted limit from row-normalized diffusion’s common limiting value. The ensemble and resampling notes distinguish model variance from irreducible observation noise, and block resampling from chronological evaluation. Appropriate assumptions remain beside each calculation rather than being implied.
-  </p>
-  <h3>
-   How the additions were checked
-  </h3>
-  <p>
-   Closed-form examples and derivative identities are compared with direct numerical calculations, PyTorch automatic differentiation, and finite differences where applicable. These are targeted consistency checks, not formal verification of every statement or every possible input. The bundle includes the exact test program and recorded results. Linked external training tutorials are references and were not all rerun.
-  </p>
-  <h3>
-   Interactive support
-  </h3>
-  <p>
-   Six original visual calculations explore activation sensitivity, quadratic-step stability, shrinkage, cell memory, attention mixtures, and graph diffusion. A seventh, in the reinforcement-learning supplement, compares immediate and delayed returns under a selectable policy. These use displayed assumptions and locally computed values, not trained-model performance. Existing PDF figures and official implementation links are retained.
-  </p>
- </details>
- <h2>
-  How to read the source references
- </h2>
- <p>
-  Each of the first 35 chapters links to the relevant sections of the supplied PDF. Page numbers mean positions in the PDF file, including its cover and contents, rather than the printed footer number. The originals are stored unchanged as separate PDF assets. Figures are crops of the original artwork, not newly generated experimental results. The reinforcement-learning chapter instead links to external primary references.
- </p>
- <p>
-  The explanatory text follows the guides’ principal mechanisms, notation and numerical examples, while grouping related sections into longer chapters. Added algebraic steps, qualifications and official-library details are identified where they go beyond the source. In particular, the different momentum, GRU, recurrent-bias and loss-normalization conventions are not silently made identical.
- </p>
- <h2>
+<button data-page="1" data-pdf="arch" type="button">Open PDF ↗</button>
+<button data-download="1" data-pdf="arch" type="button">Download PDF</button>
+</section>
+</div>
+
+
+<h2>Notation and references</h2><p>The four reference PDFs are included unchanged. Page references count positions in each PDF, including its cover and contents. Figure credits identify the original page. Library-specific conventions are stated alongside the relevant equations.</p><p>The reinforcement-learning chapter draws on the primary papers and official resources listed below. Detailed calculation panels develop the equations in the chapters; their assumptions define where each result applies.</p>
+
+
+<h2>
   Official practical material
  </h2>
- <p>
+<p>
   A tutorial or example script contains implemented operations or a training application. An API reference establishes the exact behavior of a component; it is not presented as an end-to-end experiment. PyTorch Geometric and Ignite are separate ecosystem packages. The classical coefficient-path, bias–variance and stacking examples come from scikit-learn rather than being forced into PyTorch.
  </p>
- <p>
+<p>
   These are selected links, not downloaded copies of the documentation. They require an internet connection. Linked tutorials may require data downloads and their own dependencies. Documentation and repositories can evolve; API-specific references in this edition point to PyTorch 2.13 documentation.
  </p>
- <div class="source-resources">
-  <details>
-   <summary>
+<div class="source-resources">
+<details>
+<summary>
     PyTorch
    </summary>
-   <div class="resource-list">
-    <div class="resource" data-resource="build">
-     <span class="resource-meta">
+<div class="resource-list">
+<div class="resource" data-resource="build">
+<span class="resource-meta">
       PyTorch · Tutorial + code
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Build the Neural Network
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect how Flatten, Linear, ReLU and Sequential implement a feed-forward model, and how its parameters and tensor dimensions are exposed.
-     </p>
-    </div>
-    <div class="resource" data-resource="optimization">
-     <span class="resource-meta">
+</a>
+<p>A feed-forward network built from Flatten, Linear, ReLU, and Sequential, with tensor shapes and model parameters.</p>
+</div>
+<div class="resource" data-resource="optimization">
+<span class="resource-meta">
       PyTorch · Tutorial + code
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Optimizing Model Parameters
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Follow separate training and test loops. Identify the forward calculation, loss, backward pass and optimizer update rather than treating training as one operation.
-     </p>
-    </div>
-    <div class="resource" data-resource="autograd">
-     <span class="resource-meta">
+</a>
+<p>A complete training and evaluation loop with separate forward, loss, backward, and optimizer steps.</p>
+</div>
+<div class="resource" data-resource="autograd">
+<span class="resource-meta">
       PyTorch · Tutorial + diagram
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Automatic Differentiation with torch.autograd
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Trace the computation graph and run the gradient example. Compare the role of requires_grad, backward and disabled gradient tracking.
-     </p>
-    </div>
-    <div class="resource" data-resource="polynomial">
-     <span class="resource-meta">
+</a>
+<p>A worked computation graph covering requires_grad, backward, accumulated gradients, and disabling gradient tracking.</p>
+</div>
+<div class="resource" data-resource="polynomial">
+<span class="resource-meta">
       PyTorch · Worked regression example
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/pytorch_with_examples.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/pytorch_with_examples.html" rel="noopener noreferrer" target="_blank">
+<span>
        Learning PyTorch with Examples
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      An older, still useful teaching sequence: fit a polynomial while moving from explicit derivatives to autograd, modules and optimizers. Use it to compare the same mathematics across abstraction levels.
-     </p>
-    </div>
-    <div class="resource" data-resource="tensorboard">
-     <span class="resource-meta">
+</a>
+<p>The same polynomial-fitting problem implemented with explicit derivatives, autograd, modules, and optimizers.</p>
+</div>
+<div class="resource" data-resource="tensorboard">
+<span class="resource-meta">
       PyTorch · Tutorial + visualization
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/tensorboard_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/tensorboard_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Visualizing Models, Data, and Training with TensorBoard
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect a model graph, data and training curves in a complete example. TensorBoard is a separate visualization dependency; the theory reader does not require it.
-     </p>
-    </div>
-    <div class="resource" data-resource="hessian">
-     <span class="resource-meta">
+</a>
+<p>Model-graph, data, and training-curve visualization in TensorBoard, which is a separate dependency.</p>
+</div>
+<div class="resource" data-resource="hessian">
+<span class="resource-meta">
       PyTorch · Tutorial + code
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/jacobians_hessians.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/jacobians_hessians.html" rel="noopener noreferrer" target="_blank">
+<span>
        Jacobians, Hessians and Hessian–vector products
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Use function transforms to calculate derivatives beyond a scalar gradient. The Hessian–vector examples make the curvature discussion concrete without requiring a dense Hessian.
-     </p>
-    </div>
-    <div class="resource" data-resource="transfer">
-     <span class="resource-meta">
+</a>
+<p>Executable Jacobian, Hessian, and Hessian–vector product calculations using function transforms.</p>
+</div>
+<div class="resource" data-resource="transfer">
+<span class="resource-meta">
       PyTorch · Training example + visuals
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/transfer_learning_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/transfer_learning_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Transfer Learning for Computer Vision
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect augmentation, the validation phase, retention of the best validation model and visualized predictions. Best-model restoration and stopping are different operations.
-     </p>
-    </div>
-    <div class="resource" data-resource="cnn">
-     <span class="resource-meta">
+</a>
+<p>Transfer learning with augmentation, validation, best-model restoration, and visualized predictions.</p>
+</div>
+<div class="resource" data-resource="cnn">
+<span class="resource-meta">
       PyTorch · End-to-end image example
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Training a Classifier
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Train and test a convolutional classifier on CIFAR-10. This is supplemental CNN implementation material, not a claim that the supplied architecture PDF derives convolutional networks in depth.
-     </p>
-    </div>
-    <div class="resource" data-resource="sequence">
-     <span class="resource-meta">
+</a>
+<p>A complete convolutional classifier trained and evaluated on CIFAR-10.</p>
+</div>
+<div class="resource" data-resource="sequence">
+<span class="resource-meta">
       PyTorch · LSTM tagging example
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/nlp/sequence_models_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/nlp/sequence_models_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Sequence Models and Long Short-Term Memory Networks
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Follow the LSTM shape examples and a part-of-speech tagger. Distinguish per-token outputs from a single prediction for the entire sequence.
-     </p>
-    </div>
-    <div class="resource" data-resource="rnnexample">
-     <span class="resource-meta">
+</a>
+<p>LSTM tensor shapes and a part-of-speech tagger that produces one prediction per token.</p>
+</div>
+<div class="resource" data-resource="rnnexample">
+<span class="resource-meta">
       PyTorch · Training example + visuals
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/char_rnn_classification_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/char_rnn_classification_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Classifying Names with a Character-Level RNN
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Study a complete sequence classifier and its evaluation. The confusion-matrix visualization provides a practical interpretation of classification mistakes.
-     </p>
-    </div>
-    <div class="resource" data-resource="seq2seq">
-     <span class="resource-meta">
+</a>
+<p>Character-level sequence classification with a complete training loop and confusion-matrix visualization.</p>
+</div>
+<div class="resource" data-resource="seq2seq">
+<span class="resource-meta">
       PyTorch · Training example + attention map
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Translation with a Sequence-to-Sequence Network and Attention
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect the GRU encoder/decoder, teacher forcing, attention and generated translations. Its attention plots show alignments; its additive attention is distinct from scaled dot-product attention.
-     </p>
-    </div>
-    <div class="resource" data-resource="sdpa">
-     <span class="resource-meta">
+</a>
+<p>GRU translation with teacher forcing, additive attention, generated outputs, and alignment plots. The scoring rule differs from scaled dot-product attention.</p>
+</div>
+<div class="resource" data-resource="sdpa">
+<span class="resource-meta">
       PyTorch · Tutorial + implementation
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/scaled_dot_product_attention_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/scaled_dot_product_attention_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Scaled Dot Product Attention
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Connect Q, K and V to the attention primitive and a larger attention module. Note mask semantics and dropout behavior when moving from the mathematical formula to the function.
-     </p>
-    </div>
-    <div class="resource" data-resource="transformerblocks">
-     <span class="resource-meta">
+</a>
+<p>Scaled dot-product attention and an attention module, including masking and the functional dropout behavior.</p>
+</div>
+<div class="resource" data-resource="transformerblocks">
+<span class="resource-meta">
       PyTorch · Advanced implementation tutorial
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/transformer_building_blocks.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/transformer_building_blocks.html" rel="noopener noreferrer" target="_blank">
+<span>
        Accelerating PyTorch Transformers with Building Blocks
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Read after the conceptual Transformer chapter. The examples use lower-level attention and modern execution tools; this is an engineering continuation, not the first introduction to attention.
-     </p>
-    </div>
-    <div class="resource" data-resource="ensemble">
-     <span class="resource-meta">
+</a>
+<p>Lower-level attention components and performance-oriented Transformer implementations.</p>
+</div>
+<div class="resource" data-resource="ensemble">
+<span class="resource-meta">
       PyTorch · Vectorized ensemble example
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/ensembling.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/ensembling.html" rel="noopener noreferrer" target="_blank">
+<span>
        Model Ensembling
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Compare an explicit loop over models with a vectorized implementation. This demonstrates executing multiple models, not that those models necessarily have diverse errors or better accuracy.
-     </p>
-    </div>
-    <div class="resource" data-resource="initialization">
-     <span class="resource-meta">
+</a>
+<p>Loop-based and vectorized execution of multiple models. Execution efficiency is separate from statistical diversity or accuracy.</p>
+</div>
+<div class="resource" data-resource="initialization">
+<span class="resource-meta">
       PyTorch · API + usage examples
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/nn.init.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/nn.init.html" rel="noopener noreferrer" target="_blank">
+<span>
        torch.nn.init
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Compare Xavier and Kaiming initialization, fan-in/fan-out and gain conventions. This is the parameter-initialization reference, not a complete training experiment.
-     </p>
-    </div>
-    <div class="resource" data-resource="optim">
-     <span class="resource-meta">
+</a>
+<p>Xavier and Kaiming initialization, including fan-in, fan-out, activation gains, and weight-orientation conventions.</p>
+</div>
+<div class="resource" data-resource="optim">
+<span class="resource-meta">
       PyTorch · Implementation reference
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/optim.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/optim.html" rel="noopener noreferrer" target="_blank">
+<span>
        torch.optim
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Check optimizer construction, per-parameter options, closure usage and scheduler ordering. Use the training tutorial for a complete surrounding loop.
-     </p>
-    </div>
-    <div class="resource" data-resource="sgd-api">
-     <span class="resource-meta">
+</a>
+<p>Optimizer construction, parameter groups, closures, and learning-rate scheduler ordering.</p>
+</div>
+<div class="resource" data-resource="sgd-api">
+<span class="resource-meta">
       PyTorch · API + algorithm
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.SGD.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.SGD.html" rel="noopener noreferrer" target="_blank">
+<span>
        SGD: momentum and Nesterov conventions
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Check the documented update, momentum-buffer initialization and dampening. These details explain why two textbook momentum formulas may need different learning-rate scaling.
-     </p>
-    </div>
-    <div class="resource" data-resource="adamw-api">
-     <span class="resource-meta">
+</a>
+<p>The SGD update, momentum-buffer initialization, dampening, and Nesterov conventions.</p>
+</div>
+<div class="resource" data-resource="adamw-api">
+<span class="resource-meta">
       PyTorch · API + algorithm
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.AdamW.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.AdamW.html" rel="noopener noreferrer" target="_blank">
+<span>
        AdamW: decoupled weight decay
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Compare the parameter-decay step with the first- and second-moment updates. Weight decay is kept separate from the gradient moments.
-     </p>
-    </div>
-    <div class="resource" data-resource="lbfgs-api">
-     <span class="resource-meta">
+</a>
+<p>Parameter decay separated from the gradient and first- and second-moment updates.</p>
+</div>
+<div class="resource" data-resource="lbfgs-api">
+<span class="resource-meta">
       PyTorch · API reference
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.LBFGS.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.LBFGS.html" rel="noopener noreferrer" target="_blank">
+<span>
        L-BFGS and the closure contract
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Check the closure argument, limited-memory history and line_search_fn. Pair this API with the sequence-prediction script for an actual closure in use.
-     </p>
-    </div>
-    <div class="resource" data-resource="lstm-api">
-     <span class="resource-meta">
+</a>
+<p>Closure evaluation, limited-memory history, and line-search options for torch.optim.LBFGS.</p>
+</div>
+<div class="resource" data-resource="lstm-api">
+<span class="resource-meta">
       PyTorch · API + shape example
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.LSTM.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.LSTM.html" rel="noopener noreferrer" target="_blank">
+<span>
        LSTM: equations, shapes and parameters
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect gate equations and the separate input and recurrent biases. Check hidden/cell shapes, bidirectionality and the effect of batch_first.
-     </p>
-    </div>
-    <div class="resource" data-resource="gru-api">
-     <span class="resource-meta">
+</a>
+<p>Gate equations, input and recurrent biases, hidden and cell shapes, bidirectionality, and batch_first.</p>
+</div>
+<div class="resource" data-resource="gru-api">
+<span class="resource-meta">
       PyTorch · API + shape example
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.GRU.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.GRU.html" rel="noopener noreferrer" target="_blank">
+<span>
        GRU: exact implemented gate convention
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Compare the candidate equation and final interpolation with the PDF. The reset-gate placement and meaning of the update gate are implementation conventions, not interchangeable typography.
-     </p>
-    </div>
-    <div class="resource" data-resource="ce">
-     <span class="resource-meta">
+</a>
+<p>The candidate equation and state interpolation used by PyTorch, including reset-gate placement and the role of the update gate.</p>
+</div>
+<div class="resource" data-resource="ce">
+<span class="resource-meta">
       PyTorch · API + target examples
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.CrossEntropyLoss.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.CrossEntropyLoss.html" rel="noopener noreferrer" target="_blank">
+<span>
        CrossEntropyLoss
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Check raw-logit inputs and the distinction between integer class-index targets and probability-distribution targets. Review reduction, class weights and label smoothing.
-     </p>
-    </div>
-    <div class="resource" data-resource="bce">
-     <span class="resource-meta">
+</a>
+<p>Cross entropy from logits with class-index or probability targets, including class weights, label smoothing, and reduction.</p>
+</div>
+<div class="resource" data-resource="bce">
+<span class="resource-meta">
       PyTorch · API + usage example
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.BCEWithLogitsLoss.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.BCEWithLogitsLoss.html" rel="noopener noreferrer" target="_blank">
+<span>
        BCEWithLogitsLoss
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Use the combined logit-based binary loss rather than manually applying sigmoid before this function. The documentation also illustrates positive-class weighting.
-     </p>
-    </div>
-    <div class="resource" data-resource="dropout-api">
-     <span class="resource-meta">
+</a>
+<p>Binary cross entropy directly from logits, including positive-class weighting and reduction options.</p>
+</div>
+<div class="resource" data-resource="dropout-api">
+<span class="resource-meta">
       PyTorch · API + scaling contract
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.Dropout.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.Dropout.html" rel="noopener noreferrer" target="_blank">
+<span>
        Dropout
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Check the drop probability p, inverted training-time scaling and identity behavior during evaluation. This is a behavioral reference; the MNIST script shows use within training.
-     </p>
-    </div>
-   </div>
-  </details>
-  <details>
-   <summary>
+</a>
+<p>Drop probability, inverted scaling during training, and identity behavior during ordinary evaluation.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
     PyTorch examples
    </summary>
-   <div class="resource-list">
-    <div class="resource" data-resource="sequence-example">
-     <span class="resource-meta">
+<div class="resource-list">
+<div class="resource" data-resource="sequence-example">
+<span class="resource-meta">
       PyTorch examples · Official example code
      </span>
-     <a href="https://github.com/pytorch/examples/blob/main/time_sequence_prediction/train.py" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://github.com/pytorch/examples/blob/main/time_sequence_prediction/train.py" rel="noopener noreferrer" target="_blank">
+<span>
        Time Sequence Prediction: training script
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect LSTMCell recurrence and an L-BFGS closure in a small sequence-prediction application. It illustrates implementation mechanics, not a complete production forecasting-validation protocol.
-     </p>
-    </div>
-    <div class="resource" data-resource="mnist">
-     <span class="resource-meta">
+</a>
+<p>A synthetic sequence-prediction model using LSTMCell and an L-BFGS closure, with prediction plots. Its evaluation setup is an illustration, not a full forecasting protocol.</p>
+</div>
+<div class="resource" data-resource="mnist">
+<span class="resource-meta">
       PyTorch examples · Official example code
      </span>
-     <a href="https://github.com/pytorch/examples/blob/main/mnist/main.py" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://github.com/pytorch/examples/blob/main/mnist/main.py" rel="noopener noreferrer" target="_blank">
+<span>
        MNIST classifier: training script
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Locate the dropout layers and compare training with evaluation mode in a complete classifier. The script also provides data loading, loss and optimization context.
-     </p>
-    </div>
-    <div class="resource" data-resource="vaeexample">
-     <span class="resource-meta">
+</a>
+<p>An MNIST classifier with dropout, data loading, loss evaluation, optimization, and separate training and evaluation modes.</p>
+</div>
+<div class="resource" data-resource="vaeexample">
+<span class="resource-meta">
       PyTorch examples · Official example code
      </span>
-     <a href="https://github.com/pytorch/examples/blob/main/vae/main.py" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://github.com/pytorch/examples/blob/main/vae/main.py" rel="noopener noreferrer" target="_blank">
+<span>
        Variational Autoencoder: training script
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Read encode, reparameterize, decode and loss_function together. The example produces reconstruction and generated-sample images; inspect the summed reconstruction and KL reductions.
-     </p>
-    </div>
-    <div class="resource" data-resource="vaereadme">
-     <span class="resource-meta">
+</a>
+<p>An MNIST VAE with encoding, reparameterization, decoding, reconstruction images, and generated samples. Reconstruction and KL terms use explicit summed reductions.</p>
+</div>
+<div class="resource" data-resource="vaereadme">
+<span class="resource-meta">
       PyTorch examples · Example setup
      </span>
-     <a href="https://github.com/pytorch/examples/blob/main/vae/README.md" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://github.com/pytorch/examples/blob/main/vae/README.md" rel="noopener noreferrer" target="_blank">
+<span>
        Variational Autoencoder: run instructions
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Use the repository instructions alongside the training script. This is the practical entry point for running the official MNIST VAE example.
-     </p>
-    </div>
-   </div>
-  </details>
-  <details>
-   <summary>
+</a>
+<p>Dependencies and run instructions for the MNIST VAE training script.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
     TorchVision
    </summary>
-   <div class="resource-list">
-    <div class="resource" data-resource="transforms">
-     <span class="resource-meta">
+<div class="resource-list">
+<div class="resource" data-resource="transforms">
+<span class="resource-meta">
       TorchVision · Official visual gallery
      </span>
-     <a href="https://docs.pytorch.org/vision/stable/auto_examples/transforms/plot_transforms_illustrations.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/vision/stable/auto_examples/transforms/plot_transforms_illustrations.html" rel="noopener noreferrer" target="_blank">
+<span>
        Illustration of transforms
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Compare original and transformed images with their generating code. Decide whether each transformation preserves your own target before adopting the operation.
-     </p>
-    </div>
-   </div>
-  </details>
-  <details>
-   <summary>
+</a>
+<p>Image transformations with code and before/after comparisons. Whether a transformation preserves the label depends on the task.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
     PyTorch Ignite
    </summary>
-   <div class="resource-list">
-    <div class="resource" data-resource="earlystop">
-     <span class="resource-meta">
+<div class="resource-list">
+<div class="resource" data-resource="earlystop">
+<span class="resource-meta">
       PyTorch Ignite · Ecosystem API + example
      </span>
-     <a href="https://docs.pytorch.org/ignite/generated/ignite.handlers.early_stopping.EarlyStopping.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/ignite/generated/ignite.handlers.early_stopping.EarlyStopping.html" rel="noopener noreferrer" target="_blank">
+<span>
        EarlyStopping handler
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect patience, score direction and minimum improvement in a working handler example. Ignite is a separate package; stopping alone does not restore the best checkpoint.
-     </p>
-    </div>
-   </div>
-  </details>
-  <details>
-   <summary>
+</a>
+<p>An Ignite early-stopping handler with patience, score direction, and minimum improvement. Stopping does not itself restore the best checkpoint.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
     scikit-learn
    </summary>
-   <div class="resource-list">
-    <div class="resource" data-resource="biasvariance">
-     <span class="resource-meta">
+<div class="resource-list">
+<div class="resource" data-resource="biasvariance">
+<span class="resource-meta">
       scikit-learn · Official experiment + plots
      </span>
-     <a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_bias_variance.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_bias_variance.html" rel="noopener noreferrer" target="_blank">
+<span>
        Single estimator versus bagging: bias–variance decomposition
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect the repeated-dataset experiment and its bias, variance and error curves. This is a classical-ML demonstration in scikit-learn, not a PyTorch tutorial.
-     </p>
-    </div>
-    <div class="resource" data-resource="ridgeplot">
-     <span class="resource-meta">
+</a>
+<p>A repeated-dataset experiment comparing a single estimator with bagging, including bias, variance, and prediction-error plots.</p>
+</div>
+<div class="resource" data-resource="ridgeplot">
+<span class="resource-meta">
       scikit-learn · Official experiment + plot
      </span>
-     <a href="https://scikit-learn.org/stable/auto_examples/linear_model/plot_ridge_path.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://scikit-learn.org/stable/auto_examples/linear_model/plot_ridge_path.html" rel="noopener noreferrer" target="_blank">
+<span>
        Plot Ridge coefficients as a function of regularization
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Run the coefficient-path example and compare shrinkage with the guide’s spectral explanation. Coefficients in correlated designs need not each decrease monotonically in magnitude.
-     </p>
-    </div>
-    <div class="resource" data-resource="lassopath">
-     <span class="resource-meta">
+</a>
+<p>Ridge coefficient paths with correlated predictors. Individual coefficients need not decrease monotonically in magnitude.</p>
+</div>
+<div class="resource" data-resource="lassopath">
+<span class="resource-meta">
       scikit-learn · Official experiment + plots
      </span>
-     <a href="https://scikit-learn.org/stable/auto_examples/linear_model/plot_lasso_lasso_lars_elasticnet_path.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://scikit-learn.org/stable/auto_examples/linear_model/plot_lasso_lasso_lars_elasticnet_path.html" rel="noopener noreferrer" target="_blank">
+<span>
        LASSO and Elastic Net coefficient paths
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Compare the paths and coordinate-descent implementations. Track the library’s alpha/l1_ratio definitions rather than equating them blindly with the PDF’s symbols.
-     </p>
-    </div>
-    <div class="resource" data-resource="stackingexample">
-     <span class="resource-meta">
+</a>
+<p>LASSO and Elastic Net coefficient paths using coordinate descent. The library’s alpha is total penalty strength; l1_ratio controls the L1/L2 mixture.</p>
+</div>
+<div class="resource" data-resource="stackingexample">
+<span class="resource-meta">
       scikit-learn · Official experiment + code
      </span>
-     <a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_stack_predictors.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_stack_predictors.html" rel="noopener noreferrer" target="_blank">
+<span>
        Combine predictors using stacking
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect a complete stacked-regression example and its base estimators. Connect the construction to out-of-fold predictions and the prevention of meta-model leakage.
-     </p>
-    </div>
-   </div>
-  </details>
-  <details>
-   <summary>
+</a>
+<p>A complete stacked-regression example with base estimators, out-of-fold predictions, and evaluation of the combined model.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
     PyTorch Geometric
    </summary>
-   <div class="resource-list">
-    <div class="resource" data-resource="pygintro">
-     <span class="resource-meta">
+<div class="resource-list">
+<div class="resource" data-resource="pygintro">
+<span class="resource-meta">
       PyTorch Geometric · GCN training example
      </span>
-     <a href="https://pytorch-geometric.readthedocs.io/en/latest/get_started/introduction.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://pytorch-geometric.readthedocs.io/en/latest/get_started/introduction.html" rel="noopener noreferrer" target="_blank">
+<span>
        Introduction by Example
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Study graph tensors, edge indices and a trained GCN with training masks. PyTorch Geometric is a separate graph-learning library built on PyTorch.
-     </p>
-    </div>
-    <div class="resource" data-resource="messagepassing">
-     <span class="resource-meta">
+</a>
+<p>Graph tensors, edge indices, and GCN training with node masks in PyTorch Geometric, a separate PyTorch-based library.</p>
+</div>
+<div class="resource" data-resource="messagepassing">
+<span class="resource-meta">
       PyTorch Geometric · Layer implementation tutorial
      </span>
-     <a href="https://pytorch-geometric.readthedocs.io/en/latest/tutorial/create_gnn.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://pytorch-geometric.readthedocs.io/en/latest/tutorial/create_gnn.html" rel="noopener noreferrer" target="_blank">
+<span>
        Creating Message Passing Networks
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Follow a message-passing layer from message construction to aggregation. Relate the implementation to the shared-parameter and permutation-symmetry arguments.
-     </p>
-    </div>
-    <div class="resource" data-resource="gat-example">
-     <span class="resource-meta">
+</a>
+<p>Message construction, neighborhood aggregation, and shared updates in a graph layer.</p>
+</div>
+<div class="resource" data-resource="gat-example">
+<span class="resource-meta">
       PyTorch Geometric · GAT training example
      </span>
-     <a href="https://github.com/pyg-team/pytorch_geometric/blob/master/examples/gat.py" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://github.com/pyg-team/pytorch_geometric/blob/master/examples/gat.py" rel="noopener noreferrer" target="_blank">
+<span>
        Graph Attention Network: example script
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect GATConv, attention heads, dropout and a full node-classification loop. This is an official PyG example, not a core torch.nn training tutorial.
-     </p>
-    </div>
-   </div>
-  </details>
-  <details>
-   <summary>
+</a>
+<p>A PyTorch Geometric GAT example with attention heads, dropout, and a full node-classification training loop.</p>
+</div>
+</div>
+</details>
+<details>
+<summary>
     Reinforcement learning · sources and implementations
    </summary>
-   <div class="resource-list">
-    <div class="resource" data-resource="rl-concepts">
-     <span class="resource-meta">
+<div class="resource-list">
+<div class="resource" data-resource="rl-concepts">
+<span class="resource-meta">
       OpenAI Spinning Up · Concepts + mathematical definitions
      </span>
-     <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro.html" rel="noopener noreferrer" target="_blank">
+<span>
        Key Concepts in Reinforcement Learning
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Read the state, policy, return and value definitions, then compare the expectation and optimality forms of the Bellman equations.
-     </p>
-    </div>
-    <div class="resource" data-resource="rl-dqn">
-     <span class="resource-meta">
+</a>
+<p>Formal definitions of states, policies, rewards, returns, value functions, and Bellman equations.</p>
+</div>
+<div class="resource" data-resource="rl-dqn">
+<span class="resource-meta">
       PyTorch · Complete training example + plots
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/reinforcement_q_learning.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/reinforcement_q_learning.html" rel="noopener noreferrer" target="_blank">
+<span>
        Reinforcement Learning (DQN) Tutorial
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Train a CartPole agent. Trace epsilon-greedy actions, replay sampling, chosen-action Q-values, the detached target, and episode-duration curves.
-     </p>
-    </div>
-    <div class="resource" data-resource="rl-policy">
-     <span class="resource-meta">
+</a>
+<p>CartPole DQN with epsilon-greedy exploration, replay sampling, selected-action Q-values, detached targets, and episode-duration plots.</p>
+</div>
+<div class="resource" data-resource="rl-policy">
+<span class="resource-meta">
       OpenAI Spinning Up · Derivation + PyTorch examples
      </span>
-     <a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://spinningup.openai.com/en/latest/spinningup/rl_intro3.html" rel="noopener noreferrer" target="_blank">
+<span>
        Introduction to Policy Optimization
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Follow the probability-of-a-trajectory proof and the small categorical-policy / reward-to-go implementations. These older educational scripts use legacy environment APIs; consult current Gymnasium termination handling before adapting them.
-     </p>
-    </div>
-    <div class="resource" data-resource="rl-ppo">
-     <span class="resource-meta">
+</a>
+<p>The trajectory-probability policy-gradient derivation and small PyTorch categorical-policy examples. The scripts use legacy environment APIs; time-limit handling needs care when adapting them to Gymnasium.</p>
+</div>
+<div class="resource" data-resource="rl-ppo">
+<span class="resource-meta">
       PyTorch / TorchRL · Complete training example + plots
      </span>
-     <a href="https://docs.pytorch.org/rl/stable/tutorials/coding_ppo.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/rl/stable/tutorials/coding_ppo.html" rel="noopener noreferrer" target="_blank">
+<span>
        Reinforcement Learning (PPO) with TorchRL
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect the stochastic actor, value network, GAE estimates, ClipPPOLoss, and rollout evaluation. Use the tutorial’s own dependency and environment setup; TorchRL is an additional package.
-     </p>
-    </div>
-    <div class="resource" data-resource="rl-time-limits">
-     <span class="resource-meta">
+</a>
+<p>TorchRL PPO with a stochastic actor, value network, generalized advantage estimates, ClipPPOLoss, and rollout evaluation. TorchRL has additional dependencies and its own environment setup.</p>
+</div>
+<div class="resource" data-resource="rl-time-limits">
+<span class="resource-meta">
       Farama / Gymnasium · Worked implementation caveat
      </span>
-     <a href="https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://gymnasium.farama.org/tutorials/gymnasium_basics/handling_time_limits/" rel="noopener noreferrer" target="_blank">
+<span>
        Handling Time Limits
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Compare termination and truncation, then inspect which flag masks the bootstrap term. A final observation is not the next episode’s reset state.
-     </p>
-    </div>
-    <div class="resource" data-resource="rl-ppo-paper">
-     <span class="resource-meta">
+</a>
+<p>Termination versus truncation and the corresponding bootstrap mask. The final observation of an episode is not the next episode’s reset state.</p>
+</div>
+<div class="resource" data-resource="rl-ppo-paper">
+<span class="resource-meta">
       Schulman et al. · Original research paper
      </span>
-     <a href="https://arxiv.org/abs/1707.06347" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://arxiv.org/abs/1707.06347" rel="noopener noreferrer" target="_blank">
+<span>
        Proximal Policy Optimization Algorithms
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      The original clipped-surrogate formulation and experimental study. Clipping is a practical surrogate, not a hard guarantee of monotonic return improvement.
-     </p>
-    </div>
-    <div class="resource" data-resource="rl-evaluation">
-     <span class="resource-meta">
+</a>
+<p>The clipped-surrogate objective and original experiments. Clipping is not a hard guarantee of monotonic return improvement.</p>
+</div>
+<div class="resource" data-resource="rl-evaluation">
+<span class="resource-meta">
       OpenAI Spinning Up · Evaluation + debugging guidance
      </span>
-     <a href="https://spinningup.openai.com/en/latest/spinningup/spinningup.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://spinningup.openai.com/en/latest/spinningup/spinningup.html" rel="noopener noreferrer" target="_blank">
+<span>
        Spinning Up as a Deep RL Researcher
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Study simple-environment debugging, measurement, fair comparisons, and the limits of reading policy quality from a training loss.
-     </p>
-    </div>
-   </div>
-  </details>
- </div>
- <h2>
-  The small local companions
- </h2>
- <p>
-  Four authored scripts support cases not covered by an exact official counterpart: the supplied network’s complete hand calculation, a few regularization identities, the source’s quadratic CG example, and a small synthetic denoising case. They are available under the relevant chapter rather than in a separate application catalogue.
- </p>
- <p>
-  All four ran successfully on CPU with PyTorch 2.10.0+cpu. Their numerical assertions and recorded output are included. Official third-party tutorials were reviewed as references, not rerun as part of these checks. Neither the synthetic examples nor the PDFs’ illustrative figures establish real-world predictive performance.
- </p>
- <h2>
-  Offline use and publishing
- </h2>
- <p>
-  The reader is organized into separate chapter files, styles, scripts, figures, PDFs and Python examples. No external font, JavaScript library or backend is required. Modern browsers render the equations using native MathML.
- </p>
- <p>
-  Replace
-  <code>
-   projects/pytorch-field-notes.html
-  </code>
-  in the existing website. The return links assume the existing
-  <code>
-   projects.html
-  </code>
-  and neighboring
-  <code>
-   sql-field-notes.html
-  </code>
-  files. Both readers are linked from the Side projects page.
- </p>
- <p>
-  <a href="#contents">
-   Return to contents →
-  </a>
- </p>
+</a>
+<p>Simple-environment debugging, policy evaluation, fair comparisons, and interpretation of training losses.</p>
+</div>
+</div>
+</details>
+</div>
+<h2>Python examples</h2><p>Four downloadable scripts cover a complete forward and backward pass, regularization identities, a two-dimensional Conjugate Gradient calculation, and synthetic denoising. Each includes the inputs and numerical checks needed for that example.</p><p>The recorded example runs used PyTorch 2.10.0 on CPU. External training tutorials have their own dependencies and were not all executed as part of those checks. Synthetic examples illustrate a calculation; they do not establish performance on other datasets.</p>
+
+
+<h2>Using the examples</h2><p>Python scripts run outside the browser. The equations, figures, and interactive calculations are displayed locally; external documentation links require internet access.</p>
+
+
+
 </section>

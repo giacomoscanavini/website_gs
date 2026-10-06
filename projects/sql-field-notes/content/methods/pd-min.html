@@ -1,250 +1,248 @@
 <article class="article method-page" id="m-pd-min">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=Aggregation">
+<a href="#methods?lang=pd&amp;cat=Aggregation">
    pandas · Aggregation
   </a>
- </div>
- <h1>
+</div>
+<h1>
   min()
  </h1>
- <p class="lead">
+<p class="lead">
   Minimum
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-min"><span class="n">df</span><span class="p">[</span><span class="s1">'score'</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-min"><span class="n">df</span><span class="p">[</span><span class="s1">'score'</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-sql-min">
+<a href="#m-sql-min">
    SQL · MIN()
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C13?code=code-C13-1&amp;method=pd-min&amp;line=10">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C13?code=code-C13-1&amp;method=pd-min&amp;line=10">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      550 · Game Play Analysis IV
     </strong>
-    <small>
+<small>
      Study solution · line 10
     </small>
-   </div>
-   <pre aria-hidden="true">    a = activity.assign(event_date=pd.to_datetime(activity['event_date']))
+</div>
+<pre aria-hidden="true">    a = activity.assign(event_date=pd.to_datetime(activity['event_date']))
     first = a.groupby('player_id')['event_date'].transform('min')
     valid = a['event_date'].eq(first + pd.Timedelta(days=1))
     fraction = valid.groupby(a['player_id']).any().mean()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C16?code=code-C16-1&amp;method=pd-min&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C16?code=code-C16-1&amp;method=pd-min&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1070 · First-year product sales
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def sales_analysis(sales: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def sales_analysis(sales: pd.DataFrame) -&gt; pd.DataFrame:
     first_year = sales.groupby('product_id')['year'].transform('min')
     return sales.loc[sales['year'].eq(first_year), ['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C31?code=code-C31-1&amp;method=pd-min&amp;line=14">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C31?code=code-C31-1&amp;method=pd-min&amp;line=14">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1321 · Restaurant growth
     </strong>
-    <small>
+<small>
      Study solution · line 14
     </small>
-   </div>
-   <pre aria-hidden="true">    rolled = daily.rolling('7D', closed='right').sum()
+</div>
+<pre aria-hidden="true">    rolled = daily.rolling('7D', closed='right').sum()
     rolled = rolled.loc[rolled.index &gt;= daily.index.min() + pd.Timedelta(days=6)]
     result = rolled.rename('amount').reset_index()
     result['average_amount'] = (result['amount'] / 7).map(round_half_up)</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-06?code=code-squid-06-1&amp;method=pd-min&amp;line=16">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-06?code=code-squid-06-1&amp;method=pd-min&amp;line=16">
+<div>
+<span class="usage-label">
      Squid Game · pandas
     </span>
-    <strong>
+<strong>
      Trace equipment to its first failure
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 16
     </small>
-   </div>
-   <pre aria-hidden="true">    first = failures.groupby('failed_equipment_id').agg(
+</div>
+<pre aria-hidden="true">    first = failures.groupby('failed_equipment_id').agg(
         installed=('installation_date', 'min'), failed=('failure_date', 'min'))
     years = (first['failed'] - first['installed']).dt.total_seconds() / (86400 * 365.2425)
     result = pd.DataFrame({'average_lifespan_years': [np.floor(years.mean())]})</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-min&amp;line=17">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-min&amp;line=17">
+<div>
+<span class="usage-label">
      Squid Game · pandas
     </span>
-    <strong>
+<strong>
      Join room checks and camera sightings
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 17
     </small>
-   </div>
-   <pre aria-hidden="true">                                    'movement_detected_time'].astype('string'))
+</div>
+<pre aria-hidden="true">                                    'movement_detected_time'].astype('string'))
 joined['time_range_first_last_detection'] = times.max() - times.min()
 result = joined.sort_values('guard_number')[[
     'guard_number', 'code_name', 'status', 'last_seen_in_room',</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    Other saved implementations (3)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C13?code=code-C13-3&amp;method=pd-min&amp;line=10">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C13?code=code-C13-3&amp;method=pd-min&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       550 · Game Play Analysis IV
      </strong>
-     <small>
+<small>
       My approach · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">    activity = activity.assign(event_date=pd.to_datetime(activity['event_date']))
+</div>
+<pre aria-hidden="true">    activity = activity.assign(event_date=pd.to_datetime(activity['event_date']))
     activity['first_login'] =   activity.groupby(by='player_id')['event_date'].transform('min')
     activity['valid'] = activity['event_date'] ==   activity['first_login'] + pd.Timedelta(days = 1)
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C13?code=code-C13-5&amp;method=pd-min&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C13?code=code-C13-5&amp;method=pd-min&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       550 · Game Play Analysis IV
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def gameplay_analysis(activity: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def gameplay_analysis(activity: pd.DataFrame) -&gt; pd.DataFrame:
     activity['first_login'] = activity.groupby(by='player_id')['event_date'].transform('min')
     activity['valid'] = activity['event_date'] == activity['first_login'] + pd.Timedelta(days = 1)
     </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C31?code=code-C31-3&amp;method=pd-min&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C31?code=code-C31-3&amp;method=pd-min&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1321 · Restaurant growth
      </strong>
-     <small>
+<small>
       My approach · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">    total = daily.rolling('7D').sum()
+</div>
+<pre aria-hidden="true">    total = daily.rolling('7D').sum()
     total = total[total.index &gt;= daily.index.min() + pd.Timedelta(days=6)]
     result = total.rename('amount').reset_index()
     result['average_amount'] = (result['amount'] / 7).map(round_half_up)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     pandas cheat-sheet image · Aggregation. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=Aggregation">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=Aggregation">
+<small>
     ← Browse
    </small>
    pandas · Aggregation
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

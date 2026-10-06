@@ -1,141 +1,141 @@
 <article class="article" id="LC586">
- <div class="breadcrumb">
-  <a href="#practice">
+<div class="breadcrumb">
+<a href="#practice">
    Leetcode problems
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Additional problems
   </span>
- </div>
- <h1>
+</div>
+<h1>
   586 · Customer placing the largest number of orders
  </h1>
- <p>
+<p>
   Return the customer number occurring most often in Orders.
  </p>
- <h2>
+<h2>
   My submission
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="archive-586-panel-0" aria-selected="true" id="archive-586-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="archive-586-panel-0" aria-selected="true" id="archive-586-tab-0" role="tab" tabindex="0" type="button">
      MySQL
     </button>
-    <button aria-controls="archive-586-panel-1" aria-selected="false" id="archive-586-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="archive-586-panel-1" aria-selected="false" id="archive-586-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button class="copy-button" data-copy="" type="button">
+</div>
+<button class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="archive-586-tab-0" class="code-panel" id="archive-586-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-586-tab-0" class="code-panel" id="archive-586-panel-0" role="tabpanel">
+<div class="no-script-label">
     MySQL
    </div>
-   <pre id="code-LC586-0" tabindex="0"><code class="language-sql" data-origin="archive-586-sql"><span class="c1"># Write your MySQL query statement below</span>
+<pre id="code-LC586-0" tabindex="0"><code class="language-sql" data-origin="archive-586-sql"><span class="c1"># Write your MySQL query statement below</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">customer_number</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Orders</span>
 <span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">customer_number</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="nf">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">DESC</span>
 <span class="k">LIMIT</span><span class="w"> </span><span class="n">1</span></code></pre>
-  </div>
-  <div aria-labelledby="archive-586-tab-1" class="code-panel" id="archive-586-panel-1" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-586-tab-1" class="code-panel" id="archive-586-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-LC586-1" tabindex="0"><code class="language-python" data-origin="archive-586-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-LC586-1" tabindex="0"><code class="language-python" data-origin="archive-586-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">largest_orders</span><span class="p">(</span><span class="n">orders</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="k">return</span> <span class="n">orders</span><span class="p">[</span><span class="s1">'customer_number'</span><span class="p">]</span><span class="o">.</span><span class="n">mode</span><span class="p">()</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span></code></pre>
-  </div>
- </div>
- <h2>
+</div>
+</div>
+<h2>
   How the submitted approach works
  </h2>
- <p>
+<p>
   SQL groups orders and keeps the largest count. The pandas submission uses the mode of customer_number.
  </p>
- <div class="note warning">
-  <b>
+<div class="note warning">
+<b>
    Implementation note.
   </b>
   The SQL returns one row; pandas mode() returns all tied modes. They agree when there is a unique winner.
  </div>
- <details class="reference-details">
-  <summary>
+<details class="reference-details">
+<summary>
    Source
   </summary>
-  <div class="sources-content">
-   <p>
+<div class="sources-content">
+<p>
     SQL.zip / 586-customer-placing-the-largest-number-of-orders / submission-1.sql and submission-1.py. These are the submitted files; the summary and implementation notes describe the code, not a replacement official problem statement.
    </p>
-   <p>
-    <a href="https://leetcode.com/problems/customer-placing-the-largest-number-of-orders/" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://leetcode.com/problems/customer-placing-the-largest-number-of-orders/" rel="noopener noreferrer" target="_blank">
      Original problem
     </a>
-   </p>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</p>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-count">
+<div>
+<a href="#m-sql-count">
      COUNT()
     </a>
-    <a href="#m-sql-group-by">
+<a href="#m-sql-group-by">
      GROUP BY
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-    <a href="#m-sql-order-by">
+<a href="#m-sql-order-by">
      ORDER BY
     </a>
-    <a href="#m-sql-limit">
+<a href="#m-sql-limit">
      LIMIT / OFFSET
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-mode">
+<a href="#m-pd-mode">
      mode()
     </a>
-    <a href="#m-pd-to-frame">
+<a href="#m-pd-to-frame">
      to_frame()
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#LC262">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#LC262">
+<small>
     ← Previous
    </small>
    262 · Trips and users
   </a>
-  <a href="#LC601">
-   <small>
+<a href="#LC601">
+<small>
     Next →
    </small>
    601 · Human traffic of stadium
   </a>
- </div>
+</div>
 </article>

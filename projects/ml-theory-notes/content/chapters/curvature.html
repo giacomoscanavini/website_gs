@@ -1,107 +1,80 @@
 <section aria-labelledby="curvature-title" class="page-view lesson-layout" id="curvature">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      13
     </span>
     Part 2 · Optimization
    </p>
-   <h1 id="curvature-title" tabindex="-1">
+<h1 id="curvature-title" tabindex="-1">
     Curvature, conditioning, and preconditioning
    </h1>
-   <p class="standfirst">
-    Understand why slope alone can be inefficient, and what the Hessian adds.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Optimization · PDF pp. 15–16 · §9" data-page="15" data-pdf="optim" type="button">
-     Optimization · PDF pp. 15–16 · §9
-    </button>
-    <button aria-label="Open source: Optimization · PDF p. 22 · §§16–17" data-page="22" data-pdf="optim" type="button">
-     Optimization · PDF p. 22 · §§16–17
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<p class="standfirst">The Hessian describes how the gradient changes across parameter space. Curvature and conditioning explain why a single learning rate can be safe in one direction but inefficient in another.</p>
+
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="the-gradient-describes-slope-not-the-shape-of-the-valley" href="#curvature?section=the-gradient-describes-slope-not-the-shape-of-the-valley">
-     The gradient describes slope, not the shape of the valley
-    </a>
-    <a data-section="why-conditioning-slows-gradient-descent" href="#curvature?section=why-conditioning-slows-gradient-descent">
-     Why conditioning slows gradient descent
-    </a>
-    <a data-section="diagonal-adaptation-versus-full-curvature" href="#curvature?section=diagonal-adaptation-versus-full-curvature">
-     Diagonal adaptation versus full curvature
-    </a>
-    <a data-section="cost-and-the-neural-network-setting" href="#curvature?section=cost-and-the-neural-network-setting">
-     Cost and the neural-network setting
-    </a>
-    <a data-section="better-scaling-can-help-before-optimization-starts" href="#curvature?section=better-scaling-can-help-before-optimization-starts">
-     Better scaling can help before optimization starts
-    </a>
-    <a data-section="implementation" href="#curvature?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="the-gradient-describes-slope-not-the-shape-of-the-valley" id="curvature--the-gradient-describes-slope-not-the-shape-of-the-valley">
+<nav aria-label="On this page">
+<a data-section="the-gradient-describes-slope-not-the-shape-of-the-valley" href="#curvature?section=the-gradient-describes-slope-not-the-shape-of-the-valley">The gradient describes slope, not the shape of the valley</a>
+<a data-section="why-conditioning-slows-gradient-descent" href="#curvature?section=why-conditioning-slows-gradient-descent">Why conditioning slows gradient descent</a>
+<a data-section="diagonal-adaptation-versus-full-curvature" href="#curvature?section=diagonal-adaptation-versus-full-curvature">Diagonal adaptation versus full curvature</a>
+<a data-section="cost-and-the-neural-network-setting" href="#curvature?section=cost-and-the-neural-network-setting">Cost and the neural-network setting</a>
+<a data-section="better-scaling-can-help-before-optimization-starts" href="#curvature?section=better-scaling-can-help-before-optimization-starts">Better scaling can help before optimization starts</a>
+<a data-section="implementation" href="#curvature?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="the-gradient-describes-slope-not-the-shape-of-the-valley" id="curvature--the-gradient-describes-slope-not-the-shape-of-the-valley">
     The gradient describes slope, not the shape of the valley
    </h2>
-   <p>
+<p>
     A second-order local expansion is
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msup><mi>g</mi><mi>⊤</mi></msup><mi>p</mi><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mi>p</mi><mi>⊤</mi></msup><mi>H</mi><mi>p</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">J(\theta+p)\approx J(\theta)+g^\top p+\frac12p^\top Hp,</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msup><mi>g</mi><mi>⊤</mi></msup><mi>p</mi><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mi>p</mi><mi>⊤</mi></msup><mi>H</mi><mi>p</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">J(\theta+p)\approx J(\theta)+g^\top p+\frac12p^\top Hp,</annotation></semantics></math>
+</div>
+<p>
     where
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo>=</mo><mi>∇</mi><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">g=\nabla J(\theta)</annotation></semantics></math>
     and
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>=</mo><msup><mi>∇</mi><mn>2</mn></msup><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">H=\nabla^2J(\theta)</annotation></semantics></math>
     is the Hessian. The gradient tells how the objective changes to first order. The Hessian describes how that gradient changes as parameters move.
    </p>
-   <p>
+<p>
     Minimizing the local quadratic approximation gives the Newton equation
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>p</mi><mo>=</mo><mi>−</mi><mi>g</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>p</mi><mo>=</mo><mi>−</mi><msup><mi>H</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>g</mi></mrow><annotation encoding="application/x-tex">Hp=-g,\qquad p=-H^{-1}g</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>p</mi><mo>=</mo><mi>−</mi><mi>g</mi><mo>,</mo><mspace width="2.0em"></mspace><mi>p</mi><mo>=</mo><mi>−</mi><msup><mi>H</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>g</mi></mrow><annotation encoding="application/x-tex">Hp=-g,\qquad p=-H^{-1}g</annotation></semantics></math>
+</div>
+<p>
     when the inverse and suitable curvature conditions make this expression meaningful. This is a direction derived from a quadratic model, not simply a longer negative-gradient step.
    </p>
-   <figure class="source-figure">
-    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="optim-16" type="button">
-     <img alt="The source contrasts the negative gradient with a curvature-scaled direction on an anisotropic quadratic. The illustration assumes a well-behaved local curvature model." height="565" loading="lazy" src="assets/images/the-source-contrasts-the-negative-gradient-with-a-curvature-scale-f9fe2bd120.webp" width="790"/>
-    </button>
-    <figcaption>
-     The source contrasts the negative gradient with a curvature-scaled direction on an anisotropic quadratic. The illustration assumes a well-behaved local curvature model.
-     <button aria-label="Open source: Optimization · PDF p. 16" data-page="16" data-pdf="optim" type="button">
+<figure class="source-figure">
+<button aria-label="Enlarge source figure" class="figure-frame" data-figure="optim-16" type="button">
+<img alt="The negative gradient and a curvature-scaled direction on an anisotropic quadratic. A positive-definite curvature model accounts for the unequal scales and orientation of the contours." height="565" loading="lazy" src="assets/images/the-source-contrasts-the-negative-gradient-with-a-curvature-scale-f9fe2bd120.webp" width="790"/>
+</button>
+<figcaption>The negative gradient and a curvature-scaled direction on an anisotropic quadratic. A positive-definite curvature model accounts for the unequal scales and orientation of the contours. <button aria-label="Open source: Optimization · PDF p. 16" data-page="16" data-pdf="optim" type="button">
       Optimization · PDF p. 16
-     </button>
-    </figcaption>
-   </figure>
-   <details class="derivation" data-derivation="newton-direction" id="curvature--derivation-newton-direction">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+     </button></figcaption>
+</figure>
+<details class="derivation" data-derivation="newton-direction" id="curvature--derivation-newton-direction">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive the Newton system and its descent condition
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
-      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>
       is twice differentiable. At the current point, let
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo>=</mo><mi>∇</mi><mi>J</mi></mrow><annotation encoding="application/x-tex">g=\nabla J</annotation></semantics></math>
       and
@@ -110,41 +83,41 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math>
       is symmetric, as holds for continuous second derivatives.
      </p>
-     <h4>
+<h4>
       1 · Write the quadratic approximation
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msup><mi>g</mi><mi>⊤</mi></msup><mi>p</mi><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mi>p</mi><mi>⊤</mi></msup><mi>H</mi><mi>p</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">q(p)=J(\theta)+g^\top p+\frac12p^\top Hp.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msup><mi>g</mi><mi>⊤</mi></msup><mi>p</mi><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mi>p</mi><mi>⊤</mi></msup><mi>H</mi><mi>p</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">q(p)=J(\theta)+g^\top p+\frac12p^\top Hp.</annotation></semantics></math>
+</div>
+<p>
       The approximation concerns displacement
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
       while
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mi>g</mi><mo>,</mo><mi>H</mi></mrow><annotation encoding="application/x-tex">J(\theta),g,H</annotation></semantics></math>
       are fixed.
      </p>
-     <h4>
+<h4>
       2 · Differentiate the quadratic term by entries
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mi>p</mi><mi>⊤</mi></msup><mi>H</mi><mi>p</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><msub><mi>p</mi><mi>i</mi></msub><msub><mi>H</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>p</mi><mi>j</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac12p^\top Hp=\frac12\sum_{i,j}p_iH_{ij}p_j.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mi>p</mi><mi>⊤</mi></msup><mi>H</mi><mi>p</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mrow><mi>i</mi><mo>,</mo><mi>j</mi></mrow></munder><msub><mi>p</mi><mi>i</mi></msub><msub><mi>H</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>p</mi><mi>j</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac12p^\top Hp=\frac12\sum_{i,j}p_iH_{ij}p_j.</annotation></semantics></math>
+</div>
+<p>
       For coordinate
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>k</mi></msub><annotation encoding="application/x-tex">p_k</annotation></semantics></math>
       , differentiate occurrences in both factors:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>∂</mi><mrow><mi>∂</mi><msub><mi>p</mi><mi>k</mi></msub></mrow></mfrac><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mi>p</mi><mi>⊤</mi></msup><mi>H</mi><mi>p</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>H</mi><mrow><mi>k</mi><mi>j</mi></mrow></msub><msub><mi>p</mi><mi>j</mi></msub><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>p</mi><mi>i</mi></msub><msub><mi>H</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub><mo>=</mo><msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>H</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial}{\partial p_k}\frac12p^\top Hp
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>∂</mi><mrow><mi>∂</mi><msub><mi>p</mi><mi>k</mi></msub></mrow></mfrac><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mi>p</mi><mi>⊤</mi></msup><mi>H</mi><mi>p</mi><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>H</mi><mrow><mi>k</mi><mi>j</mi></mrow></msub><msub><mi>p</mi><mi>j</mi></msub><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>p</mi><mi>i</mi></msub><msub><mi>H</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub><mo>=</mo><msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>H</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial}{\partial p_k}\frac12p^\top Hp
 =\frac12\sum_jH_{kj}p_j+\frac12\sum_i p_iH_{ik}=(Hp)_k.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       Symmetry equates the two sums.
      </p>
-     <h4>
+<h4>
       3 · Set the quadratic-model gradient to zero
      </h4>
-     <p>
+<p>
       The derivative of
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>g</mi><mi>⊤</mi></msup><mi>p</mi></mrow><annotation encoding="application/x-tex">g^\top p</annotation></semantics></math>
       is
@@ -157,21 +130,21 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>
       has a unique minimum and
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>p</mi><mo>=</mo><mi>−</mi><mi>g</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">Hp=-g.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mi>p</mi><mo>=</mo><mi>−</mi><mi>g</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">Hp=-g.</annotation></semantics></math>
+</div>
+<p>
       Writing
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mi>−</mi><msup><mi>H</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>g</mi></mrow><annotation encoding="application/x-tex">p=-H^{-1}g</annotation></semantics></math>
       describes the solution; numerical implementations should normally solve the system rather than explicitly form the inverse.
      </p>
-     <h4>
+<h4>
       4 · Check whether the direction descends
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>g</mi><mi>⊤</mi></msup><mi>p</mi><mo>=</mo><mi>−</mi><msup><mi>g</mi><mi>⊤</mi></msup><msup><mi>H</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>g</mi><mo>&lt;</mo><mn>0</mn><mspace width="1.0em"></mspace><mrow><mtext mathvariant="normal">when </mtext><mspace width="0.333em"></mspace></mrow><mi>g</mi><mo>≠</mo><mn>0</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> and </mtext><mspace width="0.333em"></mspace></mrow><mi>H</mi><mo>≻</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">g^\top p=-g^\top H^{-1}g&lt;0\quad\text{when }g\ne0\text{ and }H\succ0.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>g</mi><mi>⊤</mi></msup><mi>p</mi><mo>=</mo><mi>−</mi><msup><mi>g</mi><mi>⊤</mi></msup><msup><mi>H</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mi>g</mi><mo>&lt;</mo><mn>0</mn><mspace width="1.0em"></mspace><mrow><mtext mathvariant="normal">when </mtext><mspace width="0.333em"></mspace></mrow><mi>g</mi><mo>≠</mo><mn>0</mn><mrow><mspace width="0.333em"></mspace><mtext mathvariant="normal"> and </mtext><mspace width="0.333em"></mspace></mrow><mi>H</mi><mo>≻</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">g^\top p=-g^\top H^{-1}g&lt;0\quad\text{when }g\ne0\text{ and }H\succ0.</annotation></semantics></math>
+</div>
+<p>
       An invertible but indefinite Hessian is not enough. For
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>w</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><msup><mi>w</mi><mn>2</mn></msup><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">J(w)=-w^2/2</annotation></semantics></math>
       at
@@ -186,10 +159,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">-1/2</annotation></semantics></math>
       to zero.
      </p>
-     <h4>
+<h4>
       5 · Interpret damping
      </h4>
-     <p>
+<p>
       Replacing
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>H</mi><annotation encoding="application/x-tex">H</annotation></semantics></math>
       by
@@ -198,58 +171,48 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda&gt;0</annotation></semantics></math>
       can make the local system positive definite, producing a descent direction. A line search may still be needed because the quadratic is only local. Curvature information and safe step length are separate requirements.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="15" data-pdf="optim" type="button">
-       Chapter source · PDF p. 15
-      </button>
-      <a class="calculation-link" href="#curvature?derivation=newton-direction">
+<div class="derivation-footer">
+
+<button data-page="15" data-pdf="optim" type="button">Reference · PDF p. 15</button>
+<a class="calculation-link" href="#curvature?derivation=newton-direction">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="why-conditioning-slows-gradient-descent" id="curvature--why-conditioning-slows-gradient-descent">
+</div>
+</div>
+</details>
+<h2 data-section="why-conditioning-slows-gradient-descent" id="curvature--why-conditioning-slows-gradient-descent">
     Why conditioning slows gradient descent
    </h2>
-   <p>
+<p>
     For a positive-definite quadratic with Hessian
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
     , the condition number is
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>κ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><msub><mi>λ</mi><mo>max</mo></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><msub><mi>λ</mi><mo>min</mo></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\kappa(A)=\frac{\lambda_{\max}(A)}{\lambda_{\min}(A)}.</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>κ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><msub><mi>λ</mi><mo>max</mo></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><msub><mi>λ</mi><mo>min</mo></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\kappa(A)=\frac{\lambda_{\max}(A)}{\lambda_{\min}(A)}.</annotation></semantics></math>
+</div>
+<p>
     When it is large, some directions are much steeper than others. A step size safe for the steep direction can make little progress along the shallow direction. The contour ellipses become elongated, producing the familiar zig-zagging picture.
    </p>
-   <p>
-    The following is an expanded calculation from that quadratic model. In an eigenvector direction with eigenvalue
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\lambda_j</annotation></semantics></math>
-    , gradient descent multiplies the error by
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>η</mi><msub><mi>λ</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">1-\eta\lambda_j</annotation></semantics></math>
-    each step. Stability requires a rate compatible with the largest eigenvalue, while the smallest eigenvalue can then have a contraction factor very close to one. The same global rate must satisfy both demands.
-   </p>
-   <p>
+<p>In an eigenvector direction with eigenvalue <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>λ</mi><mi>j</mi></msub><annotation encoding="application/x-tex">\lambda_j</annotation></semantics></math>, gradient descent multiplies the error by <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>η</mi><msub><mi>λ</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">1-\eta\lambda_j</annotation></semantics></math> each step. Stability requires a rate compatible with the largest eigenvalue, while the smallest eigenvalue can then have a contraction factor very close to one. The same global rate must satisfy both demands.</p>
+<p>
     A preconditioner changes the geometry of the step. It tries to make unequal directions more comparable rather than merely shrink the same unhelpful motion.
    </p>
-   <details class="derivation" data-derivation="spectral-convergence" id="curvature--derivation-spectral-convergence">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<details class="derivation" data-derivation="spectral-convergence" id="curvature--derivation-spectral-convergence">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive gradient-descent contraction in each eigen-direction
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
-      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><msup><mi>x</mi><mi>⊤</mi></msup><mi>A</mi><mi>x</mi><mo>−</mo><msup><mi>b</mi><mi>⊤</mi></msup><mi>x</mi></mrow><annotation encoding="application/x-tex">f(x)=\tfrac12x^\top Ax-b^\top x</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><msup><mi>x</mi><mi>⊤</mi></msup><mi>A</mi><mi>x</mi><mo>−</mo><msup><mi>b</mi><mi>⊤</mi></msup><mi>x</mi></mrow><annotation encoding="application/x-tex">f(x)=\tfrac12x^\top Ax-b^\top x</annotation></semantics></math>
       with symmetric positive-definite
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>
       . Let
@@ -258,22 +221,22 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mi>t</mi></msub><mo>=</mo><msub><mi>x</mi><mi>t</mi></msub><mo>−</mo><msub><mi>x</mi><mo>*</mo></msub></mrow><annotation encoding="application/x-tex">e_t=x_t-x_*</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       1 · Rewrite the update in terms of error
      </h4>
-     <p>
+<p>
       Since
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><msub><mi>x</mi><mo>*</mo></msub><mo>=</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">Ax_*=b</annotation></semantics></math>
       ,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>x</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>A</mi><msub><mi>x</mi><mi>t</mi></msub><mo>−</mo><mi>b</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>e</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>e</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mi>A</mi><msub><mi>e</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>η</mi><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>e</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">x_{t+1}=x_t-\eta(Ax_t-b),\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>x</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>A</mi><msub><mi>x</mi><mi>t</mi></msub><mo>−</mo><mi>b</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>e</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>e</mi><mi>t</mi></msub><mo>−</mo><mi>η</mi><mi>A</mi><msub><mi>e</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>η</mi><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>e</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">x_{t+1}=x_t-\eta(Ax_t-b),\qquad
 e_{t+1}=e_t-\eta Ae_t=(I-\eta A)e_t.</annotation></semantics></math>
-     </div>
-     <h4>
+</div>
+<h4>
       2 · Rotate into an orthonormal eigenbasis
      </h4>
-     <p>
+<p>
       Write
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><mi>Q</mi><mi>Λ</mi><msup><mi>Q</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">A=Q\Lambda Q^\top</annotation></semantics></math>
       , where
@@ -286,62 +249,62 @@ e_{t+1}=e_t-\eta Ae_t=(I-\eta A)e_t.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>t</mi></msub><mo>=</mo><msup><mi>Q</mi><mi>⊤</mi></msup><msub><mi>e</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">c_t=Q^\top e_t</annotation></semantics></math>
       . Then
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msup><mi>Q</mi><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>η</mi><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>Q</mi><msub><mi>c</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>η</mi><mi>Λ</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>c</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">c_{t+1}=Q^\top(I-\eta A)Qc_t=(I-\eta\Lambda)c_t.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msup><mi>Q</mi><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>η</mi><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>Q</mi><msub><mi>c</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>η</mi><mi>Λ</mi><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>c</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">c_{t+1}=Q^\top(I-\eta A)Qc_t=(I-\eta\Lambda)c_t.</annotation></semantics></math>
+</div>
+<p>
       Thus
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn><mo>,</mo><mi>j</mi></mrow></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>η</mi><msub><mi>λ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>c</mi><mrow><mi>t</mi><mo>,</mo><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">c_{t+1,j}=(1-\eta\lambda_j)c_{t,j}</annotation></semantics></math>
       and
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mrow><mi>t</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>η</mi><msub><mi>λ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>t</mi></msup><msub><mi>c</mi><mrow><mn>0</mn><mo>,</mo><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">c_{t,j}=(1-\eta\lambda_j)^t c_{0,j}</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       3 · Require contraction in every direction
      </h4>
-     <p>
+<p>
       The condition
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">|</mo><mn>1</mn><mo>−</mo><mi>η</mi><msub><mi>λ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">|</mo></mrow><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">|1-\eta\lambda_j|&lt;1</annotation></semantics></math>
       is equivalent to
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>η</mi><mo>&lt;</mo><mn>2</mn><mi>/</mi><msub><mi>λ</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">0&lt;\eta&lt;2/\lambda_j</annotation></semantics></math>
       . Satisfying every coordinate requires
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>η</mi><mo>&lt;</mo><mn>2</mn><mi>/</mi><msub><mi>λ</mi><mo>max</mo></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">0&lt;\eta&lt;2/\lambda_{\max}.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>η</mi><mo>&lt;</mo><mn>2</mn><mi>/</mi><msub><mi>λ</mi><mo>max</mo></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">0&lt;\eta&lt;2/\lambda_{\max}.</annotation></semantics></math>
+</div>
+<p>
       The maximum one-step contraction factor is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>max</mo><mi>j</mi></msub><mrow><mo form="prefix" stretchy="true">|</mo><mn>1</mn><mo>−</mo><mi>η</mi><msub><mi>λ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">|</mo></mrow></mrow><annotation encoding="application/x-tex">\max_j|1-\eta\lambda_j|</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       4 · Balance the extreme eigenvalues
      </h4>
-     <p>
+<p>
       The best constant rate for this worst-case factor equates the two endpoint magnitudes:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>η</mi><msub><mi>λ</mi><mo>min</mo></msub><mo>=</mo><mi>−</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>η</mi><msub><mi>λ</mi><mo>max</mo></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">1-\eta\lambda_{\min}=-(1-\eta\lambda_{\max}).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>η</mi><msub><mi>λ</mi><mo>min</mo></msub><mo>=</mo><mi>−</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>η</mi><msub><mi>λ</mi><mo>max</mo></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">1-\eta\lambda_{\min}=-(1-\eta\lambda_{\max}).</annotation></semantics></math>
+</div>
+<p>
       Therefore
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>η</mi><mo>*</mo></msub><mo>=</mo><mn>2</mn><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>λ</mi><mo>max</mo></msub><mo>+</mo><msub><mi>λ</mi><mo>min</mo></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\eta_*=2/(\lambda_{\max}+\lambda_{\min})</annotation></semantics></math>
       , and the factor is
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><msub><mi>λ</mi><mo>max</mo></msub><mo>−</mo><msub><mi>λ</mi><mo>min</mo></msub></mrow><mrow><msub><mi>λ</mi><mo>max</mo></msub><mo>+</mo><msub><mi>λ</mi><mo>min</mo></msub></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>κ</mi><mo>−</mo><mn>1</mn></mrow><mrow><mi>κ</mi><mo>+</mo><mn>1</mn></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\lambda_{\max}-\lambda_{\min}}{\lambda_{\max}+\lambda_{\min}}=\frac{\kappa-1}{\kappa+1}.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><msub><mi>λ</mi><mo>max</mo></msub><mo>−</mo><msub><mi>λ</mi><mo>min</mo></msub></mrow><mrow><msub><mi>λ</mi><mo>max</mo></msub><mo>+</mo><msub><mi>λ</mi><mo>min</mo></msub></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>κ</mi><mo>−</mo><mn>1</mn></mrow><mrow><mi>κ</mi><mo>+</mo><mn>1</mn></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\lambda_{\max}-\lambda_{\min}}{\lambda_{\max}+\lambda_{\min}}=\frac{\kappa-1}{\kappa+1}.</annotation></semantics></math>
+</div>
+<p>
       For
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>κ</mi><mo>=</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">\kappa=100</annotation></semantics></math>
       , the factor is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>99</mn><mi>/</mi><mn>101</mn><mo>≈</mo><mn>0.9802</mn></mrow><annotation encoding="application/x-tex">99/101\approx0.9802</annotation></semantics></math>
       ; many contractions are required.
      </p>
-     <h4>
+<h4>
       5 · See how preconditioning changes the matrix
      </h4>
-     <p>
+<p>
       With positive-definite
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>P</mi><annotation encoding="application/x-tex">P</annotation></semantics></math>
       , the error update is
@@ -350,10 +313,10 @@ e_{t+1}=e_t-\eta Ae_t=(I-\eta A)e_t.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>t</mi></msub><mo>=</mo><msup><mi>P</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><msub><mi>e</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">z_t=P^{-1/2}e_t</annotation></semantics></math>
       . Then
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>I</mi><mo>−</mo><mi>η</mi><msup><mi>P</mi><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mi>A</mi><msup><mi>P</mi><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mo form="postfix" stretchy="true">]</mo></mrow><msub><mi>z</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">z_{t+1}=[I-\eta P^{1/2}AP^{1/2}]z_t.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>I</mi><mo>−</mo><mi>η</mi><msup><mi>P</mi><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mi>A</mi><msup><mi>P</mi><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mo form="postfix" stretchy="true">]</mo></mrow><msub><mi>z</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">z_{t+1}=[I-\eta P^{1/2}AP^{1/2}]z_t.</annotation></semantics></math>
+</div>
+<p>
       The relevant symmetric matrix is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>P</mi><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mi>A</mi><msup><mi>P</mi><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">P^{1/2}AP^{1/2}</annotation></semantics></math>
       . A good preconditioner improves its spectrum. If
@@ -362,150 +325,126 @@ e_{t+1}=e_t-\eta Ae_t=(I-\eta A)e_t.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>I</mi><annotation encoding="application/x-tex">I</annotation></semantics></math>
       , and a unit-rate step solves this exact quadratic in one iteration; general nonlinear objectives need not do so.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="15" data-pdf="optim" type="button">
-       Chapter source · PDF p. 15
-      </button>
-      <a class="calculation-link" href="#curvature?derivation=spectral-convergence">
+<div class="derivation-footer">
+
+<button data-page="15" data-pdf="optim" type="button">Reference · PDF p. 15</button>
+<a class="calculation-link" href="#curvature?derivation=spectral-convergence">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="diagonal-adaptation-versus-full-curvature" id="curvature--diagonal-adaptation-versus-full-curvature">
+</div>
+</div>
+</details>
+<h2 data-section="diagonal-adaptation-versus-full-curvature" id="curvature--diagonal-adaptation-versus-full-curvature">
     Diagonal adaptation versus full curvature
    </h2>
-   <p>
+<p>
     AdaGrad, RMSProp, and Adam estimate coordinate scales from gradient history. These estimates are inexpensive and compatible with noisy mini-batches. But they are diagonal in the current parameter coordinates.
    </p>
-   <p>
+<p>
     The Hessian contains off-diagonal terms representing cross-coordinate interactions. Those terms are essential in a rotated valley: progress along one raw coordinate may need a coordinated change in another. A full Newton or quasi-Newton approximation can represent that coupling; independent coordinate rescaling generally cannot.
    </p>
-   <p>
+<p>
     This does not make second-order methods universally preferable. It explains what additional information they try to exploit and why that information is expensive.
    </p>
-   <h2 data-section="cost-and-the-neural-network-setting" id="curvature--cost-and-the-neural-network-setting">
+<h2 data-section="cost-and-the-neural-network-setting" id="curvature--cost-and-the-neural-network-setting">
     Cost and the neural-network setting
    </h2>
-   <p>
+<p>
     A dense Hessian for
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>
     parameters has
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>d</mi><mn>2</mn></msup><annotation encoding="application/x-tex">d^2</annotation></semantics></math>
     entries. Large networks make storage, estimation, and matrix solution costly. Moreover, neural losses are generally nonconvex; a local Hessian need not be positive definite, so the ideal convex-quadratic picture is not automatically a safe descent procedure.
    </p>
-   <p>
-    Conjugate Gradient can solve certain positive-definite linear systems using matrix–vector products without explicitly inverting a matrix. BFGS estimates curvature from parameter and gradient changes. L-BFGS keeps only a limited history. These methods approach the cost problem in different ways; the following chapters distinguish them.
-   </p>
-   <p>
-    The official PyTorch function-transform tutorial gives executable Jacobian, Hessian, and Hessian-vector-product examples. It is a direct way to inspect the mathematical objects without treating a dense Hessian as the default training strategy.
-   </p>
-   <h2 data-section="better-scaling-can-help-before-optimization-starts" id="curvature--better-scaling-can-help-before-optimization-starts">
+<p>Conjugate Gradient can solve certain positive-definite linear systems using matrix–vector products without explicitly inverting a matrix. BFGS estimates curvature from parameter and gradient changes. L-BFGS keeps only a limited history. These methods approach the cost problem in different ways.</p>
+<p>Hessian–vector products expose curvature along a chosen direction without storing the full matrix. The function-transform examples below demonstrate this calculation with autograd.</p>
+<h2 data-section="better-scaling-can-help-before-optimization-starts" id="curvature--better-scaling-can-help-before-optimization-starts">
     Better scaling can help before optimization starts
    </h2>
-   <p>
-    The guide’s simple model
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>=</mo><msub><mi>θ</mi><mn>1</mn></msub><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>θ</mi><mn>2</mn></msub><msub><mi>x</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\hat y=\theta_1x_1+\theta_2x_2</annotation></semantics></math>
-    illustrates the effect of input units. If one feature is numerically a thousand times larger, its corresponding gradient can also be on a very different scale. Standardization can improve conditioning before an adaptive optimizer is involved.
-   </p>
-   <p>
+<p>The linear model <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>=</mo><msub><mi>θ</mi><mn>1</mn></msub><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>θ</mi><mn>2</mn></msub><msub><mi>x</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\hat y=\theta_1x_1+\theta_2x_2</annotation></semantics></math> illustrates the effect of input units. If one feature is numerically a thousand times larger, its corresponding gradient can also be on a very different scale. Standardization can improve conditioning before an adaptive optimizer is involved.</p>
+<p>
     Initialization, normalization layers, and residual architecture also influence the optimization geometry. Optimizer choice is therefore not independent of representation design. A useful diagnosis asks whether the hard geometry is intrinsic to the task or partly created by the way the data and model are parameterized.
    </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="curvature--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="hessian">
-     <span class="resource-meta">
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="curvature--implementation">Implementation examples</h2>
+
+<div class="resource-list">
+<div class="resource" data-resource="hessian">
+<span class="resource-meta">
       PyTorch · Tutorial + code
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/jacobians_hessians.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/jacobians_hessians.html" rel="noopener noreferrer" target="_blank">
+<span>
        Jacobians, Hessians and Hessian–vector products
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Use function transforms to calculate derivatives beyond a scalar gradient. The Hessian–vector examples make the curvature discussion concrete without requiring a dense Hessian.
-     </p>
-    </div>
-    <div class="resource" data-resource="optim">
-     <span class="resource-meta">
+</a>
+<p>Executable Jacobian, Hessian, and Hessian–vector product calculations using function transforms.</p>
+</div>
+<div class="resource" data-resource="optim">
+<span class="resource-meta">
       PyTorch · Implementation reference
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/optim.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/optim.html" rel="noopener noreferrer" target="_blank">
+<span>
        torch.optim
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Check optimizer construction, per-parameter options, closure usage and scheduler ordering. Use the training tutorial for a complete surrounding loop.
-     </p>
-    </div>
-   </div>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</a>
+<p>Optimizer construction, parameter groups, closures, and learning-rate scheduler ordering.</p>
+</div>
+</div>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
     </strong>
     What can a full curvature model do that a diagonal adaptive optimizer cannot?
    </summary>
-   <p>
+<p>
     It can represent interactions between coordinates and rotate as well as rescale a search direction. A diagonal preconditioner only rescales along the current coordinate axes, so it cannot generally correct an arbitrarily rotated ill-conditioned valley.
    </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#adam-adamw">
-    <small>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+
+<button aria-label="Open source: Optimization · PDF pp. 15–16 · §9" data-page="15" data-pdf="optim" type="button">
+     Optimization · PDF pp. 15–16 · §9
+    </button>
+<button aria-label="Open source: Optimization · PDF p. 22 · §§16–17" data-page="22" data-pdf="optim" type="button">
+     Optimization · PDF p. 22 · §§16–17
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#adam-adamw">
+<small>
      ← Previous
     </small>
-    Adam, bias correction, and AdamW
-   </a>
-   <a href="#conjugate-gradient">
-    <small>
+Adam, bias correction, and AdamW
+</a>
+<a href="#conjugate-gradient">
+<small>
      Next →
     </small>
-    Conjugate Gradient: directions that do not repeat work
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+Conjugate Gradient
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="the-gradient-describes-slope-not-the-shape-of-the-valley" href="#curvature?section=the-gradient-describes-slope-not-the-shape-of-the-valley">
-    The gradient describes slope, not the shape of the valley
-   </a>
-   <a data-section="why-conditioning-slows-gradient-descent" href="#curvature?section=why-conditioning-slows-gradient-descent">
-    Why conditioning slows gradient descent
-   </a>
-   <a data-section="diagonal-adaptation-versus-full-curvature" href="#curvature?section=diagonal-adaptation-versus-full-curvature">
-    Diagonal adaptation versus full curvature
-   </a>
-   <a data-section="cost-and-the-neural-network-setting" href="#curvature?section=cost-and-the-neural-network-setting">
-    Cost and the neural-network setting
-   </a>
-   <a data-section="better-scaling-can-help-before-optimization-starts" href="#curvature?section=better-scaling-can-help-before-optimization-starts">
-    Better scaling can help before optimization starts
-   </a>
-   <a data-section="implementation" href="#curvature?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="the-gradient-describes-slope-not-the-shape-of-the-valley" href="#curvature?section=the-gradient-describes-slope-not-the-shape-of-the-valley">The gradient describes slope, not the shape of the valley</a>
+<a data-section="why-conditioning-slows-gradient-descent" href="#curvature?section=why-conditioning-slows-gradient-descent">Why conditioning slows gradient descent</a>
+<a data-section="diagonal-adaptation-versus-full-curvature" href="#curvature?section=diagonal-adaptation-versus-full-curvature">Diagonal adaptation versus full curvature</a>
+<a data-section="cost-and-the-neural-network-setting" href="#curvature?section=cost-and-the-neural-network-setting">Cost and the neural-network setting</a>
+<a data-section="better-scaling-can-help-before-optimization-starts" href="#curvature?section=better-scaling-can-help-before-optimization-starts">Better scaling can help before optimization starts</a>
+<a data-section="implementation" href="#curvature?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>

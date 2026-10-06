@@ -1,528 +1,526 @@
 <article class="article method-page" id="m-pd-merge-inner">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=Merge%20/%20join">
+<a href="#methods?lang=pd&amp;cat=Merge%20/%20join">
    pandas · Merge / join
   </a>
- </div>
- <h1>
+</div>
+<h1>
   Inner merge
  </h1>
- <p class="lead">
+<p class="lead">
   Matching rows
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-merge-inner"><span class="n">a</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'id'</span><span class="p">)</span></code></pre>
- </div>
- <div class="note">
-  <b>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-merge-inner"><span class="n">a</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">b</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'id'</span><span class="p">)</span></code></pre>
+</div>
+<div class="note">
+<b>
    Implementation note.
   </b>
   Missing keys can match other missing keys in pandas. Use validate when the expected join cardinality matters.
   <a href="https://pandas.pydata.org/docs/reference/api/pandas.merge.html" rel="noopener noreferrer" target="_blank">
    Documentation ↗
   </a>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-sql-inner-join">
+<a href="#m-sql-inner-join">
    SQL · INNER JOIN
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C43?code=code-C43-1&amp;method=pd-merge-inner&amp;line=4">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C43?code=code-C43-1&amp;method=pd-merge-inner&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1068 · Product sales analysis I
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def sales_analysis(sales: pd.DataFrame, product: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def sales_analysis(sales: pd.DataFrame, product: pd.DataFrame) -&gt; pd.DataFrame:
     df = sales.merge(product, on='product_id', how='inner')
     return df[['product_name', 'year', 'price']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-merge-inner&amp;line=9">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-merge-inner&amp;line=9">
+<div>
+<span class="usage-label">
      Squid Game · pandas
     </span>
-    <strong>
+<strong>
      Compare hot and cold months
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 9
     </small>
-   </div>
-   <pre aria-hidden="true">games['month_num'], games['year_num'] = dates.dt.month, dates.dt.year
+</div>
+<pre aria-hidden="true">games['month_num'], games['year_num'] = dates.dt.month, dates.dt.year
 joined = games.merge(extreme[['month']], left_on='month_num', right_on='month')
 result = (joined.loc[joined['year_num'].ge(2006)]
           .groupby(['shape', 'month_num'], as_index=False)</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B06?code=code-B06-1&amp;method=pd-merge-inner&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B06?code=code-B06-1&amp;method=pd-merge-inner&amp;line=1">
+<div>
+<span class="usage-label">
      SQLBolt · pandas
     </span>
-    <strong>
+<strong>
      INNER JOIN
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+</div>
+<pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
 result = m[['title', 'domestic_sales', 'international_sales']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C46?code=code-C46-1&amp;method=pd-merge-inner&amp;line=11">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C46?code=code-C46-1&amp;method=pd-merge-inner&amp;line=11">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1661 · Average processing time per machine
     </strong>
-    <small>
+<small>
      Study solution · line 11
     </small>
-   </div>
-   <pre aria-hidden="true">    df_e = activity[activity.activity_type == 'end']
+</div>
+<pre aria-hidden="true">    df_e = activity[activity.activity_type == 'end']
     df = df_s.merge(df_e, on=['machine_id', 'process_id'], how='inner', suffixes=('_s', '_e'))
     df['processing_time'] = df['timestamp_e'] - df['timestamp_s']
     result = df.groupby('machine_id', as_index=False).agg(processing_time=('processing_time', 'mean'))</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C07?code=code-C07-1&amp;method=pd-merge-inner&amp;line=11">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-1&amp;method=pd-merge-inner&amp;line=11">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1251 · Average selling price
     </strong>
-    <small>
+<small>
      Study solution · line 11
     </small>
-   </div>
-   <pre aria-hidden="true">    u = units_sold.assign(purchase_date=pd.to_datetime(units_sold['purchase_date']))
+</div>
+<pre aria-hidden="true">    u = units_sold.assign(purchase_date=pd.to_datetime(units_sold['purchase_date']))
     matched = p.merge(u, on='product_id', how='inner')
     matched = matched.loc[matched['purchase_date'].between(matched['start_date'], matched['end_date'])].copy()
     matched['paid'] = matched['price'] * matched['units']</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-merge-inner&amp;line=5">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-merge-inner&amp;line=5">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1341 · Movie rating report
     </strong>
-    <small>
+<small>
      Study solution · line 5
     </small>
-   </div>
-   <pre aria-hidden="true">    r = movie_rating.assign(created_at=pd.to_datetime(movie_rating['created_at']))
+</div>
+<pre aria-hidden="true">    r = movie_rating.assign(created_at=pd.to_datetime(movie_rating['created_at']))
     users_ranked = r.groupby('user_id').size().reset_index(name='n_reviews').merge(users, on='user_id')
     first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})
     feb = r.loc[r['created_at'].ge('2020-02-01') &amp; r['created_at'].lt('2020-03-01')]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    11 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C34?code=code-C34-1&amp;method=pd-merge-inner&amp;line=7">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C34?code=code-C34-1&amp;method=pd-merge-inner&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       185 · Department top three salaries
      </strong>
-     <small>
+<small>
       Study solution · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    dept = department.rename(columns={'id': 'departmentId', 'name': 'Department'})
+</div>
+<pre aria-hidden="true">    dept = department.rename(columns={'id': 'departmentId', 'name': 'Department'})
     result = chosen.merge(dept, on='departmentId', how='inner', validate='many_to_one')
     return result[['Department', 'Employee', 'Salary']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C40?code=code-C40-1&amp;method=pd-merge-inner&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C40?code=code-C40-1&amp;method=pd-merge-inner&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1327 · Products with at least 100 February units
      </strong>
-     <small>
+<small>
       Study solution · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    g = feb.groupby('product_id', as_index=False).agg(unit=('unit', 'sum'))
+</div>
+<pre aria-hidden="true">    g = feb.groupby('product_id', as_index=False).agg(unit=('unit', 'sum'))
     return g.loc[g['unit'].ge(100)].merge(products, on='product_id', how='inner')[['product_name', 'unit']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC181?code=code-LC181-1&amp;method=pd-merge-inner&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC181?code=code-LC181-1&amp;method=pd-merge-inner&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       181 · Employees earning more than their managers
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def find_employees(employee: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_employees(employee: pd.DataFrame) -&gt; pd.DataFrame:
     df = employee.merge(employee, left_on='managerId', right_on='id', suffixes=['_x', '_y'])
 
     df = df[df.salary_x &gt; df.salary_y]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC601?code=code-LC601-1&amp;method=pd-merge-inner&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC601?code=code-LC601-1&amp;method=pd-merge-inner&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       601 · Human traffic of stadium
      </strong>
-     <small>
+<small>
       Uploaded submission · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     df = df.merge(valid_groups, on='groups', how='inner')
     return df[['id', 'visit_date', 'people']].sort_values(by='visit_date', ascending=True)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-05?code=code-squid-05-1&amp;method=pd-merge-inner&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-05?code=code-squid-05-1&amp;method=pd-merge-inner&amp;line=11">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Count a player’s closest interactions
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">other = player[['id', 'first_name', 'status']].rename(columns={'id': 'player_id', 'first_name': 'name_other'})
+</div>
+<pre aria-hidden="true">other = player[['id', 'first_name', 'status']].rename(columns={'id': 'player_id', 'first_name': 'name_other'})
 joined = counts.merge(target, on='target_id').merge(other, on='player_id')
 # Explicit final sort is an authored addition
 result = (joined.loc[joined['status'].eq('alive')]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-06?code=code-squid-06-1&amp;method=pd-merge-inner&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-06?code=code-squid-06-1&amp;method=pd-merge-inner&amp;line=4">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Trace equipment to its first failure
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 joined = equipment.merge(failure_incidents, left_on='id', right_on='failed_equipment_id',
                          suffixes=('_equipment', '_incident'))
 result = pd.DataFrame({'average_lifespan_years': [None]})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-merge-inner&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-merge-inner&amp;line=9">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Join room checks and camera sightings
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">joined = guards.merge(rooms, how='left', left_on='assigned_room_id', right_on='room_id')
+</div>
+<pre aria-hidden="true">joined = guards.merge(rooms, how='left', left_on='assigned_room_id', right_on='room_id')
 joined = joined.merge(cameras.loc[cameras['guard_spotted_id'].notna()],
                       left_on='guard_number', right_on='guard_spotted_id')
 joined = joined.loc[joined['isvacant'].eq(True)].copy()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-merge-inner&amp;line=17">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-merge-inner&amp;line=17">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Reconstruct access-log overlaps
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 17
      </small>
-    </div>
-    <pre aria-hidden="true">    shifts = shifts.loc[overlaps].rename(columns={'id': 'guard_id'})
+</div>
+<pre aria-hidden="true">    shifts = shifts.loc[overlaps].rename(columns={'id': 'guard_id'})
     logs = shifts.merge(daily_door_access_logs.rename(columns={'id': 'log_id'}), on='guard_id')
     off_post = (logs['assigned_post'].notna() &amp; logs['door_location'].notna()
                 &amp; logs['assigned_post'].ne(logs['door_location']))</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B09?code=code-B09-1&amp;method=pd-merge-inner&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B09?code=code-B09-1&amp;method=pd-merge-inner&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Expressions and aliases
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+</div>
+<pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
 result = m.assign(sales_millions=(m['domestic_sales'] + m['international_sales']) / 1_000_000)[['title', 'sales_millions']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B12?code=code-B12-3&amp;method=pd-merge-inner&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B12?code=code-B12-3&amp;method=pd-merge-inner&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Logical query order
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+</div>
+<pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
 m = m.assign(total_sales=m['domestic_sales'] + m['international_sales'])
 result = m.groupby('director', dropna=False)['total_sales'].sum(min_count=1).reset_index()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B20?code=code-B20-5&amp;method=pd-merge-inner&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B20?code=code-B20-5&amp;method=pd-merge-inner&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Additional topic · Set operations
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">result = a[['id']].drop_duplicates().merge(b[['id']].drop_duplicates(), on='id')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = a[['id']].drop_duplicates().merge(b[['id']].drop_duplicates(), on='id')</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (5)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C34?code=code-C34-3&amp;method=pd-merge-inner&amp;line=5">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C34?code=code-C34-3&amp;method=pd-merge-inner&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       185 · Department top three salaries
      </strong>
-     <small>
+<small>
       My approach · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    employee =   employee[employee.ranked &lt;= 3]
+</div>
+<pre aria-hidden="true">    employee =   employee[employee.ranked &lt;= 3]
     df =   employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])
     df = df.rename(columns={
         'name_x': 'Employee',</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C34?code=code-C34-5&amp;method=pd-merge-inner&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C34?code=code-C34-5&amp;method=pd-merge-inner&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       185 · Department top three salaries
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    employee = employee[employee.ranked &lt;= 3]
+</div>
+<pre aria-hidden="true">    employee = employee[employee.ranked &lt;= 3]
     df = employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])
     df = df.rename(columns={
         'name_x': 'Employee',</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B06?code=code-B06-3&amp;method=pd-merge-inner&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B06?code=code-B06-3&amp;method=pd-merge-inner&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       INNER JOIN
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+</div>
+<pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
 result = m.loc[m['international_sales'].gt(m['domestic_sales']), ['title', 'domestic_sales', 'international_sales']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B06?code=code-B06-5&amp;method=pd-merge-inner&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B06?code=code-B06-5&amp;method=pd-merge-inner&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       INNER JOIN
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+</div>
+<pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
 result = m.sort_values('rating', ascending=False)[['title', 'rating']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B09?code=code-B09-3&amp;method=pd-merge-inner&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B09?code=code-B09-3&amp;method=pd-merge-inner&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Expressions and aliases
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+</div>
+<pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
 result = m.assign(rating_percent=m['rating'] * 10)[['title', 'rating_percent']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     pandas cheat-sheet image · Merge / join. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/api/pandas.merge.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/api/pandas.merge.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=Merge%20/%20join">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=Merge%20/%20join">
+<small>
     ← Browse
    </small>
    pandas · Merge / join
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

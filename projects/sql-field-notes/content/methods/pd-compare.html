@@ -1,505 +1,503 @@
 <article class="article method-page" id="m-pd-compare">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
+<a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
    pandas · Also used in these notes
   </a>
- </div>
- <h1>
+</div>
+<h1>
   gt() / ge() / lt() / le()
  </h1>
- <p class="lead">
+<p class="lead">
   Elementwise comparisons
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-compare"><span class="n">df</span><span class="p">[</span><span class="s1">'x'</span><span class="p">]</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre>
- </div>
- <h2>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-compare"><span class="n">df</span><span class="p">[</span><span class="s1">'x'</span><span class="p">]</span><span class="o">.</span><span class="n">gt</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></code></pre>
+</div>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C03?code=code-C03-1&amp;method=pd-compare&amp;line=4">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C03?code=code-C03-1&amp;method=pd-compare&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      595 · Big countries
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def big_countries(world: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def big_countries(world: pd.DataFrame) -&gt; pd.DataFrame:
     mask = world['area'].ge(3_000_000) | world['population'].ge(25_000_000)
     return world.loc[mask, ['name', 'population', 'area']].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#murder-09?code=code-murder-09-1&amp;method=pd-compare&amp;line=7">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-09?code=code-murder-09-1&amp;method=pd-compare&amp;line=7">
+<div>
+<span class="usage-label">
      Murder City · pandas
     </span>
-    <strong>
+<strong>
      Inspect December event check-ins
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 7
     </small>
-   </div>
-   <pre aria-hidden="true">mask = (joined['person_id'].isin([78881, 90700, 99716])
+</div>
+<pre aria-hidden="true">mask = (joined['person_id'].isin([78881, 90700, 99716])
         &amp; dates.gt(20171130) &amp; dates.lt(20180101))
 result = joined.loc[mask, ['id', 'name', 'event_name', 'date']].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-01?code=code-squid-01-1&amp;method=pd-compare&amp;line=3">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-01?code=code-squid-01-1&amp;method=pd-compare&amp;line=3">
+<div>
+<span class="usage-label">
      Squid Game · pandas
     </span>
-    <strong>
+<strong>
      Filter the player pool
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 3
     </small>
-   </div>
-   <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 mask = (player['status'].eq('alive') &amp; player['debt'].gt(400000000)
         &amp; (player['age'].gt(65)
            | (player['vice'].eq('Gambling') &amp; player['has_close_family'].eq(False))))</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B05?code=code-B05-5&amp;method=pd-compare&amp;line=2">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B05?code=code-B05-5&amp;method=pd-compare&amp;line=2">
+<div>
+<span class="usage-label">
      SQLBolt · pandas
     </span>
-    <strong>
+<strong>
      Review · Simple SELECT queries
     </strong>
-    <small>
+<small>
      Study solution · line 2
     </small>
-   </div>
-   <pre aria-hidden="true">chicago_lon = north_american_cities.loc[north_american_cities['city'].eq('Chicago'), 'longitude'].iloc[0]
+</div>
+<pre aria-hidden="true">chicago_lon = north_american_cities.loc[north_american_cities['city'].eq('Chicago'), 'longitude'].iloc[0]
 result = north_american_cities.loc[north_american_cities['longitude'].lt(chicago_lon)].sort_values('longitude')[['city']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C05?code=code-C05-1&amp;method=pd-compare&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C05?code=code-C05-1&amp;method=pd-compare&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1683 · Invalid tweets
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def invalid_tweets(tweets: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def invalid_tweets(tweets: pd.DataFrame) -&gt; pd.DataFrame:
     return tweets.loc[tweets['content'].str.len().gt(15), ['tweet_id']].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C10?code=code-C10-1&amp;method=pd-compare&amp;line=9">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-1&amp;method=pd-compare&amp;line=9">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1211 · Queries quality and percentage
     </strong>
-    <small>
+<small>
      Study solution · line 9
     </small>
-   </div>
-   <pre aria-hidden="true">def queries_stats(queries: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def queries_stats(queries: pd.DataFrame) -&gt; pd.DataFrame:
     q = queries.assign(quality_ratio=queries['rating'] / queries['position'], poor=queries['rating'].lt(3).astype(int))
     g = q.groupby('query_name', dropna=False, as_index=False).agg(quality=('quality_ratio', 'mean'), poor_query_percentage=('poor', 'mean'))
     g['quality'] = g['quality'].map(round_half_up)</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    15 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C17?code=code-C17-1&amp;method=pd-compare&amp;line=5">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C17?code=code-C17-1&amp;method=pd-compare&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       596 · Classes with at least five students
      </strong>
-     <small>
+<small>
       Study solution · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    g = courses.groupby('class', as_index=False).agg(n_students=('student', 'nunique'))
+</div>
+<pre aria-hidden="true">    g = courses.groupby('class', as_index=False).agg(n_students=('student', 'nunique'))
     return g.loc[g['n_students'].ge(5), ['class']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C25?code=code-C25-1&amp;method=pd-compare&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C25?code=code-C25-1&amp;method=pd-compare&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1164 · Product price at a given date
      </strong>
-     <small>
+<small>
       Study solution · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    p = products.assign(change_date=pd.to_datetime(products['change_date']))
+</div>
+<pre aria-hidden="true">    p = products.assign(change_date=pd.to_datetime(products['change_date']))
     valid = p.loc[p['change_date'].le(pd.Timestamp('2019-08-16'))]
     latest = valid.sort_values('change_date').drop_duplicates('product_id', keep='last')
     result = p[['product_id']].drop_duplicates().merge(latest[['product_id', 'new_price']], on='product_id', how='left')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C26?code=code-C26-1&amp;method=pd-compare&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C26?code=code-C26-1&amp;method=pd-compare&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1204 · Last person to fit in the bus
      </strong>
-     <small>
+<small>
       Study solution · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    q = queue.sort_values('turn')
+</div>
+<pre aria-hidden="true">    q = queue.sort_values('turn')
     return q.loc[q['weight'].cumsum().le(1000), ['person_name']].tail(1)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C27?code=code-C27-1&amp;method=pd-compare&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C27?code=code-C27-1&amp;method=pd-compare&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1907 · Count salary categories
      </strong>
-     <small>
+<small>
       Study solution · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    return pd.DataFrame({'category': ['Low Salary', 'Average Salary', 'High Salary'],
+</div>
+<pre aria-hidden="true">    return pd.DataFrame({'category': ['Low Salary', 'Average Salary', 'High Salary'],
                          'accounts_count': [int(s.lt(20000).sum()), int(s.between(20000, 50000).sum()), int(s.gt(50000).sum())]})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C28?code=code-C28-1&amp;method=pd-compare&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C28?code=code-C28-1&amp;method=pd-compare&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1978 · Low-salary employees whose manager left
      </strong>
-     <small>
+<small>
       Study solution · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def find_employees(employees: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_employees(employees: pd.DataFrame) -&gt; pd.DataFrame:
     mask = employees['salary'].lt(30000) &amp; employees['manager_id'].notna() &amp; ~employees['manager_id'].isin(employees['employee_id'])
     return employees.loc[mask, ['employee_id']].sort_values('employee_id')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-compare&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-compare&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       Study solution · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})
+</div>
+<pre aria-hidden="true">    first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})
     feb = r.loc[r['created_at'].ge('2020-02-01') &amp; r['created_at'].lt('2020-03-01')]
     movies_ranked = feb.groupby('movie_id', as_index=False).agg(avg_rating=('rating', 'mean')).merge(movies, on='movie_id')
     second = movies_ranked.sort_values(['avg_rating', 'title'], ascending=[False, True]).head(1)[['title']].rename(columns={'title': 'results'})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C34?code=code-C34-1&amp;method=pd-compare&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C34?code=code-C34-1&amp;method=pd-compare&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       185 · Department top three salaries
      </strong>
-     <small>
+<small>
       Study solution · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    rank = employee.groupby('departmentId')['salary'].rank(method='dense', ascending=False)
+</div>
+<pre aria-hidden="true">    rank = employee.groupby('departmentId')['salary'].rank(method='dense', ascending=False)
     chosen = employee.loc[rank.le(3)].rename(columns={'name': 'Employee', 'salary': 'Salary'})
     dept = department.rename(columns={'id': 'departmentId', 'name': 'Department'})
     result = chosen.merge(dept, on='departmentId', how='inner', validate='many_to_one')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C40?code=code-C40-1&amp;method=pd-compare&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C40?code=code-C40-1&amp;method=pd-compare&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1327 · Products with at least 100 February units
      </strong>
-     <small>
+<small>
       Study solution · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    dates = pd.to_datetime(orders['order_date'])
+</div>
+<pre aria-hidden="true">    dates = pd.to_datetime(orders['order_date'])
     feb = orders.loc[dates.ge('2020-02-01') &amp; dates.lt('2020-03-01')]
     g = feb.groupby('product_id', as_index=False).agg(unit=('unit', 'sum'))
     return g.loc[g['unit'].ge(100)].merge(products, on='product_id', how='inner')[['product_name', 'unit']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-02?code=code-squid-02-1&amp;method=pd-compare&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-02?code=code-squid-02-1&amp;method=pd-compare&amp;line=7">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Calculate the ration threshold
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">result['portions'] = portions
+</div>
+<pre aria-hidden="true">result['portions'] = portions
 insufficient = result['amount'].lt(portions).fillna(False)
 result['amount'] = insufficient.map({True: 'False', False: 'True'})
 result = result[['portions', 'amount']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-compare&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-compare&amp;line=10">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Compare hot and cold months
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">joined = games.merge(extreme[['month']], left_on='month_num', right_on='month')
+</div>
+<pre aria-hidden="true">joined = games.merge(extreme[['month']], left_on='month_num', right_on='month')
 result = (joined.loc[joined['year_num'].ge(2006)]
           .groupby(['shape', 'month_num'], as_index=False)
           .agg(avg_temp=('average_completion_time', 'mean'))</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-04?code=code-squid-04-1&amp;method=pd-compare&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-04?code=code-squid-04-1&amp;method=pd-compare&amp;line=7">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Rank ten-player teams
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">result['age_group'] = 'Grizzled'
+</div>
+<pre aria-hidden="true">result['age_group'] = 'Grizzled'
 result.loc[result['age_team'].lt(40), 'age_group'] = 'Fit'
 result.loc[result['age_team'].gt(50), 'age_group'] = 'Elderly'
 result['rank'] = result['age_team'].rank(method='min', ascending=False).astype('Int64')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-compare&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-compare&amp;line=14">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Reconstruct access-log overlaps
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">    # Literal same-day overlap logic from the supplied SQL
+</div>
+<pre aria-hidden="true">    # Literal same-day overlap logic from the supplied SQL
     overlaps = ((a.le(start) &amp; b.ge(start)) | (a.le(end) &amp; b.ge(end))
                 | (a.between(start, end) &amp; b.between(start, end)))
     shifts = shifts.loc[overlaps].rename(columns={'id': 'guard_id'})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B06?code=code-B06-3&amp;method=pd-compare&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B06?code=code-B06-3&amp;method=pd-compare&amp;line=2">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       INNER JOIN
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+</div>
+<pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
 result = m.loc[m['international_sales'].gt(m['domestic_sales']), ['title', 'domestic_sales', 'international_sales']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B15?code=code-B15-1&amp;method=pd-compare&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B15?code=code-B15-1&amp;method=pd-compare&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       DELETE rows
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">movies = movies.loc[movies['year'].isna() | movies['year'].ge(2005)].copy()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">movies = movies.loc[movies['year'].isna() | movies['year'].ge(2005)].copy()</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B19?code=code-B19-1&amp;method=pd-compare&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B19?code=code-B19-1&amp;method=pd-compare&amp;line=2">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Additional topic · Subqueries
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">threshold = sales_associates['revenue_generated'].mean()
+</div>
+<pre aria-hidden="true">threshold = sales_associates['revenue_generated'].mean()
 result = sales_associates.loc[sales_associates['salary'].gt(threshold)]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (1)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#B19?code=code-B19-3&amp;method=pd-compare&amp;line=2">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#B19?code=code-B19-3&amp;method=pd-compare&amp;line=2">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Additional topic · Subqueries
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">mean_revenue = employees.groupby('department')['revenue_generated'].transform('mean')
+</div>
+<pre aria-hidden="true">mean_revenue = employees.groupby('department')['revenue_generated'].transform('mean')
 result = employees.loc[employees['salary'].gt(mean_revenue)]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     Methods present in the supplied code, added to the image-based index · Also used in these notes. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
+<small>
     ← Browse
    </small>
    pandas · Also used in these notes
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

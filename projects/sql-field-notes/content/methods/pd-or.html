@@ -1,422 +1,420 @@
 <article class="article method-page" id="m-pd-or">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=Filtering">
+<a href="#methods?lang=pd&amp;cat=Filtering">
    pandas · Filtering
   </a>
- </div>
- <h1>
+</div>
+<h1>
   OR
  </h1>
- <p class="lead">
+<p class="lead">
   OR
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-or"><span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">city</span> <span class="o">==</span> <span class="s1">'HK'</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">city</span> <span class="o">==</span> <span class="s1">'SG'</span><span class="p">)]</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-or"><span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">city</span> <span class="o">==</span> <span class="s1">'HK'</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">city</span> <span class="o">==</span> <span class="s1">'SG'</span><span class="p">)]</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-sql-or">
+<a href="#m-sql-or">
    SQL · OR
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C02?code=code-C02-1&amp;method=pd-or&amp;line=4">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C02?code=code-C02-1&amp;method=pd-or&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      584 · Find customer referee
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def find_customer_referee(customer: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_customer_referee(customer: pd.DataFrame) -&gt; pd.DataFrame:
     mask = customer['referee_id'].isna() | customer['referee_id'].ne(2)
     return customer.loc[mask, ['name']].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-01?code=code-squid-01-1&amp;method=pd-or&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-01?code=code-squid-01-1&amp;method=pd-or&amp;line=4">
+<div>
+<span class="usage-label">
      Squid Game · pandas
     </span>
-    <strong>
+<strong>
      Filter the player pool
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">mask = (player['status'].eq('alive') &amp; player['debt'].gt(400000000)
+</div>
+<pre aria-hidden="true">mask = (player['status'].eq('alive') &amp; player['debt'].gt(400000000)
         &amp; (player['age'].gt(65)
            | (player['vice'].eq('Gambling') &amp; player['has_close_family'].eq(False))))
 result = player.loc[mask.fillna(False)].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B15?code=code-B15-1&amp;method=pd-or&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B15?code=code-B15-1&amp;method=pd-or&amp;line=1">
+<div>
+<span class="usage-label">
      SQLBolt · pandas
     </span>
-    <strong>
+<strong>
      DELETE rows
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">movies = movies.loc[movies['year'].isna() | movies['year'].ge(2005)].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">movies = movies.loc[movies['year'].isna() | movies['year'].ge(2005)].copy()</pre>
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C03?code=code-C03-1&amp;method=pd-or&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C03?code=code-C03-1&amp;method=pd-or&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      595 · Big countries
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def big_countries(world: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def big_countries(world: pd.DataFrame) -&gt; pd.DataFrame:
     mask = world['area'].ge(3_000_000) | world['population'].ge(25_000_000)
     return world.loc[mask, ['name', 'population', 'area']].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C47?code=code-C47-1&amp;method=pd-or&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C47?code=code-C47-1&amp;method=pd-or&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      577 · Employee bonus
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">    df = employee.merge(bonus, on='empId', how='left')
+</div>
+<pre aria-hidden="true">    df = employee.merge(bonus, on='empId', how='left')
     return df[(df.bonus &lt; 1000) | (df.bonus.isna())][['name', 'bonus']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-or&amp;line=13">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-or&amp;line=13">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1251 · Average selling price
     </strong>
-    <small>
+<small>
      My approach · line 13
     </small>
-   </div>
-   <pre aria-hidden="true">    df = prices.merge(units_sold, on='product_id', how='left')
+</div>
+<pre aria-hidden="true">    df = prices.merge(units_sold, on='product_id', how='left')
     df = df[df.purchase_date.isna() | df.purchase_date.between(df.start_date, df.end_date)].copy()
     df['paid'] = df['price'] * df['units']
     totals = df.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    4 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C22?code=code-C22-1&amp;method=pd-or&amp;line=5">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C22?code=code-C22-1&amp;method=pd-or&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1789 · Primary department per employee
      </strong>
-     <small>
+<small>
       Study solution · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    n = employee.groupby('employee_id')['department_id'].transform('size')
+</div>
+<pre aria-hidden="true">    n = employee.groupby('employee_id')['department_id'].transform('size')
     mask = employee['primary_flag'].eq('Y') | n.eq(1)
     return employee.loc[mask, ['employee_id', 'department_id']].copy()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3475?code=code-LC3475-1&amp;method=pd-or&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3475?code=code-LC3475-1&amp;method=pd-or&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       3475 · DNA pattern recognition
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    samples['has_start'] = (samples.dna_sequence.str.startswith('ATG')).astype('int')
+</div>
+<pre aria-hidden="true">    samples['has_start'] = (samples.dna_sequence.str.startswith('ATG')).astype('int')
     samples['has_stop'] = (samples.dna_sequence.str.endswith('TAA') | 
                            samples.dna_sequence.str.endswith('TAG') | 
                            samples.dna_sequence.str.endswith('TGA')).astype('int')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-05?code=code-squid-05-1&amp;method=pd-or&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-05?code=code-squid-05-1&amp;method=pd-or&amp;line=3">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Count a player’s closest interactions
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 mask = daily_interactions['player1_id'].eq(456) | daily_interactions['player2_id'].eq(456)
 interactions = daily_interactions.loc[mask].copy()
 interactions['player_id'] = interactions['player1_id'].where(</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-or&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-or&amp;line=14">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Reconstruct access-log overlaps
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">    # Literal same-day overlap logic from the supplied SQL
+</div>
+<pre aria-hidden="true">    # Literal same-day overlap logic from the supplied SQL
     overlaps = ((a.le(start) &amp; b.ge(start)) | (a.le(end) &amp; b.ge(end))
                 | (a.between(start, end) &amp; b.between(start, end)))
     shifts = shifts.loc[overlaps].rename(columns={'id': 'guard_id'})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (7)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C02?code=code-C02-3&amp;method=pd-or&amp;line=4">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C02?code=code-C02-3&amp;method=pd-or&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       584 · Find customer referee
      </strong>
-     <small>
+<small>
       My approach · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def find_customer_referee(customer: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_customer_referee(customer: pd.DataFrame) -&gt; pd.DataFrame:
     df =   customer[(customer.referee_id != 2) | (customer.referee_id.isna())]
     return df[['name']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C02?code=code-C02-5&amp;method=pd-or&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C02?code=code-C02-5&amp;method=pd-or&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       584 · Find customer referee
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def find_customer_referee(customer: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_customer_referee(customer: pd.DataFrame) -&gt; pd.DataFrame:
     df = customer[(customer.referee_id != 2) | (customer.referee_id.isna())]
     return df[['name']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C03?code=code-C03-3&amp;method=pd-or&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C03?code=code-C03-3&amp;method=pd-or&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       595 · Big countries
      </strong>
-     <small>
+<small>
       My approach · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def big_countries(world: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def big_countries(world: pd.DataFrame) -&gt; pd.DataFrame:
     df =   world[(world.area &gt;= 3000000) | (world.population &gt;= 25000000)]
     return df[['name', 'population', 'area']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C03?code=code-C03-5&amp;method=pd-or&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C03?code=code-C03-5&amp;method=pd-or&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       595 · Big countries
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def big_countries(world: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def big_countries(world: pd.DataFrame) -&gt; pd.DataFrame:
     df = world[(world.area &gt;= 3000000) | (world.population &gt;= 25000000)]
     return df[['name', 'population', 'area']]
     </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C47?code=code-C47-3&amp;method=pd-or&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C47?code=code-C47-3&amp;method=pd-or&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       577 · Employee bonus
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    df = employee.merge(bonus, on='empId', how='left')
+</div>
+<pre aria-hidden="true">    df = employee.merge(bonus, on='empId', how='left')
     return df[(df.bonus &lt; 1000) | (df.bonus.isna())][['name', 'bonus']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C07?code=code-C07-5&amp;method=pd-or&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-5&amp;method=pd-or&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1251 · Average selling price
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    df = prices.merge(units_sold, on='product_id', how='left')
+</div>
+<pre aria-hidden="true">    df = prices.merge(units_sold, on='product_id', how='left')
     df = df[df.purchase_date.isna() | ((df.end_date &gt;= df.purchase_date) &amp; (df.purchase_date &gt;= df.start_date))]
     df['paid'] = df['price'] * df['units']
     </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B15?code=code-B15-3&amp;method=pd-or&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B15?code=code-B15-3&amp;method=pd-or&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       DELETE rows
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">movies = movies.loc[movies['director'].isna() | movies['director'].ne('Andrew Stanton')].copy()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">movies = movies.loc[movies['director'].isna() | movies['director'].ne('Andrew Stanton')].copy()</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     pandas cheat-sheet image · Filtering. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=Filtering">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=Filtering">
+<small>
     ← Browse
    </small>
    pandas · Filtering
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

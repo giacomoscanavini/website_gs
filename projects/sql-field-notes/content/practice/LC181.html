@@ -1,53 +1,53 @@
 <article class="article" id="LC181">
- <div class="breadcrumb">
-  <a href="#practice">
+<div class="breadcrumb">
+<a href="#practice">
    Leetcode problems
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Additional problems
   </span>
- </div>
- <h1>
+</div>
+<h1>
   181 · Employees earning more than their managers
  </h1>
- <p>
+<p>
   Match each employee to their manager, then return employee names where the employee salary is higher.
  </p>
- <h2>
+<h2>
   My submission
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="archive-181-panel-0" aria-selected="true" id="archive-181-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="archive-181-panel-0" aria-selected="true" id="archive-181-tab-0" role="tab" tabindex="0" type="button">
      MySQL
     </button>
-    <button aria-controls="archive-181-panel-1" aria-selected="false" id="archive-181-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="archive-181-panel-1" aria-selected="false" id="archive-181-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button class="copy-button" data-copy="" type="button">
+</div>
+<button class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="archive-181-tab-0" class="code-panel" id="archive-181-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-181-tab-0" class="code-panel" id="archive-181-panel-0" role="tabpanel">
+<div class="no-script-label">
     MySQL
    </div>
-   <pre id="code-LC181-0" tabindex="0"><code class="language-sql" data-origin="archive-181-sql"><span class="c1"># Write your MySQL query statement below</span>
+<pre id="code-LC181-0" tabindex="0"><code class="language-sql" data-origin="archive-181-sql"><span class="c1"># Write your MySQL query statement below</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">e1</span><span class="p">.</span><span class="k">name</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">Employee</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Employee</span><span class="w"> </span><span class="n">e1</span>
 <span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Employee</span><span class="w"> </span><span class="n">e2</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">e1</span><span class="p">.</span><span class="n">managerId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e2</span><span class="p">.</span><span class="n">id</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">e1</span><span class="p">.</span><span class="n">salary</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">e2</span><span class="p">.</span><span class="n">salary</span></code></pre>
-  </div>
-  <div aria-labelledby="archive-181-tab-1" class="code-panel" id="archive-181-panel-1" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-181-tab-1" class="code-panel" id="archive-181-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-LC181-1" tabindex="0"><code class="language-python" data-origin="archive-181-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-LC181-1" tabindex="0"><code class="language-python" data-origin="archive-181-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">find_employees</span><span class="p">(</span><span class="n">employee</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">employee</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">employee</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">'managerId'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">suffixes</span><span class="o">=</span><span class="p">[</span><span class="s1">'_x'</span><span class="p">,</span> <span class="s1">'_y'</span><span class="p">])</span>
@@ -55,87 +55,87 @@
     <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">salary_x</span> <span class="o">&gt;</span> <span class="n">df</span><span class="o">.</span><span class="n">salary_y</span><span class="p">]</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'name_x'</span><span class="p">:</span> <span class="s1">'Employee'</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'Employee'</span><span class="p">]]</span></code></pre>
-  </div>
- </div>
- <h2>
+</div>
+</div>
+<h2>
   How the submitted approach works
  </h2>
- <p>
+<p>
   The self-join connects managerId with id. Both implementations compare the two salary columns and project the employee name.
  </p>
- <details class="reference-details">
-  <summary>
+<details class="reference-details">
+<summary>
    Source
   </summary>
-  <div class="sources-content">
-   <p>
+<div class="sources-content">
+<p>
     SQL.zip / 181-employees-earning-more-than-their-managers / submission-1.sql and submission-1.py. These are the submitted files; the summary and implementation notes describe the code, not a replacement official problem statement.
    </p>
-   <p>
-    <a href="https://leetcode.com/problems/employees-earning-more-than-their-managers/" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://leetcode.com/problems/employees-earning-more-than-their-managers/" rel="noopener noreferrer" target="_blank">
      Original problem
     </a>
-   </p>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</p>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-left-join">
+<a href="#m-sql-left-join">
      LEFT JOIN
     </a>
-    <a href="#m-sql-self-join">
+<a href="#m-sql-self-join">
      Self join
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-columns">
+<div>
+<a href="#m-pd-select-columns">
      Select columns
     </a>
-    <a href="#m-pd-filter">
+<a href="#m-pd-filter">
      Condition
     </a>
-    <a href="#m-pd-rename">
+<a href="#m-pd-rename">
      Rename
     </a>
-    <a href="#m-pd-merge-inner">
+<a href="#m-pd-merge-inner">
      Inner merge
     </a>
-    <a href="#m-pd-merge-keys">
+<a href="#m-pd-merge-keys">
      Different keys
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#C41">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#C41">
+<small>
     ← Previous
    </small>
    1517 · Users with valid emails
   </a>
-  <a href="#LC262">
-   <small>
+<a href="#LC262">
+<small>
     Next →
    </small>
    262 · Trips and users
   </a>
- </div>
+</div>
 </article>

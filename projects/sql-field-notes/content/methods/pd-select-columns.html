@@ -1,1974 +1,1972 @@
 <article class="article method-page" id="m-pd-select-columns">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=DataFrame%20basics">
+<a href="#methods?lang=pd&amp;cat=DataFrame%20basics">
    pandas · DataFrame basics
   </a>
- </div>
- <h1>
+</div>
+<h1>
   Select columns
  </h1>
- <p class="lead">
+<p class="lead">
   Get multiple columns
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-select-columns"><span class="n">df</span><span class="p">[[</span><span class="s1">'name'</span><span class="p">,</span><span class="s1">'age'</span><span class="p">]]</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-select-columns"><span class="n">df</span><span class="p">[[</span><span class="s1">'name'</span><span class="p">,</span><span class="s1">'age'</span><span class="p">]]</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-sql-select">
+<a href="#m-sql-select">
    SQL · SELECT
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C01?code=code-C01-3&amp;method=pd-select-columns&amp;line=5">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C01?code=code-C01-3&amp;method=pd-select-columns&amp;line=5">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1757 · Recyclable and low-fat products
     </strong>
-    <small>
+<small>
      My approach · line 5
     </small>
-   </div>
-   <pre aria-hidden="true">    df =   products[(products.low_fats == 'Y') &amp; (products.recyclable == 'Y')]
+</div>
+<pre aria-hidden="true">    df =   products[(products.low_fats == 'Y') &amp; (products.recyclable == 'Y')]
     return df[['product_id']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#murder-03?code=code-murder-03-1&amp;method=pd-select-columns&amp;line=3">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-03?code=code-murder-03-1&amp;method=pd-select-columns&amp;line=3">
+<div>
+<span class="usage-label">
      Murder City · pandas
     </span>
-    <strong>
+<strong>
      Read the witness interviews
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 3
     </small>
-   </div>
-   <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 joined = interview.merge(person[['id', 'name']], how='left',
                          left_on='person_id', right_on='id')
 result = joined.loc[joined['id'].isin([14887, 16371]),</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-02?code=code-squid-02-1&amp;method=pd-select-columns&amp;line=5">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-02?code=code-squid-02-1&amp;method=pd-select-columns&amp;line=5">
+<div>
+<span class="usage-label">
      Squid Game · pandas
     </span>
-    <strong>
+<strong>
      Calculate the ration threshold
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 5
     </small>
-   </div>
-   <pre aria-hidden="true">portions = int(eligible.fillna(False).sum()) * 9 // 10
+</div>
+<pre aria-hidden="true">portions = int(eligible.fillna(False).sum()) * 9 // 10
 result = rations[['amount']].copy()
 result['portions'] = portions
 insufficient = result['amount'].lt(portions).fillna(False)</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B01?code=code-B01-1&amp;method=pd-select-columns&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B01?code=code-B01-1&amp;method=pd-select-columns&amp;line=1">
+<div>
+<span class="usage-label">
      SQLBolt · pandas
     </span>
-    <strong>
+<strong>
      SELECT queries 101
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">result = movies[['title']].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = movies[['title']].copy()</pre>
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C02?code=code-C02-3&amp;method=pd-select-columns&amp;line=5">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C02?code=code-C02-3&amp;method=pd-select-columns&amp;line=5">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      584 · Find customer referee
     </strong>
-    <small>
+<small>
      My approach · line 5
     </small>
-   </div>
-   <pre aria-hidden="true">    df =   customer[(customer.referee_id != 2) | (customer.referee_id.isna())]
+</div>
+<pre aria-hidden="true">    df =   customer[(customer.referee_id != 2) | (customer.referee_id.isna())]
     return df[['name']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C03?code=code-C03-3&amp;method=pd-select-columns&amp;line=5">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C03?code=code-C03-3&amp;method=pd-select-columns&amp;line=5">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      595 · Big countries
     </strong>
-    <small>
+<small>
      My approach · line 5
     </small>
-   </div>
-   <pre aria-hidden="true">    df =   world[(world.area &gt;= 3000000) | (world.population &gt;= 25000000)]
+</div>
+<pre aria-hidden="true">    df =   world[(world.area &gt;= 3000000) | (world.population &gt;= 25000000)]
     return df[['name', 'population', 'area']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    49 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C05?code=code-C05-3&amp;method=pd-select-columns&amp;line=13">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C05?code=code-C05-3&amp;method=pd-select-columns&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1683 · Invalid tweets
      </strong>
-     <small>
+<small>
       My approach · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">    df =   tweets[tweets.valid == False]
+</div>
+<pre aria-hidden="true">    df =   tweets[tweets.valid == False]
     return df[['tweet_id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C42?code=code-C42-1&amp;method=pd-select-columns&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C42?code=code-C42-1&amp;method=pd-select-columns&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1378 · Replace employee ID with the unique identifier
      </strong>
-     <small>
+<small>
       Study solution · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    df = employee_uni.merge(employees, on='id', how='right')
+</div>
+<pre aria-hidden="true">    df = employee_uni.merge(employees, on='id', how='right')
     return df[['unique_id','name']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C43?code=code-C43-1&amp;method=pd-select-columns&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C43?code=code-C43-1&amp;method=pd-select-columns&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1068 · Product sales analysis I
      </strong>
-     <small>
+<small>
       Study solution · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    df = sales.merge(product, on='product_id', how='inner')
+</div>
+<pre aria-hidden="true">    df = sales.merge(product, on='product_id', how='inner')
     return df[['product_name', 'year', 'price']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C45?code=code-C45-1&amp;method=pd-select-columns&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C45?code=code-C45-1&amp;method=pd-select-columns&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       197 · Rising temperature
      </strong>
-     <small>
+<small>
       Study solution · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    df = weather[(weather.recordDate.diff().eq(pd.Timedelta(days=1))) &amp; (weather.temperature.diff() &gt; 0)]
+</div>
+<pre aria-hidden="true">    df = weather[(weather.recordDate.diff().eq(pd.Timedelta(days=1))) &amp; (weather.temperature.diff() &gt; 0)]
     return df[['id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C47?code=code-C47-1&amp;method=pd-select-columns&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C47?code=code-C47-1&amp;method=pd-select-columns&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       577 · Employee bonus
      </strong>
-     <small>
+<small>
       Study solution · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    df = employee.merge(bonus, on='empId', how='left')
+</div>
+<pre aria-hidden="true">    df = employee.merge(bonus, on='empId', how='left')
     return df[(df.bonus &lt; 1000) | (df.bonus.isna())][['name', 'bonus']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C48?code=code-C48-1&amp;method=pd-select-columns&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C48?code=code-C48-1&amp;method=pd-select-columns&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1280 · Students and examinations
      </strong>
-     <small>
+<small>
       Study solution · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">    df['attended_exams'] = df['attended_exams'].fillna(0).astype(int)
+</div>
+<pre aria-hidden="true">    df['attended_exams'] = df['attended_exams'].fillna(0).astype(int)
     return df[['student_id', 'student_name', 'subject_name', 'attended_exams']].sort_values(['student_id', 'subject_name'])</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C49?code=code-C49-1&amp;method=pd-select-columns&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C49?code=code-C49-1&amp;method=pd-select-columns&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       570 · Managers with at least five direct reports
      </strong>
-     <small>
+<small>
       Study solution · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    df = employee.merge(reports, on='id', how='left')
+</div>
+<pre aria-hidden="true">    df = employee.merge(reports, on='id', how='left')
     return df[df.nReports &gt;= 5][['name']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C50?code=code-C50-1&amp;method=pd-select-columns&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C50?code=code-C50-1&amp;method=pd-select-columns&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1934 · Confirmation rate
      </strong>
-     <small>
+<small>
       Study solution · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">def confirmation_rate(signups: pd.DataFrame, confirmations: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def confirmation_rate(signups: pd.DataFrame, confirmations: pd.DataFrame) -&gt; pd.DataFrame:
     df = signups.merge(confirmations, on='user_id', how='left')[['user_id', 'action']]
     df['confirmation_rate'] = df.action.eq('confirmed').fillna(False)
     df = df.groupby('user_id', as_index=False).agg(</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C07?code=code-C07-1&amp;method=pd-select-columns&amp;line=16">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-1&amp;method=pd-select-columns&amp;line=16">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1251 · Average selling price
      </strong>
-     <small>
+<small>
       Study solution · line 16
      </small>
-    </div>
-    <pre aria-hidden="true">    g['average_price'] = (g['paid'] / g['units'].replace(0, float('nan'))).map(round_half_up)
+</div>
+<pre aria-hidden="true">    g['average_price'] = (g['paid'] / g['units'].replace(0, float('nan'))).map(round_half_up)
     result = p[['product_id']].drop_duplicates().merge(g[['product_id', 'average_price']], on='product_id', how='left')
     result['average_price'] = result['average_price'].fillna(0)
     return result</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C08?code=code-C08-3&amp;method=pd-select-columns&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C08?code=code-C08-3&amp;method=pd-select-columns&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1075 · Project employees I
      </strong>
-     <small>
+<small>
       My approach · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">def project_employees_i(project: pd.DataFrame, employee: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def project_employees_i(project: pd.DataFrame, employee: pd.DataFrame) -&gt; pd.DataFrame:
     df =   project.merge(employee, on='employee_id', how='left')[['project_id', 'experience_years']]
     df =   df.groupby(by='project_id').agg(
         total_years = ('experience_years', 'sum'),</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C09?code=code-C09-1&amp;method=pd-select-columns&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C09?code=code-C09-1&amp;method=pd-select-columns&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1633 · Users registered in a contest
      </strong>
-     <small>
+<small>
       Study solution · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">    g['percentage'] = (100 * g['participants'] / len(users)).map(round_half_up)
+</div>
+<pre aria-hidden="true">    g['percentage'] = (100 * g['participants'] / len(users)).map(round_half_up)
     return g[['contest_id', 'percentage']].sort_values(['percentage', 'contest_id'], ascending=[False, True])</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C10?code=code-C10-3&amp;method=pd-select-columns&amp;line=18">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-3&amp;method=pd-select-columns&amp;line=18">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1211 · Queries quality and percentage
      </strong>
-     <small>
+<small>
       My approach · line 18
      </small>
-    </div>
-    <pre aria-hidden="true">    df['poor_query_percentage']   = df['poor_query_percentage'].apply(round2)
+</div>
+<pre aria-hidden="true">    df['poor_query_percentage']   = df['poor_query_percentage'].apply(round2)
     return df[['query_name', 'quality', 'poor_query_percentage']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C16?code=code-C16-3&amp;method=pd-select-columns&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C16?code=code-C16-3&amp;method=pd-select-columns&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1070 · First-year product sales
      </strong>
-     <small>
+<small>
       My approach · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    sales = sales[sales['year_order'] == 1]
+</div>
+<pre aria-hidden="true">    sales = sales[sales['year_order'] == 1]
     sales = sales[['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})
     return sales</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C17?code=code-C17-3&amp;method=pd-select-columns&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C17?code=code-C17-3&amp;method=pd-select-columns&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       596 · Classes with at least five students
      </strong>
-     <small>
+<small>
       My approach · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    ).reset_index()
+</div>
+<pre aria-hidden="true">    ).reset_index()
     return   df[df.nStudents &gt;= 5][['class']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C19?code=code-C19-3&amp;method=pd-select-columns&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C19?code=code-C19-3&amp;method=pd-select-columns&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       619 · Biggest single number
      </strong>
-     <small>
+<small>
       My approach · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    ).reset_index()
+</div>
+<pre aria-hidden="true">    ).reset_index()
     return   pd.DataFrame({'num': df[df.freq == 1][['num']].max()})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C20?code=code-C20-1&amp;method=pd-select-columns&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-1&amp;method=pd-select-columns&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1045 · Customers who bought every product
      </strong>
-     <small>
+<small>
       Study solution · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    counts = eligible.groupby('customer_id')['product_key'].nunique()
+</div>
+<pre aria-hidden="true">    counts = eligible.groupby('customer_id')['product_key'].nunique()
     ids = customer[['customer_id']].drop_duplicates()
     mask = ids['customer_id'].map(counts).fillna(0).eq(len(keys))
     return ids.loc[mask].copy()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C21?code=code-C21-1&amp;method=pd-select-columns&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C21?code=code-C21-1&amp;method=pd-select-columns&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1731 · Employees reporting to employees
      </strong>
-     <small>
+<small>
       Study solution · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)
+</div>
+<pre aria-hidden="true">    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)
     df = by_manager.merge(employees[['employee_id', 'name']], how='left',
                           left_on='reports_to', right_on='employee_id')
     return df[['employee_id', 'name', 'reports_count', 'average_age']].sort_values('employee_id')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C22?code=code-C22-3&amp;method=pd-select-columns&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C22?code=code-C22-3&amp;method=pd-select-columns&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1789 · Primary department per employee
      </strong>
-     <small>
+<small>
       My approach · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    employee =   employee.query("(primary_flag == 'Y')   | (nDepartments == 1)")
+</div>
+<pre aria-hidden="true">    employee =   employee.query("(primary_flag == 'Y')   | (nDepartments == 1)")
     return employee[['employee_id', 'department_id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C25?code=code-C25-1&amp;method=pd-select-columns&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C25?code=code-C25-1&amp;method=pd-select-columns&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1164 · Product price at a given date
      </strong>
-     <small>
+<small>
       Study solution · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    latest = valid.sort_values('change_date').drop_duplicates('product_id', keep='last')
+</div>
+<pre aria-hidden="true">    latest = valid.sort_values('change_date').drop_duplicates('product_id', keep='last')
     result = p[['product_id']].drop_duplicates().merge(latest[['product_id', 'new_price']], on='product_id', how='left')
     result['price'] = result['new_price'].fillna(10)
     return result[['product_id', 'price']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C26?code=code-C26-3&amp;method=pd-select-columns&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C26?code=code-C26-3&amp;method=pd-select-columns&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1204 · Last person to fit in the bus
      </strong>
-     <small>
+<small>
       My approach · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    queue['cumsum_weight'] = queue['weight'].cumsum()
+</div>
+<pre aria-hidden="true">    queue['cumsum_weight'] = queue['weight'].cumsum()
     return   queue[queue.cumsum_weight &lt;= 1000].tail(1)[['person_name']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C28?code=code-C28-3&amp;method=pd-select-columns&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C28?code=code-C28-3&amp;method=pd-select-columns&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1978 · Low-salary employees whose manager left
      </strong>
-     <small>
+<small>
       My approach · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    flag_ = flag_lowSalary &amp;   flag_hasManager &amp; flag_managerLeft
+</div>
+<pre aria-hidden="true">    flag_ = flag_lowSalary &amp;   flag_hasManager &amp; flag_managerLeft
     return   employees[flag_][['employee_id']].sort_values(by='employee_id', ascending=True)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-select-columns&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-select-columns&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       Study solution · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    users_ranked = r.groupby('user_id').size().reset_index(name='n_reviews').merge(users, on='user_id')
+</div>
+<pre aria-hidden="true">    users_ranked = r.groupby('user_id').size().reset_index(name='n_reviews').merge(users, on='user_id')
     first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})
     feb = r.loc[r['created_at'].ge('2020-02-01') &amp; r['created_at'].lt('2020-03-01')]
     movies_ranked = feb.groupby('movie_id', as_index=False).agg(avg_rating=('rating', 'mean')).merge(movies, on='movie_id')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C33?code=code-C33-1&amp;method=pd-select-columns&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C33?code=code-C33-1&amp;method=pd-select-columns&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       585 · Investments in 2016
      </strong>
-     <small>
+<small>
       Study solution · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">    shared_value = insurance['tiv_2015'].duplicated(keep=False)
+</div>
+<pre aria-hidden="true">    shared_value = insurance['tiv_2015'].duplicated(keep=False)
     unique_location = ~insurance[['lat', 'lon']].duplicated(keep=False)
     total = insurance.loc[shared_value &amp; unique_location, 'tiv_2016'].sum(min_count=1)
     return pd.DataFrame({'tiv_2016': [round_half_up(total)]})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C34?code=code-C34-1&amp;method=pd-select-columns&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C34?code=code-C34-1&amp;method=pd-select-columns&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       185 · Department top three salaries
      </strong>
-     <small>
+<small>
       Study solution · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">    result = chosen.merge(dept, on='departmentId', how='inner', validate='many_to_one')
+</div>
+<pre aria-hidden="true">    result = chosen.merge(dept, on='departmentId', how='inner', validate='many_to_one')
     return result[['Department', 'Employee', 'Salary']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C39?code=code-C39-1&amp;method=pd-select-columns&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C39?code=code-C39-1&amp;method=pd-select-columns&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1484 · Products sold by date
      </strong>
-     <small>
+<small>
       Study solution · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def categorize_products(activities: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def categorize_products(activities: pd.DataFrame) -&gt; pd.DataFrame:
     unique = activities[['sell_date', 'product']].drop_duplicates()
     return unique.groupby('sell_date', as_index=False).agg(
         num_sold=('product', 'size'), products=('product', lambda s: ','.join(sorted(s)))).sort_values('sell_date')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C40?code=code-C40-1&amp;method=pd-select-columns&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C40?code=code-C40-1&amp;method=pd-select-columns&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1327 · Products with at least 100 February units
      </strong>
-     <small>
+<small>
       Study solution · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    g = feb.groupby('product_id', as_index=False).agg(unit=('unit', 'sum'))
+</div>
+<pre aria-hidden="true">    g = feb.groupby('product_id', as_index=False).agg(unit=('unit', 'sum'))
     return g.loc[g['unit'].ge(100)].merge(products, on='product_id', how='inner')[['product_name', 'unit']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC181?code=code-LC181-1&amp;method=pd-select-columns&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC181?code=code-LC181-1&amp;method=pd-select-columns&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       181 · Employees earning more than their managers
      </strong>
-     <small>
+<small>
       Uploaded submission · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">    df = df.rename(columns={'name_x': 'Employee'})
+</div>
+<pre aria-hidden="true">    df = df.rename(columns={'name_x': 'Employee'})
     return df[['Employee']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC262?code=code-LC262-1&amp;method=pd-select-columns&amp;line=27">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC262?code=code-LC262-1&amp;method=pd-select-columns&amp;line=27">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       262 · Trips and users
      </strong>
-     <small>
+<small>
       Uploaded submission · line 27
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return df[['Day', 'Cancellation Rate']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC601?code=code-LC601-1&amp;method=pd-select-columns&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC601?code=code-LC601-1&amp;method=pd-select-columns&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       601 · Human traffic of stadium
      </strong>
-     <small>
+<small>
       Uploaded submission · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">    df = df.merge(valid_groups, on='groups', how='inner')
+</div>
+<pre aria-hidden="true">    df = df.merge(valid_groups, on='groups', how='inner')
     return df[['id', 'visit_date', 'people']].sort_values(by='visit_date', ascending=True)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC607?code=code-LC607-1&amp;method=pd-select-columns&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC607?code=code-LC607-1&amp;method=pd-select-columns&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       607 · Sales person
      </strong>
-     <small>
+<small>
       Uploaded submission · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">    flag = ~sales_person['sales_id'].isin(idexlude)
+</div>
+<pre aria-hidden="true">    flag = ~sales_person['sales_id'].isin(idexlude)
     return sales_person[flag][['name']]
     </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC608?code=code-LC608-1&amp;method=pd-select-columns&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC608?code=code-LC608-1&amp;method=pd-select-columns&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       608 · Tree node
      </strong>
-     <small>
+<small>
       Uploaded submission · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return tree[['id', 'type']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC1158?code=code-LC1158-1&amp;method=pd-select-columns&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC1158?code=code-LC1158-1&amp;method=pd-select-columns&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1158 · Market analysis I
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">    df = users.merge(df, left_on='user_id', right_on='buyer_id', how='left')
+</div>
+<pre aria-hidden="true">    df = users.merge(df, left_on='user_id', right_on='buyer_id', how='left')
     df = df[['user_id', 'join_date', 'orders_in_2019']]
     df = df.rename(columns={'user_id': 'buyer_id'})
     </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3421?code=code-LC3421-1&amp;method=pd-select-columns&amp;line=19">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3421?code=code-LC3421-1&amp;method=pd-select-columns&amp;line=19">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       3421 · Find students who improved
      </strong>
-     <small>
+<small>
       Uploaded submission · line 19
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return df[df.improved == True][['student_id', 'subject', 'first_score', 'latest_score']]
 
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3521?code=code-LC3521-1&amp;method=pd-select-columns&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3521?code=code-LC3521-1&amp;method=pd-select-columns&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       3521 · Find product recommendation pairs
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">    })
+</div>
+<pre aria-hidden="true">    })
     df = df[['product1_id', 'product2_id']]
     
     df = df.groupby(by=['product1_id', 'product2_id']).agg(</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3564?code=code-LC3564-1&amp;method=pd-select-columns&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3564?code=code-LC3564-1&amp;method=pd-select-columns&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       3564 · Seasonal sales analysis
      </strong>
-     <small>
+<small>
       Uploaded submission · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     sales = sales[['season', 'category', 'quantity', 'revenue']]
 
     df = sales.groupby(by=['season', 'category']).agg(</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3580?code=code-LC3580-1&amp;method=pd-select-columns&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3580?code=code-LC3580-1&amp;method=pd-select-columns&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       3580 · Find consistently improving employees
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def find_consistently_improving_employees(employees: pd.DataFrame, performance_reviews: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_consistently_improving_employees(employees: pd.DataFrame, performance_reviews: pd.DataFrame) -&gt; pd.DataFrame:
     df = (
         performance_reviews
         .sort_values(by=['employee_id', 'review_date'], ascending=[True, False])</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#murder-05?code=code-murder-05-1&amp;method=pd-select-columns&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-05?code=code-murder-05-1&amp;method=pd-select-columns&amp;line=3">
+<div>
+<span class="usage-label">
       Murder City · pandas
      </span>
-     <strong>
+<strong>
       Cross-check the licence plate
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 people = person[['license_id', 'name']]
 joined = drivers_license.merge(people, how='left', left_on='id', right_on='license_id')
 mask = joined['plate_number'].str.contains('H42W', regex=False, na=False)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#murder-07?code=code-murder-07-1&amp;method=pd-select-columns&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-07?code=code-murder-07-1&amp;method=pd-select-columns&amp;line=3">
+<div>
+<span class="usage-label">
       Murder City · pandas
      </span>
-     <strong>
+<strong>
       Follow the second interview
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 joined = person[['id', 'name']].merge(interview, how='left',
                                      left_on='id', right_on='person_id')
 result = joined.loc[joined['person_id'].eq(67318), ['id', 'name', 'transcript']].copy()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#murder-09?code=code-murder-09-1&amp;method=pd-select-columns&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-09?code=code-murder-09-1&amp;method=pd-select-columns&amp;line=3">
+<div>
+<span class="usage-label">
       Murder City · pandas
      </span>
-     <strong>
+<strong>
       Inspect December event check-ins
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 joined = facebook_event_checkin.merge(person[['id', 'name']], how='left',
                                       left_on='person_id', right_on='id')
 dates = pd.to_numeric(joined['date'], errors='coerce')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-select-columns&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-select-columns&amp;line=9">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Compare hot and cold months
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">games['month_num'], games['year_num'] = dates.dt.month, dates.dt.year
+</div>
+<pre aria-hidden="true">games['month_num'], games['year_num'] = dates.dt.month, dates.dt.year
 joined = games.merge(extreme[['month']], left_on='month_num', right_on='month')
 result = (joined.loc[joined['year_num'].ge(2006)]
           .groupby(['shape', 'month_num'], as_index=False)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-05?code=code-squid-05-1&amp;method=pd-select-columns&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-05?code=code-squid-05-1&amp;method=pd-select-columns&amp;line=9">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Count a player’s closest interactions
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">counts['target_id'] = 456
+</div>
+<pre aria-hidden="true">counts['target_id'] = 456
 target = player[['id', 'first_name']].rename(columns={'id': 'target_id', 'first_name': 'name_456'})
 other = player[['id', 'first_name', 'status']].rename(columns={'id': 'player_id', 'first_name': 'name_other'})
 joined = counts.merge(target, on='target_id').merge(other, on='player_id')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-select-columns&amp;line=18">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-select-columns&amp;line=18">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Join room checks and camera sightings
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 18
      </small>
-    </div>
-    <pre aria-hidden="true">joined['time_range_first_last_detection'] = times.max() - times.min()
+</div>
+<pre aria-hidden="true">joined['time_range_first_last_detection'] = times.max() - times.min()
 result = joined.sort_values('guard_number')[[
     'guard_number', 'code_name', 'status', 'last_seen_in_room',
     'spotted_outside_room_time', 'spotted_outside_room_location',</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-08?code=code-squid-08-1&amp;method=pd-select-columns&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-08?code=code-squid-08-1&amp;method=pd-select-columns&amp;line=4">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Find the longest hesitation
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">pushed = player.loc[player['death_description'].eq('pushed')].copy()
+</div>
+<pre aria-hidden="true">pushed = player.loc[player['death_description'].eq('pushed')].copy()
 result = pushed.iloc[:0][['id', 'first_name', 'last_name', 'last_moved_time_seconds']]
 if not pushed.empty:
     means = pushed.groupby('game_id')['last_moved_time_seconds'].mean()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B04?code=code-B04-1&amp;method=pd-select-columns&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B04?code=code-B04-1&amp;method=pd-select-columns&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       DISTINCT, sorting and pagination
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">result = movies[['director']].drop_duplicates().sort_values('director')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = movies[['director']].drop_duplicates().sort_values('director')</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B05?code=code-B05-3&amp;method=pd-select-columns&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B05?code=code-B05-3&amp;method=pd-select-columns&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Review · Simple SELECT queries
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">result = north_american_cities.loc[north_american_cities['country'].eq('United States')].sort_values('latitude', ascending=False)[['city']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = north_american_cities.loc[north_american_cities['country'].eq('United States')].sort_values('latitude', ascending=False)[['city']]</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B06?code=code-B06-1&amp;method=pd-select-columns&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B06?code=code-B06-1&amp;method=pd-select-columns&amp;line=2">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       INNER JOIN
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+</div>
+<pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
 result = m[['title', 'domestic_sales', 'international_sales']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B07?code=code-B07-3&amp;method=pd-select-columns&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B07?code=code-B07-3&amp;method=pd-select-columns&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       OUTER JOINs
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">result = buildings[['building_name', 'capacity']].copy()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = buildings[['building_name', 'capacity']].copy()</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B09?code=code-B09-1&amp;method=pd-select-columns&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B09?code=code-B09-1&amp;method=pd-select-columns&amp;line=2">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Expressions and aliases
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+</div>
+<pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
 result = m.assign(sales_millions=(m['domestic_sales'] + m['international_sales']) / 1_000_000)[['title', 'sales_millions']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B20?code=code-B20-1&amp;method=pd-select-columns&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B20?code=code-B20-1&amp;method=pd-select-columns&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Additional topic · Set operations
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">result = pd.concat([a[['id']], b[['id']]], ignore_index=True)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = pd.concat([a[['id']], b[['id']]], ignore_index=True)</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (46)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C01?code=code-C01-5&amp;method=pd-select-columns&amp;line=5">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C01?code=code-C01-5&amp;method=pd-select-columns&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1757 · Recyclable and low-fat products
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    df = products[(products.low_fats == 'Y') &amp; (products.recyclable == 'Y')]
+</div>
+<pre aria-hidden="true">    df = products[(products.low_fats == 'Y') &amp; (products.recyclable == 'Y')]
     return df[['product_id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C02?code=code-C02-5&amp;method=pd-select-columns&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C02?code=code-C02-5&amp;method=pd-select-columns&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       584 · Find customer referee
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    df = customer[(customer.referee_id != 2) | (customer.referee_id.isna())]
+</div>
+<pre aria-hidden="true">    df = customer[(customer.referee_id != 2) | (customer.referee_id.isna())]
     return df[['name']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C03?code=code-C03-5&amp;method=pd-select-columns&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C03?code=code-C03-5&amp;method=pd-select-columns&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       595 · Big countries
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    df = world[(world.area &gt;= 3000000) | (world.population &gt;= 25000000)]
+</div>
+<pre aria-hidden="true">    df = world[(world.area &gt;= 3000000) | (world.population &gt;= 25000000)]
     return df[['name', 'population', 'area']]
     </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C05?code=code-C05-5&amp;method=pd-select-columns&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C05?code=code-C05-5&amp;method=pd-select-columns&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1683 · Invalid tweets
      </strong>
-     <small>
+<small>
       Uploaded submission · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">    df = tweets[tweets.valid == False]
+</div>
+<pre aria-hidden="true">    df = tweets[tweets.valid == False]
     return df[['tweet_id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C42?code=code-C42-3&amp;method=pd-select-columns&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C42?code=code-C42-3&amp;method=pd-select-columns&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1378 · Replace employee ID with the unique identifier
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    df = employee_uni.merge(employees, on='id', how='right')
+</div>
+<pre aria-hidden="true">    df = employee_uni.merge(employees, on='id', how='right')
     return df[['unique_id','name']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C43?code=code-C43-3&amp;method=pd-select-columns&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C43?code=code-C43-3&amp;method=pd-select-columns&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1068 · Product sales analysis I
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    df = sales.merge(product, on='product_id', how='left')
+</div>
+<pre aria-hidden="true">    df = sales.merge(product, on='product_id', how='left')
     return df[['product_name', 'year', 'price']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C45?code=code-C45-3&amp;method=pd-select-columns&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C45?code=code-C45-3&amp;method=pd-select-columns&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       197 · Rising temperature
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    df = weather[(weather.recordDate.diff().dt.days == 1) &amp; (weather.temperature.diff() &gt; 0)]
+</div>
+<pre aria-hidden="true">    df = weather[(weather.recordDate.diff().dt.days == 1) &amp; (weather.temperature.diff() &gt; 0)]
     return df[['id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C47?code=code-C47-3&amp;method=pd-select-columns&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C47?code=code-C47-3&amp;method=pd-select-columns&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       577 · Employee bonus
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    df = employee.merge(bonus, on='empId', how='left')
+</div>
+<pre aria-hidden="true">    df = employee.merge(bonus, on='empId', how='left')
     return df[(df.bonus &lt; 1000) | (df.bonus.isna())][['name', 'bonus']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C49?code=code-C49-3&amp;method=pd-select-columns&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C49?code=code-C49-3&amp;method=pd-select-columns&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       570 · Managers with at least five direct reports
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return df[df.nReports &gt;= 5][['name']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C50?code=code-C50-3&amp;method=pd-select-columns&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C50?code=code-C50-3&amp;method=pd-select-columns&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1934 · Confirmation rate
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def confirmation_rate(signups: pd.DataFrame, confirmations: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def confirmation_rate(signups: pd.DataFrame, confirmations: pd.DataFrame) -&gt; pd.DataFrame:
     df = signups.merge(confirmations, on='user_id', how='left')[['user_id', 'action']]
     df['confirmation_rate'] = df.action == 'confirmed'
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-select-columns&amp;line=17">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-select-columns&amp;line=17">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1251 · Average selling price
      </strong>
-     <small>
+<small>
       My approach · line 17
      </small>
-    </div>
-    <pre aria-hidden="true">    totals['average_price'] = (totals['paid'] / totals['units'].replace(0, float('nan'))).map(round_half_up)
+</div>
+<pre aria-hidden="true">    totals['average_price'] = (totals['paid'] / totals['units'].replace(0, float('nan'))).map(round_half_up)
     result = prices[['product_id']].drop_duplicates().merge(totals[['product_id', 'average_price']], on='product_id', how='left')
     result['average_price'] = result['average_price'].fillna(0)
     return result</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C08?code=code-C08-5&amp;method=pd-select-columns&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C08?code=code-C08-5&amp;method=pd-select-columns&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1075 · Project employees I
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def project_employees_i(project: pd.DataFrame, employee: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def project_employees_i(project: pd.DataFrame, employee: pd.DataFrame) -&gt; pd.DataFrame:
     df = project.merge(employee, on='employee_id', how='left')[['project_id', 'experience_years']]
     df = df.groupby(by='project_id').agg(
         total_years = ('experience_years', 'sum'),</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C09?code=code-C09-3&amp;method=pd-select-columns&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C09?code=code-C09-3&amp;method=pd-select-columns&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1633 · Users registered in a contest
      </strong>
-     <small>
+<small>
       My approach · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">    df['percentage'] = (100 * df['nUsersPerTest'] / nUsers).map(round_half_up)
+</div>
+<pre aria-hidden="true">    df['percentage'] = (100 * df['nUsersPerTest'] / nUsers).map(round_half_up)
     return df[['contest_id', 'percentage']].sort_values(by=['percentage', 'contest_id'], ascending=[False, True])</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C09?code=code-C09-5&amp;method=pd-select-columns&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C09?code=code-C09-5&amp;method=pd-select-columns&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1633 · Users registered in a contest
      </strong>
-     <small>
+<small>
       Uploaded submission · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return df[['contest_id', 'percentage']].sort_values(by=['percentage', 'contest_id'], ascending=[False, True])</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C10?code=code-C10-5&amp;method=pd-select-columns&amp;line=17">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-5&amp;method=pd-select-columns&amp;line=17">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1211 · Queries quality and percentage
      </strong>
-     <small>
+<small>
       Uploaded submission · line 17
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return df[['query_name', 'quality', 'poor_query_percentage']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C16?code=code-C16-5&amp;method=pd-select-columns&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C16?code=code-C16-5&amp;method=pd-select-columns&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1070 · First-year product sales
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    sales = sales[sales['year_order'] == 1]
+</div>
+<pre aria-hidden="true">    sales = sales[sales['year_order'] == 1]
     sales = sales[['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})
     return sales</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C17?code=code-C17-5&amp;method=pd-select-columns&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C17?code=code-C17-5&amp;method=pd-select-columns&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       596 · Classes with at least five students
      </strong>
-     <small>
+<small>
       Uploaded submission · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return df[df.nStudents &gt;= 5][['class']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C19?code=code-C19-5&amp;method=pd-select-columns&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C19?code=code-C19-5&amp;method=pd-select-columns&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       619 · Biggest single number
      </strong>
-     <small>
+<small>
       Uploaded submission · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return pd.DataFrame({'num': df[df.freq == 1][['num']].max()})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C20?code=code-C20-3&amp;method=pd-select-columns&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-3&amp;method=pd-select-columns&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1045 · Customers who bought every product
      </strong>
-     <small>
+<small>
       My approach · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    nProducts = product['product_key'].nunique()
+</div>
+<pre aria-hidden="true">    nProducts = product['product_key'].nunique()
     customer_ids = customer[['customer_id']].drop_duplicates()
     customer = customer[customer['product_key'].isin(product['product_key'])]
     df = customer.groupby(by='customer_id').agg(</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C20?code=code-C20-5&amp;method=pd-select-columns&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-5&amp;method=pd-select-columns&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1045 · Customers who bought every product
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return df[df.nSold == nProducts][['customer_id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C21?code=code-C21-3&amp;method=pd-select-columns&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C21?code=code-C21-3&amp;method=pd-select-columns&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1731 · Employees reporting to employees
      </strong>
-     <small>
+<small>
       Uploaded submission · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)
+</div>
+<pre aria-hidden="true">    by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)
     df = by_manager.merge(employees[['employee_id', 'name']], how='left', left_on='reports_to', right_on='employee_id')
     df.rename(columns={'employee_id_y': 'employee_id'}, inplace=True)
     return df[['employee_id', 'name', 'reports_count', 'average_age']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C22?code=code-C22-5&amp;method=pd-select-columns&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C22?code=code-C22-5&amp;method=pd-select-columns&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1789 · Primary department per employee
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    employee = employee.query("(primary_flag == 'Y') | (nDepartments == 1)")
+</div>
+<pre aria-hidden="true">    employee = employee.query("(primary_flag == 'Y') | (nDepartments == 1)")
     return employee[['employee_id', 'department_id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C25?code=code-C25-3&amp;method=pd-select-columns&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C25?code=code-C25-3&amp;method=pd-select-columns&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1164 · Product price at a given date
      </strong>
-     <small>
+<small>
       My approach · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">                        'price': [10 for x in to_update]})
+</div>
+<pre aria-hidden="true">                        'price': [10 for x in to_update]})
     return   pd.concat([df[['product_id', 'price']], df1])</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C25?code=code-C25-5&amp;method=pd-select-columns&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C25?code=code-C25-5&amp;method=pd-select-columns&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1164 · Product price at a given date
      </strong>
-     <small>
+<small>
       Uploaded submission · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return pd.concat([df[['product_id', 'price']], df1])</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C26?code=code-C26-5&amp;method=pd-select-columns&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C26?code=code-C26-5&amp;method=pd-select-columns&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1204 · Last person to fit in the bus
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    queue['cumsum_weight'] = queue['weight'].cumsum()
+</div>
+<pre aria-hidden="true">    queue['cumsum_weight'] = queue['weight'].cumsum()
     return queue[queue.cumsum_weight &lt;= 1000].tail(1)[['person_name']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C28?code=code-C28-5&amp;method=pd-select-columns&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C28?code=code-C28-5&amp;method=pd-select-columns&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1978 · Low-salary employees whose manager left
      </strong>
-     <small>
+<small>
       Uploaded submission · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return employees[flag_][['employee_id']].sort_values(by='employee_id', ascending=True)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-3&amp;method=pd-select-columns&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-3&amp;method=pd-select-columns&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       My approach · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">    ).reset_index()
+</div>
+<pre aria-hidden="true">    ).reset_index()
     df_users =   df_users.merge(users, on='user_id', how='left').sort_values(by=['nReviews', 'name'], ascending=[False, True])[['name', 'nReviews']]
     df_movies =   movie_rating[(movie_rating.created_at &gt;=   '2020-02-01') &amp; (movie_rating.created_at &lt; '2020-03-01')]
     df_movies = df_movies.groupby(by='movie_id').agg(</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-5&amp;method=pd-select-columns&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-5&amp;method=pd-select-columns&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       Uploaded submission · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    ).reset_index()
+</div>
+<pre aria-hidden="true">    ).reset_index()
     df_users = df_users.merge(users, on='user_id', how='left').sort_values(by=['nReviews', 'name'], ascending=[False, True])[['name', 'nReviews']]
 
     df_movies = movie_rating[(movie_rating.created_at &gt;= '2020-02-01') &amp; (movie_rating.created_at &lt; '2020-03-01')]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C33?code=code-C33-3&amp;method=pd-select-columns&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C33?code=code-C33-3&amp;method=pd-select-columns&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       585 · Investments in 2016
      </strong>
-     <small>
+<small>
       My approach · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">    flag_nonunique_tiv = insurance['tiv_2015'].duplicated(keep=False)
+</div>
+<pre aria-hidden="true">    flag_nonunique_tiv = insurance['tiv_2015'].duplicated(keep=False)
     flag_unique_city = ~insurance[['lat', 'lon']].duplicated(keep=False)
 
     df =   insurance[flag_nonunique_tiv &amp; flag_unique_city]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C33?code=code-C33-5&amp;method=pd-select-columns&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C33?code=code-C33-5&amp;method=pd-select-columns&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       585 · Investments in 2016
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    flag_nonunique_tiv = insurance['tiv_2015'].duplicated(keep=False)
+</div>
+<pre aria-hidden="true">    flag_nonunique_tiv = insurance['tiv_2015'].duplicated(keep=False)
     flag_unique_city = ~insurance[['lat', 'lon']].duplicated(keep=False)
     
     df = insurance[flag_nonunique_tiv &amp; flag_unique_city]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C34?code=code-C34-3&amp;method=pd-select-columns&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C34?code=code-C34-3&amp;method=pd-select-columns&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       185 · Department top three salaries
      </strong>
-     <small>
+<small>
       My approach · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">    })
+</div>
+<pre aria-hidden="true">    })
     return df[['Department', 'Employee', 'Salary']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C34?code=code-C34-5&amp;method=pd-select-columns&amp;line=12">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C34?code=code-C34-5&amp;method=pd-select-columns&amp;line=12">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       185 · Department top three salaries
      </strong>
-     <small>
+<small>
       Uploaded submission · line 12
      </small>
-    </div>
-    <pre aria-hidden="true">    })
+</div>
+<pre aria-hidden="true">    })
     return df[['Department', 'Employee', 'Salary']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C39?code=code-C39-3&amp;method=pd-select-columns&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C39?code=code-C39-3&amp;method=pd-select-columns&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1484 · Products sold by date
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">def categorize_products(activities: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def categorize_products(activities: pd.DataFrame) -&gt; pd.DataFrame:
     activities = activities[['sell_date', 'product']].drop_duplicates()
 
     def concat_string(x):</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C40?code=code-C40-3&amp;method=pd-select-columns&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C40?code=code-C40-3&amp;method=pd-select-columns&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1327 · Products with at least 100 February units
      </strong>
-     <small>
+<small>
       My approach · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">    df =   df.merge(products, on='product_id', how='left')
+</div>
+<pre aria-hidden="true">    df =   df.merge(products, on='product_id', how='left')
     return df[['product_name', 'unit']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C40?code=code-C40-5&amp;method=pd-select-columns&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C40?code=code-C40-5&amp;method=pd-select-columns&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1327 · Products with at least 100 February units
      </strong>
-     <small>
+<small>
       Uploaded submission · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return df[['product_name', 'unit']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B01?code=code-B01-3&amp;method=pd-select-columns&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B01?code=code-B01-3&amp;method=pd-select-columns&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       SELECT queries 101
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">result = movies[['director']].copy()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = movies[['director']].copy()</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B01?code=code-B01-5&amp;method=pd-select-columns&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B01?code=code-B01-5&amp;method=pd-select-columns&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       SELECT queries 101
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">result = movies[['title', 'director']].copy()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = movies[['title', 'director']].copy()</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B01?code=code-B01-7&amp;method=pd-select-columns&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B01?code=code-B01-7&amp;method=pd-select-columns&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       SELECT queries 101
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">result = movies[['title', 'year']].copy()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = movies[['title', 'year']].copy()</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B05?code=code-B05-5&amp;method=pd-select-columns&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B05?code=code-B05-5&amp;method=pd-select-columns&amp;line=2">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Review · Simple SELECT queries
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">chicago_lon = north_american_cities.loc[north_american_cities['city'].eq('Chicago'), 'longitude'].iloc[0]
+</div>
+<pre aria-hidden="true">chicago_lon = north_american_cities.loc[north_american_cities['city'].eq('Chicago'), 'longitude'].iloc[0]
 result = north_american_cities.loc[north_american_cities['longitude'].lt(chicago_lon)].sort_values('longitude')[['city']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B05?code=code-B05-7&amp;method=pd-select-columns&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B05?code=code-B05-7&amp;method=pd-select-columns&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Review · Simple SELECT queries
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">result = north_american_cities.loc[north_american_cities['country'].eq('Mexico')].sort_values('population', ascending=False).head(2)[['city', 'population']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = north_american_cities.loc[north_american_cities['country'].eq('Mexico')].sort_values('population', ascending=False).head(2)[['city', 'population']]</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B05?code=code-B05-9&amp;method=pd-select-columns&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B05?code=code-B05-9&amp;method=pd-select-columns&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Review · Simple SELECT queries
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">result = north_american_cities.loc[north_american_cities['country'].eq('United States')].sort_values('population', ascending=False).iloc[2:4][['city', 'population']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = north_american_cities.loc[north_american_cities['country'].eq('United States')].sort_values('population', ascending=False).iloc[2:4][['city', 'population']]</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B06?code=code-B06-5&amp;method=pd-select-columns&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B06?code=code-B06-5&amp;method=pd-select-columns&amp;line=2">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       INNER JOIN
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+</div>
+<pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
 result = m.sort_values('rating', ascending=False)[['title', 'rating']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B07?code=code-B07-5&amp;method=pd-select-columns&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B07?code=code-B07-5&amp;method=pd-select-columns&amp;line=2">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       OUTER JOINs
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">m = buildings.merge(employees, left_on='building_name', right_on='building', how='left')
+</div>
+<pre aria-hidden="true">m = buildings.merge(employees, left_on='building_name', right_on='building', how='left')
 result = m[['building_name', 'role']].drop_duplicates()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B09?code=code-B09-3&amp;method=pd-select-columns&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B09?code=code-B09-3&amp;method=pd-select-columns&amp;line=2">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Expressions and aliases
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
+</div>
+<pre aria-hidden="true">m = movies.merge(boxoffice, left_on='id', right_on='movie_id', how='inner', validate='one_to_one')
 result = m.assign(rating_percent=m['rating'] * 10)[['title', 'rating_percent']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B20?code=code-B20-3&amp;method=pd-select-columns&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B20?code=code-B20-3&amp;method=pd-select-columns&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Additional topic · Set operations
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">result = pd.concat([a[['id']], b[['id']]], ignore_index=True).drop_duplicates()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = pd.concat([a[['id']], b[['id']]], ignore_index=True).drop_duplicates()</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B20?code=code-B20-5&amp;method=pd-select-columns&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B20?code=code-B20-5&amp;method=pd-select-columns&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Additional topic · Set operations
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">result = a[['id']].drop_duplicates().merge(b[['id']].drop_duplicates(), on='id')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = a[['id']].drop_duplicates().merge(b[['id']].drop_duplicates(), on='id')</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     pandas cheat-sheet image · DataFrame basics. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=DataFrame%20basics">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=DataFrame%20basics">
+<small>
     ← Browse
    </small>
    pandas · DataFrame basics
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

@@ -1,363 +1,361 @@
 <article class="article method-page" id="m-sql-having">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=sql&amp;cat=Aggregation">
+<a href="#methods?lang=sql&amp;cat=Aggregation">
    MySQL · Aggregation
   </a>
- </div>
- <h1>
+</div>
+<h1>
   HAVING
  </h1>
- <p class="lead">
+<p class="lead">
   Filter groups
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     MySQL
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-having"><span class="k">HAVING</span><span class="w"> </span><span class="nf">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">5</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-sql" data-origin="reference-sql-having"><span class="k">HAVING</span><span class="w"> </span><span class="nf">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">5</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-pd-group-filter">
+<a href="#m-pd-group-filter">
    pandas · Group filter
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C17?code=code-C17-0&amp;method=sql-having&amp;line=1">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C17?code=code-C17-0&amp;method=sql-having&amp;line=1">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      596 · Classes with at least five students
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT class FROM Courses GROUP BY class HAVING COUNT(DISTINCT student) &gt;= 5;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">SELECT class FROM Courses GROUP BY class HAVING COUNT(DISTINCT student) &gt;= 5;</pre>
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B11?code=code-B11-4&amp;method=sql-having&amp;line=2">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B11?code=code-B11-4&amp;method=sql-having&amp;line=2">
+<div>
+<span class="usage-label">
      SQLBolt · SQL
     </span>
-    <strong>
+<strong>
      WHERE versus HAVING
     </strong>
-    <small>
+<small>
      Study solution · line 2
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT role, SUM(years_employed) AS total_years
+</div>
+<pre aria-hidden="true">SELECT role, SUM(years_employed) AS total_years
 FROM employees GROUP BY role HAVING role = 'Engineer';</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C19?code=code-C19-0&amp;method=sql-having&amp;line=2">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C19?code=code-C19-0&amp;method=sql-having&amp;line=2">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      619 · Biggest single number
     </strong>
-    <small>
+<small>
      Study solution · line 2
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT MAX(num) AS num FROM (
+</div>
+<pre aria-hidden="true">SELECT MAX(num) AS num FROM (
     SELECT num FROM MyNumbers GROUP BY num HAVING COUNT(*) = 1
 ) singles;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C20?code=code-C20-2&amp;method=sql-having&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-2&amp;method=sql-having&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1045 · Customers who bought every product
     </strong>
-    <small>
+<small>
      My approach · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">GROUP BY c.customer_id
+</div>
+<pre aria-hidden="true">GROUP BY c.customer_id
 HAVING (SELECT COUNT(*) FROM Product) = COUNT(DISTINCT CASE
     WHEN c.product_key IN (SELECT product_key FROM Product) THEN c.product_key END);</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C21?code=code-C21-2&amp;method=sql-having&amp;line=9">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C21?code=code-C21-2&amp;method=sql-having&amp;line=9">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1731 · Employees reporting to employees
     </strong>
-    <small>
+<small>
      Uploaded submission · line 9
     </small>
-   </div>
-   <pre aria-hidden="true">    GROUP BY reports_to
+</div>
+<pre aria-hidden="true">    GROUP BY reports_to
     HAVING reports_to IS NOT NULL
 )
 </pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C22?code=code-C22-2&amp;method=sql-having&amp;line=8">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C22?code=code-C22-2&amp;method=sql-having&amp;line=8">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1789 · Primary department per employee
     </strong>
-    <small>
+<small>
      My approach · line 8
     </small>
-   </div>
-   <pre aria-hidden="true">GROUP BY employee_id
+</div>
+<pre aria-hidden="true">GROUP BY employee_id
 HAVING COUNT(employee_id) = 1;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    5 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C33?code=code-C33-2&amp;method=sql-having&amp;line=6">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C33?code=code-C33-2&amp;method=sql-having&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       585 · Investments in 2016
      </strong>
-     <small>
+<small>
       My approach · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">        GROUP BY tiv_2015
+</div>
+<pre aria-hidden="true">        GROUP BY tiv_2015
         HAVING COUNT(*) &gt; 1
     ),
     UniqueCity AS (</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C40?code=code-C40-0&amp;method=sql-having&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C40?code=code-C40-0&amp;method=sql-having&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1327 · Products with at least 100 February units
      </strong>
-     <small>
+<small>
       Study solution · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">WHERE o.order_date &gt;= '2020-02-01' AND o.order_date &lt; '2020-03-01'
+</div>
+<pre aria-hidden="true">WHERE o.order_date &gt;= '2020-02-01' AND o.order_date &lt; '2020-03-01'
 GROUP BY p.product_id, p.product_name HAVING SUM(o.unit) &gt;= 100;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC601?code=code-LC601-0&amp;method=sql-having&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC601?code=code-LC601-0&amp;method=sql-having&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       601 · Human traffic of stadium
      </strong>
-     <small>
+<small>
       Uploaded submission · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">        GROUP BY group_num
+</div>
+<pre aria-hidden="true">        GROUP BY group_num
         HAVING COUNT(*) &gt;= 3
     )
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3521?code=code-LC3521-0&amp;method=sql-having&amp;line=16">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3521?code=code-LC3521-0&amp;method=sql-having&amp;line=16">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3521 · Find product recommendation pairs
      </strong>
-     <small>
+<small>
       Uploaded submission · line 16
      </small>
-    </div>
-    <pre aria-hidden="true">        GROUP BY product1_id, product2_id
+</div>
+<pre aria-hidden="true">        GROUP BY product1_id, product2_id
         HAVING COUNT(*) &gt;= 3
     )
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3580?code=code-LC3580-0&amp;method=sql-having&amp;line=15">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3580?code=code-LC3580-0&amp;method=sql-having&amp;line=15">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3580 · Find consistently improving employees
      </strong>
-     <small>
+<small>
       Uploaded submission · line 15
      </small>
-    </div>
-    <pre aria-hidden="true">            GROUP BY employee_id
+</div>
+<pre aria-hidden="true">            GROUP BY employee_id
             HAVING COUNT(*) &gt;= 3
         )
     ),</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (3)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C20?code=code-C20-4&amp;method=sql-having&amp;line=5">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C20?code=code-C20-4&amp;method=sql-having&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1045 · Customers who bought every product
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">GROUP BY customer_id
+</div>
+<pre aria-hidden="true">GROUP BY customer_id
 HAVING (SELECT COUNT(product_key) FROM Product) = COUNT(DISTINCT product_key) </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C22?code=code-C22-4&amp;method=sql-having&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C22?code=code-C22-4&amp;method=sql-having&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1789 · Primary department per employee
      </strong>
-     <small>
+<small>
       Uploaded submission · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">GROUP BY employee_id
+</div>
+<pre aria-hidden="true">GROUP BY employee_id
 HAVING COUNT(employee_id) = 1</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C33?code=code-C33-4&amp;method=sql-having&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C33?code=code-C33-4&amp;method=sql-having&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       585 · Investments in 2016
      </strong>
-     <small>
+<small>
       Uploaded submission · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">        GROUP BY tiv_2015
+</div>
+<pre aria-hidden="true">        GROUP BY tiv_2015
         HAVING COUNT(*) &gt; 1
     ),
     UniqueCity AS (</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     SQL cheat-sheet image · Aggregation. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/aggregate-functions.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=sql&amp;cat=Aggregation">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=sql&amp;cat=Aggregation">
+<small>
     ← Browse
    </small>
    MySQL · Aggregation
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

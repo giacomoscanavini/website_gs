@@ -1,657 +1,655 @@
 <article class="article method-page" id="m-sql-case">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=sql&amp;cat=Conditional%20/%20NULL%20handling">
+<a href="#methods?lang=sql&amp;cat=Conditional%20/%20NULL%20handling">
    MySQL · Conditional / NULL handling
   </a>
- </div>
- <h1>
+</div>
+<h1>
   CASE
  </h1>
- <p class="lead">
+<p class="lead">
   Conditional logic
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     MySQL
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-case"><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'Y'</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">'N'</span><span class="w"> </span><span class="k">END</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-sql" data-origin="reference-sql-case"><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="s1">'Y'</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">'N'</span><span class="w"> </span><span class="k">END</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-pd-where">
+<a href="#m-pd-where">
    pandas · where()
   </a>
-  <a href="#m-pd-np-where">
+<a href="#m-pd-np-where">
    pandas · np.where()
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C50?code=code-C50-0&amp;method=sql-case&amp;line=4">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C50?code=code-C50-0&amp;method=sql-case&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1934 · Confirmation rate
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">        s.user_id,
+</div>
+<pre aria-hidden="true">        s.user_id,
         CASE
             WHEN c.action = 'confirmed' THEN 1
             ELSE 0</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-02?code=code-squid-02-0&amp;method=sql-case&amp;line=10">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-02?code=code-squid-02-0&amp;method=sql-case&amp;line=10">
+<div>
+<span class="usage-label">
      Squid Game · SQL
     </span>
-    <strong>
+<strong>
      Calculate the ration threshold
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 10
     </small>
-   </div>
-   <pre aria-hidden="true">    table_prop.portions AS portions,
+</div>
+<pre aria-hidden="true">    table_prop.portions AS portions,
     CASE 
         WHEN table_prop.portions &gt; rations.amount THEN 'False'
         ELSE 'True'</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C10?code=code-C10-0&amp;method=sql-case&amp;line=2">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-0&amp;method=sql-case&amp;line=2">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1211 · Queries quality and percentage
     </strong>
-    <small>
+<small>
      Study solution · line 2
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT query_name, ROUND(AVG(rating / position), 2) AS quality,
+</div>
+<pre aria-hidden="true">SELECT query_name, ROUND(AVG(rating / position), 2) AS quality,
        ROUND(100.0 * AVG(CASE WHEN rating &lt; 3 THEN 1 ELSE 0 END), 2) AS poor_query_percentage
 FROM Queries GROUP BY query_name;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C11?code=code-C11-0&amp;method=sql-case&amp;line=3">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C11?code=code-C11-0&amp;method=sql-case&amp;line=3">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1193 · Monthly transactions I
     </strong>
-    <small>
+<small>
      Study solution · line 3
     </small>
-   </div>
-   <pre aria-hidden="true">       COUNT(*) AS trans_count,
+</div>
+<pre aria-hidden="true">       COUNT(*) AS trans_count,
        SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END) AS approved_count,
        SUM(amount) AS trans_total_amount,
        SUM(CASE WHEN state = 'approved' THEN amount ELSE 0 END) AS approved_total_amount</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C12?code=code-C12-0&amp;method=sql-case&amp;line=5">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C12?code=code-C12-0&amp;method=sql-case&amp;line=5">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1174 · Immediate first deliveries
     </strong>
-    <small>
+<small>
      Study solution · line 5
     </small>
-   </div>
-   <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT ROUND(100.0 * AVG(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END), 2)
        AS immediate_percentage
 FROM ranked WHERE rn = 1;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C13?code=code-C13-0&amp;method=sql-case&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C13?code=code-C13-0&amp;method=sql-case&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      550 · Game Play Analysis IV
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT ROUND(AVG(CASE WHEN EXISTS (
     SELECT 1 FROM Activity a
     WHERE a.player_id = f.player_id AND a.event_date = DATE_ADD(f.first_day, INTERVAL 1 DAY)</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    10 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C20?code=code-C20-2&amp;method=sql-case&amp;line=4">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C20?code=code-C20-2&amp;method=sql-case&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1045 · Customers who bought every product
      </strong>
-     <small>
+<small>
       My approach · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">GROUP BY c.customer_id
+</div>
+<pre aria-hidden="true">GROUP BY c.customer_id
 HAVING (SELECT COUNT(*) FROM Product) = COUNT(DISTINCT CASE
     WHEN c.product_key IN (SELECT product_key FROM Product) THEN c.product_key END);</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C23?code=code-C23-0&amp;method=sql-case&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C23?code=code-C23-0&amp;method=sql-case&amp;line=2">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       610 · Triangle judgement
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT x, y, z,
+</div>
+<pre aria-hidden="true">SELECT x, y, z,
        CASE WHEN x + y &gt; z AND x + z &gt; y AND y + z &gt; x THEN 'Yes' ELSE 'No' END AS triangle
 FROM Triangle;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C27?code=code-C27-2&amp;method=sql-case&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C27?code=code-C27-2&amp;method=sql-case&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1907 · Count salary categories
      </strong>
-     <small>
+<small>
       My approach · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">        SELECT
+</div>
+<pre aria-hidden="true">        SELECT
             CASE
                 WHEN income &lt; 20000 THEN 'Low Salary'
                 WHEN income &gt;= 20000 AND income &lt;= 50000 THEN 'Average Salary'</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C29?code=code-C29-0&amp;method=sql-case&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C29?code=code-C29-0&amp;method=sql-case&amp;line=1">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       626 · Exchange seats
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT CASE WHEN id % 2 = 0 THEN id - 1
+</div>
+<pre aria-hidden="true">SELECT CASE WHEN id % 2 = 0 THEN id - 1
             WHEN id &lt; (SELECT MAX(id) FROM Seat) THEN id + 1
             ELSE id END AS id, student</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC608?code=code-LC608-0&amp;method=sql-case&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC608?code=code-LC608-0&amp;method=sql-case&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       608 · Tree node
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    id, 
+</div>
+<pre aria-hidden="true">    id, 
     CASE
         WHEN p_id IS NULL THEN 'Root'
         WHEN id IN (SELECT p_id FROM Tree) THEN 'Inner'</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC1393?code=code-LC1393-0&amp;method=sql-case&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC1393?code=code-LC1393-0&amp;method=sql-case&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1393 · Capital gain/loss
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">        stock_name,  
+</div>
+<pre aria-hidden="true">        stock_name,  
         CASE 
             WHEN operation = 'Buy' THEN -1 * price
             ELSE price</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3475?code=code-LC3475-0&amp;method=sql-case&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3475?code=code-LC3475-0&amp;method=sql-case&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3475 · DNA pattern recognition
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    species,
+</div>
+<pre aria-hidden="true">    species,
     CASE
         WHEN dna_sequence LIKE 'ATG%' THEN 1
         ELSE 0</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3564?code=code-LC3564-0&amp;method=sql-case&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3564?code=code-LC3564-0&amp;method=sql-case&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3564 · Seasonal sales analysis
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">            s.product_id, 
+</div>
+<pre aria-hidden="true">            s.product_id, 
             CASE 
                 WHEN MONTH(s.sale_date) IN (12, 1, 2) THEN 'Winter'
                 WHEN MONTH(s.sale_date) IN (3, 4, 5) THEN 'Spring'</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-04?code=code-squid-04-0&amp;method=sql-case&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-04?code=code-squid-04-0&amp;method=sql-case&amp;line=4">
+<div>
+<span class="usage-label">
       Squid Game · SQL
      </span>
-     <strong>
+<strong>
       Rank ten-player teams
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    t.age_team,
+</div>
+<pre aria-hidden="true">    t.age_team,
     CASE
         WHEN t.age_team &lt; 40 THEN 'Fit'
         WHEN t.age_team &gt; 50 THEN 'Elderly'</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-05?code=code-squid-05-0&amp;method=sql-case&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-05?code=code-squid-05-0&amp;method=sql-case&amp;line=7">
+<div>
+<span class="usage-label">
       Squid Game · SQL
      </span>
-     <strong>
+<strong>
       Count a player’s closest interactions
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">			  456 AS target_id,
+</div>
+<pre aria-hidden="true">			  456 AS target_id,
 			  CASE
 				WHEN player1_id &lt;&gt; 456 THEN player1_id
 				ELSE player2_id </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (12)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C50?code=code-C50-2&amp;method=sql-case&amp;line=5">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C50?code=code-C50-2&amp;method=sql-case&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1934 · Confirmation rate
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">        s.user_id, 
+</div>
+<pre aria-hidden="true">        s.user_id, 
         CASE
             WHEN c.action = 'confirmed' THEN 1
             ELSE 0</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C10?code=code-C10-2&amp;method=sql-case&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-2&amp;method=sql-case&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1211 · Queries quality and percentage
      </strong>
-     <small>
+<small>
       My approach · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">        (rating / position) AS quality,
+</div>
+<pre aria-hidden="true">        (rating / position) AS quality,
         CASE
             WHEN rating &lt; 3 THEN 1
             ELSE 0</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C10?code=code-C10-4&amp;method=sql-case&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-4&amp;method=sql-case&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1211 · Queries quality and percentage
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">        (rating / position) AS quality,
+</div>
+<pre aria-hidden="true">        (rating / position) AS quality,
         CASE
             WHEN rating &lt; 3 THEN 1
             ELSE 0</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C11?code=code-C11-2&amp;method=sql-case&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C11?code=code-C11-2&amp;method=sql-case&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1193 · Monthly transactions I
      </strong>
-     <small>
+<small>
       My approach · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">        amount,
+</div>
+<pre aria-hidden="true">        amount,
         CASE
             WHEN state = 'approved' THEN 1
             ELSE 0</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C11?code=code-C11-4&amp;method=sql-case&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C11?code=code-C11-4&amp;method=sql-case&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1193 · Monthly transactions I
      </strong>
-     <small>
+<small>
       Uploaded submission · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">        amount,
+</div>
+<pre aria-hidden="true">        amount,
         CASE 
             WHEN state = 'approved' THEN 1
             ELSE 0</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C12?code=code-C12-2&amp;method=sql-case&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C12?code=code-C12-2&amp;method=sql-case&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1174 · Immediate first deliveries
      </strong>
-     <small>
+<small>
       My approach · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">        customer_id,
+</div>
+<pre aria-hidden="true">        customer_id,
         CASE
             WHEN order_date =   customer_pref_delivery_date THEN 1
             ELSE 0</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C12?code=code-C12-4&amp;method=sql-case&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C12?code=code-C12-4&amp;method=sql-case&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1174 · Immediate first deliveries
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">        customer_id,
+</div>
+<pre aria-hidden="true">        customer_id,
         CASE
             WHEN order_date = customer_pref_delivery_date THEN 1
             ELSE 0</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C23?code=code-C23-2&amp;method=sql-case&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C23?code=code-C23-2&amp;method=sql-case&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       610 · Triangle judgement
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    x, y, z,
+</div>
+<pre aria-hidden="true">    x, y, z,
     CASE
         WHEN x + y &lt;= z THEN 'No'
         WHEN x + z &lt;= y THEN 'No'</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C23?code=code-C23-4&amp;method=sql-case&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C23?code=code-C23-4&amp;method=sql-case&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       610 · Triangle judgement
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    x, y, z, 
+</div>
+<pre aria-hidden="true">    x, y, z, 
     CASE 
         WHEN x + y &lt;= z THEN 'No'
         WHEN x + z &lt;= y THEN 'No'</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C27?code=code-C27-4&amp;method=sql-case&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C27?code=code-C27-4&amp;method=sql-case&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1907 · Count salary categories
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">        SELECT 
+</div>
+<pre aria-hidden="true">        SELECT 
             CASE
                 WHEN income &lt; 20000 THEN 'Low Salary'
                 WHEN income &gt;= 20000 AND income &lt;= 50000 THEN 'Average Salary'</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C29?code=code-C29-2&amp;method=sql-case&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C29?code=code-C29-2&amp;method=sql-case&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       626 · Exchange seats
      </strong>
-     <small>
+<small>
       My approach · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT
+</div>
+<pre aria-hidden="true">SELECT
     CASE
         WHEN id % 2 = 0 THEN id-1
         WHEN id &lt;&gt; (SELECT length FROM   NStudents) AND id % 2 = 1 THEN id+1</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C29?code=code-C29-4&amp;method=sql-case&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C29?code=code-C29-4&amp;method=sql-case&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       626 · Exchange seats
      </strong>
-     <small>
+<small>
       Uploaded submission · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT
+</div>
+<pre aria-hidden="true">SELECT
     CASE 
         WHEN id % 2 = 0 THEN id-1
         WHEN id &lt;&gt; (SELECT length FROM NStudents) AND id % 2 = 1 THEN id+1</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     SQL cheat-sheet image · Conditional / NULL handling. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://dev.mysql.com/doc/refman/8.4/en/flow-control-functions.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/flow-control-functions.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=sql&amp;cat=Conditional%20/%20NULL%20handling">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=sql&amp;cat=Conditional%20/%20NULL%20handling">
+<small>
     ← Browse
    </small>
    MySQL · Conditional / NULL handling
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

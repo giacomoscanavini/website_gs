@@ -1,232 +1,230 @@
 <article class="article method-page" id="m-sql-not-in">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=sql&amp;cat=Filtering">
+<a href="#methods?lang=sql&amp;cat=Filtering">
    MySQL · Filtering
   </a>
- </div>
- <h1>
+</div>
+<h1>
   NOT IN
  </h1>
- <p class="lead">
+<p class="lead">
   Exclude set
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     MySQL
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-not-in"><span class="n">id</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span></code></pre>
- </div>
- <div class="note">
-  <b>
+</div>
+<pre tabindex="0"><code class="language-sql" data-origin="reference-sql-not-in"><span class="n">id</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span></code></pre>
+</div>
+<div class="note">
+<b>
    Implementation note.
   </b>
   NULLs in the comparison set can make NOT IN unknown rather than true. Excluding missing values or using a suitable NOT EXISTS pattern can be necessary.
   <a href="https://dev.mysql.com/doc/refman/8.4/en/comparison-operators.html" rel="noopener noreferrer" target="_blank">
    Documentation ↗
   </a>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-pd-not-isin">
+<a href="#m-pd-not-isin">
    pandas · Not membership
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C25?code=code-C25-2&amp;method=sql-not-in&amp;line=21">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C25?code=code-C25-2&amp;method=sql-not-in&amp;line=21">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1164 · Product price at a given date
     </strong>
-    <small>
+<small>
      My approach · line 21
     </small>
-   </div>
-   <pre aria-hidden="true">FROM Products
+</div>
+<pre aria-hidden="true">FROM Products
 WHERE product_id NOT IN (SELECT product_id FROM Valid);</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C27?code=code-C27-2&amp;method=sql-not-in&amp;line=26">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C27?code=code-C27-2&amp;method=sql-not-in&amp;line=26">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1907 · Count salary categories
     </strong>
-    <small>
+<small>
      My approach · line 26
     </small>
-   </div>
-   <pre aria-hidden="true">FROM Categories
+</div>
+<pre aria-hidden="true">FROM Categories
 WHERE category NOT IN (SELECT category FROM Valid);</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C28?code=code-C28-2&amp;method=sql-not-in&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C28?code=code-C28-2&amp;method=sql-not-in&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1978 · Low-salary employees whose manager left
     </strong>
-    <small>
+<small>
      My approach · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">    FROM Employees
+</div>
+<pre aria-hidden="true">    FROM Employees
     WHERE manager_id NOT IN (SELECT employee_id FROM Employees)
 )
 SELECT employee_id</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#LC607?code=code-LC607-0&amp;method=sql-not-in&amp;line=11">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC607?code=code-LC607-0&amp;method=sql-not-in&amp;line=11">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      607 · Sales person
     </strong>
-    <small>
+<small>
      Uploaded submission · line 11
     </small>
-   </div>
-   <pre aria-hidden="true">FROM SalesPerson
+</div>
+<pre aria-hidden="true">FROM SalesPerson
 WHERE sales_id NOT IN (
     SELECT sales_id
     FROM IdToExclude</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    Other saved implementations (3)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C25?code=code-C25-4&amp;method=sql-not-in&amp;line=25">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C25?code=code-C25-4&amp;method=sql-not-in&amp;line=25">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1164 · Product price at a given date
      </strong>
-     <small>
+<small>
       Uploaded submission · line 25
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Products
+</div>
+<pre aria-hidden="true">FROM Products
 WHERE product_id NOT IN (SELECT product_id FROM Valid)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C27?code=code-C27-4&amp;method=sql-not-in&amp;line=30">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C27?code=code-C27-4&amp;method=sql-not-in&amp;line=30">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1907 · Count salary categories
      </strong>
-     <small>
+<small>
       Uploaded submission · line 30
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Categories
+</div>
+<pre aria-hidden="true">FROM Categories
 WHERE category NOT IN (SELECT category FROM Valid)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C28?code=code-C28-4&amp;method=sql-not-in&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C28?code=code-C28-4&amp;method=sql-not-in&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1978 · Low-salary employees whose manager left
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    FROM Employees
+</div>
+<pre aria-hidden="true">    FROM Employees
     WHERE manager_id NOT IN (SELECT employee_id FROM Employees)
 )
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     SQL cheat-sheet image · Filtering. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://dev.mysql.com/doc/refman/8.4/en/comparison-operators.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/comparison-operators.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=sql&amp;cat=Filtering">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=sql&amp;cat=Filtering">
+<small>
     ← Browse
    </small>
    MySQL · Filtering
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

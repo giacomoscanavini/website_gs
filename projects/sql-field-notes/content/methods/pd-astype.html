@@ -1,236 +1,234 @@
 <article class="article method-page" id="m-pd-astype">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
+<a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
    pandas · Also used in these notes
   </a>
- </div>
- <h1>
+</div>
+<h1>
   astype()
  </h1>
- <p class="lead">
+<p class="lead">
   Convert a data type
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-astype"><span class="n">df</span><span class="p">[</span><span class="s1">'count'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span></code></pre>
- </div>
- <h2>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-astype"><span class="n">df</span><span class="p">[</span><span class="s1">'count'</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span></code></pre>
+</div>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C48?code=code-C48-1&amp;method=pd-astype&amp;line=7">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C48?code=code-C48-1&amp;method=pd-astype&amp;line=7">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1280 · Students and examinations
     </strong>
-    <small>
+<small>
      Study solution · line 7
     </small>
-   </div>
-   <pre aria-hidden="true">    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left')
+</div>
+<pre aria-hidden="true">    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left')
     df['attended_exams'] = df['attended_exams'].fillna(0).astype(int)
     return df[['student_id', 'student_name', 'subject_name', 'attended_exams']].sort_values(['student_id', 'subject_name'])</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#murder-01?code=code-murder-01-1&amp;method=pd-astype&amp;line=5">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-01?code=code-murder-01-1&amp;method=pd-astype&amp;line=5">
+<div>
+<span class="usage-label">
      Murder City · pandas
     </span>
-    <strong>
+<strong>
      Retrieve the crime report
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 5
     </small>
-   </div>
-   <pre aria-hidden="true">        &amp; crime_scene_report['city'].eq('SQL City')
+</div>
+<pre aria-hidden="true">        &amp; crime_scene_report['city'].eq('SQL City')
         &amp; crime_scene_report['date'].astype('string').eq('20180115'))
 result = crime_scene_report.loc[mask].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-04?code=code-squid-04-1&amp;method=pd-astype&amp;line=9">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-04?code=code-squid-04-1&amp;method=pd-astype&amp;line=9">
+<div>
+<span class="usage-label">
      Squid Game · pandas
     </span>
-    <strong>
+<strong>
      Rank ten-player teams
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 9
     </small>
-   </div>
-   <pre aria-hidden="true">result.loc[result['age_team'].gt(50), 'age_group'] = 'Elderly'
+</div>
+<pre aria-hidden="true">result.loc[result['age_team'].gt(50), 'age_group'] = 'Elderly'
 result['rank'] = result['age_team'].rank(method='min', ascending=False).astype('Int64')</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C10?code=code-C10-1&amp;method=pd-astype&amp;line=9">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-1&amp;method=pd-astype&amp;line=9">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1211 · Queries quality and percentage
     </strong>
-    <small>
+<small>
      Study solution · line 9
     </small>
-   </div>
-   <pre aria-hidden="true">def queries_stats(queries: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def queries_stats(queries: pd.DataFrame) -&gt; pd.DataFrame:
     q = queries.assign(quality_ratio=queries['rating'] / queries['position'], poor=queries['rating'].lt(3).astype(int))
     g = q.groupby('query_name', dropna=False, as_index=False).agg(quality=('quality_ratio', 'mean'), poor_query_percentage=('poor', 'mean'))
     g['quality'] = g['quality'].map(round_half_up)</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#LC3475?code=code-LC3475-1&amp;method=pd-astype&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3475?code=code-LC3475-1&amp;method=pd-astype&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      3475 · DNA pattern recognition
     </strong>
-    <small>
+<small>
      Uploaded submission · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def analyze_dna_patterns(samples: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def analyze_dna_patterns(samples: pd.DataFrame) -&gt; pd.DataFrame:
     samples['has_start'] = (samples.dna_sequence.str.startswith('ATG')).astype('int')
     samples['has_stop'] = (samples.dna_sequence.str.endswith('TAA') | 
                            samples.dna_sequence.str.endswith('TAG') | </pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#murder-04?code=code-murder-04-1&amp;method=pd-astype&amp;line=5">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-04?code=code-murder-04-1&amp;method=pd-astype&amp;line=5">
+<div>
+<span class="usage-label">
      Murder City · pandas
     </span>
-    <strong>
+<strong>
      Follow the gym clue
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 5
     </small>
-   </div>
-   <pre aria-hidden="true">                                   left_on='membership_id', right_on='id')
+</div>
+<pre aria-hidden="true">                                   left_on='membership_id', right_on='id')
 mask = (joined['check_in_date'].astype('string').eq('20180109')
         &amp; joined['membership_status'].eq('gold')
         &amp; joined['id'].str.startswith('48Z', na=False))</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    2 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-astype&amp;line=12">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-astype&amp;line=12">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Join room checks and camera sightings
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 12
      </small>
-    </div>
-    <pre aria-hidden="true">joined = joined.loc[joined['isvacant'].eq(True)].copy()
+</div>
+<pre aria-hidden="true">joined = joined.loc[joined['isvacant'].eq(True)].copy()
 seen = pd.to_timedelta(joined['spotted_outside_room_time'].astype('string'))
 checked = pd.to_timedelta(joined['last_seen_in_room'].astype('string'))
 joined['time_between_room_and_outside'] = seen - checked</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-astype&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-astype&amp;line=11">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Reconstruct access-log overlaps
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">    shifts = guard.copy()
+</div>
+<pre aria-hidden="true">    shifts = guard.copy()
     a = pd.to_timedelta(shifts['shift_start'].astype('string'))
     b = pd.to_timedelta(shifts['shift_end'].astype('string'))
     # Literal same-day overlap logic from the supplied SQL</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     Methods present in the supplied code, added to the image-based index · Also used in these notes. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=Also%20used%20in%20these%20notes">
+<small>
     ← Browse
    </small>
    pandas · Also used in these notes
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

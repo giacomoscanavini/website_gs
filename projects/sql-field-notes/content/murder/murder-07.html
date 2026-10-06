@@ -1,194 +1,174 @@
 <article class="article" id="murder-07">
- <div class="breadcrumb">
-  <a href="#murder-city">
+<div class="breadcrumb">
+<a href="#murder-city">
    SQL Murder City
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Step 7
   </span>
- </div>
- <h1>
+</div>
+<h1>
   Follow the second interview
  </h1>
- <p class="lead">
+<p class="lead">
   Read the identified person’s statement to uncover a second lead.
  </p>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-106-panel-0" aria-selected="true" id="example-106-tab-0" role="tab" tabindex="0" type="button">
-     My SQL
-    </button>
-    <button aria-controls="example-106-panel-1" aria-selected="false" id="example-106-tab-1" role="tab" tabindex="-1" type="button">
-     pandas alternative
-    </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-106-panel-0" aria-selected="true" id="example-106-tab-0" role="tab" tabindex="0" type="button"> SQL </button>
+<button aria-controls="example-106-panel-1" aria-selected="false" id="example-106-tab-1" role="tab" tabindex="-1" type="button"> pandas </button>
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-106-tab-0" class="code-panel" id="example-106-panel-0" role="tabpanel">
-   <div class="no-script-label">
-    My SQL
-   </div>
-   <pre id="code-murder-07-0" tabindex="0"><code class="language-sql" data-origin="murder-cell-12"><span class="c1">-- Let's see if Jeremy Bowers has releasted any interview statement</span>
+</div>
+<div aria-labelledby="example-106-tab-0" class="code-panel" id="example-106-panel-0" role="tabpanel">
+<div class="no-script-label"> SQL </div>
+<pre id="code-murder-07-0" tabindex="0"><code class="language-sql" data-origin="murder-cell-12"><span class="c1">-- Let's see if Jeremy Bowers has releasted any interview statement</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">name</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">transcript</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Person</span><span class="w"> </span><span class="n">p</span>
 <span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Interview</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">person_id</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">person_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">67318</span></code></pre>
-  </div>
-  <div aria-labelledby="example-106-tab-1" class="code-panel" id="example-106-panel-1" role="tabpanel">
-   <div class="no-script-label">
-    pandas alternative
-   </div>
-   <pre id="code-murder-07-1" tabindex="0"><code class="language-python" data-origin="murder-07-pandas"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</div>
+<div aria-labelledby="example-106-tab-1" class="code-panel" id="example-106-panel-1" role="tabpanel">
+<div class="no-script-label"> pandas </div>
+<pre id="code-murder-07-1" tabindex="0"><code class="language-python" data-origin="murder-07-pandas"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="n">joined</span> <span class="o">=</span> <span class="n">person</span><span class="p">[[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">]]</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">interview</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">,</span>
                                      <span class="n">left_on</span><span class="o">=</span><span class="s1">'id'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'person_id'</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">joined</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">joined</span><span class="p">[</span><span class="s1">'person_id'</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">67318</span><span class="p">),</span> <span class="p">[</span><span class="s1">'id'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">,</span> <span class="s1">'transcript'</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
-   <p class="panel-note">
-    Added translation ·
-    <a href="#murder-city">
+<p class="panel-note"> pandas · <a href="#murder-city">
      DataFrame assumptions
     </a>
-   </p>
-  </div>
- </div>
- <h2>
+</p>
+</div>
+</div>
+<h2>
   Recorded result
  </h2>
- <div aria-label="Scrollable data table" class="table-scroll" role="region" tabindex="0">
-  <table>
-   <thead>
-    <tr>
-     <th>
+<div aria-label="Scrollable data table" class="table-scroll" role="region" tabindex="0">
+<table>
+<thead>
+<tr>
+<th>
       id
      </th>
-     <th>
+<th>
       name
      </th>
-     <th>
+<th>
       transcript
      </th>
-    </tr>
-   </thead>
-   <tbody>
-    <tr>
-     <td>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
       67318
      </td>
-     <td>
+<td>
       Jeremy Bowers
      </td>
-     <td>
+<td>
       I was hired by a woman with a lot of money. I don't know her name but I know she's around 5'5" (65") or 5'7" (67"). She has red hair and she drives a Tesla Model S. I know that she attended the SQL Symphony Concert 3 times in December 2017.
      </td>
-    </tr>
-   </tbody>
-  </table>
- </div>
- <h2>
+</tr>
+</tbody>
+</table>
+</div>
+<h2>
   How it works
  </h2>
- <p>
+<p>
   The query retrieves the interview associated with person_id 67318. The recorded statement describes the person who hired the killer and adds an event-attendance clue.
  </p>
- <div class="note warning">
-  <b>
-   Source-aware note.
-  </b>
-  The height, hair, car and concert details are recorded testimony in the puzzle. They are not inferred from external sources.
- </div>
- <details class="reference-details">
-  <summary>
+<details class="reference-details">
+<summary>
    Sources and original files
   </summary>
-  <div class="sources-content">
-   <div class="source-note">
-    <b>
+<div class="sources-content">
+<div class="source-note">
+<b>
      Source:
     </b>
-    <code>
+<code>
      sql_murder_city.ipynb
-    </code>
-    , notebook cell 13 (one-based). Original code is reproduced unchanged. Explanations and pandas panels are additions to the website edition.
-   </div>
-   <p class="small">
+    </code> , notebook cell 13 (one-based). </div>
+<p class="small">
     Source:
     <a href="#murder-city">
      original notebook and casebook overview
     </a>
     . Original cell 13 and recorded Markdown cell 14.
    </p>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-left-join">
+<a href="#m-sql-left-join">
      LEFT JOIN
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-select-columns">
+<a href="#m-pd-select-columns">
      Select columns
     </a>
-    <a href="#m-pd-loc">
+<a href="#m-pd-loc">
      Rows by label
     </a>
-    <a href="#m-pd-loc-label">
+<a href="#m-pd-loc-label">
      Access label
     </a>
-    <a href="#m-pd-merge-left">
+<a href="#m-pd-merge-left">
      Left merge
     </a>
-    <a href="#m-pd-merge-keys">
+<a href="#m-pd-merge-keys">
      Different keys
     </a>
-    <a href="#m-pd-eq">
+<a href="#m-pd-eq">
      eq() / ne()
     </a>
-    <a href="#m-pd-copy">
+<a href="#m-pd-copy">
      copy()
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#murder-06">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#murder-06">
+<small>
     ← Previous
    </small>
    Submit the first identification
   </a>
-  <a href="#murder-08">
-   <small>
+<a href="#murder-08">
+<small>
     Next →
-   </small>
-   Keep the candidate-table gap visible
-  </a>
- </div>
+   </small> Candidate shortlist </a>
+</div>
 </article>

@@ -1,208 +1,206 @@
 <article class="article" id="B10">
- <div class="breadcrumb">
-  <a href="#sqlbolt">
+<div class="breadcrumb">
+<a href="#sqlbolt">
    SQLBolt
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Lesson 10
   </span>
- </div>
- <h1>
+</div>
+<h1>
   Aggregates and GROUP BY
  </h1>
- <p>
+<p>
   Aggregates collapse rows into summary values. Without GROUP BY the entire input is one group; with GROUP BY there is one result per group. COUNT(*) counts rows, whereas COUNT(column) excludes NULL.
  </p>
- <p>
-  <b>
+<p>
+<b>
    Note.
   </b>
   Pandas groupby drops missing group keys unless dropna=False. SUM in SQL returns NULL when no non-NULL values contribute; sum(min_count=1) preserves that distinction.
  </p>
- <h2>
+<h2>
   01 · Longest employee tenure
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-34-panel-0" aria-selected="true" id="example-34-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-34-panel-0" aria-selected="true" id="example-34-tab-0" role="tab" tabindex="0" type="button">
      SQL
     </button>
-    <button aria-controls="example-34-panel-1" aria-selected="false" id="example-34-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-34-panel-1" aria-selected="false" id="example-34-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-34-tab-0" class="code-panel" id="example-34-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-34-tab-0" class="code-panel" id="example-34-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-B10-0" tabindex="0"><code class="language-sql" data-origin="legacy-B10-0"><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">years_employed</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">max_years</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">employees</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-34-tab-1" class="code-panel" id="example-34-panel-1" role="tabpanel">
-   <div class="no-script-label">
+<pre id="code-B10-0" tabindex="0"><code class="language-sql" data-origin="legacy-B10-0"><span class="k">SELECT</span><span class="w"> </span><span class="k">MAX</span><span class="p">(</span><span class="n">years_employed</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">max_years</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">employees</span><span class="p">;</span></code></pre>
+</div>
+<div aria-labelledby="example-34-tab-1" class="code-panel" id="example-34-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-B10-1" tabindex="0"><code class="language-python" data-origin="legacy-B10-1"><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'max_years'</span><span class="p">:</span> <span class="p">[</span><span class="n">employees</span><span class="p">[</span><span class="s1">'years_employed'</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()]})</span></code></pre>
-  </div>
- </div>
- <h2>
+<pre id="code-B10-1" tabindex="0"><code class="language-python" data-origin="legacy-B10-1"><span class="n">result</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'max_years'</span><span class="p">:</span> <span class="p">[</span><span class="n">employees</span><span class="p">[</span><span class="s1">'years_employed'</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()]})</span></code></pre>
+</div>
+</div>
+<h2>
   02 · Mean tenure per role
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-35-panel-0" aria-selected="true" id="example-35-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-35-panel-0" aria-selected="true" id="example-35-tab-0" role="tab" tabindex="0" type="button">
      SQL
     </button>
-    <button aria-controls="example-35-panel-1" aria-selected="false" id="example-35-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-35-panel-1" aria-selected="false" id="example-35-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-35-tab-0" class="code-panel" id="example-35-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-35-tab-0" class="code-panel" id="example-35-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-B10-2" tabindex="0"><code class="language-sql" data-origin="legacy-B10-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">role</span><span class="p">,</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">years_employed</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">average_years</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">employees</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">role</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-35-tab-1" class="code-panel" id="example-35-panel-1" role="tabpanel">
-   <div class="no-script-label">
+<pre id="code-B10-2" tabindex="0"><code class="language-sql" data-origin="legacy-B10-2"><span class="k">SELECT</span><span class="w"> </span><span class="k">role</span><span class="p">,</span><span class="w"> </span><span class="k">AVG</span><span class="p">(</span><span class="n">years_employed</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">average_years</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">employees</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">role</span><span class="p">;</span></code></pre>
+</div>
+<div aria-labelledby="example-35-tab-1" class="code-panel" id="example-35-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-B10-3" tabindex="0"><code class="language-python" data-origin="legacy-B10-3"><span class="n">result</span> <span class="o">=</span> <span class="n">employees</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'role'</span><span class="p">,</span> <span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">average_years</span><span class="o">=</span><span class="p">(</span><span class="s1">'years_employed'</span><span class="p">,</span> <span class="s1">'mean'</span><span class="p">))</span></code></pre>
-  </div>
- </div>
- <h2>
+<pre id="code-B10-3" tabindex="0"><code class="language-python" data-origin="legacy-B10-3"><span class="n">result</span> <span class="o">=</span> <span class="n">employees</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'role'</span><span class="p">,</span> <span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">average_years</span><span class="o">=</span><span class="p">(</span><span class="s1">'years_employed'</span><span class="p">,</span> <span class="s1">'mean'</span><span class="p">))</span></code></pre>
+</div>
+</div>
+<h2>
   03 · Total employee-years per building
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-36-panel-0" aria-selected="true" id="example-36-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-36-panel-0" aria-selected="true" id="example-36-tab-0" role="tab" tabindex="0" type="button">
      SQL
     </button>
-    <button aria-controls="example-36-panel-1" aria-selected="false" id="example-36-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-36-panel-1" aria-selected="false" id="example-36-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-36-tab-0" class="code-panel" id="example-36-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-36-tab-0" class="code-panel" id="example-36-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-B10-4" tabindex="0"><code class="language-sql" data-origin="legacy-B10-4"><span class="k">SELECT</span><span class="w"> </span><span class="n">building</span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">years_employed</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_years</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">employees</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">building</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-36-tab-1" class="code-panel" id="example-36-panel-1" role="tabpanel">
-   <div class="no-script-label">
+<pre id="code-B10-4" tabindex="0"><code class="language-sql" data-origin="legacy-B10-4"><span class="k">SELECT</span><span class="w"> </span><span class="n">building</span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">years_employed</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">total_years</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">employees</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">building</span><span class="p">;</span></code></pre>
+</div>
+<div aria-labelledby="example-36-tab-1" class="code-panel" id="example-36-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-B10-5" tabindex="0"><code class="language-python" data-origin="legacy-B10-5"><span class="n">result</span> <span class="o">=</span> <span class="n">employees</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'building'</span><span class="p">,</span> <span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="s1">'years_employed'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">min_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'total_years'</span><span class="p">)</span></code></pre>
-  </div>
- </div>
- <p>
+<pre id="code-B10-5" tabindex="0"><code class="language-python" data-origin="legacy-B10-5"><span class="n">result</span> <span class="o">=</span> <span class="n">employees</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'building'</span><span class="p">,</span> <span class="n">dropna</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="s1">'years_employed'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">min_count</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'total_years'</span><span class="p">)</span></code></pre>
+</div>
+</div>
+<p>
   Sum years_employed; counting employees answers a different question. A building with nobody assigned is absent unless buildings is left-joined first.
  </p>
- <details class="reference-details">
-  <summary>
+<details class="reference-details">
+<summary>
    Sources
   </summary>
-  <div class="sources-content">
-   <p>
-    The worked examples and pandas translations are study alternatives, not an official answer key. Shared DataFrame setup is listed under Reference.
-   </p>
-   <p>
-    <a href="https://sqlbolt.com/lesson/select_queries_with_aggregates" rel="noopener noreferrer" target="_blank">
+<div class="sources-content">
+<p>SQLBolt exercises with SQL and pandas examples. Shared DataFrame assumptions are listed under Setup and conventions.</p>
+<p>
+<a href="https://sqlbolt.com/lesson/select_queries_with_aggregates" rel="noopener noreferrer" target="_blank">
      SQLBolt — Aggregates and GROUP BY
     </a>
-   </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+</p>
+<p>
+<a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
      pandas SQL comparison
     </a>
     — Projection, filtering, grouping, joins and operations.
    </p>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-sum">
+<div>
+<a href="#m-sql-sum">
      SUM()
     </a>
-    <a href="#m-sql-avg">
+<a href="#m-sql-avg">
      AVG()
     </a>
-    <a href="#m-sql-max">
+<a href="#m-sql-max">
      MAX()
     </a>
-    <a href="#m-sql-group-by">
+<a href="#m-sql-group-by">
      GROUP BY
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-reset-index">
+<a href="#m-pd-reset-index">
      Reset index
     </a>
-    <a href="#m-pd-sum">
+<a href="#m-pd-sum">
      sum()
     </a>
-    <a href="#m-pd-mean">
+<a href="#m-pd-mean">
      mean()
     </a>
-    <a href="#m-pd-max">
+<a href="#m-pd-max">
      max()
     </a>
-    <a href="#m-pd-groupby">
+<a href="#m-pd-groupby">
      Basic group
     </a>
-    <a href="#m-pd-agg-named">
+<a href="#m-pd-agg-named">
      Named aggregation
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#B09">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#B09">
+<small>
     ← Previous
    </small>
    Expressions and aliases
   </a>
-  <a href="#B11">
-   <small>
+<a href="#B11">
+<small>
     Next →
    </small>
    WHERE versus HAVING
   </a>
- </div>
+</div>
 </article>

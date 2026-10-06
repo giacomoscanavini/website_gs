@@ -1,77 +1,45 @@
 <section aria-labelledby="backpropagation-title" class="page-view lesson-layout" id="backpropagation">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      06
     </span>
     Part 1 · Neural-network foundations
    </p>
-   <h1 id="backpropagation-title" tabindex="-1">
-    Backpropagation, worked all the way through
-   </h1>
-   <p class="standfirst">
-    Derive scalar and matrix gradients, then update every parameter in the same numerical network.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Neural networks · PDF pp. 13–17 · §§14–20" data-page="13" data-pdf="basics" type="button">
-     Neural networks · PDF pp. 13–17 · §§14–20
-    </button>
-    <button aria-label="Open source: Neural networks · PDF pp. 21–22 · §§29–31" data-page="21" data-pdf="basics" type="button">
-     Neural networks · PDF pp. 21–22 · §§29–31
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<h1 id="backpropagation-title" tabindex="-1">Backpropagation and parameter updates</h1>
+<p class="standfirst">Backpropagation applies the chain rule from the loss to every weight and bias, reusing intermediate derivatives. The numerical example follows each gradient through one complete parameter update.</p>
+
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="local-derivatives-become-a-global-sensitivity" href="#backpropagation?section=local-derivatives-become-a-global-sensitivity">
-     Local derivatives become a global sensitivity
-    </a>
-    <a data-section="the-matrix-recurrence" href="#backpropagation?section=the-matrix-recurrence">
-     The matrix recurrence
-    </a>
-    <a data-section="step-1-the-output-error-signal" href="#backpropagation?section=step-1-the-output-error-signal">
-     Step 1: the output error signal
-    </a>
-    <a data-section="step-2-output-layer-gradients" href="#backpropagation?section=step-2-output-layer-gradients">
-     Step 2: output-layer gradients
-    </a>
-    <a data-section="step-3-send-sensitivity-into-the-hidden-layer" href="#backpropagation?section=step-3-send-sensitivity-into-the-hidden-layer">
-     Step 3: send sensitivity into the hidden layer
-    </a>
-    <a data-section="step-4-first-layer-gradients" href="#backpropagation?section=step-4-first-layer-gradients">
-     Step 4: first-layer gradients
-    </a>
-    <a data-section="step-5-one-gradient-descent-update" href="#backpropagation?section=step-5-one-gradient-descent-update">
-     Step 5: one gradient-descent update
-    </a>
-    <a data-section="why-the-algorithm-is-efficient" href="#backpropagation?section=why-the-algorithm-is-efficient">
-     Why the algorithm is efficient
-    </a>
-    <a data-section="implementation" href="#backpropagation?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="local-derivatives-become-a-global-sensitivity" id="backpropagation--local-derivatives-become-a-global-sensitivity">
+<nav aria-label="On this page">
+<a data-section="local-derivatives-become-a-global-sensitivity" href="#backpropagation?section=local-derivatives-become-a-global-sensitivity">Local derivatives become a global sensitivity</a>
+<a data-section="the-matrix-recurrence" href="#backpropagation?section=the-matrix-recurrence">The matrix recurrence</a>
+<a data-section="step-1-the-output-error-signal" href="#backpropagation?section=step-1-the-output-error-signal">Step 1: the output error signal</a>
+<a data-section="step-2-output-layer-gradients" href="#backpropagation?section=step-2-output-layer-gradients">Step 2: output-layer gradients</a>
+<a data-section="step-3-send-sensitivity-into-the-hidden-layer" href="#backpropagation?section=step-3-send-sensitivity-into-the-hidden-layer">Step 3: send sensitivity into the hidden layer</a>
+<a data-section="step-4-first-layer-gradients" href="#backpropagation?section=step-4-first-layer-gradients">Step 4: first-layer gradients</a>
+<a data-section="step-5-one-gradient-descent-update" href="#backpropagation?section=step-5-one-gradient-descent-update">Step 5: one gradient-descent update</a>
+<a data-section="why-the-algorithm-is-efficient" href="#backpropagation?section=why-the-algorithm-is-efficient">Why the algorithm is efficient</a>
+<a data-section="implementation" href="#backpropagation?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="local-derivatives-become-a-global-sensitivity" id="backpropagation--local-derivatives-become-a-global-sensitivity">
     Local derivatives become a global sensitivity
    </h2>
-   <p>
+<p>
     Backpropagation is the chain rule organized so that intermediate results are reused. For the scalar path
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo>→</mo><mi>z</mi><mo>→</mo><mi>a</mi><mo>→</mo><mi>L</mi></mrow><annotation encoding="application/x-tex">w\to z\to a\to L</annotation></semantics></math>
     ,
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>w</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>a</mi></mrow></mfrac><mfrac><mrow><mi>∂</mi><mi>a</mi></mrow><mrow><mi>∂</mi><mi>z</mi></mrow></mfrac><mfrac><mrow><mi>∂</mi><mi>z</mi></mrow><mrow><mi>∂</mi><mi>w</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial w}=\frac{\partial L}{\partial a}\frac{\partial a}{\partial z}\frac{\partial z}{\partial w}.</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>w</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>a</mi></mrow></mfrac><mfrac><mrow><mi>∂</mi><mi>a</mi></mrow><mrow><mi>∂</mi><mi>z</mi></mrow></mfrac><mfrac><mrow><mi>∂</mi><mi>z</mi></mrow><mrow><mi>∂</mi><mi>w</mi></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial w}=\frac{\partial L}{\partial a}\frac{\partial a}{\partial z}\frac{\partial z}{\partial w}.</annotation></semantics></math>
+</div>
+<p>
     If
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mi>w</mi><mi>x</mi><mo>+</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">z=wx+b</annotation></semantics></math>
     ,
@@ -82,21 +50,21 @@
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">(a-y)x</annotation></semantics></math>
     for the weight gradient. An inactive unit gives zero through this path. The derivative of the affine part says how the parameter changes the pre-activation; the activation derivative says how that change survives the nonlinearity; the loss derivative says whether it helps the objective.
    </p>
-   <details class="derivation" data-derivation="scalar-chain" id="backpropagation--derivation-scalar-chain">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<details class="derivation" data-derivation="scalar-chain" id="backpropagation--derivation-scalar-chain">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Apply the chain rule to every scalar dependency
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
-      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mi>w</mi><mi>x</mi><mo>+</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">z=wx+b</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mi>w</mi><mi>x</mi><mo>+</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">z=wx+b</annotation></semantics></math>
       ,
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><mi>ϕ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">a=\phi(z)</annotation></semantics></math>
       , and
@@ -107,47 +75,47 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>y</mi><annotation encoding="application/x-tex">y</annotation></semantics></math>
       as constants when differentiating the parameters.
      </p>
-     <h4>
+<h4>
       1 · Differentiate the loss with respect to its direct input
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>a</mi></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mspace width="0.167em"></mspace><mn>2</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>a</mi><mo>−</mo><mi>y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial a}=\frac12\,2(a-y)=a-y.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>a</mi></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mspace width="0.167em"></mspace><mn>2</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>a</mi><mo>−</mo><mi>y</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial a}=\frac12\,2(a-y)=a-y.</annotation></semantics></math>
+</div>
+<p>
       This is not yet the weight gradient: the weight reaches the loss through
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
       and
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       2 · Differentiate the activation and affine map
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>a</mi></mrow><mrow><mi>∂</mi><mi>z</mi></mrow></mfrac><mo>=</mo><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>z</mi></mrow><mrow><mi>∂</mi><mi>w</mi></mrow></mfrac><mo>=</mo><mi>x</mi><mo>,</mo><mspace width="1.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>z</mi></mrow><mrow><mi>∂</mi><mi>b</mi></mrow></mfrac><mo>=</mo><mn>1</mn><mo>,</mo><mspace width="1.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>z</mi></mrow><mrow><mi>∂</mi><mi>x</mi></mrow></mfrac><mo>=</mo><mi>w</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial a}{\partial z}=\phi'(z),\quad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>a</mi></mrow><mrow><mi>∂</mi><mi>z</mi></mrow></mfrac><mo>=</mo><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>z</mi></mrow><mrow><mi>∂</mi><mi>w</mi></mrow></mfrac><mo>=</mo><mi>x</mi><mo>,</mo><mspace width="1.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>z</mi></mrow><mrow><mi>∂</mi><mi>b</mi></mrow></mfrac><mo>=</mo><mn>1</mn><mo>,</mo><mspace width="1.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>z</mi></mrow><mrow><mi>∂</mi><mi>x</mi></mrow></mfrac><mo>=</mo><mi>w</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial a}{\partial z}=\phi'(z),\quad
 \frac{\partial z}{\partial w}=x,\quad
 \frac{\partial z}{\partial b}=1,\quad
 \frac{\partial z}{\partial x}=w.</annotation></semantics></math>
-     </div>
-     <h4>
+</div>
+<h4>
       3 · Multiply along each path
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>w</mi></mrow></mfrac><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>x</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial w}=(a-y)\phi'(z)x,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>b</mi></mrow></mfrac><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>x</mi></mrow></mfrac><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>w</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial b}=(a-y)\phi'(z),\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>w</mi></mrow></mfrac><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>x</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial w}=(a-y)\phi'(z)x,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>b</mi></mrow></mfrac><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>x</mi></mrow></mfrac><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo>−</mo><mi>y</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>w</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial b}=(a-y)\phi'(z),\qquad
 \frac{\partial L}{\partial x}=(a-y)\phi'(z)w.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       The input derivative is useful for propagating sensitivity into an earlier layer even when
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
       is not a trainable parameter.
      </p>
-     <h4>
+<h4>
       4 · Evaluate the ReLU branches
      </h4>
-     <p>
+<p>
       For
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">z&gt;0</annotation></semantics></math>
       ,
@@ -164,10 +132,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">z=0</annotation></semantics></math>
       , specify the software convention rather than using a nonexistent classical derivative.
      </p>
-     <h4>
+<h4>
       5 · Add derivatives when a variable feeds multiple branches
      </h4>
-     <p>
+<p>
       If
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
       feeds two paths
@@ -180,10 +148,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>a</mi></mrow><annotation encoding="application/x-tex">da</annotation></semantics></math>
       changes both:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>L</mi><mo>=</mo><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>u</mi></mrow></mfrac><mfrac><mrow><mi>d</mi><mi>u</mi></mrow><mrow><mi>d</mi><mi>a</mi></mrow></mfrac><mi>d</mi><mi>a</mi><mo>+</mo><mi>r</mi><mi>a</mi><mi>c</mi><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>v</mi></mrow><mfrac><mrow><mi>d</mi><mi>v</mi></mrow><mrow><mi>d</mi><mi>a</mi></mrow></mfrac><mi>d</mi><mi>a</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">dL=\frac{\partial L}{\partial u}\frac{du}{da}da+rac{\partial L}{\partial v}\frac{dv}{da}da.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>L</mi><mo>=</mo><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>u</mi></mrow></mfrac><mfrac><mrow><mi>d</mi><mi>u</mi></mrow><mrow><mi>d</mi><mi>a</mi></mrow></mfrac><mi>d</mi><mi>a</mi><mo>+</mo><mi>r</mi><mi>a</mi><mi>c</mi><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>v</mi></mrow><mfrac><mrow><mi>d</mi><mi>v</mi></mrow><mrow><mi>d</mi><mi>a</mi></mrow></mfrac><mi>d</mi><mi>a</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">dL=\frac{\partial L}{\partial u}\frac{du}{da}da+rac{\partial L}{\partial v}\frac{dv}{da}da.</annotation></semantics></math>
+</div>
+<p>
       Divide by
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>a</mi></mrow><annotation encoding="application/x-tex">da</annotation></semantics></math>
       to get the sum of both contributions. Backpropagation
@@ -192,61 +160,45 @@
       </strong>
       ; ignoring the addition loses valid dependencies.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="13" data-pdf="basics" type="button">
-       Chapter source · PDF p. 13
-      </button>
-      <a class="calculation-link" href="#backpropagation?derivation=scalar-chain">
+<div class="derivation-footer">
+
+<button data-page="13" data-pdf="basics" type="button">Reference · PDF p. 13</button>
+<a class="calculation-link" href="#backpropagation?derivation=scalar-chain">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="the-matrix-recurrence" id="backpropagation--the-matrix-recurrence">
+</div>
+</div>
+</details>
+<h2 data-section="the-matrix-recurrence" id="backpropagation--the-matrix-recurrence">
     The matrix recurrence
    </h2>
-   <p>
+<p>
     Define a layer’s error signal as a derivative, not a new trainable variable:
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msup><mi>z</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\delta^{[\ell]}=\frac{\partial L}{\partial z^{[\ell]}}.</annotation></semantics></math>
-   </div>
-   <p>
-    The guide’s single-example, column-vector equations are
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><msup><mi>W</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo>=</mo><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>∇</mi><msup><mi>b</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo>=</mo><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>,</mo></mrow><annotation encoding="application/x-tex">\nabla_{W^{[\ell]}}L=\delta^{[\ell]}(a^{[\ell-1]})^\top,\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msup><mi>z</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\delta^{[\ell]}=\frac{\partial L}{\partial z^{[\ell]}}.</annotation></semantics></math>
+</div>
+<p>For one example represented as a column vector,</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><msup><mi>W</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo>=</mo><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>a</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>∇</mi><msup><mi>b</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo>=</mo><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>,</mo></mrow><annotation encoding="application/x-tex">\nabla_{W^{[\ell]}}L=\delta^{[\ell]}(a^{[\ell-1]})^\top,\qquad
 \nabla_{b^{[\ell]}}L=\delta^{[\ell]},</annotation></semantics></math>
-   </div>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>W</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo>+</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo>+</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>⊙</mo><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>z</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\delta^{[\ell]}=(W^{[\ell+1]})^\top\delta^{[\ell+1]}\odot\phi'(z^{[\ell]}).</annotation></semantics></math>
-   </div>
-   <p>
-    The outer product gives exactly the shape of the weight matrix. Its entry
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mi>j</mi><mo>,</mo><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(j,k)</annotation></semantics></math>
-    is “sensitivity at output unit
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
-    times input activation
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
-    .” This is a useful way to recover the formula rather than memorize it. The Hadamard product
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>⊙</mi><annotation encoding="application/x-tex">\odot</annotation></semantics></math>
-    applies the activation derivative coordinate by coordinate.
-   </p>
-   <details class="derivation" data-derivation="matrix-gradient" id="backpropagation--derivation-matrix-gradient">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>W</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo>+</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo>+</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>⊙</mo><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>z</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>ℓ</mo><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\delta^{[\ell]}=(W^{[\ell+1]})^\top\delta^{[\ell+1]}\odot\phi'(z^{[\ell]}).</annotation></semantics></math>
+</div>
+<p>The outer product gives exactly the shape of the weight matrix. Its entry <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mi>j</mi><mo>,</mo><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(j,k)</annotation></semantics></math> is “sensitivity at output unit <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math> times input activation <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>.” The two factors give the row and column dimensions of the gradient. The Hadamard product <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>⊙</mi><annotation encoding="application/x-tex">\odot</annotation></semantics></math> applies the activation derivative coordinate by coordinate.</p>
+<details class="derivation" data-derivation="matrix-gradient" id="backpropagation--derivation-matrix-gradient">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Recover matrix and mini-batch gradients from individual entries
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       One layer uses
@@ -261,34 +213,34 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>δ</mi><mi>j</mi></msub><mo>=</mo><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msub><mi>z</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\delta_j=\partial L/\partial z_j</annotation></semantics></math>
       . Vectors of sensitivities are columns.
      </p>
-     <h4>
+<h4>
       1 · Differentiate one weight entry
      </h4>
-     <p>
+<p>
       Since
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>i</mi></msub><mo>=</mo><msub><mo>∑</mo><mi>k</mi></msub><msub><mi>W</mi><mrow><mi>i</mi><mi>k</mi></mrow></msub><msub><mi>a</mi><mi>k</mi></msub><mo>+</mo><msub><mi>b</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">z_i=\sum_kW_{ik}a_k+b_i</annotation></semantics></math>
       ,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msub><mi>z</mi><mi>i</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>W</mi><mrow><mi>j</mi><mi>k</mi></mrow></msub></mrow></mfrac><mo>=</mo><mrow><mo form="prefix" stretchy="true">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><msub><mi>a</mi><mi>k</mi></msub></mtd><mtd columnalign="left" style="text-align: left"><mi>i</mi><mo>=</mo><mi>j</mi><mo>,</mo></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mn>0</mn></mtd><mtd columnalign="left" style="text-align: left"><mi>i</mi><mo>≠</mo><mi>j</mi><mi>.</mi></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\frac{\partial z_i}{\partial W_{jk}}=\begin{cases}a_k&amp;i=j,\\0&amp;i\ne j.\end{cases}</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msub><mi>z</mi><mi>i</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>W</mi><mrow><mi>j</mi><mi>k</mi></mrow></msub></mrow></mfrac><mo>=</mo><mrow><mo form="prefix" stretchy="true">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><msub><mi>a</mi><mi>k</mi></msub></mtd><mtd columnalign="left" style="text-align: left"><mi>i</mi><mo>=</mo><mi>j</mi><mo>,</mo></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mn>0</mn></mtd><mtd columnalign="left" style="text-align: left"><mi>i</mi><mo>≠</mo><mi>j</mi><mi>.</mi></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\frac{\partial z_i}{\partial W_{jk}}=\begin{cases}a_k&amp;i=j,\\0&amp;i\ne j.\end{cases}</annotation></semantics></math>
+</div>
+<p>
       The multivariable chain rule sums all output paths:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>W</mi><mrow><mi>j</mi><mi>k</mi></mrow></msub></mrow></mfrac><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>z</mi><mi>i</mi></msub></mrow></mfrac><mfrac><mrow><mi>∂</mi><msub><mi>z</mi><mi>i</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>W</mi><mrow><mi>j</mi><mi>k</mi></mrow></msub></mrow></mfrac><mo>=</mo><msub><mi>δ</mi><mi>j</mi></msub><msub><mi>a</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial W_{jk}}=\sum_i\frac{\partial L}{\partial z_i}\frac{\partial z_i}{\partial W_{jk}}=\delta_j a_k.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>W</mi><mrow><mi>j</mi><mi>k</mi></mrow></msub></mrow></mfrac><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>z</mi><mi>i</mi></msub></mrow></mfrac><mfrac><mrow><mi>∂</mi><msub><mi>z</mi><mi>i</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>W</mi><mrow><mi>j</mi><mi>k</mi></mrow></msub></mrow></mfrac><mo>=</mo><msub><mi>δ</mi><mi>j</mi></msub><msub><mi>a</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial W_{jk}}=\sum_i\frac{\partial L}{\partial z_i}\frac{\partial z_i}{\partial W_{jk}}=\delta_j a_k.</annotation></semantics></math>
+</div>
+<p>
       Those entries form the outer product
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>W</mi></msub><mi>L</mi><mo>=</mo><mi>δ</mi><msup><mi>a</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\nabla_WL=\delta a^\top</annotation></semantics></math>
       , whose shape is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>×</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">m\times n</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       2 · Differentiate a bias and an input entry
      </h4>
-     <p>
+<p>
       Only
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mi>j</mi></msub><annotation encoding="application/x-tex">z_j</annotation></semantics></math>
       contains
@@ -299,10 +251,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mi>k</mi></msub><annotation encoding="application/x-tex">a_k</annotation></semantics></math>
       influences every output:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>a</mi><mi>k</mi></msub></mrow></mfrac><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>δ</mi><mi>j</mi></msub><msub><mi>W</mi><mrow><mi>j</mi><mi>k</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial a_k}=\sum_j\delta_jW_{jk}.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>a</mi><mi>k</mi></msub></mrow></mfrac><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>δ</mi><mi>j</mi></msub><msub><mi>W</mi><mrow><mi>j</mi><mi>k</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial a_k}=\sum_j\delta_jW_{jk}.</annotation></semantics></math>
+</div>
+<p>
       This is coordinate
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
       of
@@ -311,26 +263,26 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>a</mi></msub><mi>L</mi><mo>=</mo><msup><mi>W</mi><mi>⊤</mi></msup><mi>δ</mi></mrow><annotation encoding="application/x-tex">\nabla_aL=W^\top\delta</annotation></semantics></math>
       . The transpose is not an inverse.
      </p>
-     <h4>
+<h4>
       3 · Cross the preceding activation
      </h4>
-     <p>
+<p>
       If
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>k</mi></msub><mo>=</mo><mi>ϕ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>s</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">a_k=\phi(s_k)</annotation></semantics></math>
       independently per coordinate, then
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>s</mi><mi>k</mi></msub></mrow></mfrac><mo>=</mo><msub><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>W</mi><mi>⊤</mi></msup><mi>δ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>k</mi></msub><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>s</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial s_k}=(W^\top\delta)_k\phi'(s_k).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>s</mi><mi>k</mi></msub></mrow></mfrac><mo>=</mo><msub><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>W</mi><mi>⊤</mi></msup><mi>δ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>k</mi></msub><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>s</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial s_k}=(W^\top\delta)_k\phi'(s_k).</annotation></semantics></math>
+</div>
+<p>
       Collecting coordinates gives
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>W</mi><mi>⊤</mi></msup><mi>δ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">(W^\top\delta)\odot\phi'(s)</annotation></semantics></math>
       . Applying this repeatedly yields the hidden-layer recurrence in the chapter.
      </p>
-     <h4>
+<h4>
       4 · Sum a batch without losing its normalization
      </h4>
-     <p>
+<p>
       Let rows of
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>B</mi><mo>×</mo><mi>n</mi></mrow></msup></mrow><annotation encoding="application/x-tex">A\in\mathbb R^{B\times n}</annotation></semantics></math>
       be layer inputs and rows of
@@ -345,14 +297,14 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>B</mi></msub><mo>=</mo><msup><mi>B</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><msub><mo>∑</mo><mi>i</mi></msub><msub><mo>ℓ</mo><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">L_B=B^{-1}\sum_i\ell_i</annotation></semantics></math>
       ,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>W</mi></msub><msub><mi>L</mi><mi>B</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>B</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>δ</mi><mi>i</mi></msub><msubsup><mi>a</mi><mi>i</mi><mi>⊤</mi></msubsup><mo>=</mo><mfrac><mn>1</mn><mi>B</mi></mfrac><msup><mi>Δ</mi><mi>⊤</mi></msup><mi>A</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\nabla_WL_B=\frac1B\sum_i\delta_i a_i^\top=\frac1B\Delta^\top A,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>b</mi></msub><msub><mi>L</mi><mi>B</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>B</mi></mfrac><msup><mi>Δ</mi><mi>⊤</mi></msup><msub><mn>𝟏</mn><mi>B</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>∇</mi><mi>A</mi></msub><msub><mi>L</mi><mi>B</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>B</mi></mfrac><mi>Δ</mi><mi>W</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_bL_B=\frac1B\Delta^\top\mathbf1_B,\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>W</mi></msub><msub><mi>L</mi><mi>B</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>B</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>δ</mi><mi>i</mi></msub><msubsup><mi>a</mi><mi>i</mi><mi>⊤</mi></msubsup><mo>=</mo><mfrac><mn>1</mn><mi>B</mi></mfrac><msup><mi>Δ</mi><mi>⊤</mi></msup><mi>A</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\nabla_WL_B=\frac1B\sum_i\delta_i a_i^\top=\frac1B\Delta^\top A,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>b</mi></msub><msub><mi>L</mi><mi>B</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>B</mi></mfrac><msup><mi>Δ</mi><mi>⊤</mi></msup><msub><mn>𝟏</mn><mi>B</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>∇</mi><mi>A</mi></msub><msub><mi>L</mi><mi>B</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>B</mi></mfrac><mi>Δ</mi><mi>W</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_bL_B=\frac1B\Delta^\top\mathbf1_B,\qquad
 \nabla_AL_B=\frac1B\Delta W.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       The shape checks are
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>m</mi><mo>×</mo><mi>B</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>B</mi><mo>×</mo><mi>n</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">(m\times B)(B\times n)</annotation></semantics></math>
       ,
@@ -361,10 +313,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>B</mi><mo>×</mo><mi>m</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>m</mi><mo>×</mo><mi>n</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">(B\times m)(m\times n)</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       5 · Do not average twice
      </h4>
-     <p>
+<p>
       If
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mi>∂</mi><msub><mi>L</mi><mi>B</mi></msub><mi>/</mi><mi>∂</mi><mi>Z</mi></mrow><annotation encoding="application/x-tex">D=\partial L_B/\partial Z</annotation></semantics></math>
       already includes
@@ -383,23 +335,19 @@
       </strong>
       . These separable-example expressions assume the layer’s inputs are the quantities being differentiated; batch-coupled operations such as training-mode BatchNorm need their own Jacobian when propagating further backward.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="13" data-pdf="basics" type="button">
-       Chapter source · PDF p. 13
-      </button>
-      <a class="calculation-link" href="#backpropagation?derivation=matrix-gradient">
+<div class="derivation-footer">
+
+<button data-page="13" data-pdf="basics" type="button">Reference · PDF p. 13</button>
+<a class="calculation-link" href="#backpropagation?derivation=matrix-gradient">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="step-1-the-output-error-signal" id="backpropagation--step-1-the-output-error-signal">
+</div>
+</div>
+</details>
+<h2 data-section="step-1-the-output-error-signal" id="backpropagation--step-1-the-output-error-signal">
     Step 1: the output error signal
    </h2>
-   <p>
+<p>
     Continue the
     <a href="#forward-pass">
      forward example
@@ -414,110 +362,110 @@
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">y=1</annotation></semantics></math>
     .
    </p>
-   <p>
+<p>
     For sigmoid plus binary cross entropy,
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>y</mi><mo>≈</mo><mi>−</mi><mn>0.636453</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\delta^{[2]}=\hat y-y\approx-0.636453.</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mover><mi>y</mi><mo accent="true">̂</mo></mover><mo>−</mo><mi>y</mi><mo>≈</mo><mi>−</mi><mn>0.636453</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\delta^{[2]}=\hat y-y\approx-0.636453.</annotation></semantics></math>
+</div>
+<p>
     A negative derivative means increasing the logit locally reduces this loss. It does not mean every parameter should increase; the remaining chain-rule factors determine that.
    </p>
-   <h2 data-section="step-2-output-layer-gradients" id="backpropagation--step-2-output-layer-gradients">
+<h2 data-section="step-2-output-layer-gradients" id="backpropagation--step-2-output-layer-gradients">
     Step 2: output-layer gradients
    </h2>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><msup><mi>W</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo>=</mo><mi>−</mi><mn>0.636453</mn><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.2</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1.8</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>≈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.127291</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1.145615</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\nabla_{W^{[2]}}L=-0.636453\begin{bmatrix}0.2&amp;1.8\end{bmatrix}
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><msup><mi>W</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo>=</mo><mi>−</mi><mn>0.636453</mn><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.2</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>1.8</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>≈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.127291</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>1.145615</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\nabla_{W^{[2]}}L=-0.636453\begin{bmatrix}0.2&amp;1.8\end{bmatrix}
 \approx\begin{bmatrix}-0.127291&amp;-1.145615\end{bmatrix},</annotation></semantics></math>
-   </div>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><msup><mi>b</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo>≈</mo><mi>−</mi><mn>0.636453</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_{b^{[2]}}L\approx-0.636453.</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><msup><mi>b</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo>≈</mo><mi>−</mi><mn>0.636453</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_{b^{[2]}}L\approx-0.636453.</annotation></semantics></math>
+</div>
+<p>
     The second weight has a larger gradient magnitude because its input activation is nine times as large. This illustrates why activation scale influences parameter updates even when the loss sensitivity is shared.
    </p>
-   <h2 data-section="step-3-send-sensitivity-into-the-hidden-layer" id="backpropagation--step-3-send-sensitivity-into-the-hidden-layer">
+<h2 data-section="step-3-send-sensitivity-into-the-hidden-layer" id="backpropagation--step-3-send-sensitivity-into-the-hidden-layer">
     Step 3: send sensitivity into the hidden layer
    </h2>
-   <p>
+<p>
     Both hidden ReLUs are active, so their derivative vector is
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><annotation encoding="application/x-tex">(1,1)^\top</annotation></semantics></math>
     . With output weights
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.7</mn><mo>,</mo><mi>−</mi><mn>0.5</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(0.7,-0.5)</annotation></semantics></math>
     ,
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.7</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.5</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.636453</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.445517</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.318226</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\delta^{[1]}=\begin{bmatrix}0.7\\-0.5\end{bmatrix}(-0.636453)
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.7</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.5</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.636453</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.445517</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.318226</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\delta^{[1]}=\begin{bmatrix}0.7\\-0.5\end{bmatrix}(-0.636453)
 \approx\begin{bmatrix}-0.445517\\0.318226\end{bmatrix}.</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<p>
     The two hidden units receive opposite signs because their outgoing weights have opposite signs. Increasing one hidden activation raises the logit, while increasing the other lowers it. Backpropagation accounts for that structure automatically.
    </p>
-   <h2 data-section="step-4-first-layer-gradients" id="backpropagation--step-4-first-layer-gradients">
+<h2 data-section="step-4-first-layer-gradients" id="backpropagation--step-4-first-layer-gradients">
     Step 4: first-layer gradients
    </h2>
-   <p>
+<p>
     Using
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mi>⊤</mi></msup><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">x^\top=(1,2)</annotation></semantics></math>
     ,
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><msup><mi>W</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo>=</mo><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><msup><mi>x</mi><mi>⊤</mi></msup><mo>≈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.445517</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.891034</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.318226</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.636453</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\nabla_{W^{[1]}}L=\delta^{[1]}x^\top
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><msup><mi>W</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo>=</mo><msup><mi>δ</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><msup><mi>x</mi><mi>⊤</mi></msup><mo>≈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.445517</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.891034</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.318226</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.636453</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\nabla_{W^{[1]}}L=\delta^{[1]}x^\top
 \approx\begin{bmatrix}-0.445517&amp;-0.891034\\0.318226&amp;0.636453\end{bmatrix},</annotation></semantics></math>
-   </div>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><msup><mi>b</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo>≈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.445517</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.318226</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_{b^{[1]}}L\approx\begin{bmatrix}-0.445517\\0.318226\end{bmatrix}.</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><msup><mi>b</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup></msub><mi>L</mi><mo>≈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.445517</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.318226</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_{b^{[1]}}L\approx\begin{bmatrix}-0.445517\\0.318226\end{bmatrix}.</annotation></semantics></math>
+</div>
+<p>
     Every parameter gradient has now been computed. No parameter has yet been updated. In particular, the hidden derivative used the
     <strong>
      old
     </strong>
     output weights, because all gradients describe the same forward computation.
    </p>
-   <h2 data-section="step-5-one-gradient-descent-update" id="backpropagation--step-5-one-gradient-descent-update">
+<h2 data-section="step-5-one-gradient-descent-update" id="backpropagation--step-5-one-gradient-descent-update">
     Step 5: one gradient-descent update
    </h2>
-   <p>
+<p>
     For learning rate
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\eta=0.1</annotation></semantics></math>
     , apply
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow></msub><mo>=</mo><mi>θ</mi><mo>−</mo><mi>η</mi><msub><mi>∇</mi><mi>θ</mi></msub><mi>L</mi></mrow><annotation encoding="application/x-tex">\theta_{\mathrm{new}}=\theta-\eta\nabla_\theta L</annotation></semantics></math>
     :
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>W</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>≈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.544552</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.110897</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.268177</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.736355</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msubsup><mi>b</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>≈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.144552</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.131823</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">W^{[1]}_{\mathrm{new}}\approx\begin{bmatrix}0.544552&amp;-0.110897\\0.268177&amp;0.736355\end{bmatrix},\quad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>W</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>≈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.544552</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.110897</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.268177</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>0.736355</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><msubsup><mi>b</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>≈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.144552</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.131823</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">W^{[1]}_{\mathrm{new}}\approx\begin{bmatrix}0.544552&amp;-0.110897\\0.268177&amp;0.736355\end{bmatrix},\quad
 b^{[1]}_{\mathrm{new}}\approx\begin{bmatrix}0.144552\\-0.131823\end{bmatrix},</annotation></semantics></math>
-   </div>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>W</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>≈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.712729</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.385439</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msubsup><mi>b</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>≈</mo><mn>0.263645</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">W^{[2]}_{\mathrm{new}}\approx\begin{bmatrix}0.712729&amp;-0.385439\end{bmatrix},\qquad
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>W</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>≈</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.712729</mn></mtd><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.385439</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msubsup><mi>b</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>≈</mo><mn>0.263645</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">W^{[2]}_{\mathrm{new}}\approx\begin{bmatrix}0.712729&amp;-0.385439\end{bmatrix},\qquad
 b^{[2]}_{\mathrm{new}}\approx0.263645.</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<p>
     The next prediction requires another forward pass with these new values. Reusing the previous activations would not evaluate the updated network.
    </p>
-   <details class="derivation" data-derivation="nine-parameters" id="backpropagation--derivation-nine-parameters">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<details class="derivation" data-derivation="nine-parameters" id="backpropagation--derivation-nine-parameters">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Calculate and update all nine parameters of the example
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Use the original forward graph and natural-log binary cross entropy, with
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\eta=0.1</annotation></semantics></math>
       . Compute every gradient before modifying any parameter.
      </p>
-     <h4>
+<h4>
       1 · Start at the output logit
      </h4>
-     <p>
+<p>
       The binary-loss derivation gives
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mi>p</mi><mo>−</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">\delta=p-y</annotation></semantics></math>
       . Substituting
@@ -526,180 +474,180 @@ b^{[2]}_{\mathrm{new}}\approx0.263645.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">y=1</annotation></semantics></math>
       yields
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mi>−</mi><mn>0.6364525403</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\delta=-0.6364525403.</annotation></semantics></math>
-     </div>
-     <h4>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>=</mo><mi>−</mi><mn>0.6364525403</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\delta=-0.6364525403.</annotation></semantics></math>
+</div>
+<h4>
       2 · Multiply by both hidden activations
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msubsup><mi>W</mi><mn>1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup></mrow></mfrac><mo>=</mo><mi>δ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mn>0.1272905081</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial W^{[2]}_1}=\delta(0.2)=-0.1272905081,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msubsup><mi>W</mi><mn>2</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup></mrow></mfrac><mo>=</mo><mi>δ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.8</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mn>1.1456145725</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial W^{[2]}_2}=\delta(1.8)=-1.1456145725,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msup><mi>b</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup></mrow></mfrac><mo>=</mo><mi>δ</mi><mo>=</mo><mi>−</mi><mn>0.6364525403</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial b^{[2]}}=\delta=-0.6364525403.</annotation></semantics></math>
-     </div>
-     <h4>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msubsup><mi>W</mi><mn>1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup></mrow></mfrac><mo>=</mo><mi>δ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mn>0.1272905081</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial W^{[2]}_1}=\delta(0.2)=-0.1272905081,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msubsup><mi>W</mi><mn>2</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup></mrow></mfrac><mo>=</mo><mi>δ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.8</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mn>1.1456145725</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial W^{[2]}_2}=\delta(1.8)=-1.1456145725,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msup><mi>b</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup></mrow></mfrac><mo>=</mo><mi>δ</mi><mo>=</mo><mi>−</mi><mn>0.6364525403</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial b^{[2]}}=\delta=-0.6364525403.</annotation></semantics></math>
+</div>
+<h4>
       3 · Multiply by the old outgoing weights and the ReLU slopes
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>δ</mi><mn>1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>=</mo><mi>δ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.7</mn><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mn>0.4455167782</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\delta^{[1]}_1=\delta(0.7)(1)=-0.4455167782,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>δ</mi><mn>2</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>=</mo><mi>δ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.5</mn><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.3182262701</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\delta^{[1]}_2=\delta(-0.5)(1)=0.3182262701.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>δ</mi><mn>1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>=</mo><mi>δ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.7</mn><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mn>0.4455167782</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\delta^{[1]}_1=\delta(0.7)(1)=-0.4455167782,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>δ</mi><mn>2</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>=</mo><mi>δ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.5</mn><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.3182262701</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\delta^{[1]}_2=\delta(-0.5)(1)=0.3182262701.</annotation></semantics></math>
+</div>
+<p>
       The final ones are the two active ReLU derivatives.
      </p>
-     <h4>
+<h4>
       4 · Multiply each hidden sensitivity by each input
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msubsup><mi>W</mi><mn>11</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>=</mo><msubsup><mi>δ</mi><mn>1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mn>0.4455167782</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\partial L/\partial W^{[1]}_{11}=\delta^{[1]}_1(1)=-0.4455167782,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msubsup><mi>W</mi><mn>12</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>=</mo><msubsup><mi>δ</mi><mn>1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mn>0.8910335564</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\partial L/\partial W^{[1]}_{12}=\delta^{[1]}_1(2)=-0.8910335564,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msubsup><mi>W</mi><mn>21</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>=</mo><msubsup><mi>δ</mi><mn>2</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.3182262701</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\partial L/\partial W^{[1]}_{21}=\delta^{[1]}_2(1)=0.3182262701,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msubsup><mi>W</mi><mn>22</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>=</mo><msubsup><mi>δ</mi><mn>2</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.6364525403</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\partial L/\partial W^{[1]}_{22}=\delta^{[1]}_2(2)=0.6364525403.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msubsup><mi>W</mi><mn>11</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>=</mo><msubsup><mi>δ</mi><mn>1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mn>0.4455167782</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\partial L/\partial W^{[1]}_{11}=\delta^{[1]}_1(1)=-0.4455167782,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msubsup><mi>W</mi><mn>12</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>=</mo><msubsup><mi>δ</mi><mn>1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mn>0.8910335564</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\partial L/\partial W^{[1]}_{12}=\delta^{[1]}_1(2)=-0.8910335564,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msubsup><mi>W</mi><mn>21</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>=</mo><msubsup><mi>δ</mi><mn>2</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.3182262701</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\partial L/\partial W^{[1]}_{21}=\delta^{[1]}_2(1)=0.3182262701,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msubsup><mi>W</mi><mn>22</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mo>=</mo><msubsup><mi>δ</mi><mn>2</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.6364525403</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\partial L/\partial W^{[1]}_{22}=\delta^{[1]}_2(2)=0.6364525403.</annotation></semantics></math>
+</div>
+<p>
       The two bias gradients equal
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>δ</mi><mn>1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">\delta^{[1]}_1</annotation></semantics></math>
       and
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>δ</mi><mn>2</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">\delta^{[1]}_2</annotation></semantics></math>
       respectively.
      </p>
-     <h4>
+<h4>
       5 · Subtract rate times gradient for each scalar
      </h4>
-     <div aria-label="Scrollable calculation table" class="table-scroll" role="region" tabindex="0">
-      <table>
-       <thead>
-        <tr class="header">
-         <th>
+<div aria-label="Scrollable calculation table" class="table-scroll" role="region" tabindex="0">
+<table>
+<thead>
+<tr class="header">
+<th>
           Parameter
          </th>
-         <th>
+<th>
           Explicit update
          </th>
-         <th style="text-align: right;">
+<th style="text-align: right;">
           New value, rounded
          </th>
-        </tr>
-       </thead>
-       <tbody>
-        <tr class="odd">
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>W</mi><mn>11</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">W^{[1]}_{11}</annotation></semantics></math>
-         </td>
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.5</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.4455167782</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">0.5-0.1(-0.4455167782)</annotation></semantics></math>
-         </td>
-         <td style="text-align: right;">
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>W</mi><mn>11</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">W^{[1]}_{11}</annotation></semantics></math>
+</td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.5</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.4455167782</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">0.5-0.1(-0.4455167782)</annotation></semantics></math>
+</td>
+<td style="text-align: right;">
           0.544551678
          </td>
-        </tr>
-        <tr class="even">
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>W</mi><mn>12</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">W^{[1]}_{12}</annotation></semantics></math>
-         </td>
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.2</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.8910335564</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">-0.2-0.1(-0.8910335564)</annotation></semantics></math>
-         </td>
-         <td style="text-align: right;">
+</tr>
+<tr class="even">
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>W</mi><mn>12</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">W^{[1]}_{12}</annotation></semantics></math>
+</td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.2</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.8910335564</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">-0.2-0.1(-0.8910335564)</annotation></semantics></math>
+</td>
+<td style="text-align: right;">
           −0.110896644
          </td>
-        </tr>
-        <tr class="odd">
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>W</mi><mn>21</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">W^{[1]}_{21}</annotation></semantics></math>
-         </td>
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.3</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.3182262701</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">0.3-0.1(0.3182262701)</annotation></semantics></math>
-         </td>
-         <td style="text-align: right;">
+</tr>
+<tr class="odd">
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>W</mi><mn>21</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">W^{[1]}_{21}</annotation></semantics></math>
+</td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.3</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.3182262701</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">0.3-0.1(0.3182262701)</annotation></semantics></math>
+</td>
+<td style="text-align: right;">
           0.268177373
          </td>
-        </tr>
-        <tr class="even">
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>W</mi><mn>22</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">W^{[1]}_{22}</annotation></semantics></math>
-         </td>
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.8</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.6364525403</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">0.8-0.1(0.6364525403)</annotation></semantics></math>
-         </td>
-         <td style="text-align: right;">
+</tr>
+<tr class="even">
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>W</mi><mn>22</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">W^{[1]}_{22}</annotation></semantics></math>
+</td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.8</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.6364525403</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">0.8-0.1(0.6364525403)</annotation></semantics></math>
+</td>
+<td style="text-align: right;">
           0.736354746
          </td>
-        </tr>
-        <tr class="odd">
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>b</mi><mn>1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">b^{[1]}_1</annotation></semantics></math>
-         </td>
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.1</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.4455167782</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">0.1-0.1(-0.4455167782)</annotation></semantics></math>
-         </td>
-         <td style="text-align: right;">
+</tr>
+<tr class="odd">
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>b</mi><mn>1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">b^{[1]}_1</annotation></semantics></math>
+</td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.1</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.4455167782</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">0.1-0.1(-0.4455167782)</annotation></semantics></math>
+</td>
+<td style="text-align: right;">
           0.144551678
          </td>
-        </tr>
-        <tr class="even">
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>b</mi><mn>2</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">b^{[1]}_2</annotation></semantics></math>
-         </td>
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.1</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.3182262701</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">-0.1-0.1(0.3182262701)</annotation></semantics></math>
-         </td>
-         <td style="text-align: right;">
+</tr>
+<tr class="even">
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>b</mi><mn>2</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">b^{[1]}_2</annotation></semantics></math>
+</td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.1</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.3182262701</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">-0.1-0.1(0.3182262701)</annotation></semantics></math>
+</td>
+<td style="text-align: right;">
           −0.131822627
          </td>
-        </tr>
-        <tr class="odd">
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>W</mi><mn>1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">W^{[2]}_1</annotation></semantics></math>
-         </td>
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.7</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.1272905081</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">0.7-0.1(-0.1272905081)</annotation></semantics></math>
-         </td>
-         <td style="text-align: right;">
+</tr>
+<tr class="odd">
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>W</mi><mn>1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">W^{[2]}_1</annotation></semantics></math>
+</td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.7</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.1272905081</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">0.7-0.1(-0.1272905081)</annotation></semantics></math>
+</td>
+<td style="text-align: right;">
           0.712729051
          </td>
-        </tr>
-        <tr class="even">
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>W</mi><mn>2</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">W^{[2]}_2</annotation></semantics></math>
-         </td>
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.5</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>1.1456145725</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">-0.5-0.1(-1.1456145725)</annotation></semantics></math>
-         </td>
-         <td style="text-align: right;">
+</tr>
+<tr class="even">
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>W</mi><mn>2</mn><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msubsup><annotation encoding="application/x-tex">W^{[2]}_2</annotation></semantics></math>
+</td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mn>0.5</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>1.1456145725</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">-0.5-0.1(-1.1456145725)</annotation></semantics></math>
+</td>
+<td style="text-align: right;">
           −0.385438543
          </td>
-        </tr>
-        <tr class="odd">
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>b</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><annotation encoding="application/x-tex">b^{[2]}</annotation></semantics></math>
-         </td>
-         <td>
-          <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.2</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.6364525403</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">0.2-0.1(-0.6364525403)</annotation></semantics></math>
-         </td>
-         <td style="text-align: right;">
+</tr>
+<tr class="odd">
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>b</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>2</mn><mo form="postfix" stretchy="true">]</mo></mrow></msup><annotation encoding="application/x-tex">b^{[2]}</annotation></semantics></math>
+</td>
+<td>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.2</mn><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.6364525403</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">0.2-0.1(-0.6364525403)</annotation></semantics></math>
+</td>
+<td style="text-align: right;">
           0.263645254
          </td>
-        </tr>
-       </tbody>
-      </table>
-     </div>
-     <h4>
+</tr>
+</tbody>
+</table>
+</div>
+<h4>
       6 · Recompute, rather than reuse, the hidden values
      </h4>
-     <p>
+<p>
       With the new parameters, the two hidden pre-activations are approximately
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.467310067</mn><annotation encoding="application/x-tex">0.467310067</annotation></semantics></math>
       and
@@ -712,7 +660,7 @@ b^{[2]}_{\mathrm{new}}\approx0.263645.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mrow><mi mathvariant="normal">n</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">w</mi></mrow></msub><mo>≈</mo><mn>0.704958450</mn></mrow><annotation encoding="application/x-tex">L_{\mathrm{new}}\approx0.704958450</annotation></semantics></math>
       .
      </p>
-     <p>
+<p>
       The loss fell from
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1.011845427</mn><annotation encoding="application/x-tex">1.011845427</annotation></semantics></math>
       to
@@ -721,26 +669,22 @@ b^{[2]}_{\mathrm{new}}\approx0.263645.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.5</mn><annotation encoding="application/x-tex">0.5</annotation></semantics></math>
       still gives class zero. This is an arithmetic check for this step, not a guarantee that arbitrary learning rates or later steps decrease loss.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="13" data-pdf="basics" type="button">
-       Chapter source · PDF p. 13
-      </button>
-      <a class="calculation-link" href="#backpropagation?derivation=nine-parameters">
+<div class="derivation-footer">
+
+<button data-page="13" data-pdf="basics" type="button">Reference · PDF p. 13</button>
+<a class="calculation-link" href="#backpropagation?derivation=nine-parameters">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="why-the-algorithm-is-efficient" id="backpropagation--why-the-algorithm-is-efficient">
+</div>
+</div>
+</details>
+<h2 data-section="why-the-algorithm-is-efficient" id="backpropagation--why-the-algorithm-is-efficient">
     Why the algorithm is efficient
    </h2>
-   <p>
+<p>
     A naive finite-difference procedure perturbs parameters one at a time and repeatedly reevaluates the loss. Reverse-mode differentiation instead starts from the scalar objective and reuses sensitivities as it traverses the graph backward. This is particularly appropriate for a function with many parameters and one scalar loss.
    </p>
-   <p>
+<p>
     For a mini-batch mean loss, the parameter gradients are the mean of the per-example gradients. Batch shape conventions change the matrix arrangement, not the chain-rule argument. In PyTorch,
     <code>
      .backward()
@@ -753,90 +697,78 @@ b^{[2]}_{\mathrm{new}}\approx0.263645.</annotation></semantics></math>
     <strong>
      Backpropagation is not an alternative to Adam: they act at different stages.
     </strong>
-   </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="backpropagation--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="autograd">
-     <span class="resource-meta">
+</p>
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="backpropagation--implementation">Implementation examples</h2>
+
+<div class="resource-list">
+<div class="resource" data-resource="autograd">
+<span class="resource-meta">
       PyTorch · Tutorial + diagram
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Automatic Differentiation with torch.autograd
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Trace the computation graph and run the gradient example. Compare the role of requires_grad, backward and disabled gradient tracking.
-     </p>
-    </div>
-    <div class="resource" data-resource="polynomial">
-     <span class="resource-meta">
+</a>
+<p>A worked computation graph covering requires_grad, backward, accumulated gradients, and disabling gradient tracking.</p>
+</div>
+<div class="resource" data-resource="polynomial">
+<span class="resource-meta">
       PyTorch · Worked regression example
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/pytorch_with_examples.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/pytorch_with_examples.html" rel="noopener noreferrer" target="_blank">
+<span>
        Learning PyTorch with Examples
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      An older, still useful teaching sequence: fit a polynomial while moving from explicit derivatives to autograd, modules and optimizers. Use it to compare the same mathematics across abstraction levels.
-     </p>
-    </div>
-    <div class="resource" data-resource="hessian">
-     <span class="resource-meta">
+</a>
+<p>The same polynomial-fitting problem implemented with explicit derivatives, autograd, modules, and optimizers.</p>
+</div>
+<div class="resource" data-resource="hessian">
+<span class="resource-meta">
       PyTorch · Tutorial + code
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/jacobians_hessians.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/jacobians_hessians.html" rel="noopener noreferrer" target="_blank">
+<span>
        Jacobians, Hessians and Hessian–vector products
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Use function transforms to calculate derivatives beyond a scalar gradient. The Hessian–vector examples make the curvature discussion concrete without requiring a dense Hessian.
-     </p>
-    </div>
-   </div>
-   <details class="local-example">
-    <summary>
+</a>
+<p>Executable Jacobian, Hessian, and Hessian–vector product calculations using function transforms.</p>
+</div>
+</div>
+<details class="local-example">
+<summary>
      Reproduce the full forward and backward pass
      <small>
       Local worked example · Python / PyTorch
      </small>
-    </summary>
-    <p class="local-description">
-     A small authored companion reproducing the exact network in the supplied guide. Every parameter gradient is checked against the hand calculation, followed by one update. Run locally; Python is not executed by this webpage.
-    </p>
-    <div class="code-wrap">
-     <div class="code-tools">
-      <span>
+</summary>
+<p class="local-description">The 2 → 2 → 1 network with every parameter gradient checked against autograd, followed by one update. Run the script locally.</p>
+<div class="code-wrap">
+<div class="code-tools">
+<span>
        worked_backprop.py
       </span>
-      <div>
-       <button data-action="copy" data-example="worked_backprop" type="button">
+<div>
+<button data-action="copy" data-example="worked_backprop" type="button">
         Copy
        </button>
-       <button data-action="download" data-example="worked_backprop" type="button">
+<button data-action="download" data-example="worked_backprop" type="button">
         Save .py
        </button>
-      </div>
-     </div>
-     <pre tabindex="0"><code><span class="sd">"""Reproduce the supplied 2 → 2 → 1 forward and backward calculation"""</span>
+</div>
+</div>
+<pre tabindex="0"><code><span class="sd">"""Reproduce the supplied 2 → 2 → 1 forward and backward calculation"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn.functional</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">F</span>
@@ -885,12 +817,12 @@ b^{[2]}_{\mathrm{new}}\approx0.263645.</annotation></semantics></math>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </code></pre>
-    </div>
-    <details class="recorded-result">
-     <summary>
+</div>
+<details class="recorded-result">
+<summary>
       Recorded CPU output
      </summary>
-     <pre>Hidden activations: [0.19999999999999998, 1.8]
+<pre>Hidden activations: [0.19999999999999998, 1.8]
 Logit: -0.560000; probability: 0.363547
 Loss before update: 1.011845
 Gradient W1: [[-0.44551677819709645, -0.8910335563941929], [0.3182262701407832, 0.6364525402815664]]
@@ -902,67 +834,57 @@ Updated W2: [0.7127290508056313, -0.38543854274931805]
 Loss after update: 0.704958
 All four autograd gradients match the hand derivation
 </pre>
-    </details>
-   </details>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</details>
+</details>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
     </strong>
     What is the role of the transpose in the backward pass?
    </summary>
-   <p>
+<p>
     Forward propagation maps earlier activations to later pre-activations using W. The derivative of that map sends a later sensitivity back using Wᵀ. The transpose redistributes the loss sensitivity across the incoming coordinates; it is not a matrix inverse.
    </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#losses-and-outputs">
-    <small>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+
+<button aria-label="Open source: Neural networks · PDF pp. 13–17 · §§14–20" data-page="13" data-pdf="basics" type="button">
+     Neural networks · PDF pp. 13–17 · §§14–20
+    </button>
+<button aria-label="Open source: Neural networks · PDF pp. 21–22 · §§29–31" data-page="21" data-pdf="basics" type="button">
+     Neural networks · PDF pp. 21–22 · §§29–31
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#losses-and-outputs">
+<small>
      ← Previous
     </small>
-    Regression, classification, and the loss
-   </a>
-   <a href="#training-cycle">
-    <small>
+Regression, classification, and the loss
+</a>
+<a href="#training-cycle">
+<small>
      Next →
     </small>
-    Training cycles, mini-batches, and autograd
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+Training cycles, mini-batches, and autograd
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="local-derivatives-become-a-global-sensitivity" href="#backpropagation?section=local-derivatives-become-a-global-sensitivity">
-    Local derivatives become a global sensitivity
-   </a>
-   <a data-section="the-matrix-recurrence" href="#backpropagation?section=the-matrix-recurrence">
-    The matrix recurrence
-   </a>
-   <a data-section="step-1-the-output-error-signal" href="#backpropagation?section=step-1-the-output-error-signal">
-    Step 1: the output error signal
-   </a>
-   <a data-section="step-2-output-layer-gradients" href="#backpropagation?section=step-2-output-layer-gradients">
-    Step 2: output-layer gradients
-   </a>
-   <a data-section="step-3-send-sensitivity-into-the-hidden-layer" href="#backpropagation?section=step-3-send-sensitivity-into-the-hidden-layer">
-    Step 3: send sensitivity into the hidden layer
-   </a>
-   <a data-section="step-4-first-layer-gradients" href="#backpropagation?section=step-4-first-layer-gradients">
-    Step 4: first-layer gradients
-   </a>
-   <a data-section="step-5-one-gradient-descent-update" href="#backpropagation?section=step-5-one-gradient-descent-update">
-    Step 5: one gradient-descent update
-   </a>
-   <a data-section="why-the-algorithm-is-efficient" href="#backpropagation?section=why-the-algorithm-is-efficient">
-    Why the algorithm is efficient
-   </a>
-   <a data-section="implementation" href="#backpropagation?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="local-derivatives-become-a-global-sensitivity" href="#backpropagation?section=local-derivatives-become-a-global-sensitivity">Local derivatives become a global sensitivity</a>
+<a data-section="the-matrix-recurrence" href="#backpropagation?section=the-matrix-recurrence">The matrix recurrence</a>
+<a data-section="step-1-the-output-error-signal" href="#backpropagation?section=step-1-the-output-error-signal">Step 1: the output error signal</a>
+<a data-section="step-2-output-layer-gradients" href="#backpropagation?section=step-2-output-layer-gradients">Step 2: output-layer gradients</a>
+<a data-section="step-3-send-sensitivity-into-the-hidden-layer" href="#backpropagation?section=step-3-send-sensitivity-into-the-hidden-layer">Step 3: send sensitivity into the hidden layer</a>
+<a data-section="step-4-first-layer-gradients" href="#backpropagation?section=step-4-first-layer-gradients">Step 4: first-layer gradients</a>
+<a data-section="step-5-one-gradient-descent-update" href="#backpropagation?section=step-5-one-gradient-descent-update">Step 5: one gradient-descent update</a>
+<a data-section="why-the-algorithm-is-efficient" href="#backpropagation?section=why-the-algorithm-is-efficient">Why the algorithm is efficient</a>
+<a data-section="implementation" href="#backpropagation?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>

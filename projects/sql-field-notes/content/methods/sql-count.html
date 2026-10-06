@@ -1,1594 +1,1592 @@
 <article class="article method-page" id="m-sql-count">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=sql&amp;cat=Aggregation">
+<a href="#methods?lang=sql&amp;cat=Aggregation">
    MySQL · Aggregation
   </a>
- </div>
- <h1>
+</div>
+<h1>
   COUNT()
  </h1>
- <p class="lead">
+<p class="lead">
   Count rows
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     MySQL
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-count"><span class="nf">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span></code></pre>
- </div>
- <div class="note">
-  <b>
+</div>
+<pre tabindex="0"><code class="language-sql" data-origin="reference-sql-count"><span class="nf">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span></code></pre>
+</div>
+<div class="note">
+<b>
    Implementation note.
   </b>
   COUNT(*) counts rows; COUNT(column) counts non-NULL values. In pandas, size and count are different operations.
   <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
    Documentation ↗
   </a>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-pd-count">
+<a href="#m-pd-count">
    pandas · count()
   </a>
-  <a href="#m-pd-size">
+<a href="#m-pd-size">
    pandas · size
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C44?code=code-C44-0&amp;method=sql-count&amp;line=1">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C44?code=code-C44-0&amp;method=sql-count&amp;line=1">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1581 · Customers who visited without transactions
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT v.customer_id, COUNT(*) AS count_no_trans
+</div>
+<pre aria-hidden="true">SELECT v.customer_id, COUNT(*) AS count_no_trans
 FROM Visits v
 LEFT JOIN Transactions t ON v.visit_id = t.visit_id</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-02?code=code-squid-02-0&amp;method=sql-count&amp;line=3">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-02?code=code-squid-02-0&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
      Squid Game · SQL
     </span>
-    <strong>
+<strong>
      Calculate the ration threshold
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 3
     </small>
-   </div>
-   <pre aria-hidden="true">    table_prop AS (
+</div>
+<pre aria-hidden="true">    table_prop AS (
         SELECT FLOOR( COUNT(*) * 0.9 ) AS portions
         FROM player
         WHERE status = 'alive' AND isinsider = false</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B11?code=code-B11-0&amp;method=sql-count&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B11?code=code-B11-0&amp;method=sql-count&amp;line=1">
+<div>
+<span class="usage-label">
      SQLBolt · SQL
     </span>
-    <strong>
+<strong>
      WHERE versus HAVING
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT COUNT(*) AS artist_count FROM employees WHERE role = 'Artist';</pre>
-   <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">SELECT COUNT(*) AS artist_count FROM employees WHERE role = 'Artist';</pre>
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C46?code=code-C46-0&amp;method=sql-count&amp;line=17">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C46?code=code-C46-0&amp;method=sql-count&amp;line=17">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1661 · Average processing time per machine
     </strong>
-    <small>
+<small>
      Study solution · line 17
     </small>
-   </div>
-   <pre aria-hidden="true">    )
+</div>
+<pre aria-hidden="true">    )
 SELECT machine_id, ROUND(SUM(processing_time)/COUNT(*), 3) AS processing_time
 FROM m
 GROUP BY machine_id</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C48?code=code-C48-0&amp;method=sql-count&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C48?code=code-C48-0&amp;method=sql-count&amp;line=1">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1280 · Students and examinations
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT s.student_id, s.student_name, su.subject_name, COUNT(e.student_id) AS attended_exams
+</div>
+<pre aria-hidden="true">SELECT s.student_id, s.student_name, su.subject_name, COUNT(e.student_id) AS attended_exams
 FROM Students s
 CROSS JOIN Subjects su</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C49?code=code-C49-0&amp;method=sql-count&amp;line=2">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C49?code=code-C49-0&amp;method=sql-count&amp;line=2">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      570 · Managers with at least five direct reports
     </strong>
-    <small>
+<small>
      Study solution · line 2
     </small>
-   </div>
-   <pre aria-hidden="true">WITH M AS (
+</div>
+<pre aria-hidden="true">WITH M AS (
     SELECT managerId, COUNT(*) AS nReports
     FROM Employee
     GROUP BY managerId</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    31 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C50?code=code-C50-0&amp;method=sql-count&amp;line=11">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C50?code=code-C50-0&amp;method=sql-count&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1934 · Confirmation rate
      </strong>
-     <small>
+<small>
       Study solution · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT user_id, ROUND(SUM(boolean)/COUNT(boolean), 2) AS confirmation_rate
 FROM Rate
 GROUP BY user_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C08?code=code-C08-2&amp;method=sql-count&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C08?code=code-C08-2&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1075 · Project employees I
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    p.project_id,
+</div>
+<pre aria-hidden="true">    p.project_id,
     ROUND(SUM(e.experience_years) / COUNT(e.experience_years), 2) AS average_years
 FROM Project p
 LEFT JOIN Employee e   ON p.employee_id = e.employee_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C09?code=code-C09-0&amp;method=sql-count&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C09?code=code-C09-0&amp;method=sql-count&amp;line=1">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1633 · Users registered in a contest
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT contest_id, ROUND(100.0 * COUNT(*) / (SELECT COUNT(*) FROM Users), 2) AS percentage
+</div>
+<pre aria-hidden="true">SELECT contest_id, ROUND(100.0 * COUNT(*) / (SELECT COUNT(*) FROM Users), 2) AS percentage
 FROM Register GROUP BY contest_id ORDER BY percentage DESC, contest_id;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C10?code=code-C10-2&amp;method=sql-count&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-2&amp;method=sql-count&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1211 · Queries quality and percentage
      </strong>
-     <small>
+<small>
       My approach · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">    ROUND(AVG(quality), 2) AS quality,
+</div>
+<pre aria-hidden="true">    ROUND(AVG(quality), 2) AS quality,
     ROUND(100 * SUM(poor_quality)/COUNT(poor_quality), 2) AS poor_query_percentage
 FROM Quality
 GROUP BY query_name;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C11?code=code-C11-0&amp;method=sql-count&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C11?code=code-C11-0&amp;method=sql-count&amp;line=2">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1193 · Monthly transactions I
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT DATE_FORMAT(trans_date, '%Y-%m') AS month, country,
+</div>
+<pre aria-hidden="true">SELECT DATE_FORMAT(trans_date, '%Y-%m') AS month, country,
        COUNT(*) AS trans_count,
        SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END) AS approved_count,
        SUM(amount) AS trans_total_amount,</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C12?code=code-C12-2&amp;method=sql-count&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C12?code=code-C12-2&amp;method=sql-count&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1174 · Immediate first deliveries
      </strong>
-     <small>
+<small>
       My approach · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT ROUND(100 * SUM(immediate) / COUNT(immediate), 2) AS   immediate_percentage
 FROM Orders
 WHERE number = 1;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C13?code=code-C13-2&amp;method=sql-count&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C13?code=code-C13-2&amp;method=sql-count&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       550 · Game Play Analysis IV
      </strong>
-     <small>
+<small>
       My approach · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT ROUND(COUNT(DISTINCT a.player_id) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) AS fraction
 FROM Activity a
 INNER JOIN   First_login f ON</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C14?code=code-C14-0&amp;method=sql-count&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C14?code=code-C14-0&amp;method=sql-count&amp;line=1">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       2356 · Unique subjects per teacher
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT teacher_id, COUNT(DISTINCT subject_id) AS cnt FROM Teacher GROUP BY teacher_id;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">SELECT teacher_id, COUNT(DISTINCT subject_id) AS cnt FROM Teacher GROUP BY teacher_id;</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C15?code=code-C15-0&amp;method=sql-count&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C15?code=code-C15-0&amp;method=sql-count&amp;line=1">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1141 · User activity in a 30-day window
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT activity_date AS day, COUNT(DISTINCT user_id) AS active_users
+</div>
+<pre aria-hidden="true">SELECT activity_date AS day, COUNT(DISTINCT user_id) AS active_users
 FROM Activity
 WHERE activity_date BETWEEN '2019-06-28' AND '2019-07-27'</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C17?code=code-C17-0&amp;method=sql-count&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C17?code=code-C17-0&amp;method=sql-count&amp;line=1">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       596 · Classes with at least five students
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT class FROM Courses GROUP BY class HAVING COUNT(DISTINCT student) &gt;= 5;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">SELECT class FROM Courses GROUP BY class HAVING COUNT(DISTINCT student) &gt;= 5;</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C18?code=code-C18-0&amp;method=sql-count&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C18?code=code-C18-0&amp;method=sql-count&amp;line=1">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1729 · Followers count
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT user_id, COUNT(DISTINCT follower_id) AS followers_count FROM Followers GROUP BY user_id ORDER BY user_id;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">SELECT user_id, COUNT(DISTINCT follower_id) AS followers_count FROM Followers GROUP BY user_id ORDER BY user_id;</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C19?code=code-C19-0&amp;method=sql-count&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C19?code=code-C19-0&amp;method=sql-count&amp;line=2">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       619 · Biggest single number
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT MAX(num) AS num FROM (
+</div>
+<pre aria-hidden="true">SELECT MAX(num) AS num FROM (
     SELECT num FROM MyNumbers GROUP BY num HAVING COUNT(*) = 1
 ) singles;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C20?code=code-C20-2&amp;method=sql-count&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-2&amp;method=sql-count&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1045 · Customers who bought every product
      </strong>
-     <small>
+<small>
       My approach · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">GROUP BY c.customer_id
+</div>
+<pre aria-hidden="true">GROUP BY c.customer_id
 HAVING (SELECT COUNT(*) FROM Product) = COUNT(DISTINCT CASE
     WHEN c.product_key IN (SELECT product_key FROM Product) THEN c.product_key END);</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C21?code=code-C21-0&amp;method=sql-count&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C21?code=code-C21-0&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1731 · Employees reporting to employees
      </strong>
-     <small>
+<small>
       Study solution · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    SELECT reports_to AS manager_id,
+</div>
+<pre aria-hidden="true">    SELECT reports_to AS manager_id,
            COUNT(*) AS reports_count,
            ROUND(AVG(age)) AS average_age
     FROM Employees</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C22?code=code-C22-0&amp;method=sql-count&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C22?code=code-C22-0&amp;method=sql-count&amp;line=2">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1789 · Primary department per employee
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">WITH counted AS (
+</div>
+<pre aria-hidden="true">WITH counted AS (
     SELECT *, COUNT(*) OVER (PARTITION BY employee_id) AS n_departments FROM Employee
 )
 SELECT employee_id, department_id FROM counted WHERE primary_flag = 'Y' OR n_departments = 1;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C27?code=code-C27-0&amp;method=sql-count&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C27?code=code-C27-0&amp;method=sql-count&amp;line=1">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1907 · Count salary categories
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT 'Low Salary' AS category, COUNT(*) AS accounts_count FROM Accounts WHERE income &lt; 20000
+</div>
+<pre aria-hidden="true">SELECT 'Low Salary' AS category, COUNT(*) AS accounts_count FROM Accounts WHERE income &lt; 20000
 UNION ALL
 SELECT 'Average Salary', COUNT(*) FROM Accounts WHERE income BETWEEN 20000 AND 50000</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C29?code=code-C29-2&amp;method=sql-count&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C29?code=code-C29-2&amp;method=sql-count&amp;line=2">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       626 · Exchange seats
      </strong>
-     <small>
+<small>
       My approach · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">WITH NStudents AS (
+</div>
+<pre aria-hidden="true">WITH NStudents AS (
     SELECT COUNT(id) AS length
     FROM Seat
 )</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-0&amp;method=sql-count&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-0&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       Study solution · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    SELECT u.name AS results FROM MovieRating r JOIN Users u ON r.user_id = u.user_id
+</div>
+<pre aria-hidden="true">    SELECT u.name AS results FROM MovieRating r JOIN Users u ON r.user_id = u.user_id
     GROUP BY u.user_id, u.name ORDER BY COUNT(*) DESC, u.name LIMIT 1
 ), movie_winner AS (
     SELECT m.title AS results FROM MovieRating r JOIN Movies m ON r.movie_id = m.movie_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C32?code=code-C32-0&amp;method=sql-count&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C32?code=code-C32-0&amp;method=sql-count&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       602 · Most accepted friends
      </strong>
-     <small>
+<small>
       Study solution · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT id, COUNT(*) AS num FROM endpoints GROUP BY id ORDER BY num DESC, id LIMIT 1;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C33?code=code-C33-0&amp;method=sql-count&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C33?code=code-C33-0&amp;method=sql-count&amp;line=2">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       585 · Investments in 2016
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">WITH marked AS (
+</div>
+<pre aria-hidden="true">WITH marked AS (
     SELECT *, COUNT(*) OVER (PARTITION BY tiv_2015) AS value_count,
            COUNT(*) OVER (PARTITION BY lat, lon) AS location_count FROM Insurance
 )</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C39?code=code-C39-0&amp;method=sql-count&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C39?code=code-C39-0&amp;method=sql-count&amp;line=1">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1484 · Products sold by date
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT sell_date, COUNT(DISTINCT product) AS num_sold,
+</div>
+<pre aria-hidden="true">SELECT sell_date, COUNT(DISTINCT product) AS num_sold,
        GROUP_CONCAT(DISTINCT product ORDER BY product SEPARATOR ',') AS products
 FROM Activities GROUP BY sell_date ORDER BY sell_date;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC262?code=code-LC262-0&amp;method=sql-count&amp;line=17">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC262?code=code-LC262-0&amp;method=sql-count&amp;line=17">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       262 · Trips and users
      </strong>
-     <small>
+<small>
       Uploaded submission · line 17
      </small>
-    </div>
-    <pre aria-hidden="true">            request_at AS Day,
+</div>
+<pre aria-hidden="true">            request_at AS Day,
             COUNT(*) AS valid_cancel
         FROM ValidTrips
         WHERE status LIKE 'cancelled%'</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC586?code=code-LC586-0&amp;method=sql-count&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC586?code=code-LC586-0&amp;method=sql-count&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       586 · Customer placing the largest number of orders
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">GROUP BY customer_number
+</div>
+<pre aria-hidden="true">GROUP BY customer_number
 ORDER BY COUNT(*) DESC
 LIMIT 1</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC601?code=code-LC601-0&amp;method=sql-count&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC601?code=code-LC601-0&amp;method=sql-count&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       601 · Human traffic of stadium
      </strong>
-     <small>
+<small>
       Uploaded submission · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">        GROUP BY group_num
+</div>
+<pre aria-hidden="true">        GROUP BY group_num
         HAVING COUNT(*) &gt;= 3
     )
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC1158?code=code-LC1158-0&amp;method=sql-count&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC1158?code=code-LC1158-0&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1158 · Market analysis I
      </strong>
-     <small>
+<small>
       Uploaded submission · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">WITH Orders2019 AS (
+</div>
+<pre aria-hidden="true">WITH Orders2019 AS (
     SELECT buyer_id, COUNT(*) AS orders_in_2019
     FROM Orders 
     WHERE order_date &gt;= '2019-01-01' AND order_date &lt;= '2019-12-31'</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3521?code=code-LC3521-0&amp;method=sql-count&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3521?code=code-LC3521-0&amp;method=sql-count&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3521 · Find product recommendation pairs
      </strong>
-     <small>
+<small>
       Uploaded submission · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">    ValidPairs AS (
+</div>
+<pre aria-hidden="true">    ValidPairs AS (
         SELECT product1_id, product2_id, COUNT(*) AS customer_count
         FROM BoughtPairs
         GROUP BY product1_id, product2_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3580?code=code-LC3580-0&amp;method=sql-count&amp;line=15">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3580?code=code-LC3580-0&amp;method=sql-count&amp;line=15">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3580 · Find consistently improving employees
      </strong>
-     <small>
+<small>
       Uploaded submission · line 15
      </small>
-    </div>
-    <pre aria-hidden="true">            GROUP BY employee_id
+</div>
+<pre aria-hidden="true">            GROUP BY employee_id
             HAVING COUNT(*) &gt;= 3
         )
     ),</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-04?code=code-squid-04-0&amp;method=sql-count&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-04?code=code-squid-04-0&amp;method=sql-count&amp;line=11">
+<div>
+<span class="usage-label">
       Squid Game · SQL
      </span>
-     <strong>
+<strong>
       Rank ten-player teams
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">FROM (
+</div>
+<pre aria-hidden="true">FROM (
     SELECT team_id, COUNT(*) AS n_players, AVG(age) AS age_team
     FROM player  
     GROUP BY team_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-05?code=code-squid-05-0&amp;method=sql-count&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-05?code=code-squid-05-0&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
       Squid Game · SQL
      </span>
-     <strong>
+<strong>
       Count a player’s closest interactions
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">	Player_interactions AS (
+</div>
+<pre aria-hidden="true">	Player_interactions AS (
 	  SELECT t.target_id, t.player_id, COUNT(*) AS counts
 	  FROM (
 		  SELECT </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-06?code=code-squid-06-0&amp;method=sql-count&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-06?code=code-squid-06-0&amp;method=sql-count&amp;line=8">
+<div>
+<span class="usage-label">
       Squid Game · SQL
      </span>
-     <strong>
+<strong>
       Trace equipment to its first failure
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">		GROUP BY e.game_type
+</div>
+<pre aria-hidden="true">		GROUP BY e.game_type
 		ORDER BY COUNT(*) DESC
 		LIMIT 1
 	),</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B12?code=code-B12-0&amp;method=sql-count&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B12?code=code-B12-0&amp;method=sql-count&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · SQL
      </span>
-     <strong>
+<strong>
       Logical query order
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT director, COUNT(*) AS movie_count FROM movies GROUP BY director;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">SELECT director, COUNT(*) AS movie_count FROM movies GROUP BY director;</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (39)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C44?code=code-C44-2&amp;method=sql-count&amp;line=2">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C44?code=code-C44-2&amp;method=sql-count&amp;line=2">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1581 · Customers who visited without transactions
      </strong>
-     <small>
+<small>
       Uploaded submission · line 2
      </small>
-    </div>
-    <pre aria-hidden="true"># Write your MySQL query statement below
+</div>
+<pre aria-hidden="true"># Write your MySQL query statement below
 SELECT v.customer_id, COUNT(*) AS count_no_trans
 FROM Visits v
 LEFT JOIN Transactions t ON v.visit_id = t.visit_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C46?code=code-C46-2&amp;method=sql-count&amp;line=21">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C46?code=code-C46-2&amp;method=sql-count&amp;line=21">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1661 · Average processing time per machine
      </strong>
-     <small>
+<small>
       Uploaded submission · line 21
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 SELECT machine_id, ROUND(SUM(processing_time)/COUNT(*), 3) AS processing_time
 FROM m
 GROUP BY machine_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C48?code=code-C48-2&amp;method=sql-count&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C48?code=code-C48-2&amp;method=sql-count&amp;line=2">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1280 · Students and examinations
      </strong>
-     <small>
+<small>
       Uploaded submission · line 2
      </small>
-    </div>
-    <pre aria-hidden="true"># Write your MySQL query statement below
+</div>
+<pre aria-hidden="true"># Write your MySQL query statement below
 SELECT s.student_id, s.student_name, su.subject_name, COUNT(e.student_id) AS attended_exams
 FROM Students s 
 CROSS JOIN Subjects su</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C49?code=code-C49-2&amp;method=sql-count&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C49?code=code-C49-2&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       570 · Managers with at least five direct reports
      </strong>
-     <small>
+<small>
       Uploaded submission · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">WITH M AS (
+</div>
+<pre aria-hidden="true">WITH M AS (
     SELECT managerId, COUNT(*) AS nReports
     FROM Employee
     GROUP BY managerId</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C50?code=code-C50-2&amp;method=sql-count&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C50?code=code-C50-2&amp;method=sql-count&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1934 · Confirmation rate
      </strong>
-     <small>
+<small>
       Uploaded submission · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 SELECT user_id, ROUND(SUM(boolean)/COUNT(boolean), 2) AS confirmation_rate
 FROM Rate
 GROUP BY user_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C08?code=code-C08-4&amp;method=sql-count&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C08?code=code-C08-4&amp;method=sql-count&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1075 · Project employees I
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    p.project_id, 
+</div>
+<pre aria-hidden="true">    p.project_id, 
     ROUND(SUM(e.experience_years) / COUNT(e.experience_years), 2) AS average_years
 FROM Project p
 LEFT JOIN Employee e ON p.employee_id = e.employee_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C09?code=code-C09-2&amp;method=sql-count&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C09?code=code-C09-2&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1633 · Users registered in a contest
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    contest_id,
+</div>
+<pre aria-hidden="true">    contest_id,
     ROUND(COUNT(*)/(SELECT COUNT(user_id) FROM Users) * 100, 2) AS percentage
 FROM Register
 GROUP BY contest_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C09?code=code-C09-4&amp;method=sql-count&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C09?code=code-C09-4&amp;method=sql-count&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1633 · Users registered in a contest
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    contest_id, 
+</div>
+<pre aria-hidden="true">    contest_id, 
     ROUND(COUNT(*)/(SELECT COUNT(user_id) FROM Users) * 100, 2) AS percentage
 FROM Register
 GROUP BY contest_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C10?code=code-C10-4&amp;method=sql-count&amp;line=16">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-4&amp;method=sql-count&amp;line=16">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1211 · Queries quality and percentage
      </strong>
-     <small>
+<small>
       Uploaded submission · line 16
      </small>
-    </div>
-    <pre aria-hidden="true">    ROUND(AVG(quality), 2) AS quality, 
+</div>
+<pre aria-hidden="true">    ROUND(AVG(quality), 2) AS quality, 
     ROUND(100 * SUM(poor_quality)/COUNT(poor_quality), 2) AS poor_query_percentage
 FROM Quality
 GROUP BY query_name</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C11?code=code-C11-2&amp;method=sql-count&amp;line=15">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C11?code=code-C11-2&amp;method=sql-count&amp;line=15">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1193 · Monthly transactions I
      </strong>
-     <small>
+<small>
       My approach · line 15
      </small>
-    </div>
-    <pre aria-hidden="true">    country,
+</div>
+<pre aria-hidden="true">    country,
     COUNT(approved) AS trans_count,
     SUM(approved) AS approved_count,
     SUM(amount) AS   trans_total_amount,</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C11?code=code-C11-4&amp;method=sql-count&amp;line=17">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C11?code=code-C11-4&amp;method=sql-count&amp;line=17">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1193 · Monthly transactions I
      </strong>
-     <small>
+<small>
       Uploaded submission · line 17
      </small>
-    </div>
-    <pre aria-hidden="true">    country, 
+</div>
+<pre aria-hidden="true">    country, 
     COUNT(approved) AS trans_count,
     SUM(approved) AS approved_count, 
     SUM(amount) AS trans_total_amount,</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C12?code=code-C12-4&amp;method=sql-count&amp;line=16">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C12?code=code-C12-4&amp;method=sql-count&amp;line=16">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1174 · Immediate first deliveries
      </strong>
-     <small>
+<small>
       Uploaded submission · line 16
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 SELECT ROUND(100 * SUM(immediate) / COUNT(immediate), 2) AS immediate_percentage
 FROM Orders
 WHERE number = 1</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C13?code=code-C13-4&amp;method=sql-count&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C13?code=code-C13-4&amp;method=sql-count&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       550 · Game Play Analysis IV
      </strong>
-     <small>
+<small>
       Uploaded submission · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 SELECT ROUND(COUNT(*) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) AS fraction
 FROM Activity a
 INNER JOIN First_login f ON </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C14?code=code-C14-2&amp;method=sql-count&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C14?code=code-C14-2&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       2356 · Unique subjects per teacher
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    teacher_id,
+</div>
+<pre aria-hidden="true">    teacher_id,
     COUNT(DISTINCT subject_id)   AS cnt
 FROM Teacher
 GROUP BY teacher_id;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C14?code=code-C14-4&amp;method=sql-count&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C14?code=code-C14-4&amp;method=sql-count&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       2356 · Unique subjects per teacher
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    teacher_id, 
+</div>
+<pre aria-hidden="true">    teacher_id, 
     COUNT(DISTINCT subject_id) AS cnt
 FROM Teacher
 GROUP BY teacher_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C15?code=code-C15-2&amp;method=sql-count&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C15?code=code-C15-2&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1141 · User activity in a 30-day window
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    activity_date   AS day,
+</div>
+<pre aria-hidden="true">    activity_date   AS day,
     COUNT(DISTINCT user_id) AS active_users
 FROM Activity
 WHERE</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C15?code=code-C15-4&amp;method=sql-count&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C15?code=code-C15-4&amp;method=sql-count&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1141 · User activity in a 30-day window
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    activity_date AS day, 
+</div>
+<pre aria-hidden="true">    activity_date AS day, 
     COUNT(DISTINCT user_id) AS active_users
 FROM Activity 
 WHERE </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C17?code=code-C17-2&amp;method=sql-count&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C17?code=code-C17-2&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       596 · Classes with at least five students
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    SELECT
+</div>
+<pre aria-hidden="true">    SELECT
         COUNT(DISTINCT student) AS nStudents,
         class
     FROM Courses</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C17?code=code-C17-4&amp;method=sql-count&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C17?code=code-C17-4&amp;method=sql-count&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       596 · Classes with at least five students
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    SELECT 
+</div>
+<pre aria-hidden="true">    SELECT 
         COUNT(DISTINCT student) AS nStudents, 
         class
     FROM Courses</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C18?code=code-C18-2&amp;method=sql-count&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C18?code=code-C18-2&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1729 · Followers count
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    user_id,
+</div>
+<pre aria-hidden="true">    user_id,
     COUNT(DISTINCT   follower_id) AS followers_count
 FROM Followers
 GROUP BY user_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C18?code=code-C18-4&amp;method=sql-count&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C18?code=code-C18-4&amp;method=sql-count&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1729 · Followers count
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    user_id, 
+</div>
+<pre aria-hidden="true">    user_id, 
     COUNT(DISTINCT follower_id) AS followers_count
 FROM Followers
 GROUP BY user_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C19?code=code-C19-2&amp;method=sql-count&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C19?code=code-C19-2&amp;method=sql-count&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       619 · Biggest single number
      </strong>
-     <small>
+<small>
       My approach · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">        num,
+</div>
+<pre aria-hidden="true">        num,
         COUNT(*) AS frequency
     FROM MyNumbers
     GROUP BY num</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C19?code=code-C19-4&amp;method=sql-count&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C19?code=code-C19-4&amp;method=sql-count&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       619 · Biggest single number
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">        num, 
+</div>
+<pre aria-hidden="true">        num, 
         COUNT(*) AS frequency
     FROM MyNumbers
     GROUP BY num</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C20?code=code-C20-4&amp;method=sql-count&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-4&amp;method=sql-count&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1045 · Customers who bought every product
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">GROUP BY customer_id
+</div>
+<pre aria-hidden="true">GROUP BY customer_id
 HAVING (SELECT COUNT(product_key) FROM Product) = COUNT(DISTINCT product_key) </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C21?code=code-C21-2&amp;method=sql-count&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C21?code=code-C21-2&amp;method=sql-count&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1731 · Employees reporting to employees
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">        reports_to AS manager_id,
+</div>
+<pre aria-hidden="true">        reports_to AS manager_id,
         COUNT(age) AS reports_count,
         ROUND(AVG(age)) AS average_age
     FROM Employees</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C22?code=code-C22-2&amp;method=sql-count&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C22?code=code-C22-2&amp;method=sql-count&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1789 · Primary department per employee
      </strong>
-     <small>
+<small>
       My approach · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">GROUP BY employee_id
+</div>
+<pre aria-hidden="true">GROUP BY employee_id
 HAVING COUNT(employee_id) = 1;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C22?code=code-C22-4&amp;method=sql-count&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C22?code=code-C22-4&amp;method=sql-count&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1789 · Primary department per employee
      </strong>
-     <small>
+<small>
       Uploaded submission · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">GROUP BY employee_id
+</div>
+<pre aria-hidden="true">GROUP BY employee_id
 HAVING COUNT(employee_id) = 1</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C27?code=code-C27-2&amp;method=sql-count&amp;line=12">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C27?code=code-C27-2&amp;method=sql-count&amp;line=12">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1907 · Count salary categories
      </strong>
-     <small>
+<small>
       My approach · line 12
      </small>
-    </div>
-    <pre aria-hidden="true">    Valid AS (
+</div>
+<pre aria-hidden="true">    Valid AS (
         SELECT category, COUNT(category) AS accounts_count
         FROM Labels
         GROUP BY category</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C27?code=code-C27-4&amp;method=sql-count&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C27?code=code-C27-4&amp;method=sql-count&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1907 · Count salary categories
      </strong>
-     <small>
+<small>
       Uploaded submission · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">    Valid AS (
+</div>
+<pre aria-hidden="true">    Valid AS (
         SELECT category, COUNT(category) AS accounts_count
         FROM Labels
         GROUP BY category</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C29?code=code-C29-4&amp;method=sql-count&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C29?code=code-C29-4&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       626 · Exchange seats
      </strong>
-     <small>
+<small>
       Uploaded submission · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">WITH NStudents AS (
+</div>
+<pre aria-hidden="true">WITH NStudents AS (
     SELECT COUNT(id) AS length
     FROM Seat
 )</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-2&amp;method=sql-count&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-2&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">      ReviewPerUserID AS (
+</div>
+<pre aria-hidden="true">      ReviewPerUserID AS (
         SELECT user_id, COUNT(*) AS nReviews
         FROM MovieRating
         GROUP BY user_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-4&amp;method=sql-count&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-4&amp;method=sql-count&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    ReviewPerUserID AS (
+</div>
+<pre aria-hidden="true">    ReviewPerUserID AS (
         SELECT user_id, COUNT(*) AS nReviews
         FROM MovieRating
         GROUP BY user_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C32?code=code-C32-2&amp;method=sql-count&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C32?code=code-C32-2&amp;method=sql-count&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       602 · Most accepted friends
      </strong>
-     <small>
+<small>
       My approach · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">              requester_id AS id,
+</div>
+<pre aria-hidden="true">              requester_id AS id,
             COUNT(*) AS askedApproved
         FROM RequestAccepted
         GROUP BY   requester_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C32?code=code-C32-4&amp;method=sql-count&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C32?code=code-C32-4&amp;method=sql-count&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       602 · Most accepted friends
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">            requester_id AS id, 
+</div>
+<pre aria-hidden="true">            requester_id AS id, 
             COUNT(*) AS askedApproved
         FROM RequestAccepted
         GROUP BY requester_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C33?code=code-C33-2&amp;method=sql-count&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C33?code=code-C33-2&amp;method=sql-count&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       585 · Investments in 2016
      </strong>
-     <small>
+<small>
       My approach · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">        GROUP BY tiv_2015
+</div>
+<pre aria-hidden="true">        GROUP BY tiv_2015
         HAVING COUNT(*) &gt; 1
     ),
     UniqueCity AS (</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C33?code=code-C33-4&amp;method=sql-count&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C33?code=code-C33-4&amp;method=sql-count&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       585 · Investments in 2016
      </strong>
-     <small>
+<small>
       Uploaded submission · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">        GROUP BY tiv_2015
+</div>
+<pre aria-hidden="true">        GROUP BY tiv_2015
         HAVING COUNT(*) &gt; 1
     ),
     UniqueCity AS (</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C39?code=code-C39-2&amp;method=sql-count&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C39?code=code-C39-2&amp;method=sql-count&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1484 · Products sold by date
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    sell_date,
+</div>
+<pre aria-hidden="true">    sell_date,
     COUNT(DISTINCT product) AS num_sold,
     GROUP_CONCAT(
         DISTINCT product</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C39?code=code-C39-4&amp;method=sql-count&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C39?code=code-C39-4&amp;method=sql-count&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1484 · Products sold by date
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    sell_date,
+</div>
+<pre aria-hidden="true">    sell_date,
     COUNT(DISTINCT product) AS num_sold,
     GROUP_CONCAT(
         DISTINCT product </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B11?code=code-B11-2&amp;method=sql-count&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B11?code=code-B11-2&amp;method=sql-count&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · SQL
      </span>
-     <strong>
+<strong>
       WHERE versus HAVING
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT role, COUNT(*) AS employee_count FROM employees GROUP BY role;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">SELECT role, COUNT(*) AS employee_count FROM employees GROUP BY role;</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     SQL cheat-sheet image · Aggregation. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=sql&amp;cat=Aggregation">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=sql&amp;cat=Aggregation">
+<small>
     ← Browse
    </small>
    MySQL · Aggregation
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

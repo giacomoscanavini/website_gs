@@ -1,91 +1,56 @@
 <section aria-labelledby="attention-title" class="page-view lesson-layout" id="attention">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      33
     </span>
     Part 4 · Architectures &amp; information flow
    </p>
-   <h1 id="attention-title" tabindex="-1">
+<h1 id="attention-title" tabindex="-1">
     Attention: queries, keys, values, and weights
    </h1>
-   <p class="standfirst">
-    Derive the routing calculation and follow the guide’s numerical weighted mixture.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Architectures · PDF pp. 18–19 · §7" data-page="18" data-pdf="arch" type="button">
-     Architectures · PDF pp. 18–19 · §7
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<p class="standfirst">Attention compares queries with keys and uses the resulting weights to combine values. Scaling, masking, and multiple heads control how that information is selected.</p>
+
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="attention-is-content-dependent-retrieval" href="#attention?section=attention-is-content-dependent-retrieval">
-     Attention is content-dependent retrieval
-    </a>
-    <a data-section="shapes-explain-the-operation" href="#attention?section=shapes-explain-the-operation">
-     Shapes explain the operation
-    </a>
-    <a data-section="why-the-square-root-scale-appears" href="#attention?section=why-the-square-root-scale-appears">
-     Why the square-root scale appears
-    </a>
-    <a data-section="the-numerical-example-from-the-guide" href="#attention?section=the-numerical-example-from-the-guide">
-     The numerical example from the guide
-    </a>
-    <a data-section="self-attention-and-cross-attention" href="#attention?section=self-attention-and-cross-attention">
-     Self-attention and cross-attention
-    </a>
-    <a data-section="why-use-multiple-heads" href="#attention?section=why-use-multiple-heads">
-     Why use multiple heads?
-    </a>
-    <a data-section="use-the-existing-official-demonstrations" href="#attention?section=use-the-existing-official-demonstrations">
-     Use the existing official demonstrations
-    </a>
-    <a data-section="implementation" href="#attention?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="attention-is-content-dependent-retrieval" id="attention--attention-is-content-dependent-retrieval">
+<nav aria-label="On this page">
+<a data-section="attention-is-content-dependent-retrieval" href="#attention?section=attention-is-content-dependent-retrieval">Attention is content-dependent retrieval</a>
+<a data-section="shapes-explain-the-operation" href="#attention?section=shapes-explain-the-operation">Shapes explain the operation</a>
+<a data-section="why-the-square-root-scale-appears" href="#attention?section=why-the-square-root-scale-appears">Why the square-root scale appears</a>
+<a data-section="the-numerical-example-from-the-guide" href="#attention?section=the-numerical-example-from-the-guide">A weighted-mixture example</a>
+<a data-section="self-attention-and-cross-attention" href="#attention?section=self-attention-and-cross-attention">Self-attention and cross-attention</a>
+<a data-section="why-use-multiple-heads" href="#attention?section=why-use-multiple-heads">Why use multiple heads?</a>
+<a data-section="use-the-existing-official-demonstrations" href="#attention?section=use-the-existing-official-demonstrations">Scaled dot-product and additive attention in code</a>
+<a data-section="implementation" href="#attention?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="attention-is-content-dependent-retrieval" id="attention--attention-is-content-dependent-retrieval">
     Attention is content-dependent retrieval
    </h2>
-   <p>
+<p>
     A query retrieves a weighted combination of values. Keys determine how strongly each source matches that query. The three roles are distinct even when all are projected from the same input sequence.
    </p>
-   <p>
-    For
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>T</mi><mo>×</mo><msub><mi>d</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">l</mi></mrow></msub></mrow></msup></mrow><annotation encoding="application/x-tex">X\in\mathbb R^{T\times d_{\mathrm{model}}}</annotation></semantics></math>
-    , the source forms
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mi>X</mi><msub><mi>W</mi><mi>Q</mi></msub></mrow><annotation encoding="application/x-tex">Q=XW_Q</annotation></semantics></math>
-    ,
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mi>X</mi><msub><mi>W</mi><mi>K</mi></msub></mrow><annotation encoding="application/x-tex">K=XW_K</annotation></semantics></math>
-    , and
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><mi>X</mi><msub><mi>W</mi><mi>V</mi></msub></mrow><annotation encoding="application/x-tex">V=XW_V</annotation></semantics></math>
-    . Scaled dot-product attention is
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Attention</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>Q</mi><mo>,</mo><mi>K</mi><mo>,</mo><mi>V</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>softmax</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><mrow><mi>Q</mi><msup><mi>K</mi><mi>⊤</mi></msup></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>V</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Attention}(Q,K,V)=
+<p>For <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>∈</mo><msup><mi>ℝ</mi><mrow><mi>T</mi><mo>×</mo><msub><mi>d</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">l</mi></mrow></msub></mrow></msup></mrow><annotation encoding="application/x-tex">X\in\mathbb R^{T\times d_{\mathrm{model}}}</annotation></semantics></math>, form <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mi>X</mi><msub><mi>W</mi><mi>Q</mi></msub></mrow><annotation encoding="application/x-tex">Q=XW_Q</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mi>X</mi><msub><mi>W</mi><mi>K</mi></msub></mrow><annotation encoding="application/x-tex">K=XW_K</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><mi>X</mi><msub><mi>W</mi><mi>V</mi></msub></mrow><annotation encoding="application/x-tex">V=XW_V</annotation></semantics></math>. Scaled dot-product attention is</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Attention</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>Q</mi><mo>,</mo><mi>K</mi><mo>,</mo><mi>V</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>softmax</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><mrow><mi>Q</mi><msup><mi>K</mi><mi>⊤</mi></msup></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>V</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Attention}(Q,K,V)=
 \operatorname{softmax}\left(\frac{QK^\top}{\sqrt{d_k}}\right)V.</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<p>
     Softmax is applied across the allowed keys for each query row. The output is a mixture of
     <strong>
      values
     </strong>
     , not a mixture of keys. The score matrix determines where to retrieve; the value matrix determines what is retrieved.
    </p>
-   <h2 data-section="shapes-explain-the-operation" id="attention--shapes-explain-the-operation">
+<h2 data-section="shapes-explain-the-operation" id="attention--shapes-explain-the-operation">
     Shapes explain the operation
    </h2>
-   <p>
+<p>
     If
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Q</mi><annotation encoding="application/x-tex">Q</annotation></semantics></math>
     has
@@ -104,21 +69,19 @@
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>q</mi></msub><mo>×</mo><msub><mi>d</mi><mi>v</mi></msub></mrow><annotation encoding="application/x-tex">T_q\times d_v</annotation></semantics></math>
     outputs.
    </p>
-   <p>
-    This is an expanded shape reading of the source equation. Query count and key count need not match, which is important for cross-attention between different sequences.
-   </p>
-   <details class="derivation" data-derivation="attention-backward" id="attention--derivation-attention-backward">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<p>The number of queries need not equal the number of keys. Cross-attention can therefore connect sequences of different lengths while producing one output per query.</p>
+<details class="derivation" data-derivation="attention-backward" id="attention--derivation-attention-backward">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive attention gradients with respect to queries, keys, and values
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       For one head, let
@@ -139,72 +102,72 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>×</mo><msub><mi>d</mi><mi>v</mi></msub></mrow><annotation encoding="application/x-tex">T\times d_v</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       1 · Differentiate the value mixture entry by entry
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>O</mi><mrow><mi>i</mi><mi>b</mi></mrow></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>S</mi></munderover><msub><mi>P</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>V</mi><mrow><mi>j</mi><mi>b</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">O_{ib}=\sum_{j=1}^SP_{ij}V_{jb}.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>O</mi><mrow><mi>i</mi><mi>b</mi></mrow></msub><mo>=</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>S</mi></munderover><msub><mi>P</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>V</mi><mrow><mi>j</mi><mi>b</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">O_{ib}=\sum_{j=1}^SP_{ij}V_{jb}.</annotation></semantics></math>
+</div>
+<p>
       Thus the gradient with respect to one value element is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>G</mi><mrow><mi>i</mi><mi>b</mi></mrow></msub><msub><mi>P</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\sum_iG_{ib}P_{ij}</annotation></semantics></math>
       , and the gradient with respect to one probability is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>b</mi></msub><msub><mi>G</mi><mrow><mi>i</mi><mi>b</mi></mrow></msub><msub><mi>V</mi><mrow><mi>j</mi><mi>b</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\sum_bG_{ib}V_{jb}</annotation></semantics></math>
       . In matrix form,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>V</mi><mo accent="true">‾</mo></mover><mo>=</mo><msup><mi>P</mi><mi>⊤</mi></msup><mi>G</mi><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>P</mi><mo accent="true">‾</mo></mover><mo>=</mo><mi>G</mi><msup><mi>V</mi><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar V=P^\top G,\qquad \bar P=GV^\top.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>V</mi><mo accent="true">‾</mo></mover><mo>=</mo><msup><mi>P</mi><mi>⊤</mi></msup><mi>G</mi><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>P</mi><mo accent="true">‾</mo></mover><mo>=</mo><mi>G</mi><msup><mi>V</mi><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar V=P^\top G,\qquad \bar P=GV^\top.</annotation></semantics></math>
+</div>
+<p>
       Their shapes are
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>×</mo><msub><mi>d</mi><mi>v</mi></msub></mrow><annotation encoding="application/x-tex">S\times d_v</annotation></semantics></math>
       and
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi><mo>×</mo><mi>S</mi></mrow><annotation encoding="application/x-tex">T\times S</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       2 · Apply the full rowwise softmax Jacobian
      </h4>
-     <p>
+<p>
       For fixed query row
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
       ,
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><msub><mi>P</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mi>/</mi><mi>∂</mi><msub><mi>A</mi><mrow><mi>i</mi><mi>r</mi></mrow></msub><mo>=</mo><msub><mi>P</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mn>𝟏</mn><mrow><mi>j</mi><mo>=</mo><mi>r</mi></mrow></msub><mo>−</mo><msub><mi>P</mi><mrow><mi>i</mi><mi>r</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\partial P_{ij}/\partial A_{ir}=P_{ij}(\mathbf1_{j=r}-P_{ir})</annotation></semantics></math>
       . Sum over all affected outputs in that row:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>A</mi><mo accent="true">‾</mo></mover><mrow><mi>i</mi><mi>r</mi></mrow></msub><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mover><mi>P</mi><mo accent="true">‾</mo></mover><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>P</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mn>𝟏</mn><mrow><mi>j</mi><mo>=</mo><mi>r</mi></mrow></msub><mo>−</mo><msub><mi>P</mi><mrow><mi>i</mi><mi>r</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>P</mi><mrow><mi>i</mi><mi>r</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><msub><mover><mi>P</mi><mo accent="true">‾</mo></mover><mrow><mi>i</mi><mi>r</mi></mrow></msub><mo>−</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>P</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mover><mi>P</mi><mo accent="true">‾</mo></mover><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar A_{ir}=\sum_j\bar P_{ij}P_{ij}(\mathbf1_{j=r}-P_{ir})
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>A</mi><mo accent="true">‾</mo></mover><mrow><mi>i</mi><mi>r</mi></mrow></msub><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mover><mi>P</mi><mo accent="true">‾</mo></mover><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>P</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mn>𝟏</mn><mrow><mi>j</mi><mo>=</mo><mi>r</mi></mrow></msub><mo>−</mo><msub><mi>P</mi><mrow><mi>i</mi><mi>r</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>P</mi><mrow><mi>i</mi><mi>r</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><msub><mover><mi>P</mi><mo accent="true">‾</mo></mover><mrow><mi>i</mi><mi>r</mi></mrow></msub><mo>−</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>P</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mover><mi>P</mi><mo accent="true">‾</mo></mover><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar A_{ir}=\sum_j\bar P_{ij}P_{ij}(\mathbf1_{j=r}-P_{ir})
 =P_{ir}\left[\bar P_{ir}-\sum_jP_{ij}\bar P_{ij}\right].</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       The bracket subtracts a probability-weighted row mean. This avoids constructing a dense
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>×</mo><mi>S</mi></mrow><annotation encoding="application/x-tex">S\times S</annotation></semantics></math>
       Jacobian for each row.
      </p>
-     <h4>
+<h4>
       3 · Differentiate the scaled scores
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><munder><mo>∑</mo><mi>a</mi></munder><msub><mi>Q</mi><mrow><mi>i</mi><mi>a</mi></mrow></msub><msub><mi>K</mi><mrow><mi>j</mi><mi>a</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">A_{ij}=\frac1{\sqrt{d_k}}\sum_aQ_{ia}K_{ja}.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><munder><mo>∑</mo><mi>a</mi></munder><msub><mi>Q</mi><mrow><mi>i</mi><mi>a</mi></mrow></msub><msub><mi>K</mi><mrow><mi>j</mi><mi>a</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">A_{ij}=\frac1{\sqrt{d_k}}\sum_aQ_{ia}K_{ja}.</annotation></semantics></math>
+</div>
+<p>
       Hence
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>Q</mi><mo accent="true">‾</mo></mover><mrow><mi>i</mi><mi>a</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><munder><mo>∑</mo><mi>j</mi></munder><msub><mover><mi>A</mi><mo accent="true">‾</mo></mover><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>K</mi><mrow><mi>j</mi><mi>a</mi></mrow></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mover><mi>K</mi><mo accent="true">‾</mo></mover><mrow><mi>j</mi><mi>a</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mover><mi>A</mi><mo accent="true">‾</mo></mover><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>Q</mi><mrow><mi>i</mi><mi>a</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar Q_{ia}=\frac1{\sqrt{d_k}}\sum_j\bar A_{ij}K_{ja},\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>Q</mi><mo accent="true">‾</mo></mover><mrow><mi>i</mi><mi>a</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><munder><mo>∑</mo><mi>j</mi></munder><msub><mover><mi>A</mi><mo accent="true">‾</mo></mover><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>K</mi><mrow><mi>j</mi><mi>a</mi></mrow></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mover><mi>K</mi><mo accent="true">‾</mo></mover><mrow><mi>j</mi><mi>a</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mover><mi>A</mi><mo accent="true">‾</mo></mover><mrow><mi>i</mi><mi>j</mi></mrow></msub><msub><mi>Q</mi><mrow><mi>i</mi><mi>a</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar Q_{ia}=\frac1{\sqrt{d_k}}\sum_j\bar A_{ij}K_{ja},\qquad
 \bar K_{ja}=\frac1{\sqrt{d_k}}\sum_i\bar A_{ij}Q_{ia}.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       Collecting entries gives
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>Q</mi><mo accent="true">‾</mo></mover><mo>=</mo><mfrac><mrow><mover><mi>A</mi><mo accent="true">‾</mo></mover><mi>K</mi></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>K</mi><mo accent="true">‾</mo></mover><mo>=</mo><mfrac><mrow><msup><mover><mi>A</mi><mo accent="true">‾</mo></mover><mi>⊤</mi></msup><mi>Q</mi></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar Q=\frac{\bar AK}{\sqrt{d_k}},\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>Q</mi><mo accent="true">‾</mo></mover><mo>=</mo><mfrac><mrow><mover><mi>A</mi><mo accent="true">‾</mo></mover><mi>K</mi></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>K</mi><mo accent="true">‾</mo></mover><mo>=</mo><mfrac><mrow><msup><mover><mi>A</mi><mo accent="true">‾</mo></mover><mi>⊤</mi></msup><mi>Q</mi></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar Q=\frac{\bar AK}{\sqrt{d_k}},\qquad
 \bar K=\frac{\bar A^\top Q}{\sqrt{d_k}}.</annotation></semantics></math>
-     </div>
-     <h4>
+</div>
+<h4>
       4 · Continue through shared self-attention inputs
      </h4>
-     <p>
+<p>
       If
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo>=</mo><mi>X</mi><msub><mi>W</mi><mi>Q</mi></msub></mrow><annotation encoding="application/x-tex">Q=XW_Q</annotation></semantics></math>
       ,
@@ -213,40 +176,36 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mo>=</mo><mi>X</mi><msub><mi>W</mi><mi>V</mi></msub></mrow><annotation encoding="application/x-tex">V=XW_V</annotation></semantics></math>
       , then
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>X</mi><mo accent="true">‾</mo></mover><mo>=</mo><mover><mi>Q</mi><mo accent="true">‾</mo></mover><msubsup><mi>W</mi><mi>Q</mi><mi>⊤</mi></msubsup><mo>+</mo><mover><mi>K</mi><mo accent="true">‾</mo></mover><msubsup><mi>W</mi><mi>K</mi><mi>⊤</mi></msubsup><mo>+</mo><mover><mi>V</mi><mo accent="true">‾</mo></mover><msubsup><mi>W</mi><mi>V</mi><mi>⊤</mi></msubsup><mo>,</mo></mrow><annotation encoding="application/x-tex">\bar X=\bar QW_Q^\top+\bar KW_K^\top+\bar VW_V^\top,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>W</mi><mo accent="true">‾</mo></mover><mi>Q</mi></msub><mo>=</mo><msup><mi>X</mi><mi>⊤</mi></msup><mover><mi>Q</mi><mo accent="true">‾</mo></mover><mo>,</mo><mspace width="1.0em"></mspace><msub><mover><mi>W</mi><mo accent="true">‾</mo></mover><mi>K</mi></msub><mo>=</mo><msup><mi>X</mi><mi>⊤</mi></msup><mover><mi>K</mi><mo accent="true">‾</mo></mover><mo>,</mo><mspace width="1.0em"></mspace><msub><mover><mi>W</mi><mo accent="true">‾</mo></mover><mi>V</mi></msub><mo>=</mo><msup><mi>X</mi><mi>⊤</mi></msup><mover><mi>V</mi><mo accent="true">‾</mo></mover><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar W_Q=X^\top\bar Q,\quad\bar W_K=X^\top\bar K,\quad\bar W_V=X^\top\bar V.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>X</mi><mo accent="true">‾</mo></mover><mo>=</mo><mover><mi>Q</mi><mo accent="true">‾</mo></mover><msubsup><mi>W</mi><mi>Q</mi><mi>⊤</mi></msubsup><mo>+</mo><mover><mi>K</mi><mo accent="true">‾</mo></mover><msubsup><mi>W</mi><mi>K</mi><mi>⊤</mi></msubsup><mo>+</mo><mover><mi>V</mi><mo accent="true">‾</mo></mover><msubsup><mi>W</mi><mi>V</mi><mi>⊤</mi></msubsup><mo>,</mo></mrow><annotation encoding="application/x-tex">\bar X=\bar QW_Q^\top+\bar KW_K^\top+\bar VW_V^\top,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>W</mi><mo accent="true">‾</mo></mover><mi>Q</mi></msub><mo>=</mo><msup><mi>X</mi><mi>⊤</mi></msup><mover><mi>Q</mi><mo accent="true">‾</mo></mover><mo>,</mo><mspace width="1.0em"></mspace><msub><mover><mi>W</mi><mo accent="true">‾</mo></mover><mi>K</mi></msub><mo>=</mo><msup><mi>X</mi><mi>⊤</mi></msup><mover><mi>K</mi><mo accent="true">‾</mo></mover><mo>,</mo><mspace width="1.0em"></mspace><msub><mover><mi>W</mi><mo accent="true">‾</mo></mover><mi>V</mi></msub><mo>=</mo><msup><mi>X</mi><mi>⊤</mi></msup><mover><mi>V</mi><mo accent="true">‾</mo></mover><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar W_Q=X^\top\bar Q,\quad\bar W_K=X^\top\bar K,\quad\bar W_V=X^\top\bar V.</annotation></semantics></math>
+</div>
+<p>
       All three branches depend on
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>X</mi><annotation encoding="application/x-tex">X</annotation></semantics></math>
       , so their contributions must be added. Cross-attention has different query and key/value source tensors, so their gradient branches are accumulated to the appropriate source instead.
      </p>
-     <h4>
+<h4>
       5 · Respect operations omitted from the derivation
      </h4>
-     <p>
+<p>
       Attention dropout, output projection, residual paths, and normalization contribute additional local derivatives when present. Masked positions have no score influence when their probability is fixed at zero. This derivation verifies the elementary attention operation, not every optimized kernel or complete Transformer block.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="18" data-pdf="arch" type="button">
-       Chapter source · PDF p. 18
-      </button>
-      <a class="calculation-link" href="#attention?derivation=attention-backward">
+<div class="derivation-footer">
+
+<button data-page="18" data-pdf="arch" type="button">Reference · PDF p. 18</button>
+<a class="calculation-link" href="#attention?derivation=attention-backward">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="why-the-square-root-scale-appears" id="attention--why-the-square-root-scale-appears">
+</div>
+</div>
+</details>
+<h2 data-section="why-the-square-root-scale-appears" id="attention--why-the-square-root-scale-appears">
     Why the square-root scale appears
    </h2>
-   <p>
+<p>
     For the initialization-scale argument, assume independent, zero-mean query/key components with unit variance and no cross-coordinate dependence. Summing
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>d</mi><mi>k</mi></msub><annotation encoding="application/x-tex">d_k</annotation></semantics></math>
     products gives a dot-product variance growing with
@@ -255,21 +214,21 @@
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt><annotation encoding="application/x-tex">\sqrt{d_k}</annotation></semantics></math>
     controls this dimension-induced scale.
    </p>
-   <p>
+<p>
     The assumption explains the design choice; it does not say that every trained query/key distribution is exactly independent or unit variance. Learned projections, normalization, and actual data affect the observed scores.
    </p>
-   <details class="derivation" data-derivation="dot-variance" id="attention--derivation-dot-variance">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<details class="derivation" data-derivation="dot-variance" id="attention--derivation-dot-variance">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive the square-root attention scale from moments
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Let
@@ -284,85 +243,79 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>v</mi><mi>k</mi></msub><annotation encoding="application/x-tex">v_k</annotation></semantics></math>
       . Real learned queries and keys need not retain these assumptions.
      </p>
-     <h4>
+<h4>
       1 · Evaluate one product’s mean
      </h4>
-     <p>
+<p>
       Independence gives
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>q</mi><mi>j</mi></msub><msub><mi>k</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>q</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>k</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mathbb E[q_jk_j]=\mathbb E[q_j]\mathbb E[k_j]=0</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       2 · Evaluate its second moment and variance
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>q</mi><mi>j</mi></msub><msub><mi>k</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>q</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>k</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msub><mi>v</mi><mi>q</mi></msub><msub><mi>v</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[(q_jk_j)^2]=\mathbb E[q_j^2]\mathbb E[k_j^2]=v_qv_k.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>q</mi><mi>j</mi></msub><msub><mi>k</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>q</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>k</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msub><mi>v</mi><mi>q</mi></msub><msub><mi>v</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[(q_jk_j)^2]=\mathbb E[q_j^2]\mathbb E[k_j^2]=v_qv_k.</annotation></semantics></math>
+</div>
+<p>
       Since the mean is zero, this is also
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>q</mi><mi>j</mi></msub><msub><mi>k</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\operatorname{Var}(q_jk_j)</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       3 · Sum the coordinate contributions
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>q</mi><mi>j</mi></msub><msub><mi>k</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>≠</mo><mi>r</mi></mrow></munder><mo>Cov</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>q</mi><mi>j</mi></msub><msub><mi>k</mi><mi>j</mi></msub><mo>,</mo><msub><mi>q</mi><mi>r</mi></msub><msub><mi>k</mi><mi>r</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(s)=\sum_j\operatorname{Var}(q_jk_j)
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>q</mi><mi>j</mi></msub><msub><mi>k</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>≠</mo><mi>r</mi></mrow></munder><mo>Cov</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>q</mi><mi>j</mi></msub><msub><mi>k</mi><mi>j</mi></msub><mo>,</mo><msub><mi>q</mi><mi>r</mi></msub><msub><mi>k</mi><mi>r</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(s)=\sum_j\operatorname{Var}(q_jk_j)
 +\sum_{j\ne r}\operatorname{Cov}(q_jk_j,q_rk_r).</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       Coordinate independence makes the covariance terms zero. Therefore
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>d</mi><mi>k</mi></msub><msub><mi>v</mi><mi>q</mi></msub><msub><mi>v</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\operatorname{Var}(s)=d_kv_qv_k</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       4 · Scale the standard deviation, not the variance directly
      </h4>
-     <p>
+<p>
       For
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><mi>s</mi><mi>/</mi><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mrow><annotation encoding="application/x-tex">a=s/\sqrt{d_k}</annotation></semantics></math>
       , variance scales by the square of the divisor:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><msub><mi>d</mi><mi>k</mi></msub></mfrac><mo>=</mo><msub><mi>v</mi><mi>q</mi></msub><msub><mi>v</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(a)=\frac{\operatorname{Var}(s)}{d_k}=v_qv_k.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>a</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><msub><mi>d</mi><mi>k</mi></msub></mfrac><mo>=</mo><msub><mi>v</mi><mi>q</mi></msub><msub><mi>v</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(a)=\frac{\operatorname{Var}(s)}{d_k}=v_qv_k.</annotation></semantics></math>
+</div>
+<p>
       With unit component variances, the scaled score has variance one. Dividing by
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>d</mi><mi>k</mi></msub><annotation encoding="application/x-tex">d_k</annotation></semantics></math>
       would instead make its variance
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><msub><mi>d</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">1/d_k</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       5 · Connect score scale to softmax sensitivity
      </h4>
-     <p>
+<p>
       For weights
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>i</mi></msub><mo>=</mo><mo>softmax</mo><msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">p_i=\operatorname{softmax}(s)_i</annotation></semantics></math>
       , the derivative is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><msub><mi>p</mi><mi>i</mi></msub><mi>/</mi><mi>∂</mi><msub><mi>s</mi><mi>j</mi></msub><mo>=</mo><msub><mi>p</mi><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mn>𝟏</mn><mrow><mi>i</mi><mo>=</mo><mi>j</mi></mrow></msub><mo>−</mo><msub><mi>p</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\partial p_i/\partial s_j=p_i(\mathbf1_{i=j}-p_j)</annotation></semantics></math>
       . When one score dominates and the distribution saturates, many of these derivatives approach zero. Scaling avoids a predictable increase in score magnitude with width under the stated assumptions. It is not a proof that all trained scores have unit variance or that saturation can never occur.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="18" data-pdf="arch" type="button">
-       Chapter source · PDF p. 18
-      </button>
-      <a href="https://arxiv.org/abs/1706.03762" rel="noopener noreferrer" target="_blank">
+<div class="derivation-footer">
+
+<button data-page="18" data-pdf="arch" type="button">Reference · PDF p. 18</button>
+<a href="https://arxiv.org/abs/1706.03762" rel="noopener noreferrer" target="_blank">
        Research reference
       </a>
-      <a class="calculation-link" href="#attention?derivation=dot-variance">
+<a class="calculation-link" href="#attention?derivation=dot-variance">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="the-numerical-example-from-the-guide" id="attention--the-numerical-example-from-the-guide">
-    The numerical example from the guide
-   </h2>
-   <p>
+</div>
+</div>
+</details>
+<h2 data-section="the-numerical-example-from-the-guide" id="attention--the-numerical-example-from-the-guide">A weighted-mixture example</h2>
+<p>
     Take
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">q=(1,0)</annotation></semantics></math>
     and keys
@@ -377,10 +330,10 @@
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.707</mn><mo>,</mo><mn>0</mn><mo>,</mo><mn>0.707</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(0.707,0,0.707)</annotation></semantics></math>
     , giving weights
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>≈</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.401</mn><mo>,</mo><mn>0.198</mn><mo>,</mo><mn>0.401</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\alpha\approx(0.401,0.198,0.401).</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>≈</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.401</mn><mo>,</mo><mn>0.198</mn><mo>,</mo><mn>0.401</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\alpha\approx(0.401,0.198,0.401).</annotation></semantics></math>
+</div>
+<p>
     For values
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">v_1=(1,0)</annotation></semantics></math>
     ,
@@ -389,115 +342,91 @@
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>3</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">v_3=(1,1)</annotation></semantics></math>
     ,
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>1</mn></msub><msub><mi>v</mi><mn>1</mn></msub><mo>+</mo><msub><mi>α</mi><mn>2</mn></msub><msub><mi>v</mi><mn>2</mn></msub><mo>+</mo><msub><mi>α</mi><mn>3</mn></msub><msub><mi>v</mi><mn>3</mn></msub><mo>≈</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.802</mn><mo>,</mo><mn>0.797</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\alpha_1v_1+\alpha_2v_2+\alpha_3v_3\approx(0.802,0.797).</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>1</mn></msub><msub><mi>v</mi><mn>1</mn></msub><mo>+</mo><msub><mi>α</mi><mn>2</mn></msub><msub><mi>v</mi><mn>2</mn></msub><mo>+</mo><msub><mi>α</mi><mn>3</mn></msub><msub><mi>v</mi><mn>3</mn></msub><mo>≈</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.802</mn><mo>,</mo><mn>0.797</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\alpha_1v_1+\alpha_2v_2+\alpha_3v_3\approx(0.802,0.797).</annotation></semantics></math>
+</div>
+<p>
     The second source has a lower weight but still contributes to the second output coordinate because its value has magnitude two there. A large attention coefficient alone is not a full measure of a source’s eventual effect on a prediction.
    </p>
-   <figure class="source-figure">
-    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="arch-19" type="button">
-     <img alt="The source’s illustrative self-attention matrix. Rows describe query-specific distributions over keys. These are illustrative weights, not measurements from a trained language model." height="713" loading="lazy" src="assets/images/the-source-s-illustrative-self-attention-matrix-rows-describe-que-07e847a69f.webp" width="848"/>
-    </button>
-    <figcaption>
-     The source’s illustrative self-attention matrix. Rows describe query-specific distributions over keys. These are illustrative weights, not measurements from a trained language model.
-     <button aria-label="Open source: Architectures · PDF p. 19" data-page="19" data-pdf="arch" type="button">
+<figure class="source-figure">
+<button aria-label="Enlarge source figure" class="figure-frame" data-figure="arch-19" type="button">
+<img alt="An illustrative self-attention matrix. Each row is a distribution over key positions for one query; these values are not measurements from a trained language model." height="713" loading="lazy" src="assets/images/the-source-s-illustrative-self-attention-matrix-rows-describe-que-07e847a69f.webp" width="848"/>
+</button>
+<figcaption>An illustrative self-attention matrix. Each row is a distribution over key positions for one query; these values are not measurements from a trained language model. <button aria-label="Open source: Architectures · PDF p. 19" data-page="19" data-pdf="arch" type="button">
       Architectures · PDF p. 19
-     </button>
-    </figcaption>
-   </figure>
-   <details class="derivation" data-derivation="attention-arithmetic" id="attention--derivation-attention-arithmetic">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+     </button></figcaption>
+</figure>
+<details class="derivation" data-derivation="attention-arithmetic" id="attention--derivation-attention-arithmetic">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Calculate scores, normalization, and the value mixture
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
-       Setting.
-      </strong>
-      Use the supplied query
-      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">q=(1,0)</annotation></semantics></math>
-      , keys
-      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>k</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">k_1=(1,0)</annotation></semantics></math>
-      ,
-      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>k</mi><mn>2</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">k_2=(0,1)</annotation></semantics></math>
-      ,
-      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>k</mi><mn>3</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">k_3=(1,1)</annotation></semantics></math>
-      , and values
-      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">v_1=(1,0)</annotation></semantics></math>
-      ,
-      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>2</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">v_2=(0,2)</annotation></semantics></math>
-      ,
-      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>3</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">v_3=(1,1)</annotation></semantics></math>
-      . The key width is
-      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>k</mi></msub><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">d_k=2</annotation></semantics></math>
-      .
-     </p>
-     <h4>
+</summary>
+<div class="derivation-body">
+<p><strong>Setting.</strong> Use the query <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">q=(1,0)</annotation></semantics></math>, keys <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>k</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">k_1=(1,0)</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>k</mi><mn>2</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">k_2=(0,1)</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>k</mi><mn>3</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">k_3=(1,1)</annotation></semantics></math>, and values <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>1</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">v_1=(1,0)</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>2</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">v_2=(0,2)</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>3</mn></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">v_3=(1,1)</annotation></semantics></math>. The key width is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>k</mi></msub><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">d_k=2</annotation></semantics></math>.</p>
+<h4>
       1 · Form every dot product
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>q</mi><mi>⊤</mi></msup><msub><mi>k</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn><mo>,</mo><mspace width="1.0em"></mspace><msup><mi>q</mi><mi>⊤</mi></msup><msub><mi>k</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">q^\top k_1=1(1)+0(0)=1,\quad q^\top k_2=1(0)+0(1)=0,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>q</mi><mi>⊤</mi></msup><msub><mi>k</mi><mn>3</mn></msub><mo>=</mo><mn>1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">q^\top k_3=1(1)+0(1)=1.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>q</mi><mi>⊤</mi></msup><msub><mi>k</mi><mn>1</mn></msub><mo>=</mo><mn>1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn><mo>,</mo><mspace width="1.0em"></mspace><msup><mi>q</mi><mi>⊤</mi></msup><msub><mi>k</mi><mn>2</mn></msub><mo>=</mo><mn>1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">q^\top k_1=1(1)+0(0)=1,\quad q^\top k_2=1(0)+0(1)=0,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>q</mi><mi>⊤</mi></msup><msub><mi>k</mi><mn>3</mn></msub><mo>=</mo><mn>1</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">q^\top k_3=1(1)+0(1)=1.</annotation></semantics></math>
+</div>
+<p>
       Dividing by
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msqrt><mn>2</mn></msqrt><annotation encoding="application/x-tex">\sqrt2</annotation></semantics></math>
       gives scores
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mi>/</mi><msqrt><mn>2</mn></msqrt><mo>,</mo><mn>0</mn><mo>,</mo><mn>1</mn><mi>/</mi><msqrt><mn>2</mn></msqrt><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(1/\sqrt2,0,1/\sqrt2)</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       2 · Shift the scores before exponentiating
      </h4>
-     <p>
+<p>
       Subtract their maximum
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><msqrt><mn>2</mn></msqrt></mrow><annotation encoding="application/x-tex">1/\sqrt2</annotation></semantics></math>
       , which leaves softmax unchanged. The shifted exponentials are
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><msqrt><mn>2</mn></msqrt></mrow></msup><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>0.4930687</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">(1,e^{-1/\sqrt2},1)\approx(1,0.4930687,1).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><msqrt><mn>2</mn></msqrt></mrow></msup><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>,</mo><mn>0.4930687</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">(1,e^{-1/\sqrt2},1)\approx(1,0.4930687,1).</annotation></semantics></math>
+</div>
+<p>
       Their sum is approximately
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>2.4930687</mn><annotation encoding="application/x-tex">2.4930687</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       3 · Normalize each value
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>1</mn></msub><mo>=</mo><msub><mi>α</mi><mn>3</mn></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><msqrt><mn>2</mn></msqrt></mrow></msup></mrow></mfrac><mo>≈</mo><mn>0.4011121</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\alpha_1=\alpha_3=\frac1{2+e^{-1/\sqrt2}}\approx0.4011121,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>2</mn></msub><mo>=</mo><mfrac><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><msqrt><mn>2</mn></msqrt></mrow></msup><mrow><mn>2</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><msqrt><mn>2</mn></msqrt></mrow></msup></mrow></mfrac><mo>≈</mo><mn>0.1977758</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\alpha_2=\frac{e^{-1/\sqrt2}}{2+e^{-1/\sqrt2}}\approx0.1977758.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>1</mn></msub><mo>=</mo><msub><mi>α</mi><mn>3</mn></msub><mo>=</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><msqrt><mn>2</mn></msqrt></mrow></msup></mrow></mfrac><mo>≈</mo><mn>0.4011121</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\alpha_1=\alpha_3=\frac1{2+e^{-1/\sqrt2}}\approx0.4011121,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mn>2</mn></msub><mo>=</mo><mfrac><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><msqrt><mn>2</mn></msqrt></mrow></msup><mrow><mn>2</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><msqrt><mn>2</mn></msqrt></mrow></msup></mrow></mfrac><mo>≈</mo><mn>0.1977758</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\alpha_2=\frac{e^{-1/\sqrt2}}{2+e^{-1/\sqrt2}}\approx0.1977758.</annotation></semantics></math>
+</div>
+<p>
       The weights are positive and sum to one by construction.
      </p>
-     <h4>
+<h4>
       4 · Compute each output coordinate
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mn>1</mn></msub><mo>=</mo><msub><mi>α</mi><mn>1</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>α</mi><mn>2</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>α</mi><mn>3</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>α</mi><mn>1</mn></msub><mo>+</mo><msub><mi>α</mi><mn>3</mn></msub><mo>≈</mo><mn>0.8022242</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">o_1=\alpha_1(1)+\alpha_2(0)+\alpha_3(1)=\alpha_1+\alpha_3\approx0.8022242,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mn>2</mn></msub><mo>=</mo><msub><mi>α</mi><mn>1</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>α</mi><mn>2</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>α</mi><mn>3</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>2</mn><msub><mi>α</mi><mn>2</mn></msub><mo>+</mo><msub><mi>α</mi><mn>3</mn></msub><mo>≈</mo><mn>0.7966637</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">o_2=\alpha_1(0)+\alpha_2(2)+\alpha_3(1)=2\alpha_2+\alpha_3\approx0.7966637.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mn>1</mn></msub><mo>=</mo><msub><mi>α</mi><mn>1</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>α</mi><mn>2</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>α</mi><mn>3</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>α</mi><mn>1</mn></msub><mo>+</mo><msub><mi>α</mi><mn>3</mn></msub><mo>≈</mo><mn>0.8022242</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">o_1=\alpha_1(1)+\alpha_2(0)+\alpha_3(1)=\alpha_1+\alpha_3\approx0.8022242,</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>o</mi><mn>2</mn></msub><mo>=</mo><msub><mi>α</mi><mn>1</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>α</mi><mn>2</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>α</mi><mn>3</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>2</mn><msub><mi>α</mi><mn>2</mn></msub><mo>+</mo><msub><mi>α</mi><mn>3</mn></msub><mo>≈</mo><mn>0.7966637</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">o_2=\alpha_1(0)+\alpha_2(2)+\alpha_3(1)=2\alpha_2+\alpha_3\approx0.7966637.</annotation></semantics></math>
+</div>
+<p>
       Keys determine the weights; values supply the vectors being mixed. A key and its corresponding value do not have to be equal vectors.
      </p>
-     <h4>
+<h4>
       5 · Handle a mask before normalization
      </h4>
-     <p>
+<p>
       A disallowed position receives score
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>∞</mi></mrow><annotation encoding="application/x-tex">-\infty</annotation></semantics></math>
       and exponential zero. Normalize only over the remaining allowed positions. If
@@ -506,221 +435,180 @@
       </strong>
       positions are disallowed, the mathematical denominator is zero and no probability distribution is defined by this formula; prevent that case or handle it explicitly according to the chosen implementation.
      </p>
-     <figure aria-label="Explore the value mixture" class="interactive-visual" data-visual="attention">
-      <div class="visual-heading">
-       <strong>
+<figure aria-label="Explore the value mixture" class="interactive-visual" data-visual="attention">
+<div class="visual-heading">
+<strong>
         Explore the value mixture
        </strong>
-       <button data-reset-visual="" type="button">
+<button data-reset-visual="" type="button">
         Reset
        </button>
-      </div>
-      <div class="visual-controls">
-       <div class="visual-control">
-        <label for="visual-attention-temperature">
+</div>
+<div class="visual-controls">
+<div class="visual-control">
+<label for="visual-attention-temperature">
          Temperature τ
         </label>
-        <input aria-describedby="visual-attention-output" data-default="1" data-value="temperature" id="visual-attention-temperature" max="3" min="0.1" step="0.05" type="range" value="1"/>
-        <output data-range-output="temperature" for="visual-attention-temperature">
+<input aria-describedby="visual-attention-output" data-default="1" data-value="temperature" id="visual-attention-temperature" max="3" min="0.1" step="0.05" type="range" value="1"/>
+<output data-range-output="temperature" for="visual-attention-temperature">
          1
         </output>
-       </div>
-       <label class="visual-checkbox" for="visual-attention-hide">
-        <input data-value="hide" id="visual-attention-hide" type="checkbox"/>
+</div>
+<label class="visual-checkbox" for="visual-attention-hide">
+<input data-value="hide" id="visual-attention-hide" type="checkbox"/>
         Mask the third key
        </label>
-      </div>
-      <svg aria-describedby="visual-attention-output" aria-label="Explore the value mixture" role="img" viewbox="0 0 640 300"></svg>
-      <div aria-hidden="true" class="visual-legend">
-       <span style="--series:#356650">
+</div>
+<svg aria-describedby="visual-attention-output" aria-label="Explore the value mixture" role="img" viewbox="0 0 640 300"></svg>
+<div aria-hidden="true" class="visual-legend">
+<span style="--series:#356650">
         Key 1
        </span>
-       <span style="--series:#92663c">
+<span style="--series:#92663c">
         Key 2
        </span>
-       <span style="--series:#547c99">
+<span style="--series:#547c99">
         Key 3
        </span>
-      </div>
-      <figcaption aria-live="polite" class="visual-output" id="visual-attention-output">
-      </figcaption>
-      <div class="visual-note">
+</div>
+<figcaption aria-live="polite" class="visual-output" id="visual-attention-output">
+</figcaption>
+<div class="visual-note">
        Interactive calculation using the assumptions above · computed locally, not fitted performance
       </div>
-      <noscript>
-       <p class="visual-fallback">
+<noscript>
+<p class="visual-fallback">
         The interactive plot needs JavaScript. The complete equations and worked values remain available in the calculation above.
        </p>
-      </noscript>
-     </figure>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="18" data-pdf="arch" type="button">
-       Chapter source · PDF p. 18
-      </button>
-      <a class="calculation-link" href="#attention?derivation=attention-arithmetic">
+</noscript>
+</figure>
+<div class="derivation-footer">
+
+<button data-page="18" data-pdf="arch" type="button">Reference · PDF p. 18</button>
+<a class="calculation-link" href="#attention?derivation=attention-arithmetic">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="self-attention-and-cross-attention" id="attention--self-attention-and-cross-attention">
+</div>
+</div>
+</details>
+<h2 data-section="self-attention-and-cross-attention" id="attention--self-attention-and-cross-attention">
     Self-attention and cross-attention
    </h2>
-   <p>
+<p>
     In self-attention, queries, keys, and values are derived from the same sequence. In cross-attention, queries come from one sequence and keys/values from another—typically decoder states querying encoder memory.
    </p>
-   <p>
+<p>
     Masks restrict which sources are allowed. An autoregressive query must not retrieve forbidden future information. “Attention is global” should therefore be read as “direct access to the allowed interaction set,” not a requirement that every possible pair is used.
    </p>
-   <h2 data-section="why-use-multiple-heads" id="attention--why-use-multiple-heads">
+<h2 data-section="why-use-multiple-heads" id="attention--why-use-multiple-heads">
     Why use multiple heads?
    </h2>
-   <p>
-    The guide defines separate projected subspaces:
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>head</mo><mi>h</mi></msub><mo>=</mo><mo>Attention</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>Q</mi><msubsup><mi>W</mi><mi>Q</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo>,</mo><mi>K</mi><msubsup><mi>W</mi><mi>K</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo>,</mo><mi>V</mi><msubsup><mi>W</mi><mi>V</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\operatorname{head}_h=\operatorname{Attention}(QW_Q^{(h)},KW_K^{(h)},VW_V^{(h)}),</annotation></semantics></math>
-   </div>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>MHA</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>Q</mi><mo>,</mo><mi>K</mi><mo>,</mo><mi>V</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><msub><mo>head</mo><mn>1</mn></msub><mo>;</mo><mi>…</mi><mo>;</mo><msub><mo>head</mo><mi>H</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><msub><mi>W</mi><mi>O</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{MHA}(Q,K,V)=[\operatorname{head}_1;\ldots;\operatorname{head}_H]W_O.</annotation></semantics></math>
-   </div>
-   <p>
-    Different heads can express different relationships. Their concatenated information is mixed by an output projection. The source cautions against overinterpreting individual heads: an apparently meaningful weight pattern is not automatically a causal explanation.
-   </p>
-   <h2 data-section="use-the-existing-official-demonstrations" id="attention--use-the-existing-official-demonstrations">
-    Use the existing official demonstrations
-   </h2>
-   <p>
-    The SDPA tutorial supplies the attention primitive and an executable attention module. The translation tutorial supplies trained attention maps for an additive-attention model. The latter is a
-    <strong>
-     different score mechanism
-    </strong>
-    but a useful practical visualization of query-specific retrieval.
-   </p>
-   <p>
-    The link descriptions distinguish the mechanisms so that a visualization of one form is not presented as proof or an exact implementation of another.
-    <a href="#transformers">
+<p>Each head operates in a separately projected subspace:</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>head</mo><mi>h</mi></msub><mo>=</mo><mo>Attention</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>Q</mi><msubsup><mi>W</mi><mi>Q</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo>,</mo><mi>K</mi><msubsup><mi>W</mi><mi>K</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo>,</mo><mi>V</mi><msubsup><mi>W</mi><mi>V</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\operatorname{head}_h=\operatorname{Attention}(QW_Q^{(h)},KW_K^{(h)},VW_V^{(h)}),</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>MHA</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>Q</mi><mo>,</mo><mi>K</mi><mo>,</mo><mi>V</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><msub><mo>head</mo><mn>1</mn></msub><mo>;</mo><mi>…</mi><mo>;</mo><msub><mo>head</mo><mi>H</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><msub><mi>W</mi><mi>O</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{MHA}(Q,K,V)=[\operatorname{head}_1;\ldots;\operatorname{head}_H]W_O.</annotation></semantics></math>
+</div>
+<p>Different heads can represent different relationships, and the output projection mixes their concatenated results. An interpretable-looking attention pattern is not by itself a causal explanation of the prediction.</p>
+<h2 data-section="use-the-existing-official-demonstrations" id="attention--use-the-existing-official-demonstrations">Scaled dot-product and additive attention in code</h2>
+<p>The scaled dot-product example implements the Q–K–V calculation and an attention module. The translation example uses additive scores and visualizes trained alignments. Both perform query-dependent retrieval, but their scoring functions differ.</p>
+<p><a href="#transformers">
      Transformers
-    </a>
-    place attention inside a larger repeated architecture.
-   </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="attention--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="sdpa">
-     <span class="resource-meta">
+    </a> combine attention with feed-forward transformations, residual connections, normalization, and position information. Attention alone does not specify that complete architecture.</p>
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="attention--implementation">Implementation examples</h2>
+
+<div class="resource-list">
+<div class="resource" data-resource="sdpa">
+<span class="resource-meta">
       PyTorch · Tutorial + implementation
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/scaled_dot_product_attention_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/scaled_dot_product_attention_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Scaled Dot Product Attention
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Connect Q, K and V to the attention primitive and a larger attention module. Note mask semantics and dropout behavior when moving from the mathematical formula to the function.
-     </p>
-    </div>
-    <div class="resource" data-resource="seq2seq">
-     <span class="resource-meta">
+</a>
+<p>Scaled dot-product attention and an attention module, including masking and the functional dropout behavior.</p>
+</div>
+<div class="resource" data-resource="seq2seq">
+<span class="resource-meta">
       PyTorch · Training example + attention map
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Translation with a Sequence-to-Sequence Network and Attention
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect the GRU encoder/decoder, teacher forcing, attention and generated translations. Its attention plots show alignments; its additive attention is distinct from scaled dot-product attention.
-     </p>
-    </div>
-    <div class="resource" data-resource="transformerblocks">
-     <span class="resource-meta">
+</a>
+<p>GRU translation with teacher forcing, additive attention, generated outputs, and alignment plots. The scoring rule differs from scaled dot-product attention.</p>
+</div>
+<div class="resource" data-resource="transformerblocks">
+<span class="resource-meta">
       PyTorch · Advanced implementation tutorial
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/transformer_building_blocks.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/transformer_building_blocks.html" rel="noopener noreferrer" target="_blank">
+<span>
        Accelerating PyTorch Transformers with Building Blocks
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Read after the conceptual Transformer chapter. The examples use lower-level attention and modern execution tools; this is an engineering continuation, not the first introduction to attention.
-     </p>
-    </div>
-   </div>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</a>
+<p>Lower-level attention components and performance-oriented Transformer implementations.</p>
+</div>
+</div>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
     </strong>
     Why divide the attention dot product by the square root of the key dimension?
    </summary>
-   <p>
+<p>
     Under the usual independent unit-scale component argument, dot-product variance grows with the number of components. Dividing by √dₖ keeps scores on a more stable scale and reduces softmax saturation caused purely by increasing that dimension.
    </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#vae">
-    <small>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+
+<button aria-label="Open source: Architectures · PDF pp. 18–19 · §7" data-page="18" data-pdf="arch" type="button">
+     Architectures · PDF pp. 18–19 · §7
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#vae">
+<small>
      ← Previous
     </small>
-    Variational autoencoders and the ELBO
-   </a>
-   <a href="#transformers">
-    <small>
+Variational autoencoders and the ELBO
+</a>
+<a href="#transformers">
+<small>
      Next →
     </small>
-    Transformers: position, residual paths, and masking
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+Transformers: position, residual paths, and masking
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="attention-is-content-dependent-retrieval" href="#attention?section=attention-is-content-dependent-retrieval">
-    Attention is content-dependent retrieval
-   </a>
-   <a data-section="shapes-explain-the-operation" href="#attention?section=shapes-explain-the-operation">
-    Shapes explain the operation
-   </a>
-   <a data-section="why-the-square-root-scale-appears" href="#attention?section=why-the-square-root-scale-appears">
-    Why the square-root scale appears
-   </a>
-   <a data-section="the-numerical-example-from-the-guide" href="#attention?section=the-numerical-example-from-the-guide">
-    The numerical example from the guide
-   </a>
-   <a data-section="self-attention-and-cross-attention" href="#attention?section=self-attention-and-cross-attention">
-    Self-attention and cross-attention
-   </a>
-   <a data-section="why-use-multiple-heads" href="#attention?section=why-use-multiple-heads">
-    Why use multiple heads?
-   </a>
-   <a data-section="use-the-existing-official-demonstrations" href="#attention?section=use-the-existing-official-demonstrations">
-    Use the existing official demonstrations
-   </a>
-   <a data-section="implementation" href="#attention?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="attention-is-content-dependent-retrieval" href="#attention?section=attention-is-content-dependent-retrieval">Attention is content-dependent retrieval</a>
+<a data-section="shapes-explain-the-operation" href="#attention?section=shapes-explain-the-operation">Shapes explain the operation</a>
+<a data-section="why-the-square-root-scale-appears" href="#attention?section=why-the-square-root-scale-appears">Why the square-root scale appears</a>
+<a data-section="the-numerical-example-from-the-guide" href="#attention?section=the-numerical-example-from-the-guide">A weighted-mixture example</a>
+<a data-section="self-attention-and-cross-attention" href="#attention?section=self-attention-and-cross-attention">Self-attention and cross-attention</a>
+<a data-section="why-use-multiple-heads" href="#attention?section=why-use-multiple-heads">Why use multiple heads?</a>
+<a data-section="use-the-existing-official-demonstrations" href="#attention?section=use-the-existing-official-demonstrations">Scaled dot-product and additive attention in code</a>
+<a data-section="implementation" href="#attention?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>

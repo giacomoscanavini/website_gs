@@ -1,148 +1,146 @@
 <article class="article" id="B17">
- <div class="breadcrumb">
-  <a href="#sqlbolt">
+<div class="breadcrumb">
+<a href="#sqlbolt">
    SQLBolt
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Lesson 17
   </span>
- </div>
- <h1>
+</div>
+<h1>
   ALTER TABLE
  </h1>
- <p>
+<p>
   ALTER TABLE changes an existing schema. The exercises add two columns, one with a default. The lesson also discusses dropping columns and renaming tables.
  </p>
- <p>
-  <b>
+<p>
+<b>
    Note.
   </b>
   The lesson describes limitations of its embedded engine; do not treat that as a universal statement about current SQLite. In pandas, assigning English fills existing rows but does not establish a default for future rows.
  </p>
- <h2>
+<h2>
   01 · Add floating-point aspect ratio
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-50-panel-0" aria-selected="true" id="example-50-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-50-panel-0" aria-selected="true" id="example-50-tab-0" role="tab" tabindex="0" type="button">
      SQL
     </button>
-    <button aria-controls="example-50-panel-1" aria-selected="false" id="example-50-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-50-panel-1" aria-selected="false" id="example-50-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-50-tab-0" class="code-panel" id="example-50-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-50-tab-0" class="code-panel" id="example-50-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-B17-0" tabindex="0"><code class="language-sql" data-origin="legacy-B17-0"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">Aspect_ratio</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-50-tab-1" class="code-panel" id="example-50-panel-1" role="tabpanel">
-   <div class="no-script-label">
+<pre id="code-B17-0" tabindex="0"><code class="language-sql" data-origin="legacy-B17-0"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="n">Aspect_ratio</span><span class="w"> </span><span class="nb">FLOAT</span><span class="p">;</span></code></pre>
+</div>
+<div aria-labelledby="example-50-tab-1" class="code-panel" id="example-50-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-B17-1" tabindex="0"><code class="language-python" data-origin="legacy-B17-1"><span class="n">movies</span><span class="p">[</span><span class="s1">'aspect_ratio'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">movies</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'Float64'</span><span class="p">)</span></code></pre>
-  </div>
- </div>
- <h2>
+<pre id="code-B17-1" tabindex="0"><code class="language-python" data-origin="legacy-B17-1"><span class="n">movies</span><span class="p">[</span><span class="s1">'aspect_ratio'</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">NA</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">movies</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">'Float64'</span><span class="p">)</span></code></pre>
+</div>
+</div>
+<h2>
   02 · Add language with English default
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-51-panel-0" aria-selected="true" id="example-51-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-51-panel-0" aria-selected="true" id="example-51-tab-0" role="tab" tabindex="0" type="button">
      SQL
     </button>
-    <button aria-controls="example-51-panel-1" aria-selected="false" id="example-51-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-51-panel-1" aria-selected="false" id="example-51-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-51-tab-0" class="code-panel" id="example-51-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-51-tab-0" class="code-panel" id="example-51-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-B17-2" tabindex="0"><code class="language-sql" data-origin="legacy-B17-2"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="k">Language</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">'English'</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-51-tab-1" class="code-panel" id="example-51-panel-1" role="tabpanel">
-   <div class="no-script-label">
+<pre id="code-B17-2" tabindex="0"><code class="language-sql" data-origin="legacy-B17-2"><span class="k">ALTER</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">ADD</span><span class="w"> </span><span class="k">COLUMN</span><span class="w"> </span><span class="k">Language</span><span class="w"> </span><span class="nb">TEXT</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="s1">'English'</span><span class="p">;</span></code></pre>
+</div>
+<div aria-labelledby="example-51-tab-1" class="code-panel" id="example-51-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-B17-3" tabindex="0"><code class="language-python" data-origin="legacy-B17-3"><span class="n">movies</span><span class="p">[</span><span class="s1">'language'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'English'</span></code></pre>
-  </div>
- </div>
- <details class="reference-details">
-  <summary>
+<pre id="code-B17-3" tabindex="0"><code class="language-python" data-origin="legacy-B17-3"><span class="n">movies</span><span class="p">[</span><span class="s1">'language'</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'English'</span></code></pre>
+</div>
+</div>
+<details class="reference-details">
+<summary>
    Sources
   </summary>
-  <div class="sources-content">
-   <p>
-    The worked examples and pandas translations are study alternatives, not an official answer key. Shared DataFrame setup is listed under Reference.
-   </p>
-   <p>
-    <a href="https://sqlbolt.com/lesson/altering_tables" rel="noopener noreferrer" target="_blank">
+<div class="sources-content">
+<p>SQLBolt exercises with SQL and pandas examples. Shared DataFrame assumptions are listed under Setup and conventions.</p>
+<p>
+<a href="https://sqlbolt.com/lesson/altering_tables" rel="noopener noreferrer" target="_blank">
      SQLBolt — ALTER TABLE
     </a>
-   </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+</p>
+<p>
+<a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
      pandas SQL comparison
     </a>
     — Projection, filtering, grouping, joins and operations.
    </p>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-alter-table">
+<div>
+<a href="#m-sql-alter-table">
      ALTER TABLE
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-new-column">
+<a href="#m-pd-new-column">
      New column
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#B16">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#B16">
+<small>
     ← Previous
    </small>
    CREATE TABLE and schemas
   </a>
-  <a href="#B18">
-   <small>
+<a href="#B18">
+<small>
     Next →
    </small>
    DROP TABLE
   </a>
- </div>
+</div>
 </article>

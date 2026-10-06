@@ -1,214 +1,212 @@
 <article class="article method-page" id="m-sql-datediff">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=sql&amp;cat=Date/time%20functions">
+<a href="#methods?lang=sql&amp;cat=Date/time%20functions">
    MySQL · Date/time functions
   </a>
- </div>
- <h1>
+</div>
+<h1>
   DATEDIFF()
  </h1>
- <p class="lead">
+<p class="lead">
   Difference in days
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     MySQL
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-datediff"><span class="nf">DATEDIFF</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span><span class="n">d2</span><span class="p">)</span></code></pre>
- </div>
- <div class="note">
-  <b>
+</div>
+<pre tabindex="0"><code class="language-sql" data-origin="reference-sql-datediff"><span class="nf">DATEDIFF</span><span class="p">(</span><span class="n">d1</span><span class="p">,</span><span class="n">d2</span><span class="p">)</span></code></pre>
+</div>
+<div class="note">
+<b>
    Implementation note.
   </b>
   DATEDIFF(d1,d2) is d1 minus d2 using date parts. TIMESTAMPDIFF(unit,d1,d2) uses d2 minus d1.
   <a href="https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html" rel="noopener noreferrer" target="_blank">
    Documentation ↗
   </a>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-pd-dt-days">
+<a href="#m-pd-dt-days">
    pandas · Date difference
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C45?code=code-C45-0&amp;method=sql-datediff&amp;line=3">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C45?code=code-C45-0&amp;method=sql-datediff&amp;line=3">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      197 · Rising temperature
     </strong>
-    <small>
+<small>
      Study solution · line 3
     </small>
-   </div>
-   <pre aria-hidden="true">FROM Weather w1, Weather w2
+</div>
+<pre aria-hidden="true">FROM Weather w1, Weather w2
 WHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1 AND w1.temperature &gt; w2.temperature</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C13?code=code-C13-2&amp;method=sql-datediff&amp;line=10">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C13?code=code-C13-2&amp;method=sql-datediff&amp;line=10">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      550 · Game Play Analysis IV
     </strong>
-    <small>
+<small>
      My approach · line 10
     </small>
-   </div>
-   <pre aria-hidden="true">INNER JOIN   First_login f ON
+</div>
+<pre aria-hidden="true">INNER JOIN   First_login f ON
     DATEDIFF(a.event_date, f.first_day) = 1 AND
     a.player_id = f.player_id;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C15?code=code-C15-2&amp;method=sql-datediff&amp;line=6">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C15?code=code-C15-2&amp;method=sql-datediff&amp;line=6">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1141 · User activity in a 30-day window
     </strong>
-    <small>
+<small>
      My approach · line 6
     </small>
-   </div>
-   <pre aria-hidden="true">WHERE
+</div>
+<pre aria-hidden="true">WHERE
     DATEDIFF('2019-07-27',   activity_date) &lt; 30 AND
     activity_date   &lt;= '2019-07-27'   AND
     activity_type   IN ('open_session', 'end_session', 'scroll_down', 'send_message')</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    Other saved implementations (3)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C45?code=code-C45-2&amp;method=sql-datediff&amp;line=4">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C45?code=code-C45-2&amp;method=sql-datediff&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       197 · Rising temperature
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Weather w1, Weather w2
+</div>
+<pre aria-hidden="true">FROM Weather w1, Weather w2
 WHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1 AND w1.temperature &gt; w2.temperature</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C13?code=code-C13-4&amp;method=sql-datediff&amp;line=12">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C13?code=code-C13-4&amp;method=sql-datediff&amp;line=12">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       550 · Game Play Analysis IV
      </strong>
-     <small>
+<small>
       Uploaded submission · line 12
      </small>
-    </div>
-    <pre aria-hidden="true">INNER JOIN First_login f ON 
+</div>
+<pre aria-hidden="true">INNER JOIN First_login f ON 
     DATEDIFF(a.event_date, f.first_day) = 1 AND
     a.player_id = f.player_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C15?code=code-C15-4&amp;method=sql-datediff&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C15?code=code-C15-4&amp;method=sql-datediff&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1141 · User activity in a 30-day window
      </strong>
-     <small>
+<small>
       Uploaded submission · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">WHERE 
+</div>
+<pre aria-hidden="true">WHERE 
     DATEDIFF('2019-07-27', activity_date) &lt; 30 AND
     activity_date &lt;= '2019-07-27' AND
     activity_type IN ('open_session', 'end_session', 'scroll_down', 'send_message')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     SQL cheat-sheet image · Date/time functions. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/date-and-time-functions.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=sql&amp;cat=Date/time%20functions">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=sql&amp;cat=Date/time%20functions">
+<small>
     ← Browse
    </small>
    MySQL · Date/time functions
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

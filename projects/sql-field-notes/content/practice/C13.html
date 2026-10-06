@@ -1,52 +1,52 @@
 <article class="article" id="C13">
- <div class="breadcrumb">
-  <a href="#practice">
+<div class="breadcrumb">
+<a href="#practice">
    Leetcode problems
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Problem 550
   </span>
- </div>
- <h1>
+</div>
+<h1>
   550 · Game Play Analysis IV
  </h1>
- <p>
+<p>
   Find the fraction of players active exactly one day after their own first login.
  </p>
- <p class="pattern">
+<p class="pattern">
   Pattern: First date / next-day retention
  </p>
- <h2>
+<h2>
   Example
  </h2>
- <p>
+<p>
   Player 1 logs on Jan 1 and Jan 2; player 2 logs on Jan 1 and Jan 3 → fraction 0.50.
  </p>
- <h2>
+<h2>
   Study solution
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-72-panel-0" aria-selected="true" id="example-72-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-72-panel-0" aria-selected="true" id="example-72-tab-0" role="tab" tabindex="0" type="button">
      MySQL
     </button>
-    <button aria-controls="example-72-panel-1" aria-selected="false" id="example-72-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-72-panel-1" aria-selected="false" id="example-72-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-72-tab-0" class="code-panel" id="example-72-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-72-tab-0" class="code-panel" id="example-72-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-C13-0" tabindex="0"><code class="language-sql" data-origin="legacy-C13-0"><span class="k">WITH</span><span class="w"> </span><span class="n">first_login</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<pre id="code-C13-0" tabindex="0"><code class="language-sql" data-origin="legacy-C13-0"><span class="k">WITH</span><span class="w"> </span><span class="n">first_login</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">player_id</span><span class="p">,</span><span class="w"> </span><span class="k">MIN</span><span class="p">(</span><span class="n">event_date</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">first_day</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Activity</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">player_id</span>
 <span class="p">)</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="k">AVG</span><span class="p">(</span><span class="k">CASE</span><span class="w"> </span><span class="k">WHEN</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="p">(</span>
@@ -54,12 +54,12 @@
 <span class="w">    </span><span class="k">WHERE</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">player_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">player_id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">a</span><span class="p">.</span><span class="n">event_date</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">DATE_ADD</span><span class="p">(</span><span class="n">f</span><span class="p">.</span><span class="n">first_day</span><span class="p">,</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">DAY</span><span class="p">)</span>
 <span class="p">)</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">ELSE</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">END</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">fraction</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">first_login</span><span class="w"> </span><span class="n">f</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-72-tab-1" class="code-panel" id="example-72-panel-1" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-72-tab-1" class="code-panel" id="example-72-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-C13-1" tabindex="0"><code class="language-python" data-origin="legacy-C13-1"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
+<pre id="code-C13-1" tabindex="0"><code class="language-python" data-origin="legacy-C13-1"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">round_half_up</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">digits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
@@ -72,43 +72,43 @@
     <span class="n">valid</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="s1">'event_date'</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">first</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
     <span class="n">fraction</span> <span class="o">=</span> <span class="n">valid</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="s1">'player_id'</span><span class="p">])</span><span class="o">.</span><span class="n">any</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'fraction'</span><span class="p">:</span> <span class="p">[</span><span class="n">round_half_up</span><span class="p">(</span><span class="n">fraction</span><span class="p">)]})</span></code></pre>
-  </div>
- </div>
- <h2>
+</div>
+</div>
+<h2>
   Why it works
  </h2>
- <p>
+<p>
   Compare with the minimum date for each player, not merely the previous observed row. Group-level any prevents duplicate qualifying events from counting twice.
  </p>
- <h2>
+<h2>
   Notes
  </h2>
- <p>
+<p>
   Count players who return the day after their first login, not any later two-day streak.
  </p>
- <details class="original-details">
-  <summary>
+<details class="original-details">
+<summary>
    My approach
   </summary>
-  <div class="code-pair">
-   <div class="pair-head">
-    <div aria-label="Solution language" class="code-tabs" role="tablist">
-     <button aria-controls="approach-C13-panel-0" aria-selected="true" id="approach-C13-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="approach-C13-panel-0" aria-selected="true" id="approach-C13-tab-0" role="tab" tabindex="0" type="button">
       MySQL
      </button>
-     <button aria-controls="approach-C13-panel-1" aria-selected="false" id="approach-C13-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="approach-C13-panel-1" aria-selected="false" id="approach-C13-tab-1" role="tab" tabindex="-1" type="button">
       pandas
      </button>
-    </div>
-    <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
      Copy
     </button>
-   </div>
-   <div aria-labelledby="approach-C13-tab-0" class="code-panel" id="approach-C13-panel-0" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="approach-C13-tab-0" class="code-panel" id="approach-C13-panel-0" role="tabpanel">
+<div class="no-script-label">
      SQL
     </div>
-    <pre id="code-C13-2" tabindex="0"><code class="language-sql" data-origin="approach-C13-sql"><span class="k">WITH</span><span class="w"> </span><span class="n">First_login</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<pre id="code-C13-2" tabindex="0"><code class="language-sql" data-origin="approach-C13-sql"><span class="k">WITH</span><span class="w"> </span><span class="n">First_login</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span>
 <span class="w">        </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">player_id</span><span class="p">,</span>
 <span class="w">        </span><span class="k">MIN</span><span class="p">(</span><span class="n">event_date</span><span class="p">)</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span><span class="n">PARTITION</span><span class="w"> </span><span class="k">BY</span><span class="w">   </span><span class="n">player_id</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">first_day</span>
@@ -119,12 +119,12 @@
 <span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w">   </span><span class="n">First_login</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="k">ON</span>
 <span class="w">    </span><span class="n">DATEDIFF</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">event_date</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">first_day</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AND</span>
 <span class="w">    </span><span class="n">a</span><span class="p">.</span><span class="n">player_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">player_id</span><span class="p">;</span></code></pre>
-   </div>
-   <div aria-labelledby="approach-C13-tab-1" class="code-panel" id="approach-C13-panel-1" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="approach-C13-tab-1" class="code-panel" id="approach-C13-panel-1" role="tabpanel">
+<div class="no-script-label">
      pandas
     </div>
-    <pre id="code-C13-3" tabindex="0"><code class="language-python" data-origin="approach-C13-python"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
+<pre id="code-C13-3" tabindex="0"><code class="language-python" data-origin="approach-C13-python"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">round_half_up</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">digits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
@@ -139,57 +139,51 @@
     <span class="k">return</span>   <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
         <span class="s1">'fraction'</span><span class="p">:</span> <span class="p">[</span><span class="n">round_half_up</span><span class="p">(</span><span class="n">activity</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'player_id'</span><span class="p">)[</span><span class="s1">'valid'</span><span class="p">]</span><span class="o">.</span><span class="n">any</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)]</span>
     <span class="p">})</span></code></pre>
-   </div>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
+</div>
+</div>
+</details>
+<details class="reference-details">
+<summary>
    Sources
   </summary>
-  <div class="sources-content">
-   <p>
-    Primary exercise basis: your uploaded Pasted markdown(3).md, exercise 550, line 6. The exercise heading may be abbreviated in the upload; full official problem statements and schemas were not supplied.
-   </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+<div class="sources-content">
+<p> Exercise source: Pasted markdown(3).md, problem 550, line 6. </p>
+<p>
+<a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
      pandas SQL comparison
     </a>
     — Projection, filtering, grouping, joins and operations.
    </p>
-   <p>
-    <a href="https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html" rel="noopener noreferrer" target="_blank">
      MySQL rounding
     </a>
     — Exact versus approximate numeric rounding.
    </p>
-  </div>
- </details>
- <details class="original-details archive-submission">
-  <summary>
-   Uploaded submission · SQL.zip
-  </summary>
-  <p class="small">
-   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
-  </p>
-  <div class="code-pair">
-   <div class="pair-head">
-    <div aria-label="Solution language" class="code-tabs" role="tablist">
-     <button aria-controls="archive-550-panel-0" aria-selected="true" id="archive-550-tab-0" role="tab" tabindex="0" type="button">
+</div>
+</details>
+<details class="original-details archive-submission">
+<summary> Original submission </summary>
+<p class="small"> Archived submissions. These may differ from the reference implementation above. </p>
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="archive-550-panel-0" aria-selected="true" id="archive-550-tab-0" role="tab" tabindex="0" type="button">
       MySQL
      </button>
-     <button aria-controls="archive-550-panel-1" aria-selected="false" id="archive-550-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="archive-550-panel-1" aria-selected="false" id="archive-550-tab-1" role="tab" tabindex="-1" type="button">
       pandas
      </button>
-    </div>
-    <button class="copy-button" data-copy="" type="button">
+</div>
+<button class="copy-button" data-copy="" type="button">
      Copy
     </button>
-   </div>
-   <div aria-labelledby="archive-550-tab-0" class="code-panel" id="archive-550-panel-0" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-550-tab-0" class="code-panel" id="archive-550-panel-0" role="tabpanel">
+<div class="no-script-label">
      MySQL
     </div>
-    <pre id="code-C13-4" tabindex="0"><code class="language-sql" data-origin="archive-550-sql"><span class="c1"># Write your MySQL query statement below</span>
+<pre id="code-C13-4" tabindex="0"><code class="language-sql" data-origin="archive-550-sql"><span class="c1"># Write your MySQL query statement below</span>
 <span class="k">WITH</span><span class="w"> </span><span class="n">First_login</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span>
 <span class="w">        </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">player_id</span><span class="p">,</span>
@@ -202,12 +196,12 @@
 <span class="k">INNER</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">First_login</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span>
 <span class="w">    </span><span class="nf">DATEDIFF</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">event_date</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">first_day</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AND</span>
 <span class="w">    </span><span class="n">a</span><span class="p">.</span><span class="n">player_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">player_id</span></code></pre>
-   </div>
-   <div aria-labelledby="archive-550-tab-1" class="code-panel" id="archive-550-panel-1" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-550-tab-1" class="code-panel" id="archive-550-panel-1" role="tabpanel">
+<div class="no-script-label">
      pandas
     </div>
-    <pre id="code-C13-5" tabindex="0"><code class="language-python" data-origin="archive-550-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C13-5" tabindex="0"><code class="language-python" data-origin="archive-550-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">gameplay_analysis</span><span class="p">(</span><span class="n">activity</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">activity</span><span class="p">[</span><span class="s1">'first_login'</span><span class="p">]</span> <span class="o">=</span> <span class="n">activity</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'player_id'</span><span class="p">)[</span><span class="s1">'event_date'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">'min'</span><span class="p">)</span>
@@ -216,133 +210,133 @@
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
         <span class="s1">'fraction'</span><span class="p">:</span> <span class="p">[</span><span class="nb">round</span><span class="p">(</span><span class="n">activity</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'player_id'</span><span class="p">)[</span><span class="s1">'valid'</span><span class="p">]</span><span class="o">.</span><span class="n">any</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="mi">2</span><span class="p">)]</span>
     <span class="p">})</span></code></pre>
-   </div>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</div>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-and">
+<a href="#m-sql-and">
      AND
     </a>
-    <a href="#m-sql-count">
+<a href="#m-sql-count">
      COUNT()
     </a>
-    <a href="#m-sql-count-distinct">
+<a href="#m-sql-count-distinct">
      COUNT(DISTINCT)
     </a>
-    <a href="#m-sql-avg">
+<a href="#m-sql-avg">
      AVG()
     </a>
-    <a href="#m-sql-min">
+<a href="#m-sql-min">
      MIN()
     </a>
-    <a href="#m-sql-group-by">
+<a href="#m-sql-group-by">
      GROUP BY
     </a>
-    <a href="#m-sql-inner-join">
+<a href="#m-sql-inner-join">
      INNER JOIN
     </a>
-    <a href="#m-sql-case">
+<a href="#m-sql-case">
      CASE
     </a>
-    <a href="#m-sql-round">
+<a href="#m-sql-round">
      ROUND()
     </a>
-    <a href="#m-sql-datediff">
+<a href="#m-sql-datediff">
      DATEDIFF()
     </a>
-    <a href="#m-sql-date-add">
+<a href="#m-sql-date-add">
      DATE_ADD()
     </a>
-    <a href="#m-sql-partition-by">
+<a href="#m-sql-partition-by">
      PARTITION BY
     </a>
-    <a href="#m-sql-subquery">
+<a href="#m-sql-subquery">
      Subquery
     </a>
-    <a href="#m-sql-with">
+<a href="#m-sql-with">
      WITH
     </a>
-    <a href="#m-sql-exists">
+<a href="#m-sql-exists">
      EXISTS
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-    <a href="#m-sql-distinct">
+<a href="#m-sql-distinct">
      DISTINCT
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-filter-null">
+<a href="#m-pd-filter-null">
      Missing
     </a>
-    <a href="#m-pd-new-column">
+<a href="#m-pd-new-column">
      New column
     </a>
-    <a href="#m-pd-conditional-column">
+<a href="#m-pd-conditional-column">
      Conditional column
     </a>
-    <a href="#m-pd-assign">
+<a href="#m-pd-assign">
      assign()
     </a>
-    <a href="#m-pd-isna">
+<a href="#m-pd-isna">
      Check null
     </a>
-    <a href="#m-pd-mean">
+<a href="#m-pd-mean">
      mean()
     </a>
-    <a href="#m-pd-min">
+<a href="#m-pd-min">
      min()
     </a>
-    <a href="#m-pd-groupby">
+<a href="#m-pd-groupby">
      Basic group
     </a>
-    <a href="#m-pd-transform">
+<a href="#m-pd-transform">
      Group transform
     </a>
-    <a href="#m-pd-to-datetime">
+<a href="#m-pd-to-datetime">
      Convert date
     </a>
-    <a href="#m-pd-timedelta">
+<a href="#m-pd-timedelta">
      Add days
     </a>
-    <a href="#m-pd-eq">
+<a href="#m-pd-eq">
      eq() / ne()
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#C12">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#C12">
+<small>
     ← Previous
    </small>
    1174 · Immediate first deliveries
   </a>
-  <a href="#C14">
-   <small>
+<a href="#C14">
+<small>
     Next →
    </small>
    2356 · Unique subjects per teacher
   </a>
- </div>
+</div>
 </article>

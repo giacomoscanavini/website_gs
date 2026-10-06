@@ -1,122 +1,83 @@
 <section aria-labelledby="vae-title" class="page-view lesson-layout" id="vae">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      32
     </span>
     Part 4 · Architectures &amp; information flow
    </p>
-   <h1 id="vae-title" tabindex="-1">
+<h1 id="vae-title" tabindex="-1">
     Variational autoencoders and the ELBO
    </h1>
-   <p class="standfirst">
-    Derive the lower bound, interpret the two terms, and explain how reparameterization permits gradients.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Architectures · PDF p. 17 · §6.7" data-page="17" data-pdf="arch" type="button">
-     Architectures · PDF p. 17 · §6.7
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<p class="standfirst">A variational autoencoder learns a latent-variable generative model. Its encoder approximates the posterior, and its objective balances reconstruction likelihood with divergence from a latent prior.</p>
+
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="replace-a-point-code-with-a-conditional-distribution" href="#vae?section=replace-a-point-code-with-a-conditional-distribution">
-     Replace a point code with a conditional distribution
-    </a>
-    <a data-section="the-bound-in-the-source" href="#vae?section=the-bound-in-the-source">
-     The bound in the source
-    </a>
-    <a data-section="why-it-is-a-lower-bound-expanded-derivation" href="#vae?section=why-it-is-a-lower-bound-expanded-derivation">
-     Why it is a lower bound — expanded derivation
-    </a>
-    <a data-section="reparameterization-separates-randomness-from-parameters" href="#vae?section=reparameterization-separates-randomness-from-parameters">
-     Reparameterization separates randomness from parameters
-    </a>
-    <a data-section="the-diagonal-gaussian-kl-in-the-official-example" href="#vae?section=the-diagonal-gaussian-kl-in-the-official-example">
-     The diagonal Gaussian KL in the official example
-    </a>
-    <a data-section="read-the-objectives-trade-off" href="#vae?section=read-the-objectives-trade-off">
-     Read the objective’s trade-off
-    </a>
-    <a data-section="implementation" href="#vae?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="replace-a-point-code-with-a-conditional-distribution" id="vae--replace-a-point-code-with-a-conditional-distribution">
+<nav aria-label="On this page">
+<a data-section="replace-a-point-code-with-a-conditional-distribution" href="#vae?section=replace-a-point-code-with-a-conditional-distribution">Replace a point code with a conditional distribution</a>
+<a data-section="the-bound-in-the-source" href="#vae?section=the-bound-in-the-source">The evidence lower bound</a>
+<a data-section="why-it-is-a-lower-bound-expanded-derivation" href="#vae?section=why-it-is-a-lower-bound-expanded-derivation">Why the ELBO is a lower bound</a>
+<a data-section="reparameterization-separates-randomness-from-parameters" href="#vae?section=reparameterization-separates-randomness-from-parameters">Reparameterization separates randomness from parameters</a>
+<a data-section="the-diagonal-gaussian-kl-in-the-official-example" href="#vae?section=the-diagonal-gaussian-kl-in-the-official-example">KL divergence for a diagonal Gaussian</a>
+<a data-section="read-the-objectives-trade-off" href="#vae?section=read-the-objectives-trade-off">Read the objective’s trade-off</a>
+<a data-section="implementation" href="#vae?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="replace-a-point-code-with-a-conditional-distribution" id="vae--replace-a-point-code-with-a-conditional-distribution">
     Replace a point code with a conditional distribution
    </h2>
-   <p>
+<p>
     A deterministic autoencoder assigns a code to an input. A VAE encoder parameterizes an approximate posterior, commonly
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>𝒩</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>μ</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>σ</mi><mi>ϕ</mi><mn>2</mn></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">q_\phi(z\mid x)=\mathcal N\left(\mu_\phi(x),\operatorname{diag}(\sigma_\phi^2(x))\right).</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>𝒩</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>μ</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>σ</mi><mi>ϕ</mi><mn>2</mn></msubsup><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">q_\phi(z\mid x)=\mathcal N\left(\mu_\phi(x),\operatorname{diag}(\sigma_\phi^2(x))\right).</annotation></semantics></math>
+</div>
+<p>
     The latent prior is often
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>𝒩</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mi>I</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p(z)=\mathcal N(0,I)</annotation></semantics></math>
     , and a decoder specifies a likelihood
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p_\theta(x\mid z)</annotation></semantics></math>
     . The goal is not merely to reconstruct one point through a noisy layer; it is to learn a latent-variable generative model with a tractable approximation to inference.
    </p>
-   <h2 data-section="the-bound-in-the-source" id="vae--the-bound-in-the-source">
-    The bound in the source
-   </h2>
-   <p>
-    The architecture guide gives
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℒ</mi><mrow><mi mathvariant="normal">E</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">B</mi><mi mathvariant="normal">O</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>𝔼</mi><mrow><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>−</mo><mo>KL</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="false">‖</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal L_{\mathrm{ELBO}}(x)=\mathbb E_{q_\phi(z\mid x)}[\log p_\theta(x\mid z)]
+<h2 data-section="the-bound-in-the-source" id="vae--the-bound-in-the-source">The evidence lower bound</h2>
+<p>The evidence lower bound, or ELBO, is</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℒ</mi><mrow><mi mathvariant="normal">E</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">B</mi><mi mathvariant="normal">O</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>𝔼</mi><mrow><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>−</mo><mo>KL</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="false">‖</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal L_{\mathrm{ELBO}}(x)=\mathbb E_{q_\phi(z\mid x)}[\log p_\theta(x\mid z)]
 -\operatorname{KL}(q_\phi(z\mid x)\Vert p(z)).</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<p>
     Training minimizes the negative ELBO, equivalently maximizing this lower bound. The expectation rewards likelihood of the observed input under latent samples. The KL term pulls the approximate posterior toward the chosen prior.
    </p>
-   <p>
+<p>
     A “reconstruction loss” is therefore a negative log-likelihood term under a particular observation model, not an arbitrary interchangeable distance. The decoder’s output distribution determines what loss is consistent with it.
    </p>
-   <h2 data-section="why-it-is-a-lower-bound-expanded-derivation" id="vae--why-it-is-a-lower-bound-expanded-derivation">
-    Why it is a lower bound — expanded derivation
-   </h2>
-   <p>
-    The following fills in the algebra behind the source’s named bound. Introduce
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">q_\phi(z\mid x)</annotation></semantics></math>
-    and rewrite
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>ℒ</mi><mrow><mi mathvariant="normal">E</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">B</mi><mi mathvariant="normal">O</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mo>KL</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="false">‖</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\log p_\theta(x)=\mathcal L_{\mathrm{ELBO}}(x)+
+<h2 data-section="why-it-is-a-lower-bound-expanded-derivation" id="vae--why-it-is-a-lower-bound-expanded-derivation">Why the ELBO is a lower bound</h2>
+<p>Introduce <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">q_\phi(z\mid x)</annotation></semantics></math> and rewrite</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>ℒ</mi><mrow><mi mathvariant="normal">E</mi><mi mathvariant="normal">L</mi><mi mathvariant="normal">B</mi><mi mathvariant="normal">O</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mo>KL</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="false">‖</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\log p_\theta(x)=\mathcal L_{\mathrm{ELBO}}(x)+
 \operatorname{KL}(q_\phi(z\mid x)\Vert p_\theta(z\mid x)).</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<p>
     The last term is nonnegative, so the ELBO cannot exceed the log evidence. Equality holds when the approximate posterior matches the model posterior, subject to the usual distribution/support conditions.
    </p>
-   <p>
-    Expanding the ELBO expectation as
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mo>log</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbb E_q[\log p_\theta(x,z)-\log q_\phi(z\mid x)]</annotation></semantics></math>
-    and using
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p_\theta(x,z)=p_\theta(x\mid z)p(z)</annotation></semantics></math>
-    gives the two terms displayed in the PDF. This separates the tractable training bound from the generally difficult exact posterior.
-   </p>
-   <details class="derivation" data-derivation="elbo-proof" id="vae--derivation-elbo-proof">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<p>Expanding the ELBO expectation as <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mo>log</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mathbb E_q[\log p_\theta(x,z)-\log q_\phi(z\mid x)]</annotation></semantics></math> and using <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p_\theta(x,z)=p_\theta(x\mid z)p(z)</annotation></semantics></math> gives the reconstruction-likelihood and prior-divergence terms above. This separates the tractable training bound from the generally difficult exact posterior.</p>
+<details class="derivation" data-derivation="elbo-proof" id="vae--derivation-elbo-proof">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive the evidence bound and identify its exact gap
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Fix an observed
@@ -127,10 +88,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">q_\phi(z\mid x)</annotation></semantics></math>
       be a normalized density, with support compatible with the following ratios and finite expectations. All logarithms are natural.
      </p>
-     <h4>
+<h4>
       1 · Introduce the latent variable and an auxiliary density
      </h4>
-     <p>
+<p>
       Marginalization gives
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>∫</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mspace width="0.167em"></mspace><mi>d</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">p_\theta(x)=\int p_\theta(x,z)\,dz</annotation></semantics></math>
       . If
@@ -139,68 +100,68 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>q</mi><annotation encoding="application/x-tex">q</annotation></semantics></math>
       :
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>∫</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mfrac><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mspace width="0.167em"></mspace><mi>d</mi><mi>z</mi><mo>=</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mfrac><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">p_\theta(x)=\int q_\phi(z\mid x)\frac{p_\theta(x,z)}{q_\phi(z\mid x)}\,dz
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>∫</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mfrac><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mspace width="0.167em"></mspace><mi>d</mi><mi>z</mi><mo>=</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mfrac><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">p_\theta(x)=\int q_\phi(z\mid x)\frac{p_\theta(x,z)}{q_\phi(z\mid x)}\,dz
 =\mathbb E_q\left[\frac{p_\theta(x,z)}{q_\phi(z\mid x)}\right].</annotation></semantics></math>
-     </div>
-     <h4>
+</div>
+<h4>
       2 · Apply concavity of the logarithm
      </h4>
-     <p>
+<p>
       For positive
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>
       , Jensen’s inequality says
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>R</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>≥</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><mi>R</mi><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\log\mathbb E[R]\ge\mathbb E[\log R]</annotation></semantics></math>
       . Therefore
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≥</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mo>log</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>≡</mo><mi>ℰ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>,</mo><mi>ϕ</mi><mo>;</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\log p_\theta(x)\ge\mathbb E_q[\log p_\theta(x,z)-\log q_\phi(z\mid x)]\equiv\mathcal E(\theta,\phi;x).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≥</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mo>log</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>≡</mo><mi>ℰ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>,</mo><mi>ϕ</mi><mo>;</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\log p_\theta(x)\ge\mathbb E_q[\log p_\theta(x,z)-\log q_\phi(z\mid x)]\equiv\mathcal E(\theta,\phi;x).</annotation></semantics></math>
+</div>
+<p>
       This quantity
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ℰ</mi><annotation encoding="application/x-tex">\mathcal E</annotation></semantics></math>
       is the evidence lower bound, or ELBO.
      </p>
-     <h4>
+<h4>
       3 · Factor the joint model
      </h4>
-     <p>
+<p>
       Use
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p_\theta(x,z)=p_\theta(x\mid z)p(z)</annotation></semantics></math>
       . Logarithms split the product:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℰ</mi><mo>=</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>+</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mo>log</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal E=\mathbb E_q[\log p_\theta(x\mid z)]
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℰ</mi><mo>=</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>+</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mo>log</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal E=\mathbb E_q[\log p_\theta(x\mid z)]
 +\mathbb E_q[\log p(z)-\log q_\phi(z\mid x)].</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       The second term is negative KL, yielding
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℰ</mi><mo>=</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>−</mo><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="false">∥</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal E=\mathbb E_q[\log p_\theta(x\mid z)]-
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℰ</mi><mo>=</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>−</mo><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>q</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="false">∥</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal E=\mathbb E_q[\log p_\theta(x\mid z)]-
 D_{\mathrm{KL}}(q_\phi(z\mid x)\|p(z)).</annotation></semantics></math>
-     </div>
-     <h4>
+</div>
+<h4>
       4 · Derive the gap directly using Bayes’ rule
      </h4>
-     <p>
+<p>
       Since
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p_\theta(z\mid x)=p_\theta(x,z)/p_\theta(x)</annotation></semantics></math>
       ,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo form="postfix" stretchy="false">∥</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><mi>q</mi><mo>−</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">D_{\mathrm{KL}}(q\|p_\theta(z\mid x))
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo form="postfix" stretchy="false">∥</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mo>log</mo><mi>q</mi><mo>−</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">D_{\mathrm{KL}}(q\|p_\theta(z\mid x))
 =\mathbb E_q[\log q-\log p_\theta(x,z)+\log p_\theta(x)].</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       The evidence is constant with respect to
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
       , so this becomes
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo form="postfix" stretchy="false">∥</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>ℰ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">D_{\mathrm{KL}}(q\|p_\theta(z\mid x))=\log p_\theta(x)-\mathcal E.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo form="postfix" stretchy="false">∥</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>ℰ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">D_{\mathrm{KL}}(q\|p_\theta(z\mid x))=\log p_\theta(x)-\mathcal E.</annotation></semantics></math>
+</div>
+<p>
       Rearranging gives an exact identity, not merely an inequality. The KL-to-
       <strong>
        posterior
@@ -211,56 +172,50 @@ D_{\mathrm{KL}}(q_\phi(z\mid x)\|p(z)).</annotation></semantics></math>
       </strong>
       is the term appearing in the decomposed training bound. They are different objects.
      </p>
-     <h4>
+<h4>
       5 · Justify nonnegativity
      </h4>
-     <p>
+<p>
       For normalized compatible densities
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>,</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">q,p</annotation></semantics></math>
       , concavity gives
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>q</mi></msub><mo>log</mo><mfrac><mi>p</mi><mi>q</mi></mfrac><mo>≤</mo><mo>log</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mfrac><mi>p</mi><mi>q</mi></mfrac><mo>≤</mo><mo>log</mo><mn>1</mn><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E_q\log\frac pq\le\log\mathbb E_q\frac pq\le\log1=0.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>q</mi></msub><mo>log</mo><mfrac><mi>p</mi><mi>q</mi></mfrac><mo>≤</mo><mo>log</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mfrac><mi>p</mi><mi>q</mi></mfrac><mo>≤</mo><mo>log</mo><mn>1</mn><mo>=</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E_q\log\frac pq\le\log\mathbb E_q\frac pq\le\log1=0.</annotation></semantics></math>
+</div>
+<p>
       Negating yields
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo form="postfix" stretchy="false">∥</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">D_{\mathrm{KL}}(q\|p)\ge0</annotation></semantics></math>
       . Equality requires matching distributions almost everywhere. Thus the bound is tight exactly when the variational posterior matches the true posterior under the stated conditions.
      </p>
-     <h4>
+<h4>
       6 · Convert the bound to a minimized objective
      </h4>
-     <p>
+<p>
       Training typically minimizes
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mi>ℰ</mi><mo>=</mo><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mi>−</mi><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>+</mo><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo form="postfix" stretchy="false">∥</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">-\mathcal E=\mathbb E_q[-\log p_\theta(x\mid z)]+D_{\mathrm{KL}}(q\|p(z))</annotation></semantics></math>
       . A changed coefficient on KL or an independently rescaled reconstruction loss changes this objective; it is not automatically the same model’s exact negative ELBO.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="17" data-pdf="arch" type="button">
-       Chapter source · PDF p. 17
-      </button>
-      <a href="https://arxiv.org/abs/1312.6114" rel="noopener noreferrer" target="_blank">
+<div class="derivation-footer">
+
+<button data-page="17" data-pdf="arch" type="button">Reference · PDF p. 17</button>
+<a href="https://arxiv.org/abs/1312.6114" rel="noopener noreferrer" target="_blank">
        Research reference
       </a>
-      <a class="calculation-link" href="#vae?derivation=elbo-proof">
+<a class="calculation-link" href="#vae?derivation=elbo-proof">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="reparameterization-separates-randomness-from-parameters" id="vae--reparameterization-separates-randomness-from-parameters">
+</div>
+</div>
+</details>
+<h2 data-section="reparameterization-separates-randomness-from-parameters" id="vae--reparameterization-separates-randomness-from-parameters">
     Reparameterization separates randomness from parameters
    </h2>
-   <p>
-    Directly sampling from a parameter-dependent distribution obscures an ordinary differentiable path. The source instead writes
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi><mo>∼</mo><mi>𝒩</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mi>I</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>z</mi><mo>=</mo><msub><mi>μ</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>σ</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><mi>ϵ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\epsilon\sim\mathcal N(0,I),\qquad z=\mu_\phi(x)+\sigma_\phi(x)\odot\epsilon.</annotation></semantics></math>
-   </div>
-   <p>
+<p>Directly sampling from a parameter-dependent distribution obscures an ordinary differentiable path. Reparameterization writes</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi><mo>∼</mo><mi>𝒩</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mi>I</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>z</mi><mo>=</mo><msub><mi>μ</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>σ</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><mi>ϵ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\epsilon\sim\mathcal N(0,I),\qquad z=\mu_\phi(x)+\sigma_\phi(x)\odot\epsilon.</annotation></semantics></math>
+</div>
+<p>
     The random draw now has a fixed parameter-independent distribution. For a sampled
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
     , the transformation from
@@ -269,21 +224,21 @@ D_{\mathrm{KL}}(q_\phi(z\mid x)\|p(z)).</annotation></semantics></math>
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
     is differentiable. A Monte Carlo estimate can then pass gradients through the decoder and into the encoder parameters.
    </p>
-   <p>
+<p>
     This does not eliminate sampling variation. It gives a usable gradient path for the selected distributional family.
    </p>
-   <details class="derivation" data-derivation="reparameterization" id="vae--derivation-reparameterization">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<details class="derivation" data-derivation="reparameterization" id="vae--derivation-reparameterization">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Differentiate through Gaussian reparameterization
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Draw
@@ -292,69 +247,69 @@ D_{\mathrm{KL}}(q_\phi(z\mid x)\|p(z)).</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><msub><mi>μ</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>σ</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><mi>ε</mi></mrow><annotation encoding="application/x-tex">z=\mu_\phi(x)+\sigma_\phi(x)\odot\varepsilon</annotation></semantics></math>
       . Assume enough regularity to exchange differentiation and expectation.
      </p>
-     <h4>
+<h4>
       1 · Verify the sample distribution
      </h4>
-     <p>
+<p>
       Each coordinate has mean
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>j</mi></msub><mo>+</mo><msub><mi>σ</mi><mi>j</mi></msub><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>ε</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msub><mi>μ</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\mu_j+\sigma_j\mathbb E[\varepsilon_j]=\mu_j</annotation></semantics></math>
       and variance
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>ε</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">\sigma_j^2\operatorname{Var}(\varepsilon_j)=\sigma_j^2</annotation></semantics></math>
       . Independent noise coordinates yield diagonal covariance, so this construction samples the desired Gaussian.
      </p>
-     <h4>
+<h4>
       2 · Rewrite the expectation over fixed base noise
      </h4>
-     <p>
+<p>
       For a differentiable function
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>
       , the equal distributions imply
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mrow><mi>z</mi><mo>∼</mo><msub><mi>q</mi><mi>ϕ</mi></msub></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msub><mi>𝔼</mi><mi>ε</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>μ</mi><mi>ϕ</mi></msub><mo>+</mo><msub><mi>σ</mi><mi>ϕ</mi></msub><mo>⊙</mo><mi>ε</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E_{z\sim q_\phi}[F(z)]=\mathbb E_\varepsilon[F(\mu_\phi+\sigma_\phi\odot\varepsilon)].</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mrow><mi>z</mi><mo>∼</mo><msub><mi>q</mi><mi>ϕ</mi></msub></mrow></msub><mrow><mo form="prefix" stretchy="true">[</mo><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msub><mi>𝔼</mi><mi>ε</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>μ</mi><mi>ϕ</mi></msub><mo>+</mo><msub><mi>σ</mi><mi>ϕ</mi></msub><mo>⊙</mo><mi>ε</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E_{z\sim q_\phi}[F(z)]=\mathbb E_\varepsilon[F(\mu_\phi+\sigma_\phi\odot\varepsilon)].</annotation></semantics></math>
+</div>
+<p>
       The distribution on the right does not move when
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>
       changes; only the transformation does.
      </p>
-     <h4>
+<h4>
       3 · Apply the chain rule to a sampled computation
      </h4>
-     <p>
+<p>
       Let
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>j</mi></msub><mo>=</mo><mi>∂</mi><mi>F</mi><mi>/</mi><mi>∂</mi><msub><mi>z</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">g_j=\partial F/\partial z_j</annotation></semantics></math>
       . Holding the sampled
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ε</mi><annotation encoding="application/x-tex">\varepsilon</annotation></semantics></math>
       fixed,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>F</mi></mrow><mrow><mi>∂</mi><msub><mi>μ</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><msub><mi>g</mi><mi>j</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>F</mi></mrow><mrow><mi>∂</mi><msub><mi>σ</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><msub><mi>g</mi><mi>j</mi></msub><msub><mi>ε</mi><mi>j</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial F}{\partial\mu_j}=g_j,\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>F</mi></mrow><mrow><mi>∂</mi><msub><mi>μ</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><msub><mi>g</mi><mi>j</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>F</mi></mrow><mrow><mi>∂</mi><msub><mi>σ</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><msub><mi>g</mi><mi>j</mi></msub><msub><mi>ε</mi><mi>j</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial F}{\partial\mu_j}=g_j,\qquad
 \frac{\partial F}{\partial\sigma_j}=g_j\varepsilon_j.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       If the network emits
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>ℓ</mo><mi>j</mi></msub><mo>=</mo><mo>log</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">\ell_j=\log\sigma_j^2</annotation></semantics></math>
       , then
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mi>j</mi></msub><mo>=</mo><msup><mi>e</mi><mrow><msub><mo>ℓ</mo><mi>j</mi></msub><mi>/</mi><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\sigma_j=e^{\ell_j/2}</annotation></semantics></math>
       and
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msub><mi>σ</mi><mi>j</mi></msub></mrow><mrow><mi>∂</mi><msub><mo>ℓ</mo><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><msup><mi>e</mi><mrow><msub><mo>ℓ</mo><mi>j</mi></msub><mi>/</mi><mn>2</mn></mrow></msup><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><msub><mi>σ</mi><mi>j</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\frac{\partial\sigma_j}{\partial\ell_j}=\tfrac12e^{\ell_j/2}=\tfrac12\sigma_j,</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msub><mi>σ</mi><mi>j</mi></msub></mrow><mrow><mi>∂</mi><msub><mo>ℓ</mo><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><msup><mi>e</mi><mrow><msub><mo>ℓ</mo><mi>j</mi></msub><mi>/</mi><mn>2</mn></mrow></msup><mo>=</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><msub><mi>σ</mi><mi>j</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\frac{\partial\sigma_j}{\partial\ell_j}=\tfrac12e^{\ell_j/2}=\tfrac12\sigma_j,</annotation></semantics></math>
+</div>
+<p>
       so
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>F</mi><mi>/</mi><mi>∂</mi><msub><mo>ℓ</mo><mi>j</mi></msub><mo>=</mo><msub><mi>g</mi><mi>j</mi></msub><msub><mi>ε</mi><mi>j</mi></msub><msub><mi>σ</mi><mi>j</mi></msub><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\partial F/\partial\ell_j=g_j\varepsilon_j\sigma_j/2</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       4 · Continue to encoder parameters
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>ϕ</mi></msub><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msub><mi>𝔼</mi><mi>ε</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>g</mi><mi>j</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>∇</mi><mi>ϕ</mi></msub><msub><mi>μ</mi><mi>j</mi></msub><mo>+</mo><msub><mi>ε</mi><mi>j</mi></msub><msub><mi>∇</mi><mi>ϕ</mi></msub><msub><mi>σ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_\phi\mathbb E[F(z)]
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>∇</mi><mi>ϕ</mi></msub><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msub><mi>𝔼</mi><mi>ε</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>g</mi><mi>j</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>∇</mi><mi>ϕ</mi></msub><msub><mi>μ</mi><mi>j</mi></msub><mo>+</mo><msub><mi>ε</mi><mi>j</mi></msub><msub><mi>∇</mi><mi>ϕ</mi></msub><msub><mi>σ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\nabla_\phi\mathbb E[F(z)]
 =\mathbb E_\varepsilon\left[\sum_j g_j\left(\nabla_\phi\mu_j+\varepsilon_j\nabla_\phi\sigma_j\right)\right].</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       A sample average of the bracketed term estimates this gradient. If
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>
       also depends explicitly on
@@ -363,61 +318,47 @@ D_{\mathrm{KL}}(q_\phi(z\mid x)\|p(z)).</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       5 · Interpret the randomness correctly
      </h4>
-     <p>
+<p>
       We do not differentiate the random-number generator. We differentiate a deterministic transformation of already sampled noise, then average over such computations. This is a pathwise gradient estimator; it does not by itself establish a valid pathwise estimator for discrete categorical sampling.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="17" data-pdf="arch" type="button">
-       Chapter source · PDF p. 17
-      </button>
-      <a href="https://arxiv.org/abs/1312.6114" rel="noopener noreferrer" target="_blank">
+<div class="derivation-footer">
+
+<button data-page="17" data-pdf="arch" type="button">Reference · PDF p. 17</button>
+<a href="https://arxiv.org/abs/1312.6114" rel="noopener noreferrer" target="_blank">
        Research reference
       </a>
-      <a class="calculation-link" href="#vae?derivation=reparameterization">
+<a class="calculation-link" href="#vae?derivation=reparameterization">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="the-diagonal-gaussian-kl-in-the-official-example" id="vae--the-diagonal-gaussian-kl-in-the-official-example">
-    The diagonal Gaussian KL in the official example
-   </h2>
-   <p>
-    The official PyTorch VAE example implements the standard-normal-prior KL as
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>KL</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo form="postfix" stretchy="false">‖</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mi>j</mi></munder><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>μ</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo>−</mo><mn>1</mn><mo>−</mo><mo>log</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{KL}(q\Vert p)=\frac12\sum_j\left(\mu_j^2+\sigma_j^2-1-\log\sigma_j^2\right).</annotation></semantics></math>
-   </div>
-   <p>
-    This is an implementation supplement to the source’s general KL notation. If
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mu=0</annotation></semantics></math>
-    and every
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sigma_j^2=1</annotation></semantics></math>
-    , the divergence is zero. Moving a mean away from zero or changing the variances incurs a penalty.
-   </p>
-   <p>
+</div>
+</div>
+</details>
+<h2 data-section="the-diagonal-gaussian-kl-in-the-official-example" id="vae--the-diagonal-gaussian-kl-in-the-official-example">KL divergence for a diagonal Gaussian</h2>
+<p>For a diagonal Gaussian posterior and standard normal prior, the KL term is</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>KL</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo form="postfix" stretchy="false">‖</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mi>j</mi></munder><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>μ</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo>−</mo><mn>1</mn><mo>−</mo><mo>log</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{KL}(q\Vert p)=\frac12\sum_j\left(\mu_j^2+\sigma_j^2-1-\log\sigma_j^2\right).</annotation></semantics></math>
+</div>
+<p>If <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mu=0</annotation></semantics></math> and every <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\sigma_j^2=1</annotation></semantics></math>, the divergence is zero. Moving a mean away from zero or changing the variances incurs a penalty.</p>
+<p>
     The code predicts a log variance and computes the standard deviation as
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>exp</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac displaystyle="false"><mn>1</mn><mn>2</mn></mfrac><mo>log</mo><msup><mi>σ</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\exp(\tfrac12\log\sigma^2)</annotation></semantics></math>
     . Confusing variance with standard deviation changes the sampled distribution. The example also shows how the reconstruction and KL reductions are combined; their relative scale must remain intentional.
    </p>
-   <details class="derivation" data-derivation="gaussian-kl" id="vae--derivation-gaussian-kl">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<details class="derivation" data-derivation="gaussian-kl" id="vae--derivation-gaussian-kl">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive every term of the diagonal-Gaussian KL
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Let
@@ -430,63 +371,63 @@ D_{\mathrm{KL}}(q_\phi(z\mid x)\|p(z)).</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>x</mi><annotation encoding="application/x-tex">x</annotation></semantics></math>
       during this calculation.
      </p>
-     <h4>
+<h4>
       1 · Write both log densities
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>q</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mfrac><mi>d</mi><mn>2</mn></mfrac><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>π</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><munder><mo>∑</mo><mi>j</mi></munder><mo>log</mo><msub><mi>σ</mi><mi>j</mi></msub><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mi>j</mi></munder><mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">\log q(z)=-\frac d2\log(2\pi)-\sum_j\log\sigma_j
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>q</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mfrac><mi>d</mi><mn>2</mn></mfrac><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>π</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><munder><mo>∑</mo><mi>j</mi></munder><mo>log</mo><msub><mi>σ</mi><mi>j</mi></msub><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mi>j</mi></munder><mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">\log q(z)=-\frac d2\log(2\pi)-\sum_j\log\sigma_j
 -\frac12\sum_j\frac{(z_j-\mu_j)^2}{\sigma_j^2},</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mfrac><mi>d</mi><mn>2</mn></mfrac><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>π</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mi>j</mi></munder><msubsup><mi>z</mi><mi>j</mi><mn>2</mn></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">\log p(z)=-\frac d2\log(2\pi)-\frac12\sum_jz_j^2.</annotation></semantics></math>
-     </div>
-     <h4>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mfrac><mi>d</mi><mn>2</mn></mfrac><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>π</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mi>j</mi></munder><msubsup><mi>z</mi><mi>j</mi><mn>2</mn></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">\log p(z)=-\frac d2\log(2\pi)-\frac12\sum_jz_j^2.</annotation></semantics></math>
+</div>
+<h4>
       2 · Subtract to cancel the normalization constants
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mfrac><mrow><mi>q</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mi>j</mi></munder><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>z</mi><mi>j</mi><mn>2</mn></msubsup><mo>−</mo><mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup></mfrac><mo>−</mo><mo>log</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\log\frac{q(z)}{p(z)}
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mfrac><mrow><mi>q</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mi>j</mi></munder><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>z</mi><mi>j</mi><mn>2</mn></msubsup><mo>−</mo><mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup></mfrac><mo>−</mo><mo>log</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\log\frac{q(z)}{p(z)}
 =\frac12\sum_j\left[z_j^2-\frac{(z_j-\mu_j)^2}{\sigma_j^2}-\log\sigma_j^2\right].</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       The logarithmic term uses
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>log</mo><msub><mi>σ</mi><mi>j</mi></msub><mo>=</mo><mo>log</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">2\log\sigma_j=\log\sigma_j^2</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       3 · Evaluate each expectation under q
      </h4>
-     <p>
+<p>
       By definition,
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>z</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msub><mi>μ</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\mathbb E_q[z_j]=\mu_j</annotation></semantics></math>
       and
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>Var</mo><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">\operatorname{Var}_q(z_j)=\sigma_j^2</annotation></semantics></math>
       . Hence
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>z</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>μ</mi><mi>j</mi><mn>2</mn></msubsup><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mi>/</mi><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E_q[z_j^2]=\sigma_j^2+\mu_j^2,\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><msubsup><mi>z</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>μ</mi><mi>j</mi><mn>2</mn></msubsup><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>𝔼</mi><mi>q</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mi>/</mi><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E_q[z_j^2]=\sigma_j^2+\mu_j^2,\qquad
 \mathbb E_q[(z_j-\mu_j)^2/\sigma_j^2]=1.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       The log variance is constant under this expectation.
      </p>
-     <h4>
+<h4>
       4 · Substitute and sum
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo form="postfix" stretchy="false">∥</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>d</mi></munderover><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>μ</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo>−</mo><mn>1</mn><mo>−</mo><mo>log</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">D_{\mathrm{KL}}(q\|p)=\frac12\sum_{j=1}^d
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>q</mi><mo form="postfix" stretchy="false">∥</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>d</mi></munderover><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>μ</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo>−</mo><mn>1</mn><mo>−</mo><mo>log</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">D_{\mathrm{KL}}(q\|p)=\frac12\sum_{j=1}^d
 \left(\mu_j^2+\sigma_j^2-1-\log\sigma_j^2\right).</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       For network output
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>ℓ</mo><mi>j</mi></msub><mo>=</mo><mo>log</mo><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">\ell_j=\log\sigma_j^2</annotation></semantics></math>
       , substitute
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>σ</mi><mi>j</mi><mn>2</mn></msubsup><mo>=</mo><msup><mi>e</mi><msub><mo>ℓ</mo><mi>j</mi></msub></msup></mrow><annotation encoding="application/x-tex">\sigma_j^2=e^{\ell_j}</annotation></semantics></math>
       :
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mi>j</mi></munder><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>μ</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><msup><mi>e</mi><msub><mo>ℓ</mo><mi>j</mi></msub></msup><mo>−</mo><mn>1</mn><mo>−</mo><msub><mo>ℓ</mo><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">D_{\mathrm{KL}}=\frac12\sum_j(\mu_j^2+e^{\ell_j}-1-\ell_j).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><munder><mo>∑</mo><mi>j</mi></munder><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>μ</mi><mi>j</mi><mn>2</mn></msubsup><mo>+</mo><msup><mi>e</mi><msub><mo>ℓ</mo><mi>j</mi></msub></msup><mo>−</mo><mn>1</mn><mo>−</mo><msub><mo>ℓ</mo><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">D_{\mathrm{KL}}=\frac12\sum_j(\mu_j^2+e^{\ell_j}-1-\ell_j).</annotation></semantics></math>
+</div>
+<p>
       Each term is nonnegative because
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mo>−</mo><mn>1</mn><mo>−</mo><mo>log</mo><mi>u</mi><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">u-1-\log u\ge0</annotation></semantics></math>
       for
@@ -495,14 +436,14 @@ D_{\mathrm{KL}}(q_\phi(z\mid x)\|p(z)).</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>μ</mi><mi>j</mi><mn>2</mn></msubsup><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mu_j^2\ge0</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       5 · Differentiate the analytic result
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub></mrow><mrow><mi>∂</mi><msub><mi>μ</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><msub><mi>μ</mi><mi>j</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><mi>∂</mi><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub></mrow><mrow><mi>∂</mi><msub><mo>ℓ</mo><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>e</mi><msub><mo>ℓ</mo><mi>j</mi></msub></msup><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial D_{\mathrm{KL}}}{\partial\mu_j}=\mu_j,\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub></mrow><mrow><mi>∂</mi><msub><mi>μ</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><msub><mi>μ</mi><mi>j</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><mi>∂</mi><msub><mi>D</mi><mrow><mi mathvariant="normal">K</mi><mi mathvariant="normal">L</mi></mrow></msub></mrow><mrow><mi>∂</mi><msub><mo>ℓ</mo><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>e</mi><msub><mo>ℓ</mo><mi>j</mi></msub></msup><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial D_{\mathrm{KL}}}{\partial\mu_j}=\mu_j,\qquad
 \frac{\partial D_{\mathrm{KL}}}{\partial\ell_j}=\frac12(e^{\ell_j}-1).</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       For
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mu=0</annotation></semantics></math>
       and
@@ -513,132 +454,109 @@ D_{\mathrm{KL}}(q_\phi(z\mid x)\|p(z)).</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><mn>4</mn><mo>−</mo><mn>1</mn><mo>−</mo><mo>log</mo><mn>4</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mn>2</mn><mo>≈</mo><mn>1.30685</mn></mrow><annotation encoding="application/x-tex">(1+4-1-\log4)/2\approx1.30685</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       6 · Keep the reduction consistent
      </h4>
-     <p>
+<p>
       The displayed expression sums latent coordinates for one example. A batch objective may average these per-example values, while its reconstruction likelihood normally sums observed dimensions per example. Averaging one term over its dimensions but not the other changes their relative weight.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="17" data-pdf="arch" type="button">
-       Chapter source · PDF p. 17
-      </button>
-      <a href="https://arxiv.org/abs/1312.6114" rel="noopener noreferrer" target="_blank">
+<div class="derivation-footer">
+
+<button data-page="17" data-pdf="arch" type="button">Reference · PDF p. 17</button>
+<a href="https://arxiv.org/abs/1312.6114" rel="noopener noreferrer" target="_blank">
        Research reference
       </a>
-      <a class="calculation-link" href="#vae?derivation=gaussian-kl">
+<a class="calculation-link" href="#vae?derivation=gaussian-kl">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="read-the-objectives-trade-off" id="vae--read-the-objectives-trade-off">
+</div>
+</div>
+</details>
+<h2 data-section="read-the-objectives-trade-off" id="vae--read-the-objectives-trade-off">
     Read the objective’s trade-off
    </h2>
-   <p>
+<p>
     The encoder is pulled toward codes that support reconstruction and toward posterior distributions compatible with the prior. If the latent variable is ignored, a low KL by itself is not evidence of a useful representation. If reconstruction dominates without an appropriate prior relationship, the generative interpretation can weaken.
    </p>
-   <p>
-    The supplied guide introduces the VAE rather than providing a full catalogue of its training pathologies. The linked official implementation supplies training, sampling, and reconstruction images. Those existing visualizations make a separate local VAE training script unnecessary here.
-   </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="vae--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="vaeexample">
-     <span class="resource-meta">
+<p>The implementation below trains a VAE on MNIST and produces both reconstructions and samples from the latent prior. These two outputs illustrate different uses of the learned decoder.</p>
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="vae--implementation">Implementation examples</h2>
+
+<div class="resource-list">
+<div class="resource" data-resource="vaeexample">
+<span class="resource-meta">
       PyTorch examples · Official example code
      </span>
-     <a href="https://github.com/pytorch/examples/blob/main/vae/main.py" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://github.com/pytorch/examples/blob/main/vae/main.py" rel="noopener noreferrer" target="_blank">
+<span>
        Variational Autoencoder: training script
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Read encode, reparameterize, decode and loss_function together. The example produces reconstruction and generated-sample images; inspect the summed reconstruction and KL reductions.
-     </p>
-    </div>
-    <div class="resource" data-resource="vaereadme">
-     <span class="resource-meta">
+</a>
+<p>An MNIST VAE with encoding, reparameterization, decoding, reconstruction images, and generated samples. Reconstruction and KL terms use explicit summed reductions.</p>
+</div>
+<div class="resource" data-resource="vaereadme">
+<span class="resource-meta">
       PyTorch examples · Example setup
      </span>
-     <a href="https://github.com/pytorch/examples/blob/main/vae/README.md" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://github.com/pytorch/examples/blob/main/vae/README.md" rel="noopener noreferrer" target="_blank">
+<span>
        Variational Autoencoder: run instructions
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Use the repository instructions alongside the training script. This is the practical entry point for running the official MNIST VAE example.
-     </p>
-    </div>
-   </div>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</a>
+<p>Dependencies and run instructions for the MNIST VAE training script.</p>
+</div>
+</div>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
     </strong>
     What does the VAE KL term do, and is a VAE just an autoencoder with random noise?
    </summary>
-   <p>
+<p>
     The encoder specifies an approximate posterior distribution, and the decoder is a likelihood model. The KL term regularizes that posterior toward a prior as part of a variational lower bound. Sampling alone does not create that objective or probabilistic interpretation.
    </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#autoencoders">
-    <small>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+
+<button aria-label="Open source: Architectures · PDF p. 17 · §6.7" data-page="17" data-pdf="arch" type="button">
+     Architectures · PDF p. 17 · §6.7
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#autoencoders">
+<small>
      ← Previous
     </small>
-    Autoencoders, bottlenecks, and denoising
-   </a>
-   <a href="#attention">
-    <small>
+Autoencoders, bottlenecks, and denoising
+</a>
+<a href="#attention">
+<small>
      Next →
     </small>
-    Attention: queries, keys, values, and weights
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+Attention: queries, keys, values, and weights
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="replace-a-point-code-with-a-conditional-distribution" href="#vae?section=replace-a-point-code-with-a-conditional-distribution">
-    Replace a point code with a conditional distribution
-   </a>
-   <a data-section="the-bound-in-the-source" href="#vae?section=the-bound-in-the-source">
-    The bound in the source
-   </a>
-   <a data-section="why-it-is-a-lower-bound-expanded-derivation" href="#vae?section=why-it-is-a-lower-bound-expanded-derivation">
-    Why it is a lower bound — expanded derivation
-   </a>
-   <a data-section="reparameterization-separates-randomness-from-parameters" href="#vae?section=reparameterization-separates-randomness-from-parameters">
-    Reparameterization separates randomness from parameters
-   </a>
-   <a data-section="the-diagonal-gaussian-kl-in-the-official-example" href="#vae?section=the-diagonal-gaussian-kl-in-the-official-example">
-    The diagonal Gaussian KL in the official example
-   </a>
-   <a data-section="read-the-objectives-trade-off" href="#vae?section=read-the-objectives-trade-off">
-    Read the objective’s trade-off
-   </a>
-   <a data-section="implementation" href="#vae?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="replace-a-point-code-with-a-conditional-distribution" href="#vae?section=replace-a-point-code-with-a-conditional-distribution">Replace a point code with a conditional distribution</a>
+<a data-section="the-bound-in-the-source" href="#vae?section=the-bound-in-the-source">The evidence lower bound</a>
+<a data-section="why-it-is-a-lower-bound-expanded-derivation" href="#vae?section=why-it-is-a-lower-bound-expanded-derivation">Why the ELBO is a lower bound</a>
+<a data-section="reparameterization-separates-randomness-from-parameters" href="#vae?section=reparameterization-separates-randomness-from-parameters">Reparameterization separates randomness from parameters</a>
+<a data-section="the-diagonal-gaussian-kl-in-the-official-example" href="#vae?section=the-diagonal-gaussian-kl-in-the-official-example">KL divergence for a diagonal Gaussian</a>
+<a data-section="read-the-objectives-trade-off" href="#vae?section=read-the-objectives-trade-off">Read the objective’s trade-off</a>
+<a data-section="implementation" href="#vae?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>

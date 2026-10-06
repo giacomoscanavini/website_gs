@@ -1,74 +1,43 @@
 <section aria-labelledby="bagging-title" class="page-view lesson-layout" id="bagging">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      24
     </span>
     Part 3 · Regularization &amp; ensembles
    </p>
-   <h1 id="bagging-title" tabindex="-1">
+<h1 id="bagging-title" tabindex="-1">
     Bagging, random forests, and out-of-bag evaluation
    </h1>
-   <p class="standfirst">
-    Derive variance reduction and explain why resampling and feature randomization create useful diversity.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Regularization · PDF pp. 21–23 · §§13–15" data-page="21" data-pdf="reg" type="button">
-     Regularization · PDF pp. 21–23 · §§13–15
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<p class="standfirst">Bagging fits models to bootstrap samples and combines their predictions. The variance reduction depends on both the variability of individual models and the correlation between them.</p>
+
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="bootstrap-aggregating" href="#bagging?section=bootstrap-aggregating">
-     Bootstrap aggregating
-    </a>
-    <a data-section="derive-the-variance-of-an-average" href="#bagging?section=derive-the-variance-of-an-average">
-     Derive the variance of an average
-    </a>
-    <a data-section="why-unstable-trees-benefit" href="#bagging?section=why-unstable-trees-benefit">
-     Why unstable trees benefit
-    </a>
-    <a data-section="out-of-bag-predictions" href="#bagging?section=out-of-bag-predictions">
-     Out-of-bag predictions
-    </a>
-    <a data-section="why-temporal-data-need-different-reasoning" href="#bagging?section=why-temporal-data-need-different-reasoning">
-     Why temporal data need different reasoning
-    </a>
-    <a data-section="implementation" href="#bagging?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="bootstrap-aggregating" id="bagging--bootstrap-aggregating">
+<nav aria-label="On this page">
+<a data-section="bootstrap-aggregating" href="#bagging?section=bootstrap-aggregating">Bootstrap aggregating</a>
+<a data-section="derive-the-variance-of-an-average" href="#bagging?section=derive-the-variance-of-an-average">Derive the variance of an average</a>
+<a data-section="why-unstable-trees-benefit" href="#bagging?section=why-unstable-trees-benefit">Why unstable trees benefit</a>
+<a data-section="out-of-bag-predictions" href="#bagging?section=out-of-bag-predictions">Out-of-bag predictions</a>
+<a data-section="why-temporal-data-need-different-reasoning" href="#bagging?section=why-temporal-data-need-different-reasoning">Why temporal data need different reasoning</a>
+<a data-section="implementation" href="#bagging?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="bootstrap-aggregating" id="bagging--bootstrap-aggregating">
     Bootstrap aggregating
    </h2>
-   <p>
-    Bagging trains models on perturbed versions of the dataset and combines their predictions. The guide’s ordinary bootstrap draws
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
-    observations
-    <strong>
-     with replacement
-    </strong>
-    from
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
-    originals. Some rows appear repeatedly; others are absent.
-   </p>
-   <p>
+<p>Bagging trains models on perturbed versions of the dataset and combines their predictions. An ordinary bootstrap draws <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> observations <strong>with replacement</strong> from <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math> originals. Some rows appear repeatedly; others are absent.</p>
+<p>
     The probability that a particular row is omitted is
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>n</mi></msup><mo>→</mo><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>≈</mo><mn>0.368</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\left(1-\frac1n\right)^n\longrightarrow e^{-1}\approx0.368.</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>n</mi></msup><mo>→</mo><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>≈</mo><mn>0.368</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\left(1-\frac1n\right)^n\longrightarrow e^{-1}\approx0.368.</annotation></semantics></math>
+</div>
+<p>
     Thus a bootstrap dataset of size
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
     contains about
@@ -77,32 +46,27 @@
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
     limit. Size and number of unique rows are different quantities.
    </p>
-   <figure class="source-figure">
-    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="reg-21" type="button">
-     <img alt="The supplied bootstrap visualization marks duplicate multiplicities and omitted observations. Each resampled dataset has its own fitted model." height="413" loading="lazy" src="assets/images/the-supplied-bootstrap-visualization-marks-duplicate-multipliciti-e43b7358fa.webp" width="780"/>
-    </button>
-    <figcaption>
-     The supplied bootstrap visualization marks duplicate multiplicities and omitted observations. Each resampled dataset has its own fitted model.
-     <button aria-label="Open source: Regularization · PDF p. 21" data-page="21" data-pdf="reg" type="button">
+<figure class="source-figure">
+<button aria-label="Enlarge source figure" class="figure-frame" data-figure="reg-21" type="button">
+<img alt="Bootstrap samples contain repeated observations and omit others. Each resampled dataset is used to fit a separate model." height="413" loading="lazy" src="assets/images/the-supplied-bootstrap-visualization-marks-duplicate-multipliciti-e43b7358fa.webp" width="780"/>
+</button>
+<figcaption>Bootstrap samples contain repeated observations and omit others. Each resampled dataset is used to fit a separate model. <button aria-label="Open source: Regularization · PDF p. 21" data-page="21" data-pdf="reg" type="button">
       Regularization · PDF p. 21
-     </button>
-    </figcaption>
-   </figure>
-   <p>
-    For regression, average the predictions. For classification, the guide uses class-probability averaging or majority voting. The combination is a separate stage from fitting each component.
-   </p>
-   <details class="derivation" data-derivation="bootstrap-omission" id="bagging--derivation-bootstrap-omission">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+     </button></figcaption>
+</figure>
+<p>For regression, average the component predictions. For classification, combine class probabilities or use majority voting. Prediction aggregation is separate from fitting the component models.</p>
+<details class="derivation" data-derivation="bootstrap-omission" id="bagging--derivation-bootstrap-omission">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive the out-of-bag probability and expected number of unique observations
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Draw
@@ -113,37 +77,37 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
       bootstrap, not sampling without replacement.
      </p>
-     <h4>
+<h4>
       1 · Follow one particular observation
      </h4>
-     <p>
+<p>
       At one draw, its selection probability is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">1/n</annotation></semantics></math>
       , so its omission probability is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mn>1</mn><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">1-1/n</annotation></semantics></math>
       . Independence of the draws makes omission from the complete bootstrap sample
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mrow><mo form="prefix" stretchy="true">(</mo><mtext mathvariant="normal">omitted</mtext><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munderover><mo>∏</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>n</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">P(\text{omitted})=\prod_{j=1}^n\left(1-\frac1n\right)=\left(1-\frac1n\right)^n.</annotation></semantics></math>
-     </div>
-     <h4>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mrow><mo form="prefix" stretchy="true">(</mo><mtext mathvariant="normal">omitted</mtext><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munderover><mo>∏</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>n</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">P(\text{omitted})=\prod_{j=1}^n\left(1-\frac1n\right)=\left(1-\frac1n\right)^n.</annotation></semantics></math>
+</div>
+<h4>
       2 · Take the large-sample limit carefully
      </h4>
-     <p>
+<p>
       Take logarithms:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>P</mi><mo>=</mo><mi>n</mi><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mn>1</mn><mi>/</mi><mi>n</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\log P=n\log(1-1/n).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mi>P</mi><mo>=</mo><mi>n</mi><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mn>1</mn><mi>/</mi><mi>n</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\log P=n\log(1-1/n).</annotation></semantics></math>
+</div>
+<p>
       Using
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>u</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mi>u</mi><mo>−</mo><msup><mi>u</mi><mn>2</mn></msup><mi>/</mi><mn>2</mn><mo>+</mo><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>u</mi><mn>3</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\log(1-u)=-u-u^2/2+O(u^3)</annotation></semantics></math>
       near zero,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mn>1</mn><mi>/</mi><mi>n</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>n</mi></mrow></mfrac><mo>+</mo><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>n</mi><mrow><mi>−</mi><mn>2</mn></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>→</mo><mi>−</mi><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">n\log(1-1/n)=-1-\frac1{2n}+O(n^{-2})\longrightarrow-1.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>log</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mn>1</mn><mi>/</mi><mi>n</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>n</mi></mrow></mfrac><mo>+</mo><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>n</mi><mrow><mi>−</mi><mn>2</mn></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>→</mo><mi>−</mi><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">n\log(1-1/n)=-1-\frac1{2n}+O(n^{-2})\longrightarrow-1.</annotation></semantics></math>
+</div>
+<p>
       Exponentiating gives
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>→</mo><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>≈</mo><mn>0.367879</mn></mrow><annotation encoding="application/x-tex">P\to e^{-1}\approx0.367879</annotation></semantics></math>
       . For finite
@@ -154,10 +118,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">n=1</annotation></semantics></math>
       it is zero.
      </p>
-     <h4>
+<h4>
       3 · Count unique observations with indicators
      </h4>
-     <p>
+<p>
       Let
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mi>i</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">I_i=1</annotation></semantics></math>
       if original observation
@@ -166,96 +130,89 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo>=</mo><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>I</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">U=\sum_iI_i</annotation></semantics></math>
       . Linearity of expectation does not require the indicators to be independent:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>U</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>I</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>n</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>−</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>n</mi></msup><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[U]=\sum_i\mathbb E[I_i]=n\left[1-\left(1-\frac1n\right)^n\right].</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>U</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>I</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>n</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>−</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mi>n</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>n</mi></msup><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[U]=\sum_i\mathbb E[I_i]=n\left[1-\left(1-\frac1n\right)^n\right].</annotation></semantics></math>
+</div>
+<p>
       Thus the expected included fraction tends to
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><msup><mi>e</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>≈</mo><mn>0.632121</mn></mrow><annotation encoding="application/x-tex">1-e^{-1}\approx0.632121</annotation></semantics></math>
       , even though the sample contains exactly
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
       draws.
      </p>
-     <h4>
+<h4>
       4 · Interpret out-of-bag predictions with their training boundary
      </h4>
-     <p>
+<p>
       For each observation, aggregate only models whose bootstrap training sample omitted it. This yields an out-of-bag prediction under the ensemble construction. It does not automatically protect against preprocessing fitted using that observation, dependent entities, or future information. A temporal block bootstrap preserves some local dependence but does not by itself turn an OOB estimate into a chronological forecasting test.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="21" data-pdf="reg" type="button">
-       Chapter source · PDF p. 21
-      </button>
-      <a class="calculation-link" href="#bagging?derivation=bootstrap-omission">
+<div class="derivation-footer">
+
+<button data-page="21" data-pdf="reg" type="button">Reference · PDF p. 21</button>
+<a class="calculation-link" href="#bagging?derivation=bootstrap-omission">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="derive-the-variance-of-an-average" id="bagging--derive-the-variance-of-an-average">
+</div>
+</div>
+</details>
+<h2 data-section="derive-the-variance-of-an-average" id="bagging--derive-the-variance-of-an-average">
     Derive the variance of an average
    </h2>
-   <p>
+<p>
     At a fixed input, assume the fitted predictions have common variance
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>σ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\sigma^2</annotation></semantics></math>
     and pairwise correlation
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ρ</mi><annotation encoding="application/x-tex">\rho</annotation></semantics></math>
     over fitting randomness. The same covariance applies to errors relative to the fixed conditional mean, excluding fresh shared observation noise. Then
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><mn>1</mn><mi>M</mi></mfrac><munder><mo>∑</mo><mi>m</mi></munder><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>m</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><msup><mi>M</mi><mn>2</mn></msup></mfrac><mrow><mo form="prefix" stretchy="true">[</mo><mi>M</mi><msup><mi>σ</mi><mn>2</mn></msup><mo>+</mo><mi>M</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>M</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>ρ</mi><msup><mi>σ</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}\left(\frac1M\sum_m\hat f_m\right)
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><mn>1</mn><mi>M</mi></mfrac><munder><mo>∑</mo><mi>m</mi></munder><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>m</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><msup><mi>M</mi><mn>2</mn></msup></mfrac><mrow><mo form="prefix" stretchy="true">[</mo><mi>M</mi><msup><mi>σ</mi><mn>2</mn></msup><mo>+</mo><mi>M</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>M</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>ρ</mi><msup><mi>σ</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}\left(\frac1M\sum_m\hat f_m\right)
 =\frac1{M^2}\left[M\sigma^2+M(M-1)\rho\sigma^2\right].</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<p>
     There are
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>M</mi><annotation encoding="application/x-tex">M</annotation></semantics></math>
     variance terms and
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>M</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">M(M-1)</annotation></semantics></math>
     ordered covariance terms. Simplifying,
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>f</mi><mo accent="true">‾</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mrow><mo form="prefix" stretchy="true">[</mo><mi>ρ</mi><mo>+</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>ρ</mi></mrow><mi>M</mi></mfrac><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(\bar f)=\sigma^2\left[\rho+\frac{1-\rho}{M}\right].</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>f</mi><mo accent="true">‾</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mrow><mo form="prefix" stretchy="true">[</mo><mi>ρ</mi><mo>+</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>ρ</mi></mrow><mi>M</mi></mfrac><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(\bar f)=\sigma^2\left[\rho+\frac{1-\rho}{M}\right].</annotation></semantics></math>
+</div>
+<p>
     At zero correlation, the familiar
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mi>M</mi></mrow><annotation encoding="application/x-tex">1/M</annotation></semantics></math>
     reduction appears. At perfect positive correlation, the variance does not fall at all. With a fixed positive common correlation, the limit is
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\rho\sigma^2</annotation></semantics></math>
     .
    </p>
-   <p>
+<p>
     The equal-variance/equal-correlation assumptions make this a clean explanatory model, not a literal formula for every ensemble. It explains why
     <strong>
      useful diversity of errors
     </strong>
     matters more than the number of differently named models.
    </p>
-   <figure class="source-figure">
-    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="reg-22" type="button">
-     <img alt="The source’s variance curves show the correlation-dependent floor. They hold under the equal-variance/common-correlation model stated in the derivation." height="527" loading="lazy" src="assets/images/the-source-s-variance-curves-show-the-correlation-dependent-floor-ed9a7dbef6.webp" width="760"/>
-    </button>
-    <figcaption>
-     The source’s variance curves show the correlation-dependent floor. They hold under the equal-variance/common-correlation model stated in the derivation.
-     <button aria-label="Open source: Regularization · PDF p. 22" data-page="22" data-pdf="reg" type="button">
+<figure class="source-figure">
+<button aria-label="Enlarge source figure" class="figure-frame" data-figure="reg-22" type="button">
+<img alt="Variance of an ensemble average under equal component variances and a common pairwise correlation. Positive correlation leaves a variance floor as the ensemble grows." height="527" loading="lazy" src="assets/images/the-source-s-variance-curves-show-the-correlation-dependent-floor-ed9a7dbef6.webp" width="760"/>
+</button>
+<figcaption>Variance of an ensemble average under equal component variances and a common pairwise correlation. Positive correlation leaves a variance floor as the ensemble grows. <button aria-label="Open source: Regularization · PDF p. 22" data-page="22" data-pdf="reg" type="button">
       Regularization · PDF p. 22
-     </button>
-    </figcaption>
-   </figure>
-   <details class="derivation" data-derivation="ensemble-variance" id="bagging--derivation-ensemble-variance">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+     </button></figcaption>
+</figure>
+<details class="derivation" data-derivation="ensemble-variance" id="bagging--derivation-ensemble-variance">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Expand every covariance term in the variance of an average
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       At a fixed input, let
@@ -266,27 +223,27 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\rho\sigma^2</annotation></semantics></math>
       . Equivalently, use errors relative to the fixed true conditional mean. Do not add an independent new-outcome noise term to each error and then count that shared noise as reducible model variance.
      </p>
-     <h4>
+<h4>
       1 · Center the average
      </h4>
-     <p>
+<p>
       Let
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>F</mi><mo accent="true">‾</mo></mover><mo>=</mo><msup><mi>M</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><msub><mo>∑</mo><mi>m</mi></msub><msub><mi>F</mi><mi>m</mi></msub></mrow><annotation encoding="application/x-tex">\bar F=M^{-1}\sum_mF_m</annotation></semantics></math>
       and
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>μ</mi><mi>m</mi></msub><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>F</mi><mi>m</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mu_m=\mathbb E[F_m]</annotation></semantics></math>
       . Then
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>F</mi><mo accent="true">‾</mo></mover><mo>−</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mover><mi>F</mi><mo accent="true">‾</mo></mover><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mi>M</mi></mfrac><munder><mo>∑</mo><mi>m</mi></munder><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>F</mi><mi>m</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>m</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar F-\mathbb E[\bar F]=\frac1M\sum_m(F_m-\mu_m).</annotation></semantics></math>
-     </div>
-     <h4>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>F</mi><mo accent="true">‾</mo></mover><mo>−</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mover><mi>F</mi><mo accent="true">‾</mo></mover><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mi>M</mi></mfrac><munder><mo>∑</mo><mi>m</mi></munder><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>F</mi><mi>m</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>m</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\bar F-\mathbb E[\bar F]=\frac1M\sum_m(F_m-\mu_m).</annotation></semantics></math>
+</div>
+<h4>
       2 · Expand the square as a double sum
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>F</mi><mo accent="true">‾</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><msup><mi>M</mi><mn>2</mn></msup></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>M</mi></munderover><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>M</mi></munderover><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>F</mi><mi>j</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(\bar F)=\frac1{M^2}\sum_{i=1}^M\sum_{j=1}^M
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>F</mi><mo accent="true">‾</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><msup><mi>M</mi><mn>2</mn></msup></mfrac><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>M</mi></munderover><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>M</mi></munderover><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>F</mi><mi>i</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>F</mi><mi>j</mi></msub><mo>−</mo><msub><mi>μ</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(\bar F)=\frac1{M^2}\sum_{i=1}^M\sum_{j=1}^M
 \mathbb E[(F_i-\mu_i)(F_j-\mu_j)].</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       There are
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>M</mi><annotation encoding="application/x-tex">M</annotation></semantics></math>
       diagonal terms with
@@ -299,14 +256,14 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\rho\sigma^2</annotation></semantics></math>
       . Counting ordered pairs is why no extra factor of two is needed.
      </p>
-     <h4>
+<h4>
       3 · Simplify the sum
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>F</mi><mo accent="true">‾</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><mi>M</mi><msup><mi>σ</mi><mn>2</mn></msup><mo>+</mo><mi>M</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>M</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>ρ</mi><msup><mi>σ</mi><mn>2</mn></msup></mrow><msup><mi>M</mi><mn>2</mn></msup></mfrac><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mrow><mo form="prefix" stretchy="true">[</mo><mi>ρ</mi><mo>+</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>ρ</mi></mrow><mi>M</mi></mfrac><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(\bar F)=\frac{M\sigma^2+M(M-1)\rho\sigma^2}{M^2}
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Var</mo><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>F</mi><mo accent="true">‾</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><mi>M</mi><msup><mi>σ</mi><mn>2</mn></msup><mo>+</mo><mi>M</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>M</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>ρ</mi><msup><mi>σ</mi><mn>2</mn></msup></mrow><msup><mi>M</mi><mn>2</mn></msup></mfrac><mo>=</mo><msup><mi>σ</mi><mn>2</mn></msup><mrow><mo form="prefix" stretchy="true">[</mo><mi>ρ</mi><mo>+</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>ρ</mi></mrow><mi>M</mi></mfrac><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Var}(\bar F)=\frac{M\sigma^2+M(M-1)\rho\sigma^2}{M^2}
 =\sigma^2\left[\rho+\frac{1-\rho}{M}\right].</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       If
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ρ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\rho=0</annotation></semantics></math>
       , variance is
@@ -321,10 +278,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>σ</mi><mn>2</mn></msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.2</mn><mo>+</mo><mn>0.8</mn><mi>/</mi><mn>10</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.28</mn><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\sigma^2(0.2+0.8/10)=0.28\sigma^2</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       4 · Check which correlations are possible
      </h4>
-     <p>
+<p>
       The equicorrelation matrix is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>I</mi><mo>+</mo><mi>ρ</mi><mn>𝟏</mn><msup><mn>𝟏</mn><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">(1-\rho)I+\rho\mathbf1\mathbf1^\top</annotation></semantics></math>
       . Along
@@ -339,149 +296,124 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">M&gt;1</annotation></semantics></math>
       ,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mfrac><mn>1</mn><mrow><mi>M</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mo>≤</mo><mi>ρ</mi><mo>≤</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">-\frac1{M-1}\le\rho\le1.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mfrac><mn>1</mn><mrow><mi>M</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mo>≤</mo><mi>ρ</mi><mo>≤</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">-\frac1{M-1}\le\rho\le1.</annotation></semantics></math>
+</div>
+<p>
       A fixed negative correlation cannot persist unchanged as
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>M</mi><annotation encoding="application/x-tex">M</annotation></semantics></math>
       grows without bound. The often-quoted nonzero limiting floor assumes a feasible fixed nonnegative
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ρ</mi><annotation encoding="application/x-tex">\rho</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       5 · Return to prediction error
      </h4>
-     <p>
+<p>
       Variance reduction is only one term of squared prediction risk. Biased models can retain shared bias after averaging, and independent future observation noise remains irreducible. Diversity is useful when it lowers the relevant error covariance without making the component predictions excessively poor.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="21" data-pdf="reg" type="button">
-       Chapter source · PDF p. 21
-      </button>
-      <a class="calculation-link" href="#bagging?derivation=ensemble-variance">
+<div class="derivation-footer">
+
+<button data-page="21" data-pdf="reg" type="button">Reference · PDF p. 21</button>
+<a class="calculation-link" href="#bagging?derivation=ensemble-variance">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="why-unstable-trees-benefit" id="bagging--why-unstable-trees-benefit">
+</div>
+</div>
+</details>
+<h2 data-section="why-unstable-trees-benefit" id="bagging--why-unstable-trees-benefit">
     Why unstable trees benefit
    </h2>
-   <p>
-    The guide describes deep decision trees as high-variance estimators: small sample changes can alter early splits and therefore many downstream predictions. Bagging can average part of that instability away.
-   </p>
-   <p>
+<p>Deep decision trees can be unstable: a small sample change may alter an early split and many predictions below it. Bagging reduces some of this variability by averaging trees fitted to different bootstrap samples.</p>
+<p>
     A random forest adds feature randomization when considering each split. That makes it harder for every tree to repeatedly choose the same strongest feature and can reduce correlation among trees. The motivation follows directly from the variance formula. Randomness that lowers useful signal too much would not be an improvement; the bias and diversity effects must be considered together.
    </p>
-   <p>
-    This chapter follows the guide’s ensemble perspective on trees. It is not intended as a complete derivation of all tree-splitting algorithms.
-   </p>
-   <h2 data-section="out-of-bag-predictions" id="bagging--out-of-bag-predictions">
+
+<h2 data-section="out-of-bag-predictions" id="bagging--out-of-bag-predictions">
     Out-of-bag predictions
    </h2>
-   <p>
+<p>
     For observation
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>
     , use only models whose bootstrap samples omitted it:
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>i</mi><mrow><mi mathvariant="normal">O</mi><mi mathvariant="normal">O</mi><mi mathvariant="normal">B</mi></mrow></msubsup><mo>=</mo><mfrac><mn>1</mn><mrow><mo form="prefix" stretchy="true">|</mo><msub><mi>M</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">|</mo></mrow></mfrac><munder><mo>∑</mo><mrow><mi>m</mi><mo>∈</mo><msub><mi>M</mi><mi>i</mi></msub></mrow></munder><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>m</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat y_i^{\mathrm{OOB}}=\frac1{|M_i|}\sum_{m\in M_i}\hat f_m(x_i).</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mover><mi>y</mi><mo accent="true">̂</mo></mover><mi>i</mi><mrow><mi mathvariant="normal">O</mi><mi mathvariant="normal">O</mi><mi mathvariant="normal">B</mi></mrow></msubsup><mo>=</mo><mfrac><mn>1</mn><mrow><mo form="prefix" stretchy="true">|</mo><msub><mi>M</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">|</mo></mrow></mfrac><munder><mo>∑</mo><mrow><mi>m</mi><mo>∈</mo><msub><mi>M</mi><mi>i</mi></msub></mrow></munder><msub><mover><mi>f</mi><mo accent="true">̂</mo></mover><mi>m</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat y_i^{\mathrm{OOB}}=\frac1{|M_i|}\sum_{m\in M_i}\hat f_m(x_i).</annotation></semantics></math>
+</div>
+<p>
     Each observation is evaluated by models that did not train on it. This can supply an internal generalization estimate for ordinary bootstrap ensembles in appropriate IID settings. The number of available out-of-bag models differs by observation; with very few models, some observations may have poor coverage.
    </p>
-   <p>
+<p>
     OOB evaluation is not automatically equivalent to an untouched final test after unrestricted model selection. It is a measurement within a particular resampling procedure.
    </p>
-   <h2 data-section="why-temporal-data-need-different-reasoning" id="bagging--why-temporal-data-need-different-reasoning">
+<h2 data-section="why-temporal-data-need-different-reasoning" id="bagging--why-temporal-data-need-different-reasoning">
     Why temporal data need different reasoning
    </h2>
-   <p>
-    Ordinary row-wise resampling assumes observations are exchangeable enough for that procedure. Resampling a time series independently can destroy dependence and allow future regimes to influence models used to score earlier observations. The source discusses time-aware procedures such as block/stationary bootstrap or explicitly ordered ensembles. Preserving blocks addresses some dependence, but does not by itself enforce forecasting chronology: evaluation must still prevent future information from entering a model used to predict an earlier outcome.
-   </p>
-   <p>
-    The official scikit-learn example already trains and plots a single estimator against bagging with a bias–variance decomposition. It is the relevant classical-ML implementation here; no additional PyTorch forest implementation is needed to make the theoretical point.
-   </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="bagging--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="biasvariance">
-     <span class="resource-meta">
+<p>Ordinary row-wise resampling assumes observations are exchangeable enough for that procedure. Resampling a time series independently can destroy dependence and allow future regimes to influence models used to score earlier observations. Time-aware alternatives include block/stationary bootstrap or explicitly ordered ensembles. Preserving blocks addresses some dependence, but does not by itself enforce forecasting chronology: evaluation must still prevent future information from entering a model used to predict an earlier outcome.</p>
+
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="bagging--implementation">Implementation examples</h2>
+
+<div class="resource-list">
+<div class="resource" data-resource="biasvariance">
+<span class="resource-meta">
       scikit-learn · Official experiment + plots
      </span>
-     <a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_bias_variance.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://scikit-learn.org/stable/auto_examples/ensemble/plot_bias_variance.html" rel="noopener noreferrer" target="_blank">
+<span>
        Single estimator versus bagging: bias–variance decomposition
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect the repeated-dataset experiment and its bias, variance and error curves. This is a classical-ML demonstration in scikit-learn, not a PyTorch tutorial.
-     </p>
-    </div>
-   </div>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</a>
+<p>A repeated-dataset experiment comparing a single estimator with bagging, including bias, variance, and prediction-error plots.</p>
+</div>
+</div>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
     </strong>
     Why does adding more highly correlated models give diminishing returns?
    </summary>
-   <p>
+<p>
     With equal model variance σ² and common error correlation ρ, the average has variance σ²[ρ+(1−ρ)/M]. Increasing M reduces the independent component, but positive shared error leaves a floor ρσ². More models do not remove what they all get wrong together.
    </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#sparsity-and-dropout">
-    <small>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+
+<button aria-label="Open source: Regularization · PDF pp. 21–23 · §§13–15" data-page="21" data-pdf="reg" type="button">
+     Regularization · PDF pp. 21–23 · §§13–15
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#sparsity-and-dropout">
+<small>
      ← Previous
     </small>
-    Sparse representations and dropout
-   </a>
-   <a href="#ensembles">
-    <small>
+Sparse representations and dropout
+</a>
+<a href="#ensembles">
+<small>
      Next →
     </small>
-    Averaging, covariance weights, and stacking
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+Averaging, covariance weights, and stacking
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="bootstrap-aggregating" href="#bagging?section=bootstrap-aggregating">
-    Bootstrap aggregating
-   </a>
-   <a data-section="derive-the-variance-of-an-average" href="#bagging?section=derive-the-variance-of-an-average">
-    Derive the variance of an average
-   </a>
-   <a data-section="why-unstable-trees-benefit" href="#bagging?section=why-unstable-trees-benefit">
-    Why unstable trees benefit
-   </a>
-   <a data-section="out-of-bag-predictions" href="#bagging?section=out-of-bag-predictions">
-    Out-of-bag predictions
-   </a>
-   <a data-section="why-temporal-data-need-different-reasoning" href="#bagging?section=why-temporal-data-need-different-reasoning">
-    Why temporal data need different reasoning
-   </a>
-   <a data-section="implementation" href="#bagging?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="bootstrap-aggregating" href="#bagging?section=bootstrap-aggregating">Bootstrap aggregating</a>
+<a data-section="derive-the-variance-of-an-average" href="#bagging?section=derive-the-variance-of-an-average">Derive the variance of an average</a>
+<a data-section="why-unstable-trees-benefit" href="#bagging?section=why-unstable-trees-benefit">Why unstable trees benefit</a>
+<a data-section="out-of-bag-predictions" href="#bagging?section=out-of-bag-predictions">Out-of-bag predictions</a>
+<a data-section="why-temporal-data-need-different-reasoning" href="#bagging?section=why-temporal-data-need-different-reasoning">Why temporal data need different reasoning</a>
+<a data-section="implementation" href="#bagging?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>

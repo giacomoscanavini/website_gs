@@ -1,43 +1,43 @@
 <article class="article" id="LC3580">
- <div class="breadcrumb">
-  <a href="#practice">
+<div class="breadcrumb">
+<a href="#practice">
    Leetcode problems
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Additional problems
   </span>
- </div>
- <h1>
+</div>
+<h1>
   3580 · Find consistently improving employees
  </h1>
- <p>
+<p>
   Keep employees whose last three selected review ratings increase, and report their improvement.
  </p>
- <h2>
+<h2>
   My submission
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="archive-3580-panel-0" aria-selected="true" id="archive-3580-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="archive-3580-panel-0" aria-selected="true" id="archive-3580-tab-0" role="tab" tabindex="0" type="button">
      MySQL
     </button>
-    <button aria-controls="archive-3580-panel-1" aria-selected="false" id="archive-3580-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="archive-3580-panel-1" aria-selected="false" id="archive-3580-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button class="copy-button" data-copy="" type="button">
+</div>
+<button class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="archive-3580-tab-0" class="code-panel" id="archive-3580-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-3580-tab-0" class="code-panel" id="archive-3580-panel-0" role="tabpanel">
+<div class="no-script-label">
     MySQL
    </div>
-   <pre id="code-LC3580-0" tabindex="0"><code class="language-sql" data-origin="archive-3580-sql"><span class="c1"># Write your MySQL query statement below</span>
+<pre id="code-LC3580-0" tabindex="0"><code class="language-sql" data-origin="archive-3580-sql"><span class="c1"># Write your MySQL query statement below</span>
 <span class="k">WITH</span><span class="w"> </span>
 <span class="w">    </span><span class="n">ValidReviews</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">        </span><span class="k">SELECT</span><span class="w"> </span>
@@ -86,12 +86,12 @@
 <span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Employees</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">employee_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">employee_id</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">rating1</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">rating2</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">rating2</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">rating3</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">rating1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="n">rating3</span><span class="w"> </span><span class="k">DESC</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="k">name</span><span class="w"> </span><span class="k">ASC</span></code></pre>
-  </div>
-  <div aria-labelledby="archive-3580-tab-1" class="code-panel" id="archive-3580-panel-1" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-3580-tab-1" class="code-panel" id="archive-3580-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-LC3580-1" tabindex="0"><code class="language-python" data-origin="archive-3580-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-LC3580-1" tabindex="0"><code class="language-python" data-origin="archive-3580-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">find_consistently_improving_employees</span><span class="p">(</span><span class="n">employees</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">performance_reviews</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">df</span> <span class="o">=</span> <span class="p">(</span>
@@ -115,168 +115,168 @@
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="p">[</span><span class="s1">'improvement_score'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">],</span> <span class="n">ascending</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])[[</span><span class="s1">'employee_id'</span><span class="p">,</span> <span class="s1">'name'</span><span class="p">,</span> <span class="s1">'improvement_score'</span><span class="p">]]</span>
 
     </code></pre>
-  </div>
- </div>
- <h2>
+</div>
+</div>
+<h2>
   How the submitted approach works
  </h2>
- <p>
+<p>
   The saved SQL builds three review positions and joins them side by side. The pandas version selects three recent reviews, compares consecutive ratings, then attaches employee names.
  </p>
- <div class="note warning">
-  <b>
+<div class="note warning">
+<b>
    Implementation note.
   </b>
   The SQL selects reviews by review_id DESC; pandas selects by review_date DESC. These are not equivalent unless IDs follow chronology. The two submissions are shown separately without choosing an unstated rule.
  </div>
- <details class="reference-details">
-  <summary>
+<details class="reference-details">
+<summary>
    Source
   </summary>
-  <div class="sources-content">
-   <p>
+<div class="sources-content">
+<p>
     SQL.zip / 3580-find-consistently-improving-employees / submission-1.sql and submission-1.py. These are the submitted files; the summary and implementation notes describe the code, not a replacement official problem statement.
    </p>
-   <p>
-    <a href="https://leetcode.com/problems/find-consistently-improving-employees/" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://leetcode.com/problems/find-consistently-improving-employees/" rel="noopener noreferrer" target="_blank">
      Original problem
     </a>
-   </p>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</p>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-and">
+<a href="#m-sql-and">
      AND
     </a>
-    <a href="#m-sql-in">
+<a href="#m-sql-in">
      IN
     </a>
-    <a href="#m-sql-count">
+<a href="#m-sql-count">
      COUNT()
     </a>
-    <a href="#m-sql-group-by">
+<a href="#m-sql-group-by">
      GROUP BY
     </a>
-    <a href="#m-sql-having">
+<a href="#m-sql-having">
      HAVING
     </a>
-    <a href="#m-sql-left-join">
+<a href="#m-sql-left-join">
      LEFT JOIN
     </a>
-    <a href="#m-sql-self-join">
+<a href="#m-sql-self-join">
      Self join
     </a>
-    <a href="#m-sql-first-row">
+<a href="#m-sql-first-row">
      First row per group
     </a>
-    <a href="#m-sql-top-n">
+<a href="#m-sql-top-n">
      Top N per group
     </a>
-    <a href="#m-sql-row-number">
+<a href="#m-sql-row-number">
      ROW_NUMBER()
     </a>
-    <a href="#m-sql-partition-by">
+<a href="#m-sql-partition-by">
      PARTITION BY
     </a>
-    <a href="#m-sql-window-order">
+<a href="#m-sql-window-order">
      ORDER BY
     </a>
-    <a href="#m-sql-subquery">
+<a href="#m-sql-subquery">
      Subquery
     </a>
-    <a href="#m-sql-with">
+<a href="#m-sql-with">
      WITH
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-    <a href="#m-sql-distinct">
+<a href="#m-sql-distinct">
      DISTINCT
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-select-columns">
+<a href="#m-pd-select-columns">
      Select columns
     </a>
-    <a href="#m-pd-head">
+<a href="#m-pd-head">
      First rows
     </a>
-    <a href="#m-pd-filter">
+<a href="#m-pd-filter">
      Condition
     </a>
-    <a href="#m-pd-and">
+<a href="#m-pd-and">
      Multiple conditions
     </a>
-    <a href="#m-pd-sort-values">
+<a href="#m-pd-sort-values">
      Sort one column
     </a>
-    <a href="#m-pd-sort-desc">
+<a href="#m-pd-sort-desc">
      Descending
     </a>
-    <a href="#m-pd-sort-multi">
+<a href="#m-pd-sort-multi">
      Multiple columns
     </a>
-    <a href="#m-pd-new-column">
+<a href="#m-pd-new-column">
      New column
     </a>
-    <a href="#m-pd-reset-index">
+<a href="#m-pd-reset-index">
      Reset index
     </a>
-    <a href="#m-pd-first-group">
+<a href="#m-pd-first-group">
      First row per group
     </a>
-    <a href="#m-pd-merge-left">
+<a href="#m-pd-merge-left">
      Left merge
     </a>
-    <a href="#m-pd-size">
+<a href="#m-pd-size">
      size
     </a>
-    <a href="#m-pd-groupby">
+<a href="#m-pd-groupby">
      Basic group
     </a>
-    <a href="#m-pd-group-size">
+<a href="#m-pd-group-size">
      Group size
     </a>
-    <a href="#m-pd-transform">
+<a href="#m-pd-transform">
      Group transform
     </a>
-    <a href="#m-pd-lead">
+<a href="#m-pd-lead">
      Next row
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#LC3564">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#LC3564">
+<small>
     ← Previous
    </small>
    3564 · Seasonal sales analysis
   </a>
-  <a href="#practice">
-   <small>
+<a href="#practice">
+<small>
     Contents
    </small>
    Leetcode problems
   </a>
- </div>
+</div>
 </article>

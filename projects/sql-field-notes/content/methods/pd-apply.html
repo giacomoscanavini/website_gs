@@ -1,265 +1,263 @@
 <article class="article method-page" id="m-pd-apply">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=Conditional%20logic">
+<a href="#methods?lang=pd&amp;cat=Conditional%20logic">
    pandas · Conditional logic
   </a>
- </div>
- <h1>
+</div>
+<h1>
   apply()
  </h1>
- <p class="lead">
+<p class="lead">
   Custom function on Series
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-apply"><span class="n">df</span><span class="p">[</span><span class="s1">'x'</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">func</span><span class="p">)</span></code></pre>
- </div>
- <h2>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-apply"><span class="n">df</span><span class="p">[</span><span class="s1">'x'</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">func</span><span class="p">)</span></code></pre>
+</div>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C07?code=code-C07-5&amp;method=pd-apply&amp;line=8">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C07?code=code-C07-5&amp;method=pd-apply&amp;line=8">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1251 · Average selling price
     </strong>
-    <small>
+<small>
      Uploaded submission · line 8
     </small>
-   </div>
-   <pre aria-hidden="true">    
+</div>
+<pre aria-hidden="true">    
     return df.groupby(by='product_id').apply(
         lambda x: round(x['paid'].sum() / x['units'].sum(), 2) if x['units'].sum() != 0 else 0
     ).reset_index(name='average_price')</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C10?code=code-C10-3&amp;method=pd-apply&amp;line=16">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-3&amp;method=pd-apply&amp;line=16">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1211 · Queries quality and percentage
     </strong>
-    <small>
+<small>
      My approach · line 16
     </small>
-   </div>
-   <pre aria-hidden="true">    round2 = round_half_up
+</div>
+<pre aria-hidden="true">    round2 = round_half_up
     df['quality'] = df['quality'].apply(round2)
     df['poor_query_percentage']   = df['poor_query_percentage'].apply(round2)
     return df[['query_name', 'quality', 'poor_query_percentage']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C23?code=code-C23-3&amp;method=pd-apply&amp;line=9">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C23?code=code-C23-3&amp;method=pd-apply&amp;line=9">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      610 · Triangle judgement
     </strong>
-    <small>
+<small>
      My approach · line 9
     </small>
-   </div>
-   <pre aria-hidden="true">        else: return 'Yes'
+</div>
+<pre aria-hidden="true">        else: return 'Yes'
     triangle['triangle'] =   triangle.apply(triangle_check, axis=1)
     return triangle</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#LC608?code=code-LC608-1&amp;method=pd-apply&amp;line=11">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC608?code=code-LC608-1&amp;method=pd-apply&amp;line=11">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      608 · Tree node
     </strong>
-    <small>
+<small>
      Uploaded submission · line 11
     </small>
-   </div>
-   <pre aria-hidden="true"> 
+</div>
+<pre aria-hidden="true"> 
     tree['type'] = tree.apply(classify, axis=1)
 
     return tree[['id', 'type']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#LC3421?code=code-LC3421-1&amp;method=pd-apply&amp;line=17">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3421?code=code-LC3421-1&amp;method=pd-apply&amp;line=17">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      3421 · Find students who improved
     </strong>
-    <small>
+<small>
      Uploaded submission · line 17
     </small>
-   </div>
-   <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     df = scores.groupby(by=['student_id', 'subject']).apply(custom_func).reset_index()
 
     return df[df.improved == True][['student_id', 'subject', 'first_score', 'latest_score']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#LC3497?code=code-LC3497-1&amp;method=pd-apply&amp;line=15">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3497?code=code-LC3497-1&amp;method=pd-apply&amp;line=15">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      3497 · Analyze subscription conversion
     </strong>
-    <small>
+<small>
      Uploaded submission · line 15
     </small>
-   </div>
-   <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     df = user_activity.groupby(by='user_id').apply(custom_func).reset_index()
 
     return df.dropna()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    1 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#LC3564?code=code-LC3564-1&amp;method=pd-apply&amp;line=10">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#LC3564?code=code-LC3564-1&amp;method=pd-apply&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       3564 · Seasonal sales analysis
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     sales['season'] = sales['sale_date'].dt.month.apply(season)
     sales['revenue'] = (sales['quantity'] * sales['price']).round(2)
     sales = sales.merge(products, on='product_id', how='left')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (2)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C10?code=code-C10-5&amp;method=pd-apply&amp;line=5">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C10?code=code-C10-5&amp;method=pd-apply&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1211 · Queries quality and percentage
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    queries['quality_ratio'] = queries['rating'] / queries['position']
+</div>
+<pre aria-hidden="true">    queries['quality_ratio'] = queries['rating'] / queries['position']
     queries['poor'] = queries['rating'].apply(
         lambda x: 1 if x &lt; 3 else 0
     )</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C23?code=code-C23-5&amp;method=pd-apply&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C23?code=code-C23-5&amp;method=pd-apply&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       610 · Triangle judgement
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     triangle['triangle'] = triangle.apply(triangle_check, axis=1)
     return triangle</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     pandas cheat-sheet image · Conditional logic. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=Conditional%20logic">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=Conditional%20logic">
+<small>
     ← Browse
    </small>
    pandas · Conditional logic
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

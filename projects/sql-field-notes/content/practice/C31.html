@@ -1,52 +1,52 @@
 <article class="article" id="C31">
- <div class="breadcrumb">
-  <a href="#practice">
+<div class="breadcrumb">
+<a href="#practice">
    Leetcode problems
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Problem 1321
   </span>
- </div>
- <h1>
+</div>
+<h1>
   1321 · Restaurant growth
  </h1>
- <p>
+<p>
   Compute seven-calendar-day spending totals and daily averages, starting when the first full window is available.
  </p>
- <p class="pattern">
+<p class="pattern">
   Pattern: Daily aggregation / rolling calendar window
  </p>
- <h2>
+<h2>
   Example
  </h2>
- <p>
+<p>
   Two visits totaling 100 each day for seven days → rolling amount 700 and average_amount 100.00.
  </p>
- <h2>
+<h2>
   Study solution
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-90-panel-0" aria-selected="true" id="example-90-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-90-panel-0" aria-selected="true" id="example-90-tab-0" role="tab" tabindex="0" type="button">
      MySQL
     </button>
-    <button aria-controls="example-90-panel-1" aria-selected="false" id="example-90-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-90-panel-1" aria-selected="false" id="example-90-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-90-tab-0" class="code-panel" id="example-90-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-90-tab-0" class="code-panel" id="example-90-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-C31-0" tabindex="0"><code class="language-sql" data-origin="legacy-C31-0"><span class="k">WITH</span><span class="w"> </span><span class="n">daily</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<pre id="code-C31-0" tabindex="0"><code class="language-sql" data-origin="legacy-C31-0"><span class="k">WITH</span><span class="w"> </span><span class="n">daily</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">visited_on</span><span class="p">,</span><span class="w"> </span><span class="k">SUM</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">amount</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Customer</span><span class="w"> </span><span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">visited_on</span>
 <span class="p">),</span><span class="w"> </span><span class="n">rolled</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="n">visited_on</span><span class="p">,</span>
@@ -56,12 +56,12 @@
 <span class="p">)</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">visited_on</span><span class="p">,</span><span class="w"> </span><span class="n">amount</span><span class="p">,</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="n">amount</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">7</span><span class="p">.</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">average_amount</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">rolled</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">visited_on</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">DATE_ADD</span><span class="p">(</span><span class="n">first_day</span><span class="p">,</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="k">DAY</span><span class="p">)</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">visited_on</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-90-tab-1" class="code-panel" id="example-90-panel-1" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-90-tab-1" class="code-panel" id="example-90-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-C31-1" tabindex="0"><code class="language-python" data-origin="legacy-C31-1"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
+<pre id="code-C31-1" tabindex="0"><code class="language-python" data-origin="legacy-C31-1"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">round_half_up</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">digits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
@@ -78,43 +78,43 @@
     <span class="n">result</span> <span class="o">=</span> <span class="n">rolled</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">'amount'</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
     <span class="n">result</span><span class="p">[</span><span class="s1">'average_amount'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">'amount'</span><span class="p">]</span> <span class="o">/</span> <span class="mi">7</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">round_half_up</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">result</span></code></pre>
-  </div>
- </div>
- <h2>
+</div>
+</div>
+<h2>
   Why it works
  </h2>
- <p>
+<p>
   Collapse multiple customers on the same day before rolling. The time window includes the current date plus the preceding six dates. Divide by seven, not by the number of customer rows.
  </p>
- <h2>
+<h2>
   Notes
  </h2>
- <p>
+<p>
   Dates are normalized calendar dates. Use a seven-day window, with missing dates contributing zero, and report dates present in the data.
  </p>
- <details class="original-details">
-  <summary>
+<details class="original-details">
+<summary>
    My approach
   </summary>
-  <div class="code-pair">
-   <div class="pair-head">
-    <div aria-label="Solution language" class="code-tabs" role="tablist">
-     <button aria-controls="approach-C31-panel-0" aria-selected="true" id="approach-C31-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="approach-C31-panel-0" aria-selected="true" id="approach-C31-tab-0" role="tab" tabindex="0" type="button">
       MySQL
      </button>
-     <button aria-controls="approach-C31-panel-1" aria-selected="false" id="approach-C31-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="approach-C31-panel-1" aria-selected="false" id="approach-C31-tab-1" role="tab" tabindex="-1" type="button">
       pandas
      </button>
-    </div>
-    <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
      Copy
     </button>
-   </div>
-   <div aria-labelledby="approach-C31-tab-0" class="code-panel" id="approach-C31-panel-0" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="approach-C31-tab-0" class="code-panel" id="approach-C31-panel-0" role="tabpanel">
+<div class="no-script-label">
      SQL
     </div>
-    <pre id="code-C31-2" tabindex="0"><code class="language-sql" data-origin="approach-C31-sql"><span class="k">WITH</span><span class="w"> </span><span class="n">Rolling</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
+<pre id="code-C31-2" tabindex="0"><code class="language-sql" data-origin="approach-C31-sql"><span class="k">WITH</span><span class="w"> </span><span class="n">Rolling</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span>
 <span class="w">        </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">visited_on</span><span class="p">,</span>
 <span class="w">        </span><span class="k">SUM</span><span class="p">(</span><span class="n">amount</span><span class="p">)</span><span class="w"> </span><span class="n">OVER</span><span class="w"> </span><span class="p">(</span>
@@ -130,12 +130,12 @@
 <span class="k">FROM</span><span class="w"> </span><span class="n">Rolling</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">visited_on</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">DATE_ADD</span><span class="p">(</span><span class="n">first_date</span><span class="p">,</span><span class="w"> </span><span class="nb">INTERVAL</span><span class="w"> </span><span class="mi">6</span><span class="w"> </span><span class="k">DAY</span><span class="p">)</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">visited_on</span><span class="p">;</span></code></pre>
-   </div>
-   <div aria-labelledby="approach-C31-tab-1" class="code-panel" id="approach-C31-panel-1" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="approach-C31-tab-1" class="code-panel" id="approach-C31-panel-1" role="tabpanel">
+<div class="no-script-label">
      pandas
     </div>
-    <pre id="code-C31-3" tabindex="0"><code class="language-python" data-origin="approach-C31-python"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
+<pre id="code-C31-3" tabindex="0"><code class="language-python" data-origin="approach-C31-python"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">round_half_up</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">digits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
@@ -152,63 +152,57 @@
     <span class="n">result</span> <span class="o">=</span> <span class="n">total</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">'amount'</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
     <span class="n">result</span><span class="p">[</span><span class="s1">'average_amount'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">'amount'</span><span class="p">]</span> <span class="o">/</span> <span class="mi">7</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">round_half_up</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">result</span></code></pre>
-   </div>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
+</div>
+</div>
+</details>
+<details class="reference-details">
+<summary>
    Sources
   </summary>
-  <div class="sources-content">
-   <p>
-    Primary exercise basis: your uploaded Pasted markdown(3).md, exercise 1321, line 3. The exercise heading may be abbreviated in the upload; full official problem statements and schemas were not supplied.
-   </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+<div class="sources-content">
+<p> Exercise source: Pasted markdown(3).md, problem 1321, line 3. </p>
+<p>
+<a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
      pandas SQL comparison
     </a>
     — Projection, filtering, grouping, joins and operations.
    </p>
-   <p>
-    <a href="https://dev.mysql.com/doc/refman/8.4/en/window-functions-usage.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/window-functions-usage.html" rel="noopener noreferrer" target="_blank">
      MySQL windows
     </a>
     — Ordering and window expressions.
    </p>
-   <p>
-    <a href="https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html" rel="noopener noreferrer" target="_blank">
      MySQL rounding
     </a>
     — Exact versus approximate numeric rounding.
    </p>
-  </div>
- </details>
- <details class="original-details archive-submission">
-  <summary>
-   Uploaded submission · SQL.zip
-  </summary>
-  <p class="small">
-   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
-  </p>
-  <div class="code-pair">
-   <div class="pair-head">
-    <div aria-label="Solution language" class="code-tabs" role="tablist">
-     <button aria-controls="archive-1321-panel-0" aria-selected="true" id="archive-1321-tab-0" role="tab" tabindex="0" type="button">
+</div>
+</details>
+<details class="original-details archive-submission">
+<summary> Original submission </summary>
+<p class="small"> Archived submissions. These may differ from the reference implementation above. </p>
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="archive-1321-panel-0" aria-selected="true" id="archive-1321-tab-0" role="tab" tabindex="0" type="button">
       MySQL
      </button>
-     <button aria-controls="archive-1321-panel-1" aria-selected="false" id="archive-1321-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="archive-1321-panel-1" aria-selected="false" id="archive-1321-tab-1" role="tab" tabindex="-1" type="button">
       pandas
      </button>
-    </div>
-    <button class="copy-button" data-copy="" type="button">
+</div>
+<button class="copy-button" data-copy="" type="button">
      Copy
     </button>
-   </div>
-   <div aria-labelledby="archive-1321-tab-0" class="code-panel" id="archive-1321-panel-0" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-1321-tab-0" class="code-panel" id="archive-1321-panel-0" role="tabpanel">
+<div class="no-script-label">
      MySQL
     </div>
-    <pre id="code-C31-4" tabindex="0"><code class="language-sql" data-origin="archive-1321-sql"><span class="c1"># Write your MySQL query statement below</span>
+<pre id="code-C31-4" tabindex="0"><code class="language-sql" data-origin="archive-1321-sql"><span class="c1"># Write your MySQL query statement below</span>
 <span class="k">WITH</span><span class="w"> </span><span class="n">Rolling</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span>
 <span class="w">        </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">visited_on</span><span class="p">,</span><span class="w"> </span>
@@ -225,12 +219,12 @@
 <span class="w">    </span><span class="nf">ROUND</span><span class="p">(</span><span class="n">rolling_amount</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">average_amount</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Rolling</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">visited_on</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">first_date</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">6</span></code></pre>
-   </div>
-   <div aria-labelledby="archive-1321-tab-1" class="code-panel" id="archive-1321-panel-1" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-1321-tab-1" class="code-panel" id="archive-1321-panel-1" role="tabpanel">
+<div class="no-script-label">
      pandas
     </div>
-    <pre id="code-C31-5" tabindex="0"><code class="language-python" data-origin="archive-1321-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C31-5" tabindex="0"><code class="language-python" data-origin="archive-1321-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">restaurant_growth</span><span class="p">(</span><span class="n">customer</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">customer</span> <span class="o">=</span> <span class="n">customer</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'visited_on'</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)[</span><span class="s1">'amount'</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
@@ -240,145 +234,145 @@
     <span class="n">customer</span><span class="p">[</span><span class="s1">'average_amount'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">customer</span><span class="o">.</span><span class="n">amount</span> <span class="o">/</span> <span class="n">nDays</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">customer</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span></code></pre>
-   </div>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</div>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-and">
+<a href="#m-sql-and">
      AND
     </a>
-    <a href="#m-sql-between">
+<a href="#m-sql-between">
      BETWEEN
     </a>
-    <a href="#m-sql-sum">
+<a href="#m-sql-sum">
      SUM()
     </a>
-    <a href="#m-sql-min">
+<a href="#m-sql-min">
      MIN()
     </a>
-    <a href="#m-sql-group-by">
+<a href="#m-sql-group-by">
      GROUP BY
     </a>
-    <a href="#m-sql-round">
+<a href="#m-sql-round">
      ROUND()
     </a>
-    <a href="#m-sql-date-add">
+<a href="#m-sql-date-add">
      DATE_ADD()
     </a>
-    <a href="#m-sql-sum-over">
+<a href="#m-sql-sum-over">
      SUM() OVER
     </a>
-    <a href="#m-sql-window-order">
+<a href="#m-sql-window-order">
      ORDER BY
     </a>
-    <a href="#m-sql-subquery">
+<a href="#m-sql-subquery">
      Subquery
     </a>
-    <a href="#m-sql-with">
+<a href="#m-sql-with">
      WITH
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-    <a href="#m-sql-distinct">
+<a href="#m-sql-distinct">
      DISTINCT
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-loc">
+<a href="#m-pd-loc">
      Rows by label
     </a>
-    <a href="#m-pd-filter">
+<a href="#m-pd-filter">
      Condition
     </a>
-    <a href="#m-pd-filter-null">
+<a href="#m-pd-filter-null">
      Missing
     </a>
-    <a href="#m-pd-sort-index">
+<a href="#m-pd-sort-index">
      Sort index
     </a>
-    <a href="#m-pd-new-column">
+<a href="#m-pd-new-column">
      New column
     </a>
-    <a href="#m-pd-assign">
+<a href="#m-pd-assign">
      assign()
     </a>
-    <a href="#m-pd-rename">
+<a href="#m-pd-rename">
      Rename
     </a>
-    <a href="#m-pd-map">
+<a href="#m-pd-map">
      map()
     </a>
-    <a href="#m-pd-reset-index">
+<a href="#m-pd-reset-index">
      Reset index
     </a>
-    <a href="#m-pd-loc-label">
+<a href="#m-pd-loc-label">
      Access label
     </a>
-    <a href="#m-pd-conditional-group-count">
+<a href="#m-pd-conditional-group-count">
      Conditional group count
     </a>
-    <a href="#m-pd-isna">
+<a href="#m-pd-isna">
      Check null
     </a>
-    <a href="#m-pd-dropna">
+<a href="#m-pd-dropna">
      Drop null rows
     </a>
-    <a href="#m-pd-sum">
+<a href="#m-pd-sum">
      sum()
     </a>
-    <a href="#m-pd-min">
+<a href="#m-pd-min">
      min()
     </a>
-    <a href="#m-pd-groupby">
+<a href="#m-pd-groupby">
      Basic group
     </a>
-    <a href="#m-pd-rolling">
+<a href="#m-pd-rolling">
      Rolling mean
     </a>
-    <a href="#m-pd-to-datetime">
+<a href="#m-pd-to-datetime">
      Convert date
     </a>
-    <a href="#m-pd-timedelta">
+<a href="#m-pd-timedelta">
      Add days
     </a>
-    <a href="#m-pd-round">
+<a href="#m-pd-round">
      round()
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#C30">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#C30">
+<small>
     ← Previous
    </small>
    1341 · Movie rating report
   </a>
-  <a href="#C32">
-   <small>
+<a href="#C32">
+<small>
     Next →
    </small>
    602 · Most accepted friends
   </a>
- </div>
+</div>
 </article>

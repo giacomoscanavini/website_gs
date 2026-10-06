@@ -1,43 +1,43 @@
 <article class="article" id="LC3475">
- <div class="breadcrumb">
-  <a href="#practice">
+<div class="breadcrumb">
+<a href="#practice">
    Leetcode problems
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Additional problems
   </span>
- </div>
- <h1>
+</div>
+<h1>
   3475 · DNA pattern recognition
  </h1>
- <p>
+<p>
   Flag start, stop and repeated-substring patterns in each DNA sequence.
  </p>
- <h2>
+<h2>
   My submission
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="archive-3475-panel-0" aria-selected="true" id="archive-3475-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="archive-3475-panel-0" aria-selected="true" id="archive-3475-tab-0" role="tab" tabindex="0" type="button">
      MySQL
     </button>
-    <button aria-controls="archive-3475-panel-1" aria-selected="false" id="archive-3475-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="archive-3475-panel-1" aria-selected="false" id="archive-3475-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button class="copy-button" data-copy="" type="button">
+</div>
+<button class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="archive-3475-tab-0" class="code-panel" id="archive-3475-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-3475-tab-0" class="code-panel" id="archive-3475-panel-0" role="tabpanel">
+<div class="no-script-label">
     MySQL
    </div>
-   <pre id="code-LC3475-0" tabindex="0"><code class="language-sql" data-origin="archive-3475-sql"><span class="c1"># Write your MySQL query statement below</span>
+<pre id="code-LC3475-0" tabindex="0"><code class="language-sql" data-origin="archive-3475-sql"><span class="c1"># Write your MySQL query statement below</span>
 <span class="k">SELECT</span><span class="w"> </span>
 <span class="w">    </span><span class="n">sample_id</span><span class="p">,</span>
 <span class="w">    </span><span class="n">dna_sequence</span><span class="p">,</span>
@@ -61,12 +61,12 @@
 <span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="mi">0</span>
 <span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">has_ggg</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Samples</span></code></pre>
-  </div>
-  <div aria-labelledby="archive-3475-tab-1" class="code-panel" id="archive-3475-panel-1" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-3475-tab-1" class="code-panel" id="archive-3475-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-LC3475-1" tabindex="0"><code class="language-python" data-origin="archive-3475-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-LC3475-1" tabindex="0"><code class="language-python" data-origin="archive-3475-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">analyze_dna_patterns</span><span class="p">(</span><span class="n">samples</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">samples</span><span class="p">[</span><span class="s1">'has_start'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">samples</span><span class="o">.</span><span class="n">dna_sequence</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">'ATG'</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'int'</span><span class="p">)</span>
@@ -77,96 +77,96 @@
     <span class="n">samples</span><span class="p">[</span><span class="s1">'has_ggg'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">samples</span><span class="o">.</span><span class="n">dna_sequence</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="s1">'GGG'</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">'int'</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">samples</span></code></pre>
-  </div>
- </div>
- <h2>
+</div>
+</div>
+<h2>
   How the submitted approach works
  </h2>
- <p>
+<p>
   The submitted code checks the ATG prefix, TAA/TAG/TGA suffixes, and the ATAT and GGG substrings. SQL uses CASE with LIKE; pandas uses string accessors and integer flags.
  </p>
- <details class="reference-details">
-  <summary>
+<details class="reference-details">
+<summary>
    Source
   </summary>
-  <div class="sources-content">
-   <p>
+<div class="sources-content">
+<p>
     SQL.zip / 3475-dna-pattern-recognition / submission-1.sql and submission-1.py. These are the submitted files; the summary and implementation notes describe the code, not a replacement official problem statement.
    </p>
-   <p>
-    <a href="https://leetcode.com/problems/dna-pattern-recognition/" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://leetcode.com/problems/dna-pattern-recognition/" rel="noopener noreferrer" target="_blank">
      Original problem
     </a>
-   </p>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</p>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-or">
+<div>
+<a href="#m-sql-or">
      OR
     </a>
-    <a href="#m-sql-like">
+<a href="#m-sql-like">
      LIKE
     </a>
-    <a href="#m-sql-case">
+<a href="#m-sql-case">
      CASE
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-or">
+<a href="#m-pd-or">
      OR
     </a>
-    <a href="#m-pd-filter-string">
+<a href="#m-pd-filter-string">
      String match
     </a>
-    <a href="#m-pd-new-column">
+<a href="#m-pd-new-column">
      New column
     </a>
-    <a href="#m-pd-str-contains">
+<a href="#m-pd-str-contains">
      Contains
     </a>
-    <a href="#m-pd-str-startswith">
+<a href="#m-pd-str-startswith">
      Starts with
     </a>
-    <a href="#m-pd-str-endswith">
+<a href="#m-pd-str-endswith">
      Ends with
     </a>
-    <a href="#m-pd-astype">
+<a href="#m-pd-astype">
      astype()
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#LC3421">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#LC3421">
+<small>
     ← Previous
    </small>
    3421 · Find students who improved
   </a>
-  <a href="#LC3497">
-   <small>
+<a href="#LC3497">
+<small>
     Next →
    </small>
    3497 · Analyze subscription conversion
   </a>
- </div>
+</div>
 </article>

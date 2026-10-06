@@ -1,242 +1,236 @@
 <article class="article" id="C06">
- <div class="breadcrumb">
-  <a href="#practice">
+<div class="breadcrumb">
+<a href="#practice">
    Leetcode problems
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Problem 620
   </span>
- </div>
- <h1>
+</div>
+<h1>
   620 · Not boring movies
  </h1>
- <p>
+<p>
   Keep odd-ID movies with a non-boring description, sorted by rating descending.
  </p>
- <p class="pattern">
+<p class="pattern">
   Pattern: Filtering / sorting
  </p>
- <h2>
+<h2>
   Example
  </h2>
- <p>
+<p>
   ID 1 exciting/8.0 and ID 3 exciting/9.0 survive; output is 3 then 1.
  </p>
- <h2>
+<h2>
   Study solution
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-65-panel-0" aria-selected="true" id="example-65-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-65-panel-0" aria-selected="true" id="example-65-tab-0" role="tab" tabindex="0" type="button">
      MySQL
     </button>
-    <button aria-controls="example-65-panel-1" aria-selected="false" id="example-65-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-65-panel-1" aria-selected="false" id="example-65-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-65-tab-0" class="code-panel" id="example-65-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-65-tab-0" class="code-panel" id="example-65-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-C06-0" tabindex="0"><code class="language-sql" data-origin="legacy-C06-0"><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">movie</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Cinema</span>
+<pre id="code-C06-0" tabindex="0"><code class="language-sql" data-origin="legacy-C06-0"><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">movie</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Cinema</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s1">'boring'</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-65-tab-1" class="code-panel" id="example-65-panel-1" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-65-tab-1" class="code-panel" id="example-65-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-C06-1" tabindex="0"><code class="language-python" data-origin="legacy-C06-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C06-1" tabindex="0"><code class="language-python" data-origin="legacy-C06-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">not_boring_movies</span><span class="p">(</span><span class="n">cinema</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">cinema</span><span class="p">[</span><span class="s1">'id'</span><span class="p">]</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">cinema</span><span class="p">[</span><span class="s1">'description'</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">()</span> <span class="o">&amp;</span> <span class="n">cinema</span><span class="p">[</span><span class="s1">'description'</span><span class="p">]</span><span class="o">.</span><span class="n">ne</span><span class="p">(</span><span class="s1">'boring'</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">cinema</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'rating'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code></pre>
-  </div>
- </div>
- <h2>
+</div>
+</div>
+<h2>
   Why it works
  </h2>
- <p>
+<p>
   Use modulo for odd IDs and an explicit sort for output order. Single quotes are the portable SQL string syntax.
  </p>
- <details class="original-details">
-  <summary>
+<details class="original-details">
+<summary>
    My approach
   </summary>
-  <div class="code-pair">
-   <div class="pair-head">
-    <div aria-label="Solution language" class="code-tabs" role="tablist">
-     <button aria-controls="approach-C06-panel-0" aria-selected="true" id="approach-C06-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="approach-C06-panel-0" aria-selected="true" id="approach-C06-tab-0" role="tab" tabindex="0" type="button">
       MySQL
      </button>
-     <button aria-controls="approach-C06-panel-1" aria-selected="false" id="approach-C06-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="approach-C06-panel-1" aria-selected="false" id="approach-C06-tab-1" role="tab" tabindex="-1" type="button">
       pandas
      </button>
-    </div>
-    <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
      Copy
     </button>
-   </div>
-   <div aria-labelledby="approach-C06-tab-0" class="code-panel" id="approach-C06-panel-0" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="approach-C06-tab-0" class="code-panel" id="approach-C06-panel-0" role="tabpanel">
+<div class="no-script-label">
      SQL
     </div>
-    <pre id="code-C06-2" tabindex="0"><code class="language-sql" data-origin="approach-C06-sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">movie</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="n">rating</span>
+<pre id="code-C06-2" tabindex="0"><code class="language-sql" data-origin="approach-C06-sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">movie</span><span class="p">,</span><span class="w"> </span><span class="n">description</span><span class="p">,</span><span class="w"> </span><span class="n">rating</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Cinema</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">description</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s1">'boring'</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">DESC</span><span class="p">;</span></code></pre>
-   </div>
-   <div aria-labelledby="approach-C06-tab-1" class="code-panel" id="approach-C06-panel-1" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="approach-C06-tab-1" class="code-panel" id="approach-C06-panel-1" role="tabpanel">
+<div class="no-script-label">
      pandas
     </div>
-    <pre id="code-C06-3" tabindex="0"><code class="language-python" data-origin="approach-C06-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C06-3" tabindex="0"><code class="language-python" data-origin="approach-C06-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">not_boring_movies</span><span class="p">(</span><span class="n">cinema</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">df</span> <span class="o">=</span>   <span class="n">cinema</span><span class="p">[(</span><span class="n">cinema</span><span class="o">.</span><span class="n">id</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cinema</span><span class="o">.</span><span class="n">description</span><span class="o">.</span><span class="n">notna</span><span class="p">())</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cinema</span><span class="o">.</span><span class="n">description</span> <span class="o">!=</span> <span class="s1">'boring'</span><span class="p">)]</span>
     <span class="k">return</span>   <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'rating'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code></pre>
-   </div>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
+</div>
+</div>
+</details>
+<details class="reference-details">
+<summary>
    Sources
   </summary>
-  <div class="sources-content">
-   <p>
-    Primary exercise basis: your uploaded Pasted markdown(3).md, exercise 620, line 6. The exercise heading may be abbreviated in the upload; full official problem statements and schemas were not supplied.
-   </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+<div class="sources-content">
+<p> Exercise source: Pasted markdown(3).md, problem 620, line 6. </p>
+<p>
+<a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
      pandas SQL comparison
     </a>
     — Projection, filtering, grouping, joins and operations.
    </p>
-  </div>
- </details>
- <details class="original-details archive-submission">
-  <summary>
-   Uploaded submission · SQL.zip
-  </summary>
-  <p class="small">
-   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
-  </p>
-  <div class="code-pair">
-   <div class="pair-head">
-    <div aria-label="Solution language" class="code-tabs" role="tablist">
-     <button aria-controls="archive-620-panel-0" aria-selected="true" id="archive-620-tab-0" role="tab" tabindex="0" type="button">
+</div>
+</details>
+<details class="original-details archive-submission">
+<summary> Original submission </summary>
+<p class="small"> Archived submissions. These may differ from the reference implementation above. </p>
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="archive-620-panel-0" aria-selected="true" id="archive-620-tab-0" role="tab" tabindex="0" type="button">
       MySQL
      </button>
-     <button aria-controls="archive-620-panel-1" aria-selected="false" id="archive-620-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="archive-620-panel-1" aria-selected="false" id="archive-620-tab-1" role="tab" tabindex="-1" type="button">
       pandas
      </button>
-    </div>
-    <button class="copy-button" data-copy="" type="button">
+</div>
+<button class="copy-button" data-copy="" type="button">
      Copy
     </button>
-   </div>
-   <div aria-labelledby="archive-620-tab-0" class="code-panel" id="archive-620-panel-0" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-620-tab-0" class="code-panel" id="archive-620-panel-0" role="tabpanel">
+<div class="no-script-label">
      MySQL
     </div>
-    <pre id="code-C06-4" tabindex="0"><code class="language-sql" data-origin="archive-620-sql"><span class="c1"># Write your MySQL query statement below</span>
+<pre id="code-C06-4" tabindex="0"><code class="language-sql" data-origin="archive-620-sql"><span class="c1"># Write your MySQL query statement below</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">movie</span><span class="p">,</span><span class="w"> </span><span class="k">description</span><span class="p">,</span><span class="w"> </span><span class="n">rating</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Cinema</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="k">description</span><span class="w"> </span><span class="o">&lt;&gt;</span><span class="w"> </span><span class="s2">"boring"</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">rating</span><span class="w"> </span><span class="k">DESC</span></code></pre>
-   </div>
-   <div aria-labelledby="archive-620-tab-1" class="code-panel" id="archive-620-panel-1" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-620-tab-1" class="code-panel" id="archive-620-panel-1" role="tabpanel">
+<div class="no-script-label">
      pandas
     </div>
-    <pre id="code-C06-5" tabindex="0"><code class="language-python" data-origin="archive-620-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C06-5" tabindex="0"><code class="language-python" data-origin="archive-620-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">not_boring_movies</span><span class="p">(</span><span class="n">cinema</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">cinema</span><span class="p">[(</span><span class="n">cinema</span><span class="o">.</span><span class="n">id</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">cinema</span><span class="o">.</span><span class="n">description</span> <span class="o">!=</span> <span class="s1">'boring'</span><span class="p">)]</span>
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'rating'</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></code></pre>
-   </div>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</div>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-and">
+<a href="#m-sql-and">
      AND
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-    <a href="#m-sql-order-by">
+<a href="#m-sql-order-by">
      ORDER BY
     </a>
-    <a href="#m-sql-modulo">
+<a href="#m-sql-modulo">
      % operator
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-loc">
+<a href="#m-pd-loc">
      Rows by label
     </a>
-    <a href="#m-pd-filter">
+<a href="#m-pd-filter">
      Condition
     </a>
-    <a href="#m-pd-and">
+<a href="#m-pd-and">
      Multiple conditions
     </a>
-    <a href="#m-pd-filter-notnull">
+<a href="#m-pd-filter-notnull">
      Non-missing
     </a>
-    <a href="#m-pd-sort-values">
+<a href="#m-pd-sort-values">
      Sort one column
     </a>
-    <a href="#m-pd-sort-desc">
+<a href="#m-pd-sort-desc">
      Descending
     </a>
-    <a href="#m-pd-loc-label">
+<a href="#m-pd-loc-label">
      Access label
     </a>
-    <a href="#m-pd-eq">
+<a href="#m-pd-eq">
      eq() / ne()
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#C50">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#C50">
+<small>
     ← Previous
    </small>
    1934 · Confirmation rate
   </a>
-  <a href="#C07">
-   <small>
+<a href="#C07">
+<small>
     Next →
    </small>
    1251 · Average selling price
   </a>
- </div>
+</div>
 </article>

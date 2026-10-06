@@ -1,104 +1,77 @@
 <section aria-labelledby="encoder-decoder-title" class="page-view lesson-layout" id="encoder-decoder">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      30
     </span>
     Part 4 · Architectures &amp; information flow
    </p>
-   <h1 id="encoder-decoder-title" tabindex="-1">
+<h1 id="encoder-decoder-title" tabindex="-1">
     Encoders, decoders, and teacher forcing
    </h1>
-   <p class="standfirst">
-    Separate architectural roles from layer types, and distinguish training context from generation context.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Architectures · PDF pp. 13–14 · §5" data-page="13" data-pdf="arch" type="button">
-     Architectures · PDF pp. 13–14 · §5
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<p class="standfirst">An encoder constructs a representation; a decoder turns it into an output. Autoregressive decoding conditions each prediction on earlier outputs, with different available histories during training and inference.</p>
+
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="encoder-and-decoder-describe-roles" href="#encoder-decoder?section=encoder-and-decoder-describe-roles">
-     Encoder and decoder describe roles
-    </a>
-    <a data-section="why-the-autoregressive-factorization-is-useful" href="#encoder-decoder?section=why-the-autoregressive-factorization-is-useful">
-     Why the autoregressive factorization is useful
-    </a>
-    <a data-section="teacher-forcing" href="#encoder-decoder?section=teacher-forcing">
-     Teacher forcing
-    </a>
-    <a data-section="the-fixed-context-bottleneck" href="#encoder-decoder?section=the-fixed-context-bottleneck">
-     The fixed-context bottleneck
-    </a>
-    <a data-section="three-architectural-forms" href="#encoder-decoder?section=three-architectural-forms">
-     Three architectural forms
-    </a>
-    <a data-section="existing-implementation-and-visualization" href="#encoder-decoder?section=existing-implementation-and-visualization">
-     Existing implementation and visualization
-    </a>
-    <a data-section="implementation" href="#encoder-decoder?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="encoder-and-decoder-describe-roles" id="encoder-decoder--encoder-and-decoder-describe-roles">
+<nav aria-label="On this page">
+<a data-section="encoder-and-decoder-describe-roles" href="#encoder-decoder?section=encoder-and-decoder-describe-roles">Encoder and decoder describe roles</a>
+<a data-section="why-the-autoregressive-factorization-is-useful" href="#encoder-decoder?section=why-the-autoregressive-factorization-is-useful">Why the autoregressive factorization is useful</a>
+<a data-section="teacher-forcing" href="#encoder-decoder?section=teacher-forcing">Teacher forcing</a>
+<a data-section="the-fixed-context-bottleneck" href="#encoder-decoder?section=the-fixed-context-bottleneck">The fixed-context bottleneck</a>
+<a data-section="three-architectural-forms" href="#encoder-decoder?section=three-architectural-forms">Three architectural forms</a>
+<a data-section="existing-implementation-and-visualization" href="#encoder-decoder?section=existing-implementation-and-visualization">Translation with additive attention</a>
+<a data-section="implementation" href="#encoder-decoder?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="encoder-and-decoder-describe-roles" id="encoder-decoder--encoder-and-decoder-describe-roles">
     Encoder and decoder describe roles
    </h2>
-   <p>
+<p>
     An encoder transforms an input into a useful representation. A decoder transforms a representation into an output. Either can use recurrent layers, attention, convolutions, or graph computations. The label specifies information flow, not a particular neuron or layer.
    </p>
-   <p>
+<p>
     In classical recurrent sequence-to-sequence modeling, the encoder processes
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mrow><mn>1</mn><mo>:</mo><mi>T</mi></mrow></msub><annotation encoding="application/x-tex">x_{1:T}</annotation></semantics></math>
     into context
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>
     . The decoder models
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mrow><mn>1</mn><mo>:</mo><mi>U</mi></mrow></msub><mo>∣</mo><msub><mi>x</mi><mrow><mn>1</mn><mo>:</mo><mi>T</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munderover><mo>∏</mo><mrow><mi>u</mi><mo>=</mo><mn>1</mn></mrow><mi>U</mi></munderover><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>u</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>u</mi></mrow></msub><mo>,</mo><mi>c</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">p(y_{1:U}\mid x_{1:T})=\prod_{u=1}^{U}p(y_u\mid y_{&lt;u},c).</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mrow><mn>1</mn><mo>:</mo><mi>U</mi></mrow></msub><mo>∣</mo><msub><mi>x</mi><mrow><mn>1</mn><mo>:</mo><mi>T</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munderover><mo>∏</mo><mrow><mi>u</mi><mo>=</mo><mn>1</mn></mrow><mi>U</mi></munderover><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>u</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>u</mi></mrow></msub><mo>,</mo><mi>c</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">p(y_{1:U}\mid x_{1:T})=\prod_{u=1}^{U}p(y_u\mid y_{&lt;u},c).</annotation></semantics></math>
+</div>
+<p>
     The input and output lengths can differ. At each output step, the model conditions on source information and earlier target tokens. This is different from requiring one output aligned with every input position.
    </p>
-   <h2 data-section="why-the-autoregressive-factorization-is-useful" id="encoder-decoder--why-the-autoregressive-factorization-is-useful">
+<h2 data-section="why-the-autoregressive-factorization-is-useful" id="encoder-decoder--why-the-autoregressive-factorization-is-useful">
     Why the autoregressive factorization is useful
    </h2>
-   <p>
+<p>
     Rather than produce a whole structured sequence as an unstructured object, the model makes a series of conditional predictions. For observed target sequence
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>y</mi><mo>*</mo></msup><annotation encoding="application/x-tex">y^*</annotation></semantics></math>
     , the usual token-level negative log-likelihood is
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>−</mi><munderover><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><mn>1</mn></mrow><mi>U</mi></munderover><mo>log</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>y</mi><mi>u</mi><mo>*</mo></msubsup><mo>∣</mo><msubsup><mi>y</mi><mrow><mo>&lt;</mo><mi>u</mi></mrow><mo>*</mo></msubsup><mo>,</mo><mi>c</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">L=-\sum_{u=1}^{U}\log p(y_u^*\mid y_{&lt;u}^*,c).</annotation></semantics></math>
-   </div>
-   <p>
-    The model is trained to assign high probability to each observed token under the supplied history. The chosen representation, decoder state, and attention mechanism determine how it uses that context.
-   </p>
-   <p>
-    The guide’s translation example maps an encoded source sentence into a sequence of output words. A later word depends on both the source and what has already been generated. This is the important dependency, not the language pair itself.
-   </p>
-   <details class="derivation" data-derivation="sequence-likelihood" id="encoder-decoder--derivation-sequence-likelihood">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><mi>−</mi><munderover><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><mn>1</mn></mrow><mi>U</mi></munderover><mo>log</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msubsup><mi>y</mi><mi>u</mi><mo>*</mo></msubsup><mo>∣</mo><msubsup><mi>y</mi><mrow><mo>&lt;</mo><mi>u</mi></mrow><mo>*</mo></msubsup><mo>,</mo><mi>c</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">L=-\sum_{u=1}^{U}\log p(y_u^*\mid y_{&lt;u}^*,c).</annotation></semantics></math>
+</div>
+<p>The model is trained to assign high probability to each observed token under the conditioning history. The chosen representation, decoder state, and attention mechanism determine how it uses that context.</p>
+<p>In translation, each generated word depends on the encoded input and the words already produced. The decoder therefore models a sequence of conditional distributions rather than independent output words.</p>
+<details class="derivation" data-derivation="sequence-likelihood" id="encoder-decoder--derivation-sequence-likelihood">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive the autoregressive likelihood and masked token loss
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Let
@@ -107,46 +80,46 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>y</mi><mi>U</mi></msub></mrow><annotation encoding="application/x-tex">y_1,\ldots,y_U</annotation></semantics></math>
       a target sequence, including an end-of-sequence token when termination is modeled. No independence between target tokens is assumed.
      </p>
-     <h4>
+<h4>
       1 · Apply the conditional probability product rule
      </h4>
-     <p>
+<p>
       For two target tokens,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mn>1</mn></msub><mo>,</mo><msub><mi>y</mi><mn>2</mn></msub><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mn>1</mn></msub><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mn>2</mn></msub><mo>∣</mo><msub><mi>y</mi><mn>1</mn></msub><mo>,</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">p(y_1,y_2\mid x)=p(y_1\mid x)p(y_2\mid y_1,x).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mn>1</mn></msub><mo>,</mo><msub><mi>y</mi><mn>2</mn></msub><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mn>1</mn></msub><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mn>2</mn></msub><mo>∣</mo><msub><mi>y</mi><mn>1</mn></msub><mo>,</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">p(y_1,y_2\mid x)=p(y_1\mid x)p(y_2\mid y_1,x).</annotation></semantics></math>
+</div>
+<p>
       Applying the same rule to a third gives a new factor
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mn>3</mn></msub><mo>∣</mo><msub><mi>y</mi><mn>1</mn></msub><mo>,</mo><msub><mi>y</mi><mn>2</mn></msub><mo>,</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p(y_3\mid y_1,y_2,x)</annotation></semantics></math>
       . Repeating yields
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mrow><mn>1</mn><mo>:</mo><mi>U</mi></mrow></msub><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munderover><mo>∏</mo><mrow><mi>u</mi><mo>=</mo><mn>1</mn></mrow><mi>U</mi></munderover><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>u</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>u</mi></mrow></msub><mo>,</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">p_\theta(y_{1:U}\mid x)=\prod_{u=1}^U p_\theta(y_u\mid y_{&lt;u},x).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mrow><mn>1</mn><mo>:</mo><mi>U</mi></mrow></msub><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munderover><mo>∏</mo><mrow><mi>u</mi><mo>=</mo><mn>1</mn></mrow><mi>U</mi></munderover><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>u</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>u</mi></mrow></msub><mo>,</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">p_\theta(y_{1:U}\mid x)=\prod_{u=1}^U p_\theta(y_u\mid y_{&lt;u},x).</annotation></semantics></math>
+</div>
+<p>
       This factorization is a probability identity. An encoder–decoder supplies a parameterization of its factors; a compressed context may impose an approximation to the full conditioning information.
      </p>
-     <h4>
+<h4>
       2 · Convert a product into an additive training objective
      </h4>
-     <p>
+<p>
       Take negative natural logarithms:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mrow><mn>1</mn><mo>:</mo><mi>U</mi></mrow></msub><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><munderover><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><mn>1</mn></mrow><mi>U</mi></munderover><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>u</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>u</mi></mrow></msub><mo>,</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">-\log p_\theta(y_{1:U}\mid x)=-\sum_{u=1}^U\log p_\theta(y_u\mid y_{&lt;u},x).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mrow><mn>1</mn><mo>:</mo><mi>U</mi></mrow></msub><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><munderover><mo>∑</mo><mrow><mi>u</mi><mo>=</mo><mn>1</mn></mrow><mi>U</mi></munderover><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>u</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>u</mi></mrow></msub><mo>,</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">-\log p_\theta(y_{1:U}\mid x)=-\sum_{u=1}^U\log p_\theta(y_u\mid y_{&lt;u},x).</annotation></semantics></math>
+</div>
+<p>
       The target history in each factor is the
       <strong>
        observed
       </strong>
       history. Supplying it during training is teacher forcing, consistent with evaluating the likelihood of the observed sequence.
      </p>
-     <h4>
+<h4>
       3 · Expand one categorical token loss
      </h4>
-     <p>
+<p>
       For logits
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mrow><mi>u</mi><mo>,</mo><mi>k</mi></mrow></msub><annotation encoding="application/x-tex">z_{u,k}</annotation></semantics></math>
       over vocabulary classes
@@ -155,199 +128,164 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>y</mi><mi>u</mi></msub><annotation encoding="application/x-tex">y_u</annotation></semantics></math>
       ,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>u</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>u</mi></mrow></msub><mo>,</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><msub><mi>z</mi><mrow><mi>u</mi><mo>,</mo><msub><mi>y</mi><mi>u</mi></msub></mrow></msub><mo>+</mo><mo>log</mo><munder><mo>∑</mo><mi>k</mi></munder><msup><mi>e</mi><msub><mi>z</mi><mrow><mi>u</mi><mo>,</mo><mi>k</mi></mrow></msub></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">-\log p_\theta(y_u\mid y_{&lt;u},x)
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>−</mi><mo>log</mo><msub><mi>p</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>y</mi><mi>u</mi></msub><mo>∣</mo><msub><mi>y</mi><mrow><mo>&lt;</mo><mi>u</mi></mrow></msub><mo>,</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><msub><mi>z</mi><mrow><mi>u</mi><mo>,</mo><msub><mi>y</mi><mi>u</mi></msub></mrow></msub><mo>+</mo><mo>log</mo><munder><mo>∑</mo><mi>k</mi></munder><msup><mi>e</mi><msub><mi>z</mi><mrow><mi>u</mi><mo>,</mo><mi>k</mi></mrow></msub></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">-\log p_\theta(y_u\mid y_{&lt;u},x)
 =-z_{u,y_u}+\log\sum_k e^{z_{u,k}}.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       The decoder must receive shifted targets or a mask that prevents the token at
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
       from directly revealing its own answer.
      </p>
-     <h4>
+<h4>
       4 · Remove padding without changing the modeled event
      </h4>
-     <p>
+<p>
       For a padded batch, let
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mrow><mi>b</mi><mo>,</mo><mi>u</mi></mrow></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">m_{b,u}=1</annotation></semantics></math>
       for genuine target tokens and zero for padding. A mean per-token objective is
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo>=</mo><mfrac><mrow><munder><mo>∑</mo><mrow><mi>b</mi><mo>,</mo><mi>u</mi></mrow></munder><msub><mi>m</mi><mrow><mi>b</mi><mo>,</mo><mi>u</mi></mrow></msub><msub><mo>ℓ</mo><mrow><mi>b</mi><mo>,</mo><mi>u</mi></mrow></msub></mrow><mrow><munder><mo>∑</mo><mrow><mi>b</mi><mo>,</mo><mi>u</mi></mrow></munder><msub><mi>m</mi><mrow><mi>b</mi><mo>,</mo><mi>u</mi></mrow></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">J=\frac{\sum_{b,u}m_{b,u}\ell_{b,u}}{\sum_{b,u}m_{b,u}}.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo>=</mo><mfrac><mrow><munder><mo>∑</mo><mrow><mi>b</mi><mo>,</mo><mi>u</mi></mrow></munder><msub><mi>m</mi><mrow><mi>b</mi><mo>,</mo><mi>u</mi></mrow></msub><msub><mo>ℓ</mo><mrow><mi>b</mi><mo>,</mo><mi>u</mi></mrow></msub></mrow><mrow><munder><mo>∑</mo><mrow><mi>b</mi><mo>,</mo><mi>u</mi></mrow></munder><msub><mi>m</mi><mrow><mi>b</mi><mo>,</mo><mi>u</mi></mrow></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">J=\frac{\sum_{b,u}m_{b,u}\ell_{b,u}}{\sum_{b,u}m_{b,u}}.</annotation></semantics></math>
+</div>
+<p>
       This requires at least one valid token. Averaging each sequence separately and then averaging sequences gives a different weighting when lengths differ. Both may be deliberate, but the denominator must match the intended objective.
      </p>
-     <h4>
+<h4>
       5 · Explain generation separately
      </h4>
-     <p>
+<p>
       At generation time, the true prefix is unavailable. The model conditions on generated tokens and chooses or samples the next token until termination. Sampling implements the autoregressive model; greedy or beam decoding is a decision procedure over that model. Parallel teacher-forced training does not make ordinary autoregressive generation nonsequential.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="13" data-pdf="arch" type="button">
-       Chapter source · PDF p. 13
-      </button>
-      <a class="calculation-link" href="#encoder-decoder?derivation=sequence-likelihood">
+<div class="derivation-footer">
+
+<button data-page="13" data-pdf="arch" type="button">Reference · PDF p. 13</button>
+<a class="calculation-link" href="#encoder-decoder?derivation=sequence-likelihood">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="teacher-forcing" id="encoder-decoder--teacher-forcing">
+</div>
+</div>
+</details>
+<h2 data-section="teacher-forcing" id="encoder-decoder--teacher-forcing">
     Teacher forcing
    </h2>
-   <p>
+<p>
     During training, true previous tokens are available, so the decoder can receive
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>y</mi><mrow><mi>u</mi><mo>−</mo><mn>1</mn></mrow><mo>*</mo></msubsup><annotation encoding="application/x-tex">y_{u-1}^*</annotation></semantics></math>
     . This is teacher forcing. At inference it cannot receive an unknown true target token, so it receives its own previous prediction instead.
    </p>
-   <p>
-    The source calls the resulting mismatch
-    <strong>
-     exposure bias
-    </strong>
-    : training histories are often cleaner than the histories encountered after an error during free-running generation. This does not make teacher forcing invalid; it identifies a difference between the conditional training calculation and the generation procedure.
-   </p>
-   <p>
+<p>The resulting mismatch is <strong>exposure bias</strong>: training histories are often cleaner than the histories encountered after an error during free-running generation. This does not make teacher forcing invalid; it identifies a difference between the conditional training calculation and the generation procedure.</p>
+<p>
     Teacher forcing also does not give permission to include unavailable future target information. The autoregressive structure still determines which context each prediction is allowed to use.
    </p>
-   <h2 data-section="the-fixed-context-bottleneck" id="encoder-decoder--the-fixed-context-bottleneck">
+<h2 data-section="the-fixed-context-bottleneck" id="encoder-decoder--the-fixed-context-bottleneck">
     The fixed-context bottleneck
    </h2>
-   <p>
+<p>
     An early recurrent encoder–decoder might compress the entire input into one final state. For a long source sequence, that fixed-width representation must carry every detail the decoder will later need.
    </p>
-   <p>
-    Attention relieves this bottleneck by letting each decoder step retrieve from all encoder states. In the guide’s additive attention,
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><msup><mi>v</mi><mi>⊤</mi></msup><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>s</mi></msub><msub><mi>s</mi><mrow><mi>u</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>W</mi><mi>h</mi></msub><msub><mi>h</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">e_{u,t}=v^\top\tanh(W_ss_{u-1}+W_hh_t),</annotation></semantics></math>
-   </div>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><mfrac><msup><mi>e</mi><msub><mi>e</mi><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub></msup><mrow><munder><mo>∑</mo><mi>j</mi></munder><msup><mi>e</mi><msub><mi>e</mi><mrow><mi>u</mi><mo>,</mo><mi>j</mi></mrow></msub></msup></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>c</mi><mi>u</mi></msub><mo>=</mo><munder><mo>∑</mo><mi>t</mi></munder><msub><mi>α</mi><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub><msub><mi>h</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\alpha_{u,t}=\frac{e^{e_{u,t}}}{\sum_j e^{e_{u,j}}},\qquad c_u=\sum_t\alpha_{u,t}h_t.</annotation></semantics></math>
-   </div>
-   <p>
+<p>Attention relieves this bottleneck by letting each decoder step retrieve from all encoder states. With additive attention,</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><msup><mi>v</mi><mi>⊤</mi></msup><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>s</mi></msub><msub><mi>s</mi><mrow><mi>u</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>W</mi><mi>h</mi></msub><msub><mi>h</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">e_{u,t}=v^\top\tanh(W_ss_{u-1}+W_hh_t),</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>α</mi><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub><mo>=</mo><mfrac><msup><mi>e</mi><msub><mi>e</mi><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub></msup><mrow><munder><mo>∑</mo><mi>j</mi></munder><msup><mi>e</mi><msub><mi>e</mi><mrow><mi>u</mi><mo>,</mo><mi>j</mi></mrow></msub></msup></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>c</mi><mi>u</mi></msub><mo>=</mo><munder><mo>∑</mo><mi>t</mi></munder><msub><mi>α</mi><mrow><mi>u</mi><mo>,</mo><mi>t</mi></mrow></msub><msub><mi>h</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\alpha_{u,t}=\frac{e^{e_{u,t}}}{\sum_j e^{e_{u,j}}},\qquad c_u=\sum_t\alpha_{u,t}h_t.</annotation></semantics></math>
+</div>
+<p>
     Now the context is specific to output step
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
     . The decoder can emphasize different source positions at different stages instead of relying exclusively on one fixed vector.
    </p>
-   <h2 data-section="three-architectural-forms" id="encoder-decoder--three-architectural-forms">
+<h2 data-section="three-architectural-forms" id="encoder-decoder--three-architectural-forms">
     Three architectural forms
    </h2>
-   <p>
+<p>
     An encoder-only model contextualizes the available input and can support classification, tagging, retrieval, or embeddings. A decoder-only model uses allowed prior context for autoregressive generation. An encoder–decoder model builds source memory and then generates while consulting it.
    </p>
-   <p>
+<p>
     These are routing forms that can appear with recurrent components or Transformers. “Encoder” is not a synonym for “autoencoder”: reconstruction is a particular training objective discussed in the next chapter.
    </p>
-   <h2 data-section="existing-implementation-and-visualization" id="encoder-decoder--existing-implementation-and-visualization">
-    Existing implementation and visualization
-   </h2>
-   <p>
-    The official PyTorch translation tutorial already includes an encoder, GRU decoder, teacher forcing logic, additive attention, training code, and labeled attention maps. The resource link points to that complete application, and a separate visualization link goes directly to the attention display section.
-   </p>
-   <p>
-    Use the example to trace what is passed into the decoder at each step, when the true target is used, and how attention weights produce a context vector. Those questions test understanding of the architecture instead of merely whether you can instantiate a recurrent layer.
-   </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="encoder-decoder--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="seq2seq">
-     <span class="resource-meta">
+<h2 data-section="existing-implementation-and-visualization" id="encoder-decoder--existing-implementation-and-visualization">Translation with additive attention</h2>
+<p>The translation example below combines a GRU encoder and decoder with teacher forcing and additive attention. Its attention maps show which encoder positions contribute to the context at each output step.</p>
+<p>During training, identify where true target tokens enter the decoder. During generation, trace how earlier predictions become new inputs. In both modes, the attention weights determine the context vector retrieved from the encoder states.</p>
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="encoder-decoder--implementation">Implementation examples</h2>
+
+<div class="resource-list">
+<div class="resource" data-resource="seq2seq">
+<span class="resource-meta">
       PyTorch · Training example + attention map
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Translation with a Sequence-to-Sequence Network and Attention
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect the GRU encoder/decoder, teacher forcing, attention and generated translations. Its attention plots show alignments; its additive attention is distinct from scaled dot-product attention.
-     </p>
-    </div>
-    <div class="resource" data-resource="sequence">
-     <span class="resource-meta">
+</a>
+<p>GRU translation with teacher forcing, additive attention, generated outputs, and alignment plots. The scoring rule differs from scaled dot-product attention.</p>
+</div>
+<div class="resource" data-resource="sequence">
+<span class="resource-meta">
       PyTorch · LSTM tagging example
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/nlp/sequence_models_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/nlp/sequence_models_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Sequence Models and Long Short-Term Memory Networks
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Follow the LSTM shape examples and a part-of-speech tagger. Distinguish per-token outputs from a single prediction for the entire sequence.
-     </p>
-    </div>
-   </div>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</a>
+<p>LSTM tensor shapes and a part-of-speech tagger that produces one prediction per token.</p>
+</div>
+</div>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
     </strong>
     Why can teacher forcing create a training–inference mismatch?
    </summary>
-   <p>
+<p>
     During training, the decoder can receive the true previous target token. During free-running inference, it receives its own earlier prediction. An early error can therefore change later inputs in a way that was less common during training.
    </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#gru">
-    <small>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+
+<button aria-label="Open source: Architectures · PDF pp. 13–14 · §5" data-page="13" data-pdf="arch" type="button">
+     Architectures · PDF pp. 13–14 · §5
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#gru">
+<small>
      ← Previous
     </small>
-    GRUs and gate conventions
-   </a>
-   <a href="#autoencoders">
-    <small>
+GRUs and gate conventions
+</a>
+<a href="#autoencoders">
+<small>
      Next →
     </small>
-    Autoencoders, bottlenecks, and denoising
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+Autoencoders, bottlenecks, and denoising
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="encoder-and-decoder-describe-roles" href="#encoder-decoder?section=encoder-and-decoder-describe-roles">
-    Encoder and decoder describe roles
-   </a>
-   <a data-section="why-the-autoregressive-factorization-is-useful" href="#encoder-decoder?section=why-the-autoregressive-factorization-is-useful">
-    Why the autoregressive factorization is useful
-   </a>
-   <a data-section="teacher-forcing" href="#encoder-decoder?section=teacher-forcing">
-    Teacher forcing
-   </a>
-   <a data-section="the-fixed-context-bottleneck" href="#encoder-decoder?section=the-fixed-context-bottleneck">
-    The fixed-context bottleneck
-   </a>
-   <a data-section="three-architectural-forms" href="#encoder-decoder?section=three-architectural-forms">
-    Three architectural forms
-   </a>
-   <a data-section="existing-implementation-and-visualization" href="#encoder-decoder?section=existing-implementation-and-visualization">
-    Existing implementation and visualization
-   </a>
-   <a data-section="implementation" href="#encoder-decoder?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="encoder-and-decoder-describe-roles" href="#encoder-decoder?section=encoder-and-decoder-describe-roles">Encoder and decoder describe roles</a>
+<a data-section="why-the-autoregressive-factorization-is-useful" href="#encoder-decoder?section=why-the-autoregressive-factorization-is-useful">Why the autoregressive factorization is useful</a>
+<a data-section="teacher-forcing" href="#encoder-decoder?section=teacher-forcing">Teacher forcing</a>
+<a data-section="the-fixed-context-bottleneck" href="#encoder-decoder?section=the-fixed-context-bottleneck">The fixed-context bottleneck</a>
+<a data-section="three-architectural-forms" href="#encoder-decoder?section=three-architectural-forms">Three architectural forms</a>
+<a data-section="existing-implementation-and-visualization" href="#encoder-decoder?section=existing-implementation-and-visualization">Translation with additive attention</a>
+<a data-section="implementation" href="#encoder-decoder?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>

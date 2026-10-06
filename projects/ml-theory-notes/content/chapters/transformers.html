@@ -1,94 +1,64 @@
 <section aria-labelledby="transformers-title" class="page-view lesson-layout" id="transformers">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      34
     </span>
     Part 4 · Architectures &amp; information flow
    </p>
-   <h1 id="transformers-title" tabindex="-1">
+<h1 id="transformers-title" tabindex="-1">
     Transformers: position, residual paths, and masking
    </h1>
-   <p class="standfirst">
-    Build the full architecture around attention and distinguish parallel training from sequential generation.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Architectures · PDF pp. 20–23 · §8" data-page="20" data-pdf="arch" type="button">
-     Architectures · PDF pp. 20–23 · §8
-    </button>
-    <button aria-label="Open source: Architectures · PDF pp. 31–32 · §§12–13" data-page="31" data-pdf="arch" type="button">
-     Architectures · PDF pp. 31–32 · §§12–13
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<p class="standfirst">Transformers combine attention, position-wise feed-forward layers, residual connections, and normalization. Position signals and attention masks determine which sequence relationships they can represent.</p>
+
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="attention-is-one-component-not-the-whole-model" href="#transformers?section=attention-is-one-component-not-the-whole-model">
-     Attention is one component, not the whole model
-    </a>
-    <a data-section="position-must-enter-somewhere" href="#transformers?section=position-must-enter-somewhere">
-     Position must enter somewhere
-    </a>
-    <a data-section="encoder-and-decoder-visibility" href="#transformers?section=encoder-and-decoder-visibility">
-     Encoder and decoder visibility
-    </a>
-    <a data-section="work-through-the-sources-dimensions" href="#transformers?section=work-through-the-sources-dimensions">
-     Work through the source’s dimensions
-    </a>
-    <a data-section="parallel-work-and-quadratic-interactions" href="#transformers?section=parallel-work-and-quadratic-interactions">
-     Parallel work and quadratic interactions
-    </a>
-    <a data-section="training-and-generation-are-different-computations" href="#transformers?section=training-and-generation-are-different-computations">
-     Training and generation are different computations
-    </a>
-    <a data-section="implementation" href="#transformers?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="attention-is-one-component-not-the-whole-model" id="transformers--attention-is-one-component-not-the-whole-model">
+<nav aria-label="On this page">
+<a data-section="attention-is-one-component-not-the-whole-model" href="#transformers?section=attention-is-one-component-not-the-whole-model">Attention is one component, not the whole model</a>
+<a data-section="position-must-enter-somewhere" href="#transformers?section=position-must-enter-somewhere">Position must enter somewhere</a>
+<a data-section="encoder-and-decoder-visibility" href="#transformers?section=encoder-and-decoder-visibility">Encoder and decoder visibility</a>
+<a data-section="work-through-the-sources-dimensions" href="#transformers?section=work-through-the-sources-dimensions">Tensor dimensions and attention memory</a>
+<a data-section="parallel-work-and-quadratic-interactions" href="#transformers?section=parallel-work-and-quadratic-interactions">Parallel work and quadratic interactions</a>
+<a data-section="training-and-generation-are-different-computations" href="#transformers?section=training-and-generation-are-different-computations">Training and generation are different computations</a>
+<a data-section="implementation" href="#transformers?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="attention-is-one-component-not-the-whole-model" id="transformers--attention-is-one-component-not-the-whole-model">
     Attention is one component, not the whole model
    </h2>
-   <p>
-    A Transformer repeats attention and position-wise feed-forward blocks, with residual connections and normalization. The guide’s post-normalization encoder schematic is
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo>=</mo><mo>Norm</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>X</mi><mo>+</mo><mo>MHA</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>X</mi><mo>,</mo><mi>X</mi><mo>,</mo><mi>X</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">U=\operatorname{Norm}(X+\operatorname{MHA}(X,X,X)),</annotation></semantics></math>
-   </div>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>=</mo><mo>Norm</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>U</mi><mo>+</mo><mo>FFN</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>U</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">Y=\operatorname{Norm}(U+\operatorname{FFN}(U)),</annotation></semantics></math>
-   </div>
-   <p>
+<p>A Transformer repeats attention and position-wise feed-forward blocks, with residual connections and normalization. A post-normalization encoder block has the form</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo>=</mo><mo>Norm</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>X</mi><mo>+</mo><mo>MHA</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>X</mi><mo>,</mo><mi>X</mi><mo>,</mo><mi>X</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">U=\operatorname{Norm}(X+\operatorname{MHA}(X,X,X)),</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Y</mi><mo>=</mo><mo>Norm</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>U</mi><mo>+</mo><mo>FFN</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>U</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">Y=\operatorname{Norm}(U+\operatorname{FFN}(U)),</annotation></semantics></math>
+</div>
+<p>
     where
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>FFN</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>u</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mi>W</mi><mn>2</mn></msub><mi>ϕ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mn>1</mn></msub><mi>u</mi><mo>+</mo><msub><mi>b</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>b</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\operatorname{FFN}(u)=W_2\phi(W_1u+b_1)+b_2</annotation></semantics></math>
     .
    </p>
-   <p>
+<p>
     Attention exchanges information between positions. The feed-forward sublayer transforms each position’s representation. Residual paths preserve a direct contribution from the block input, while normalization helps manage scale across repeated transformations.
    </p>
-   <p>
-    The source notes that pre-normalization variants are common. The displayed equations remain the PDF’s post-normalization convention; practical implementations can arrange normalization differently.
-   </p>
-   <details class="derivation" data-derivation="layernorm-backward" id="transformers--derivation-layernorm-backward">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<p>Pre-normalization variants place normalization before the attention and feed-forward sublayers instead. The equations above use post-normalization; match that ordering when comparing implementations.</p>
+<details class="derivation" data-derivation="layernorm-backward" id="transformers--derivation-layernorm-backward">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive LayerNorm’s statistics and complete input gradient
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Normalize one token’s
@@ -97,14 +67,14 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>x</mi><mi>d</mi></msub></mrow><annotation encoding="application/x-tex">x_1,\ldots,x_d</annotation></semantics></math>
       . Let
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><mfrac><mn>1</mn><mi>d</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>x</mi><mi>i</mi></msub><mo>,</mo><mspace width="1.0em"></mspace><mi>v</mi><mo>=</mo><mfrac><mn>1</mn><mi>d</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>,</mo><mspace width="1.0em"></mspace><mi>r</mi><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>v</mi><mo>+</mo><mi>ϵ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mo>,</mo><mspace width="1.0em"></mspace><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>r</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\mu=\frac1d\sum_i x_i,\quad v=\frac1d\sum_i(x_i-\mu)^2,\quad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><mfrac><mn>1</mn><mi>d</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>x</mi><mi>i</mi></msub><mo>,</mo><mspace width="1.0em"></mspace><mi>v</mi><mo>=</mo><mfrac><mn>1</mn><mi>d</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>,</mo><mspace width="1.0em"></mspace><mi>r</mi><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>v</mi><mo>+</mo><mi>ϵ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><mo>,</mo><mspace width="1.0em"></mspace><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>r</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">\mu=\frac1d\sum_i x_i,\quad v=\frac1d\sum_i(x_i-\mu)^2,\quad
 r=(v+\epsilon)^{-1/2},\quad\hat x_i=(x_i-\mu)r,</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><msub><mi>γ</mi><mi>i</mi></msub><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>+</mo><msub><mi>β</mi><mi>i</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mi>ϵ</mi><mo>&gt;</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">y_i=\gamma_i\hat x_i+\beta_i,\qquad\epsilon&gt;0.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>y</mi><mi>i</mi></msub><mo>=</mo><msub><mi>γ</mi><mi>i</mi></msub><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo>+</mo><msub><mi>β</mi><mi>i</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mi>ϵ</mi><mo>&gt;</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">y_i=\gamma_i\hat x_i+\beta_i,\qquad\epsilon&gt;0.</annotation></semantics></math>
+</div>
+<p>
       This uses the population-form divisor
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>
       , not
@@ -113,123 +83,119 @@ r=(v+\epsilon)^{-1/2},\quad\hat x_i=(x_i-\mu)r,</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mo>,</mo><mi>β</mi></mrow><annotation encoding="application/x-tex">\gamma,\beta</annotation></semantics></math>
       do not depend on the token’s computed statistics.
      </p>
-     <h4>
+<h4>
       1 · Differentiate the mean
      </h4>
-     <p>
+<p>
       For every input coordinate
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>x</mi><mi>j</mi></msub><annotation encoding="application/x-tex">x_j</annotation></semantics></math>
       ,
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>μ</mi><mi>/</mi><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn><mi>/</mi><mi>d</mi></mrow><annotation encoding="application/x-tex">\partial\mu/\partial x_j=1/d</annotation></semantics></math>
       . Consequently,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><msub><mn>𝟏</mn><mrow><mi>i</mi><mo>=</mo><mi>j</mi></mrow></msub><mo>−</mo><mfrac><mn>1</mn><mi>d</mi></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial(x_i-\mu)}{\partial x_j}=\mathbf1_{i=j}-\frac1d.</annotation></semantics></math>
-     </div>
-     <h4>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><msub><mn>𝟏</mn><mrow><mi>i</mi><mo>=</mo><mi>j</mi></mrow></msub><mo>−</mo><mfrac><mn>1</mn><mi>d</mi></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial(x_i-\mu)}{\partial x_j}=\mathbf1_{i=j}-\frac1d.</annotation></semantics></math>
+</div>
+<h4>
       2 · Differentiate the variance, including the mean’s dependence
      </h4>
-     <p>
+<p>
       Apply the chain rule:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>v</mi></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mfrac><mn>2</mn><mi>d</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><msub><mn>𝟏</mn><mrow><mi>i</mi><mo>=</mo><mi>j</mi></mrow></msub><mo>−</mo><mfrac><mn>1</mn><mi>d</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial v}{\partial x_j}=\frac2d\sum_i(x_i-\mu)\left(\mathbf1_{i=j}-\frac1d\right).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>v</mi></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mfrac><mn>2</mn><mi>d</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><msub><mn>𝟏</mn><mrow><mi>i</mi><mo>=</mo><mi>j</mi></mrow></msub><mo>−</mo><mfrac><mn>1</mn><mi>d</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial v}{\partial x_j}=\frac2d\sum_i(x_i-\mu)\left(\mathbf1_{i=j}-\frac1d\right).</annotation></semantics></math>
+</div>
+<p>
       Because
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>d</mi><mi>μ</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sum_i(x_i-\mu)=\sum_i x_i-d\mu=0</annotation></semantics></math>
       , the mean-related sum vanishes and
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>v</mi></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mfrac><mn>2</mn><mi>d</mi></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial v}{\partial x_j}=\frac2d(x_j-\mu).</annotation></semantics></math>
-     </div>
-     <h4>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>v</mi></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mfrac><mn>2</mn><mi>d</mi></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial v}{\partial x_j}=\frac2d(x_j-\mu).</annotation></semantics></math>
+</div>
+<h4>
       3 · Differentiate inverse standard deviation
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>r</mi></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mi>−</mi><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>v</mi><mo>+</mo><mi>ϵ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>−</mi><mn>3</mn><mi>/</mi><mn>2</mn></mrow></msup><mfrac><mn>2</mn><mi>d</mi></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mfrac><msup><mi>r</mi><mn>3</mn></msup><mi>d</mi></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial r}{\partial x_j}
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>r</mi></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mi>−</mi><mfrac><mn>1</mn><mn>2</mn></mfrac><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>v</mi><mo>+</mo><mi>ϵ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>−</mi><mn>3</mn><mi>/</mi><mn>2</mn></mrow></msup><mfrac><mn>2</mn><mi>d</mi></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mfrac><msup><mi>r</mi><mn>3</mn></msup><mi>d</mi></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial r}{\partial x_j}
 =-\frac12(v+\epsilon)^{-3/2}\frac2d(x_j-\mu)
 =-\frac{r^3}{d}(x_j-\mu).</annotation></semantics></math>
-     </div>
-     <h4>
+</div>
+<h4>
       4 · Apply the product rule to the normalized feature
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mn>𝟏</mn><mrow><mi>i</mi><mo>=</mo><mi>j</mi></mrow></msub><mo>−</mo><mfrac><mn>1</mn><mi>d</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mfrac><msup><mi>r</mi><mn>3</mn></msup><mi>d</mi></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial\hat x_i}{\partial x_j}
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mn>𝟏</mn><mrow><mi>i</mi><mo>=</mo><mi>j</mi></mrow></msub><mo>−</mo><mfrac><mn>1</mn><mi>d</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mfrac><msup><mi>r</mi><mn>3</mn></msup><mi>d</mi></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial\hat x_i}{\partial x_j}
 =r\left(\mathbf1_{i=j}-\frac1d\right)-\frac{r^3}{d}(x_i-\mu)(x_j-\mu).</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       Using
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo>−</mo><mi>μ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>r</mi><mo>=</mo><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">(x_i-\mu)r=\hat x_i</annotation></semantics></math>
       , this becomes
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mn>𝟏</mn><mrow><mi>i</mi><mo>=</mo><mi>j</mi></mrow></msub><mo>−</mo><mfrac><mn>1</mn><mi>d</mi></mfrac><mo>−</mo><mfrac><mrow><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub></mrow><mi>d</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial\hat x_i}{\partial x_j}
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mn>𝟏</mn><mrow><mi>i</mi><mo>=</mo><mi>j</mi></mrow></msub><mo>−</mo><mfrac><mn>1</mn><mi>d</mi></mfrac><mo>−</mo><mfrac><mrow><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub></mrow><mi>d</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial\hat x_i}{\partial x_j}
 =r\left(\mathbf1_{i=j}-\frac1d-\frac{\hat x_i\hat x_j}{d}\right).</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       The formula retains
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>
       through
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>
       and the normalized features; it does not assume their variance is exactly one.
      </p>
-     <h4>
+<h4>
       5 · Contract the Jacobian with the upstream gradient
      </h4>
-     <p>
+<p>
       Let
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>i</mi></msub><mo>=</mo><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msub><mi>y</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">g_i=\partial L/\partial y_i</annotation></semantics></math>
       and
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub><mo>=</mo><msub><mi>g</mi><mi>i</mi></msub><msub><mi>γ</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">a_i=g_i\gamma_i</annotation></semantics></math>
       . Then
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>a</mi><mi>i</mi></msub><mfrac><mrow><mi>∂</mi><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mi>r</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>a</mi><mi>j</mi></msub><mo>−</mo><mfrac><mn>1</mn><mi>d</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>a</mi><mi>i</mi></msub><mo>−</mo><mfrac><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mi>d</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>a</mi><mi>i</mi></msub><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial x_j}
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>a</mi><mi>i</mi></msub><mfrac><mrow><mi>∂</mi><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mi>j</mi></msub></mrow></mfrac><mo>=</mo><mi>r</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>a</mi><mi>j</mi></msub><mo>−</mo><mfrac><mn>1</mn><mi>d</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>a</mi><mi>i</mi></msub><mo>−</mo><mfrac><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mi>d</mi></mfrac><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>a</mi><mi>i</mi></msub><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial L}{\partial x_j}
 =\sum_i a_i\frac{\partial\hat x_i}{\partial x_j}
 =r\left[a_j-\frac1d\sum_i a_i-\frac{\hat x_j}{d}\sum_i a_i\hat x_i\right].</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       The affine gradients are
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msub><mi>γ</mi><mi>i</mi></msub><mo>=</mo><msub><mi>g</mi><mi>i</mi></msub><msub><mover><mi>x</mi><mo accent="true">̂</mo></mover><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\partial L/\partial\gamma_i=g_i\hat x_i</annotation></semantics></math>
       and
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><msub><mi>β</mi><mi>i</mi></msub><mo>=</mo><msub><mi>g</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\partial L/\partial\beta_i=g_i</annotation></semantics></math>
       , summed over examples or positions sharing these parameters.
      </p>
-     <h4>
+<h4>
       6 · Compare the normalized axes, not just the names
      </h4>
-     <p>
+<p>
       LayerNorm typically normalizes features within each token and uses those input statistics in both training and evaluation. Training BatchNorm normalizes across batch-related axes, so a prediction and its derivatives can depend on other batch members. They are not interchangeable operations merely because both subtract a mean and divide by a scale.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="20" data-pdf="arch" type="button">
-       Chapter source · PDF p. 20
-      </button>
-      <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.LayerNorm.html" rel="noopener noreferrer" target="_blank">
+<div class="derivation-footer">
+
+<button data-page="20" data-pdf="arch" type="button">Reference · PDF p. 20</button>
+<a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.LayerNorm.html" rel="noopener noreferrer" target="_blank">
        Library reference
       </a>
-      <a class="calculation-link" href="#transformers?derivation=layernorm-backward">
+<a class="calculation-link" href="#transformers?derivation=layernorm-backward">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <details class="derivation" data-derivation="residual-jacobian" id="transformers--derivation-residual-jacobian">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+</div>
+</div>
+</details>
+<details class="derivation" data-derivation="residual-jacobian" id="transformers--derivation-residual-jacobian">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive residual-path gradients and compare pre-norm with post-norm
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       For a residual transformation
@@ -238,135 +204,124 @@ r=(v+\epsilon)^{-1/2},\quad\hat x_i=(x_i-\mu)r,</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>J</mi><mi>F</mi></msub><mo>=</mo><mi>∂</mi><mi>F</mi><mi>/</mi><mi>∂</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">J_F=\partial F/\partial x</annotation></semantics></math>
       . Treat vectors as columns and assume differentiability at the point considered.
      </p>
-     <h4>
+<h4>
       1 · Differentiate both additive branches
      </h4>
-     <p>
+<p>
       The identity branch has Jacobian
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>I</mi><annotation encoding="application/x-tex">I</annotation></semantics></math>
       . Addition sums the contributions:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>y</mi></mrow><mrow><mi>∂</mi><mi>x</mi></mrow></mfrac><mo>=</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><mi>F</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial y}{\partial x}=I+J_F.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>y</mi></mrow><mrow><mi>∂</mi><mi>x</mi></mrow></mfrac><mo>=</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><mi>F</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial y}{\partial x}=I+J_F.</annotation></semantics></math>
+</div>
+<p>
       For upstream loss gradient
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>g</mi><mi>y</mi></msub><annotation encoding="application/x-tex">g_y</annotation></semantics></math>
       , the chain rule gives
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>x</mi></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><mi>F</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><msub><mi>g</mi><mi>y</mi></msub><mo>=</mo><msub><mi>g</mi><mi>y</mi></msub><mo>+</mo><msubsup><mi>J</mi><mi>F</mi><mi>⊤</mi></msubsup><msub><mi>g</mi><mi>y</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">g_x=(I+J_F)^\top g_y=g_y+J_F^\top g_y.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>x</mi></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><mi>F</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><msub><mi>g</mi><mi>y</mi></msub><mo>=</mo><msub><mi>g</mi><mi>y</mi></msub><mo>+</mo><msubsup><mi>J</mi><mi>F</mi><mi>⊤</mi></msubsup><msub><mi>g</mi><mi>y</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">g_x=(I+J_F)^\top g_y=g_y+J_F^\top g_y.</annotation></semantics></math>
+</div>
+<p>
       The gradient therefore has a direct path that does not traverse
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       2 · Expand two residual blocks
      </h4>
-     <p>
+<p>
       If
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>=</mo><msub><mi>x</mi><mn>0</mn></msub><mo>+</mo><msub><mi>F</mi><mn>0</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mn>0</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">x_1=x_0+F_0(x_0)</annotation></semantics></math>
       and
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>2</mn></msub><mo>=</mo><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><msub><mi>F</mi><mn>1</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">x_2=x_1+F_1(x_1)</annotation></semantics></math>
       , then
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msub><mi>x</mi><mn>2</mn></msub></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mn>0</mn></msub></mrow></mfrac><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><msub><mi>F</mi><mn>1</mn></msub></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><msub><mi>F</mi><mn>0</mn></msub></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><msub><mi>F</mi><mn>0</mn></msub></msub><mo>+</mo><msub><mi>J</mi><msub><mi>F</mi><mn>1</mn></msub></msub><mo>+</mo><msub><mi>J</mi><msub><mi>F</mi><mn>1</mn></msub></msub><msub><mi>J</mi><msub><mi>F</mi><mn>0</mn></msub></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial x_2}{\partial x_0}=(I+J_{F_1})(I+J_{F_0})
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><msub><mi>x</mi><mn>2</mn></msub></mrow><mrow><mi>∂</mi><msub><mi>x</mi><mn>0</mn></msub></mrow></mfrac><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><msub><mi>F</mi><mn>1</mn></msub></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><msub><mi>F</mi><mn>0</mn></msub></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><msub><mi>F</mi><mn>0</mn></msub></msub><mo>+</mo><msub><mi>J</mi><msub><mi>F</mi><mn>1</mn></msub></msub><mo>+</mo><msub><mi>J</mi><msub><mi>F</mi><mn>1</mn></msub></msub><msub><mi>J</mi><msub><mi>F</mi><mn>0</mn></msub></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial x_2}{\partial x_0}=(I+J_{F_1})(I+J_{F_0})
 =I+J_{F_0}+J_{F_1}+J_{F_1}J_{F_0}.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       The identity term is one available path among several. The other terms can cancel or amplify it; residual connections do not prove the total gradient norm is bounded away from zero.
      </p>
-     <h4>
+<h4>
       3 · Include normalization before the sublayer
      </h4>
-     <p>
+<p>
       For pre-norm
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mi>x</mi><mo>+</mo><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>N</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">y=x+F(N(x))</annotation></semantics></math>
       ,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>y</mi></mrow><mrow><mi>∂</mi><mi>x</mi></mrow></mfrac><mo>=</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><mi>F</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>N</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>J</mi><mi>N</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial y}{\partial x}=I+J_F(N(x))J_N(x).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>y</mi></mrow><mrow><mi>∂</mi><mi>x</mi></mrow></mfrac><mo>=</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><mi>F</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>N</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><msub><mi>J</mi><mi>N</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial y}{\partial x}=I+J_F(N(x))J_N(x).</annotation></semantics></math>
+</div>
+<p>
       The direct identity path remains outside normalization.
      </p>
-     <h4>
+<h4>
       4 · Include normalization after the residual sum
      </h4>
-     <p>
+<p>
       For post-norm
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mi>N</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>+</mo><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">y=N(x+F(x))</annotation></semantics></math>
       ,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>y</mi></mrow><mrow><mi>∂</mi><mi>x</mi></mrow></mfrac><mo>=</mo><msub><mi>J</mi><mi>N</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>+</mo><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><mi>F</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial y}{\partial x}=J_N(x+F(x))(I+J_F(x)).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>y</mi></mrow><mrow><mi>∂</mi><mi>x</mi></mrow></mfrac><mo>=</mo><msub><mi>J</mi><mi>N</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo>+</mo><mi>F</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>+</mo><msub><mi>J</mi><mi>F</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial y}{\partial x}=J_N(x+F(x))(I+J_F(x)).</annotation></semantics></math>
+</div>
+<p>
       Now every path crosses the normalization Jacobian after the sum. These are distinct computations, even though both contain the same three ingredients.
      </p>
-     <h4>
+<h4>
       5 · Avoid a universal architecture verdict
      </h4>
-     <p>
+<p>
       This path analysis explains an optimization difference, not a theorem that one layout always wins. Initial scale, depth, initialization, normalization parameters, and optimizer settings affect the complete system. A final normalization after a stack also contributes its own Jacobian.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="20" data-pdf="arch" type="button">
-       Chapter source · PDF p. 20
-      </button>
-      <a class="calculation-link" href="#transformers?derivation=residual-jacobian">
+<div class="derivation-footer">
+
+<button data-page="20" data-pdf="arch" type="button">Reference · PDF p. 20</button>
+<a class="calculation-link" href="#transformers?derivation=residual-jacobian">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="position-must-enter-somewhere" id="transformers--position-must-enter-somewhere">
+</div>
+</div>
+</details>
+<h2 data-section="position-must-enter-somewhere" id="transformers--position-must-enter-somewhere">
     Position must enter somewhere
    </h2>
-   <p>
+<p>
     Without positional signals or a fixed order-dependent mask, unrestricted self-attention is permutation-equivariant: reorder the inputs and the outputs reorder correspondingly. That symmetry is appropriate for sets but does not encode sentence order or time order by itself. A fixed causal mask is already order-dependent, so that unrestricted symmetry argument cannot be applied unchanged to every masked architecture.
    </p>
-   <p>
-    The source gives sinusoidal positions:
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>E</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo>,</mo><mn>2</mn><mi>i</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><mrow><mi>p</mi><mi>o</mi><mi>s</mi></mrow><msup><mn>10000</mn><mrow><mn>2</mn><mi>i</mi><mi>/</mi><msub><mi>d</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">l</mi></mrow></msub></mrow></msup></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">PE(pos,2i)=\sin\left(\frac{pos}{10000^{2i/d_{\mathrm{model}}}}\right),</annotation></semantics></math>
-   </div>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>E</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo>,</mo><mn>2</mn><mi>i</mi><mo>+</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><mrow><mi>p</mi><mi>o</mi><mi>s</mi></mrow><msup><mn>10000</mn><mrow><mn>2</mn><mi>i</mi><mi>/</mi><msub><mi>d</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">l</mi></mrow></msub></mrow></msup></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">PE(pos,2i+1)=\cos\left(\frac{pos}{10000^{2i/d_{\mathrm{model}}}}\right).</annotation></semantics></math>
-   </div>
-   <p>
-    Different dimensions vary at different frequencies. The position representation can be combined with token representations so attention can distinguish order. The guide also mentions learned, relative, and rotary approaches, without treating the sinusoidal form as a universal requirement.
-   </p>
-   <figure class="source-figure">
-    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="arch-20" type="button">
-     <img alt="The source’s sinusoidal position illustration. It shows how multiple frequencies encode position; it is not a learned attention map." height="555" loading="lazy" src="assets/images/the-source-s-sinusoidal-position-illustration-it-shows-how-multip-59cb89e630.webp" width="946"/>
-    </button>
-    <figcaption>
-     The source’s sinusoidal position illustration. It shows how multiple frequencies encode position; it is not a learned attention map.
-     <button aria-label="Open source: Architectures · PDF p. 20" data-page="20" data-pdf="arch" type="button">
+<p>Sinusoidal position encodings use</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>E</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo>,</mo><mn>2</mn><mi>i</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><mrow><mi>p</mi><mi>o</mi><mi>s</mi></mrow><msup><mn>10000</mn><mrow><mn>2</mn><mi>i</mi><mi>/</mi><msub><mi>d</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">l</mi></mrow></msub></mrow></msup></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">PE(pos,2i)=\sin\left(\frac{pos}{10000^{2i/d_{\mathrm{model}}}}\right),</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>E</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mi>o</mi><mi>s</mi><mo>,</mo><mn>2</mn><mi>i</mi><mo>+</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><mrow><mi>p</mi><mi>o</mi><mi>s</mi></mrow><msup><mn>10000</mn><mrow><mn>2</mn><mi>i</mi><mi>/</mi><msub><mi>d</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">l</mi></mrow></msub></mrow></msup></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">PE(pos,2i+1)=\cos\left(\frac{pos}{10000^{2i/d_{\mathrm{model}}}}\right).</annotation></semantics></math>
+</div>
+<p>Different dimensions vary at different frequencies. Combining these encodings with token representations makes position available to the model. Learned, relative, and rotary schemes provide other ways to represent position; the sinusoidal form is one choice.</p>
+<figure class="source-figure">
+<button aria-label="Enlarge source figure" class="figure-frame" data-figure="arch-20" type="button">
+<img alt="Sinusoidal position encodings at several frequencies. The plot shows a deterministic position representation, not learned attention weights." height="555" loading="lazy" src="assets/images/the-source-s-sinusoidal-position-illustration-it-shows-how-multip-59cb89e630.webp" width="946"/>
+</button>
+<figcaption>Sinusoidal position encodings at several frequencies. The plot shows a deterministic position representation, not learned attention weights. <button aria-label="Open source: Architectures · PDF p. 20" data-page="20" data-pdf="arch" type="button">
       Architectures · PDF p. 20
-     </button>
-    </figcaption>
-   </figure>
-   <details class="derivation" data-derivation="permutation-position" id="transformers--derivation-permutation-position">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+     </button></figcaption>
+</figure>
+<details class="derivation" data-derivation="permutation-position" id="transformers--derivation-permutation-position">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Prove attention equivariance and derive a sinusoidal position shift
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       First consider self-attention without positional features, a fixed order-dependent mask, or stochastic dropout. Let
@@ -377,10 +332,10 @@ r=(v+\epsilon)^{-1/2},\quad\hat x_i=(x_i-\mu)r,</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mi>X</mi></mrow><annotation encoding="application/x-tex">PX</annotation></semantics></math>
       reorders token rows.
      </p>
-     <h4>
+<h4>
       1 · Follow the permutation through the projections
      </h4>
-     <p>
+<p>
       For input
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mi>′</mi><mo>=</mo><mi>P</mi><mi>X</mi></mrow><annotation encoding="application/x-tex">X'=PX</annotation></semantics></math>
       , shared linear projections give
@@ -391,101 +346,97 @@ r=(v+\epsilon)^{-1/2},\quad\hat x_i=(x_i-\mu)r,</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi><mi>′</mi><mo>=</mo><mi>P</mi><mi>V</mi></mrow><annotation encoding="application/x-tex">V'=PV</annotation></semantics></math>
       . Thus the score matrix transforms as
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>′</mi><mo>=</mo><mfrac><mrow><mi>Q</mi><mi>′</mi><mi>K</mi><msup><mi>′</mi><mi>⊤</mi></msup></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mo>=</mo><mfrac><mrow><mi>P</mi><mi>Q</mi><msup><mi>K</mi><mi>⊤</mi></msup><msup><mi>P</mi><mi>⊤</mi></msup></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mo>=</mo><mi>P</mi><mi>A</mi><msup><mi>P</mi><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">A'=\frac{Q'K'^\top}{\sqrt{d_k}}=\frac{PQK^\top P^\top}{\sqrt{d_k}}=PAP^\top.</annotation></semantics></math>
-     </div>
-     <h4>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mi>′</mi><mo>=</mo><mfrac><mrow><mi>Q</mi><mi>′</mi><mi>K</mi><msup><mi>′</mi><mi>⊤</mi></msup></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mo>=</mo><mfrac><mrow><mi>P</mi><mi>Q</mi><msup><mi>K</mi><mi>⊤</mi></msup><msup><mi>P</mi><mi>⊤</mi></msup></mrow><msqrt><msub><mi>d</mi><mi>k</mi></msub></msqrt></mfrac><mo>=</mo><mi>P</mi><mi>A</mi><msup><mi>P</mi><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">A'=\frac{Q'K'^\top}{\sqrt{d_k}}=\frac{PQK^\top P^\top}{\sqrt{d_k}}=PAP^\top.</annotation></semantics></math>
+</div>
+<h4>
       2 · Follow it through rowwise normalization
      </h4>
-     <p>
+<p>
       Permuting a row’s entries permutes its exponentials but does not change their sum. Permuting rows simply reorders which row is normalized. Therefore
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>softmax</mo><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>P</mi><mi>A</mi><msup><mi>P</mi><mi>⊤</mi></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>P</mi><msub><mo>softmax</mo><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow><msup><mi>P</mi><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{softmax}_{\mathrm{row}}(PAP^\top)=P\operatorname{softmax}_{\mathrm{row}}(A)P^\top.</annotation></semantics></math>
-     </div>
-     <h4>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>softmax</mo><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>P</mi><mi>A</mi><msup><mi>P</mi><mi>⊤</mi></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>P</mi><msub><mo>softmax</mo><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow><msup><mi>P</mi><mi>⊤</mi></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{softmax}_{\mathrm{row}}(PAP^\top)=P\operatorname{softmax}_{\mathrm{row}}(A)P^\top.</annotation></semantics></math>
+</div>
+<h4>
       3 · Complete the attention operation
      </h4>
-     <p>
+<p>
       Writing
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><msub><mo>softmax</mo><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">w</mi></mrow></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>A</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">S=\operatorname{softmax}_{\mathrm{row}}(A)</annotation></semantics></math>
       ,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mi>′</mi><mo>=</mo><mi>P</mi><mi>S</mi><msup><mi>P</mi><mi>⊤</mi></msup><mi>P</mi><mi>V</mi><mo>=</mo><mi>P</mi><mi>S</mi><mi>V</mi><mo>=</mo><mi>P</mi><mi>O</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">O'=PSP^\top PV=PSV=PO.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mi>′</mi><mo>=</mo><mi>P</mi><mi>S</mi><msup><mi>P</mi><mi>⊤</mi></msup><mi>P</mi><mi>V</mi><mo>=</mo><mi>P</mi><mi>S</mi><mi>V</mi><mo>=</mo><mi>P</mi><mi>O</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">O'=PSP^\top PV=PSV=PO.</annotation></semantics></math>
+</div>
+<p>
       The output permutes in the same way as the input:
       <strong>
        equivariance
       </strong>
       , not invariance. A shared per-token feed-forward function preserves this property; a symmetric pooling over tokens can turn it into invariance for a global prediction.
      </p>
-     <h4>
+<h4>
       4 · Identify what breaks the premise
      </h4>
-     <p>
+<p>
       A fixed triangular causal mask is not generally unchanged by an arbitrary permutation, so the preceding unrestricted-attention symmetry proof does not apply to that fixed-mask computation. Position embeddings, relative-position biases, recurrence, or masking can all supply order-dependent structure. Positional encoding is a common mechanism, not the only possible one.
      </p>
-     <h4>
+<h4>
       5 · Derive how one sinusoidal pair changes with position
      </h4>
-     <p>
+<p>
       For frequency
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ω</mi><annotation encoding="application/x-tex">\omega</annotation></semantics></math>
       , define
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">v(p)=(\sin(\omega p),\cos(\omega p))^\top</annotation></semantics></math>
       . Angle addition gives
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>sin</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>ω</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo>+</mo><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\sin[\omega(p+k)]=\sin(\omega p)\cos(\omega k)+\cos(\omega p)\sin(\omega k),</annotation></semantics></math>
-     </div>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>cos</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>ω</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo>+</mo><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\cos[\omega(p+k)]=\cos(\omega p)\cos(\omega k)-\sin(\omega p)\sin(\omega k).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>sin</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>ω</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo>+</mo><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\sin[\omega(p+k)]=\sin(\omega p)\cos(\omega k)+\cos(\omega p)\sin(\omega k),</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>cos</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>ω</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo>+</mo><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\cos[\omega(p+k)]=\cos(\omega p)\cos(\omega k)-\sin(\omega p)\sin(\omega k).</annotation></semantics></math>
+</div>
+<p>
       Consequently
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo>+</mo><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow></mtd><mtd columnalign="center" style="text-align: center"><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow></mtd><mtd columnalign="center" style="text-align: center"><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>v</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">v(p+k)=
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo>+</mo><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow></mtd><mtd columnalign="center" style="text-align: center"><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mo>sin</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow></mtd><mtd columnalign="center" style="text-align: center"><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>ω</mi><mi>k</mi><mo form="postfix" stretchy="true">)</mo></mrow></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>v</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">v(p+k)=
 \begin{bmatrix}\cos(\omega k)&amp;\sin(\omega k)\\-\sin(\omega k)&amp;\cos(\omega k)\end{bmatrix}v(p).</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       For a fixed offset
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
       , this is the same linear transformation at every
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
       . Using multiple frequencies gives several position scales. This algebra explains structure available to the model; it does not guarantee that a trained model extrapolates correctly to longer sequences.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="20" data-pdf="arch" type="button">
-       Chapter source · PDF p. 20
-      </button>
-      <a href="https://arxiv.org/abs/1706.03762" rel="noopener noreferrer" target="_blank">
+<div class="derivation-footer">
+
+<button data-page="20" data-pdf="arch" type="button">Reference · PDF p. 20</button>
+<a href="https://arxiv.org/abs/1706.03762" rel="noopener noreferrer" target="_blank">
        Research reference
       </a>
-      <a class="calculation-link" href="#transformers?derivation=permutation-position">
+<a class="calculation-link" href="#transformers?derivation=permutation-position">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="encoder-and-decoder-visibility" id="transformers--encoder-and-decoder-visibility">
+</div>
+</div>
+</details>
+<h2 data-section="encoder-and-decoder-visibility" id="transformers--encoder-and-decoder-visibility">
     Encoder and decoder visibility
    </h2>
-   <p>
+<p>
     An encoder normally lets input positions use bidirectional context. A causal decoder restricts each position to allowed prior context. An encoder–decoder decoder combines masked self-attention with cross-attention to the encoder’s source memory.
    </p>
-   <p>
+<p>
     An additive causal mask is
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mn>0</mn></mtd><mtd columnalign="left" style="text-align: left"><mi>j</mi><mo>≤</mo><mi>i</mi></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mi>−</mi><mi>∞</mi></mtd><mtd columnalign="left" style="text-align: left"><mi>j</mi><mo>&gt;</mo><mi>i</mi><mi>.</mi></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">M_{ij}=\begin{cases}0&amp;j\le i\\-\infty&amp;j&gt;i.\end{cases}</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mn>0</mn></mtd><mtd columnalign="left" style="text-align: left"><mi>j</mi><mo>≤</mo><mi>i</mi></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mi>−</mi><mi>∞</mi></mtd><mtd columnalign="left" style="text-align: left"><mi>j</mi><mo>&gt;</mo><mi>i</mi><mi>.</mi></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">M_{ij}=\begin{cases}0&amp;j\le i\\-\infty&amp;j&gt;i.\end{cases}</annotation></semantics></math>
+</div>
+<p>
     Adding it before softmax gives zero weight to disallowed future positions. This is a mathematical additive-mask convention. Boolean mask meanings differ across APIs:
     <code>
      scaled_dot_product_attention
@@ -508,10 +459,8 @@ r=(v+\epsilon)^{-1/2},\quad\hat x_i=(x_i-\mu)r,</annotation></semantics></math>
     </code>
     applies dropout even if a surrounding module is in evaluation mode, so pass zero explicitly for deterministic evaluation.
    </p>
-   <h2 data-section="work-through-the-sources-dimensions" id="transformers--work-through-the-sources-dimensions">
-    Work through the source’s dimensions
-   </h2>
-   <p>
+<h2 data-section="work-through-the-sources-dimensions" id="transformers--work-through-the-sources-dimensions">Tensor dimensions and attention memory</h2>
+<p>
     With batch size
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mo>=</mo><mn>16</mn></mrow><annotation encoding="application/x-tex">B=16</annotation></semantics></math>
     , length
@@ -526,23 +475,23 @@ r=(v+\epsilon)^{-1/2},\quad\hat x_i=(x_i-\mu)r,</annotation></semantics></math>
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>16</mn><mo>×</mo><mn>100</mn><mo>×</mo><mn>100</mn></mrow><annotation encoding="application/x-tex">16\times100\times100</annotation></semantics></math>
     .
    </p>
-   <p>
+<p>
     Across eight heads, that is
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>8</mn><mo>×</mo><mn>16</mn><mo>×</mo><mn>100</mn><mo>×</mo><mn>100</mn><mo>=</mo><mn>1</mn><mo>,</mo><mn>280</mn><mo>,</mo><mn>000</mn></mrow><annotation encoding="application/x-tex">8\times16\times100\times100=1{,}280{,}000</annotation></semantics></math>
     attention weights in the naive explicit representation. This calculation explains where the sequence-length cost arises. Optimized kernels can change memory materialization and constants without turning the conceptual dense interaction pattern into recurrence.
    </p>
-   <details class="derivation" data-derivation="attention-cost" id="transformers--derivation-attention-cost">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<details class="derivation" data-derivation="attention-cost" id="transformers--derivation-attention-cost">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Count tensor elements, matrix products, and projection parameters
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Use batch
@@ -557,10 +506,10 @@ r=(v+\epsilon)^{-1/2},\quad\hat x_i=(x_i-\mu)r,</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>k</mi></msub><mo>=</mo><msub><mi>d</mi><mi>v</mi></msub><mo>=</mo><mi>d</mi><mi>/</mi><mi>H</mi><mo>=</mo><mn>32</mn></mrow><annotation encoding="application/x-tex">d_k=d_v=d/H=32</annotation></semantics></math>
       . Ignore padding and describe an ordinary dense attention implementation.
      </p>
-     <h4>
+<h4>
       1 · Follow each shape
      </h4>
-     <p>
+<p>
       The model representation is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mi>B</mi><mo>,</mo><mi>T</mi><mo>,</mo><mi>d</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>16</mn><mo>,</mo><mn>100</mn><mo>,</mo><mn>256</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">(B,T,d)=(16,100,256)</annotation></semantics></math>
       . Each head uses
@@ -573,18 +522,18 @@ r=(v+\epsilon)^{-1/2},\quad\hat x_i=(x_i-\mu)r,</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>16</mn><mo>,</mo><mn>100</mn><mo>,</mo><mn>100</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(16,100,100)</annotation></semantics></math>
       scores. Across heads, the score count is
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mi>H</mi><msup><mi>T</mi><mn>2</mn></msup><mo>=</mo><mn>16</mn><mo>⋅</mo><mn>8</mn><mo>⋅</mo><mn>100</mn><mo>⋅</mo><mn>100</mn><mo>=</mo><mn>1</mn><mo>,</mo><mn>280</mn><mo>,</mo><mn>000</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">BHT^2=16\cdot8\cdot100\cdot100=1{,}280{,}000.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mi>H</mi><msup><mi>T</mi><mn>2</mn></msup><mo>=</mo><mn>16</mn><mo>⋅</mo><mn>8</mn><mo>⋅</mo><mn>100</mn><mo>⋅</mo><mn>100</mn><mo>=</mo><mn>1</mn><mo>,</mo><mn>280</mn><mo>,</mo><mn>000</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">BHT^2=16\cdot8\cdot100\cdot100=1{,}280{,}000.</annotation></semantics></math>
+</div>
+<p>
       At four bytes per scalar, one such tensor alone occupies
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mo>,</mo><mn>120</mn><mo>,</mo><mn>000</mn></mrow><annotation encoding="application/x-tex">5{,}120{,}000</annotation></semantics></math>
       bytes, before gradients, probabilities, or other activations.
      </p>
-     <h4>
+<h4>
       2 · Count pairwise arithmetic
      </h4>
-     <p>
+<p>
       For one head, computing
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mi>h</mi></msub><msubsup><mi>K</mi><mi>h</mi><mi>⊤</mi></msubsup></mrow><annotation encoding="application/x-tex">Q_hK_h^\top</annotation></semantics></math>
       needs
@@ -597,10 +546,10 @@ r=(v+\epsilon)^{-1/2},\quad\hat x_i=(x_i-\mu)r,</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>B</mi><msup><mi>T</mi><mn>2</mn></msup><mi>d</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O(BT^2d)</annotation></semantics></math>
       interaction cost.
      </p>
-     <h4>
+<h4>
       3 · Include the projections that the interaction shorthand omits
      </h4>
-     <p>
+<p>
       Each of the three input projections maps
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>
       to
@@ -615,10 +564,10 @@ r=(v+\epsilon)^{-1/2},\quad\hat x_i=(x_i-\mu)r,</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><msup><mi>T</mi><mn>2</mn></msup><mi>d</mi></mrow><annotation encoding="application/x-tex">BT^2d</annotation></semantics></math>
       contributions, before the feed-forward sublayer.
      </p>
-     <h4>
+<h4>
       4 · Count trainable parameters separately
      </h4>
-     <p>
+<p>
       Three dense
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>×</mo><mi>d</mi></mrow><annotation encoding="application/x-tex">d\times d</annotation></semantics></math>
       input projections plus one output projection have
@@ -639,181 +588,140 @@ r=(v+\epsilon)^{-1/2},\quad\hat x_i=(x_i-\mu)r,</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       5 · Distinguish arithmetic from materialized memory
      </h4>
-     <p>
+<p>
       A straightforward implementation stores the quadratic score/probability arrays. Memory-efficient fused attention can avoid materializing the complete matrices while computing equivalent dense attention, so the naive storage count is not a lower bound for every implementation. The quadratic all-pairs interaction arithmetic remains distinct from this memory optimization. Actual runtime also depends on kernels, hardware, masks, and sequence lengths.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="20" data-pdf="arch" type="button">
-       Chapter source · PDF p. 20
-      </button>
-      <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.scaled_dot_product_attention.html" rel="noopener noreferrer" target="_blank">
+<div class="derivation-footer">
+
+<button data-page="20" data-pdf="arch" type="button">Reference · PDF p. 20</button>
+<a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.functional.scaled_dot_product_attention.html" rel="noopener noreferrer" target="_blank">
        Library reference
       </a>
-      <a class="calculation-link" href="#transformers?derivation=attention-cost">
+<a class="calculation-link" href="#transformers?derivation=attention-cost">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="parallel-work-and-quadratic-interactions" id="transformers--parallel-work-and-quadratic-interactions">
+</div>
+</div>
+</details>
+<h2 data-section="parallel-work-and-quadratic-interactions" id="transformers--parallel-work-and-quadratic-interactions">
     Parallel work and quadratic interactions
    </h2>
-   <p>
-    An RNN’s
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>h</mi><mi>t</mi></msub><annotation encoding="application/x-tex">h_t</annotation></semantics></math>
-    depends on
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">h_{t-1}</annotation></semantics></math>
-    , creating a sequential chain. Self-attention computes all allowed query/key interactions within a layer in parallel. Dense attention’s interaction term is
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>T</mi><mn>2</mn></msup><mi>d</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O(T^2d)</annotation></semantics></math>
-    , while a recurrent layer has roughly
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><msubsup><mi>d</mi><mi>h</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O(Td_h^2)</annotation></semantics></math>
-    arithmetic and sequential depth
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O(T)</annotation></semantics></math>
-    in the guide’s simplified comparison.
-   </p>
-   <figure class="source-figure">
-    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="arch-22" type="button">
-     <img alt="The source contrasts linear recurrent step count with quadratic dense interactions. This is a scaling illustration; constants, projections, and hardware determine real runtimes." height="560" loading="lazy" src="assets/images/the-source-contrasts-linear-recurrent-step-count-with-quadratic-d-c272432aa9.webp" width="956"/>
-    </button>
-    <figcaption>
-     The source contrasts linear recurrent step count with quadratic dense interactions. This is a scaling illustration; constants, projections, and hardware determine real runtimes.
-     <button aria-label="Open source: Architectures · PDF p. 22" data-page="22" data-pdf="arch" type="button">
+<p>An RNN’s <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>h</mi><mi>t</mi></msub><annotation encoding="application/x-tex">h_t</annotation></semantics></math> depends on <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><annotation encoding="application/x-tex">h_{t-1}</annotation></semantics></math>, creating a sequential chain. Self-attention computes all allowed query/key interactions within a layer in parallel. Dense attention’s interaction term is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>T</mi><mn>2</mn></msup><mi>d</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O(T^2d)</annotation></semantics></math>, while a recurrent layer has roughly <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><msubsup><mi>d</mi><mi>h</mi><mn>2</mn></msubsup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O(Td_h^2)</annotation></semantics></math> arithmetic and sequential depth <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>T</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O(T)</annotation></semantics></math> in this simplified comparison.</p>
+<figure class="source-figure">
+<button aria-label="Enlarge source figure" class="figure-frame" data-figure="arch-22" type="button">
+<img alt="Linear growth in recurrent steps versus quadratic growth in dense pairwise interactions. Projection costs, hardware, and implementation constants also affect runtime." height="560" loading="lazy" src="assets/images/the-source-contrasts-linear-recurrent-step-count-with-quadratic-d-c272432aa9.webp" width="956"/>
+</button>
+<figcaption>Linear growth in recurrent steps versus quadratic growth in dense pairwise interactions. Projection costs, hardware, and implementation constants also affect runtime. <button aria-label="Open source: Architectures · PDF p. 22" data-page="22" data-pdf="arch" type="button">
       Architectures · PDF p. 22
-     </button>
-    </figcaption>
-   </figure>
-   <p>
-    Long context can therefore make dense attention expensive despite its parallelism. The source motivates sparse, local, linearized, or chunked variants from this cost, rather than claiming every attention architecture has the same implementation behavior.
-   </p>
-   <h2 data-section="training-and-generation-are-different-computations" id="transformers--training-and-generation-are-different-computations">
+     </button></figcaption>
+</figure>
+<p>Dense attention can be expensive at long sequence lengths despite its parallelism. Sparse, local, linearized, and chunked variants address this cost by changing the interactions or how they are computed.</p>
+<h2 data-section="training-and-generation-are-different-computations" id="transformers--training-and-generation-are-different-computations">
     Training and generation are different computations
    </h2>
-   <p>
+<p>
     During teacher-forced causal training, all target positions are known, so a mask permits parallel loss calculation without future leakage. During generation, new tokens must be produced before they can become inputs to later predictions. Generation remains sequential at the token level.
    </p>
-   <p>
-    Key/value caching avoids recomputing earlier projections each time. It reduces repeated work, not the dependency on previously generated tokens. The official SDPA and Transformer-building-blocks tutorials illustrate actual implementations; the latter is an advanced performance-oriented resource, not the required first reading.
-   </p>
-   <p>
-    The conceptual summary is a repeated routing-and-transformation block with explicit position and visibility rules—not merely an attention layer with more parameters.
-   </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="transformers--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="sdpa">
-     <span class="resource-meta">
+<p>Key/value caching avoids recomputing earlier projections at each generation step. It reduces repeated computation without removing the dependency on earlier generated tokens.</p>
+<p>Position and visibility rules are part of the architecture. A model with the wrong mask can perform the tensor operations correctly while using information that should be unavailable.</p>
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="transformers--implementation">Implementation examples</h2>
+
+<div class="resource-list">
+<div class="resource" data-resource="sdpa">
+<span class="resource-meta">
       PyTorch · Tutorial + implementation
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/scaled_dot_product_attention_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/scaled_dot_product_attention_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Scaled Dot Product Attention
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Connect Q, K and V to the attention primitive and a larger attention module. Note mask semantics and dropout behavior when moving from the mathematical formula to the function.
-     </p>
-    </div>
-    <div class="resource" data-resource="transformerblocks">
-     <span class="resource-meta">
+</a>
+<p>Scaled dot-product attention and an attention module, including masking and the functional dropout behavior.</p>
+</div>
+<div class="resource" data-resource="transformerblocks">
+<span class="resource-meta">
       PyTorch · Advanced implementation tutorial
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/transformer_building_blocks.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/transformer_building_blocks.html" rel="noopener noreferrer" target="_blank">
+<span>
        Accelerating PyTorch Transformers with Building Blocks
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Read after the conceptual Transformer chapter. The examples use lower-level attention and modern execution tools; this is an engineering continuation, not the first introduction to attention.
-     </p>
-    </div>
-    <div class="resource" data-resource="seq2seq">
-     <span class="resource-meta">
+</a>
+<p>Lower-level attention components and performance-oriented Transformer implementations.</p>
+</div>
+<div class="resource" data-resource="seq2seq">
+<span class="resource-meta">
       PyTorch · Training example + attention map
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Translation with a Sequence-to-Sequence Network and Attention
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect the GRU encoder/decoder, teacher forcing, attention and generated translations. Its attention plots show alignments; its additive attention is distinct from scaled dot-product attention.
-     </p>
-    </div>
-   </div>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</a>
+<p>GRU translation with teacher forcing, additive attention, generated outputs, and alignment plots. The scoring rule differs from scaled dot-product attention.</p>
+</div>
+</div>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
     </strong>
     Why can an autoregressive Transformer train in parallel but generate sequentially?
    </summary>
-   <p>
+<p>
     During training all target tokens are known, and a causal mask permits computing all position losses together without future access. During generation the next token is not known until it is produced, so later inputs depend on earlier generated outputs. Parallel training does not remove this inference dependency.
    </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#attention">
-    <small>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+
+<button aria-label="Open source: Architectures · PDF pp. 20–23 · §8" data-page="20" data-pdf="arch" type="button">
+     Architectures · PDF pp. 20–23 · §8
+    </button>
+<button aria-label="Open source: Architectures · PDF pp. 31–32 · §§12–13" data-page="31" data-pdf="arch" type="button">
+     Architectures · PDF pp. 31–32 · §§12–13
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#attention">
+<small>
      ← Previous
     </small>
-    Attention: queries, keys, values, and weights
-   </a>
-   <a href="#graphs">
-    <small>
+Attention: queries, keys, values, and weights
+</a>
+<a href="#graphs">
+<small>
      Next →
     </small>
-    GNNs, graph attention, and relational bottlenecks
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+GNNs, graph attention, and relational bottlenecks
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="attention-is-one-component-not-the-whole-model" href="#transformers?section=attention-is-one-component-not-the-whole-model">
-    Attention is one component, not the whole model
-   </a>
-   <a data-section="position-must-enter-somewhere" href="#transformers?section=position-must-enter-somewhere">
-    Position must enter somewhere
-   </a>
-   <a data-section="encoder-and-decoder-visibility" href="#transformers?section=encoder-and-decoder-visibility">
-    Encoder and decoder visibility
-   </a>
-   <a data-section="work-through-the-sources-dimensions" href="#transformers?section=work-through-the-sources-dimensions">
-    Work through the source’s dimensions
-   </a>
-   <a data-section="parallel-work-and-quadratic-interactions" href="#transformers?section=parallel-work-and-quadratic-interactions">
-    Parallel work and quadratic interactions
-   </a>
-   <a data-section="training-and-generation-are-different-computations" href="#transformers?section=training-and-generation-are-different-computations">
-    Training and generation are different computations
-   </a>
-   <a data-section="implementation" href="#transformers?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="attention-is-one-component-not-the-whole-model" href="#transformers?section=attention-is-one-component-not-the-whole-model">Attention is one component, not the whole model</a>
+<a data-section="position-must-enter-somewhere" href="#transformers?section=position-must-enter-somewhere">Position must enter somewhere</a>
+<a data-section="encoder-and-decoder-visibility" href="#transformers?section=encoder-and-decoder-visibility">Encoder and decoder visibility</a>
+<a data-section="work-through-the-sources-dimensions" href="#transformers?section=work-through-the-sources-dimensions">Tensor dimensions and attention memory</a>
+<a data-section="parallel-work-and-quadratic-interactions" href="#transformers?section=parallel-work-and-quadratic-interactions">Parallel work and quadratic interactions</a>
+<a data-section="training-and-generation-are-different-computations" href="#transformers?section=training-and-generation-are-different-computations">Training and generation are different computations</a>
+<a data-section="implementation" href="#transformers?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>

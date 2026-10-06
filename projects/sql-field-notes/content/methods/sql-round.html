@@ -1,752 +1,750 @@
 <article class="article method-page" id="m-sql-round">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=sql&amp;cat=Numeric%20functions">
+<a href="#methods?lang=sql&amp;cat=Numeric%20functions">
    MySQL · Numeric functions
   </a>
- </div>
- <h1>
+</div>
+<h1>
   ROUND()
  </h1>
- <p class="lead">
+<p class="lead">
   Round
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     MySQL
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-round"><span class="nf">ROUND</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-sql" data-origin="reference-sql-round"><span class="nf">ROUND</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-pd-round">
+<a href="#m-pd-round">
    pandas · round()
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C46?code=code-C46-0&amp;method=sql-round&amp;line=17">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C46?code=code-C46-0&amp;method=sql-round&amp;line=17">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1661 · Average processing time per machine
     </strong>
-    <small>
+<small>
      Study solution · line 17
     </small>
-   </div>
-   <pre aria-hidden="true">    )
+</div>
+<pre aria-hidden="true">    )
 SELECT machine_id, ROUND(SUM(processing_time)/COUNT(*), 3) AS processing_time
 FROM m
 GROUP BY machine_id</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C50?code=code-C50-0&amp;method=sql-round&amp;line=11">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C50?code=code-C50-0&amp;method=sql-round&amp;line=11">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1934 · Confirmation rate
     </strong>
-    <small>
+<small>
      Study solution · line 11
     </small>
-   </div>
-   <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT user_id, ROUND(SUM(boolean)/COUNT(boolean), 2) AS confirmation_rate
 FROM Rate
 GROUP BY user_id</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C07?code=code-C07-0&amp;method=sql-round&amp;line=2">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-0&amp;method=sql-round&amp;line=2">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1251 · Average selling price
     </strong>
-    <small>
+<small>
      Study solution · line 2
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT p.product_id,
+</div>
+<pre aria-hidden="true">SELECT p.product_id,
        COALESCE(ROUND(SUM(p.price * u.units) / NULLIF(SUM(u.units), 0), 2), 0) AS average_price
 FROM Prices p LEFT JOIN UnitsSold u
   ON p.product_id = u.product_id AND u.purchase_date BETWEEN p.start_date AND p.end_date</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C08?code=code-C08-0&amp;method=sql-round&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C08?code=code-C08-0&amp;method=sql-round&amp;line=1">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1075 · Project employees I
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT p.project_id, ROUND(AVG(e.experience_years), 2) AS average_years
+</div>
+<pre aria-hidden="true">SELECT p.project_id, ROUND(AVG(e.experience_years), 2) AS average_years
 FROM Project p LEFT JOIN Employee e ON p.employee_id = e.employee_id
 GROUP BY p.project_id;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C09?code=code-C09-0&amp;method=sql-round&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C09?code=code-C09-0&amp;method=sql-round&amp;line=1">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1633 · Users registered in a contest
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT contest_id, ROUND(100.0 * COUNT(*) / (SELECT COUNT(*) FROM Users), 2) AS percentage
+</div>
+<pre aria-hidden="true">SELECT contest_id, ROUND(100.0 * COUNT(*) / (SELECT COUNT(*) FROM Users), 2) AS percentage
 FROM Register GROUP BY contest_id ORDER BY percentage DESC, contest_id;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C10?code=code-C10-0&amp;method=sql-round&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-0&amp;method=sql-round&amp;line=1">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1211 · Queries quality and percentage
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT query_name, ROUND(AVG(rating / position), 2) AS quality,
+</div>
+<pre aria-hidden="true">SELECT query_name, ROUND(AVG(rating / position), 2) AS quality,
        ROUND(100.0 * AVG(CASE WHEN rating &lt; 3 THEN 1 ELSE 0 END), 2) AS poor_query_percentage
 FROM Queries GROUP BY query_name;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    8 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C12?code=code-C12-0&amp;method=sql-round&amp;line=5">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C12?code=code-C12-0&amp;method=sql-round&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1174 · Immediate first deliveries
      </strong>
-     <small>
+<small>
       Study solution · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT ROUND(100.0 * AVG(CASE WHEN order_date = customer_pref_delivery_date THEN 1 ELSE 0 END), 2)
        AS immediate_percentage
 FROM ranked WHERE rn = 1;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C13?code=code-C13-0&amp;method=sql-round&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C13?code=code-C13-0&amp;method=sql-round&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       550 · Game Play Analysis IV
      </strong>
-     <small>
+<small>
       Study solution · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT ROUND(AVG(CASE WHEN EXISTS (
     SELECT 1 FROM Activity a
     WHERE a.player_id = f.player_id AND a.event_date = DATE_ADD(f.first_day, INTERVAL 1 DAY)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C21?code=code-C21-0&amp;method=sql-round&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C21?code=code-C21-0&amp;method=sql-round&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1731 · Employees reporting to employees
      </strong>
-     <small>
+<small>
       Study solution · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">           COUNT(*) AS reports_count,
+</div>
+<pre aria-hidden="true">           COUNT(*) AS reports_count,
            ROUND(AVG(age)) AS average_age
     FROM Employees
     WHERE reports_to IS NOT NULL</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C31?code=code-C31-0&amp;method=sql-round&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C31?code=code-C31-0&amp;method=sql-round&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1321 · Restaurant growth
      </strong>
-     <small>
+<small>
       Study solution · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT visited_on, amount, ROUND(amount / 7.0, 2) AS average_amount
 FROM rolled WHERE visited_on &gt;= DATE_ADD(first_day, INTERVAL 6 DAY) ORDER BY visited_on;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C33?code=code-C33-0&amp;method=sql-round&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C33?code=code-C33-0&amp;method=sql-round&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       585 · Investments in 2016
      </strong>
-     <small>
+<small>
       Study solution · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016 FROM marked
 WHERE value_count &gt; 1 AND location_count = 1;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC262?code=code-LC262-0&amp;method=sql-round&amp;line=32">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC262?code=code-LC262-0&amp;method=sql-round&amp;line=32">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       262 · Trips and users
      </strong>
-     <small>
+<small>
       Uploaded submission · line 32
      </small>
-    </div>
-    <pre aria-hidden="true">    t.Day,
+</div>
+<pre aria-hidden="true">    t.Day,
     COALESCE(ROUND(c.valid_cancel / t.valid , 2), 0) AS 'Cancellation Rate'
 FROM ValidTotal t
 LEFT JOIN ValidCancelled c ON t.Day = c.Day</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3497?code=code-LC3497-0&amp;method=sql-round&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3497?code=code-LC3497-0&amp;method=sql-round&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3497 · Analyze subscription conversion
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">        user_id, 
+</div>
+<pre aria-hidden="true">        user_id, 
         ROUND(AVG(IF(activity_type='free_trial', activity_duration, NULL)), 2) AS trial_avg_duration,
         ROUND(AVG(IF(activity_type='paid', activity_duration, NULL)), 2) AS paid_avg_duration
     FROM UserActivity</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3564?code=code-LC3564-0&amp;method=sql-round&amp;line=22">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3564?code=code-LC3564-0&amp;method=sql-round&amp;line=22">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3564 · Seasonal sales analysis
      </strong>
-     <small>
+<small>
       Uploaded submission · line 22
      </small>
-    </div>
-    <pre aria-hidden="true">            SUM(quantity) AS total_quantity, 
+</div>
+<pre aria-hidden="true">            SUM(quantity) AS total_quantity, 
             ROUND(SUM(revenue), 2) AS total_revenue
         FROM SeasonSales
         GROUP BY season, category</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (19)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C46?code=code-C46-2&amp;method=sql-round&amp;line=21">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C46?code=code-C46-2&amp;method=sql-round&amp;line=21">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1661 · Average processing time per machine
      </strong>
-     <small>
+<small>
       Uploaded submission · line 21
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 SELECT machine_id, ROUND(SUM(processing_time)/COUNT(*), 3) AS processing_time
 FROM m
 GROUP BY machine_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C50?code=code-C50-2&amp;method=sql-round&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C50?code=code-C50-2&amp;method=sql-round&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1934 · Confirmation rate
      </strong>
-     <small>
+<small>
       Uploaded submission · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 SELECT user_id, ROUND(SUM(boolean)/COUNT(boolean), 2) AS confirmation_rate
 FROM Rate
 GROUP BY user_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C07?code=code-C07-2&amp;method=sql-round&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-2&amp;method=sql-round&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1251 · Average selling price
      </strong>
-     <small>
+<small>
       My approach · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT product_id, COALESCE(ROUND(SUM(paid) / NULLIF(SUM(units), 0), 2), 0) AS average_price
 FROM Sold
 GROUP BY product_id;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C07?code=code-C07-4&amp;method=sql-round&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-4&amp;method=sql-round&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1251 · Average selling price
      </strong>
-     <small>
+<small>
       Uploaded submission · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 SELECT product_id, COALESCE(ROUND(SUM(paid) / SUM(units), 2), 0) AS average_price
 FROM Sold
 GROUP BY product_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C08?code=code-C08-2&amp;method=sql-round&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C08?code=code-C08-2&amp;method=sql-round&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1075 · Project employees I
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    p.project_id,
+</div>
+<pre aria-hidden="true">    p.project_id,
     ROUND(SUM(e.experience_years) / COUNT(e.experience_years), 2) AS average_years
 FROM Project p
 LEFT JOIN Employee e   ON p.employee_id = e.employee_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C08?code=code-C08-4&amp;method=sql-round&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C08?code=code-C08-4&amp;method=sql-round&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1075 · Project employees I
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    p.project_id, 
+</div>
+<pre aria-hidden="true">    p.project_id, 
     ROUND(SUM(e.experience_years) / COUNT(e.experience_years), 2) AS average_years
 FROM Project p
 LEFT JOIN Employee e ON p.employee_id = e.employee_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C09?code=code-C09-2&amp;method=sql-round&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C09?code=code-C09-2&amp;method=sql-round&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1633 · Users registered in a contest
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    contest_id,
+</div>
+<pre aria-hidden="true">    contest_id,
     ROUND(COUNT(*)/(SELECT COUNT(user_id) FROM Users) * 100, 2) AS percentage
 FROM Register
 GROUP BY contest_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C09?code=code-C09-4&amp;method=sql-round&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C09?code=code-C09-4&amp;method=sql-round&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1633 · Users registered in a contest
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    contest_id, 
+</div>
+<pre aria-hidden="true">    contest_id, 
     ROUND(COUNT(*)/(SELECT COUNT(user_id) FROM Users) * 100, 2) AS percentage
 FROM Register
 GROUP BY contest_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C10?code=code-C10-2&amp;method=sql-round&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-2&amp;method=sql-round&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1211 · Queries quality and percentage
      </strong>
-     <small>
+<small>
       My approach · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">    query_name,
+</div>
+<pre aria-hidden="true">    query_name,
     ROUND(AVG(quality), 2) AS quality,
     ROUND(100 * SUM(poor_quality)/COUNT(poor_quality), 2) AS poor_query_percentage
 FROM Quality</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C10?code=code-C10-4&amp;method=sql-round&amp;line=15">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-4&amp;method=sql-round&amp;line=15">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1211 · Queries quality and percentage
      </strong>
-     <small>
+<small>
       Uploaded submission · line 15
      </small>
-    </div>
-    <pre aria-hidden="true">    query_name, 
+</div>
+<pre aria-hidden="true">    query_name, 
     ROUND(AVG(quality), 2) AS quality, 
     ROUND(100 * SUM(poor_quality)/COUNT(poor_quality), 2) AS poor_query_percentage
 FROM Quality</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C12?code=code-C12-2&amp;method=sql-round&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C12?code=code-C12-2&amp;method=sql-round&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1174 · Immediate first deliveries
      </strong>
-     <small>
+<small>
       My approach · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT ROUND(100 * SUM(immediate) / COUNT(immediate), 2) AS   immediate_percentage
 FROM Orders
 WHERE number = 1;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C12?code=code-C12-4&amp;method=sql-round&amp;line=16">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C12?code=code-C12-4&amp;method=sql-round&amp;line=16">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1174 · Immediate first deliveries
      </strong>
-     <small>
+<small>
       Uploaded submission · line 16
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 SELECT ROUND(100 * SUM(immediate) / COUNT(immediate), 2) AS immediate_percentage
 FROM Orders
 WHERE number = 1</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C13?code=code-C13-2&amp;method=sql-round&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C13?code=code-C13-2&amp;method=sql-round&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       550 · Game Play Analysis IV
      </strong>
-     <small>
+<small>
       My approach · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT ROUND(COUNT(DISTINCT a.player_id) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) AS fraction
 FROM Activity a
 INNER JOIN   First_login f ON</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C13?code=code-C13-4&amp;method=sql-round&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C13?code=code-C13-4&amp;method=sql-round&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       550 · Game Play Analysis IV
      </strong>
-     <small>
+<small>
       Uploaded submission · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 SELECT ROUND(COUNT(*) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) AS fraction
 FROM Activity a
 INNER JOIN First_login f ON </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C21?code=code-C21-2&amp;method=sql-round&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C21?code=code-C21-2&amp;method=sql-round&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1731 · Employees reporting to employees
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">        COUNT(age) AS reports_count,
+</div>
+<pre aria-hidden="true">        COUNT(age) AS reports_count,
         ROUND(AVG(age)) AS average_age
     FROM Employees
     GROUP BY reports_to</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C31?code=code-C31-2&amp;method=sql-round&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C31?code=code-C31-2&amp;method=sql-round&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1321 · Restaurant growth
      </strong>
-     <small>
+<small>
       My approach · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">      rolling_amount AS amount,
+</div>
+<pre aria-hidden="true">      rolling_amount AS amount,
     ROUND(rolling_amount   / 7, 2) AS average_amount
 FROM Rolling
 WHERE visited_on &gt;= DATE_ADD(first_date, INTERVAL 6 DAY)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C31?code=code-C31-4&amp;method=sql-round&amp;line=15">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C31?code=code-C31-4&amp;method=sql-round&amp;line=15">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1321 · Restaurant growth
      </strong>
-     <small>
+<small>
       Uploaded submission · line 15
      </small>
-    </div>
-    <pre aria-hidden="true">    rolling_amount AS amount,
+</div>
+<pre aria-hidden="true">    rolling_amount AS amount,
     ROUND(rolling_amount / 7, 2) AS average_amount
 FROM Rolling
 WHERE visited_on &gt;= first_date + 6</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C33?code=code-C33-2&amp;method=sql-round&amp;line=15">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C33?code=code-C33-2&amp;method=sql-round&amp;line=15">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       585 · Investments in 2016
      </strong>
-     <small>
+<small>
       My approach · line 15
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 SELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016
 FROM Insurance
 WHERE pid IN (SELECT pid FROM UniqueCity) AND tiv_2015 IN (SELECT tiv_2015 FROM NonUniqueTIV);</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C33?code=code-C33-4&amp;method=sql-round&amp;line=16">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C33?code=code-C33-4&amp;method=sql-round&amp;line=16">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       585 · Investments in 2016
      </strong>
-     <small>
+<small>
       Uploaded submission · line 16
      </small>
-    </div>
-    <pre aria-hidden="true">    
+</div>
+<pre aria-hidden="true">    
 SELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016
 FROM Insurance
 WHERE pid IN (SELECT pid FROM UniqueCity) AND tiv_2015 IN (SELECT tiv_2015 FROM NonUniqueTIV)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     SQL cheat-sheet image · Numeric functions. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=sql&amp;cat=Numeric%20functions">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=sql&amp;cat=Numeric%20functions">
+<small>
     ← Browse
    </small>
    MySQL · Numeric functions
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

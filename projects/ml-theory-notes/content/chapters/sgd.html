@@ -1,93 +1,70 @@
 <section aria-labelledby="sgd-title" class="page-view lesson-layout" id="sgd">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      09
     </span>
     Part 2 · Optimization
    </p>
-   <h1 id="sgd-title" tabindex="-1">
+<h1 id="sgd-title" tabindex="-1">
     SGD, gradient noise, and learning rates
    </h1>
-   <p class="standfirst">
-    Start with the negative gradient, then understand what mini-batch sampling and step size change.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Optimization · PDF pp. 4–7 · §§1–2.5" data-page="4" data-pdf="optim" type="button">
-     Optimization · PDF pp. 4–7 · §§1–2.5
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<p class="standfirst">Stochastic gradient descent replaces the full training gradient with a mini-batch estimate. Batch size controls sampling noise; the learning rate controls how far each update moves.</p>
+
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="why-move-against-the-gradient" href="#sgd?section=why-move-against-the-gradient">
-     Why move against the gradient?
-    </a>
-    <a data-section="replace-an-expensive-average-with-a-sampled-average" href="#sgd?section=replace-an-expensive-average-with-a-sampled-average">
-     Replace an expensive average with a sampled average
-    </a>
-    <a data-section="batch-size-controls-more-than-memory-use" href="#sgd?section=batch-size-controls-more-than-memory-use">
-     Batch size controls more than memory use
-    </a>
-    <a data-section="a-numerical-update" href="#sgd?section=a-numerical-update">
-     A numerical update
-    </a>
-    <a data-section="schedules-are-not-coordinate-wise-adaptation" href="#sgd?section=schedules-are-not-coordinate-wise-adaptation">
-     Schedules are not coordinate-wise adaptation
-    </a>
-    <a data-section="what-to-tune-and-what-to-measure" href="#sgd?section=what-to-tune-and-what-to-measure">
-     What to tune and what to measure
-    </a>
-    <a data-section="implementation" href="#sgd?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="why-move-against-the-gradient" id="sgd--why-move-against-the-gradient">
+<nav aria-label="On this page">
+<a data-section="why-move-against-the-gradient" href="#sgd?section=why-move-against-the-gradient">Why move against the gradient?</a>
+<a data-section="replace-an-expensive-average-with-a-sampled-average" href="#sgd?section=replace-an-expensive-average-with-a-sampled-average">Replace an expensive average with a sampled average</a>
+<a data-section="batch-size-controls-more-than-memory-use" href="#sgd?section=batch-size-controls-more-than-memory-use">Batch size controls more than memory use</a>
+<a data-section="a-numerical-update" href="#sgd?section=a-numerical-update">A numerical update</a>
+<a data-section="schedules-are-not-coordinate-wise-adaptation" href="#sgd?section=schedules-are-not-coordinate-wise-adaptation">Schedules are not coordinate-wise adaptation</a>
+<a data-section="what-to-tune-and-what-to-measure" href="#sgd?section=what-to-tune-and-what-to-measure">What to tune and what to measure</a>
+<a data-section="implementation" href="#sgd?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="why-move-against-the-gradient" id="sgd--why-move-against-the-gradient">
     Why move against the gradient?
    </h2>
-   <p>
+<p>
     A first-order expansion around the current parameters gives
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>Δ</mi><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>∇</mi><mi>J</mi><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mi>Δ</mi><mi>θ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">J(\theta+\Delta\theta)\approx J(\theta)+\nabla J(\theta)^\top\Delta\theta.</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>Δ</mi><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>∇</mi><mi>J</mi><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mi>Δ</mi><mi>θ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">J(\theta+\Delta\theta)\approx J(\theta)+\nabla J(\theta)^\top\Delta\theta.</annotation></semantics></math>
+</div>
+<p>
     Among directions with the same Euclidean length, the negative gradient gives the largest local reduction in this linear approximation. Gradient descent therefore chooses
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><msub><mi>η</mi><mi>t</mi></msub><mi>∇</mi><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\theta_{t+1}=\theta_t-\eta_t\nabla J(\theta_t).</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><msub><mi>η</mi><mi>t</mi></msub><mi>∇</mi><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\theta_{t+1}=\theta_t-\eta_t\nabla J(\theta_t).</annotation></semantics></math>
+</div>
+<p>
     This is a
     <strong>
      local
     </strong>
     argument. A large step can leave the region where the linear approximation is useful, overshoot a low-loss region, or increase the objective. The gradient chooses a direction; the learning rate controls the distance.
    </p>
-   <details class="derivation" data-derivation="steepest-descent" id="sgd--derivation-steepest-descent">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<details class="derivation" data-derivation="steepest-descent" id="sgd--derivation-steepest-descent">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive the negative-gradient direction and a safe quadratic step
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
-      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>
       is differentiable at
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>θ</mi><annotation encoding="application/x-tex">\theta</annotation></semantics></math>
       with nonzero gradient
@@ -96,10 +73,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">r&gt;0</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       1 · Reduce the local problem to an inner product
      </h4>
-     <p>
+<p>
       The first-order model is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msup><mi>g</mi><mi>⊤</mi></msup><mi>s</mi></mrow><annotation encoding="application/x-tex">J(\theta+s)\approx J(\theta)+g^\top s</annotation></semantics></math>
       . Since the first term is constant, choose
@@ -110,13 +87,13 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>s</mi><mo form="postfix" stretchy="false">∥</mo><mo>≤</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">\|s\|\le r</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       2 · Apply Cauchy–Schwarz
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>g</mi><mi>⊤</mi></msup><mi>s</mi><mo>≥</mo><mi>−</mi><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo><mo form="postfix" stretchy="false">∥</mo><mi>s</mi><mo form="postfix" stretchy="false">∥</mo><mo>≥</mo><mi>−</mi><mi>r</mi><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">g^\top s\ge-\|g\|\|s\|\ge-r\|g\|.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>g</mi><mi>⊤</mi></msup><mi>s</mi><mo>≥</mo><mi>−</mi><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo><mo form="postfix" stretchy="false">∥</mo><mi>s</mi><mo form="postfix" stretchy="false">∥</mo><mo>≥</mo><mi>−</mi><mi>r</mi><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><mo form="postfix" stretchy="false">∥</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">g^\top s\ge-\|g\|\|s\|\ge-r\|g\|.</annotation></semantics></math>
+</div>
+<p>
       The first bound is attained when
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
       is opposite to
@@ -131,49 +108,49 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>−</mi><mi>η</mi><mi>g</mi></mrow><annotation encoding="application/x-tex">s=-\eta g</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       3 · Bound the error of the linear model
      </h4>
-     <p>
+<p>
       Suppose the gradient is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
       -Lipschitz along the step:
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>∇</mi><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>u</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>∇</mi><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>v</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="false">∥</mo><mo>≤</mo><mi>L</mi><mo form="postfix" stretchy="false">∥</mo><mi>u</mi><mo>−</mo><mi>v</mi><mo form="postfix" stretchy="false">∥</mo></mrow><annotation encoding="application/x-tex">\|\nabla J(u)-\nabla J(v)\|\le L\|u-v\|</annotation></semantics></math>
       . Integrate the directional derivative:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msubsup><mo>∫</mo><mn>0</mn><mn>1</mn></msubsup><mi>∇</mi><mi>J</mi><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>t</mi><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mi>s</mi><mspace width="0.167em"></mspace><mi>d</mi><mi>t</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">J(\theta+s)-J(\theta)=\int_0^1\nabla J(\theta+ts)^\top s\,dt.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msubsup><mo>∫</mo><mn>0</mn><mn>1</mn></msubsup><mi>∇</mi><mi>J</mi><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>t</mi><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mi>s</mi><mspace width="0.167em"></mspace><mi>d</mi><mi>t</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">J(\theta+s)-J(\theta)=\int_0^1\nabla J(\theta+ts)^\top s\,dt.</annotation></semantics></math>
+</div>
+<p>
       Add and subtract
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>g</mi><annotation encoding="application/x-tex">g</annotation></semantics></math>
       inside the integral. The remainder is at most
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>∫</mo><mn>0</mn><mn>1</mn></msubsup><mi>L</mi><mi>t</mi><mo form="postfix" stretchy="false">∥</mo><mi>s</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>d</mi><mi>t</mi><mo>=</mo><mfrac><mi>L</mi><mn>2</mn></mfrac><mo form="postfix" stretchy="false">∥</mo><mi>s</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\int_0^1Lt\|s\|^2dt=\frac L2\|s\|^2.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>∫</mo><mn>0</mn><mn>1</mn></msubsup><mi>L</mi><mi>t</mi><mo form="postfix" stretchy="false">∥</mo><mi>s</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>d</mi><mi>t</mi><mo>=</mo><mfrac><mi>L</mi><mn>2</mn></mfrac><mo form="postfix" stretchy="false">∥</mo><mi>s</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\int_0^1Lt\|s\|^2dt=\frac L2\|s\|^2.</annotation></semantics></math>
+</div>
+<p>
       Hence
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>+</mo><mi>s</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≤</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msup><mi>g</mi><mi>⊤</mi></msup><mi>s</mi><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>L</mi><mi>/</mi><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="false">∥</mo><mi>s</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">J(\theta+s)\le J(\theta)+g^\top s+(L/2)\|s\|^2</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       4 · Substitute the gradient step
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>−</mo><mi>η</mi><mi>g</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≤</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>η</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mi>L</mi><mi>η</mi></mrow><mn>2</mn></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">J(\theta-\eta g)\le J(\theta)-\eta\left(1-\frac{L\eta}{2}\right)\|g\|^2.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo>−</mo><mi>η</mi><mi>g</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≤</mo><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>θ</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>η</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mi>L</mi><mi>η</mi></mrow><mn>2</mn></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="false">∥</mo><mi>g</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">J(\theta-\eta g)\le J(\theta)-\eta\left(1-\frac{L\eta}{2}\right)\|g\|^2.</annotation></semantics></math>
+</div>
+<p>
       For
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo>≠</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">g\ne0</annotation></semantics></math>
       and
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>η</mi><mo>&lt;</mo><mn>2</mn><mi>/</mi><mi>L</mi></mrow><annotation encoding="application/x-tex">0&lt;\eta&lt;2/L</annotation></semantics></math>
       , the upper bound is strictly lower than the old loss. This is a smooth, exact-gradient statement, not a guarantee for arbitrary stochastic updates.
      </p>
-     <h4>
+<h4>
       5 · Check the simplest quadratic
      </h4>
-     <p>
+<p>
       For
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>w</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>a</mi><msup><mi>w</mi><mn>2</mn></msup><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">J(w)=aw^2/2</annotation></semantics></math>
       with
@@ -190,60 +167,56 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mi>a</mi><mo>&gt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\eta a&gt;1</annotation></semantics></math>
       but below two, signs alternate while magnitudes shrink.
      </p>
-     <figure aria-label="Change the step size" class="interactive-visual" data-visual="gd">
-      <div class="visual-heading">
-       <strong>
+<figure aria-label="Change the step size" class="interactive-visual" data-visual="gd">
+<div class="visual-heading">
+<strong>
         Change the step size
        </strong>
-       <button data-reset-visual="" type="button">
+<button data-reset-visual="" type="button">
         Reset
        </button>
-      </div>
-      <div class="visual-controls">
-       <div class="visual-control">
-        <label for="visual-gd-step">
+</div>
+<div class="visual-controls">
+<div class="visual-control">
+<label for="visual-gd-step">
          Normalized step ηλ
         </label>
-        <input aria-describedby="visual-gd-output" data-default="0.5" data-value="step" id="visual-gd-step" max="2.4" min="0" step="0.05" type="range" value="0.5"/>
-        <output data-range-output="step" for="visual-gd-step">
+<input aria-describedby="visual-gd-output" data-default="0.5" data-value="step" id="visual-gd-step" max="2.4" min="0" step="0.05" type="range" value="0.5"/>
+<output data-range-output="step" for="visual-gd-step">
          0.5
         </output>
-       </div>
-      </div>
-      <svg aria-describedby="visual-gd-output" aria-label="Change the step size" role="img" viewbox="0 0 640 300"></svg>
-      <div aria-hidden="true" class="visual-legend">
-       <span style="--series:#356650">
+</div>
+</div>
+<svg aria-describedby="visual-gd-output" aria-label="Change the step size" role="img" viewbox="0 0 640 300"></svg>
+<div aria-hidden="true" class="visual-legend">
+<span style="--series:#356650">
         Error magnitude
        </span>
-      </div>
-      <figcaption aria-live="polite" class="visual-output" id="visual-gd-output">
-      </figcaption>
-      <div class="visual-note">
+</div>
+<figcaption aria-live="polite" class="visual-output" id="visual-gd-output">
+</figcaption>
+<div class="visual-note">
        Interactive calculation using the assumptions above · computed locally, not fitted performance
       </div>
-      <noscript>
-       <p class="visual-fallback">
+<noscript>
+<p class="visual-fallback">
         The interactive plot needs JavaScript. The complete equations and worked values remain available in the calculation above.
        </p>
-      </noscript>
-     </figure>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="4" data-pdf="optim" type="button">
-       Chapter source · PDF p. 4
-      </button>
-      <a class="calculation-link" href="#sgd?derivation=steepest-descent">
+</noscript>
+</figure>
+<div class="derivation-footer">
+
+<button data-page="4" data-pdf="optim" type="button">Reference · PDF p. 4</button>
+<a class="calculation-link" href="#sgd?derivation=steepest-descent">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="replace-an-expensive-average-with-a-sampled-average" id="sgd--replace-an-expensive-average-with-a-sampled-average">
+</div>
+</div>
+</details>
+<h2 data-section="replace-an-expensive-average-with-a-sampled-average" id="sgd--replace-an-expensive-average-with-a-sampled-average">
     Replace an expensive average with a sampled average
    </h2>
-   <p>
+<p>
     The exact empirical gradient averages over all
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>
     observations. A mini-batch
@@ -252,58 +225,51 @@
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
     gives
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>t</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>m</mi></mfrac><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>B</mi><mi>t</mi></msub></mrow></munder><mi>∇</mi><msub><mo>ℓ</mo><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><msub><mi>η</mi><mi>t</mi></msub><msub><mi>g</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">g_t=\frac1m\sum_{i\in B_t}\nabla\ell_i(\theta_t),\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>t</mi></msub><mo>=</mo><mfrac><mn>1</mn><mi>m</mi></mfrac><munder><mo>∑</mo><mrow><mi>i</mi><mo>∈</mo><msub><mi>B</mi><mi>t</mi></msub></mrow></munder><mi>∇</mi><msub><mo>ℓ</mo><mi>i</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><msub><mi>θ</mi><mi>t</mi></msub><mo>−</mo><msub><mi>η</mi><mi>t</mi></msub><msub><mi>g</mi><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">g_t=\frac1m\sum_{i\in B_t}\nabla\ell_i(\theta_t),\qquad
 \theta_{t+1}=\theta_t-\eta_t g_t.</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<p>
     For a fresh uniform batch drawn independently of the current optimization history, with per-observation gradients evaluated at the same parameters, the conditional estimate is unbiased:
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>g</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>∇</mi><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[g_t\mid\theta_t]=\nabla J(\theta_t).</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><msub><mi>g</mi><mi>t</mi></msub><mo>∣</mo><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>∇</mi><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[g_t\mid\theta_t]=\nabla J(\theta_t).</annotation></semantics></math>
+</div>
+<p>
     This does not say that each update points toward the exact minimum. Individual batches contain different observations and produce different directions. Write
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>t</mi></msub><mo>=</mo><mi>∇</mi><mi>J</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>θ</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>ϵ</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">g_t=\nabla J(\theta_t)+\epsilon_t</annotation></semantics></math>
     to separate the average direction from gradient noise.
    </p>
-   <figure class="source-figure">
-    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="optim-6" type="button">
-     <img alt="The source’s quadratic example compares deterministic descent with a noisy gradient path. It illustrates the effect of stochastic estimates, not an empirical ranking of optimizers." height="577" loading="lazy" src="assets/images/the-source-s-quadratic-example-compares-deterministic-descent-wit-538f761cf9.webp" width="820"/>
-    </button>
-    <figcaption>
-     The source’s quadratic example compares deterministic descent with a noisy gradient path. It illustrates the effect of stochastic estimates, not an empirical ranking of optimizers.
-     <button aria-label="Open source: Optimization · PDF p. 6" data-page="6" data-pdf="optim" type="button">
+<figure class="source-figure">
+<button aria-label="Enlarge source figure" class="figure-frame" data-figure="optim-6" type="button">
+<img alt="Full gradient descent follows a deterministic trajectory on this quadratic. Noisy gradient estimates produce fluctuations around the descent direction. The plot illustrates sampling noise rather than ranking optimizers." height="577" loading="lazy" src="assets/images/the-source-s-quadratic-example-compares-deterministic-descent-wit-538f761cf9.webp" width="820"/>
+</button>
+<figcaption>Full gradient descent follows a deterministic trajectory on this quadratic. Noisy gradient estimates produce fluctuations around the descent direction. The plot illustrates sampling noise rather than ranking optimizers. <button aria-label="Open source: Optimization · PDF p. 6" data-page="6" data-pdf="optim" type="button">
       Optimization · PDF p. 6
-     </button>
-    </figcaption>
-   </figure>
-   <h2 data-section="batch-size-controls-more-than-memory-use" id="sgd--batch-size-controls-more-than-memory-use">
+     </button></figcaption>
+</figure>
+<h2 data-section="batch-size-controls-more-than-memory-use" id="sgd--batch-size-controls-more-than-memory-use">
     Batch size controls more than memory use
    </h2>
-   <p>
+<p>
     For independent draws of per-observation gradients at fixed parameters, covariance of their mean scales as
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">1/m</annotation></semantics></math>
     . Uniform sampling without replacement adds a finite-population correction; random reshuffling within an epoch needs a separate conditional argument. Larger batches therefore reduce gradient noise. But at fixed dataset size, they also reduce the number of updates made during one epoch.
    </p>
-   <p>
-    For 60,000 observations and a batch size of 100, the source counts 600 updates per epoch. Doubling the batch size gives roughly half as many updates per pass, not merely a less noisy version of an otherwise identical run. Compare time, data passes, and update counts deliberately.
-   </p>
-   <p>
-    Stochasticity can help exploration and changes optimization dynamics, but noise is not automatically beneficial. Excessive noise can prevent fine convergence. The guide’s purpose is to explain the mechanism, not claim that smaller batches universally generalize better.
-   </p>
-   <details class="derivation" data-derivation="minibatch-variance" id="sgd--derivation-minibatch-variance">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<p>For 60,000 observations and a batch size of 100, there are 600 updates per epoch. Doubling the batch size gives roughly half as many updates per pass, not merely a less noisy version of an otherwise identical run. Compare time, data passes, and update counts deliberately.</p>
+<p>Gradient noise changes the optimization trajectory and can promote exploration. Excessive noise can also hinder fine convergence. A smaller batch is therefore not automatically better for either optimization or generalization.</p>
+<details class="derivation" data-derivation="minibatch-variance" id="sgd--derivation-minibatch-variance">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive the mini-batch gradient’s expectation and variance
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Fix a parameter vector
@@ -320,10 +286,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>N</mi><annotation encoding="application/x-tex">N</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       1 · Sample uniformly with replacement
      </h4>
-     <p>
+<p>
       For one random index
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>I</mi><annotation encoding="application/x-tex">I</annotation></semantics></math>
       ,
@@ -334,16 +300,16 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
       independent draws,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>g</mi><mo accent="true">̂</mo></mover><mo>=</mo><mfrac><mn>1</mn><mi>m</mi></mfrac><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><msub><mi>g</mi><msub><mi>I</mi><mi>j</mi></msub></msub><mo>,</mo><mspace width="2.0em"></mspace><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mover><mi>g</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mi>m</mi></mfrac><munder><mo>∑</mo><mi>j</mi></munder><mover><mi>g</mi><mo accent="true">‾</mo></mover><mo>=</mo><mover><mi>g</mi><mo accent="true">‾</mo></mover><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat g=\frac1m\sum_{j=1}^m g_{I_j},\qquad\mathbb E[\hat g]=\frac1m\sum_j\bar g=\bar g.</annotation></semantics></math>
-     </div>
-     <h4>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>g</mi><mo accent="true">̂</mo></mover><mo>=</mo><mfrac><mn>1</mn><mi>m</mi></mfrac><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>m</mi></munderover><msub><mi>g</mi><msub><mi>I</mi><mi>j</mi></msub></msub><mo>,</mo><mspace width="2.0em"></mspace><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mover><mi>g</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mi>m</mi></mfrac><munder><mo>∑</mo><mi>j</mi></munder><mover><mi>g</mi><mo accent="true">‾</mo></mover><mo>=</mo><mover><mi>g</mi><mo accent="true">‾</mo></mover><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat g=\frac1m\sum_{j=1}^m g_{I_j},\qquad\mathbb E[\hat g]=\frac1m\sum_j\bar g=\bar g.</annotation></semantics></math>
+</div>
+<h4>
       2 · Expand covariance of the mean
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Cov</mo><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>g</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><msup><mi>m</mi><mn>2</mn></msup></mfrac><munder><mo>∑</mo><mrow><mi>j</mi><mo>,</mo><mi>k</mi></mrow></munder><mo>Cov</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>g</mi><msub><mi>I</mi><mi>j</mi></msub></msub><mo>,</mo><msub><mi>g</mi><msub><mi>I</mi><mi>k</mi></msub></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Cov}(\hat g)=\frac1{m^2}\sum_{j,k}\operatorname{Cov}(g_{I_j},g_{I_k}).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Cov</mo><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>g</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><msup><mi>m</mi><mn>2</mn></msup></mfrac><munder><mo>∑</mo><mrow><mi>j</mi><mo>,</mo><mi>k</mi></mrow></munder><mo>Cov</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>g</mi><msub><mi>I</mi><mi>j</mi></msub></msub><mo>,</mo><msub><mi>g</mi><msub><mi>I</mi><mi>k</mi></msub></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Cov}(\hat g)=\frac1{m^2}\sum_{j,k}\operatorname{Cov}(g_{I_j},g_{I_k}).</annotation></semantics></math>
+</div>
+<p>
       For
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>≠</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">j\ne k</annotation></semantics></math>
       , independence makes each cross-covariance zero. There are
@@ -354,10 +320,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Cov</mo><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>g</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>Σ</mi><mi>/</mi><mi>m</mi></mrow><annotation encoding="application/x-tex">\operatorname{Cov}(\hat g)=\Sigma/m</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       3 · Derive the without-replacement cross term
      </h4>
-     <p>
+<p>
       For two distinct uniform indices
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo>≠</mo><mi>J</mi></mrow><annotation encoding="application/x-tex">I\ne J</annotation></semantics></math>
       , write
@@ -366,20 +332,20 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>u</mi><mi>i</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\sum_i u_i=0</annotation></semantics></math>
       . Then
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mo>∑</mo><mrow><mi>i</mi><mo>≠</mo><mi>j</mi></mrow></munder><msub><mi>u</mi><mi>i</mi></msub><msubsup><mi>u</mi><mi>j</mi><mi>⊤</mi></msubsup><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>u</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>u</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mo>−</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>u</mi><mi>i</mi></msub><msubsup><mi>u</mi><mi>i</mi><mi>⊤</mi></msubsup><mo>=</mo><mi>−</mi><mi>N</mi><mi>Σ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\sum_{i\ne j}u_i u_j^\top=\left(\sum_i u_i\right)\left(\sum_j u_j\right)^\top-\sum_i u_i u_i^\top=-N\Sigma.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mo>∑</mo><mrow><mi>i</mi><mo>≠</mo><mi>j</mi></mrow></munder><msub><mi>u</mi><mi>i</mi></msub><msubsup><mi>u</mi><mi>j</mi><mi>⊤</mi></msubsup><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>u</mi><mi>i</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>u</mi><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mo>−</mo><munder><mo>∑</mo><mi>i</mi></munder><msub><mi>u</mi><mi>i</mi></msub><msubsup><mi>u</mi><mi>i</mi><mi>⊤</mi></msubsup><mo>=</mo><mi>−</mi><mi>N</mi><mi>Σ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\sum_{i\ne j}u_i u_j^\top=\left(\sum_i u_i\right)\left(\sum_j u_j\right)^\top-\sum_i u_i u_i^\top=-N\Sigma.</annotation></semantics></math>
+</div>
+<p>
       Dividing by
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>N</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">N(N-1)</annotation></semantics></math>
       gives
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Cov</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>g</mi><mi>I</mi></msub><mo>,</mo><msub><mi>g</mi><mi>J</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><mi>Σ</mi><mi>/</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>N</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\operatorname{Cov}(g_I,g_J)=-\Sigma/(N-1)</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       4 · Substitute into the covariance sum
      </h4>
-     <p>
+<p>
       A batch of size
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>≤</mo><mi>N</mi></mrow><annotation encoding="application/x-tex">m\le N</annotation></semantics></math>
       without replacement has
@@ -388,201 +354,166 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>m</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">m(m-1)</annotation></semantics></math>
       ordered off-diagonal terms:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Cov</mo><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>g</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><msup><mi>m</mi><mn>2</mn></msup></mfrac><mrow><mo form="prefix" stretchy="true">[</mo><mi>m</mi><mi>Σ</mi><mo>−</mo><mfrac><mrow><mi>m</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>m</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mi>Σ</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mfrac><mrow><mi>N</mi><mo>−</mo><mi>m</mi></mrow><mrow><mi>m</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>N</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mi>Σ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Cov}(\hat g)=\frac1{m^2}\left[m\Sigma-\frac{m(m-1)}{N-1}\Sigma\right]=\frac{N-m}{m(N-1)}\Sigma.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>Cov</mo><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>g</mi><mo accent="true">̂</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><msup><mi>m</mi><mn>2</mn></msup></mfrac><mrow><mo form="prefix" stretchy="true">[</mo><mi>m</mi><mi>Σ</mi><mo>−</mo><mfrac><mrow><mi>m</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>m</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mi>Σ</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mfrac><mrow><mi>N</mi><mo>−</mo><mi>m</mi></mrow><mrow><mi>m</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>N</mi><mo>−</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mi>Σ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{Cov}(\hat g)=\frac1{m^2}\left[m\Sigma-\frac{m(m-1)}{N-1}\Sigma\right]=\frac{N-m}{m(N-1)}\Sigma.</annotation></semantics></math>
+</div>
+<p>
       At
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>=</mo><mi>N</mi></mrow><annotation encoding="application/x-tex">m=N</annotation></semantics></math>
       this is zero, as a full-dataset average must be.
      </p>
-     <h4>
+<h4>
       5 · Condition on the actual training history
      </h4>
-     <p>
+<p>
       These unbiasedness statements hold for a fresh uniform draw independent of the current parameter choice, or at a fixed parameter vector. During a shuffled epoch, the next batch is drawn from the
       <strong>
        remaining
       </strong>
       observations, and the parameters depend on earlier batches. Conditional unbiasedness for the full gradient is not automatic. Correlated examples and batch-coupled losses also require a different covariance argument.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="4" data-pdf="optim" type="button">
-       Chapter source · PDF p. 4
-      </button>
-      <a class="calculation-link" href="#sgd?derivation=minibatch-variance">
+<div class="derivation-footer">
+
+<button data-page="4" data-pdf="optim" type="button">Reference · PDF p. 4</button>
+<a class="calculation-link" href="#sgd?derivation=minibatch-variance">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="a-numerical-update" id="sgd--a-numerical-update">
+</div>
+</div>
+</details>
+<h2 data-section="a-numerical-update" id="sgd--a-numerical-update">
     A numerical update
    </h2>
-   <p>
-    The PDF sets
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mi>t</mi></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.20</mn><mo>,</mo><mi>−</mi><mn>0.50</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\theta_t=(1.20,-0.50)^\top</annotation></semantics></math>
-    ,
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>t</mi></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.80</mn><mo>,</mo><mi>−</mi><mn>0.30</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">g_t=(0.80,-0.30)^\top</annotation></semantics></math>
-    , and
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\eta=0.1</annotation></semantics></math>
-    . Thus
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1.20</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.50</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.80</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.30</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1.12</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.47</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\theta_{t+1}=\begin{bmatrix}1.20\\-0.50\end{bmatrix}
+<p>Take <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mi>t</mi></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.20</mn><mo>,</mo><mi>−</mi><mn>0.50</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">\theta_t=(1.20,-0.50)^\top</annotation></semantics></math>, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>t</mi></msub><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.80</mn><mo>,</mo><mi>−</mi><mn>0.30</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">g_t=(0.80,-0.30)^\top</annotation></semantics></math>, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>η</mi><mo>=</mo><mn>0.1</mn></mrow><annotation encoding="application/x-tex">\eta=0.1</annotation></semantics></math>. Thus</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>θ</mi><mrow><mi>t</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1.20</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.50</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>−</mo><mn>0.1</mn><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.80</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.30</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1.12</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mi>−</mi><mn>0.47</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\theta_{t+1}=\begin{bmatrix}1.20\\-0.50\end{bmatrix}
 -0.1\begin{bmatrix}0.80\\-0.30\end{bmatrix}
 =\begin{bmatrix}1.12\\-0.47\end{bmatrix}.</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<p>
     The negative second gradient causes the second parameter to increase. The update rule uses the sign of each sensitivity; it does not simply make weights smaller. Shrinkage requires a penalty or an explicit decay mechanism.
    </p>
-   <h2 data-section="schedules-are-not-coordinate-wise-adaptation" id="sgd--schedules-are-not-coordinate-wise-adaptation">
+<h2 data-section="schedules-are-not-coordinate-wise-adaptation" id="sgd--schedules-are-not-coordinate-wise-adaptation">
     Schedules are not coordinate-wise adaptation
    </h2>
-   <p>
-    The source gives several global schedules:
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>η</mi><mi>t</mi></msub><mo>=</mo><msub><mi>η</mi><mn>0</mn></msub><msup><mi>γ</mi><mrow><mo form="prefix" stretchy="false">⌊</mo><mi>t</mi><mi>/</mi><mi>T</mi><mo form="postfix" stretchy="false">⌋</mo></mrow></msup><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>η</mi><mi>t</mi></msub><mo>=</mo><mfrac><msub><mi>η</mi><mn>0</mn></msub><mrow><mn>1</mn><mo>+</mo><mi>k</mi><mi>t</mi></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>η</mi><mi>t</mi></msub><mo>=</mo><msub><mi>η</mi><mn>0</mn></msub><msup><mi>e</mi><mrow><mi>−</mi><mi>k</mi><mi>t</mi></mrow></msup><mo>,</mo></mrow><annotation encoding="application/x-tex">\eta_t=\eta_0\gamma^{\lfloor t/T\rfloor},\qquad
+<p>Common global learning-rate schedules include</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>η</mi><mi>t</mi></msub><mo>=</mo><msub><mi>η</mi><mn>0</mn></msub><msup><mi>γ</mi><mrow><mo form="prefix" stretchy="false">⌊</mo><mi>t</mi><mi>/</mi><mi>T</mi><mo form="postfix" stretchy="false">⌋</mo></mrow></msup><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>η</mi><mi>t</mi></msub><mo>=</mo><mfrac><msub><mi>η</mi><mn>0</mn></msub><mrow><mn>1</mn><mo>+</mo><mi>k</mi><mi>t</mi></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>η</mi><mi>t</mi></msub><mo>=</mo><msub><mi>η</mi><mn>0</mn></msub><msup><mi>e</mi><mrow><mi>−</mi><mi>k</mi><mi>t</mi></mrow></msup><mo>,</mo></mrow><annotation encoding="application/x-tex">\eta_t=\eta_0\gamma^{\lfloor t/T\rfloor},\qquad
 \eta_t=\frac{\eta_0}{1+kt},\qquad
 \eta_t=\eta_0e^{-kt},</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<p>
     and cosine decay
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>η</mi><mi>t</mi></msub><mo>=</mo><msub><mi>η</mi><mo>min</mo></msub><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>η</mi><mo>max</mo></msub><mo>−</mo><msub><mi>η</mi><mo>min</mo></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>+</mo><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><mrow><mi>π</mi><mi>t</mi></mrow><mi>T</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\eta_t=\eta_{\min}+\frac12(\eta_{\max}-\eta_{\min})\left[1+\cos\left(\frac{\pi t}{T}\right)\right].</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>η</mi><mi>t</mi></msub><mo>=</mo><msub><mi>η</mi><mo>min</mo></msub><mo>+</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>η</mi><mo>max</mo></msub><mo>−</mo><msub><mi>η</mi><mo>min</mo></msub><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>+</mo><mo>cos</mo><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><mrow><mi>π</mi><mi>t</mi></mrow><mi>T</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\eta_t=\eta_{\min}+\frac12(\eta_{\max}-\eta_{\min})\left[1+\cos\left(\frac{\pi t}{T}\right)\right].</annotation></semantics></math>
+</div>
+<p>
     Each gives one scalar scale at time
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
     . AdaGrad, RMSProp, and Adam additionally alter the effective scale per coordinate using gradient history. A scheduled optimizer can use both mechanisms; they answer different questions.
    </p>
-   <p>
+<p>
     The scheduling unit must be explicit. Here
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
     denotes an update index; implementations can step schedulers per epoch or per batch, depending on the intended design. Advancing a schedule at the wrong frequency changes the actual experiment.
    </p>
-   <h2 data-section="what-to-tune-and-what-to-measure" id="sgd--what-to-tune-and-what-to-measure">
+<h2 data-section="what-to-tune-and-what-to-measure" id="sgd--what-to-tune-and-what-to-measure">
     What to tune and what to measure
    </h2>
-   <p>
-    A learning rate that is too small wastes progress; one that is too large can destabilize the trajectory. The optimization guide warns against comparing methods at one arbitrary shared learning rate. Their update scales have different interpretations. A meaningful comparison tunes the base rate and relevant schedule and compares progress in computational terms, not just abstract iteration counts.
-   </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="sgd--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="optimization">
-     <span class="resource-meta">
+<p>A very small learning rate makes progress slow; a large one can destabilize training. Update scales differ across optimizers, so a comparison at one arbitrary shared learning rate is not necessarily fair. Tune the base rate and schedule for each method, and compare computational work as well as loss and validation performance.</p>
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="sgd--implementation">Implementation examples</h2>
+
+<div class="resource-list">
+<div class="resource" data-resource="optimization">
+<span class="resource-meta">
       PyTorch · Tutorial + code
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/basics/optimization_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Optimizing Model Parameters
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Follow separate training and test loops. Identify the forward calculation, loss, backward pass and optimizer update rather than treating training as one operation.
-     </p>
-    </div>
-    <div class="resource" data-resource="sgd-api">
-     <span class="resource-meta">
+</a>
+<p>A complete training and evaluation loop with separate forward, loss, backward, and optimizer steps.</p>
+</div>
+<div class="resource" data-resource="sgd-api">
+<span class="resource-meta">
       PyTorch · API + algorithm
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.SGD.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/generated/torch.optim.SGD.html" rel="noopener noreferrer" target="_blank">
+<span>
        SGD: momentum and Nesterov conventions
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Check the documented update, momentum-buffer initialization and dampening. These details explain why two textbook momentum formulas may need different learning-rate scaling.
-     </p>
-    </div>
-    <div class="resource" data-resource="optim">
-     <span class="resource-meta">
+</a>
+<p>The SGD update, momentum-buffer initialization, dampening, and Nesterov conventions.</p>
+</div>
+<div class="resource" data-resource="optim">
+<span class="resource-meta">
       PyTorch · Implementation reference
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/optim.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/optim.html" rel="noopener noreferrer" target="_blank">
+<span>
        torch.optim
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Check optimizer construction, per-parameter options, closure usage and scheduler ordering. Use the training tutorial for a complete surrounding loop.
-     </p>
-    </div>
-   </div>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</a>
+<p>Optimizer construction, parameter groups, closures, and learning-rate scheduler ordering.</p>
+</div>
+</div>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
     </strong>
     Does using a larger batch always make training better?
    </summary>
-   <p>
+<p>
     It reduces variance of the gradient estimate under the usual sampling assumptions, but changes the number of updates per data pass and the computational trade-off. Lower gradient noise does not by itself guarantee faster wall-clock convergence or better generalization.
    </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#gradient-flow">
-    <small>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+
+<button aria-label="Open source: Optimization · PDF pp. 4–7 · §§1–2.5" data-page="4" data-pdf="optim" type="button">
+     Optimization · PDF pp. 4–7 · §§1–2.5
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#gradient-flow">
+<small>
      ← Previous
     </small>
-    Gradient flow and initialization
-   </a>
-   <a href="#momentum">
-    <small>
+Gradient flow and initialization
+</a>
+<a href="#momentum">
+<small>
      Next →
     </small>
-    Momentum and Nesterov acceleration
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+Momentum and Nesterov acceleration
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="why-move-against-the-gradient" href="#sgd?section=why-move-against-the-gradient">
-    Why move against the gradient?
-   </a>
-   <a data-section="replace-an-expensive-average-with-a-sampled-average" href="#sgd?section=replace-an-expensive-average-with-a-sampled-average">
-    Replace an expensive average with a sampled average
-   </a>
-   <a data-section="batch-size-controls-more-than-memory-use" href="#sgd?section=batch-size-controls-more-than-memory-use">
-    Batch size controls more than memory use
-   </a>
-   <a data-section="a-numerical-update" href="#sgd?section=a-numerical-update">
-    A numerical update
-   </a>
-   <a data-section="schedules-are-not-coordinate-wise-adaptation" href="#sgd?section=schedules-are-not-coordinate-wise-adaptation">
-    Schedules are not coordinate-wise adaptation
-   </a>
-   <a data-section="what-to-tune-and-what-to-measure" href="#sgd?section=what-to-tune-and-what-to-measure">
-    What to tune and what to measure
-   </a>
-   <a data-section="implementation" href="#sgd?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="why-move-against-the-gradient" href="#sgd?section=why-move-against-the-gradient">Why move against the gradient?</a>
+<a data-section="replace-an-expensive-average-with-a-sampled-average" href="#sgd?section=replace-an-expensive-average-with-a-sampled-average">Replace an expensive average with a sampled average</a>
+<a data-section="batch-size-controls-more-than-memory-use" href="#sgd?section=batch-size-controls-more-than-memory-use">Batch size controls more than memory use</a>
+<a data-section="a-numerical-update" href="#sgd?section=a-numerical-update">A numerical update</a>
+<a data-section="schedules-are-not-coordinate-wise-adaptation" href="#sgd?section=schedules-are-not-coordinate-wise-adaptation">Schedules are not coordinate-wise adaptation</a>
+<a data-section="what-to-tune-and-what-to-measure" href="#sgd?section=what-to-tune-and-what-to-measure">What to tune and what to measure</a>
+<a data-section="implementation" href="#sgd?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>

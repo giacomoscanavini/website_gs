@@ -1,247 +1,245 @@
 <article class="article method-page" id="m-pd-filter-notnull">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=Filtering">
+<a href="#methods?lang=pd&amp;cat=Filtering">
    pandas · Filtering
   </a>
- </div>
- <h1>
+</div>
+<h1>
   Non-missing
  </h1>
- <p class="lead">
+<p class="lead">
   Non-null rows
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-filter-notnull"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">score</span><span class="o">.</span><span class="n">notna</span><span class="p">()]</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-filter-notnull"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">score</span><span class="o">.</span><span class="n">notna</span><span class="p">()]</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-sql-is-not-null">
+<a href="#m-sql-is-not-null">
    SQL · IS NOT NULL
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C06?code=code-C06-1&amp;method=pd-filter-notnull&amp;line=4">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C06?code=code-C06-1&amp;method=pd-filter-notnull&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      620 · Not boring movies
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def not_boring_movies(cinema: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def not_boring_movies(cinema: pd.DataFrame) -&gt; pd.DataFrame:
     mask = cinema['id'].mod(2).eq(1) &amp; cinema['description'].notna() &amp; cinema['description'].ne('boring')
     return cinema.loc[mask].sort_values('rating', ascending=False)</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-filter-notnull&amp;line=9">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-07?code=code-squid-07-1&amp;method=pd-filter-notnull&amp;line=9">
+<div>
+<span class="usage-label">
      Squid Game · pandas
     </span>
-    <strong>
+<strong>
      Join room checks and camera sightings
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 9
     </small>
-   </div>
-   <pre aria-hidden="true">joined = guards.merge(rooms, how='left', left_on='assigned_room_id', right_on='room_id')
+</div>
+<pre aria-hidden="true">joined = guards.merge(rooms, how='left', left_on='assigned_room_id', right_on='room_id')
 joined = joined.merge(cameras.loc[cameras['guard_spotted_id'].notna()],
                       left_on='guard_number', right_on='guard_spotted_id')
 joined = joined.loc[joined['isvacant'].eq(True)].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B02?code=code-B02-5&amp;method=pd-filter-notnull&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B02?code=code-B02-5&amp;method=pd-filter-notnull&amp;line=1">
+<div>
+<span class="usage-label">
      SQLBolt · pandas
     </span>
-    <strong>
+<strong>
      Numeric constraints
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">result = movies.loc[movies['year'].notna() &amp; ~movies['year'].between(2000, 2010)].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = movies.loc[movies['year'].notna() &amp; ~movies['year'].between(2000, 2010)].copy()</pre>
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C28?code=code-C28-1&amp;method=pd-filter-notnull&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C28?code=code-C28-1&amp;method=pd-filter-notnull&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1978 · Low-salary employees whose manager left
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def find_employees(employees: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_employees(employees: pd.DataFrame) -&gt; pd.DataFrame:
     mask = employees['salary'].lt(30000) &amp; employees['manager_id'].notna() &amp; ~employees['manager_id'].isin(employees['employee_id'])
     return employees.loc[mask, ['employee_id']].sort_values('employee_id')</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-filter-notnull&amp;line=18">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-filter-notnull&amp;line=18">
+<div>
+<span class="usage-label">
      Squid Game · pandas
     </span>
-    <strong>
+<strong>
      Reconstruct access-log overlaps
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 18
     </small>
-   </div>
-   <pre aria-hidden="true">    logs = shifts.merge(daily_door_access_logs.rename(columns={'id': 'log_id'}), on='guard_id')
+</div>
+<pre aria-hidden="true">    logs = shifts.merge(daily_door_access_logs.rename(columns={'id': 'log_id'}), on='guard_id')
     off_post = (logs['assigned_post'].notna() &amp; logs['door_location'].notna()
                 &amp; logs['assigned_post'].ne(logs['door_location']))
     locations = logs.loc[off_post, 'door_location']</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B03?code=code-B03-5&amp;method=pd-filter-notnull&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B03?code=code-B03-5&amp;method=pd-filter-notnull&amp;line=1">
+<div>
+<span class="usage-label">
      SQLBolt · pandas
     </span>
-    <strong>
+<strong>
      Text constraints and LIKE
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">mask = movies['director'].notna() &amp; movies['director'].ne('John Lasseter')
+</div>
+<pre aria-hidden="true">mask = movies['director'].notna() &amp; movies['director'].ne('John Lasseter')
 result = movies.loc[mask, ['title', 'director']].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    1 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#B07?code=code-B07-1&amp;method=pd-filter-notnull&amp;line=1">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#B07?code=code-B07-1&amp;method=pd-filter-notnull&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       OUTER JOINs
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">result = employees.loc[employees['building'].notna(), ['building']].drop_duplicates()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = employees.loc[employees['building'].notna(), ['building']].drop_duplicates()</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (1)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C06?code=code-C06-3&amp;method=pd-filter-notnull&amp;line=4">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C06?code=code-C06-3&amp;method=pd-filter-notnull&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       620 · Not boring movies
      </strong>
-     <small>
+<small>
       My approach · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def not_boring_movies(cinema: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def not_boring_movies(cinema: pd.DataFrame) -&gt; pd.DataFrame:
     df =   cinema[(cinema.id % 2 == 1) &amp; (cinema.description.notna()) &amp; (cinema.description != 'boring')]
     return   df.sort_values('rating', ascending=False)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     pandas cheat-sheet image · Filtering. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=Filtering">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=Filtering">
+<small>
     ← Browse
    </small>
    pandas · Filtering
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

@@ -1,93 +1,60 @@
 <section aria-labelledby="activations-title" class="page-view lesson-layout" id="activations">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      03
     </span>
     Part 1 · Neural-network foundations
    </p>
-   <h1 id="activations-title" tabindex="-1">
+<h1 id="activations-title" tabindex="-1">
     Activations and their derivatives
    </h1>
-   <p class="standfirst">
-    Understand each nonlinearity as both a forward transformation and a gate on backward sensitivity.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Neural networks · PDF pp. 6–9 · §§2–5" data-page="6" data-pdf="basics" type="button">
-     Neural networks · PDF pp. 6–9 · §§2–5
-    </button>
-    <button aria-label="Open source: Neural networks · PDF pp. 18–19 · §§23–25" data-page="18" data-pdf="basics" type="button">
-     Neural networks · PDF pp. 18–19 · §§23–25
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<p class="standfirst">An activation transforms a neuron’s output. Its derivative controls how changes in that output propagate back to earlier parameters.</p>
+
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="two-jobs-not-one" href="#activations?section=two-jobs-not-one">
-     Two jobs, not one
-    </a>
-    <a data-section="relu-a-piecewise-linear-gate" href="#activations?section=relu-a-piecewise-linear-gate">
-     ReLU: a piecewise-linear gate
-    </a>
-    <a data-section="sigmoid-probability-interpretation-and-saturation" href="#activations?section=sigmoid-probability-interpretation-and-saturation">
-     Sigmoid: probability interpretation and saturation
-    </a>
-    <a data-section="tanh-centered-but-still-saturating" href="#activations?section=tanh-centered-but-still-saturating">
-     Tanh: centered, but still saturating
-    </a>
-    <a data-section="gelu-smooth-modulation" href="#activations?section=gelu-smooth-modulation">
-     GELU: smooth modulation
-    </a>
-    <a data-section="hidden-activations-versus-output-activations" href="#activations?section=hidden-activations-versus-output-activations">
-     Hidden activations versus output activations
-    </a>
-    <a data-section="implementation" href="#activations?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="two-jobs-not-one" id="activations--two-jobs-not-one">
-    Two jobs, not one
-   </h2>
-   <p>
+<nav aria-label="On this page">
+<a data-section="two-jobs-not-one" href="#activations?section=two-jobs-not-one">Forward values and backward derivatives</a>
+<a data-section="relu-a-piecewise-linear-gate" href="#activations?section=relu-a-piecewise-linear-gate">ReLU: a piecewise-linear gate</a>
+<a data-section="sigmoid-probability-interpretation-and-saturation" href="#activations?section=sigmoid-probability-interpretation-and-saturation">Sigmoid: probability interpretation and saturation</a>
+<a data-section="tanh-centered-but-still-saturating" href="#activations?section=tanh-centered-but-still-saturating">Tanh: centered, but still saturating</a>
+<a data-section="gelu-smooth-modulation" href="#activations?section=gelu-smooth-modulation">GELU: smooth modulation</a>
+<a data-section="hidden-activations-versus-output-activations" href="#activations?section=hidden-activations-versus-output-activations">Hidden activations versus output activations</a>
+<a data-section="implementation" href="#activations?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="two-jobs-not-one" id="activations--two-jobs-not-one">Forward values and backward derivatives</h2>
+<p>
     An activation shapes the function evaluated in the forward pass. Its derivative also scales the learning signal in the backward pass:
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><mi>ϕ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>z</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>a</mi></mrow></mfrac><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">a=\phi(z),\qquad \frac{\partial L}{\partial z}=\frac{\partial L}{\partial a}\phi'(z).</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><mi>ϕ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>z</mi></mrow></mfrac><mo>=</mo><mfrac><mrow><mi>∂</mi><mi>L</mi></mrow><mrow><mi>∂</mi><mi>a</mi></mrow></mfrac><mi>ϕ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">a=\phi(z),\qquad \frac{\partial L}{\partial z}=\frac{\partial L}{\partial a}\phi'(z).</annotation></semantics></math>
+</div>
+<p>
     That is why activation choice affects both representational capacity and trainability. Two functions can have a similar output range yet behave differently under optimization because their derivatives differ.
    </p>
-   <figure class="source-figure">
-    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="basics-6" type="button">
-     <img alt="The source compares ReLU, sigmoid, and tanh over the same pre-activation range. Read both the output range and the flat regions: flatness indicates weak local sensitivity." height="505" loading="lazy" src="assets/images/the-source-compares-relu-sigmoid-and-tanh-over-the-same-pre-activ-a2a2e26ac4.webp" width="862"/>
-    </button>
-    <figcaption>
-     The source compares ReLU, sigmoid, and tanh over the same pre-activation range. Read both the output range and the flat regions: flatness indicates weak local sensitivity.
-     <button aria-label="Open source: Neural networks · PDF p. 6" data-page="6" data-pdf="basics" type="button">
+<figure class="source-figure">
+<button aria-label="Enlarge source figure" class="figure-frame" data-figure="basics-6" type="button">
+<img alt="ReLU, sigmoid, and tanh over the same pre-activation range. Flat regions have low local sensitivity; their derivatives attenuate the backward signal." height="505" loading="lazy" src="assets/images/the-source-compares-relu-sigmoid-and-tanh-over-the-same-pre-activ-a2a2e26ac4.webp" width="862"/>
+</button>
+<figcaption>ReLU, sigmoid, and tanh over the same pre-activation range. Flat regions have low local sensitivity; their derivatives attenuate the backward signal. <button aria-label="Open source: Neural networks · PDF p. 6" data-page="6" data-pdf="basics" type="button">
       Neural networks · PDF p. 6
-     </button>
-    </figcaption>
-   </figure>
-   <h2 data-section="relu-a-piecewise-linear-gate" id="activations--relu-a-piecewise-linear-gate">
+     </button></figcaption>
+</figure>
+<h2 data-section="relu-a-piecewise-linear-gate" id="activations--relu-a-piecewise-linear-gate">
     ReLU: a piecewise-linear gate
    </h2>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>ReLU</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>max</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mo>ReLU</mo><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mn>1</mn></mtd><mtd columnalign="left" style="text-align: left"><mi>z</mi><mo>&gt;</mo><mn>0</mn></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mn>0</mn></mtd><mtd columnalign="left" style="text-align: left"><mi>z</mi><mo>&lt;</mo><mn>0</mn><mi>.</mi></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\operatorname{ReLU}(z)=\max(0,z),\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>ReLU</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>max</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>0</mn><mo>,</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mo>ReLU</mo><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mrow><mo form="prefix" stretchy="true">{</mo><mtable><mtr><mtd columnalign="left" style="text-align: left"><mn>1</mn></mtd><mtd columnalign="left" style="text-align: left"><mi>z</mi><mo>&gt;</mo><mn>0</mn></mtd></mtr><mtr><mtd columnalign="left" style="text-align: left"><mn>0</mn></mtd><mtd columnalign="left" style="text-align: left"><mi>z</mi><mo>&lt;</mo><mn>0</mn><mi>.</mi></mtd></mtr></mtable></mrow></mrow><annotation encoding="application/x-tex">\operatorname{ReLU}(z)=\max(0,z),\qquad
 \operatorname{ReLU}'(z)=\begin{cases}1&amp;z&gt;0\\0&amp;z&lt;0.\end{cases}</annotation></semantics></math>
-   </div>
-   <p>
-    For positive inputs, the activation transmits the incoming derivative without attenuation. For negative inputs, it blocks that path for the observation. At exactly zero, the mathematical derivative is not defined; the source notes that software typically uses zero as a convention.
-   </p>
-   <p>
+</div>
+<p>For positive inputs, ReLU passes the incoming derivative unchanged. For negative inputs, its derivative is zero. At exactly zero, the mathematical derivative is undefined; software commonly selects zero as a convention.</p>
+<p>
     A
     <strong>
      dead ReLU
@@ -96,13 +63,13 @@
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mi>z</mi></mrow><annotation encoding="application/x-tex">\alpha z</annotation></semantics></math>
     , giving a small nonzero slope instead of zero. This does not guarantee a useful representation, but it prevents a strictly zero derivative on that branch.
    </p>
-   <h2 data-section="sigmoid-probability-interpretation-and-saturation" id="activations--sigmoid-probability-interpretation-and-saturation">
+<h2 data-section="sigmoid-probability-interpretation-and-saturation" id="activations--sigmoid-probability-interpretation-and-saturation">
     Sigmoid: probability interpretation and saturation
    </h2>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>σ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\sigma(z)=\frac{1}{1+e^{-z}},\qquad \sigma'(z)=\sigma(z)(1-\sigma(z)).</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mi>σ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\sigma(z)=\frac{1}{1+e^{-z}},\qquad \sigma'(z)=\sigma(z)(1-\sigma(z)).</annotation></semantics></math>
+</div>
+<p>
     Its output lies between zero and one. At
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">z=0</annotation></semantics></math>
     , the output is
@@ -111,42 +78,28 @@
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.25</mn><annotation encoding="application/x-tex">0.25</annotation></semantics></math>
     , the maximum. At large positive or negative logits it saturates: changing the logit produces only a small probability change.
    </p>
-   <p>
+<p>
     This makes sigmoid natural for modeling a binary probability but problematic when repeated as the hidden activation in a deep network. Even before accounting for weights, multiplying many derivatives no larger than
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.25</mn><annotation encoding="application/x-tex">0.25</annotation></semantics></math>
     can produce a tiny sensitivity.
    </p>
-   <p>
-    The important nuance is the
-    <strong>
-     loss–activation pair
-    </strong>
-    . With a binary cross-entropy loss, differentiating with respect to the
-    <em>
-     logit
-    </em>
-    simplifies to
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">\sigma(z)-y</annotation></semantics></math>
-    . Do not reason about output-layer training by looking at the sigmoid derivative alone while ignoring the derivative of the loss. The
-    <a href="#losses-and-outputs">
+<p>The important nuance is the <strong>loss–activation pair</strong>. With a binary cross-entropy loss, differentiating with respect to the <em>logit</em> simplifies to <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">\sigma(z)-y</annotation></semantics></math>. Do not reason about output-layer training by looking at the sigmoid derivative alone while ignoring the derivative of the loss. The <a href="#losses-and-outputs">
      loss chapter
-    </a>
-    explains the pairing.
-   </p>
-   <details class="derivation" data-derivation="sigmoid-derivative" id="activations--derivation-sigmoid-derivative">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+    </a> derives this cancellation.</p>
+<details class="derivation" data-derivation="sigmoid-derivative" id="activations--derivation-sigmoid-derivative">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive sigmoid’s derivative and maximum slope
      </span>
-    </summary>
-    <div class="derivation-body">
-     <h4>
+</summary>
+<div class="derivation-body">
+<h4>
       1 · Differentiate the reciprocal
      </h4>
-     <p>
+<p>
       Write
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">\sigma(z)=(1+e^{-z})^{-1}</annotation></semantics></math>
       . For
@@ -157,35 +110,35 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow><annotation encoding="application/x-tex">u'(z)=-e^{-z}</annotation></semantics></math>
       , so
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>−</mi><mn>2</mn></mrow></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\sigma'(z)=-(1+e^{-z})^{-2}(-e^{-z})=\frac{e^{-z}}{(1+e^{-z})^2}.</annotation></semantics></math>
-     </div>
-     <h4>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>−</mi><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mi>−</mi><mn>2</mn></mrow></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\sigma'(z)=-(1+e^{-z})^{-2}(-e^{-z})=\frac{e^{-z}}{(1+e^{-z})^2}.</annotation></semantics></math>
+</div>
+<h4>
       2 · Express the result using the output itself
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow></mfrac><mo>=</mo><mfrac><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">1-\sigma(z)=1-\frac1{1+e^{-z}}=\frac{e^{-z}}{1+e^{-z}}.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow></mfrac><mo>=</mo><mfrac><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">1-\sigma(z)=1-\frac1{1+e^{-z}}=\frac{e^{-z}}{1+e^{-z}}.</annotation></semantics></math>
+</div>
+<p>
       Multiply the two factors:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>−</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow></mfrac><mfrac><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow></mfrac><mo>=</mo><mi>σ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\sigma(z)[1-\sigma(z)]=\frac1{1+e^{-z}}\frac{e^{-z}}{1+e^{-z}}=\sigma'(z).</annotation></semantics></math>
-     </div>
-     <h4>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>−</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow></mfrac><mfrac><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mrow><mn>1</mn><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow></mfrac><mo>=</mo><mi>σ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\sigma(z)[1-\sigma(z)]=\frac1{1+e^{-z}}\frac{e^{-z}}{1+e^{-z}}=\sigma'(z).</annotation></semantics></math>
+</div>
+<h4>
       3 · Find the largest possible slope
      </h4>
-     <p>
+<p>
       Let
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">p=\sigma(z)</annotation></semantics></math>
       , so
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>&lt;</mo><mi>p</mi><mo>&lt;</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">0&lt;p&lt;1</annotation></semantics></math>
       . Completing the square gives
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>p</mi><mo>−</mo><msup><mi>p</mi><mn>2</mn></msup><mo>=</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mo>−</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>≤</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">p(1-p)=p-p^2=\frac14-\left(p-\frac12\right)^2\le\frac14.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>p</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>p</mi><mo>−</mo><msup><mi>p</mi><mn>2</mn></msup><mo>=</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mo>−</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>p</mi><mo>−</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>≤</mo><mfrac><mn>1</mn><mn>4</mn></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">p(1-p)=p-p^2=\frac14-\left(p-\frac12\right)^2\le\frac14.</annotation></semantics></math>
+</div>
+<p>
       Equality requires
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>=</mo><mn>1</mn><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">p=1/2</annotation></semantics></math>
       , attained at
@@ -198,10 +151,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>→</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">p\to1</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       4 · Carry an upstream gradient through it
      </h4>
-     <p>
+<p>
       If
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo>=</mo><mi>∂</mi><mi>L</mi><mi>/</mi><mi>∂</mi><mi>p</mi></mrow><annotation encoding="application/x-tex">g=\partial L/\partial p</annotation></semantics></math>
       , then
@@ -212,85 +165,81 @@
       </strong>
       . It does not bound the entire network gradient because weights and the loss derivative also contribute. In the binary cross-entropy pairing, the latter cancels this factor; see the logit derivation in the loss chapter.
      </p>
-     <figure aria-label="Output and sensitivity" class="interactive-visual" data-visual="sigmoid">
-      <div class="visual-heading">
-       <strong>
+<figure aria-label="Output and sensitivity" class="interactive-visual" data-visual="sigmoid">
+<div class="visual-heading">
+<strong>
         Output and sensitivity
        </strong>
-       <button data-reset-visual="" type="button">
+<button data-reset-visual="" type="button">
         Reset
        </button>
-      </div>
-      <div class="visual-controls">
-       <div class="visual-control">
-        <label for="visual-sigmoid-z">
+</div>
+<div class="visual-controls">
+<div class="visual-control">
+<label for="visual-sigmoid-z">
          Pre-activation z
         </label>
-        <input aria-describedby="visual-sigmoid-output" data-default="0" data-value="z" id="visual-sigmoid-z" max="8" min="-8" step="0.1" type="range" value="0"/>
-        <output data-range-output="z" for="visual-sigmoid-z">
+<input aria-describedby="visual-sigmoid-output" data-default="0" data-value="z" id="visual-sigmoid-z" max="8" min="-8" step="0.1" type="range" value="0"/>
+<output data-range-output="z" for="visual-sigmoid-z">
          0
         </output>
-       </div>
-      </div>
-      <svg aria-describedby="visual-sigmoid-output" aria-label="Output and sensitivity" role="img" viewbox="0 0 640 300"></svg>
-      <div aria-hidden="true" class="visual-legend">
-       <span style="--series:#356650">
+</div>
+</div>
+<svg aria-describedby="visual-sigmoid-output" aria-label="Output and sensitivity" role="img" viewbox="0 0 640 300"></svg>
+<div aria-hidden="true" class="visual-legend">
+<span style="--series:#356650">
         Sigmoid
        </span>
-       <span style="--series:#92663c">
+<span style="--series:#92663c">
         Derivative
        </span>
-      </div>
-      <figcaption aria-live="polite" class="visual-output" id="visual-sigmoid-output">
-      </figcaption>
-      <div class="visual-note">
+</div>
+<figcaption aria-live="polite" class="visual-output" id="visual-sigmoid-output">
+</figcaption>
+<div class="visual-note">
        Interactive calculation using the assumptions above · computed locally, not fitted performance
       </div>
-      <noscript>
-       <p class="visual-fallback">
+<noscript>
+<p class="visual-fallback">
         The interactive plot needs JavaScript. The complete equations and worked values remain available in the calculation above.
        </p>
-      </noscript>
-     </figure>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="6" data-pdf="basics" type="button">
-       Chapter source · PDF p. 6
-      </button>
-      <a class="calculation-link" href="#activations?derivation=sigmoid-derivative">
+</noscript>
+</figure>
+<div class="derivation-footer">
+
+<button data-page="6" data-pdf="basics" type="button">Reference · PDF p. 6</button>
+<a class="calculation-link" href="#activations?derivation=sigmoid-derivative">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="tanh-centered-but-still-saturating" id="activations--tanh-centered-but-still-saturating">
+</div>
+</div>
+</details>
+<h2 data-section="tanh-centered-but-still-saturating" id="activations--tanh-centered-but-still-saturating">
     Tanh: centered, but still saturating
    </h2>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><msup><mi>e</mi><mi>z</mi></msup><mo>−</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow><mrow><msup><mi>e</mi><mi>z</mi></msup><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mo>tanh</mo><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><msup><mo>tanh</mo><mn>2</mn></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\tanh(z)=\frac{e^z-e^{-z}}{e^z+e^{-z}},\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><msup><mi>e</mi><mi>z</mi></msup><mo>−</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow><mrow><msup><mi>e</mi><mi>z</mi></msup><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mo>tanh</mo><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><msup><mo>tanh</mo><mn>2</mn></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\tanh(z)=\frac{e^z-e^{-z}}{e^z+e^{-z}},\qquad
 \tanh'(z)=1-\tanh^2(z).</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<p>
     Tanh maps to
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>1</mn><mo>,</mo><mn>1</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(-1,1)</annotation></semantics></math>
     and is centered at zero. It is useful when a signed bounded state is desired, as in recurrent candidates. But large-magnitude inputs still move it into flat regions. Zero centering and resistance to saturation are different properties.
    </p>
-   <details class="derivation" data-derivation="tanh-derivative" id="activations--derivation-tanh-derivative">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<details class="derivation" data-derivation="tanh-derivative" id="activations--derivation-tanh-derivative">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive tanh’s derivative without omitting the quotient rule
      </span>
-    </summary>
-    <div class="derivation-body">
-     <h4>
+</summary>
+<div class="derivation-body">
+<h4>
       1 · Name the numerator and denominator
      </h4>
-     <p>
+<p>
       Let
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mo>=</mo><msup><mi>e</mi><mi>z</mi></msup><mo>−</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup></mrow><annotation encoding="application/x-tex">u=e^z-e^{-z}</annotation></semantics></math>
       and
@@ -301,94 +250,84 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mi>′</mi><mo>=</mo><msup><mi>e</mi><mi>z</mi></msup><mo>−</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo>=</mo><mi>u</mi></mrow><annotation encoding="application/x-tex">v'=e^z-e^{-z}=u</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       2 · Apply the quotient rule
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>d</mi><mrow><mi>d</mi><mi>z</mi></mrow></mfrac><mfrac><mi>u</mi><mi>v</mi></mfrac><mo>=</mo><mfrac><mrow><mi>u</mi><mi>′</mi><mi>v</mi><mo>−</mo><mi>u</mi><mi>v</mi><mi>′</mi></mrow><msup><mi>v</mi><mn>2</mn></msup></mfrac><mo>=</mo><mfrac><mrow><msup><mi>v</mi><mn>2</mn></msup><mo>−</mo><msup><mi>u</mi><mn>2</mn></msup></mrow><msup><mi>v</mi><mn>2</mn></msup></mfrac><mo>=</mo><mn>1</mn><mo>−</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><mi>u</mi><mi>v</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{d}{dz}\frac uv=\frac{u'v-uv'}{v^2}=\frac{v^2-u^2}{v^2}=1-\left(\frac uv\right)^2.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>d</mi><mrow><mi>d</mi><mi>z</mi></mrow></mfrac><mfrac><mi>u</mi><mi>v</mi></mfrac><mo>=</mo><mfrac><mrow><mi>u</mi><mi>′</mi><mi>v</mi><mo>−</mo><mi>u</mi><mi>v</mi><mi>′</mi></mrow><msup><mi>v</mi><mn>2</mn></msup></mfrac><mo>=</mo><mfrac><mrow><msup><mi>v</mi><mn>2</mn></msup><mo>−</mo><msup><mi>u</mi><mn>2</mn></msup></mrow><msup><mi>v</mi><mn>2</mn></msup></mfrac><mo>=</mo><mn>1</mn><mo>−</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mfrac><mi>u</mi><mi>v</mi></mfrac><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{d}{dz}\frac uv=\frac{u'v-uv'}{v^2}=\frac{v^2-u^2}{v^2}=1-\left(\frac uv\right)^2.</annotation></semantics></math>
+</div>
+<p>
       Since
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mi>/</mi><mi>v</mi><mo>=</mo><mo>tanh</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">u/v=\tanh z</annotation></semantics></math>
       ,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>tanh</mo><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><msup><mo>tanh</mo><mn>2</mn></msup><mi>z</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\tanh'(z)=1-\tanh^2z.</annotation></semantics></math>
-     </div>
-     <h4>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>tanh</mo><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn><mo>−</mo><msup><mo>tanh</mo><mn>2</mn></msup><mi>z</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\tanh'(z)=1-\tanh^2z.</annotation></semantics></math>
+</div>
+<h4>
       3 · Check the numerator directly
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>v</mi><mn>2</mn></msup><mo>−</mo><msup><mi>u</mi><mn>2</mn></msup><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>e</mi><mi>z</mi></msup><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>−</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>e</mi><mi>z</mi></msup><mo>−</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>=</mo><mn>4</mn><msup><mi>e</mi><mi>z</mi></msup><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo>=</mo><mn>4</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">v^2-u^2=(e^z+e^{-z})^2-(e^z-e^{-z})^2=4e^ze^{-z}=4.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>v</mi><mn>2</mn></msup><mo>−</mo><msup><mi>u</mi><mn>2</mn></msup><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>e</mi><mi>z</mi></msup><mo>+</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>−</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>e</mi><mi>z</mi></msup><mo>−</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>=</mo><mn>4</mn><msup><mi>e</mi><mi>z</mi></msup><msup><mi>e</mi><mrow><mi>−</mi><mi>z</mi></mrow></msup><mo>=</mo><mn>4</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">v^2-u^2=(e^z+e^{-z})^2-(e^z-e^{-z})^2=4e^ze^{-z}=4.</annotation></semantics></math>
+</div>
+<p>
       Thus the derivative is positive for finite
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
       , equals one at zero, and approaches zero in either tail.
      </p>
-     <h4>
+<h4>
       4 · Relate tanh to sigmoid
      </h4>
-     <p>
+<p>
       Multiply numerator and denominator by
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>e</mi><mi>z</mi></msup><annotation encoding="application/x-tex">e^z</annotation></semantics></math>
       :
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>tanh</mo><mi>z</mi><mo>=</mo><mfrac><mrow><msup><mi>e</mi><mrow><mn>2</mn><mi>z</mi></mrow></msup><mo>−</mo><mn>1</mn></mrow><mrow><msup><mi>e</mi><mrow><mn>2</mn><mi>z</mi></mrow></msup><mo>+</mo><mn>1</mn></mrow></mfrac><mo>=</mo><mn>2</mn><mfrac><msup><mi>e</mi><mrow><mn>2</mn><mi>z</mi></mrow></msup><mrow><msup><mi>e</mi><mrow><mn>2</mn><mi>z</mi></mrow></msup><mo>+</mo><mn>1</mn></mrow></mfrac><mo>−</mo><mn>1</mn><mo>=</mo><mn>2</mn><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\tanh z=\frac{e^{2z}-1}{e^{2z}+1}=2\frac{e^{2z}}{e^{2z}+1}-1=2\sigma(2z)-1.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>tanh</mo><mi>z</mi><mo>=</mo><mfrac><mrow><msup><mi>e</mi><mrow><mn>2</mn><mi>z</mi></mrow></msup><mo>−</mo><mn>1</mn></mrow><mrow><msup><mi>e</mi><mrow><mn>2</mn><mi>z</mi></mrow></msup><mo>+</mo><mn>1</mn></mrow></mfrac><mo>=</mo><mn>2</mn><mfrac><msup><mi>e</mi><mrow><mn>2</mn><mi>z</mi></mrow></msup><mrow><msup><mi>e</mi><mrow><mn>2</mn><mi>z</mi></mrow></msup><mo>+</mo><mn>1</mn></mrow></mfrac><mo>−</mo><mn>1</mn><mo>=</mo><mn>2</mn><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\tanh z=\frac{e^{2z}-1}{e^{2z}+1}=2\frac{e^{2z}}{e^{2z}+1}-1=2\sigma(2z)-1.</annotation></semantics></math>
+</div>
+<p>
       Differentiating this second expression gives
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>−</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>2</mn><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">4\sigma(2z)[1-\sigma(2z)]</annotation></semantics></math>
       , which equals
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><msup><mo>tanh</mo><mn>2</mn></msup><mi>z</mi></mrow><annotation encoding="application/x-tex">1-\tanh^2z</annotation></semantics></math>
       . It is an independent algebraic check of the same result.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="6" data-pdf="basics" type="button">
-       Chapter source · PDF p. 6
-      </button>
-      <a class="calculation-link" href="#activations?derivation=tanh-derivative">
+<div class="derivation-footer">
+
+<button data-page="6" data-pdf="basics" type="button">Reference · PDF p. 6</button>
+<a class="calculation-link" href="#activations?derivation=tanh-derivative">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="gelu-smooth-modulation" id="activations--gelu-smooth-modulation">
+</div>
+</div>
+</details>
+<h2 data-section="gelu-smooth-modulation" id="activations--gelu-smooth-modulation">
     GELU: smooth modulation
    </h2>
-   <p>
-    The source defines
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>GELU</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>z</mi><mi>Φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\operatorname{GELU}(z)=z\Phi(z),</annotation></semantics></math>
-   </div>
-   <p>
-    where
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Φ</mi><annotation encoding="application/x-tex">\Phi</annotation></semantics></math>
-    is the standard normal cumulative distribution function, and gives the common approximation
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>GELU</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mfrac><mi>z</mi><mn>2</mn></mfrac><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>+</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><msqrt><mfrac><mn>2</mn><mi>π</mi></mfrac></msqrt><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>+</mo><mn>0.044715</mn><msup><mi>z</mi><mn>3</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{GELU}(z)\approx \frac z2\left[1+\tanh\left(\sqrt{\frac2\pi}(z+0.044715z^3)\right)\right].</annotation></semantics></math>
-   </div>
-   <p>
+<p>GELU is defined by</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>GELU</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>z</mi><mi>Φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\operatorname{GELU}(z)=z\Phi(z),</annotation></semantics></math>
+</div>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>Φ</mi><annotation encoding="application/x-tex">\Phi</annotation></semantics></math> is the standard normal cumulative distribution function. A common approximation is</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>GELU</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>≈</mo><mfrac><mi>z</mi><mn>2</mn></mfrac><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>+</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><msqrt><mfrac><mn>2</mn><mi>π</mi></mfrac></msqrt><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo>+</mo><mn>0.044715</mn><msup><mi>z</mi><mn>3</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{GELU}(z)\approx \frac z2\left[1+\tanh\left(\sqrt{\frac2\pi}(z+0.044715z^3)\right)\right].</annotation></semantics></math>
+</div>
+<p>
     Rather than applying ReLU’s abrupt cutoff, GELU changes the contribution smoothly. It can produce small negative outputs. The function’s name and probabilistic expression do not mean that the layer returns class probabilities.
    </p>
-   <details class="derivation" data-derivation="gelu-derivative" id="activations--derivation-gelu-derivative">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<details class="derivation" data-derivation="gelu-derivative" id="activations--derivation-gelu-derivative">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive the exact and approximate GELU gradients
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Notation.
       </strong>
       Write
@@ -399,10 +338,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϕ</mi><annotation encoding="application/x-tex">\phi</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       1 · Differentiate the exact definition
      </h4>
-     <p>
+<p>
       By definition,
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msubsup><mo>∫</mo><mrow><mi>−</mi><mi>∞</mi></mrow><mi>z</mi></msubsup><mi>φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>t</mi><mo form="postfix" stretchy="true">)</mo></mrow><mspace width="0.167em"></mspace><mi>d</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">\Phi(z)=\int_{-\infty}^z\varphi(t)\,dt</annotation></semantics></math>
       . The fundamental theorem of calculus gives
@@ -411,20 +350,20 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mi>Φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">z\Phi(z)</annotation></semantics></math>
       :
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>GELU</mo><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn><mo>⋅</mo><mi>Φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>z</mi><mi>Φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>Φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>z</mi><mi>φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{GELU}'(z)=1\cdot\Phi(z)+z\Phi'(z)=\Phi(z)+z\varphi(z).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>GELU</mo><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>1</mn><mo>⋅</mo><mi>Φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>z</mi><mi>Φ</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>Φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mi>z</mi><mi>φ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{GELU}'(z)=1\cdot\Phi(z)+z\Phi'(z)=\Phi(z)+z\varphi(z).</annotation></semantics></math>
+</div>
+<p>
       At
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">z=0</annotation></semantics></math>
       the derivative is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">1/2</annotation></semantics></math>
       . A smooth derivative is not necessarily positive everywhere; GELU has a mildly nonmonotonic negative-input region.
      </p>
-     <h4>
+<h4>
       2 · Differentiate the tanh approximation as a separate function
      </h4>
-     <p>
+<p>
       Set
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>=</mo><msqrt><mrow><mn>2</mn><mi>/</mi><mi>π</mi></mrow></msqrt></mrow><annotation encoding="application/x-tex">c=\sqrt{2/\pi}</annotation></semantics></math>
       ,
@@ -435,22 +374,22 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>z</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>+</mo><mo>tanh</mo><mi>u</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">g(z)=z[1+\tanh u(z)]/2</annotation></semantics></math>
       . First,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>c</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><mn>3</mn><mi>a</mi><msup><mi>z</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">u'(z)=c(1+3az^2).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>c</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><mn>3</mn><mi>a</mi><msup><mi>z</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">u'(z)=c(1+3az^2).</annotation></semantics></math>
+</div>
+<p>
       Then the product rule and chain rule give
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>+</mo><mo>tanh</mo><mi>u</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>+</mo><mfrac><mi>z</mi><mn>2</mn></mfrac><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>−</mo><msup><mo>tanh</mo><mn>2</mn></msup><mi>u</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>c</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><mn>3</mn><mi>a</mi><msup><mi>z</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">g'(z)=\frac12[1+\tanh u(z)]+\frac z2[1-\tanh^2u(z)]c(1+3az^2).</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mi>′</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>+</mo><mo>tanh</mo><mi>u</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>+</mo><mfrac><mi>z</mi><mn>2</mn></mfrac><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>−</mo><msup><mo>tanh</mo><mn>2</mn></msup><mi>u</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>c</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>+</mo><mn>3</mn><mi>a</mi><msup><mi>z</mi><mn>2</mn></msup><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">g'(z)=\frac12[1+\tanh u(z)]+\frac z2[1-\tanh^2u(z)]c(1+3az^2).</annotation></semantics></math>
+</div>
+<p>
       Do not combine the exact forward formula with this approximate backward formula. They differentiate different functions.
      </p>
-     <h4>
+<h4>
       3 · Contrast the piecewise ReLU calculation
      </h4>
-     <p>
+<p>
       For
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">z&gt;0</annotation></semantics></math>
       ,
@@ -461,127 +400,109 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
       .
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="6" data-pdf="basics" type="button">
-       Chapter source · PDF p. 6
-      </button>
-      <a class="calculation-link" href="#activations?derivation=gelu-derivative">
+<div class="derivation-footer">
+
+<button data-page="6" data-pdf="basics" type="button">Reference · PDF p. 6</button>
+<a class="calculation-link" href="#activations?derivation=gelu-derivative">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="hidden-activations-versus-output-activations" id="activations--hidden-activations-versus-output-activations">
+</div>
+</div>
+</details>
+<h2 data-section="hidden-activations-versus-output-activations" id="activations--hidden-activations-versus-output-activations">
     Hidden activations versus output activations
    </h2>
-   <p>
+<p>
     Hidden activations help construct a useful nonlinear representation. Output activations must match the target: a real-valued regression target may require no restriction, a binary probability uses sigmoid, and mutually exclusive class probabilities use softmax.
    </p>
-   <p>
+<p>
     An output ReLU would make negative predictions impossible, which is wrong for an unrestricted signed target. Conversely, an unrestricted scalar is not automatically a probability. In PyTorch, numerical stability often means passing
     <strong>
      raw logits into a fused loss
     </strong>
     , then applying sigmoid or softmax only when probabilities are needed. The conceptual probability mapping is not a mandate to insert that mapping before every loss call.
    </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="activations--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="build">
-     <span class="resource-meta">
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="activations--implementation">Implementation examples</h2>
+
+<div class="resource-list">
+<div class="resource" data-resource="build">
+<span class="resource-meta">
       PyTorch · Tutorial + code
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/basics/buildmodel_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Build the Neural Network
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect how Flatten, Linear, ReLU and Sequential implement a feed-forward model, and how its parameters and tensor dimensions are exposed.
-     </p>
-    </div>
-    <div class="resource" data-resource="autograd">
-     <span class="resource-meta">
+</a>
+<p>A feed-forward network built from Flatten, Linear, ReLU, and Sequential, with tensor shapes and model parameters.</p>
+</div>
+<div class="resource" data-resource="autograd">
+<span class="resource-meta">
       PyTorch · Tutorial + diagram
      </span>
-     <a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/beginner/basics/autogradqs_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Automatic Differentiation with torch.autograd
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Trace the computation graph and run the gradient example. Compare the role of requires_grad, backward and disabled gradient tracking.
-     </p>
-    </div>
-   </div>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</a>
+<p>A worked computation graph covering requires_grad, backward, accumulated gradients, and disabling gradient tracking.</p>
+</div>
+</div>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
     </strong>
     Does using ReLU solve vanishing gradients?
    </summary>
-   <p>
+<p>
     No. On an active unit its local derivative is one, so that activation does not shrink the gradient. Inactive units have zero derivative, and weight matrices elsewhere can still contract or amplify gradients. ReLU removes one source of attenuation, not every source.
    </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#neurons-and-layers">
-    <small>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+
+<button aria-label="Open source: Neural networks · PDF pp. 6–9 · §§2–5" data-page="6" data-pdf="basics" type="button">
+     Neural networks · PDF pp. 6–9 · §§2–5
+    </button>
+<button aria-label="Open source: Neural networks · PDF pp. 18–19 · §§23–25" data-page="18" data-pdf="basics" type="button">
+     Neural networks · PDF pp. 18–19 · §§23–25
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#neurons-and-layers">
+<small>
      ← Previous
     </small>
-    Neurons, layers, and model capacity
-   </a>
-   <a href="#forward-pass">
-    <small>
+Neurons, layers, and model capacity
+</a>
+<a href="#forward-pass">
+<small>
      Next →
     </small>
-    A complete forward pass
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+A complete forward pass
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="two-jobs-not-one" href="#activations?section=two-jobs-not-one">
-    Two jobs, not one
-   </a>
-   <a data-section="relu-a-piecewise-linear-gate" href="#activations?section=relu-a-piecewise-linear-gate">
-    ReLU: a piecewise-linear gate
-   </a>
-   <a data-section="sigmoid-probability-interpretation-and-saturation" href="#activations?section=sigmoid-probability-interpretation-and-saturation">
-    Sigmoid: probability interpretation and saturation
-   </a>
-   <a data-section="tanh-centered-but-still-saturating" href="#activations?section=tanh-centered-but-still-saturating">
-    Tanh: centered, but still saturating
-   </a>
-   <a data-section="gelu-smooth-modulation" href="#activations?section=gelu-smooth-modulation">
-    GELU: smooth modulation
-   </a>
-   <a data-section="hidden-activations-versus-output-activations" href="#activations?section=hidden-activations-versus-output-activations">
-    Hidden activations versus output activations
-   </a>
-   <a data-section="implementation" href="#activations?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="two-jobs-not-one" href="#activations?section=two-jobs-not-one">Forward values and backward derivatives</a>
+<a data-section="relu-a-piecewise-linear-gate" href="#activations?section=relu-a-piecewise-linear-gate">ReLU: a piecewise-linear gate</a>
+<a data-section="sigmoid-probability-interpretation-and-saturation" href="#activations?section=sigmoid-probability-interpretation-and-saturation">Sigmoid: probability interpretation and saturation</a>
+<a data-section="tanh-centered-but-still-saturating" href="#activations?section=tanh-centered-but-still-saturating">Tanh: centered, but still saturating</a>
+<a data-section="gelu-smooth-modulation" href="#activations?section=gelu-smooth-modulation">GELU: smooth modulation</a>
+<a data-section="hidden-activations-versus-output-activations" href="#activations?section=hidden-activations-versus-output-activations">Hidden activations versus output activations</a>
+<a data-section="implementation" href="#activations?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>

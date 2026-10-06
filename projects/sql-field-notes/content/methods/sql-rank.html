@@ -1,154 +1,152 @@
 <article class="article method-page" id="m-sql-rank">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=sql&amp;cat=Window%20functions">
+<a href="#methods?lang=sql&amp;cat=Window%20functions">
    MySQL · Window functions
   </a>
- </div>
- <h1>
+</div>
+<h1>
   RANK()
  </h1>
- <p class="lead">
+<p class="lead">
   Rank with gaps
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     MySQL
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-rank"><span class="k">RANK</span><span class="p">()</span><span class="w"> </span><span class="k">OVER</span><span class="w"> </span><span class="p">(...)</span></code></pre>
- </div>
- <p class="small">
+</div>
+<pre tabindex="0"><code class="language-sql" data-origin="reference-sql-rank"><span class="k">RANK</span><span class="p">()</span><span class="w"> </span><span class="k">OVER</span><span class="w"> </span><span class="p">(...)</span></code></pre>
+</div>
+<p class="small">
   Syntax fragment: replace the ellipsis with the required columns, table or window specification.
  </p>
- <div class="counterparts">
-  <span>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-pd-rank">
+<a href="#m-pd-rank">
    pandas · Rank
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C16?code=code-C16-2&amp;method=sql-rank&amp;line=5">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C16?code=code-C16-2&amp;method=sql-rank&amp;line=5">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1070 · First-year product sales
     </strong>
-    <small>
+<small>
      My approach · line 5
     </small>
-   </div>
-   <pre aria-hidden="true">        year,
+</div>
+<pre aria-hidden="true">        year,
         RANK() OVER (
             PARTITION BY   product_id
             ORDER BY year ASC</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-04?code=code-squid-04-0&amp;method=sql-rank&amp;line=9">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-04?code=code-squid-04-0&amp;method=sql-rank&amp;line=9">
+<div>
+<span class="usage-label">
      Squid Game · SQL
     </span>
-    <strong>
+<strong>
      Rank ten-player teams
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 9
     </small>
-   </div>
-   <pre aria-hidden="true">    END AS age_group,
+</div>
+<pre aria-hidden="true">    END AS age_group,
     RANK() OVER (ORDER BY age_team DESC) AS rank
 FROM (
     SELECT team_id, COUNT(*) AS n_players, AVG(age) AS age_team</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    Other saved implementations (1)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C16?code=code-C16-4&amp;method=sql-rank&amp;line=6">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C16?code=code-C16-4&amp;method=sql-rank&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1070 · First-year product sales
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">        year,
+</div>
+<pre aria-hidden="true">        year,
         RANK() OVER (
             PARTITION BY product_id
             ORDER BY year ASC</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     SQL cheat-sheet image · Window functions. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/window-function-descriptions.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=sql&amp;cat=Window%20functions">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=sql&amp;cat=Window%20functions">
+<small>
     ← Browse
    </small>
    MySQL · Window functions
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

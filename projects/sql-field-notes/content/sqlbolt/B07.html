@@ -1,216 +1,214 @@
 <article class="article" id="B07">
- <div class="breadcrumb">
-  <a href="#sqlbolt">
+<div class="breadcrumb">
+<a href="#sqlbolt">
    SQLBolt
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Lesson 7
   </span>
- </div>
- <h1>
+</div>
+<h1>
   OUTER JOINs
  </h1>
- <p>
+<p>
   LEFT JOIN preserves the left table’s rows, including unmatched ones. RIGHT JOIN preserves the right side; FULL JOIN preserves both. SQLBolt’s exercise environment here uses LEFT JOIN.
  </p>
- <p>
-  <b>
+<p>
+<b>
    Note.
   </b>
   Place buildings on the left to retain empty buildings. DISTINCT is applied after selecting the building-role pair, not to employee names.
  </p>
- <h2>
+<h2>
   01 · Buildings occupied by employees
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-26-panel-0" aria-selected="true" id="example-26-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-26-panel-0" aria-selected="true" id="example-26-tab-0" role="tab" tabindex="0" type="button">
      SQL
     </button>
-    <button aria-controls="example-26-panel-1" aria-selected="false" id="example-26-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-26-panel-1" aria-selected="false" id="example-26-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-26-tab-0" class="code-panel" id="example-26-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-26-tab-0" class="code-panel" id="example-26-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-B07-0" tabindex="0"><code class="language-sql" data-origin="legacy-B07-0"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">building</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">employees</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">building</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-26-tab-1" class="code-panel" id="example-26-panel-1" role="tabpanel">
-   <div class="no-script-label">
+<pre id="code-B07-0" tabindex="0"><code class="language-sql" data-origin="legacy-B07-0"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">building</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">employees</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">building</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">;</span></code></pre>
+</div>
+<div aria-labelledby="example-26-tab-1" class="code-panel" id="example-26-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-B07-1" tabindex="0"><code class="language-python" data-origin="legacy-B07-1"><span class="n">result</span> <span class="o">=</span> <span class="n">employees</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">employees</span><span class="p">[</span><span class="s1">'building'</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">(),</span> <span class="p">[</span><span class="s1">'building'</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span></code></pre>
-  </div>
- </div>
- <h2>
+<pre id="code-B07-1" tabindex="0"><code class="language-python" data-origin="legacy-B07-1"><span class="n">result</span> <span class="o">=</span> <span class="n">employees</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">employees</span><span class="p">[</span><span class="s1">'building'</span><span class="p">]</span><span class="o">.</span><span class="n">notna</span><span class="p">(),</span> <span class="p">[</span><span class="s1">'building'</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span></code></pre>
+</div>
+</div>
+<h2>
   02 · Every building and its capacity
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-27-panel-0" aria-selected="true" id="example-27-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-27-panel-0" aria-selected="true" id="example-27-tab-0" role="tab" tabindex="0" type="button">
      SQL
     </button>
-    <button aria-controls="example-27-panel-1" aria-selected="false" id="example-27-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-27-panel-1" aria-selected="false" id="example-27-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-27-tab-0" class="code-panel" id="example-27-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-27-tab-0" class="code-panel" id="example-27-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-B07-2" tabindex="0"><code class="language-sql" data-origin="legacy-B07-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">building_name</span><span class="p">,</span><span class="w"> </span><span class="n">capacity</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">buildings</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-27-tab-1" class="code-panel" id="example-27-panel-1" role="tabpanel">
-   <div class="no-script-label">
+<pre id="code-B07-2" tabindex="0"><code class="language-sql" data-origin="legacy-B07-2"><span class="k">SELECT</span><span class="w"> </span><span class="n">building_name</span><span class="p">,</span><span class="w"> </span><span class="n">capacity</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">buildings</span><span class="p">;</span></code></pre>
+</div>
+<div aria-labelledby="example-27-tab-1" class="code-panel" id="example-27-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-B07-3" tabindex="0"><code class="language-python" data-origin="legacy-B07-3"><span class="n">result</span> <span class="o">=</span> <span class="n">buildings</span><span class="p">[[</span><span class="s1">'building_name'</span><span class="p">,</span> <span class="s1">'capacity'</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
-  </div>
- </div>
- <h2>
+<pre id="code-B07-3" tabindex="0"><code class="language-python" data-origin="legacy-B07-3"><span class="n">result</span> <span class="o">=</span> <span class="n">buildings</span><span class="p">[[</span><span class="s1">'building_name'</span><span class="p">,</span> <span class="s1">'capacity'</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+</div>
+</div>
+<h2>
   03 · Distinct roles per building, keeping empty buildings
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-28-panel-0" aria-selected="true" id="example-28-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-28-panel-0" aria-selected="true" id="example-28-tab-0" role="tab" tabindex="0" type="button">
      SQL
     </button>
-    <button aria-controls="example-28-panel-1" aria-selected="false" id="example-28-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-28-panel-1" aria-selected="false" id="example-28-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-28-tab-0" class="code-panel" id="example-28-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-28-tab-0" class="code-panel" id="example-28-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-B07-4" tabindex="0"><code class="language-sql" data-origin="legacy-B07-4"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">building_name</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="k">role</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">buildings</span><span class="w"> </span><span class="n">b</span>
+<pre id="code-B07-4" tabindex="0"><code class="language-sql" data-origin="legacy-B07-4"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">building_name</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="k">role</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">buildings</span><span class="w"> </span><span class="n">b</span>
 <span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">employees</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">building_name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">building</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-28-tab-1" class="code-panel" id="example-28-panel-1" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-28-tab-1" class="code-panel" id="example-28-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-B07-5" tabindex="0"><code class="language-python" data-origin="legacy-B07-5"><span class="n">m</span> <span class="o">=</span> <span class="n">buildings</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">employees</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">'building_name'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'building'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span>
+<pre id="code-B07-5" tabindex="0"><code class="language-python" data-origin="legacy-B07-5"><span class="n">m</span> <span class="o">=</span> <span class="n">buildings</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">employees</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s1">'building_name'</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s1">'building'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">m</span><span class="p">[[</span><span class="s1">'building_name'</span><span class="p">,</span> <span class="s1">'role'</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span></code></pre>
-  </div>
- </div>
- <details class="reference-details">
-  <summary>
+</div>
+</div>
+<details class="reference-details">
+<summary>
    Sources
   </summary>
-  <div class="sources-content">
-   <p>
-    The worked examples and pandas translations are study alternatives, not an official answer key. Shared DataFrame setup is listed under Reference.
-   </p>
-   <p>
-    <a href="https://sqlbolt.com/lesson/select_queries_with_outer_joins" rel="noopener noreferrer" target="_blank">
+<div class="sources-content">
+<p>SQLBolt exercises with SQL and pandas examples. Shared DataFrame assumptions are listed under Setup and conventions.</p>
+<p>
+<a href="https://sqlbolt.com/lesson/select_queries_with_outer_joins" rel="noopener noreferrer" target="_blank">
      SQLBolt — OUTER JOINs
     </a>
-   </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+</p>
+<p>
+<a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
      pandas SQL comparison
     </a>
     — Projection, filtering, grouping, joins and operations.
    </p>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-not">
+<a href="#m-sql-not">
      NOT
     </a>
-    <a href="#m-sql-is-not-null">
+<a href="#m-sql-is-not-null">
      IS NOT NULL
     </a>
-    <a href="#m-sql-left-join">
+<a href="#m-sql-left-join">
      LEFT JOIN
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-    <a href="#m-sql-distinct">
+<a href="#m-sql-distinct">
      DISTINCT
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-select-columns">
+<a href="#m-pd-select-columns">
      Select columns
     </a>
-    <a href="#m-pd-loc">
+<a href="#m-pd-loc">
      Rows by label
     </a>
-    <a href="#m-pd-filter-notnull">
+<a href="#m-pd-filter-notnull">
      Non-missing
     </a>
-    <a href="#m-pd-loc-label">
+<a href="#m-pd-loc-label">
      Access label
     </a>
-    <a href="#m-pd-drop-duplicates">
+<a href="#m-pd-drop-duplicates">
      Drop duplicates
     </a>
-    <a href="#m-pd-merge-left">
+<a href="#m-pd-merge-left">
      Left merge
     </a>
-    <a href="#m-pd-merge-keys">
+<a href="#m-pd-merge-keys">
      Different keys
     </a>
-    <a href="#m-pd-copy">
+<a href="#m-pd-copy">
      copy()
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#B06">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#B06">
+<small>
     ← Previous
    </small>
    INNER JOIN
   </a>
-  <a href="#B08">
-   <small>
+<a href="#B08">
+<small>
     Next →
    </small>
    NULL and unmatched rows
   </a>
- </div>
+</div>
 </article>

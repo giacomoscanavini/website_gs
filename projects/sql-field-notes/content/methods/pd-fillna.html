@@ -1,311 +1,309 @@
 <article class="article method-page" id="m-pd-fillna">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=Missing%20values">
+<a href="#methods?lang=pd&amp;cat=Missing%20values">
    pandas · Missing values
   </a>
- </div>
- <h1>
+</div>
+<h1>
   Fill null
  </h1>
- <p class="lead">
+<p class="lead">
   Replace missing values
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-fillna"><span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-fillna"><span class="n">df</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-sql-ifnull">
+<a href="#m-sql-ifnull">
    SQL · IFNULL()
   </a>
-  <a href="#m-sql-coalesce">
+<a href="#m-sql-coalesce">
    SQL · COALESCE()
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C48?code=code-C48-1&amp;method=pd-fillna&amp;line=7">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C48?code=code-C48-1&amp;method=pd-fillna&amp;line=7">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1280 · Students and examinations
     </strong>
-    <small>
+<small>
      Study solution · line 7
     </small>
-   </div>
-   <pre aria-hidden="true">    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left')
+</div>
+<pre aria-hidden="true">    df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left')
     df['attended_exams'] = df['attended_exams'].fillna(0).astype(int)
     return df[['student_id', 'student_name', 'subject_name', 'attended_exams']].sort_values(['student_id', 'subject_name'])</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-01?code=code-squid-01-1&amp;method=pd-fillna&amp;line=6">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-01?code=code-squid-01-1&amp;method=pd-fillna&amp;line=6">
+<div>
+<span class="usage-label">
      Squid Game · pandas
     </span>
-    <strong>
+<strong>
      Filter the player pool
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 6
     </small>
-   </div>
-   <pre aria-hidden="true">           | (player['vice'].eq('Gambling') &amp; player['has_close_family'].eq(False))))
+</div>
+<pre aria-hidden="true">           | (player['vice'].eq('Gambling') &amp; player['has_close_family'].eq(False))))
 result = player.loc[mask.fillna(False)].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C50?code=code-C50-1&amp;method=pd-fillna&amp;line=10">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C50?code=code-C50-1&amp;method=pd-fillna&amp;line=10">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1934 · Confirmation rate
     </strong>
-    <small>
+<small>
      Study solution · line 10
     </small>
-   </div>
-   <pre aria-hidden="true">    df = signups.merge(confirmations, on='user_id', how='left')[['user_id', 'action']]
+</div>
+<pre aria-hidden="true">    df = signups.merge(confirmations, on='user_id', how='left')[['user_id', 'action']]
     df['confirmation_rate'] = df.action.eq('confirmed').fillna(False)
     df = df.groupby('user_id', as_index=False).agg(
         total=('confirmation_rate', 'size'),</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C07?code=code-C07-1&amp;method=pd-fillna&amp;line=17">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-1&amp;method=pd-fillna&amp;line=17">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1251 · Average selling price
     </strong>
-    <small>
+<small>
      Study solution · line 17
     </small>
-   </div>
-   <pre aria-hidden="true">    result = p[['product_id']].drop_duplicates().merge(g[['product_id', 'average_price']], on='product_id', how='left')
+</div>
+<pre aria-hidden="true">    result = p[['product_id']].drop_duplicates().merge(g[['product_id', 'average_price']], on='product_id', how='left')
     result['average_price'] = result['average_price'].fillna(0)
     return result</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C20?code=code-C20-1&amp;method=pd-fillna&amp;line=8">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-1&amp;method=pd-fillna&amp;line=8">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1045 · Customers who bought every product
     </strong>
-    <small>
+<small>
      Study solution · line 8
     </small>
-   </div>
-   <pre aria-hidden="true">    ids = customer[['customer_id']].drop_duplicates()
+</div>
+<pre aria-hidden="true">    ids = customer[['customer_id']].drop_duplicates()
     mask = ids['customer_id'].map(counts).fillna(0).eq(len(keys))
     return ids.loc[mask].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C25?code=code-C25-1&amp;method=pd-fillna&amp;line=8">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C25?code=code-C25-1&amp;method=pd-fillna&amp;line=8">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1164 · Product price at a given date
     </strong>
-    <small>
+<small>
      Study solution · line 8
     </small>
-   </div>
-   <pre aria-hidden="true">    result = p[['product_id']].drop_duplicates().merge(latest[['product_id', 'new_price']], on='product_id', how='left')
+</div>
+<pre aria-hidden="true">    result = p[['product_id']].drop_duplicates().merge(latest[['product_id', 'new_price']], on='product_id', how='left')
     result['price'] = result['new_price'].fillna(10)
     return result[['product_id', 'price']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    2 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#LC1158?code=code-LC1158-1&amp;method=pd-fillna&amp;line=13">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#LC1158?code=code-LC1158-1&amp;method=pd-fillna&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1158 · Market analysis I
      </strong>
-     <small>
+<small>
       Uploaded submission · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">    
+</div>
+<pre aria-hidden="true">    
     return df.fillna(0)
     </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-02?code=code-squid-02-1&amp;method=pd-fillna&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-02?code=code-squid-02-1&amp;method=pd-fillna&amp;line=4">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Calculate the ration threshold
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">eligible = player['status'].eq('alive') &amp; player['isinsider'].eq(False)
+</div>
+<pre aria-hidden="true">eligible = player['status'].eq('alive') &amp; player['isinsider'].eq(False)
 portions = int(eligible.fillna(False).sum()) * 9 // 10
 result = rations[['amount']].copy()
 result['portions'] = portions</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (3)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C48?code=code-C48-3&amp;method=pd-fillna&amp;line=10">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C48?code=code-C48-3&amp;method=pd-fillna&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1280 · Students and examinations
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     df = df.merge(exam_count, on=['student_id', 'subject_name'], how='left').fillna(0)
     return df.sort_values(['student_id', 'subject_name'])</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-fillna&amp;line=18">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-fillna&amp;line=18">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1251 · Average selling price
      </strong>
-     <small>
+<small>
       My approach · line 18
      </small>
-    </div>
-    <pre aria-hidden="true">    result = prices[['product_id']].drop_duplicates().merge(totals[['product_id', 'average_price']], on='product_id', how='left')
+</div>
+<pre aria-hidden="true">    result = prices[['product_id']].drop_duplicates().merge(totals[['product_id', 'average_price']], on='product_id', how='left')
     result['average_price'] = result['average_price'].fillna(0)
     return result</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C20?code=code-C20-3&amp;method=pd-fillna&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-3&amp;method=pd-fillna&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1045 · Customers who bought every product
      </strong>
-     <small>
+<small>
       My approach · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">    ).reset_index()
+</div>
+<pre aria-hidden="true">    ).reset_index()
     df = customer_ids.merge(df, on='customer_id', how='left').fillna({'nSold': 0})
     return df[df.nSold == nProducts][['customer_id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     pandas cheat-sheet image · Missing values. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=Missing%20values">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=Missing%20values">
+<small>
     ← Browse
    </small>
    pandas · Missing values
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

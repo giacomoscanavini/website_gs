@@ -1,64 +1,64 @@
 <article class="article" id="C20">
- <div class="breadcrumb">
-  <a href="#practice">
+<div class="breadcrumb">
+<a href="#practice">
    Leetcode problems
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Problem 1045
   </span>
- </div>
- <h1>
+</div>
+<h1>
   1045 · Customers who bought every product
  </h1>
- <p>
+<p>
   Return customers who have purchased all keys listed in Product.
  </p>
- <p class="pattern">
+<p class="pattern">
   Pattern: Relational division / membership
  </p>
- <h2>
+<h2>
   Example
  </h2>
- <p>
+<p>
   Catalog {A,B}; customer 1 buys A,B; customer 2 buys A,X → only customer 1 qualifies.
  </p>
- <h2>
+<h2>
   Study solution
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-79-panel-0" aria-selected="true" id="example-79-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-79-panel-0" aria-selected="true" id="example-79-tab-0" role="tab" tabindex="0" type="button">
      MySQL
     </button>
-    <button aria-controls="example-79-panel-1" aria-selected="false" id="example-79-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-79-panel-1" aria-selected="false" id="example-79-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-79-tab-0" class="code-panel" id="example-79-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-79-tab-0" class="code-panel" id="example-79-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-C20-0" tabindex="0"><code class="language-sql" data-origin="legacy-C20-0"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">customer_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Customer</span><span class="w"> </span><span class="k">c</span>
+<pre id="code-C20-0" tabindex="0"><code class="language-sql" data-origin="legacy-C20-0"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">customer_id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Customer</span><span class="w"> </span><span class="k">c</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Product</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Customer</span><span class="w"> </span><span class="n">bought</span>
 <span class="w">        </span><span class="k">WHERE</span><span class="w"> </span><span class="n">bought</span><span class="p">.</span><span class="n">customer_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">customer_id</span><span class="w"> </span><span class="k">AND</span><span class="w"> </span><span class="n">bought</span><span class="p">.</span><span class="n">product_key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">product_key</span>
 <span class="w">    </span><span class="p">)</span>
 <span class="p">);</span></code></pre>
-  </div>
-  <div aria-labelledby="example-79-tab-1" class="code-panel" id="example-79-panel-1" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-79-tab-1" class="code-panel" id="example-79-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-C20-1" tabindex="0"><code class="language-python" data-origin="legacy-C20-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C20-1" tabindex="0"><code class="language-python" data-origin="legacy-C20-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">find_customers</span><span class="p">(</span><span class="n">customer</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">product</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">keys</span> <span class="o">=</span> <span class="n">product</span><span class="p">[</span><span class="s1">'product_key'</span><span class="p">]</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
@@ -67,53 +67,53 @@
     <span class="n">ids</span> <span class="o">=</span> <span class="n">customer</span><span class="p">[[</span><span class="s1">'customer_id'</span><span class="p">]]</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">ids</span><span class="p">[</span><span class="s1">'customer_id'</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">counts</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">ids</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
-  </div>
- </div>
- <h2>
+</div>
+</div>
+<h2>
   Why it works
  </h2>
- <p>
+<p>
   There must not exist a catalog product that the customer has not bought. The pandas version counts only catalog keys before comparing with catalog size.
  </p>
- <h2>
+<h2>
   Notes
  </h2>
- <p>
+<p>
   Count distinct purchased keys that belong to the product catalogue.
  </p>
- <details class="original-details">
-  <summary>
+<details class="original-details">
+<summary>
    My approach
   </summary>
-  <div class="code-pair">
-   <div class="pair-head">
-    <div aria-label="Solution language" class="code-tabs" role="tablist">
-     <button aria-controls="approach-C20-panel-0" aria-selected="true" id="approach-C20-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="approach-C20-panel-0" aria-selected="true" id="approach-C20-tab-0" role="tab" tabindex="0" type="button">
       MySQL
      </button>
-     <button aria-controls="approach-C20-panel-1" aria-selected="false" id="approach-C20-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="approach-C20-panel-1" aria-selected="false" id="approach-C20-tab-1" role="tab" tabindex="-1" type="button">
       pandas
      </button>
-    </div>
-    <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
      Copy
     </button>
-   </div>
-   <div aria-labelledby="approach-C20-tab-0" class="code-panel" id="approach-C20-panel-0" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="approach-C20-tab-0" class="code-panel" id="approach-C20-panel-0" role="tabpanel">
+<div class="no-script-label">
      SQL
     </div>
-    <pre id="code-C20-2" tabindex="0"><code class="language-sql" data-origin="approach-C20-sql"><span class="k">SELECT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">customer_id</span>
+<pre id="code-C20-2" tabindex="0"><code class="language-sql" data-origin="approach-C20-sql"><span class="k">SELECT</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">customer_id</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Customer</span><span class="w"> </span><span class="k">c</span>
 <span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">customer_id</span>
 <span class="k">HAVING</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Product</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="k">CASE</span>
 <span class="w">    </span><span class="k">WHEN</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">product_key</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="n">product_key</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Product</span><span class="p">)</span><span class="w"> </span><span class="k">THEN</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">product_key</span><span class="w"> </span><span class="k">END</span><span class="p">);</span></code></pre>
-   </div>
-   <div aria-labelledby="approach-C20-tab-1" class="code-panel" id="approach-C20-panel-1" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="approach-C20-tab-1" class="code-panel" id="approach-C20-panel-1" role="tabpanel">
+<div class="no-script-label">
      pandas
     </div>
-    <pre id="code-C20-3" tabindex="0"><code class="language-python" data-origin="approach-C20-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C20-3" tabindex="0"><code class="language-python" data-origin="approach-C20-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">find_customers</span><span class="p">(</span><span class="n">customer</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">product</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">nProducts</span> <span class="o">=</span> <span class="n">product</span><span class="p">[</span><span class="s1">'product_key'</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
@@ -124,61 +124,55 @@
     <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">customer_ids</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'customer_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">({</span><span class="s1">'nSold'</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">nSold</span> <span class="o">==</span> <span class="n">nProducts</span><span class="p">][[</span><span class="s1">'customer_id'</span><span class="p">]]</span></code></pre>
-   </div>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
+</div>
+</div>
+</details>
+<details class="reference-details">
+<summary>
    Sources
   </summary>
-  <div class="sources-content">
-   <p>
-    Primary exercise basis: your uploaded Pasted markdown(3).md, exercise 1045, line 5. The exercise heading may be abbreviated in the upload; full official problem statements and schemas were not supplied.
-   </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+<div class="sources-content">
+<p> Exercise source: Pasted markdown(3).md, problem 1045, line 5. </p>
+<p>
+<a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
      pandas SQL comparison
     </a>
     — Projection, filtering, grouping, joins and operations.
    </p>
-  </div>
- </details>
- <details class="original-details archive-submission">
-  <summary>
-   Uploaded submission · SQL.zip
-  </summary>
-  <p class="small">
-   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
-  </p>
-  <div class="code-pair">
-   <div class="pair-head">
-    <div aria-label="Solution language" class="code-tabs" role="tablist">
-     <button aria-controls="archive-1045-panel-0" aria-selected="true" id="archive-1045-tab-0" role="tab" tabindex="0" type="button">
+</div>
+</details>
+<details class="original-details archive-submission">
+<summary> Original submission </summary>
+<p class="small"> Archived submissions. These may differ from the reference implementation above. </p>
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="archive-1045-panel-0" aria-selected="true" id="archive-1045-tab-0" role="tab" tabindex="0" type="button">
       MySQL
      </button>
-     <button aria-controls="archive-1045-panel-1" aria-selected="false" id="archive-1045-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="archive-1045-panel-1" aria-selected="false" id="archive-1045-tab-1" role="tab" tabindex="-1" type="button">
       pandas
      </button>
-    </div>
-    <button class="copy-button" data-copy="" type="button">
+</div>
+<button class="copy-button" data-copy="" type="button">
      Copy
     </button>
-   </div>
-   <div aria-labelledby="archive-1045-tab-0" class="code-panel" id="archive-1045-panel-0" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-1045-tab-0" class="code-panel" id="archive-1045-panel-0" role="tabpanel">
+<div class="no-script-label">
      MySQL
     </div>
-    <pre id="code-C20-4" tabindex="0"><code class="language-sql" data-origin="archive-1045-sql"><span class="c1"># Write your MySQL query statement below</span>
+<pre id="code-C20-4" tabindex="0"><code class="language-sql" data-origin="archive-1045-sql"><span class="c1"># Write your MySQL query statement below</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="n">customer_id</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Customer</span>
 <span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">customer_id</span>
 <span class="k">HAVING</span><span class="w"> </span><span class="p">(</span><span class="k">SELECT</span><span class="w"> </span><span class="nf">COUNT</span><span class="p">(</span><span class="n">product_key</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Product</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nf">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">product_key</span><span class="p">)</span><span class="w"> </span></code></pre>
-   </div>
-   <div aria-labelledby="archive-1045-tab-1" class="code-panel" id="archive-1045-panel-1" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-1045-tab-1" class="code-panel" id="archive-1045-panel-1" role="tabpanel">
+<div class="no-script-label">
      pandas
     </div>
-    <pre id="code-C20-5" tabindex="0"><code class="language-python" data-origin="archive-1045-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C20-5" tabindex="0"><code class="language-python" data-origin="archive-1045-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">find_customers</span><span class="p">(</span><span class="n">customer</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">product</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">nProducts</span> <span class="o">=</span> <span class="n">product</span><span class="p">[</span><span class="s1">'product_key'</span><span class="p">]</span><span class="o">.</span><span class="n">nunique</span><span class="p">()</span>
@@ -188,133 +182,133 @@
     <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">nSold</span> <span class="o">==</span> <span class="n">nProducts</span><span class="p">][[</span><span class="s1">'customer_id'</span><span class="p">]]</span></code></pre>
-   </div>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</div>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-and">
+<a href="#m-sql-and">
      AND
     </a>
-    <a href="#m-sql-not">
+<a href="#m-sql-not">
      NOT
     </a>
-    <a href="#m-sql-in">
+<a href="#m-sql-in">
      IN
     </a>
-    <a href="#m-sql-count">
+<a href="#m-sql-count">
      COUNT()
     </a>
-    <a href="#m-sql-count-distinct">
+<a href="#m-sql-count-distinct">
      COUNT(DISTINCT)
     </a>
-    <a href="#m-sql-group-by">
+<a href="#m-sql-group-by">
      GROUP BY
     </a>
-    <a href="#m-sql-having">
+<a href="#m-sql-having">
      HAVING
     </a>
-    <a href="#m-sql-case">
+<a href="#m-sql-case">
      CASE
     </a>
-    <a href="#m-sql-subquery">
+<a href="#m-sql-subquery">
      Subquery
     </a>
-    <a href="#m-sql-not-exists">
+<a href="#m-sql-not-exists">
      NOT EXISTS
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-    <a href="#m-sql-distinct">
+<a href="#m-sql-distinct">
      DISTINCT
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-select-columns">
+<a href="#m-pd-select-columns">
      Select columns
     </a>
-    <a href="#m-pd-loc">
+<a href="#m-pd-loc">
      Rows by label
     </a>
-    <a href="#m-pd-filter">
+<a href="#m-pd-filter">
      Condition
     </a>
-    <a href="#m-pd-isin">
+<a href="#m-pd-isin">
      Membership
     </a>
-    <a href="#m-pd-map">
+<a href="#m-pd-map">
      map()
     </a>
-    <a href="#m-pd-reset-index">
+<a href="#m-pd-reset-index">
      Reset index
     </a>
-    <a href="#m-pd-loc-label">
+<a href="#m-pd-loc-label">
      Access label
     </a>
-    <a href="#m-pd-fillna">
+<a href="#m-pd-fillna">
      Fill null
     </a>
-    <a href="#m-pd-dropna">
+<a href="#m-pd-dropna">
      Drop null rows
     </a>
-    <a href="#m-pd-drop-duplicates">
+<a href="#m-pd-drop-duplicates">
      Drop duplicates
     </a>
-    <a href="#m-pd-merge-left">
+<a href="#m-pd-merge-left">
      Left merge
     </a>
-    <a href="#m-pd-size">
+<a href="#m-pd-size">
      size
     </a>
-    <a href="#m-pd-nunique">
+<a href="#m-pd-nunique">
      nunique()
     </a>
-    <a href="#m-pd-groupby">
+<a href="#m-pd-groupby">
      Basic group
     </a>
-    <a href="#m-pd-agg-named">
+<a href="#m-pd-agg-named">
      Named aggregation
     </a>
-    <a href="#m-pd-eq">
+<a href="#m-pd-eq">
      eq() / ne()
     </a>
-    <a href="#m-pd-copy">
+<a href="#m-pd-copy">
      copy()
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#C19">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#C19">
+<small>
     ← Previous
    </small>
    619 · Biggest single number
   </a>
-  <a href="#C21">
-   <small>
+<a href="#C21">
+<small>
     Next →
    </small>
    1731 · Employees reporting to employees
   </a>
- </div>
+</div>
 </article>

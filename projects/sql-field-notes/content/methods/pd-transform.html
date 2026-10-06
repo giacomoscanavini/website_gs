@@ -1,356 +1,354 @@
 <article class="article method-page" id="m-pd-transform">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=GroupBy">
+<a href="#methods?lang=pd&amp;cat=GroupBy">
    pandas · GroupBy
   </a>
- </div>
- <h1>
+</div>
+<h1>
   Group transform
  </h1>
- <p class="lead">
+<p class="lead">
   Return value per original row
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-transform"><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'city'</span><span class="p">)[</span><span class="s1">'x'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">'mean'</span><span class="p">)</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-transform"><span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'city'</span><span class="p">)[</span><span class="s1">'x'</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">'mean'</span><span class="p">)</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-sql-avg-over">
+<a href="#m-sql-avg-over">
    SQL · AVG() OVER
   </a>
-  <a href="#m-sql-count-over">
+<a href="#m-sql-count-over">
    SQL · COUNT() OVER
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C13?code=code-C13-1&amp;method=pd-transform&amp;line=10">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C13?code=code-C13-1&amp;method=pd-transform&amp;line=10">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      550 · Game Play Analysis IV
     </strong>
-    <small>
+<small>
      Study solution · line 10
     </small>
-   </div>
-   <pre aria-hidden="true">    a = activity.assign(event_date=pd.to_datetime(activity['event_date']))
+</div>
+<pre aria-hidden="true">    a = activity.assign(event_date=pd.to_datetime(activity['event_date']))
     first = a.groupby('player_id')['event_date'].transform('min')
     valid = a['event_date'].eq(first + pd.Timedelta(days=1))
     fraction = valid.groupby(a['player_id']).any().mean()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B19?code=code-B19-3&amp;method=pd-transform&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B19?code=code-B19-3&amp;method=pd-transform&amp;line=1">
+<div>
+<span class="usage-label">
      SQLBolt · pandas
     </span>
-    <strong>
+<strong>
      Additional topic · Subqueries
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">mean_revenue = employees.groupby('department')['revenue_generated'].transform('mean')
+</div>
+<pre aria-hidden="true">mean_revenue = employees.groupby('department')['revenue_generated'].transform('mean')
 result = employees.loc[employees['salary'].gt(mean_revenue)]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C16?code=code-C16-1&amp;method=pd-transform&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C16?code=code-C16-1&amp;method=pd-transform&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1070 · First-year product sales
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def sales_analysis(sales: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def sales_analysis(sales: pd.DataFrame) -&gt; pd.DataFrame:
     first_year = sales.groupby('product_id')['year'].transform('min')
     return sales.loc[sales['year'].eq(first_year), ['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C22?code=code-C22-1&amp;method=pd-transform&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C22?code=code-C22-1&amp;method=pd-transform&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1789 · Primary department per employee
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def find_primary_department(employee: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_primary_department(employee: pd.DataFrame) -&gt; pd.DataFrame:
     n = employee.groupby('employee_id')['department_id'].transform('size')
     mask = employee['primary_flag'].eq('Y') | n.eq(1)
     return employee.loc[mask, ['employee_id', 'department_id']].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C29?code=code-C29-3&amp;method=pd-transform&amp;line=9">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C29?code=code-C29-3&amp;method=pd-transform&amp;line=9">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      626 · Exchange seats
     </strong>
-    <small>
+<small>
      My approach · line 9
     </small>
-   </div>
-   <pre aria-hidden="true">            else: return x + 1
+</div>
+<pre aria-hidden="true">            else: return x + 1
     seat['id'] = seat['id'].transform(swap_ids)
     return   seat.sort_values(by='id', ascending=True)</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C35?code=code-C35-3&amp;method=pd-transform&amp;line=9">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C35?code=code-C35-3&amp;method=pd-transform&amp;line=9">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1667 · Fix names in a table
     </strong>
-    <small>
+<small>
      My approach · line 9
     </small>
-   </div>
-   <pre aria-hidden="true">        else: return x[0].upper()
+</div>
+<pre aria-hidden="true">        else: return x[0].upper()
     users['name'] = users['name'].transform(fix_string)
 
     return   users.sort_values(by='user_id')</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    1 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#LC3580?code=code-LC3580-1&amp;method=pd-transform&amp;line=11">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#LC3580?code=code-LC3580-1&amp;method=pd-transform&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       3580 · Find consistently improving employees
      </strong>
-     <small>
+<small>
       Uploaded submission · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     df['nRating'] = df.groupby(by='employee_id').rating.transform('size')
     df = df[df.nRating &gt;= 3]
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (6)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C13?code=code-C13-3&amp;method=pd-transform&amp;line=10">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C13?code=code-C13-3&amp;method=pd-transform&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       550 · Game Play Analysis IV
      </strong>
-     <small>
+<small>
       My approach · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">    activity = activity.assign(event_date=pd.to_datetime(activity['event_date']))
+</div>
+<pre aria-hidden="true">    activity = activity.assign(event_date=pd.to_datetime(activity['event_date']))
     activity['first_login'] =   activity.groupby(by='player_id')['event_date'].transform('min')
     activity['valid'] = activity['event_date'] ==   activity['first_login'] + pd.Timedelta(days = 1)
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C13?code=code-C13-5&amp;method=pd-transform&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C13?code=code-C13-5&amp;method=pd-transform&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       550 · Game Play Analysis IV
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def gameplay_analysis(activity: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def gameplay_analysis(activity: pd.DataFrame) -&gt; pd.DataFrame:
     activity['first_login'] = activity.groupby(by='player_id')['event_date'].transform('min')
     activity['valid'] = activity['event_date'] == activity['first_login'] + pd.Timedelta(days = 1)
     </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C22?code=code-C22-3&amp;method=pd-transform&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C22?code=code-C22-3&amp;method=pd-transform&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1789 · Primary department per employee
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">def find_primary_department(employee: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_primary_department(employee: pd.DataFrame) -&gt; pd.DataFrame:
     employee['nDepartments'] =   employee.groupby('employee_id').department_id.transform('count')
     employee =   employee.query("(primary_flag == 'Y')   | (nDepartments == 1)")
     return employee[['employee_id', 'department_id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C22?code=code-C22-5&amp;method=pd-transform&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C22?code=code-C22-5&amp;method=pd-transform&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1789 · Primary department per employee
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def find_primary_department(employee: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_primary_department(employee: pd.DataFrame) -&gt; pd.DataFrame:
     employee['nDepartments'] = employee.groupby('employee_id').department_id.transform('count')
     employee = employee.query("(primary_flag == 'Y') | (nDepartments == 1)")
     return employee[['employee_id', 'department_id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C29?code=code-C29-5&amp;method=pd-transform&amp;line=12">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C29?code=code-C29-5&amp;method=pd-transform&amp;line=12">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       626 · Exchange seats
      </strong>
-     <small>
+<small>
       Uploaded submission · line 12
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     seat['id'] = seat['id'].transform(swap_ids)
     return seat.sort_values(by='id', ascending=True)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C35?code=code-C35-5&amp;method=pd-transform&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C35?code=code-C35-5&amp;method=pd-transform&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1667 · Fix names in a table
      </strong>
-     <small>
+<small>
       Uploaded submission · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     users['name'] = users['name'].transform(fix_string)
     
     return users.sort_values(by='user_id')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     pandas cheat-sheet image · GroupBy. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=GroupBy">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=GroupBy">
+<small>
     ← Browse
    </small>
    pandas · GroupBy
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

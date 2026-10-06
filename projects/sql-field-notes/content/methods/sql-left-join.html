@@ -1,918 +1,916 @@
 <article class="article method-page" id="m-sql-left-join">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=sql&amp;cat=Joins">
+<a href="#methods?lang=sql&amp;cat=Joins">
    MySQL · Joins
   </a>
- </div>
- <h1>
+</div>
+<h1>
   LEFT JOIN
  </h1>
- <p class="lead">
+<p class="lead">
   All left rows
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     MySQL
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-left-join"><span class="n">A</span><span class="w"> </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="p">...</span></code></pre>
- </div>
- <p class="small">
+</div>
+<pre tabindex="0"><code class="language-sql" data-origin="reference-sql-left-join"><span class="n">A</span><span class="w"> </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="p">...</span></code></pre>
+</div>
+<p class="small">
   Syntax fragment: replace the ellipsis with the required columns, table or window specification.
  </p>
- <div class="counterparts">
-  <span>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-pd-merge-left">
+<a href="#m-pd-merge-left">
    pandas · Left merge
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C44?code=code-C44-0&amp;method=sql-left-join&amp;line=3">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C44?code=code-C44-0&amp;method=sql-left-join&amp;line=3">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1581 · Customers who visited without transactions
     </strong>
-    <small>
+<small>
      Study solution · line 3
     </small>
-   </div>
-   <pre aria-hidden="true">FROM Visits v
+</div>
+<pre aria-hidden="true">FROM Visits v
 LEFT JOIN Transactions t ON v.visit_id = t.visit_id
 WHERE t.transaction_id IS NULL
 GROUP BY v.customer_id;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#murder-03?code=code-murder-03-0&amp;method=sql-left-join&amp;line=7">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-03?code=code-murder-03-0&amp;method=sql-left-join&amp;line=7">
+<div>
+<span class="usage-label">
      Murder City · SQL
     </span>
-    <strong>
+<strong>
      Read the witness interviews
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 7
     </small>
-   </div>
-   <pre aria-hidden="true">FROM Interview i
+</div>
+<pre aria-hidden="true">FROM Interview i
 LEFT JOIN Person p ON i.person_id = p.id
 WHERE p.id = 14887 OR p.id = 16371</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-07?code=code-squid-07-0&amp;method=sql-left-join&amp;line=13">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-07?code=code-squid-07-0&amp;method=sql-left-join&amp;line=13">
+<div>
+<span class="usage-label">
      Squid Game · SQL
     </span>
-    <strong>
+<strong>
      Join room checks and camera sightings
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 13
     </small>
-   </div>
-   <pre aria-hidden="true">FROM Guard g
+</div>
+<pre aria-hidden="true">FROM Guard g
 LEFT JOIN Room r
 	ON r.id = g.assigned_room_id
 INNER JOIN Camera c</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B07?code=code-B07-4&amp;method=sql-left-join&amp;line=2">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B07?code=code-B07-4&amp;method=sql-left-join&amp;line=2">
+<div>
+<span class="usage-label">
      SQLBolt · SQL
     </span>
-    <strong>
+<strong>
      OUTER JOINs
     </strong>
-    <small>
+<small>
      Study solution · line 2
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT DISTINCT b.building_name, e.role FROM buildings b
+</div>
+<pre aria-hidden="true">SELECT DISTINCT b.building_name, e.role FROM buildings b
 LEFT JOIN employees e ON b.building_name = e.building;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C47?code=code-C47-0&amp;method=sql-left-join&amp;line=3">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C47?code=code-C47-0&amp;method=sql-left-join&amp;line=3">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      577 · Employee bonus
     </strong>
-    <small>
+<small>
      Study solution · line 3
     </small>
-   </div>
-   <pre aria-hidden="true">FROM Employee e
+</div>
+<pre aria-hidden="true">FROM Employee e
 LEFT JOIN Bonus b ON e.empId = b.empId
 WHERE b.bonus &lt; 1000 OR b.bonus IS NULL</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C48?code=code-C48-0&amp;method=sql-left-join&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C48?code=code-C48-0&amp;method=sql-left-join&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1280 · Students and examinations
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">CROSS JOIN Subjects su
+</div>
+<pre aria-hidden="true">CROSS JOIN Subjects su
 LEFT JOIN Examinations e ON s.student_id = e.student_id AND su.subject_name = e.subject_name
 GROUP BY s.student_id, s.student_name, su.subject_name
 ORDER BY s.student_id, s.student_name, su.subject_name</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    23 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C49?code=code-C49-0&amp;method=sql-left-join&amp;line=8">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C49?code=code-C49-0&amp;method=sql-left-join&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       570 · Managers with at least five direct reports
      </strong>
-     <small>
+<small>
       Study solution · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Employee e
+</div>
+<pre aria-hidden="true">FROM Employee e
 LEFT JOIN M ON e.id = M.managerId
 WHERE M.nReports &gt;= 5</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C50?code=code-C50-0&amp;method=sql-left-join&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C50?code=code-C50-0&amp;method=sql-left-join&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1934 · Confirmation rate
      </strong>
-     <small>
+<small>
       Study solution · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">    FROM Signups s
+</div>
+<pre aria-hidden="true">    FROM Signups s
     LEFT JOIN Confirmations c ON s.user_id = c.user_id
 )
 SELECT user_id, ROUND(SUM(boolean)/COUNT(boolean), 2) AS confirmation_rate</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C07?code=code-C07-0&amp;method=sql-left-join&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-0&amp;method=sql-left-join&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1251 · Average selling price
      </strong>
-     <small>
+<small>
       Study solution · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">       COALESCE(ROUND(SUM(p.price * u.units) / NULLIF(SUM(u.units), 0), 2), 0) AS average_price
+</div>
+<pre aria-hidden="true">       COALESCE(ROUND(SUM(p.price * u.units) / NULLIF(SUM(u.units), 0), 2), 0) AS average_price
 FROM Prices p LEFT JOIN UnitsSold u
   ON p.product_id = u.product_id AND u.purchase_date BETWEEN p.start_date AND p.end_date
 GROUP BY p.product_id;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C08?code=code-C08-0&amp;method=sql-left-join&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C08?code=code-C08-0&amp;method=sql-left-join&amp;line=2">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1075 · Project employees I
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT p.project_id, ROUND(AVG(e.experience_years), 2) AS average_years
+</div>
+<pre aria-hidden="true">SELECT p.project_id, ROUND(AVG(e.experience_years), 2) AS average_years
 FROM Project p LEFT JOIN Employee e ON p.employee_id = e.employee_id
 GROUP BY p.project_id;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C21?code=code-C21-0&amp;method=sql-left-join&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C21?code=code-C21-0&amp;method=sql-left-join&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1731 · Employees reporting to employees
      </strong>
-     <small>
+<small>
       Study solution · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Reports r
+</div>
+<pre aria-hidden="true">FROM Reports r
 LEFT JOIN Employees e ON r.manager_id = e.employee_id
 ORDER BY r.manager_id;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C25?code=code-C25-0&amp;method=sql-left-join&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C25?code=code-C25-0&amp;method=sql-left-join&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1164 · Product price at a given date
      </strong>
-     <small>
+<small>
       Study solution · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT i.product_id, COALESCE(r.new_price, 10) AS price FROM ids i
+</div>
+<pre aria-hidden="true">SELECT i.product_id, COALESCE(r.new_price, 10) AS price FROM ids i
 LEFT JOIN ranked r ON i.product_id = r.product_id AND r.rn = 1;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-2&amp;method=sql-left-join&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-2&amp;method=sql-left-join&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       My approach · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">        FROM ReviewPerUserID   a
+</div>
+<pre aria-hidden="true">        FROM ReviewPerUserID   a
         LEFT JOIN Users b ON a.user_id = b.user_id
     ),
     FirstUserName   AS (</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C32?code=code-C32-2&amp;method=sql-left-join&amp;line=30">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C32?code=code-C32-2&amp;method=sql-left-join&amp;line=30">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       602 · Most accepted friends
      </strong>
-     <small>
+<small>
       My approach · line 30
      </small>
-    </div>
-    <pre aria-hidden="true">        FROM Users u
+</div>
+<pre aria-hidden="true">        FROM Users u
         LEFT JOIN   TableAccepted ta ON u.id = ta.id
         LEFT JOIN   TableRequest tr ON u.id = tr.id
     )</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C34?code=code-C34-4&amp;method=sql-left-join&amp;line=17">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C34?code=code-C34-4&amp;method=sql-left-join&amp;line=17">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       185 · Department top three salaries
      </strong>
-     <small>
+<small>
       Uploaded submission · line 17
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Ranked r
+</div>
+<pre aria-hidden="true">FROM Ranked r
 LEFT JOIN Department d ON r.departmentId = d.id 
 WHERE r.ranked &lt;= 3</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C40?code=code-C40-2&amp;method=sql-left-join&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C40?code=code-C40-2&amp;method=sql-left-join&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1327 · Products with at least 100 February units
      </strong>
-     <small>
+<small>
       My approach · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Quantities q
+</div>
+<pre aria-hidden="true">FROM Quantities q
 LEFT JOIN Products p   ON q.product_id = p.product_id
 WHERE q.unit &gt;= 100;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC181?code=code-LC181-0&amp;method=sql-left-join&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC181?code=code-LC181-0&amp;method=sql-left-join&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       181 · Employees earning more than their managers
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Employee e1
+</div>
+<pre aria-hidden="true">FROM Employee e1
 LEFT JOIN Employee e2 ON e1.managerId = e2.id
 WHERE e1.salary &gt; e2.salary</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC262?code=code-LC262-0&amp;method=sql-left-join&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC262?code=code-LC262-0&amp;method=sql-left-join&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       262 · Trips and users
      </strong>
-     <small>
+<small>
       Uploaded submission · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">        FROM Trips t
+</div>
+<pre aria-hidden="true">        FROM Trips t
         LEFT JOIN Users u1 ON t.client_id = u1.users_id
         LEFT JOIN Users u2 ON t.driver_id = u2.users_id
         WHERE </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC607?code=code-LC607-0&amp;method=sql-left-join&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC607?code=code-LC607-0&amp;method=sql-left-join&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       607 · Sales person
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    FROM Orders o
+</div>
+<pre aria-hidden="true">    FROM Orders o
     LEFT JOIN Company c ON o.com_id = c.com_id
     WHERE c.name = 'RED'
 )</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC1158?code=code-LC1158-0&amp;method=sql-left-join&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC1158?code=code-LC1158-0&amp;method=sql-left-join&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1158 · Market analysis I
      </strong>
-     <small>
+<small>
       Uploaded submission · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Users u
+</div>
+<pre aria-hidden="true">FROM Users u
 LEFT JOIN Orders2019 o ON u.user_id = o.buyer_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3220?code=code-LC3220-0&amp;method=sql-left-join&amp;line=29">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3220?code=code-LC3220-0&amp;method=sql-left-join&amp;line=29">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3220 · Odd and even transactions
      </strong>
-     <small>
+<small>
       Uploaded submission · line 29
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Days d
+</div>
+<pre aria-hidden="true">FROM Days d
 LEFT JOIN Odds o ON d.transaction_date = o.transaction_date
 LEFT JOIN Evens e ON d.transaction_date = e.transaction_date
 ORDER BY d.transaction_date</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3521?code=code-LC3521-0&amp;method=sql-left-join&amp;line=25">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3521?code=code-LC3521-0&amp;method=sql-left-join&amp;line=25">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3521 · Find product recommendation pairs
      </strong>
-     <small>
+<small>
       Uploaded submission · line 25
      </small>
-    </div>
-    <pre aria-hidden="true">FROM ValidPairs v
+</div>
+<pre aria-hidden="true">FROM ValidPairs v
 LEFT JOIN ProductInfo p1 ON v.product1_id = p1.product_id
 LEFT JOIN ProductInfo p2 ON v.product2_id = p2.product_id
 ORDER BY customer_count DESC, v.product1_id ASC, v.product2_id ASC</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3564?code=code-LC3564-0&amp;method=sql-left-join&amp;line=16">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3564?code=code-LC3564-0&amp;method=sql-left-join&amp;line=16">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3564 · Seasonal sales analysis
      </strong>
-     <small>
+<small>
       Uploaded submission · line 16
      </small>
-    </div>
-    <pre aria-hidden="true">        FROM Sales s
+</div>
+<pre aria-hidden="true">        FROM Sales s
         LEFT JOIN Products p ON s.product_id = p.product_id
     ),
     GroupSales AS (</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3580?code=code-LC3580-0&amp;method=sql-left-join&amp;line=33">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3580?code=code-LC3580-0&amp;method=sql-left-join&amp;line=33">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3580 · Find consistently improving employees
      </strong>
-     <small>
+<small>
       Uploaded submission · line 33
      </small>
-    </div>
-    <pre aria-hidden="true">        FROM LatestReviews l1
+</div>
+<pre aria-hidden="true">        FROM LatestReviews l1
         LEFT JOIN LatestReviews l2 ON l1.ranked = l2.ranked - 1 
                                     AND l1.employee_id = l2.employee_id
                                     AND l1.ranked = 1</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#murder-04?code=code-murder-04-0&amp;method=sql-left-join&amp;line=16">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-04?code=code-murder-04-0&amp;method=sql-left-join&amp;line=16">
+<div>
+<span class="usage-label">
       Murder City · SQL
      </span>
-     <strong>
+<strong>
       Follow the gym clue
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 16
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Get_fit_now_check_in g
+</div>
+<pre aria-hidden="true">FROM Get_fit_now_check_in g
 LEFT JOIN Get_fit_now_member m ON g.membership_id = m.id
 WHERE 
 	g.check_in_date = '20180109' </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#murder-05?code=code-murder-05-0&amp;method=sql-left-join&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-05?code=code-murder-05-0&amp;method=sql-left-join&amp;line=6">
+<div>
+<span class="usage-label">
       Murder City · SQL
      </span>
-     <strong>
+<strong>
       Cross-check the licence plate
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Drivers_license d
+</div>
+<pre aria-hidden="true">FROM Drivers_license d
 LEFT JOIN Person p ON d.id = p.license_id
 WHERE 
 	d.plate_number LIKE 'H42W%'</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#murder-07?code=code-murder-07-0&amp;method=sql-left-join&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-07?code=code-murder-07-0&amp;method=sql-left-join&amp;line=4">
+<div>
+<span class="usage-label">
       Murder City · SQL
      </span>
-     <strong>
+<strong>
       Follow the second interview
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Person p
+</div>
+<pre aria-hidden="true">FROM Person p
 LEFT JOIN Interview i ON p.id = i.person_id
 WHERE i.person_id = 67318</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#murder-09?code=code-murder-09-0&amp;method=sql-left-join&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-09?code=code-murder-09-0&amp;method=sql-left-join&amp;line=6">
+<div>
+<span class="usage-label">
       Murder City · SQL
      </span>
-     <strong>
+<strong>
       Inspect December event check-ins
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Facebook_event_checkin f
+</div>
+<pre aria-hidden="true">FROM Facebook_event_checkin f
 LEFT JOIN Person p ON f.person_id = p.id
 WHERE 
 	f.person_id IN (78881, 90700, 99716)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B08?code=code-B08-2&amp;method=sql-left-join&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B08?code=code-B08-2&amp;method=sql-left-join&amp;line=2">
+<div>
+<span class="usage-label">
       SQLBolt · SQL
      </span>
-     <strong>
+<strong>
       NULL and unmatched rows
      </strong>
-     <small>
+<small>
       Study solution · line 2
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT b.building_name FROM buildings b
+</div>
+<pre aria-hidden="true">SELECT b.building_name FROM buildings b
 LEFT JOIN employees e ON b.building_name = e.building WHERE e.building IS NULL;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (13)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C44?code=code-C44-2&amp;method=sql-left-join&amp;line=4">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C44?code=code-C44-2&amp;method=sql-left-join&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1581 · Customers who visited without transactions
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Visits v
+</div>
+<pre aria-hidden="true">FROM Visits v
 LEFT JOIN Transactions t ON v.visit_id = t.visit_id
 WHERE t.amount IS NULL
 GROUP BY v.customer_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C47?code=code-C47-2&amp;method=sql-left-join&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C47?code=code-C47-2&amp;method=sql-left-join&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       577 · Employee bonus
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Employee e
+</div>
+<pre aria-hidden="true">FROM Employee e
 LEFT JOIN Bonus b ON e.empId = b.empId
 WHERE b.bonus &lt; 1000 OR b.bonus IS NULL</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C48?code=code-C48-2&amp;method=sql-left-join&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C48?code=code-C48-2&amp;method=sql-left-join&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1280 · Students and examinations
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">CROSS JOIN Subjects su
+</div>
+<pre aria-hidden="true">CROSS JOIN Subjects su
 LEFT JOIN Examinations e ON s.student_id = e.student_id AND su.subject_name = e.subject_name
 GROUP BY s.student_id, s.student_name, su.subject_name
 ORDER BY s.student_id, s.student_name, su.subject_name</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C49?code=code-C49-2&amp;method=sql-left-join&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C49?code=code-C49-2&amp;method=sql-left-join&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       570 · Managers with at least five direct reports
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Employee e
+</div>
+<pre aria-hidden="true">FROM Employee e
 LEFT JOIN M ON e.id = M.managerId
 WHERE M.nReports &gt;= 5</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C50?code=code-C50-2&amp;method=sql-left-join&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C50?code=code-C50-2&amp;method=sql-left-join&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1934 · Confirmation rate
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">    FROM Signups s
+</div>
+<pre aria-hidden="true">    FROM Signups s
     LEFT JOIN Confirmations c ON s.user_id = c.user_id
 )
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C07?code=code-C07-2&amp;method=sql-left-join&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-2&amp;method=sql-left-join&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1251 · Average selling price
      </strong>
-     <small>
+<small>
       My approach · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    FROM Prices p
+</div>
+<pre aria-hidden="true">    FROM Prices p
     LEFT JOIN UnitsSold   u ON (p.product_id = u.product_id) AND (u.purchase_date BETWEEN   p.start_date AND p.end_date)
 )
 SELECT product_id, COALESCE(ROUND(SUM(paid) / NULLIF(SUM(units), 0), 2), 0) AS average_price</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C07?code=code-C07-4&amp;method=sql-left-join&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-4&amp;method=sql-left-join&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1251 · Average selling price
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    FROM Prices p
+</div>
+<pre aria-hidden="true">    FROM Prices p
     LEFT JOIN UnitsSold u ON (p.product_id = u.product_id) AND (u.purchase_date BETWEEN p.start_date AND p.end_date)
 )
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C08?code=code-C08-2&amp;method=sql-left-join&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C08?code=code-C08-2&amp;method=sql-left-join&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1075 · Project employees I
      </strong>
-     <small>
+<small>
       My approach · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Project p
+</div>
+<pre aria-hidden="true">FROM Project p
 LEFT JOIN Employee e   ON p.employee_id = e.employee_id
 GROUP BY p.project_id;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C08?code=code-C08-4&amp;method=sql-left-join&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C08?code=code-C08-4&amp;method=sql-left-join&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1075 · Project employees I
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Project p
+</div>
+<pre aria-hidden="true">FROM Project p
 LEFT JOIN Employee e ON p.employee_id = e.employee_id
 GROUP BY p.project_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C21?code=code-C21-2&amp;method=sql-left-join&amp;line=18">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C21?code=code-C21-2&amp;method=sql-left-join&amp;line=18">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1731 · Employees reporting to employees
      </strong>
-     <small>
+<small>
       Uploaded submission · line 18
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Reports r
+</div>
+<pre aria-hidden="true">FROM Reports r
 LEFT JOIN Employees e ON r.manager_id = e.employee_id
 ORDER BY r.manager_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-4&amp;method=sql-left-join&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-4&amp;method=sql-left-join&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       Uploaded submission · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">        FROM ReviewPerUserID a
+</div>
+<pre aria-hidden="true">        FROM ReviewPerUserID a
         LEFT JOIN Users b ON a.user_id = b.user_id
     ),
     FirstUserName AS (</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C32?code=code-C32-4&amp;method=sql-left-join&amp;line=31">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C32?code=code-C32-4&amp;method=sql-left-join&amp;line=31">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       602 · Most accepted friends
      </strong>
-     <small>
+<small>
       Uploaded submission · line 31
      </small>
-    </div>
-    <pre aria-hidden="true">        FROM Users u
+</div>
+<pre aria-hidden="true">        FROM Users u
         LEFT JOIN TableAccepted ta ON u.id = ta.id
         LEFT JOIN TableRequest tr ON u.id = tr.id
     )</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C40?code=code-C40-4&amp;method=sql-left-join&amp;line=15">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C40?code=code-C40-4&amp;method=sql-left-join&amp;line=15">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1327 · Products with at least 100 February units
      </strong>
-     <small>
+<small>
       Uploaded submission · line 15
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Quantities q 
+</div>
+<pre aria-hidden="true">FROM Quantities q 
 LEFT JOIN Products p ON q.product_id = p.product_id
 WHERE q.unit &gt;= 100</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     SQL cheat-sheet image · Joins. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://dev.mysql.com/doc/refman/8.4/en/join.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/join.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=sql&amp;cat=Joins">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=sql&amp;cat=Joins">
+<small>
     ← Browse
    </small>
    MySQL · Joins
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

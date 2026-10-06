@@ -1,43 +1,43 @@
 <article class="article" id="LC3497">
- <div class="breadcrumb">
-  <a href="#practice">
+<div class="breadcrumb">
+<a href="#practice">
    Leetcode problems
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Additional problems
   </span>
- </div>
- <h1>
+</div>
+<h1>
   3497 · Analyze subscription conversion
  </h1>
- <p>
+<p>
   Compare average free-trial and paid activity duration for users with both types.
  </p>
- <h2>
+<h2>
   My submission
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="archive-3497-panel-0" aria-selected="true" id="archive-3497-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="archive-3497-panel-0" aria-selected="true" id="archive-3497-tab-0" role="tab" tabindex="0" type="button">
      MySQL
     </button>
-    <button aria-controls="archive-3497-panel-1" aria-selected="false" id="archive-3497-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="archive-3497-panel-1" aria-selected="false" id="archive-3497-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button class="copy-button" data-copy="" type="button">
+</div>
+<button class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="archive-3497-tab-0" class="code-panel" id="archive-3497-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-3497-tab-0" class="code-panel" id="archive-3497-panel-0" role="tabpanel">
+<div class="no-script-label">
     MySQL
    </div>
-   <pre id="code-LC3497-0" tabindex="0"><code class="language-sql" data-origin="archive-3497-sql"><span class="c1"># Write your MySQL query statement below</span>
+<pre id="code-LC3497-0" tabindex="0"><code class="language-sql" data-origin="archive-3497-sql"><span class="c1"># Write your MySQL query statement below</span>
 <span class="k">WITH</span><span class="w"> </span><span class="n">Payments</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span>
 <span class="w">        </span><span class="n">user_id</span><span class="p">,</span><span class="w"> </span>
@@ -54,12 +54,12 @@
 <span class="k">WHERE</span><span class="w"> </span>
 <span class="w">    </span><span class="n">paid_avg_duration</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="no">NULL</span>
 <span class="w">    </span><span class="k">AND</span><span class="w"> </span><span class="n">trial_avg_duration</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="no">NULL</span></code></pre>
-  </div>
-  <div aria-labelledby="archive-3497-tab-1" class="code-panel" id="archive-3497-panel-1" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-3497-tab-1" class="code-panel" id="archive-3497-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-LC3497-1" tabindex="0"><code class="language-python" data-origin="archive-3497-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-LC3497-1" tabindex="0"><code class="language-python" data-origin="archive-3497-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">analyze_subscription_conversion</span><span class="p">(</span><span class="n">user_activity</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">custom_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -76,123 +76,121 @@
     <span class="n">df</span> <span class="o">=</span> <span class="n">user_activity</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'user_id'</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">custom_func</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span></code></pre>
-  </div>
- </div>
- <h2>
+</div>
+</div>
+<h2>
   How the submitted approach works
  </h2>
- <p>
+<p>
   SQL computes conditional averages. The pandas group function selects both activity types and returns their means, then drops incomplete results.
  </p>
- <div class="note warning">
-  <b>
+<div class="note warning">
+<b>
    Implementation note.
-  </b>
-  The pandas submission adds 0.0001 before rounding. That is the saved approach, not a general exact-decimal rounding rule.
- </div>
- <details class="reference-details">
-  <summary>
+  </b> The pandas submission adds 0.0001 before rounding. This is not a general exact-decimal rounding rule. </div>
+<details class="reference-details">
+<summary>
    Source
   </summary>
-  <div class="sources-content">
-   <p>
+<div class="sources-content">
+<p>
     SQL.zip / 3497-analyze-subscription-conversion / submission-1.sql and submission-1.py. These are the submitted files; the summary and implementation notes describe the code, not a replacement official problem statement.
    </p>
-   <p>
-    <a href="https://leetcode.com/problems/analyze-subscription-conversion/" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://leetcode.com/problems/analyze-subscription-conversion/" rel="noopener noreferrer" target="_blank">
      Original problem
     </a>
-   </p>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</p>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-and">
+<a href="#m-sql-and">
      AND
     </a>
-    <a href="#m-sql-not">
+<a href="#m-sql-not">
      NOT
     </a>
-    <a href="#m-sql-is-not-null">
+<a href="#m-sql-is-not-null">
      IS NOT NULL
     </a>
-    <a href="#m-sql-avg">
+<a href="#m-sql-avg">
      AVG()
     </a>
-    <a href="#m-sql-group-by">
+<a href="#m-sql-group-by">
      GROUP BY
     </a>
-    <a href="#m-sql-if">
+<a href="#m-sql-if">
      IF()
     </a>
-    <a href="#m-sql-round">
+<a href="#m-sql-round">
      ROUND()
     </a>
-    <a href="#m-sql-subquery">
+<a href="#m-sql-subquery">
      Subquery
     </a>
-    <a href="#m-sql-with">
+<a href="#m-sql-with">
      WITH
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-    <a href="#m-sql-order-by">
+<a href="#m-sql-order-by">
      ORDER BY
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-apply">
+<a href="#m-pd-apply">
      apply()
     </a>
-    <a href="#m-pd-reset-index">
+<a href="#m-pd-reset-index">
      Reset index
     </a>
-    <a href="#m-pd-dropna">
+<a href="#m-pd-dropna">
      Drop null rows
     </a>
-    <a href="#m-pd-mean">
+<a href="#m-pd-mean">
      mean()
     </a>
-    <a href="#m-pd-groupby">
+<a href="#m-pd-groupby">
      Basic group
     </a>
-    <a href="#m-pd-group-apply">
+<a href="#m-pd-group-apply">
      Group apply
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#LC3475">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#LC3475">
+<small>
     ← Previous
    </small>
    3475 · DNA pattern recognition
   </a>
-  <a href="#LC3521">
-   <small>
+<a href="#LC3521">
+<small>
     Next →
    </small>
    3521 · Find product recommendation pairs
   </a>
- </div>
+</div>
 </article>

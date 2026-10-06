@@ -1,384 +1,382 @@
 <article class="article method-page" id="m-sql-in">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=sql&amp;cat=Filtering">
+<a href="#methods?lang=sql&amp;cat=Filtering">
    MySQL · Filtering
   </a>
- </div>
- <h1>
+</div>
+<h1>
   IN
  </h1>
- <p class="lead">
+<p class="lead">
   Match set
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     MySQL
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-in"><span class="n">city</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'HK'</span><span class="p">,</span><span class="s1">'SG'</span><span class="p">)</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-sql" data-origin="reference-sql-in"><span class="n">city</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="p">(</span><span class="s1">'HK'</span><span class="p">,</span><span class="s1">'SG'</span><span class="p">)</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-pd-isin">
+<a href="#m-pd-isin">
    pandas · Membership
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C15?code=code-C15-0&amp;method=sql-in&amp;line=4">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C15?code=code-C15-0&amp;method=sql-in&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1141 · User activity in a 30-day window
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">WHERE activity_date BETWEEN '2019-06-28' AND '2019-07-27'
+</div>
+<pre aria-hidden="true">WHERE activity_date BETWEEN '2019-06-28' AND '2019-07-27'
   AND activity_type IN ('open_session', 'end_session', 'scroll_down', 'send_message')
 GROUP BY activity_date;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#murder-09?code=code-murder-09-0&amp;method=sql-in&amp;line=8">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-09?code=code-murder-09-0&amp;method=sql-in&amp;line=8">
+<div>
+<span class="usage-label">
      Murder City · SQL
     </span>
-    <strong>
+<strong>
      Inspect December event check-ins
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 8
     </small>
-   </div>
-   <pre aria-hidden="true">WHERE 
+</div>
+<pre aria-hidden="true">WHERE 
 	f.person_id IN (78881, 90700, 99716)
 	AND (f.date &gt; 20171130 AND f.date &lt; 20180101)</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-09?code=code-squid-09-0&amp;method=sql-in&amp;line=39">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-09?code=code-squid-09-0&amp;method=sql-in&amp;line=39">
+<div>
+<span class="usage-label">
      Squid Game · SQL
     </span>
-    <strong>
+<strong>
      Reconstruct access-log overlaps
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 39
     </small>
-   </div>
-   <pre aria-hidden="true">	   (select end_time from Most_recent_squid_game)) AND
+</div>
+<pre aria-hidden="true">	   (select end_time from Most_recent_squid_game)) AND
     (d.door_location IN (select door_location from Suspect))</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C20?code=code-C20-2&amp;method=sql-in&amp;line=5">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-2&amp;method=sql-in&amp;line=5">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1045 · Customers who bought every product
     </strong>
-    <small>
+<small>
      My approach · line 5
     </small>
-   </div>
-   <pre aria-hidden="true">HAVING (SELECT COUNT(*) FROM Product) = COUNT(DISTINCT CASE
+</div>
+<pre aria-hidden="true">HAVING (SELECT COUNT(*) FROM Product) = COUNT(DISTINCT CASE
     WHEN c.product_key IN (SELECT product_key FROM Product) THEN c.product_key END);</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C28?code=code-C28-2&amp;method=sql-in&amp;line=8">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C28?code=code-C28-2&amp;method=sql-in&amp;line=8">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1978 · Low-salary employees whose manager left
     </strong>
-    <small>
+<small>
      My approach · line 8
     </small>
-   </div>
-   <pre aria-hidden="true">FROM Employees
+</div>
+<pre aria-hidden="true">FROM Employees
 WHERE manager_id IN (SELECT manager_id FROM ManagersLeftID)   AND   salary &lt; 30000
 ORDER BY employee_id   ASC;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C33?code=code-C33-2&amp;method=sql-in&amp;line=17">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C33?code=code-C33-2&amp;method=sql-in&amp;line=17">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      585 · Investments in 2016
     </strong>
-    <small>
+<small>
      My approach · line 17
     </small>
-   </div>
-   <pre aria-hidden="true">FROM Insurance
+</div>
+<pre aria-hidden="true">FROM Insurance
 WHERE pid IN (SELECT pid FROM UniqueCity) AND tiv_2015 IN (SELECT tiv_2015 FROM NonUniqueTIV);</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    4 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C37?code=code-C37-2&amp;method=sql-in&amp;line=11">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C37?code=code-C37-2&amp;method=sql-in&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       196 · Delete duplicate emails
      </strong>
-     <small>
+<small>
       My approach · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">DELETE FROM Person
+</div>
+<pre aria-hidden="true">DELETE FROM Person
 WHERE id IN (
     SELECT id
     FROM Ranked</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC608?code=code-LC608-0&amp;method=sql-in&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC608?code=code-LC608-0&amp;method=sql-in&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       608 · Tree node
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">        WHEN p_id IS NULL THEN 'Root'
+</div>
+<pre aria-hidden="true">        WHEN p_id IS NULL THEN 'Root'
         WHEN id IN (SELECT p_id FROM Tree) THEN 'Inner'
         ELSE 'Leaf'
     END AS type</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3564?code=code-LC3564-0&amp;method=sql-in&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3564?code=code-LC3564-0&amp;method=sql-in&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3564 · Seasonal sales analysis
      </strong>
-     <small>
+<small>
       Uploaded submission · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">            CASE 
+</div>
+<pre aria-hidden="true">            CASE 
                 WHEN MONTH(s.sale_date) IN (12, 1, 2) THEN 'Winter'
                 WHEN MONTH(s.sale_date) IN (3, 4, 5) THEN 'Spring'
                 WHEN MONTH(s.sale_date) IN (6, 7, 8) THEN 'Summer'</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3580?code=code-LC3580-0&amp;method=sql-in&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3580?code=code-LC3580-0&amp;method=sql-in&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3580 · Find consistently improving employees
      </strong>
-     <small>
+<small>
       Uploaded submission · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">        FROM Performance_reviews
+</div>
+<pre aria-hidden="true">        FROM Performance_reviews
         WHERE employee_id IN (
             SELECT employee_id
             FROM Performance_reviews</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (5)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C15?code=code-C15-2&amp;method=sql-in&amp;line=8">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C15?code=code-C15-2&amp;method=sql-in&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1141 · User activity in a 30-day window
      </strong>
-     <small>
+<small>
       My approach · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">    activity_date   &lt;= '2019-07-27'   AND
+</div>
+<pre aria-hidden="true">    activity_date   &lt;= '2019-07-27'   AND
     activity_type   IN ('open_session', 'end_session', 'scroll_down', 'send_message')
 GROUP BY   activity_date;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C15?code=code-C15-4&amp;method=sql-in&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C15?code=code-C15-4&amp;method=sql-in&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1141 · User activity in a 30-day window
      </strong>
-     <small>
+<small>
       Uploaded submission · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">    activity_date &lt;= '2019-07-27' AND
+</div>
+<pre aria-hidden="true">    activity_date &lt;= '2019-07-27' AND
     activity_type IN ('open_session', 'end_session', 'scroll_down', 'send_message')
 GROUP BY activity_date </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C28?code=code-C28-4&amp;method=sql-in&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C28?code=code-C28-4&amp;method=sql-in&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1978 · Low-salary employees whose manager left
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Employees
+</div>
+<pre aria-hidden="true">FROM Employees
 WHERE manager_id IN (SELECT manager_id FROM ManagersLeftID) AND salary &lt; 30000
 ORDER BY employee_id ASC</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C33?code=code-C33-4&amp;method=sql-in&amp;line=18">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C33?code=code-C33-4&amp;method=sql-in&amp;line=18">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       585 · Investments in 2016
      </strong>
-     <small>
+<small>
       Uploaded submission · line 18
      </small>
-    </div>
-    <pre aria-hidden="true">FROM Insurance
+</div>
+<pre aria-hidden="true">FROM Insurance
 WHERE pid IN (SELECT pid FROM UniqueCity) AND tiv_2015 IN (SELECT tiv_2015 FROM NonUniqueTIV)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C37?code=code-C37-4&amp;method=sql-in&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C37?code=code-C37-4&amp;method=sql-in&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       196 · Delete duplicate emails
      </strong>
-     <small>
+<small>
       Uploaded submission · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">DELETE FROM Person
+</div>
+<pre aria-hidden="true">DELETE FROM Person
 WHERE id IN (
     SELECT id
     FROM Ranked </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     SQL cheat-sheet image · Filtering. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://dev.mysql.com/doc/refman/8.4/en/" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=sql&amp;cat=Filtering">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=sql&amp;cat=Filtering">
+<small>
     ← Browse
    </small>
    MySQL · Filtering
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

@@ -1,159 +1,157 @@
 <article class="article method-page" id="m-pd-rolling">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=Window-like%20operations">
+<a href="#methods?lang=pd&amp;cat=Window-like%20operations">
    pandas · Window-like operations
   </a>
- </div>
- <h1>
+</div>
+<h1>
   Rolling mean
  </h1>
- <p class="lead">
+<p class="lead">
   Moving average
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-rolling"><span class="n">df</span><span class="p">[</span><span class="s1">'x'</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></code></pre>
- </div>
- <h2>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-rolling"><span class="n">df</span><span class="p">[</span><span class="s1">'x'</span><span class="p">]</span><span class="o">.</span><span class="n">rolling</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></code></pre>
+</div>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C24?code=code-C24-5&amp;method=pd-rolling&amp;line=4">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C24?code=code-C24-5&amp;method=pd-rolling&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      180 · Consecutive Numbers
     </strong>
-    <small>
+<small>
      Uploaded submission · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def consecutive_numbers(logs: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def consecutive_numbers(logs: pd.DataFrame) -&gt; pd.DataFrame:
     logs['var'] = logs['num'].rolling(window=3).var()
     return pd.DataFrame({'ConsecutiveNums': logs[logs['var']==0]['num'].unique()})</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C31?code=code-C31-1&amp;method=pd-rolling&amp;line=13">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C31?code=code-C31-1&amp;method=pd-rolling&amp;line=13">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1321 · Restaurant growth
     </strong>
-    <small>
+<small>
      Study solution · line 13
     </small>
-   </div>
-   <pre aria-hidden="true">        return pd.DataFrame(columns=['visited_on', 'amount', 'average_amount'])
+</div>
+<pre aria-hidden="true">        return pd.DataFrame(columns=['visited_on', 'amount', 'average_amount'])
     rolled = daily.rolling('7D', closed='right').sum()
     rolled = rolled.loc[rolled.index &gt;= daily.index.min() + pd.Timedelta(days=6)]
     result = rolled.rename('amount').reset_index()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    Other saved implementations (2)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C31?code=code-C31-3&amp;method=pd-rolling&amp;line=13">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C31?code=code-C31-3&amp;method=pd-rolling&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1321 · Restaurant growth
      </strong>
-     <small>
+<small>
       My approach · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">        return pd.DataFrame(columns=['visited_on', 'amount', 'average_amount'])
+</div>
+<pre aria-hidden="true">        return pd.DataFrame(columns=['visited_on', 'amount', 'average_amount'])
     total = daily.rolling('7D').sum()
     total = total[total.index &gt;= daily.index.min() + pd.Timedelta(days=6)]
     result = total.rename('amount').reset_index()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C31?code=code-C31-5&amp;method=pd-rolling&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C31?code=code-C31-5&amp;method=pd-rolling&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1321 · Restaurant growth
      </strong>
-     <small>
+<small>
       Uploaded submission · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    nDays = 7
+</div>
+<pre aria-hidden="true">    nDays = 7
     customer['amount'] = customer.amount.rolling(nDays).sum()
     customer['average_amount'] = (customer.amount / nDays).round(2)
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     pandas cheat-sheet image · Window-like operations. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=Window-like%20operations">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=Window-like%20operations">
+<small>
     ← Browse
    </small>
    pandas · Window-like operations
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

@@ -1,151 +1,149 @@
 <article class="article method-page" id="m-pd-conditional-group-count">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=Very%20common%20interview%20/%20LeetCode%20patterns">
+<a href="#methods?lang=pd&amp;cat=Very%20common%20interview%20/%20LeetCode%20patterns">
    pandas · Very common interview / LeetCode patterns
   </a>
- </div>
- <h1>
+</div>
+<h1>
   Conditional group count
  </h1>
- <p class="lead">
+<p class="lead">
   Count condition by group
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-conditional-group-count"><span class="n">df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">flag</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'g'</span><span class="p">)</span><span class="o">.</span><span class="n">flag</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-conditional-group-count"><span class="n">df</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">flag</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">x</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'g'</span><span class="p">)</span><span class="o">.</span><span class="n">flag</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-sql-conditional-sum">
+<a href="#m-sql-conditional-sum">
    SQL · Conditional sum
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C31?code=code-C31-1&amp;method=pd-conditional-group-count&amp;line=10">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C31?code=code-C31-1&amp;method=pd-conditional-group-count&amp;line=10">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1321 · Restaurant growth
     </strong>
-    <small>
+<small>
      Study solution · line 10
     </small>
-   </div>
-   <pre aria-hidden="true">    c = customer.assign(visited_on=pd.to_datetime(customer['visited_on']))
+</div>
+<pre aria-hidden="true">    c = customer.assign(visited_on=pd.to_datetime(customer['visited_on']))
     daily = c.groupby('visited_on')['amount'].sum().sort_index()
     if daily.empty:
         return pd.DataFrame(columns=['visited_on', 'amount', 'average_amount'])</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C40?code=code-C40-3&amp;method=pd-conditional-group-count&amp;line=6">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C40?code=code-C40-3&amp;method=pd-conditional-group-count&amp;line=6">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1327 · Products with at least 100 February units
     </strong>
-    <small>
+<small>
      My approach · line 6
     </small>
-   </div>
-   <pre aria-hidden="true">    df =   orders.groupby(by='product_id').agg(
+</div>
+<pre aria-hidden="true">    df =   orders.groupby(by='product_id').agg(
         unit = ('unit', 'sum')
     ).reset_index()
     df =   df[df.unit &gt;= 100]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    Other saved implementations (1)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C31?code=code-C31-3&amp;method=pd-conditional-group-count&amp;line=10">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C31?code=code-C31-3&amp;method=pd-conditional-group-count&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1321 · Restaurant growth
      </strong>
-     <small>
+<small>
       My approach · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">    customer = customer.assign(visited_on=pd.to_datetime(customer['visited_on']))
+</div>
+<pre aria-hidden="true">    customer = customer.assign(visited_on=pd.to_datetime(customer['visited_on']))
     daily = customer.groupby('visited_on')['amount'].sum().sort_index()
     if daily.empty:
         return pd.DataFrame(columns=['visited_on', 'amount', 'average_amount'])</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     pandas cheat-sheet image · Very common interview / LeetCode patterns. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=Very%20common%20interview%20/%20LeetCode%20patterns">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=Very%20common%20interview%20/%20LeetCode%20patterns">
+<small>
     ← Browse
    </small>
    pandas · Very common interview / LeetCode patterns
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

@@ -1,156 +1,98 @@
 <section aria-labelledby="elastic-net-title" class="page-view lesson-layout" id="elastic-net">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      20
     </span>
     Part 3 · Regularization &amp; ensembles
    </p>
-   <h1 id="elastic-net-title" tabindex="-1">
+<h1 id="elastic-net-title" tabindex="-1">
     Elastic Net and correlated predictors
    </h1>
-   <p class="standfirst">
-    Separate total penalty strength from the balance between selection and stabilization.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Regularization · PDF pp. 11–13 · §§5–6" data-page="11" data-pdf="reg" type="button">
-     Regularization · PDF pp. 11–13 · §§5–6
-    </button>
-    <button aria-label="Open source: Regularization · PDF pp. 24–25 · §18" data-page="24" data-pdf="reg" type="button">
-     Regularization · PDF pp. 24–25 · §18
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<p class="standfirst">Elastic Net combines L1 selection with L2 stabilization. One hyperparameter sets the total penalty strength; another controls the balance between the two.</p>
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="combine-two-distinct-effects" href="#elastic-net?section=combine-two-distinct-effects">
-     Combine two distinct effects
-    </a>
-    <a data-section="read-the-endpoints-carefully" href="#elastic-net?section=read-the-endpoints-carefully">
-     Read the endpoints carefully
-    </a>
-    <a data-section="why-correlation-changes-the-choice" href="#elastic-net?section=why-correlation-changes-the-choice">
-     Why correlation changes the choice
-    </a>
-    <a data-section="a-one-coordinate-view" href="#elastic-net?section=a-one-coordinate-view">
-     A one-coordinate view
-    </a>
-    <a data-section="choosing-among-the-three-penalties" href="#elastic-net?section=choosing-among-the-three-penalties">
-     Choosing among the three penalties
-    </a>
-    <a data-section="implementation" href="#elastic-net?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="combine-two-distinct-effects" id="elastic-net--combine-two-distinct-effects">
+<nav aria-label="On this page">
+<a data-section="combine-two-distinct-effects" href="#elastic-net?section=combine-two-distinct-effects">Combine two distinct effects</a>
+<a data-section="read-the-endpoints-carefully" href="#elastic-net?section=read-the-endpoints-carefully">Read the endpoints carefully</a>
+<a data-section="why-correlation-changes-the-choice" href="#elastic-net?section=why-correlation-changes-the-choice">Why correlation changes the choice</a>
+<a data-section="a-one-coordinate-view" href="#elastic-net?section=a-one-coordinate-view">A one-coordinate view</a>
+<a data-section="choosing-among-the-three-penalties" href="#elastic-net?section=choosing-among-the-three-penalties">Choosing among the three penalties</a>
+<a data-section="implementation" href="#elastic-net?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="combine-two-distinct-effects" id="elastic-net--combine-two-distinct-effects">
     Combine two distinct effects
    </h2>
-   <p>
-    The guide defines Elastic Net as
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>∈</mo><msub><mo>argmin</mo><mi>β</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>n</mi></mrow></mfrac><mo form="prefix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msubsup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn><mn>2</mn></msubsup><mo>+</mo><mi>λ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>α</mi><mo form="prefix" stretchy="false">∥</mo><mi>β</mi><msub><mo form="postfix" stretchy="false">∥</mo><mn>1</mn></msub><mo>+</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow><mn>2</mn></mfrac><mo form="prefix" stretchy="false">∥</mo><mi>β</mi><msubsup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn><mn>2</mn></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mn>0</mn><mo>≤</mo><mi>α</mi><mo>≤</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat\beta\in\mathop{\mathrm{argmin}}_\beta\left[
+<p>Elastic Net minimizes</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>β</mi><mo accent="true">̂</mo></mover><mo>∈</mo><msub><mo>argmin</mo><mi>β</mi></msub><mrow><mo form="prefix" stretchy="true">[</mo><mfrac><mn>1</mn><mrow><mn>2</mn><mi>n</mi></mrow></mfrac><mo form="prefix" stretchy="false">∥</mo><mi>y</mi><mo>−</mo><mi>X</mi><mi>β</mi><msubsup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn><mn>2</mn></msubsup><mo>+</mo><mi>λ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>α</mi><mo form="prefix" stretchy="false">∥</mo><mi>β</mi><msub><mo form="postfix" stretchy="false">∥</mo><mn>1</mn></msub><mo>+</mo><mfrac><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow><mn>2</mn></mfrac><mo form="prefix" stretchy="false">∥</mo><mi>β</mi><msubsup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn><mn>2</mn></msubsup><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mn>0</mn><mo>≤</mo><mi>α</mi><mo>≤</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\hat\beta\in\mathop{\mathrm{argmin}}_\beta\left[
 \frac1{2n}\lVert y-X\beta\rVert_2^2+
 \lambda\left(\alpha\lVert\beta\rVert_1+
 \frac{1-\alpha}{2}\lVert\beta\rVert_2^2\right)\right],\quad0\le\alpha\le1.</annotation></semantics></math>
-   </div>
-   <p>
-    The L1 part encourages sparse coefficients. The L2 part stabilizes weakly identified directions and makes it easier for correlated predictors to share weight. It is not simply a compromise between two names; it combines two geometrically different preferences.
-   </p>
-   <p>
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
+</div>
+<p>The L1 part encourages sparse coefficients. The L2 part stabilizes weakly identified directions and makes it easier for correlated predictors to share weight. The two penalties impose geometrically different restrictions.</p>
+<p>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>λ</mi><annotation encoding="application/x-tex">\lambda</annotation></semantics></math>
     sets how much total regularization is applied.
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
     sets how LASSO-like the penalty is. Those are separate questions, and both belong inside model selection.
    </p>
-   <h2 data-section="read-the-endpoints-carefully" id="elastic-net--read-the-endpoints-carefully">
+<h2 data-section="read-the-endpoints-carefully" id="elastic-net--read-the-endpoints-carefully">
     Read the endpoints carefully
    </h2>
-   <p>
-    At
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha=1</annotation></semantics></math>
-    , the L2 contribution vanishes and the stated mean-scaled LASSO objective remains. At
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\alpha=0</annotation></semantics></math>
-    , only L2 remains. The guide says “Ridge up to parameterization conventions” because its earlier Ridge section uses a different normalization of the fitting term.
-   </p>
-   <p>
-    The same caution applies to library APIs. The symbol called
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>
-    in one source can be a total strength in another library, while
-    <code>
+<p>At <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha=1</annotation></semantics></math>, the L2 contribution vanishes and the stated mean-scaled LASSO objective remains. At <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\alpha=0</annotation></semantics></math>, only L2 remains. This is Ridge with a rescaled penalty parameter because the Ridge objective above uses a different normalization of the fitting loss.</p>
+<p>The same caution applies to library APIs. The symbol called <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math> in one formulation can be a total strength in another library, while <code>
      l1_ratio
-    </code>
-    can play the role of the PDF’s mixing parameter. The practical invariant is the
-    <strong>
-     objective actually minimized
-    </strong>
-    , not the parameter name.
-   </p>
-   <h2 data-section="why-correlation-changes-the-choice" id="elastic-net--why-correlation-changes-the-choice">
+    </code> can play the role of the mixing parameter here. The practical invariant is the <strong>objective actually minimized</strong>, not the parameter name.</p>
+<h2 data-section="why-correlation-changes-the-choice" id="elastic-net--why-correlation-changes-the-choice">
     Why correlation changes the choice
    </h2>
-   <p>
-    The source imagines two predictors with correlation
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.95</mn><annotation encoding="application/x-tex">0.95</annotation></semantics></math>
-    measuring approximately the same latent signal. A possible LASSO fit is
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.8</mn><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(1.8,0)</annotation></semantics></math>
-    ; a Ridge fit might be
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.0</mn><mo>,</mo><mn>0.9</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(1.0,0.9)</annotation></semantics></math>
-    ; an Elastic Net fit might be
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.15</mn><mo>,</mo><mn>0.75</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(1.15,0.75)</annotation></semantics></math>
-    while eliminating other weak variables.
-   </p>
-   <p>
+<p>Consider two predictors with correlation <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.95</mn><annotation encoding="application/x-tex">0.95</annotation></semantics></math> measuring approximately the same latent signal. A possible LASSO fit is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.8</mn><mo>,</mo><mn>0</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(1.8,0)</annotation></semantics></math>; a Ridge fit might be <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.0</mn><mo>,</mo><mn>0.9</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(1.0,0.9)</annotation></semantics></math>; an Elastic Net fit might be <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.15</mn><mo>,</mo><mn>0.75</mn><mo form="postfix" stretchy="true">)</mo></mrow><annotation encoding="application/x-tex">(1.15,0.75)</annotation></semantics></math> while eliminating other weak variables.</p>
+<p>
     These are illustrative coefficients, not outputs derived from a fully specified dataset. Their purpose is to show different behavior: one method selects one correlated representative, one spreads weight continuously, and the combined penalty can retain a group while still removing unrelated features.
    </p>
-   <p>
+<p>
     The instability of selecting only one representative is especially relevant when interpretations are attached to individual coefficient identities. A stable prediction does not imply stable variable membership.
    </p>
-   <h2 data-section="a-one-coordinate-view" id="elastic-net--a-one-coordinate-view">
+<h2 data-section="a-one-coordinate-view" id="elastic-net--a-one-coordinate-view">
     A one-coordinate view
    </h2>
-   <p>
+<p>
     In a standardized coordinate calculation, the update has the schematic structure
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>j</mi></msub><mo>←</mo><mfrac><mrow><mo>soft</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo>,</mo><mi>λ</mi><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><mn>1</mn><mo>+</mo><mi>λ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\beta_j\leftarrow
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>j</mi></msub><mo>←</mo><mfrac><mrow><mo>soft</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo>,</mo><mi>λ</mi><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><mn>1</mn><mo>+</mo><mi>λ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\beta_j\leftarrow
 \frac{\operatorname{soft}(z_j,\lambda\alpha)}{1+\lambda(1-\alpha)}.</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<p>
     The numerator performs the L1 thresholding. The denominator performs additional L2 shrinkage. The exact denominator includes the coordinate’s design norm when it is not normalized as assumed here. This decomposition is an efficient way to remember what each term does.
    </p>
-   <figure class="source-figure">
-    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="reg-12" type="button">
-     <img alt="The source’s illustrative Elastic Net paths. Zeroing and continuous shrinkage coexist; the paths are examples, not a guarantee that every correlated group will be selected together." height="522" loading="lazy" src="assets/images/the-source-s-illustrative-elastic-net-paths-zeroing-and-continuou-0c6e5181e8.webp" width="760"/>
-    </button>
-    <figcaption>
-     The source’s illustrative Elastic Net paths. Zeroing and continuous shrinkage coexist; the paths are examples, not a guarantee that every correlated group will be selected together.
-     <button aria-label="Open source: Regularization · PDF p. 12" data-page="12" data-pdf="reg" type="button">
+<figure class="source-figure">
+<button aria-label="Enlarge source figure" class="figure-frame" data-figure="reg-12" type="button">
+<img alt="Elastic Net coefficient paths combine exact zeros with continuous shrinkage. Correlated features may be retained together, but grouping is not guaranteed for every dataset." height="522" loading="lazy" src="assets/images/the-source-s-illustrative-elastic-net-paths-zeroing-and-continuou-0c6e5181e8.webp" width="760"/>
+</button>
+<figcaption>Elastic Net coefficient paths combine exact zeros with continuous shrinkage. Correlated features may be retained together, but grouping is not guaranteed for every dataset. <button aria-label="Open source: Regularization · PDF p. 12" data-page="12" data-pdf="reg" type="button">
       Regularization · PDF p. 12
-     </button>
-    </figcaption>
-   </figure>
-   <details class="derivation" data-derivation="coordinate-and-grouping" id="elastic-net--derivation-coordinate-and-grouping">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+     </button></figcaption>
+</figure>
+<details class="derivation" data-derivation="coordinate-and-grouping" id="elastic-net--derivation-coordinate-and-grouping">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive the Elastic Net update and its grouping effect
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Use
@@ -163,10 +105,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>1</mn></msub><mo>,</mo><msub><mi>λ</mi><mn>2</mn></msub><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda_1,\lambda_2\ge0</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       1 · Add the L2 contribution to the coordinate quadratic
      </h4>
-     <p>
+<p>
       With the same
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mi>j</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><annotation encoding="application/x-tex">r^{(-j)}</annotation></semantics></math>
       ,
@@ -175,28 +117,28 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>j</mi></msub><mo>=</mo><msubsup><mi>x</mi><mi>j</mi><mi>⊤</mi></msubsup><msup><mi>r</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mi>j</mi><mo form="postfix" stretchy="true">)</mo></mrow></msup><mi>/</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">z_j=x_j^\top r^{(-j)}/n</annotation></semantics></math>
       as in LASSO, the variable part is
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><msub><mi>a</mi><mi>j</mi></msub><mo>+</mo><msub><mi>λ</mi><mn>2</mn></msub></mrow><mn>2</mn></mfrac><msup><mi>b</mi><mn>2</mn></msup><mo>−</mo><msub><mi>z</mi><mi>j</mi></msub><mi>b</mi><mo>+</mo><msub><mi>λ</mi><mn>1</mn></msub><mrow><mo form="prefix" stretchy="true">|</mo><mi>b</mi><mo form="postfix" stretchy="true">|</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{a_j+\lambda_2}{2}b^2-z_jb+\lambda_1|b|.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><msub><mi>a</mi><mi>j</mi></msub><mo>+</mo><msub><mi>λ</mi><mn>2</mn></msub></mrow><mn>2</mn></mfrac><msup><mi>b</mi><mn>2</mn></msup><mo>−</mo><msub><mi>z</mi><mi>j</mi></msub><mi>b</mi><mo>+</mo><msub><mi>λ</mi><mn>1</mn></msub><mrow><mo form="prefix" stretchy="true">|</mo><mi>b</mi><mo form="postfix" stretchy="true">|</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{a_j+\lambda_2}{2}b^2-z_jb+\lambda_1|b|.</annotation></semantics></math>
+</div>
+<p>
       For
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>j</mi></msub><mo>+</mo><msub><mi>λ</mi><mn>2</mn></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">a_j+\lambda_2&gt;0</annotation></semantics></math>
       , the three-case subgradient calculation gives
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>j</mi></msub><mo>←</mo><mfrac><mrow><mo>soft</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo>,</mo><msub><mi>λ</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><msub><mi>a</mi><mi>j</mi></msub><mo>+</mo><msub><mi>λ</mi><mn>2</mn></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\beta_j\leftarrow\frac{\operatorname{soft}(z_j,\lambda_1)}{a_j+\lambda_2}.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>j</mi></msub><mo>←</mo><mfrac><mrow><mo>soft</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo>,</mo><msub><mi>λ</mi><mn>1</mn></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><mrow><msub><mi>a</mi><mi>j</mi></msub><mo>+</mo><msub><mi>λ</mi><mn>2</mn></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\beta_j\leftarrow\frac{\operatorname{soft}(z_j,\lambda_1)}{a_j+\lambda_2}.</annotation></semantics></math>
+</div>
+<p>
       When
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">a_j=1</annotation></semantics></math>
       , this becomes
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>soft</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>j</mi></msub><mo>,</mo><mi>λ</mi><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>/</mi><mrow><mo form="prefix" stretchy="true">[</mo><mn>1</mn><mo>+</mo><mi>λ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\operatorname{soft}(z_j,\lambda\alpha)/[1+\lambda(1-\alpha)]</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       2 · Explain why identical predictors share weight under an L2 term
      </h4>
-     <p>
+<p>
       Suppose
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>=</mo><msub><mi>x</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">x_1=x_2</annotation></semantics></math>
       and their total coefficient is
@@ -209,10 +151,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mn>2</mn></msub><mo>=</mo><mi>s</mi><mi>/</mi><mn>2</mn><mo>−</mo><mi>d</mi></mrow><annotation encoding="application/x-tex">\beta_2=s/2-d</annotation></semantics></math>
       . Their squared penalty is
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>β</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>β</mi><mn>2</mn><mn>2</mn></msubsup><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>/</mi><mn>2</mn><mo>+</mo><mi>d</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>/</mi><mn>2</mn><mo>−</mo><mi>d</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>=</mo><msup><mi>s</mi><mn>2</mn></msup><mi>/</mi><mn>2</mn><mo>+</mo><mn>2</mn><msup><mi>d</mi><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\beta_1^2+\beta_2^2=(s/2+d)^2+(s/2-d)^2=s^2/2+2d^2.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>β</mi><mn>1</mn><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>β</mi><mn>2</mn><mn>2</mn></msubsup><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>/</mi><mn>2</mn><mo>+</mo><mi>d</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>+</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>s</mi><mi>/</mi><mn>2</mn><mo>−</mo><mi>d</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>=</mo><msup><mi>s</mi><mn>2</mn></msup><mi>/</mi><mn>2</mn><mo>+</mo><mn>2</mn><msup><mi>d</mi><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\beta_1^2+\beta_2^2=(s/2+d)^2+(s/2-d)^2=s^2/2+2d^2.</annotation></semantics></math>
+</div>
+<p>
       It is uniquely minimized at
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">d=0</annotation></semantics></math>
       . Their L1 penalty obeys
@@ -221,10 +163,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mn>1</mn></msub><mo>=</mo><msub><mi>β</mi><mn>2</mn></msub><mo>=</mo><mi>s</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\beta_1=\beta_2=s/2</annotation></semantics></math>
       . Pure LASSO can have many allocations with the same total and L1 penalty.
      </p>
-     <h4>
+<h4>
       3 · Quantify a local grouping statement for similar columns
      </h4>
-     <p>
+<p>
       Let
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mi>y</mi><mo>−</mo><mi>X</mi><mover><mi>β</mi><mo accent="true">̂</mo></mover></mrow><annotation encoding="application/x-tex">r=y-X\hat\beta</annotation></semantics></math>
       . For two nonzero fitted coefficients with the
@@ -233,26 +175,26 @@
       </strong>
       , stationarity gives
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><msubsup><mi>x</mi><mi>j</mi><mi>⊤</mi></msubsup><mi>r</mi></mrow><mi>n</mi></mfrac><mo>=</mo><msub><mi>λ</mi><mn>1</mn></msub><mo>sign</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>λ</mi><mn>2</mn></msub><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\frac{x_j^\top r}{n}=\lambda_1\operatorname{sign}(\hat\beta_j)+\lambda_2\hat\beta_j,</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><msubsup><mi>x</mi><mi>j</mi><mi>⊤</mi></msubsup><mi>r</mi></mrow><mi>n</mi></mfrac><mo>=</mo><msub><mi>λ</mi><mn>1</mn></msub><mo>sign</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>λ</mi><mn>2</mn></msub><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mo>,</mo></mrow><annotation encoding="application/x-tex">\frac{x_j^\top r}{n}=\lambda_1\operatorname{sign}(\hat\beta_j)+\lambda_2\hat\beta_j,</annotation></semantics></math>
+</div>
+<p>
       and the corresponding equation for
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
       . Subtracting cancels the L1 terms:
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>2</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mo>−</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><msub><mi>x</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mi>r</mi></mrow><mi>n</mi></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\lambda_2(\hat\beta_j-\hat\beta_k)=\frac{(x_j-x_k)^\top r}{n}.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>2</mn></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mo>−</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mfrac><mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><msub><mi>x</mi><mi>k</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mi>r</mi></mrow><mi>n</mi></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">\lambda_2(\hat\beta_j-\hat\beta_k)=\frac{(x_j-x_k)^\top r}{n}.</annotation></semantics></math>
+</div>
+<p>
       For
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>2</mn></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda_2&gt;0</annotation></semantics></math>
       , Cauchy–Schwarz yields
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">|</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mo>−</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>k</mi></msub><mo form="postfix" stretchy="true">|</mo></mrow><mo>≤</mo><mfrac><mrow><mo form="postfix" stretchy="false">∥</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><msub><mi>x</mi><mi>k</mi></msub><mo form="postfix" stretchy="false">∥</mo><mspace width="0.167em"></mspace><mo form="postfix" stretchy="false">∥</mo><mi>r</mi><mo form="postfix" stretchy="false">∥</mo></mrow><mrow><mi>n</mi><msub><mi>λ</mi><mn>2</mn></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">|\hat\beta_j-\hat\beta_k|\le\frac{\|x_j-x_k\|\,\|r\|}{n\lambda_2}.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">|</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>j</mi></msub><mo>−</mo><msub><mover><mi>β</mi><mo accent="true">̂</mo></mover><mi>k</mi></msub><mo form="postfix" stretchy="true">|</mo></mrow><mo>≤</mo><mfrac><mrow><mo form="postfix" stretchy="false">∥</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><msub><mi>x</mi><mi>k</mi></msub><mo form="postfix" stretchy="false">∥</mo><mspace width="0.167em"></mspace><mo form="postfix" stretchy="false">∥</mo><mi>r</mi><mo form="postfix" stretchy="false">∥</mo></mrow><mrow><mi>n</mi><msub><mi>λ</mi><mn>2</mn></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">|\hat\beta_j-\hat\beta_k|\le\frac{\|x_j-x_k\|\,\|r\|}{n\lambda_2}.</annotation></semantics></math>
+</div>
+<p>
       If both columns have norm
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msqrt><mi>n</mi></msqrt><annotation encoding="application/x-tex">\sqrt n</annotation></semantics></math>
       and empirical inner-product correlation
@@ -261,129 +203,99 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><msub><mi>x</mi><mi>j</mi></msub><mo>−</mo><msub><mi>x</mi><mi>k</mi></msub><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><mn>2</mn><mi>n</mi><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><mi>ρ</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">\|x_j-x_k\|^2=2n(1-\rho)</annotation></semantics></math>
       . The bound tightens as same-oriented columns become similar, but it assumes matching coefficient signs and is not a blanket statement about every correlated variable.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="11" data-pdf="reg" type="button">
-       Chapter source · PDF p. 11
-      </button>
-      <a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.ElasticNet.html" rel="noopener noreferrer" target="_blank">
+<div class="derivation-footer">
+<button data-page="11" data-pdf="reg" type="button">Reference · PDF p. 11</button>
+<a href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.ElasticNet.html" rel="noopener noreferrer" target="_blank">
        Library reference
       </a>
-      <a class="calculation-link" href="#elastic-net?derivation=coordinate-and-grouping">
+<a class="calculation-link" href="#elastic-net?derivation=coordinate-and-grouping">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="choosing-among-the-three-penalties" id="elastic-net--choosing-among-the-three-penalties">
+</div>
+</div>
+</details>
+<h2 data-section="choosing-among-the-three-penalties" id="elastic-net--choosing-among-the-three-penalties">
     Choosing among the three penalties
    </h2>
-   <p>
-    The guide favors Ridge intuition when signal is diffuse across many correlated predictors, LASSO intuition when sparsity and interpretability are central, and Elastic Net intuition when both correlated groups and sparse selection matter. Those are starting hypotheses, not guaranteed rankings.
-   </p>
-   <p>
-    Use consistent scaling, the same validation split, and comparable tuning effort. For temporal data, the guide specifically calls for time-ordered validation. Selecting the penalty by repeatedly inspecting the final test performance would undermine that comparison.
-   </p>
-   <p>
-    In its 500-observation, 200-predictor hypothetical case, the guide contrasts these regularized linear choices with a neural approach using penalties, dropout, and early stopping. The common goal is reliable unseen-data performance; the different interventions encode different assumptions about the structure to retain.
-   </p>
-   <p>
-    The official path visualization linked below already supplies runnable code for the classical estimators. There is no need to rebuild those solvers inside this theory reader just to demonstrate coefficient shrinkage.
-   </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="elastic-net--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="lassopath">
-     <span class="resource-meta">
+<p>Ridge is a natural candidate when signal is spread across many predictors. LASSO is useful when a sparse representation is important. Elastic Net is a candidate when correlated predictors and sparse selection both matter. These are modeling choices to test under the same validation protocol, not a fixed performance ranking.</p>
+<p>Use consistent feature scaling, validation splits, and tuning effort. For temporal data, preserve time order. The final test set must remain outside penalty selection.</p>
+<p>For a hypothetical problem with 500 observations and 200 predictors, compare regularized linear models with a neural model using appropriate penalties, dropout, and early stopping. Their different restrictions should be judged by out-of-sample performance, rather than by training fit alone.</p>
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="elastic-net--implementation">Implementation examples</h2>
+<div class="resource-list">
+<div class="resource" data-resource="lassopath">
+<span class="resource-meta">
       scikit-learn · Official experiment + plots
      </span>
-     <a href="https://scikit-learn.org/stable/auto_examples/linear_model/plot_lasso_lasso_lars_elasticnet_path.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://scikit-learn.org/stable/auto_examples/linear_model/plot_lasso_lasso_lars_elasticnet_path.html" rel="noopener noreferrer" target="_blank">
+<span>
        LASSO and Elastic Net coefficient paths
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Compare the paths and coordinate-descent implementations. Track the library’s alpha/l1_ratio definitions rather than equating them blindly with the PDF’s symbols.
-     </p>
-    </div>
-    <div class="resource" data-resource="ridgeplot">
-     <span class="resource-meta">
+</a>
+<p>LASSO and Elastic Net coefficient paths using coordinate descent. The library’s alpha is total penalty strength; l1_ratio controls the L1/L2 mixture.</p>
+</div>
+<div class="resource" data-resource="ridgeplot">
+<span class="resource-meta">
       scikit-learn · Official experiment + plot
      </span>
-     <a href="https://scikit-learn.org/stable/auto_examples/linear_model/plot_ridge_path.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://scikit-learn.org/stable/auto_examples/linear_model/plot_ridge_path.html" rel="noopener noreferrer" target="_blank">
+<span>
        Plot Ridge coefficients as a function of regularization
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Run the coefficient-path example and compare shrinkage with the guide’s spectral explanation. Coefficients in correlated designs need not each decrease monotonically in magnitude.
-     </p>
-    </div>
-   </div>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</a>
+<p>Ridge coefficient paths with correlated predictors. Individual coefficients need not decrease monotonically in magnitude.</p>
+</div>
+</div>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
-    </strong>
-    What are the two roles of λ and α in the guide’s Elastic Net equation?
-   </summary>
-   <p>
+    </strong> What do λ and α control in Elastic Net? </summary>
+<p>
     λ controls total regularization strength; α determines the mixture of L1 and L2. At α=1 the penalty is LASSO-like; at α=0 it is Ridge-like under the stated normalization. Library parameter names can use different conventions, so compare objectives rather than names.
    </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#lasso">
-    <small>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+<button aria-label="Open source: Regularization · PDF pp. 11–13 · §§5–6" data-page="11" data-pdf="reg" type="button">
+     Regularization · PDF pp. 11–13 · §§5–6
+    </button>
+<button aria-label="Open source: Regularization · PDF pp. 24–25 · §18" data-page="24" data-pdf="reg" type="button">
+     Regularization · PDF pp. 24–25 · §18
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#lasso">
+<small>
      ← Previous
     </small>
-    LASSO, subgradients, and exact zeros
-   </a>
-   <a href="#augmentation-noise">
-    <small>
+LASSO, subgradients, and exact zeros
+</a>
+<a href="#augmentation-noise">
+<small>
      Next →
     </small>
-    Augmentation, invariance, and noise injection
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+Augmentation, invariance, and noise injection
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="combine-two-distinct-effects" href="#elastic-net?section=combine-two-distinct-effects">
-    Combine two distinct effects
-   </a>
-   <a data-section="read-the-endpoints-carefully" href="#elastic-net?section=read-the-endpoints-carefully">
-    Read the endpoints carefully
-   </a>
-   <a data-section="why-correlation-changes-the-choice" href="#elastic-net?section=why-correlation-changes-the-choice">
-    Why correlation changes the choice
-   </a>
-   <a data-section="a-one-coordinate-view" href="#elastic-net?section=a-one-coordinate-view">
-    A one-coordinate view
-   </a>
-   <a data-section="choosing-among-the-three-penalties" href="#elastic-net?section=choosing-among-the-three-penalties">
-    Choosing among the three penalties
-   </a>
-   <a data-section="implementation" href="#elastic-net?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="combine-two-distinct-effects" href="#elastic-net?section=combine-two-distinct-effects">Combine two distinct effects</a>
+<a data-section="read-the-endpoints-carefully" href="#elastic-net?section=read-the-endpoints-carefully">Read the endpoints carefully</a>
+<a data-section="why-correlation-changes-the-choice" href="#elastic-net?section=why-correlation-changes-the-choice">Why correlation changes the choice</a>
+<a data-section="a-one-coordinate-view" href="#elastic-net?section=a-one-coordinate-view">A one-coordinate view</a>
+<a data-section="choosing-among-the-three-penalties" href="#elastic-net?section=choosing-among-the-three-penalties">Choosing among the three penalties</a>
+<a data-section="implementation" href="#elastic-net?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>

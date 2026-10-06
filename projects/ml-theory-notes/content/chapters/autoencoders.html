@@ -1,117 +1,82 @@
 <section aria-labelledby="autoencoders-title" class="page-view lesson-layout" id="autoencoders">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      31
     </span>
     Part 4 · Architectures &amp; information flow
    </p>
-   <h1 id="autoencoders-title" tabindex="-1">
+<h1 id="autoencoders-title" tabindex="-1">
     Autoencoders, bottlenecks, and denoising
    </h1>
-   <p class="standfirst">
-    Understand reconstruction as an objective, and distinguish useful compression from copying or memorization.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Architectures · PDF pp. 15–17 · §§6.1–6.6 and 6.8" data-page="15" data-pdf="arch" type="button">
-     Architectures · PDF pp. 15–17 · §§6.1–6.6 and 6.8
-    </button>
-    <button aria-label="Open source: Regularization · PDF p. 18 · §11.3" data-page="18" data-pdf="reg" type="button">
-     Regularization · PDF p. 18 · §11.3
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<p class="standfirst">An autoencoder learns a representation by reconstructing its input. Bottlenecks, sparsity, and denoising constrain the solution so that reconstruction requires more than copying.</p>
+
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="reconstruction-defines-the-task" href="#autoencoders?section=reconstruction-defines-the-task">
-     Reconstruction defines the task
-    </a>
-    <a data-section="a-bottleneck-restricts-the-easy-identity-map" href="#autoencoders?section=a-bottleneck-restricts-the-easy-identity-map">
-     A bottleneck restricts the easy identity map
-    </a>
-    <a data-section="denoising-changes-the-shortcut" href="#autoencoders?section=denoising-changes-the-shortcut">
-     Denoising changes the shortcut
-    </a>
-    <a data-section="sparse-and-overcomplete-codes" href="#autoencoders?section=sparse-and-overcomplete-codes">
-     Sparse and overcomplete codes
-    </a>
-    <a data-section="anomaly-detection-is-conditional-on-reconstruction-behavior" href="#autoencoders?section=anomaly-detection-is-conditional-on-reconstruction-behavior">
-     Anomaly detection is conditional on reconstruction behavior
-    </a>
-    <a data-section="practical-support-without-a-second-code-library" href="#autoencoders?section=practical-support-without-a-second-code-library">
-     Practical support without a second code library
-    </a>
-    <a data-section="implementation" href="#autoencoders?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="reconstruction-defines-the-task" id="autoencoders--reconstruction-defines-the-task">
+<nav aria-label="On this page">
+<a data-section="reconstruction-defines-the-task" href="#autoencoders?section=reconstruction-defines-the-task">Reconstruction defines the task</a>
+<a data-section="a-bottleneck-restricts-the-easy-identity-map" href="#autoencoders?section=a-bottleneck-restricts-the-easy-identity-map">A bottleneck restricts the easy identity map</a>
+<a data-section="denoising-changes-the-shortcut" href="#autoencoders?section=denoising-changes-the-shortcut">Denoising changes the shortcut</a>
+<a data-section="sparse-and-overcomplete-codes" href="#autoencoders?section=sparse-and-overcomplete-codes">Sparse and overcomplete codes</a>
+<a data-section="anomaly-detection-is-conditional-on-reconstruction-behavior" href="#autoencoders?section=anomaly-detection-is-conditional-on-reconstruction-behavior">Anomaly detection is conditional on reconstruction behavior</a>
+<a data-section="practical-support-without-a-second-code-library" href="#autoencoders?section=practical-support-without-a-second-code-library">A denoising example</a>
+<a data-section="implementation" href="#autoencoders?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="reconstruction-defines-the-task" id="autoencoders--reconstruction-defines-the-task">
     Reconstruction defines the task
    </h2>
-   <p>
+<p>
     An autoencoder uses an encoder and decoder with the input itself as the usual target:
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>x</mi><mo accent="true">̂</mo></mover><mo>=</mo><msub><mi>g</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">z=f_\theta(x),\qquad\hat x=g_\phi(z).</annotation></semantics></math>
-   </div>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>x</mi><mo accent="true">̂</mo></mover><mo>=</mo><msub><mi>g</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">z=f_\theta(x),\qquad\hat x=g_\phi(z).</annotation></semantics></math>
+</div>
+<p>
     The encoder constructs a code
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>z</mi><annotation encoding="application/x-tex">z</annotation></semantics></math>
     and the decoder reconstructs the observation. This is not simply “an encoder model”; the paired reconstruction objective is essential to the definition.
    </p>
-   <figure class="source-figure">
-    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="arch-ae" type="button">
-     <img alt="The source’s encoder–latent-code–decoder diagram. The bottleneck lies in the representation or training constraints, not in the word “encoder” alone." height="108" loading="lazy" src="assets/images/the-source-s-encoder-latent-code-decoder-diagram-the-bottleneck-l-180004822f.webp" width="1223"/>
-    </button>
-    <figcaption>
-     The source’s encoder–latent-code–decoder diagram. The bottleneck lies in the representation or training constraints, not in the word “encoder” alone.
-     <button aria-label="Open source: Architectures · PDF p. 15" data-page="15" data-pdf="arch" type="button">
+<figure class="source-figure">
+<button aria-label="Enlarge source figure" class="figure-frame" data-figure="arch-ae" type="button">
+<img alt="An encoder maps the input to a latent code; a decoder reconstructs it. Useful compression depends on the bottleneck or training constraints, not just on having an encoder–decoder structure." height="108" loading="lazy" src="assets/images/the-source-s-encoder-latent-code-decoder-diagram-the-bottleneck-l-180004822f.webp" width="1223"/>
+</button>
+<figcaption>An encoder maps the input to a latent code; a decoder reconstructs it. Useful compression depends on the bottleneck or training constraints, not just on having an encoder–decoder structure. <button aria-label="Open source: Architectures · PDF p. 15" data-page="15" data-pdf="arch" type="button">
       Architectures · PDF p. 15
-     </button>
-    </figcaption>
-   </figure>
-   <p>
-    For continuous data the guide uses squared reconstruction error, for example
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="false">∥</mo><mi>x</mi><mo>−</mo><mover><mi>x</mi><mo accent="true">̂</mo></mover><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>/</mi><mi>d</mi></mrow><annotation encoding="application/x-tex">\lVert x-\hat x\rVert^2/d</annotation></semantics></math>
-    . For binary or Bernoulli-modeled inputs, a binary cross-entropy reconstruction objective can be appropriate. The likelihood assumptions and feature scales matter.
-   </p>
-   <h2 data-section="a-bottleneck-restricts-the-easy-identity-map" id="autoencoders--a-bottleneck-restricts-the-easy-identity-map">
+     </button></figcaption>
+</figure>
+<p>For continuous data, a common objective is squared reconstruction error, for example <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="prefix" stretchy="false">∥</mo><mi>x</mi><mo>−</mo><mover><mi>x</mi><mo accent="true">̂</mo></mover><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>/</mi><mi>d</mi></mrow><annotation encoding="application/x-tex">\lVert x-\hat x\rVert^2/d</annotation></semantics></math>. For binary or Bernoulli-modeled inputs, a binary cross-entropy reconstruction objective can be appropriate. The likelihood assumptions and feature scales matter.</p>
+<h2 data-section="a-bottleneck-restricts-the-easy-identity-map" id="autoencoders--a-bottleneck-restricts-the-easy-identity-map">
     A bottleneck restricts the easy identity map
    </h2>
-   <p>
+<p>
     If the latent dimension
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
     is smaller than input dimension
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>d</mi><annotation encoding="application/x-tex">d</annotation></semantics></math>
     , the autoencoder is undercomplete. It must prioritize information that helps reconstruction. But dimension alone does not guarantee useful semantics: a powerful nonlinear model can still memorize a finite training sample or devote its limited capacity to nuisance variation.
    </p>
-   <p>
-    The source connects a linear undercomplete autoencoder with squared loss to the principal subspace of PCA. The relationship concerns a reconstruction-optimal subspace, not a guarantee that the learned latent axes have the same orientation or interpretation as a particular PCA basis.
-   </p>
-   <p>
+<p>With an undercomplete linear encoder and decoder, squared reconstruction loss is related to the principal subspace of PCA. The optimal reconstruction subspace need not give latent axes with the same orientation or interpretation as a particular PCA basis.</p>
+<p>
     A nonlinear decoder can represent curved structure, but additional expressiveness also changes the risks. Good training reconstruction is not enough to establish a useful general representation.
    </p>
-   <details class="derivation" data-derivation="pca-projection" id="autoencoders--derivation-pca-projection">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<details class="derivation" data-derivation="pca-projection" id="autoencoders--derivation-pca-projection">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive the PCA connection for a linear reconstruction model
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Use centered column-vector data
@@ -128,10 +93,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>U</mi><mi>⊤</mi></msup><mi>U</mi><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">U^\top U=I</annotation></semantics></math>
       . This restricted problem makes the principal-subspace connection explicit.
      </p>
-     <h4>
+<h4>
       1 · Expand the reconstruction error
      </h4>
-     <p>
+<p>
       Let
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo>=</mo><mi>U</mi><msup><mi>U</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">P=UU^\top</annotation></semantics></math>
       . Since
@@ -140,35 +105,35 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>P</mi><mn>2</mn></msup><mo>=</mo><mi>P</mi></mrow><annotation encoding="application/x-tex">P^2=P</annotation></semantics></math>
       ,
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>x</mi><mo>−</mo><mi>P</mi><mi>x</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><msup><mi>x</mi><mi>⊤</mi></msup><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>P</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>P</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>x</mi><mo>=</mo><msup><mi>x</mi><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>P</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>x</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\|x-Px\|^2=x^\top(I-P)^\top(I-P)x=x^\top(I-P)x.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>x</mi><mo>−</mo><mi>P</mi><mi>x</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><msup><mi>x</mi><mi>⊤</mi></msup><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>P</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>P</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>x</mi><mo>=</mo><msup><mi>x</mi><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>P</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>x</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\|x-Px\|^2=x^\top(I-P)^\top(I-P)x=x^\top(I-P)x.</annotation></semantics></math>
+</div>
+<p>
       The last equality follows from
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>I</mi><mo>−</mo><mi>P</mi><mo form="postfix" stretchy="true">)</mo></mrow><mn>2</mn></msup><mo>=</mo><mi>I</mi><mo>−</mo><mn>2</mn><mi>P</mi><mo>+</mo><msup><mi>P</mi><mn>2</mn></msup><mo>=</mo><mi>I</mi><mo>−</mo><mi>P</mi></mrow><annotation encoding="application/x-tex">(I-P)^2=I-2P+P^2=I-P</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       2 · Take the expectation using a trace
      </h4>
-     <p>
+<p>
       For a scalar,
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mi>⊤</mi></msup><mi>A</mi><mi>x</mi><mo>=</mo><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>A</mi><mi>x</mi><msup><mi>x</mi><mi>⊤</mi></msup><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">x^\top Ax=\operatorname{tr}(Axx^\top)</annotation></semantics></math>
       . Therefore
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mo form="postfix" stretchy="false">∥</mo><mi>x</mi><mo>−</mo><mi>P</mi><mi>x</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>S</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>P</mi><mi>S</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>S</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>U</mi><mi>⊤</mi></msup><mi>S</mi><mi>U</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E\|x-Px\|^2=\operatorname{tr}(S)-\operatorname{tr}(PS)
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mo form="postfix" stretchy="false">∥</mo><mi>x</mi><mo>−</mo><mi>P</mi><mi>x</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>S</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>P</mi><mi>S</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>S</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>U</mi><mi>⊤</mi></msup><mi>S</mi><mi>U</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E\|x-Px\|^2=\operatorname{tr}(S)-\operatorname{tr}(PS)
 =\operatorname{tr}(S)-\operatorname{tr}(U^\top SU).</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       The first term is constant. Minimizing error is equivalent to maximizing variance captured by the
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>
       -dimensional subspace.
      </p>
-     <h4>
+<h4>
       3 · Rotate into covariance eigenvectors
      </h4>
-     <p>
+<p>
       Write
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo>=</mo><mi>V</mi><mi>Λ</mi><msup><mi>V</mi><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">S=V\Lambda V^\top</annotation></semantics></math>
       , with eigenvalues
@@ -179,11 +144,11 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>C</mi><mi>⊤</mi></msup><mi>C</mi><mo>=</mo><mi>I</mi></mrow><annotation encoding="application/x-tex">C^\top C=I</annotation></semantics></math>
       and
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>U</mi><mi>⊤</mi></msup><mi>S</mi><mi>U</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>C</mi><mi>⊤</mi></msup><mi>Λ</mi><mi>C</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>d</mi></munderover><msub><mi>λ</mi><mi>i</mi></msub><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>k</mi></munderover><msubsup><mi>C</mi><mrow><mi>i</mi><mi>j</mi></mrow><mn>2</mn></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{tr}(U^\top SU)=\operatorname{tr}(C^\top\Lambda C)
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>U</mi><mi>⊤</mi></msup><mi>S</mi><mi>U</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo>tr</mo><mrow><mo form="prefix" stretchy="true">(</mo><msup><mi>C</mi><mi>⊤</mi></msup><mi>Λ</mi><mi>C</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><munderover><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>d</mi></munderover><msub><mi>λ</mi><mi>i</mi></msub><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>k</mi></munderover><msubsup><mi>C</mi><mrow><mi>i</mi><mi>j</mi></mrow><mn>2</mn></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">\operatorname{tr}(U^\top SU)=\operatorname{tr}(C^\top\Lambda C)
 =\sum_{i=1}^d\lambda_i\sum_{j=1}^k C_{ij}^2.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       Let
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>i</mi></msub><mo>=</mo><msub><mo>∑</mo><mi>j</mi></msub><msubsup><mi>C</mi><mrow><mi>i</mi><mi>j</mi></mrow><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">a_i=\sum_jC_{ij}^2</annotation></semantics></math>
       . Because
@@ -194,10 +159,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>i</mi></msub><msub><mi>a</mi><mi>i</mi></msub><mo>=</mo><mi>k</mi></mrow><annotation encoding="application/x-tex">\sum_i a_i=k</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       4 · Allocate captured dimensions to the largest eigenvalues
      </h4>
-     <p>
+<p>
       For ordered eigenvalues, the largest possible weighted sum under those constraints is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>k</mi></msubsup><msub><mi>λ</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\sum_{i=1}^k\lambda_i</annotation></semantics></math>
       : if weight remains on a smaller eigenvalue while a larger one has available capacity, transferring that weight cannot reduce the sum. Choosing
@@ -208,10 +173,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mo>∑</mo><mrow><mi>i</mi><mo>=</mo><mi>k</mi><mo>+</mo><mn>1</mn></mrow><mi>d</mi></msubsup><msub><mi>λ</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">\sum_{i=k+1}^d\lambda_i</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       5 · Avoid claiming unique latent coordinates
      </h4>
-     <p>
+<p>
       For unconstrained linear encoder/decoder matrices, the principal reconstruction subspace can be represented in many latent bases. Replacing an encoder by
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mi>E</mi></mrow><annotation encoding="application/x-tex">RE</annotation></semantics></math>
       and decoder by
@@ -222,51 +187,47 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mi>E</mi></mrow><annotation encoding="application/x-tex">DE</annotation></semantics></math>
       unchanged. An ordinary nonlinear autoencoder therefore neither guarantees PCA coordinates nor solves this exact orthogonal projection problem. The equivalence concerns the optimal linear squared-error reconstruction subspace under appropriate conditions.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="15" data-pdf="arch" type="button">
-       Chapter source · PDF p. 15
-      </button>
-      <a class="calculation-link" href="#autoencoders?derivation=pca-projection">
+<div class="derivation-footer">
+
+<button data-page="15" data-pdf="arch" type="button">Reference · PDF p. 15</button>
+<a class="calculation-link" href="#autoencoders?derivation=pca-projection">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="denoising-changes-the-shortcut" id="autoencoders--denoising-changes-the-shortcut">
+</div>
+</div>
+</details>
+<h2 data-section="denoising-changes-the-shortcut" id="autoencoders--denoising-changes-the-shortcut">
     Denoising changes the shortcut
    </h2>
-   <p>
+<p>
     A denoising autoencoder sees a corrupted input but reconstructs the clean target:
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>x</mi><mo accent="true">̃</mo></mover><mo>∼</mo><mi>q</mi><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>x</mi><mo accent="true">̃</mo></mover><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>L</mi><mo>=</mo><mo form="prefix" stretchy="false">∥</mo><mi>x</mi><mo>−</mo><msub><mi>g</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>x</mi><mo accent="true">̃</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\tilde x\sim q(\tilde x\mid x),\qquad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>x</mi><mo accent="true">̃</mo></mover><mo>∼</mo><mi>q</mi><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>x</mi><mo accent="true">̃</mo></mover><mo>∣</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="2.0em"></mspace><mi>L</mi><mo>=</mo><mo form="prefix" stretchy="false">∥</mo><mi>x</mi><mo>−</mo><msub><mi>g</mi><mi>ϕ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>f</mi><mi>θ</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><mover><mi>x</mi><mo accent="true">̃</mo></mover><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\tilde x\sim q(\tilde x\mid x),\qquad
 L=\lVert x-g_\phi(f_\theta(\tilde x))\rVert^2.</annotation></semantics></math>
-   </div>
-   <p>
+</div>
+<p>
     Copying the noisy input is no longer sufficient. The model is encouraged to preserve stable structure that predicts the clean sample. This only makes sense if the corruption process represents a valid nuisance rather than changes that should alter the desired target.
    </p>
-   <p>
+<p>
     For example, reconstructing a clean signal from a plausible noisy measurement has a clear interpretation. Adding arbitrary noise to strongly constrained features can instead create unrealistic training examples. The
     <a href="#augmentation-noise">
      augmentation and noise chapter
     </a>
     develops that assumption.
    </p>
-   <details class="derivation" data-derivation="denoising-conditional-mean" id="autoencoders--derivation-denoising-conditional-mean">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<details class="derivation" data-derivation="denoising-conditional-mean" id="autoencoders--derivation-denoising-conditional-mean">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Derive the optimal denoising reconstruction under squared error
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
       </strong>
       Let clean data be a random vector
@@ -279,10 +240,10 @@ L=\lVert x-g_\phi(f_\theta(\tilde x))\rVert^2.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mo form="postfix" stretchy="false">∥</mo><mi>X</mi><mo>−</mo><mi>g</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>Z</mi><mo form="postfix" stretchy="true">)</mo></mrow><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\mathbb E\|X-g(Z)\|^2</annotation></semantics></math>
       . Assume the relevant conditional second moments exist. The function class is unrestricted for this population argument.
      </p>
-     <h4>
+<h4>
       1 · Condition on a particular corrupted observation
      </h4>
-     <p>
+<p>
       At
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">Z=z</annotation></semantics></math>
       , a proposed reconstruction
@@ -293,23 +254,23 @@ L=\lVert x-g_\phi(f_\theta(\tilde x))\rVert^2.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>X</mi><mo>∣</mo><mi>Z</mi><mo>=</mo><mi>z</mi><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">\mu(z)=\mathbb E[X\mid Z=z]</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       2 · Add and subtract the conditional mean
      </h4>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>−</mo><mi>a</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>X</mi><mo>−</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>+</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>a</mi><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">X-a=[X-\mu(z)]+[\mu(z)-a].</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>X</mi><mo>−</mo><mi>a</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>X</mi><mo>−</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mo>+</mo><mrow><mo form="prefix" stretchy="true">[</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>a</mi><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">X-a=[X-\mu(z)]+[\mu(z)-a].</annotation></semantics></math>
+</div>
+<p>
       Expanding the squared norm gives
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>X</mi><mo>−</mo><mi>a</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><mo form="postfix" stretchy="false">∥</mo><mi>X</mi><mo>−</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>+</mi><mo form="postfix" stretchy="false">∥</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>a</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>+</mo><mn>2</mn><msup><mrow><mo form="prefix" stretchy="true">[</mo><mi>X</mi><mo>−</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">[</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>a</mi><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\|X-a\|^2=\|X-\mu(z)\|^2+\|\mu(z)-a\|^2
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo form="postfix" stretchy="false">∥</mo><mi>X</mi><mo>−</mo><mi>a</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>=</mo><mo form="postfix" stretchy="false">∥</mo><mi>X</mi><mo>−</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>+</mi><mo form="postfix" stretchy="false">∥</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>a</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>+</mo><mn>2</mn><msup><mrow><mo form="prefix" stretchy="true">[</mo><mi>X</mi><mo>−</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">]</mo></mrow><mi>⊤</mi></msup><mrow><mo form="prefix" stretchy="true">[</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>a</mi><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\|X-a\|^2=\|X-\mu(z)\|^2+\|\mu(z)-a\|^2
 +2[X-\mu(z)]^\top[\mu(z)-a].</annotation></semantics></math>
-     </div>
-     <h4>
+</div>
+<h4>
       3 · Evaluate the cross term
      </h4>
-     <p>
+<p>
       Given
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Z</mi><mo>=</mo><mi>z</mi></mrow><annotation encoding="application/x-tex">Z=z</annotation></semantics></math>
       , the vector
@@ -318,154 +279,121 @@ L=\lVert x-g_\phi(f_\theta(\tilde x))\rVert^2.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>X</mi><mo>−</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>∣</mo><mi>Z</mi><mo>=</mo><mi>z</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\mathbb E[X-\mu(z)\mid Z=z]=0</annotation></semantics></math>
       . Thus the expected cross term is zero, and
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo form="postfix" stretchy="false">∥</mo><mi>X</mi><mo>−</mo><mi>a</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo form="postfix" stretchy="false">∥</mo><mi>X</mi><mo>−</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">]</mo></mrow><mi>+</mi><mo form="postfix" stretchy="false">∥</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>a</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[\|X-a\|^2\mid z]=\mathbb E[\|X-\mu(z)\|^2\mid z]+\|\mu(z)-a\|^2.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo form="postfix" stretchy="false">∥</mo><mi>X</mi><mo>−</mo><mi>a</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">]</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mo form="postfix" stretchy="false">∥</mo><mi>X</mi><mo>−</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mo>∣</mo><mi>z</mi><mo form="postfix" stretchy="true">]</mo></mrow><mi>+</mi><mo form="postfix" stretchy="false">∥</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>−</mo><mi>a</mi><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E[\|X-a\|^2\mid z]=\mathbb E[\|X-\mu(z)\|^2\mid z]+\|\mu(z)-a\|^2.</annotation></semantics></math>
+</div>
+<p>
       Only the last term depends on
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>
       , and it is minimized at
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><mi>μ</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">a=\mu(z)</annotation></semantics></math>
       .
      </p>
-     <h4>
+<h4>
       4 · Read the consequence for a denoising model
      </h4>
-     <p>
+<p>
       The population optimum is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>g</mi><mo>*</mo></msup><mrow><mo form="prefix" stretchy="true">(</mo><mi>z</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>𝔼</mi><mrow><mo form="prefix" stretchy="true">[</mo><mi>X</mi><mo>∣</mo><mi>Z</mi><mo>=</mo><mi>z</mi><mo form="postfix" stretchy="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">g^*(z)=\mathbb E[X\mid Z=z]</annotation></semantics></math>
       . If corruption makes several clean inputs plausible, squared-error training averages them. A blurred reconstruction can therefore follow from ambiguity and the chosen loss, not only inadequate model capacity.
      </p>
-     <h4>
+<h4>
       5 · State the limits of the result
      </h4>
-     <p>
+<p>
       A finite neural network, finite training sample, or imperfect optimizer may not reach this optimum. The corruption distribution determines the conditional mean being learned. Denoising success does not alone certify anomaly detection, class separation, or a useful causal representation.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="15" data-pdf="arch" type="button">
-       Chapter source · PDF p. 15
-      </button>
-      <a class="calculation-link" href="#autoencoders?derivation=denoising-conditional-mean">
+<div class="derivation-footer">
+
+<button data-page="15" data-pdf="arch" type="button">Reference · PDF p. 15</button>
+<a class="calculation-link" href="#autoencoders?derivation=denoising-conditional-mean">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="sparse-and-overcomplete-codes" id="autoencoders--sparse-and-overcomplete-codes">
+</div>
+</div>
+</details>
+<h2 data-section="sparse-and-overcomplete-codes" id="autoencoders--sparse-and-overcomplete-codes">
     Sparse and overcomplete codes
    </h2>
-   <p>
-    A latent layer need not be small to be constrained. A sparse autoencoder can use many available units while penalizing frequent activation. The guide discusses a KL penalty on mean hidden activity. The constraint is on code usage rather than only on dimensionality.
-   </p>
-   <p>
+<p>A sparse autoencoder can provide many latent units while penalizing frequent activation. A KL penalty on mean hidden activity constrains use of the code rather than simply its dimensionality.</p>
+<p>
     This is different from dropout’s random temporary masks and from an L1 penalty on network weights. Each acts on a different object in the learning system.
    </p>
-   <h2 data-section="anomaly-detection-is-conditional-on-reconstruction-behavior" id="autoencoders--anomaly-detection-is-conditional-on-reconstruction-behavior">
+<h2 data-section="anomaly-detection-is-conditional-on-reconstruction-behavior" id="autoencoders--anomaly-detection-is-conditional-on-reconstruction-behavior">
     Anomaly detection is conditional on reconstruction behavior
    </h2>
-   <p>
-    The source proposes training primarily on normal data and scoring
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo form="prefix" stretchy="false">∥</mo><mi>x</mi><mo>−</mo><mover><mi>x</mi><mo accent="true">̂</mo></mover><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">s(x)=\lVert x-\hat x\rVert^2</annotation></semantics></math>
-    . A high score can flag observations that are poorly represented by the learned reconstruction system.
-   </p>
-   <figure class="source-figure">
-    <button aria-label="Enlarge source figure" class="figure-frame" data-figure="arch-16" type="button">
-     <img alt="The guide’s illustrative distributions of reconstruction error. Their overlap shows why a threshold involves a trade-off; the histogram is not a measured guarantee for a deployed detector." height="550" loading="lazy" src="assets/images/the-guide-s-illustrative-distributions-of-reconstruction-error-th-2a50a00ac3.webp" width="933"/>
-    </button>
-    <figcaption>
-     The guide’s illustrative distributions of reconstruction error. Their overlap shows why a threshold involves a trade-off; the histogram is not a measured guarantee for a deployed detector.
-     <button aria-label="Open source: Architectures · PDF p. 16" data-page="16" data-pdf="arch" type="button">
+<p>One approach trains primarily on normal observations and scores <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>x</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mo form="prefix" stretchy="false">∥</mo><mi>x</mi><mo>−</mo><mover><mi>x</mi><mo accent="true">̂</mo></mover><msup><mo form="postfix" stretchy="false">∥</mo><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">s(x)=\lVert x-\hat x\rVert^2</annotation></semantics></math>. A high score can flag observations that are poorly represented by the learned reconstruction system.</p>
+<figure class="source-figure">
+<button aria-label="Enlarge source figure" class="figure-frame" data-figure="arch-16" type="button">
+<img alt="Illustrative reconstruction-error distributions for typical and atypical observations. Their overlap creates a trade-off between missed anomalies and false positives when selecting a threshold." height="550" loading="lazy" src="assets/images/the-guide-s-illustrative-distributions-of-reconstruction-error-th-2a50a00ac3.webp" width="933"/>
+</button>
+<figcaption>Illustrative reconstruction-error distributions for typical and atypical observations. Their overlap creates a trade-off between missed anomalies and false positives when selecting a threshold. <button aria-label="Open source: Architectures · PDF p. 16" data-page="16" data-pdf="arch" type="button">
       Architectures · PDF p. 16
-     </button>
-    </figcaption>
-   </figure>
-   <p>
+     </button></figcaption>
+</figure>
+<p>
     The key assumption is that anomalous observations reconstruct substantially worse than normal observations. An overly expressive autoencoder can reconstruct anomalies too well, and normal distribution shifts can also raise scores. A threshold therefore needs validation and a connection to the relevant false-positive or downstream cost.
    </p>
-   <h2 data-section="practical-support-without-a-second-code-library" id="autoencoders--practical-support-without-a-second-code-library">
-    Practical support without a second code library
-   </h2>
-   <p>
-    The official VAE example is linked as a
-    <strong>
-     related probabilistic extension
-    </strong>
-    , not mislabeled as a deterministic denoising tutorial. For the exact clean-target/corrupted-input distinction, the optional local companion provides a small synthetic denoising example with fixed validation corruption and held-out evaluation. It demonstrates that objective only; it does not claim that the toy results establish real anomaly-detection performance.
-   </p>
-   <p>
-    The next chapter explains why adding a latent distribution and KL term changes an autoencoder into a different probabilistic construction.
-   </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="autoencoders--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="vaeexample">
-     <span class="resource-meta">
+<h2 data-section="practical-support-without-a-second-code-library" id="autoencoders--practical-support-without-a-second-code-library">A denoising example</h2>
+<p>The denoising example trains on a corrupted synthetic curve with clean reconstruction targets. It keeps validation corruption fixed, selects a checkpoint on held-out validation data, and evaluates test data afterward. The example demonstrates denoising rather than validating an anomaly detector. The VAE implementation below is a separate probabilistic extension.</p>
+<p>A variational autoencoder changes this construction by introducing a latent distribution, a decoder likelihood, and a KL term in a probabilistic training objective.</p>
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="autoencoders--implementation">Implementation examples</h2>
+
+<div class="resource-list">
+<div class="resource" data-resource="vaeexample">
+<span class="resource-meta">
       PyTorch examples · Official example code
      </span>
-     <a href="https://github.com/pytorch/examples/blob/main/vae/main.py" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://github.com/pytorch/examples/blob/main/vae/main.py" rel="noopener noreferrer" target="_blank">
+<span>
        Variational Autoencoder: training script
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Read encode, reparameterize, decode and loss_function together. The example produces reconstruction and generated-sample images; inspect the summed reconstruction and KL reductions.
-     </p>
-    </div>
-    <div class="resource" data-resource="seq2seq">
-     <span class="resource-meta">
+</a>
+<p>An MNIST VAE with encoding, reparameterization, decoding, reconstruction images, and generated samples. Reconstruction and KL terms use explicit summed reductions.</p>
+</div>
+<div class="resource" data-resource="seq2seq">
+<span class="resource-meta">
       PyTorch · Training example + attention map
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Translation with a Sequence-to-Sequence Network and Attention
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect the GRU encoder/decoder, teacher forcing, attention and generated translations. Its attention plots show alignments; its additive attention is distinct from scaled dot-product attention.
-     </p>
-    </div>
-   </div>
-   <details class="local-example">
-    <summary>
+</a>
+<p>GRU translation with teacher forcing, additive attention, generated outputs, and alignment plots. The scoring rule differs from scaled dot-product attention.</p>
+</div>
+</div>
+<details class="local-example">
+<summary>
      A small denoising case
      <small>
       Local worked example · Python / PyTorch
      </small>
-    </summary>
-    <p class="local-description">
-     An authored gap-filling illustration using a noisy synthetic curve, a lower-dimensional code and clean reconstruction targets. A held-out validation split selects the checkpoint; test data are used only afterward. Run locally; Python is not executed by this webpage.
-    </p>
-    <div class="code-wrap">
-     <div class="code-tools">
-      <span>
+</summary>
+<p class="local-description">Denoising a synthetic curve through a lower-dimensional code. Validation selects the checkpoint; held-out test data are evaluated afterward. Run the script locally.</p>
+<div class="code-wrap">
+<div class="code-tools">
+<span>
        denoising_demo.py
       </span>
-      <div>
-       <button data-action="copy" data-example="denoising_demo" type="button">
+<div>
+<button data-action="copy" data-example="denoising_demo" type="button">
         Copy
        </button>
-       <button data-action="download" data-example="denoising_demo" type="button">
+<button data-action="download" data-example="denoising_demo" type="button">
         Save .py
        </button>
-      </div>
-     </div>
-     <pre tabindex="0"><code><span class="sd">"""Authored denoising example on a synthetic one-dimensional curve in three dimensions"""</span>
+</div>
+</div>
+<pre tabindex="0"><code><span class="sd">"""Authored denoising example on a synthetic one-dimensional curve in three dimensions"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
@@ -539,71 +467,65 @@ L=\lVert x-g_\phi(f_\theta(\tilde x))\rVert^2.</annotation></semantics></math>
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">main</span><span class="p">()</span>
 </code></pre>
-    </div>
-    <details class="recorded-result">
-     <summary>
+</div>
+<details class="recorded-result">
+<summary>
       Recorded CPU output
      </summary>
-     <pre>Best validation checkpoint: step 770
+<pre>Best validation checkpoint: step 770
 Test MSE of noisy input: 0.022562
 Test MSE after denoising: 0.007948
 Synthetic illustration only; denoising quality does not establish anomaly-detection quality
 </pre>
-    </details>
-   </details>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</details>
+</details>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
     </strong>
     Why does low reconstruction error not prove that an autoencoder learned useful semantic features?
    </summary>
-   <p>
+<p>
     The objective rewards reconstructing inputs, including nuisance variation. A sufficiently expressive model can memorize or copy, and even an undercomplete representation need not align with a downstream label. Reconstruction and downstream predictive usefulness are different objectives.
    </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#encoder-decoder">
-    <small>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+
+<button aria-label="Open source: Architectures · PDF pp. 15–17 · §§6.1–6.6 and 6.8" data-page="15" data-pdf="arch" type="button">
+     Architectures · PDF pp. 15–17 · §§6.1–6.6 and 6.8
+    </button>
+<button aria-label="Open source: Regularization · PDF p. 18 · §11.3" data-page="18" data-pdf="reg" type="button">
+     Regularization · PDF p. 18 · §11.3
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#encoder-decoder">
+<small>
      ← Previous
     </small>
-    Encoders, decoders, and teacher forcing
-   </a>
-   <a href="#vae">
-    <small>
+Encoders, decoders, and teacher forcing
+</a>
+<a href="#vae">
+<small>
      Next →
     </small>
-    Variational autoencoders and the ELBO
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+Variational autoencoders and the ELBO
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="reconstruction-defines-the-task" href="#autoencoders?section=reconstruction-defines-the-task">
-    Reconstruction defines the task
-   </a>
-   <a data-section="a-bottleneck-restricts-the-easy-identity-map" href="#autoencoders?section=a-bottleneck-restricts-the-easy-identity-map">
-    A bottleneck restricts the easy identity map
-   </a>
-   <a data-section="denoising-changes-the-shortcut" href="#autoencoders?section=denoising-changes-the-shortcut">
-    Denoising changes the shortcut
-   </a>
-   <a data-section="sparse-and-overcomplete-codes" href="#autoencoders?section=sparse-and-overcomplete-codes">
-    Sparse and overcomplete codes
-   </a>
-   <a data-section="anomaly-detection-is-conditional-on-reconstruction-behavior" href="#autoencoders?section=anomaly-detection-is-conditional-on-reconstruction-behavior">
-    Anomaly detection is conditional on reconstruction behavior
-   </a>
-   <a data-section="practical-support-without-a-second-code-library" href="#autoencoders?section=practical-support-without-a-second-code-library">
-    Practical support without a second code library
-   </a>
-   <a data-section="implementation" href="#autoencoders?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="reconstruction-defines-the-task" href="#autoencoders?section=reconstruction-defines-the-task">Reconstruction defines the task</a>
+<a data-section="a-bottleneck-restricts-the-easy-identity-map" href="#autoencoders?section=a-bottleneck-restricts-the-easy-identity-map">A bottleneck restricts the easy identity map</a>
+<a data-section="denoising-changes-the-shortcut" href="#autoencoders?section=denoising-changes-the-shortcut">Denoising changes the shortcut</a>
+<a data-section="sparse-and-overcomplete-codes" href="#autoencoders?section=sparse-and-overcomplete-codes">Sparse and overcomplete codes</a>
+<a data-section="anomaly-detection-is-conditional-on-reconstruction-behavior" href="#autoencoders?section=anomaly-detection-is-conditional-on-reconstruction-behavior">Anomaly detection is conditional on reconstruction behavior</a>
+<a data-section="practical-support-without-a-second-code-library" href="#autoencoders?section=practical-support-without-a-second-code-library">A denoising example</a>
+<a data-section="implementation" href="#autoencoders?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>

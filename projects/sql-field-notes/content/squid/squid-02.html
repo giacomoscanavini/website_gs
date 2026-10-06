@@ -1,46 +1,40 @@
 <article class="article" id="squid-02">
- <div class="breadcrumb">
-  <a href="#squid-game">
+<div class="breadcrumb">
+<a href="#squid-game">
    SQL Squid Game
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Level 2
   </span>
- </div>
- <h1>
+</div>
+<h1>
   Calculate the ration threshold
  </h1>
- <p class="lead">
+<p class="lead">
   Count eligible players, round down a proportion and compare it with supply.
  </p>
- <h2>
+<h2>
   Task
  </h2>
- <p>
+<p>
   The organizers need to calculate how many food portions to withhold to create the right amount of tension. In a table, calculate how many rations would feed 90% of the remaining(alive) non-insider players (rounded down), and in another column, indicate if the current rations supply is sufficient. (True or False)
  </p>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-109-panel-0" aria-selected="true" id="example-109-tab-0" role="tab" tabindex="0" type="button">
-     My SQL
-    </button>
-    <button aria-controls="example-109-panel-1" aria-selected="false" id="example-109-tab-1" role="tab" tabindex="-1" type="button">
-     pandas alternative
-    </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-109-panel-0" aria-selected="true" id="example-109-tab-0" role="tab" tabindex="0" type="button"> SQL </button>
+<button aria-controls="example-109-panel-1" aria-selected="false" id="example-109-tab-1" role="tab" tabindex="-1" type="button"> pandas </button>
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-109-tab-0" class="code-panel" id="example-109-panel-0" role="tabpanel">
-   <div class="no-script-label">
-    My SQL
-   </div>
-   <pre id="code-squid-02-0" tabindex="0"><code class="language-sql" data-origin="squid-query-02"><span class="k">WITH</span>
+</div>
+<div aria-labelledby="example-109-tab-0" class="code-panel" id="example-109-panel-0" role="tabpanel">
+<div class="no-script-label"> SQL </div>
+<pre id="code-squid-02-0" tabindex="0"><code class="language-sql" data-origin="squid-query-02"><span class="k">WITH</span>
 <span class="w">    </span><span class="n">table_prop</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">        </span><span class="k">SELECT</span><span class="w"> </span><span class="n">FLOOR</span><span class="p">(</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">9</span><span class="w"> </span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">portions</span>
 <span class="w">        </span><span class="k">FROM</span><span class="w"> </span><span class="n">player</span>
@@ -54,12 +48,10 @@
 <span class="w">        </span><span class="k">ELSE</span><span class="w"> </span><span class="s1">'True'</span>
 <span class="w">    </span><span class="k">END</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">amount</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">table_prop</span><span class="p">,</span><span class="w"> </span><span class="n">rations</span></code></pre>
-  </div>
-  <div aria-labelledby="example-109-tab-1" class="code-panel" id="example-109-panel-1" role="tabpanel">
-   <div class="no-script-label">
-    pandas alternative
-   </div>
-   <pre id="code-squid-02-1" tabindex="0"><code class="language-python" data-origin="squid-02-pandas"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+</div>
+<div aria-labelledby="example-109-tab-1" class="code-panel" id="example-109-panel-1" role="tabpanel">
+<div class="no-script-label"> pandas </div>
+<pre id="code-squid-02-1" tabindex="0"><code class="language-python" data-origin="squid-02-pandas"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="n">eligible</span> <span class="o">=</span> <span class="n">player</span><span class="p">[</span><span class="s1">'status'</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="s1">'alive'</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">player</span><span class="p">[</span><span class="s1">'isinsider'</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">portions</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">eligible</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span> <span class="o">*</span> <span class="mi">9</span> <span class="o">//</span> <span class="mi">10</span>
@@ -68,61 +60,44 @@
 <span class="n">insufficient</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s1">'amount'</span><span class="p">]</span><span class="o">.</span><span class="n">lt</span><span class="p">(</span><span class="n">portions</span><span class="p">)</span><span class="o">.</span><span class="n">fillna</span><span class="p">(</span><span class="kc">False</span><span class="p">)</span>
 <span class="n">result</span><span class="p">[</span><span class="s1">'amount'</span><span class="p">]</span> <span class="o">=</span> <span class="n">insufficient</span><span class="o">.</span><span class="n">map</span><span class="p">({</span><span class="kc">True</span><span class="p">:</span> <span class="s1">'False'</span><span class="p">,</span> <span class="kc">False</span><span class="p">:</span> <span class="s1">'True'</span><span class="p">})</span>
 <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[[</span><span class="s1">'portions'</span><span class="p">,</span> <span class="s1">'amount'</span><span class="p">]]</span></code></pre>
-   <p class="panel-note">
-    Added translation ·
-    <a href="#squid-game">
+<p class="panel-note"> pandas · <a href="#squid-game">
      DataFrame assumptions
     </a>
-   </p>
-  </div>
- </div>
- <h2>
+</p>
+</div>
+</div>
+<h2>
   How it works
  </h2>
- <p>
-  The CTE counts living non-insiders and rounds 90% of that count down. The outer SELECT compares that single count with each row in rations and produces portions plus the source’s amount label.
- </p>
- <div class="note warning">
-  <b>
-   Source-aware note.
-  </b>
-  The source emits the strings 'True' and 'False', not a Boolean type, and calls the second column amount. Those choices are preserved. If rations has several rows, the cross join returns several comparisons rather than summing supply.
- </div>
- <p class="small">
-  No query-result table was stored in this SQL file. Sample-schema rows below are inputs, not the answer.
- </p>
- <details class="reference-details">
-  <summary>
+<p> The CTE counts living non-insiders and rounds 90% of that count down. The outer SELECT compares that single count with each row in rations and produces portions plus the amount label. </p>
+<div class="note warning"><b>Output values.</b> The amount column contains the strings True and False, not Boolean values. Multiple rows in rations produce separate comparisons through the cross join; the query does not sum them.</div>
+<p class="small"> No result table is recorded. The schema examples below are input rows. </p>
+<details class="reference-details">
+<summary>
    Sources and original files
   </summary>
-  <div class="sources-content">
-   <div class="source-note">
-    <b>
+<div class="sources-content">
+<div class="source-note">
+<b>
      Source:
     </b>
-    <code>
+<code>
      sql_squid_game-main/level_02.sql
     </code>
     .
     <a href="https://datalemur.com/sql-game/level2.html" rel="noopener noreferrer" target="_blank">
      Original level ↗
-    </a>
-    . The brief and original SQL come from my saved file; study notes and pandas code are newly authored.
-   </div>
-   <details class="source-details">
-    <summary>
-     Original sample-schema comments · not a full dataset
-    </summary>
-    <div class="codebox">
-     <div class="codehead">
-      <span>
-       Schema and sample rows · preserved source text
-      </span>
-      <button aria-label="Copy Schema and sample rows · preserved source text" data-copy="" type="button">
+    </a> . </div>
+<details class="source-details">
+<summary> Schema and sample rows </summary>
+<div class="codebox">
+<div class="codehead">
+<span> Schema and sample rows </span>
+<button aria-label="Copy Schema and sample rows · preserved source text" data-copy="" type="button">
        Copy
       </button>
-     </div>
-     <pre id="code-squid-02-2" tabindex="0"><code class="language-text">SCHEMA for `player`:
+</div>
+<pre id="code-squid-02-2" tabindex="0"><code class="language-text">SCHEMA for `player`:
     id	first_name	last_name	age	status	debt	    isinsider
     1	Luigi	    Mangione	27	alive	3930975804	false
     2	Seokjin	    Nam	        68	alive	684587725	false
@@ -131,22 +106,20 @@
     SCHEMA for `rations`:
     amount
     399</code></pre>
-    </div>
-   </details>
-   <details class="source-details">
-    <summary>
-     Complete original file · brief, sample schema and SQL
-    </summary>
-    <div class="codebox">
-     <div class="codehead">
-      <span>
+</div>
+</details>
+<details class="source-details">
+<summary> Original submission and task </summary>
+<div class="codebox">
+<div class="codehead">
+<span>
        level_02.sql · original source
       </span>
-      <button aria-label="Copy level_02.sql · original source" data-copy="" type="button">
+<button aria-label="Copy level_02.sql · original source" data-copy="" type="button">
        Copy
       </button>
-     </div>
-     <pre id="code-squid-02-3" tabindex="0"><code class="language-text" data-origin="level_02.sql">/* LEVEL 02: https://datalemur.com/sql-game/level2.html
+</div>
+<pre id="code-squid-02-3" tabindex="0"><code class="language-text" data-origin="level_02.sql">/* LEVEL 02: https://datalemur.com/sql-game/level2.html
 
     The organizers need to calculate how many food portions to withhold to create the right amount of tension. 
     In a table, calculate how many rations would feed 90% of the remaining(alive) non-insider players (rounded down), 
@@ -178,98 +151,98 @@ SELECT
         ELSE 'True'
     END AS amount
 FROM table_prop, rations</code></pre>
-    </div>
-   </details>
-   <a class="button source-download" download="level_02.sql" href="assets/downloads/level_02.sql">
+</div>
+</details>
+<a class="button source-download" download="level_02.sql" href="assets/downloads/level_02.sql">
     Download level_02.sql ↓
    </a>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-and">
+<a href="#m-sql-and">
      AND
     </a>
-    <a href="#m-sql-count">
+<a href="#m-sql-count">
      COUNT()
     </a>
-    <a href="#m-sql-case">
+<a href="#m-sql-case">
      CASE
     </a>
-    <a href="#m-sql-floor">
+<a href="#m-sql-floor">
      FLOOR()
     </a>
-    <a href="#m-sql-subquery">
+<a href="#m-sql-subquery">
      Subquery
     </a>
-    <a href="#m-sql-with">
+<a href="#m-sql-with">
      WITH
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-select-columns">
+<a href="#m-pd-select-columns">
      Select columns
     </a>
-    <a href="#m-pd-and">
+<a href="#m-pd-and">
      Multiple conditions
     </a>
-    <a href="#m-pd-new-column">
+<a href="#m-pd-new-column">
      New column
     </a>
-    <a href="#m-pd-map">
+<a href="#m-pd-map">
      map()
     </a>
-    <a href="#m-pd-fillna">
+<a href="#m-pd-fillna">
      Fill null
     </a>
-    <a href="#m-pd-sum">
+<a href="#m-pd-sum">
      sum()
     </a>
-    <a href="#m-pd-eq">
+<a href="#m-pd-eq">
      eq() / ne()
     </a>
-    <a href="#m-pd-compare">
+<a href="#m-pd-compare">
      gt() / ge() / lt() / le()
     </a>
-    <a href="#m-pd-copy">
+<a href="#m-pd-copy">
      copy()
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#squid-01">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#squid-01">
+<small>
     ← Previous
    </small>
    Filter the player pool
   </a>
-  <a href="#squid-03">
-   <small>
+<a href="#squid-03">
+<small>
     Next →
    </small>
    Compare hot and cold months
   </a>
- </div>
+</div>
 </article>

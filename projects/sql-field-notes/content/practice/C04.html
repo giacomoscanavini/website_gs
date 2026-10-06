@@ -1,238 +1,232 @@
 <article class="article" id="C04">
- <div class="breadcrumb">
-  <a href="#practice">
+<div class="breadcrumb">
+<a href="#practice">
    Leetcode problems
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Problem 1148
   </span>
- </div>
- <h1>
+</div>
+<h1>
   1148 · Article Views I
  </h1>
- <p>
+<p>
   Return authors who viewed their own articles, without duplicates and sorted by ID.
  </p>
- <p class="pattern">
+<p class="pattern">
   Pattern: DISTINCT / sorting
  </p>
- <h2>
+<h2>
   Example
  </h2>
- <p>
+<p>
   Qualifying author IDs [7, 3, 7] → id values [3, 7].
  </p>
- <h2>
+<h2>
   Study solution
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-63-panel-0" aria-selected="true" id="example-63-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-63-panel-0" aria-selected="true" id="example-63-tab-0" role="tab" tabindex="0" type="button">
      MySQL
     </button>
-    <button aria-controls="example-63-panel-1" aria-selected="false" id="example-63-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-63-panel-1" aria-selected="false" id="example-63-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-63-tab-0" class="code-panel" id="example-63-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-63-tab-0" class="code-panel" id="example-63-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-C04-0" tabindex="0"><code class="language-sql" data-origin="legacy-C04-0"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">author_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Views</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">author_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewer_id</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-63-tab-1" class="code-panel" id="example-63-panel-1" role="tabpanel">
-   <div class="no-script-label">
+<pre id="code-C04-0" tabindex="0"><code class="language-sql" data-origin="legacy-C04-0"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">author_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">Views</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">author_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewer_id</span><span class="w"> </span><span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="p">;</span></code></pre>
+</div>
+<div aria-labelledby="example-63-tab-1" class="code-panel" id="example-63-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-C04-1" tabindex="0"><code class="language-python" data-origin="legacy-C04-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C04-1" tabindex="0"><code class="language-python" data-origin="legacy-C04-1"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">article_views</span><span class="p">(</span><span class="n">views</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">result</span> <span class="o">=</span> <span class="n">views</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">views</span><span class="p">[</span><span class="s1">'author_id'</span><span class="p">]</span><span class="o">.</span><span class="n">eq</span><span class="p">(</span><span class="n">views</span><span class="p">[</span><span class="s1">'viewer_id'</span><span class="p">]),</span> <span class="p">[</span><span class="s1">'author_id'</span><span class="p">]]</span>
     <span class="k">return</span> <span class="n">result</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">()</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">'author_id'</span><span class="p">:</span> <span class="s1">'id'</span><span class="p">})</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">'id'</span><span class="p">)</span></code></pre>
-  </div>
- </div>
- <h2>
+</div>
+</div>
+<h2>
   Why it works
  </h2>
- <p>
+<p>
   Filter first, select the author column, then deduplicate. Deduplicating complete view records would not necessarily make author IDs unique.
  </p>
- <details class="original-details">
-  <summary>
+<details class="original-details">
+<summary>
    My approach
   </summary>
-  <div class="code-pair">
-   <div class="pair-head">
-    <div aria-label="Solution language" class="code-tabs" role="tablist">
-     <button aria-controls="approach-C04-panel-0" aria-selected="true" id="approach-C04-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="approach-C04-panel-0" aria-selected="true" id="approach-C04-tab-0" role="tab" tabindex="0" type="button">
       MySQL
      </button>
-     <button aria-controls="approach-C04-panel-1" aria-selected="false" id="approach-C04-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="approach-C04-panel-1" aria-selected="false" id="approach-C04-tab-1" role="tab" tabindex="-1" type="button">
       pandas
      </button>
-    </div>
-    <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
      Copy
     </button>
-   </div>
-   <div aria-labelledby="approach-C04-tab-0" class="code-panel" id="approach-C04-panel-0" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="approach-C04-tab-0" class="code-panel" id="approach-C04-panel-0" role="tabpanel">
+<div class="no-script-label">
      SQL
     </div>
-    <pre id="code-C04-2" tabindex="0"><code class="language-sql" data-origin="approach-C04-sql"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w">   </span><span class="n">author_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span>
+<pre id="code-C04-2" tabindex="0"><code class="language-sql" data-origin="approach-C04-sql"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w">   </span><span class="n">author_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Views</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">author_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewer_id</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">ASC</span><span class="p">;</span></code></pre>
-   </div>
-   <div aria-labelledby="approach-C04-tab-1" class="code-panel" id="approach-C04-panel-1" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="approach-C04-tab-1" class="code-panel" id="approach-C04-panel-1" role="tabpanel">
+<div class="no-script-label">
      pandas
     </div>
-    <pre id="code-C04-3" tabindex="0"><code class="language-python" data-origin="approach-C04-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C04-3" tabindex="0"><code class="language-python" data-origin="approach-C04-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">article_views</span><span class="p">(</span><span class="n">views</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">ids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">views</span><span class="p">[</span><span class="n">views</span><span class="o">.</span><span class="n">author_id</span>   <span class="o">==</span> <span class="n">views</span><span class="o">.</span><span class="n">viewer_id</span><span class="p">]</span><span class="o">.</span><span class="n">author_id</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
     <span class="k">return</span>   <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'id'</span><span class="p">:</span> <span class="n">ids</span><span class="p">})</span></code></pre>
-   </div>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
+</div>
+</div>
+</details>
+<details class="reference-details">
+<summary>
    Sources
   </summary>
-  <div class="sources-content">
-   <p>
-    Primary exercise basis: your uploaded Pasted markdown(3).md, exercise 1148, line 4. The exercise heading may be abbreviated in the upload; full official problem statements and schemas were not supplied.
-   </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+<div class="sources-content">
+<p> Exercise source: Pasted markdown(3).md, problem 1148, line 4. </p>
+<p>
+<a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
      pandas SQL comparison
     </a>
     — Projection, filtering, grouping, joins and operations.
    </p>
-  </div>
- </details>
- <details class="original-details archive-submission">
-  <summary>
-   Uploaded submission · SQL.zip
-  </summary>
-  <p class="small">
-   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
-  </p>
-  <div class="code-pair">
-   <div class="pair-head">
-    <div aria-label="Solution language" class="code-tabs" role="tablist">
-     <button aria-controls="archive-1148-panel-0" aria-selected="true" id="archive-1148-tab-0" role="tab" tabindex="0" type="button">
+</div>
+</details>
+<details class="original-details archive-submission">
+<summary> Original submission </summary>
+<p class="small"> Archived submissions. These may differ from the reference implementation above. </p>
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="archive-1148-panel-0" aria-selected="true" id="archive-1148-tab-0" role="tab" tabindex="0" type="button">
       MySQL
      </button>
-     <button aria-controls="archive-1148-panel-1" aria-selected="false" id="archive-1148-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="archive-1148-panel-1" aria-selected="false" id="archive-1148-tab-1" role="tab" tabindex="-1" type="button">
       pandas
      </button>
-    </div>
-    <button class="copy-button" data-copy="" type="button">
+</div>
+<button class="copy-button" data-copy="" type="button">
      Copy
     </button>
-   </div>
-   <div aria-labelledby="archive-1148-tab-0" class="code-panel" id="archive-1148-panel-0" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-1148-tab-0" class="code-panel" id="archive-1148-panel-0" role="tabpanel">
+<div class="no-script-label">
      MySQL
     </div>
-    <pre id="code-C04-4" tabindex="0"><code class="language-sql" data-origin="archive-1148-sql"><span class="c1"># Write your MySQL query statement below</span>
+<pre id="code-C04-4" tabindex="0"><code class="language-sql" data-origin="archive-1148-sql"><span class="c1"># Write your MySQL query statement below</span>
 <span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">author_id</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">id</span><span class="w"> </span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Views</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">author_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">viewer_id</span>
 <span class="k">ORDER</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">ASC</span></code></pre>
-   </div>
-   <div aria-labelledby="archive-1148-tab-1" class="code-panel" id="archive-1148-panel-1" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-1148-tab-1" class="code-panel" id="archive-1148-panel-1" role="tabpanel">
+<div class="no-script-label">
      pandas
     </div>
-    <pre id="code-C04-5" tabindex="0"><code class="language-python" data-origin="archive-1148-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C04-5" tabindex="0"><code class="language-python" data-origin="archive-1148-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">article_views</span><span class="p">(</span><span class="n">views</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">ids</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">views</span><span class="p">[</span><span class="n">views</span><span class="o">.</span><span class="n">author_id</span> <span class="o">==</span> <span class="n">views</span><span class="o">.</span><span class="n">viewer_id</span><span class="p">]</span><span class="o">.</span><span class="n">author_id</span><span class="o">.</span><span class="n">unique</span><span class="p">())</span>
     <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">'id'</span><span class="p">:</span> <span class="n">ids</span><span class="p">})</span></code></pre>
-   </div>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</div>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-    <a href="#m-sql-distinct">
+<a href="#m-sql-distinct">
      DISTINCT
     </a>
-    <a href="#m-sql-order-by">
+<a href="#m-sql-order-by">
      ORDER BY
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-loc">
+<a href="#m-pd-loc">
      Rows by label
     </a>
-    <a href="#m-pd-filter">
+<a href="#m-pd-filter">
      Condition
     </a>
-    <a href="#m-pd-sort-values">
+<a href="#m-pd-sort-values">
      Sort one column
     </a>
-    <a href="#m-pd-rename">
+<a href="#m-pd-rename">
      Rename
     </a>
-    <a href="#m-pd-loc-label">
+<a href="#m-pd-loc-label">
      Access label
     </a>
-    <a href="#m-pd-drop-duplicates">
+<a href="#m-pd-drop-duplicates">
      Drop duplicates
     </a>
-    <a href="#m-pd-unique">
+<a href="#m-pd-unique">
      unique()
     </a>
-    <a href="#m-pd-eq">
+<a href="#m-pd-eq">
      eq() / ne()
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#C03">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#C03">
+<small>
     ← Previous
    </small>
    595 · Big countries
   </a>
-  <a href="#C05">
-   <small>
+<a href="#C05">
+<small>
     Next →
    </small>
    1683 · Invalid tweets
   </a>
- </div>
+</div>
 </article>

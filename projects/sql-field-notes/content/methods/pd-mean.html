@@ -1,578 +1,576 @@
 <article class="article method-page" id="m-pd-mean">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=Aggregation">
+<a href="#methods?lang=pd&amp;cat=Aggregation">
    pandas · Aggregation
   </a>
- </div>
- <h1>
+</div>
+<h1>
   mean()
  </h1>
- <p class="lead">
+<p class="lead">
   Mean
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-mean"><span class="n">df</span><span class="p">[</span><span class="s1">'score'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-mean"><span class="n">df</span><span class="p">[</span><span class="s1">'score'</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-sql-avg">
+<a href="#m-sql-avg">
    SQL · AVG()
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C46?code=code-C46-1&amp;method=pd-mean&amp;line=13">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C46?code=code-C46-1&amp;method=pd-mean&amp;line=13">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1661 · Average processing time per machine
     </strong>
-    <small>
+<small>
      Study solution · line 13
     </small>
-   </div>
-   <pre aria-hidden="true">    df['processing_time'] = df['timestamp_e'] - df['timestamp_s']
+</div>
+<pre aria-hidden="true">    df['processing_time'] = df['timestamp_e'] - df['timestamp_s']
     result = df.groupby('machine_id', as_index=False).agg(processing_time=('processing_time', 'mean'))
     result['processing_time'] = result['processing_time'].map(lambda x: round_half_up(x, 3))
     return result</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-mean&amp;line=12">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-03?code=code-squid-03-1&amp;method=pd-mean&amp;line=12">
+<div>
+<span class="usage-label">
      Squid Game · pandas
     </span>
-    <strong>
+<strong>
      Compare hot and cold months
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 12
     </small>
-   </div>
-   <pre aria-hidden="true">          .groupby(['shape', 'month_num'], as_index=False)
+</div>
+<pre aria-hidden="true">          .groupby(['shape', 'month_num'], as_index=False)
           .agg(avg_temp=('average_completion_time', 'mean'))
           .sort_values('avg_temp'))</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B10?code=code-B10-3&amp;method=pd-mean&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B10?code=code-B10-3&amp;method=pd-mean&amp;line=1">
+<div>
+<span class="usage-label">
      SQLBolt · pandas
     </span>
-    <strong>
+<strong>
      Aggregates and GROUP BY
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">result = employees.groupby('role', dropna=False, as_index=False).agg(average_years=('years_employed', 'mean'))</pre>
-   <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = employees.groupby('role', dropna=False, as_index=False).agg(average_years=('years_employed', 'mean'))</pre>
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C08?code=code-C08-1&amp;method=pd-mean&amp;line=10">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C08?code=code-C08-1&amp;method=pd-mean&amp;line=10">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1075 · Project employees I
     </strong>
-    <small>
+<small>
      Study solution · line 10
     </small>
-   </div>
-   <pre aria-hidden="true">    m = project.merge(employee, on='employee_id', how='left', validate='many_to_one')
+</div>
+<pre aria-hidden="true">    m = project.merge(employee, on='employee_id', how='left', validate='many_to_one')
     g = m.groupby('project_id', as_index=False).agg(average_years=('experience_years', 'mean'))
     g['average_years'] = g['average_years'].map(round_half_up)
     return g</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C10?code=code-C10-1&amp;method=pd-mean&amp;line=10">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-1&amp;method=pd-mean&amp;line=10">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1211 · Queries quality and percentage
     </strong>
-    <small>
+<small>
      Study solution · line 10
     </small>
-   </div>
-   <pre aria-hidden="true">    q = queries.assign(quality_ratio=queries['rating'] / queries['position'], poor=queries['rating'].lt(3).astype(int))
+</div>
+<pre aria-hidden="true">    q = queries.assign(quality_ratio=queries['rating'] / queries['position'], poor=queries['rating'].lt(3).astype(int))
     g = q.groupby('query_name', dropna=False, as_index=False).agg(quality=('quality_ratio', 'mean'), poor_query_percentage=('poor', 'mean'))
     g['quality'] = g['quality'].map(round_half_up)
     g['poor_query_percentage'] = (100 * g['poor_query_percentage']).map(round_half_up)</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C12?code=code-C12-1&amp;method=pd-mean&amp;line=11">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C12?code=code-C12-1&amp;method=pd-mean&amp;line=11">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1174 · Immediate first deliveries
     </strong>
-    <small>
+<small>
      Study solution · line 11
     </small>
-   </div>
-   <pre aria-hidden="true">    first = d.sort_values('order_date').drop_duplicates('customer_id', keep='first')
+</div>
+<pre aria-hidden="true">    first = d.sort_values('order_date').drop_duplicates('customer_id', keep='first')
     value = 100 * first['order_date'].eq(first['customer_pref_delivery_date']).mean()
     return pd.DataFrame({'immediate_percentage': [round_half_up(value)]})</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    8 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C13?code=code-C13-1&amp;method=pd-mean&amp;line=12">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C13?code=code-C13-1&amp;method=pd-mean&amp;line=12">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       550 · Game Play Analysis IV
      </strong>
-     <small>
+<small>
       Study solution · line 12
      </small>
-    </div>
-    <pre aria-hidden="true">    valid = a['event_date'].eq(first + pd.Timedelta(days=1))
+</div>
+<pre aria-hidden="true">    valid = a['event_date'].eq(first + pd.Timedelta(days=1))
     fraction = valid.groupby(a['player_id']).any().mean()
     return pd.DataFrame({'fraction': [round_half_up(fraction)]})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C21?code=code-C21-1&amp;method=pd-mean&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C21?code=code-C21-1&amp;method=pd-mean&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1731 · Employees reporting to employees
      </strong>
-     <small>
+<small>
       Study solution · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">        reports_count=('employee_id', 'size'),
+</div>
+<pre aria-hidden="true">        reports_count=('employee_id', 'size'),
         average_age=('age', 'mean')
     )
     by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-mean&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-mean&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       Study solution · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">    feb = r.loc[r['created_at'].ge('2020-02-01') &amp; r['created_at'].lt('2020-03-01')]
+</div>
+<pre aria-hidden="true">    feb = r.loc[r['created_at'].ge('2020-02-01') &amp; r['created_at'].lt('2020-03-01')]
     movies_ranked = feb.groupby('movie_id', as_index=False).agg(avg_rating=('rating', 'mean')).merge(movies, on='movie_id')
     second = movies_ranked.sort_values(['avg_rating', 'title'], ascending=[False, True]).head(1)[['title']].rename(columns={'title': 'results'})
     return pd.concat([first, second], ignore_index=True)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3497?code=code-LC3497-1&amp;method=pd-mean&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3497?code=code-LC3497-1&amp;method=pd-mean&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       3497 · Analyze subscription conversion
      </strong>
-     <small>
+<small>
       Uploaded submission · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">        return pd.Series({
+</div>
+<pre aria-hidden="true">        return pd.Series({
             'trial_avg_duration': round2(x['activity_duration'][free_flag].mean()), 
             'paid_avg_duration': round2(x['activity_duration'][paid_flag].mean()), 
         })</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-04?code=code-squid-04-1&amp;method=pd-mean&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-04?code=code-squid-04-1&amp;method=pd-mean&amp;line=4">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Rank ten-player teams
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">teams = player.groupby('team_id', as_index=False, dropna=False).agg(
+</div>
+<pre aria-hidden="true">teams = player.groupby('team_id', as_index=False, dropna=False).agg(
     n_players=('id', 'size'), age_team=('age', 'mean'))
 result = teams.loc[teams['n_players'].eq(10), ['team_id', 'age_team']].copy()
 result['age_group'] = 'Grizzled'</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-06?code=code-squid-06-1&amp;method=pd-mean&amp;line=18">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-06?code=code-squid-06-1&amp;method=pd-mean&amp;line=18">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Trace equipment to its first failure
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 18
      </small>
-    </div>
-    <pre aria-hidden="true">    years = (first['failed'] - first['installed']).dt.total_seconds() / (86400 * 365.2425)
+</div>
+<pre aria-hidden="true">    years = (first['failed'] - first['installed']).dt.total_seconds() / (86400 * 365.2425)
     result = pd.DataFrame({'average_lifespan_years': [np.floor(years.mean())]})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#squid-08?code=code-squid-08-1&amp;method=pd-mean&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-08?code=code-squid-08-1&amp;method=pd-mean&amp;line=6">
+<div>
+<span class="usage-label">
       Squid Game · pandas
      </span>
-     <strong>
+<strong>
       Find the longest hesitation
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">if not pushed.empty:
+</div>
+<pre aria-hidden="true">if not pushed.empty:
     means = pushed.groupby('game_id')['last_moved_time_seconds'].mean()
     game_id = means.sort_values(ascending=False).index[0]
     result = (pushed.loc[pushed['game_id'].eq(game_id)]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B19?code=code-B19-1&amp;method=pd-mean&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B19?code=code-B19-1&amp;method=pd-mean&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Additional topic · Subqueries
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">threshold = sales_associates['revenue_generated'].mean()
+</div>
+<pre aria-hidden="true">threshold = sales_associates['revenue_generated'].mean()
 result = sales_associates.loc[sales_associates['salary'].gt(threshold)]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (11)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C46?code=code-C46-3&amp;method=pd-mean&amp;line=10">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C46?code=code-C46-3&amp;method=pd-mean&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1661 · Average processing time per machine
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return df.groupby(by='machine_id').mean().round(3).reset_index()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C10?code=code-C10-3&amp;method=pd-mean&amp;line=12">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-3&amp;method=pd-mean&amp;line=12">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1211 · Queries quality and percentage
      </strong>
-     <small>
+<small>
       My approach · line 12
      </small>
-    </div>
-    <pre aria-hidden="true">    df =   queries.groupby(by='query_name', dropna=False).agg(
+</div>
+<pre aria-hidden="true">    df =   queries.groupby(by='query_name', dropna=False).agg(
         quality = ('quality_ratio', 'mean'),
         poor_query_percentage   = ('poor',   'mean')
     ).reset_index()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C10?code=code-C10-5&amp;method=pd-mean&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C10?code=code-C10-5&amp;method=pd-mean&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1211 · Queries quality and percentage
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">    df = queries.groupby(by='query_name').agg(
+</div>
+<pre aria-hidden="true">    df = queries.groupby(by='query_name').agg(
         quality = ('quality_ratio', 'mean'),
         poor_query_percentage = ('poor', 'mean')
     ).reset_index()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C12?code=code-C12-3&amp;method=pd-mean&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C12?code=code-C12-3&amp;method=pd-mean&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1174 · Immediate first deliveries
      </strong>
-     <small>
+<small>
       My approach · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">    idx_to_keep =   delivery.groupby(by='customer_id')['order_date'].idxmin()
+</div>
+<pre aria-hidden="true">    idx_to_keep =   delivery.groupby(by='customer_id')['order_date'].idxmin()
     return   pd.DataFrame({'immediate_percentage': [round_half_up(100 * delivery['immediate'][idx_to_keep].mean(), 2)]})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C12?code=code-C12-5&amp;method=pd-mean&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C12?code=code-C12-5&amp;method=pd-mean&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1174 · Immediate first deliveries
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    idx_to_keep = delivery.groupby(by='customer_id')['order_date'].idxmin()
+</div>
+<pre aria-hidden="true">    idx_to_keep = delivery.groupby(by='customer_id')['order_date'].idxmin()
     return pd.DataFrame({'immediate_percentage': [round(100 * delivery['immediate'][idx_to_keep].mean(), 2)]})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C13?code=code-C13-3&amp;method=pd-mean&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C13?code=code-C13-3&amp;method=pd-mean&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       550 · Game Play Analysis IV
      </strong>
-     <small>
+<small>
       My approach · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">    return   pd.DataFrame({
+</div>
+<pre aria-hidden="true">    return   pd.DataFrame({
         'fraction': [round_half_up(activity.groupby(by='player_id')['valid'].any().mean(), 2)]
     })</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C13?code=code-C13-5&amp;method=pd-mean&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C13?code=code-C13-5&amp;method=pd-mean&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       550 · Game Play Analysis IV
      </strong>
-     <small>
+<small>
       Uploaded submission · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">    return pd.DataFrame({
+</div>
+<pre aria-hidden="true">    return pd.DataFrame({
         'fraction': [round(activity.groupby(by='player_id')['valid'].any().mean(), 2)]
     })</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C21?code=code-C21-3&amp;method=pd-mean&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C21?code=code-C21-3&amp;method=pd-mean&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1731 · Employees reporting to employees
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">        reports_count=('employee_id', 'size'), 
+</div>
+<pre aria-hidden="true">        reports_count=('employee_id', 'size'), 
         average_age=('age', 'mean')
     )
     by_manager['average_age'] = (by_manager['average_age'] + 1e-12).round(0)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-3&amp;method=pd-mean&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-3&amp;method=pd-mean&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       My approach · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">    df_movies = df_movies.groupby(by='movie_id').agg(
+</div>
+<pre aria-hidden="true">    df_movies = df_movies.groupby(by='movie_id').agg(
         avgRating = ('rating', 'mean')
     )
     df_movies =   df_movies.merge(movies, on='movie_id', how='left').sort_values(by=['avgRating', 'title'], ascending=[False, True])[['title', 'avgRating']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-5&amp;method=pd-mean&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-5&amp;method=pd-mean&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       Uploaded submission · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">    df_movies = df_movies.groupby(by='movie_id').agg(
+</div>
+<pre aria-hidden="true">    df_movies = df_movies.groupby(by='movie_id').agg(
         avgRating = ('rating', 'mean')
     )
     df_movies = df_movies.merge(movies, on='movie_id', how='left').sort_values(by=['avgRating', 'title'], ascending=[False, True])[['title', 'avgRating']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B19?code=code-B19-3&amp;method=pd-mean&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B19?code=code-B19-3&amp;method=pd-mean&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Additional topic · Subqueries
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">mean_revenue = employees.groupby('department')['revenue_generated'].transform('mean')
+</div>
+<pre aria-hidden="true">mean_revenue = employees.groupby('department')['revenue_generated'].transform('mean')
 result = employees.loc[employees['salary'].gt(mean_revenue)]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     pandas cheat-sheet image · Aggregation. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=Aggregation">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=Aggregation">
+<small>
     ← Browse
    </small>
    pandas · Aggregation
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

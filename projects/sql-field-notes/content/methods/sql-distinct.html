@@ -1,870 +1,868 @@
 <article class="article method-page" id="m-sql-distinct">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=sql&amp;cat=Also%20used%20in%20these%20notes">
+<a href="#methods?lang=sql&amp;cat=Also%20used%20in%20these%20notes">
    MySQL · Also used in these notes
   </a>
- </div>
- <h1>
+</div>
+<h1>
   DISTINCT
  </h1>
- <p class="lead">
+<p class="lead">
   Remove duplicate result rows
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     MySQL
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-distinct"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">users</span><span class="p">;</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-sql" data-origin="reference-sql-distinct"><span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">users</span><span class="p">;</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-pd-drop-duplicates">
+<a href="#m-pd-drop-duplicates">
    pandas · Drop duplicates
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C04?code=code-C04-0&amp;method=sql-distinct&amp;line=1">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C04?code=code-C04-0&amp;method=sql-distinct&amp;line=1">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1148 · Article Views I
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT DISTINCT author_id AS id FROM Views WHERE author_id = viewer_id ORDER BY id;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">SELECT DISTINCT author_id AS id FROM Views WHERE author_id = viewer_id ORDER BY id;</pre>
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B04?code=code-B04-0&amp;method=sql-distinct&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B04?code=code-B04-0&amp;method=sql-distinct&amp;line=1">
+<div>
+<span class="usage-label">
      SQLBolt · SQL
     </span>
-    <strong>
+<strong>
      DISTINCT, sorting and pagination
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT DISTINCT director FROM movies ORDER BY director;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">SELECT DISTINCT director FROM movies ORDER BY director;</pre>
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C13?code=code-C13-2&amp;method=sql-distinct&amp;line=3">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C13?code=code-C13-2&amp;method=sql-distinct&amp;line=3">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      550 · Game Play Analysis IV
     </strong>
-    <small>
+<small>
      My approach · line 3
     </small>
-   </div>
-   <pre aria-hidden="true">    SELECT
+</div>
+<pre aria-hidden="true">    SELECT
         DISTINCT player_id,
         MIN(event_date) OVER (PARTITION BY   player_id) AS first_day
     FROM Activity</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C14?code=code-C14-0&amp;method=sql-distinct&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C14?code=code-C14-0&amp;method=sql-distinct&amp;line=1">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      2356 · Unique subjects per teacher
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT teacher_id, COUNT(DISTINCT subject_id) AS cnt FROM Teacher GROUP BY teacher_id;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">SELECT teacher_id, COUNT(DISTINCT subject_id) AS cnt FROM Teacher GROUP BY teacher_id;</pre>
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C15?code=code-C15-0&amp;method=sql-distinct&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C15?code=code-C15-0&amp;method=sql-distinct&amp;line=1">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1141 · User activity in a 30-day window
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT activity_date AS day, COUNT(DISTINCT user_id) AS active_users
+</div>
+<pre aria-hidden="true">SELECT activity_date AS day, COUNT(DISTINCT user_id) AS active_users
 FROM Activity
 WHERE activity_date BETWEEN '2019-06-28' AND '2019-07-27'</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C17?code=code-C17-0&amp;method=sql-distinct&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C17?code=code-C17-0&amp;method=sql-distinct&amp;line=1">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      596 · Classes with at least five students
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT class FROM Courses GROUP BY class HAVING COUNT(DISTINCT student) &gt;= 5;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">SELECT class FROM Courses GROUP BY class HAVING COUNT(DISTINCT student) &gt;= 5;</pre>
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    12 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C18?code=code-C18-0&amp;method=sql-distinct&amp;line=1">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C18?code=code-C18-0&amp;method=sql-distinct&amp;line=1">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1729 · Followers count
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT user_id, COUNT(DISTINCT follower_id) AS followers_count FROM Followers GROUP BY user_id ORDER BY user_id;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">SELECT user_id, COUNT(DISTINCT follower_id) AS followers_count FROM Followers GROUP BY user_id ORDER BY user_id;</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C20?code=code-C20-0&amp;method=sql-distinct&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-0&amp;method=sql-distinct&amp;line=1">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1045 · Customers who bought every product
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT DISTINCT c.customer_id FROM Customer c
+</div>
+<pre aria-hidden="true">SELECT DISTINCT c.customer_id FROM Customer c
 WHERE NOT EXISTS (
     SELECT 1 FROM Product p WHERE NOT EXISTS (</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C24?code=code-C24-0&amp;method=sql-distinct&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C24?code=code-C24-0&amp;method=sql-distinct&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       180 · Consecutive Numbers
      </strong>
-     <small>
+<small>
       Study solution · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT DISTINCT num AS ConsecutiveNums FROM ordered
 WHERE num = next_num AND num = next_next_num;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C25?code=code-C25-0&amp;method=sql-distinct&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C25?code=code-C25-0&amp;method=sql-distinct&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1164 · Product price at a given date
      </strong>
-     <small>
+<small>
       Study solution · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    FROM Products WHERE change_date &lt;= '2019-08-16'
+</div>
+<pre aria-hidden="true">    FROM Products WHERE change_date &lt;= '2019-08-16'
 ), ids AS (SELECT DISTINCT product_id FROM Products)
 SELECT i.product_id, COALESCE(r.new_price, 10) AS price FROM ids i
 LEFT JOIN ranked r ON i.product_id = r.product_id AND r.rn = 1;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C31?code=code-C31-2&amp;method=sql-distinct&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C31?code=code-C31-2&amp;method=sql-distinct&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1321 · Restaurant growth
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    SELECT
+</div>
+<pre aria-hidden="true">    SELECT
         DISTINCT visited_on,
         SUM(amount) OVER (
             ORDER BY visited_on RANGE BETWEEN   INTERVAL 6 DAY   PRECEDING AND CURRENT ROW</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C32?code=code-C32-2&amp;method=sql-distinct&amp;line=17">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C32?code=code-C32-2&amp;method=sql-distinct&amp;line=17">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       602 · Most accepted friends
      </strong>
-     <small>
+<small>
       My approach · line 17
      </small>
-    </div>
-    <pre aria-hidden="true">    PooledUsers AS (
+</div>
+<pre aria-hidden="true">    PooledUsers AS (
         SELECT DISTINCT   requester_id AS id FROM RequestAccepted
         UNION
         SELECT DISTINCT   accepter_id AS id FROM RequestAccepted</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C39?code=code-C39-0&amp;method=sql-distinct&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C39?code=code-C39-0&amp;method=sql-distinct&amp;line=1">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1484 · Products sold by date
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT sell_date, COUNT(DISTINCT product) AS num_sold,
+</div>
+<pre aria-hidden="true">SELECT sell_date, COUNT(DISTINCT product) AS num_sold,
        GROUP_CONCAT(DISTINCT product ORDER BY product SEPARATOR ',') AS products
 FROM Activities GROUP BY sell_date ORDER BY sell_date;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC607?code=code-LC607-0&amp;method=sql-distinct&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC607?code=code-LC607-0&amp;method=sql-distinct&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       607 · Sales person
      </strong>
-     <small>
+<small>
       Uploaded submission · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">WITH IdToExclude AS (
+</div>
+<pre aria-hidden="true">WITH IdToExclude AS (
     SELECT DISTINCT o.sales_id
     FROM Orders o
     LEFT JOIN Company c ON o.com_id = c.com_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3220?code=code-LC3220-0&amp;method=sql-distinct&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3220?code=code-LC3220-0&amp;method=sql-distinct&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3220 · Odd and even transactions
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    Days AS (
+</div>
+<pre aria-hidden="true">    Days AS (
         SELECT DISTINCT transaction_date
         FROM Transactions
     ),</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3421?code=code-LC3421-0&amp;method=sql-distinct&amp;line=17">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3421?code=code-LC3421-0&amp;method=sql-distinct&amp;line=17">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3421 · Find students who improved
      </strong>
-     <small>
+<small>
       Uploaded submission · line 17
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 SELECT DISTINCT student_id, subject, first_score, latest_score
 FROM Comparison
 WHERE first_score &lt; latest_score</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3580?code=code-LC3580-0&amp;method=sql-distinct&amp;line=24">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3580?code=code-LC3580-0&amp;method=sql-distinct&amp;line=24">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       3580 · Find consistently improving employees
      </strong>
-     <small>
+<small>
       Uploaded submission · line 24
      </small>
-    </div>
-    <pre aria-hidden="true">    OrderedReviews AS (
+</div>
+<pre aria-hidden="true">    OrderedReviews AS (
         SELECT DISTINCT
             l1.employee_id,  
             l1.ranked AS ranked1, </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B07?code=code-B07-0&amp;method=sql-distinct&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B07?code=code-B07-0&amp;method=sql-distinct&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · SQL
      </span>
-     <strong>
+<strong>
       OUTER JOINs
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT DISTINCT building FROM employees WHERE building IS NOT NULL;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">SELECT DISTINCT building FROM employees WHERE building IS NOT NULL;</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (22)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C04?code=code-C04-2&amp;method=sql-distinct&amp;line=1">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C04?code=code-C04-2&amp;method=sql-distinct&amp;line=1">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1148 · Article Views I
      </strong>
-     <small>
+<small>
       My approach · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT DISTINCT   author_id AS id
+</div>
+<pre aria-hidden="true">SELECT DISTINCT   author_id AS id
 FROM Views
 WHERE author_id = viewer_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C04?code=code-C04-4&amp;method=sql-distinct&amp;line=2">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C04?code=code-C04-4&amp;method=sql-distinct&amp;line=2">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1148 · Article Views I
      </strong>
-     <small>
+<small>
       Uploaded submission · line 2
      </small>
-    </div>
-    <pre aria-hidden="true"># Write your MySQL query statement below
+</div>
+<pre aria-hidden="true"># Write your MySQL query statement below
 SELECT DISTINCT author_id AS id 
 FROM Views
 WHERE author_id = viewer_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C13?code=code-C13-4&amp;method=sql-distinct&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C13?code=code-C13-4&amp;method=sql-distinct&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       550 · Game Play Analysis IV
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    SELECT 
+</div>
+<pre aria-hidden="true">    SELECT 
         DISTINCT player_id,
         MIN(event_date) OVER (PARTITION BY player_id) AS first_day
     FROM Activity</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C14?code=code-C14-2&amp;method=sql-distinct&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C14?code=code-C14-2&amp;method=sql-distinct&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       2356 · Unique subjects per teacher
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    teacher_id,
+</div>
+<pre aria-hidden="true">    teacher_id,
     COUNT(DISTINCT subject_id)   AS cnt
 FROM Teacher
 GROUP BY teacher_id;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C14?code=code-C14-4&amp;method=sql-distinct&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C14?code=code-C14-4&amp;method=sql-distinct&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       2356 · Unique subjects per teacher
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    teacher_id, 
+</div>
+<pre aria-hidden="true">    teacher_id, 
     COUNT(DISTINCT subject_id) AS cnt
 FROM Teacher
 GROUP BY teacher_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C15?code=code-C15-2&amp;method=sql-distinct&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C15?code=code-C15-2&amp;method=sql-distinct&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1141 · User activity in a 30-day window
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    activity_date   AS day,
+</div>
+<pre aria-hidden="true">    activity_date   AS day,
     COUNT(DISTINCT user_id) AS active_users
 FROM Activity
 WHERE</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C15?code=code-C15-4&amp;method=sql-distinct&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C15?code=code-C15-4&amp;method=sql-distinct&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1141 · User activity in a 30-day window
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    activity_date AS day, 
+</div>
+<pre aria-hidden="true">    activity_date AS day, 
     COUNT(DISTINCT user_id) AS active_users
 FROM Activity 
 WHERE </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C17?code=code-C17-2&amp;method=sql-distinct&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C17?code=code-C17-2&amp;method=sql-distinct&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       596 · Classes with at least five students
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    SELECT
+</div>
+<pre aria-hidden="true">    SELECT
         COUNT(DISTINCT student) AS nStudents,
         class
     FROM Courses</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C17?code=code-C17-4&amp;method=sql-distinct&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C17?code=code-C17-4&amp;method=sql-distinct&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       596 · Classes with at least five students
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    SELECT 
+</div>
+<pre aria-hidden="true">    SELECT 
         COUNT(DISTINCT student) AS nStudents, 
         class
     FROM Courses</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C18?code=code-C18-2&amp;method=sql-distinct&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C18?code=code-C18-2&amp;method=sql-distinct&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1729 · Followers count
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    user_id,
+</div>
+<pre aria-hidden="true">    user_id,
     COUNT(DISTINCT   follower_id) AS followers_count
 FROM Followers
 GROUP BY user_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C18?code=code-C18-4&amp;method=sql-distinct&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C18?code=code-C18-4&amp;method=sql-distinct&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1729 · Followers count
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    user_id, 
+</div>
+<pre aria-hidden="true">    user_id, 
     COUNT(DISTINCT follower_id) AS followers_count
 FROM Followers
 GROUP BY user_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C20?code=code-C20-2&amp;method=sql-distinct&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-2&amp;method=sql-distinct&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1045 · Customers who bought every product
      </strong>
-     <small>
+<small>
       My approach · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">GROUP BY c.customer_id
+</div>
+<pre aria-hidden="true">GROUP BY c.customer_id
 HAVING (SELECT COUNT(*) FROM Product) = COUNT(DISTINCT CASE
     WHEN c.product_key IN (SELECT product_key FROM Product) THEN c.product_key END);</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C20?code=code-C20-4&amp;method=sql-distinct&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-4&amp;method=sql-distinct&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1045 · Customers who bought every product
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">GROUP BY customer_id
+</div>
+<pre aria-hidden="true">GROUP BY customer_id
 HAVING (SELECT COUNT(product_key) FROM Product) = COUNT(DISTINCT product_key) </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C24?code=code-C24-2&amp;method=sql-distinct&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C24?code=code-C24-2&amp;method=sql-distinct&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       180 · Consecutive Numbers
      </strong>
-     <small>
+<small>
       My approach · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">)
+</div>
+<pre aria-hidden="true">)
 SELECT DISTINCT num AS ConsecutiveNums
 FROM Nums
 WHERE num = next_num AND next_num = next_next_num;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C24?code=code-C24-4&amp;method=sql-distinct&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C24?code=code-C24-4&amp;method=sql-distinct&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       180 · Consecutive Numbers
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 SELECT DISTINCT num AS ConsecutiveNums
 FROM Nums
 WHERE num = next_num AND next_num = next_next_num</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C25?code=code-C25-2&amp;method=sql-distinct&amp;line=19">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C25?code=code-C25-2&amp;method=sql-distinct&amp;line=19">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1164 · Product price at a given date
      </strong>
-     <small>
+<small>
       My approach · line 19
      </small>
-    </div>
-    <pre aria-hidden="true">UNION
+</div>
+<pre aria-hidden="true">UNION
 SELECT DISTINCT   product_id, 10 AS price
 FROM Products
 WHERE product_id NOT IN (SELECT product_id FROM Valid);</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C25?code=code-C25-4&amp;method=sql-distinct&amp;line=23">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C25?code=code-C25-4&amp;method=sql-distinct&amp;line=23">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1164 · Product price at a given date
      </strong>
-     <small>
+<small>
       Uploaded submission · line 23
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
 SELECT DISTINCT product_id, 10 AS price
 FROM Products
 WHERE product_id NOT IN (SELECT product_id FROM Valid)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C31?code=code-C31-4&amp;method=sql-distinct&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C31?code=code-C31-4&amp;method=sql-distinct&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1321 · Restaurant growth
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    SELECT 
+</div>
+<pre aria-hidden="true">    SELECT 
         DISTINCT visited_on, 
         SUM(amount) OVER (
             ORDER BY visited_on RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C32?code=code-C32-4&amp;method=sql-distinct&amp;line=18">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C32?code=code-C32-4&amp;method=sql-distinct&amp;line=18">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       602 · Most accepted friends
      </strong>
-     <small>
+<small>
       Uploaded submission · line 18
      </small>
-    </div>
-    <pre aria-hidden="true">    PooledUsers AS (
+</div>
+<pre aria-hidden="true">    PooledUsers AS (
         SELECT DISTINCT requester_id AS id FROM RequestAccepted
         UNION 
         SELECT DISTINCT accepter_id AS id FROM RequestAccepted</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C39?code=code-C39-2&amp;method=sql-distinct&amp;line=3">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C39?code=code-C39-2&amp;method=sql-distinct&amp;line=3">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1484 · Products sold by date
      </strong>
-     <small>
+<small>
       My approach · line 3
      </small>
-    </div>
-    <pre aria-hidden="true">    sell_date,
+</div>
+<pre aria-hidden="true">    sell_date,
     COUNT(DISTINCT product) AS num_sold,
     GROUP_CONCAT(
         DISTINCT product</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C39?code=code-C39-4&amp;method=sql-distinct&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C39?code=code-C39-4&amp;method=sql-distinct&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1484 · Products sold by date
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    sell_date,
+</div>
+<pre aria-hidden="true">    sell_date,
     COUNT(DISTINCT product) AS num_sold,
     GROUP_CONCAT(
         DISTINCT product </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B07?code=code-B07-4&amp;method=sql-distinct&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B07?code=code-B07-4&amp;method=sql-distinct&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · SQL
      </span>
-     <strong>
+<strong>
       OUTER JOINs
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">SELECT DISTINCT b.building_name, e.role FROM buildings b
+</div>
+<pre aria-hidden="true">SELECT DISTINCT b.building_name, e.role FROM buildings b
 LEFT JOIN employees e ON b.building_name = e.building;</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     Methods present in the supplied code, added to the image-based index · Also used in these notes. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://dev.mysql.com/doc/refman/8.4/en/" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=sql&amp;cat=Also%20used%20in%20these%20notes">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=sql&amp;cat=Also%20used%20in%20these%20notes">
+<small>
     ← Browse
    </small>
    MySQL · Also used in these notes
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

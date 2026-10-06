@@ -1,150 +1,148 @@
 <article class="article method-page" id="m-sql-anti-join">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=sql&amp;cat=Useful%20LeetCode%20patterns">
+<a href="#methods?lang=sql&amp;cat=Useful%20LeetCode%20patterns">
    MySQL · Useful LeetCode patterns
   </a>
- </div>
- <h1>
+</div>
+<h1>
   Anti-join
  </h1>
- <p class="lead">
+<p class="lead">
   Find unmatched rows
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     MySQL
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-sql" data-origin="reference-sql-anti-join"><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="no">NULL</span></code></pre>
- </div>
- <p class="small">
+</div>
+<pre tabindex="0"><code class="language-sql" data-origin="reference-sql-anti-join"><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">b</span><span class="p">.</span><span class="n">id</span><span class="w"> </span><span class="k">IS</span><span class="w"> </span><span class="no">NULL</span></code></pre>
+</div>
+<p class="small">
   Syntax fragment: replace the ellipsis with the required columns, table or window specification.
  </p>
- <div class="counterparts">
-  <span>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-pd-anti-join">
+<a href="#m-pd-anti-join">
    pandas · Anti-join
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C44?code=code-C44-0&amp;method=sql-anti-join&amp;line=4">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C44?code=code-C44-0&amp;method=sql-anti-join&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · MySQL
     </span>
-    <strong>
+<strong>
      1581 · Customers who visited without transactions
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">LEFT JOIN Transactions t ON v.visit_id = t.visit_id
+</div>
+<pre aria-hidden="true">LEFT JOIN Transactions t ON v.visit_id = t.visit_id
 WHERE t.transaction_id IS NULL
 GROUP BY v.customer_id;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B08?code=code-B08-2&amp;method=sql-anti-join&amp;line=2">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B08?code=code-B08-2&amp;method=sql-anti-join&amp;line=2">
+<div>
+<span class="usage-label">
      SQLBolt · SQL
     </span>
-    <strong>
+<strong>
      NULL and unmatched rows
     </strong>
-    <small>
+<small>
      Study solution · line 2
     </small>
-   </div>
-   <pre aria-hidden="true">SELECT b.building_name FROM buildings b
+</div>
+<pre aria-hidden="true">SELECT b.building_name FROM buildings b
 LEFT JOIN employees e ON b.building_name = e.building WHERE e.building IS NULL;</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    Other saved implementations (1)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C44?code=code-C44-2&amp;method=sql-anti-join&amp;line=5">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C44?code=code-C44-2&amp;method=sql-anti-join&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · MySQL
      </span>
-     <strong>
+<strong>
       1581 · Customers who visited without transactions
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">LEFT JOIN Transactions t ON v.visit_id = t.visit_id
+</div>
+<pre aria-hidden="true">LEFT JOIN Transactions t ON v.visit_id = t.visit_id
 WHERE t.amount IS NULL
 GROUP BY v.customer_id</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     SQL cheat-sheet image · Useful LeetCode patterns. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://dev.mysql.com/doc/refman/8.4/en/" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=sql&amp;cat=Useful%20LeetCode%20patterns">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=sql&amp;cat=Useful%20LeetCode%20patterns">
+<small>
     ← Browse
    </small>
    MySQL · Useful LeetCode patterns
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

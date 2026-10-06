@@ -1,1248 +1,1246 @@
 <article class="article method-page" id="m-pd-filter">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=Filtering">
+<a href="#methods?lang=pd&amp;cat=Filtering">
    pandas · Filtering
   </a>
- </div>
- <h1>
+</div>
+<h1>
   Condition
  </h1>
- <p class="lead">
+<p class="lead">
   Filter rows
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-filter"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">'age'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">]</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-filter"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s1">'age'</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">]</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-sql-where">
+<a href="#m-sql-where">
    SQL · WHERE
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C01?code=code-C01-3&amp;method=pd-filter&amp;line=4">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C01?code=code-C01-3&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1757 · Recyclable and low-fat products
     </strong>
-    <small>
+<small>
      My approach · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def find_products(products: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_products(products: pd.DataFrame) -&gt; pd.DataFrame:
     df =   products[(products.low_fats == 'Y') &amp; (products.recyclable == 'Y')]
     return df[['product_id']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#murder-02?code=code-murder-02-1&amp;method=pd-filter&amp;line=5">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-02?code=code-murder-02-1&amp;method=pd-filter&amp;line=5">
+<div>
+<span class="usage-label">
      Murder City · pandas
     </span>
-    <strong>
+<strong>
      Find the two witnesses
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 5
     </small>
-   </div>
-   <pre aria-hidden="true">         .sort_values('address_number', ascending=False).head(1))
+</div>
+<pre aria-hidden="true">         .sort_values('address_number', ascending=False).head(1))
 second = person.loc[
     person['address_street_name'].eq('Franklin Ave')
     &amp; person['name'].str.startswith('Annabel', na=False)</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B02?code=code-B02-5&amp;method=pd-filter&amp;line=1">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B02?code=code-B02-5&amp;method=pd-filter&amp;line=1">
+<div>
+<span class="usage-label">
      SQLBolt · pandas
     </span>
-    <strong>
+<strong>
      Numeric constraints
     </strong>
-    <small>
+<small>
      Study solution · line 1
     </small>
-   </div>
-   <pre aria-hidden="true">result = movies.loc[movies['year'].notna() &amp; ~movies['year'].between(2000, 2010)].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = movies.loc[movies['year'].notna() &amp; ~movies['year'].between(2000, 2010)].copy()</pre>
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C02?code=code-C02-3&amp;method=pd-filter&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C02?code=code-C02-3&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      584 · Find customer referee
     </strong>
-    <small>
+<small>
      My approach · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def find_customer_referee(customer: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_customer_referee(customer: pd.DataFrame) -&gt; pd.DataFrame:
     df =   customer[(customer.referee_id != 2) | (customer.referee_id.isna())]
     return df[['name']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C03?code=code-C03-3&amp;method=pd-filter&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C03?code=code-C03-3&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      595 · Big countries
     </strong>
-    <small>
+<small>
      My approach · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def big_countries(world: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def big_countries(world: pd.DataFrame) -&gt; pd.DataFrame:
     df =   world[(world.area &gt;= 3000000) | (world.population &gt;= 25000000)]
     return df[['name', 'population', 'area']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C04?code=code-C04-3&amp;method=pd-filter&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C04?code=code-C04-3&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1148 · Article Views I
     </strong>
-    <small>
+<small>
      My approach · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def article_views(views: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def article_views(views: pd.DataFrame) -&gt; pd.DataFrame:
     ids = sorted(views[views.author_id   == views.viewer_id].author_id.unique())
     return   pd.DataFrame({'id': ids})</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    28 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C05?code=code-C05-3&amp;method=pd-filter&amp;line=12">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C05?code=code-C05-3&amp;method=pd-filter&amp;line=12">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1683 · Invalid tweets
      </strong>
-     <small>
+<small>
       My approach · line 12
      </small>
-    </div>
-    <pre aria-hidden="true">    """
+</div>
+<pre aria-hidden="true">    """
     df =   tweets[tweets.valid == False]
     return df[['tweet_id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C45?code=code-C45-1&amp;method=pd-filter&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C45?code=code-C45-1&amp;method=pd-filter&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       197 · Rising temperature
      </strong>
-     <small>
+<small>
       Study solution · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    weather = weather.sort_values('recordDate')
+</div>
+<pre aria-hidden="true">    weather = weather.sort_values('recordDate')
     df = weather[(weather.recordDate.diff().eq(pd.Timedelta(days=1))) &amp; (weather.temperature.diff() &gt; 0)]
     return df[['id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C46?code=code-C46-1&amp;method=pd-filter&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C46?code=code-C46-1&amp;method=pd-filter&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1661 · Average processing time per machine
      </strong>
-     <small>
+<small>
       Study solution · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">def get_average_time(activity: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def get_average_time(activity: pd.DataFrame) -&gt; pd.DataFrame:
     df_s = activity[activity.activity_type == 'start']
     df_e = activity[activity.activity_type == 'end']
     df = df_s.merge(df_e, on=['machine_id', 'process_id'], how='inner', suffixes=('_s', '_e'))</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C47?code=code-C47-1&amp;method=pd-filter&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C47?code=code-C47-1&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       577 · Employee bonus
      </strong>
-     <small>
+<small>
       Study solution · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    df = employee.merge(bonus, on='empId', how='left')
+</div>
+<pre aria-hidden="true">    df = employee.merge(bonus, on='empId', how='left')
     return df[(df.bonus &lt; 1000) | (df.bonus.isna())][['name', 'bonus']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C49?code=code-C49-1&amp;method=pd-filter&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C49?code=code-C49-1&amp;method=pd-filter&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       570 · Managers with at least five direct reports
      </strong>
-     <small>
+<small>
       Study solution · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    df = employee.merge(reports, on='id', how='left')
+</div>
+<pre aria-hidden="true">    df = employee.merge(reports, on='id', how='left')
     return df[df.nReports &gt;= 5][['name']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C06?code=code-C06-3&amp;method=pd-filter&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C06?code=code-C06-3&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       620 · Not boring movies
      </strong>
-     <small>
+<small>
       My approach · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def not_boring_movies(cinema: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def not_boring_movies(cinema: pd.DataFrame) -&gt; pd.DataFrame:
     df =   cinema[(cinema.id % 2 == 1) &amp; (cinema.description.notna()) &amp; (cinema.description != 'boring')]
     return   df.sort_values('rating', ascending=False)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-filter&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-3&amp;method=pd-filter&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1251 · Average selling price
      </strong>
-     <small>
+<small>
       My approach · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">    df = prices.merge(units_sold, on='product_id', how='left')
+</div>
+<pre aria-hidden="true">    df = prices.merge(units_sold, on='product_id', how='left')
     df = df[df.purchase_date.isna() | df.purchase_date.between(df.start_date, df.end_date)].copy()
     df['paid'] = df['price'] * df['units']
     totals = df.groupby('product_id', as_index=False).agg(paid=('paid', 'sum'), units=('units', 'sum'))</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C16?code=code-C16-3&amp;method=pd-filter&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C16?code=code-C16-3&amp;method=pd-filter&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1070 · First-year product sales
      </strong>
-     <small>
+<small>
       My approach · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    sales['year_order'] = sales.groupby(by='product_id')['year'].rank(method='min')
+</div>
+<pre aria-hidden="true">    sales['year_order'] = sales.groupby(by='product_id')['year'].rank(method='min')
     sales = sales[sales['year_order'] == 1]
     sales = sales[['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})
     return sales</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C17?code=code-C17-3&amp;method=pd-filter&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C17?code=code-C17-3&amp;method=pd-filter&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       596 · Classes with at least five students
      </strong>
-     <small>
+<small>
       My approach · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    ).reset_index()
+</div>
+<pre aria-hidden="true">    ).reset_index()
     return   df[df.nStudents &gt;= 5][['class']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C19?code=code-C19-3&amp;method=pd-filter&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C19?code=code-C19-3&amp;method=pd-filter&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       619 · Biggest single number
      </strong>
-     <small>
+<small>
       My approach · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    ).reset_index()
+</div>
+<pre aria-hidden="true">    ).reset_index()
     return   pd.DataFrame({'num': df[df.freq == 1][['num']].max()})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C20?code=code-C20-3&amp;method=pd-filter&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-3&amp;method=pd-filter&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1045 · Customers who bought every product
      </strong>
-     <small>
+<small>
       My approach · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">    df = customer_ids.merge(df, on='customer_id', how='left').fillna({'nSold': 0})
+</div>
+<pre aria-hidden="true">    df = customer_ids.merge(df, on='customer_id', how='left').fillna({'nSold': 0})
     return df[df.nSold == nProducts][['customer_id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C24?code=code-C24-5&amp;method=pd-filter&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C24?code=code-C24-5&amp;method=pd-filter&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       180 · Consecutive Numbers
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    logs['var'] = logs['num'].rolling(window=3).var()
+</div>
+<pre aria-hidden="true">    logs['var'] = logs['num'].rolling(window=3).var()
     return pd.DataFrame({'ConsecutiveNums': logs[logs['var']==0]['num'].unique()})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C25?code=code-C25-3&amp;method=pd-filter&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C25?code=code-C25-3&amp;method=pd-filter&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1164 · Product price at a given date
      </strong>
-     <small>
+<small>
       My approach · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    ids = set(products.product_id)
+</div>
+<pre aria-hidden="true">    ids = set(products.product_id)
     df = products[products['change_date'] &lt;= '2019-08-16']
     df = df.sort_values(by=['product_id', 'change_date'], ascending=[True, False]).drop_duplicates('product_id').rename(columns={'new_price': 'price'})
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C26?code=code-C26-3&amp;method=pd-filter&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C26?code=code-C26-3&amp;method=pd-filter&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1204 · Last person to fit in the bus
      </strong>
-     <small>
+<small>
       My approach · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    queue['cumsum_weight'] = queue['weight'].cumsum()
+</div>
+<pre aria-hidden="true">    queue['cumsum_weight'] = queue['weight'].cumsum()
     return   queue[queue.cumsum_weight &lt;= 1000].tail(1)[['person_name']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C27?code=code-C27-3&amp;method=pd-filter&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C27?code=code-C27-3&amp;method=pd-filter&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1907 · Count salary categories
      </strong>
-     <small>
+<small>
       My approach · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">                        'accounts_count': [
+</div>
+<pre aria-hidden="true">                        'accounts_count': [
                         accounts[accounts.income &lt; 20000].shape[0],
                         accounts[(accounts.income &gt;= 20000) &amp;   (accounts.income &lt;= 50000)].shape[0],
                         accounts[accounts.income &gt; 50000].shape[0]],</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-filter&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-1&amp;method=pd-filter&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       Study solution · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})
+</div>
+<pre aria-hidden="true">    first = users_ranked.sort_values(['n_reviews', 'name'], ascending=[False, True]).head(1)[['name']].rename(columns={'name': 'results'})
     feb = r.loc[r['created_at'].ge('2020-02-01') &amp; r['created_at'].lt('2020-03-01')]
     movies_ranked = feb.groupby('movie_id', as_index=False).agg(avg_rating=('rating', 'mean')).merge(movies, on='movie_id')
     second = movies_ranked.sort_values(['avg_rating', 'title'], ascending=[False, True]).head(1)[['title']].rename(columns={'title': 'results'})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C31?code=code-C31-1&amp;method=pd-filter&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C31?code=code-C31-1&amp;method=pd-filter&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1321 · Restaurant growth
      </strong>
-     <small>
+<small>
       Study solution · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">    rolled = daily.rolling('7D', closed='right').sum()
+</div>
+<pre aria-hidden="true">    rolled = daily.rolling('7D', closed='right').sum()
     rolled = rolled.loc[rolled.index &gt;= daily.index.min() + pd.Timedelta(days=6)]
     result = rolled.rename('amount').reset_index()
     result['average_amount'] = (result['amount'] / 7).map(round_half_up)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C33?code=code-C33-3&amp;method=pd-filter&amp;line=11">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C33?code=code-C33-3&amp;method=pd-filter&amp;line=11">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       585 · Investments in 2016
      </strong>
-     <small>
+<small>
       My approach · line 11
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     df =   insurance[flag_nonunique_tiv &amp; flag_unique_city]
     return pd.DataFrame({'tiv_2016': [round_half_up(df['tiv_2016'].sum(min_count=1))]})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C34?code=code-C34-3&amp;method=pd-filter&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C34?code=code-C34-3&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       185 · Department top three salaries
      </strong>
-     <small>
+<small>
       My approach · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    employee['ranked'] = employee.groupby(by='departmentId')['salary'].rank(method='dense', ascending=False)
+</div>
+<pre aria-hidden="true">    employee['ranked'] = employee.groupby(by='departmentId')['salary'].rank(method='dense', ascending=False)
     employee =   employee[employee.ranked &lt;= 3]
     df =   employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])
     df = df.rename(columns={</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C40?code=code-C40-1&amp;method=pd-filter&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C40?code=code-C40-1&amp;method=pd-filter&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1327 · Products with at least 100 February units
      </strong>
-     <small>
+<small>
       Study solution · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    dates = pd.to_datetime(orders['order_date'])
+</div>
+<pre aria-hidden="true">    dates = pd.to_datetime(orders['order_date'])
     feb = orders.loc[dates.ge('2020-02-01') &amp; dates.lt('2020-03-01')]
     g = feb.groupby('product_id', as_index=False).agg(unit=('unit', 'sum'))
     return g.loc[g['unit'].ge(100)].merge(products, on='product_id', how='inner')[['product_name', 'unit']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC181?code=code-LC181-1&amp;method=pd-filter&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC181?code=code-LC181-1&amp;method=pd-filter&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       181 · Employees earning more than their managers
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     df = df[df.salary_x &gt; df.salary_y]
     df = df.rename(columns={'name_x': 'Employee'})
     return df[['Employee']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC262?code=code-LC262-1&amp;method=pd-filter&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC262?code=code-LC262-1&amp;method=pd-filter&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       262 · Trips and users
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     trips = trips[
         ~trips['client_id'].isin(banned_ids) &amp;
         ~trips['driver_id'].isin(banned_ids)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC601?code=code-LC601-1&amp;method=pd-filter&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC601?code=code-LC601-1&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       601 · Human traffic of stadium
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def human_traffic(stadium: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def human_traffic(stadium: pd.DataFrame) -&gt; pd.DataFrame:
     df = stadium[stadium.people &gt;= 100]
     df = df.reset_index(drop=True)
     df['groups'] = df['id'] - (df.index + 1)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC1158?code=code-LC1158-1&amp;method=pd-filter&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC1158?code=code-LC1158-1&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1158 · Market analysis I
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def market_analysis(users: pd.DataFrame, orders: pd.DataFrame, items: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def market_analysis(users: pd.DataFrame, orders: pd.DataFrame, items: pd.DataFrame) -&gt; pd.DataFrame:
     orders = orders[(orders.order_date &gt;= '2019-01-01') &amp; (orders.order_date &lt;= '2019-12-31')]
     df = orders.groupby(by='buyer_id').agg(
         orders_in_2019 = ('buyer_id', 'size')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3421?code=code-LC3421-1&amp;method=pd-filter&amp;line=19">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3421?code=code-LC3421-1&amp;method=pd-filter&amp;line=19">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       3421 · Find students who improved
      </strong>
-     <small>
+<small>
       Uploaded submission · line 19
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return df[df.improved == True][['student_id', 'subject', 'first_score', 'latest_score']]
 
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3521?code=code-LC3521-1&amp;method=pd-filter&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3521?code=code-LC3521-1&amp;method=pd-filter&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       3521 · Find product recommendation pairs
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    df = product_purchases.merge(product_purchases, how='cross', suffixes=['_1', '_2'])
+</div>
+<pre aria-hidden="true">    df = product_purchases.merge(product_purchases, how='cross', suffixes=['_1', '_2'])
     df = df[(df.user_id_1 == df.user_id_2) &amp; (df.product_id_1 &lt; df.product_id_2)]
     df = df.rename(columns={
         'product_id_1': 'product1_id',</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC3580?code=code-LC3580-1&amp;method=pd-filter&amp;line=12">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC3580?code=code-LC3580-1&amp;method=pd-filter&amp;line=12">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       3580 · Find consistently improving employees
      </strong>
-     <small>
+<small>
       Uploaded submission · line 12
      </small>
-    </div>
-    <pre aria-hidden="true">    df['nRating'] = df.groupby(by='employee_id').rating.transform('size')
+</div>
+<pre aria-hidden="true">    df['nRating'] = df.groupby(by='employee_id').rating.transform('size')
     df = df[df.nRating &gt;= 3]
 
     df['rating2'] = df['rating'].shift(-1)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B15?code=code-B15-1&amp;method=pd-filter&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B15?code=code-B15-1&amp;method=pd-filter&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       DELETE rows
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">movies = movies.loc[movies['year'].isna() | movies['year'].ge(2005)].copy()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">movies = movies.loc[movies['year'].isna() | movies['year'].ge(2005)].copy()</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (26)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C01?code=code-C01-5&amp;method=pd-filter&amp;line=4">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C01?code=code-C01-5&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1757 · Recyclable and low-fat products
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def find_products(products: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_products(products: pd.DataFrame) -&gt; pd.DataFrame:
     df = products[(products.low_fats == 'Y') &amp; (products.recyclable == 'Y')]
     return df[['product_id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C02?code=code-C02-5&amp;method=pd-filter&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C02?code=code-C02-5&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       584 · Find customer referee
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def find_customer_referee(customer: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_customer_referee(customer: pd.DataFrame) -&gt; pd.DataFrame:
     df = customer[(customer.referee_id != 2) | (customer.referee_id.isna())]
     return df[['name']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C03?code=code-C03-5&amp;method=pd-filter&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C03?code=code-C03-5&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       595 · Big countries
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def big_countries(world: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def big_countries(world: pd.DataFrame) -&gt; pd.DataFrame:
     df = world[(world.area &gt;= 3000000) | (world.population &gt;= 25000000)]
     return df[['name', 'population', 'area']]
     </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C04?code=code-C04-5&amp;method=pd-filter&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C04?code=code-C04-5&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1148 · Article Views I
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def article_views(views: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def article_views(views: pd.DataFrame) -&gt; pd.DataFrame:
     ids = sorted(views[views.author_id == views.viewer_id].author_id.unique())
     return pd.DataFrame({'id': ids})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C05?code=code-C05-5&amp;method=pd-filter&amp;line=13">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C05?code=code-C05-5&amp;method=pd-filter&amp;line=13">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1683 · Invalid tweets
      </strong>
-     <small>
+<small>
       Uploaded submission · line 13
      </small>
-    </div>
-    <pre aria-hidden="true">    """
+</div>
+<pre aria-hidden="true">    """
     df = tweets[tweets.valid == False]
     return df[['tweet_id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C45?code=code-C45-3&amp;method=pd-filter&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C45?code=code-C45-3&amp;method=pd-filter&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       197 · Rising temperature
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    weather.sort_values(by='recordDate', inplace=True)
+</div>
+<pre aria-hidden="true">    weather.sort_values(by='recordDate', inplace=True)
     df = weather[(weather.recordDate.diff().dt.days == 1) &amp; (weather.temperature.diff() &gt; 0)]
     return df[['id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C46?code=code-C46-3&amp;method=pd-filter&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C46?code=code-C46-3&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1661 · Average processing time per machine
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def get_average_time(activity: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def get_average_time(activity: pd.DataFrame) -&gt; pd.DataFrame:
     df_s = activity[activity.activity_type == 'start']
     df_e = activity[activity.activity_type == 'end']
     df = df_s.merge(df_e, on=['machine_id', 'process_id'], how='left', suffixes=('_s', '_e'))</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C47?code=code-C47-3&amp;method=pd-filter&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C47?code=code-C47-3&amp;method=pd-filter&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       577 · Employee bonus
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    df = employee.merge(bonus, on='empId', how='left')
+</div>
+<pre aria-hidden="true">    df = employee.merge(bonus, on='empId', how='left')
     return df[(df.bonus &lt; 1000) | (df.bonus.isna())][['name', 'bonus']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C49?code=code-C49-3&amp;method=pd-filter&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C49?code=code-C49-3&amp;method=pd-filter&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       570 · Managers with at least five direct reports
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return df[df.nReports &gt;= 5][['name']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C06?code=code-C06-5&amp;method=pd-filter&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C06?code=code-C06-5&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       620 · Not boring movies
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def not_boring_movies(cinema: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def not_boring_movies(cinema: pd.DataFrame) -&gt; pd.DataFrame:
     df = cinema[(cinema.id % 2 == 1) &amp; (cinema.description != 'boring')]
     return df.sort_values('rating', ascending=False)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C07?code=code-C07-5&amp;method=pd-filter&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C07?code=code-C07-5&amp;method=pd-filter&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1251 · Average selling price
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    df = prices.merge(units_sold, on='product_id', how='left')
+</div>
+<pre aria-hidden="true">    df = prices.merge(units_sold, on='product_id', how='left')
     df = df[df.purchase_date.isna() | ((df.end_date &gt;= df.purchase_date) &amp; (df.purchase_date &gt;= df.start_date))]
     df['paid'] = df['price'] * df['units']
     </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C16?code=code-C16-5&amp;method=pd-filter&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C16?code=code-C16-5&amp;method=pd-filter&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1070 · First-year product sales
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    sales['year_order'] = sales.groupby(by='product_id')['year'].rank(method='min')
+</div>
+<pre aria-hidden="true">    sales['year_order'] = sales.groupby(by='product_id')['year'].rank(method='min')
     sales = sales[sales['year_order'] == 1]
     sales = sales[['product_id', 'year', 'quantity', 'price']].rename(columns={'year': 'first_year'})
     return sales</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C17?code=code-C17-5&amp;method=pd-filter&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C17?code=code-C17-5&amp;method=pd-filter&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       596 · Classes with at least five students
      </strong>
-     <small>
+<small>
       Uploaded submission · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return df[df.nStudents &gt;= 5][['class']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C19?code=code-C19-5&amp;method=pd-filter&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C19?code=code-C19-5&amp;method=pd-filter&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       619 · Biggest single number
      </strong>
-     <small>
+<small>
       Uploaded submission · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return pd.DataFrame({'num': df[df.freq == 1][['num']].max()})</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C20?code=code-C20-5&amp;method=pd-filter&amp;line=10">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-5&amp;method=pd-filter&amp;line=10">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1045 · Customers who bought every product
      </strong>
-     <small>
+<small>
       Uploaded submission · line 10
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     return df[df.nSold == nProducts][['customer_id']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C25?code=code-C25-5&amp;method=pd-filter&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C25?code=code-C25-5&amp;method=pd-filter&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1164 · Product price at a given date
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     df = products[products['change_date'] &lt;= '2019-08-16']
     df = df.sort_values(by=['product_id', 'change_date'], ascending=[True, False]).drop_duplicates('product_id').rename(columns={'new_price': 'price'})
     </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C26?code=code-C26-5&amp;method=pd-filter&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C26?code=code-C26-5&amp;method=pd-filter&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1204 · Last person to fit in the bus
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    queue['cumsum_weight'] = queue['weight'].cumsum()
+</div>
+<pre aria-hidden="true">    queue['cumsum_weight'] = queue['weight'].cumsum()
     return queue[queue.cumsum_weight &lt;= 1000].tail(1)[['person_name']]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C27?code=code-C27-5&amp;method=pd-filter&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C27?code=code-C27-5&amp;method=pd-filter&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1907 · Count salary categories
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">                      'accounts_count': [
+</div>
+<pre aria-hidden="true">                      'accounts_count': [
                         accounts[accounts.income &lt; 20000].shape[0],
                         accounts[(accounts.income &gt;= 20000) &amp; (accounts.income &lt;= 50000)].shape[0],
                         accounts[accounts.income &gt; 50000].shape[0]],</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-3&amp;method=pd-filter&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-3&amp;method=pd-filter&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       My approach · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">    df_users =   df_users.merge(users, on='user_id', how='left').sort_values(by=['nReviews', 'name'], ascending=[False, True])[['name', 'nReviews']]
+</div>
+<pre aria-hidden="true">    df_users =   df_users.merge(users, on='user_id', how='left').sort_values(by=['nReviews', 'name'], ascending=[False, True])[['name', 'nReviews']]
     df_movies =   movie_rating[(movie_rating.created_at &gt;=   '2020-02-01') &amp; (movie_rating.created_at &lt; '2020-03-01')]
     df_movies = df_movies.groupby(by='movie_id').agg(
         avgRating = ('rating', 'mean')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C30?code=code-C30-5&amp;method=pd-filter&amp;line=9">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C30?code=code-C30-5&amp;method=pd-filter&amp;line=9">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1341 · Movie rating report
      </strong>
-     <small>
+<small>
       Uploaded submission · line 9
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     df_movies = movie_rating[(movie_rating.created_at &gt;= '2020-02-01') &amp; (movie_rating.created_at &lt; '2020-03-01')]
     df_movies = df_movies.groupby(by='movie_id').agg(
         avgRating = ('rating', 'mean')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C31?code=code-C31-3&amp;method=pd-filter&amp;line=14">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C31?code=code-C31-3&amp;method=pd-filter&amp;line=14">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1321 · Restaurant growth
      </strong>
-     <small>
+<small>
       My approach · line 14
      </small>
-    </div>
-    <pre aria-hidden="true">    total = daily.rolling('7D').sum()
+</div>
+<pre aria-hidden="true">    total = daily.rolling('7D').sum()
     total = total[total.index &gt;= daily.index.min() + pd.Timedelta(days=6)]
     result = total.rename('amount').reset_index()
     result['average_amount'] = (result['amount'] / 7).map(round_half_up)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C33?code=code-C33-5&amp;method=pd-filter&amp;line=7">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C33?code=code-C33-5&amp;method=pd-filter&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       585 · Investments in 2016
      </strong>
-     <small>
+<small>
       Uploaded submission · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    
+</div>
+<pre aria-hidden="true">    
     df = insurance[flag_nonunique_tiv &amp; flag_unique_city]
     return df[['tiv_2016']].sum().to_frame('tiv_2016').round(2)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C34?code=code-C34-5&amp;method=pd-filter&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C34?code=code-C34-5&amp;method=pd-filter&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       185 · Department top three salaries
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    employee['ranked'] = employee.groupby(by='departmentId')['salary'].rank(method='dense', ascending=False)
+</div>
+<pre aria-hidden="true">    employee['ranked'] = employee.groupby(by='departmentId')['salary'].rank(method='dense', ascending=False)
     employee = employee[employee.ranked &lt;= 3]
     df = employee.merge(department, left_on='departmentId', right_on='id', suffixes=['_x', '_y'])
     df = df.rename(columns={</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C40?code=code-C40-3&amp;method=pd-filter&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C40?code=code-C40-3&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1327 · Products with at least 100 February units
      </strong>
-     <small>
+<small>
       My approach · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">    orders = orders.assign(order_date=pd.to_datetime(orders['order_date']))
+</div>
+<pre aria-hidden="true">    orders = orders.assign(order_date=pd.to_datetime(orders['order_date']))
     orders =   orders[(orders.order_date &gt;= '2020-02-01') &amp; (orders.order_date &lt; '2020-03-01')]
     df =   orders.groupby(by='product_id').agg(
         unit = ('unit', 'sum')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C40?code=code-C40-5&amp;method=pd-filter&amp;line=4">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C40?code=code-C40-5&amp;method=pd-filter&amp;line=4">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1327 · Products with at least 100 February units
      </strong>
-     <small>
+<small>
       Uploaded submission · line 4
      </small>
-    </div>
-    <pre aria-hidden="true">def list_products(products: pd.DataFrame, orders: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def list_products(products: pd.DataFrame, orders: pd.DataFrame) -&gt; pd.DataFrame:
     orders = orders[(orders.order_date &gt; '2020-01-31') &amp; (orders.order_date &lt; '2020-03-01')]
 
     df = orders.groupby(by='product_id').agg(</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B15?code=code-B15-3&amp;method=pd-filter&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B15?code=code-B15-3&amp;method=pd-filter&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       DELETE rows
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">movies = movies.loc[movies['director'].isna() | movies['director'].ne('Andrew Stanton')].copy()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">movies = movies.loc[movies['director'].isna() | movies['director'].ne('Andrew Stanton')].copy()</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     pandas cheat-sheet image · Filtering. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=Filtering">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=Filtering">
+<small>
     ← Browse
    </small>
    pandas · Filtering
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

@@ -1,89 +1,53 @@
 <section aria-labelledby="gru-title" class="page-view lesson-layout" id="gru">
- <article class="lesson">
-  <header>
-   <p class="part-label">
-    <span class="number">
+<article class="lesson">
+<header>
+<p class="part-label">
+<span class="number">
      29
     </span>
     Part 4 · Architectures &amp; information flow
    </p>
-   <h1 id="gru-title" tabindex="-1">
+<h1 id="gru-title" tabindex="-1">
     GRUs and gate conventions
    </h1>
-   <p class="standfirst">
-    Understand a single gated state, then keep the PDF and PyTorch equations explicitly distinct.
-   </p>
-   <div class="source-bar">
-    <span>
-     Source reading
-    </span>
-    <button aria-label="Open source: Architectures · PDF p. 12 · §4" data-page="12" data-pdf="arch" type="button">
-     Architectures · PDF p. 12 · §4
-    </button>
-   </div>
-  </header>
-  <details class="mobile-onpage">
-   <summary>
+<p class="standfirst">A GRU uses reset and update gates to modify a single hidden state. The placement of the reset gate and the meaning of the update coefficient depend on the exact formulation.</p>
+</header>
+<details class="mobile-onpage">
+<summary>
     In this chapter
    </summary>
-   <nav aria-label="On this page">
-    <a data-section="a-compact-gated-state" href="#gru?section=a-compact-gated-state">
-     A compact gated state
-    </a>
-    <a data-section="work-the-sources-interpolation" href="#gru?section=work-the-sources-interpolation">
-     Work the source’s interpolation
-    </a>
-    <a data-section="compare-gru-with-lstm-by-mechanism" href="#gru?section=compare-gru-with-lstm-by-mechanism">
-     Compare GRU with LSTM by mechanism
-    </a>
-    <a data-section="pytorchs-documented-convention" href="#gru?section=pytorchs-documented-convention">
-     PyTorch’s documented convention
-    </a>
-    <a data-section="a-practical-sequence-to-sequence-use" href="#gru?section=a-practical-sequence-to-sequence-use">
-     A practical sequence-to-sequence use
-    </a>
-    <a data-section="implementation" href="#gru?section=implementation">
-     See it implemented
-    </a>
-   </nav>
-  </details>
-  <div class="lesson-body">
-   <h2 data-section="a-compact-gated-state" id="gru--a-compact-gated-state">
+<nav aria-label="On this page">
+<a data-section="a-compact-gated-state" href="#gru?section=a-compact-gated-state">A compact gated state</a>
+<a data-section="work-the-sources-interpolation" href="#gru?section=work-the-sources-interpolation">A scalar state update</a>
+<a data-section="compare-gru-with-lstm-by-mechanism" href="#gru?section=compare-gru-with-lstm-by-mechanism">Compare GRU with LSTM by mechanism</a>
+<a data-section="pytorchs-documented-convention" href="#gru?section=pytorchs-documented-convention">PyTorch’s documented convention</a>
+<a data-section="a-practical-sequence-to-sequence-use" href="#gru?section=a-practical-sequence-to-sequence-use">GRUs in sequence-to-sequence models</a>
+<a data-section="implementation" href="#gru?section=implementation">Implementation examples</a>
+</nav>
+</details>
+<div class="lesson-body">
+<h2 data-section="a-compact-gated-state" id="gru--a-compact-gated-state">
     A compact gated state
    </h2>
-   <p>
-    The GRU combines the roles of the LSTM’s cell and hidden state into one principal recurrent state. The source uses an update gate
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mi>t</mi></msub><annotation encoding="application/x-tex">z_t</annotation></semantics></math>
-    and a reset gate
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>r</mi><mi>t</mi></msub><annotation encoding="application/x-tex">r_t</annotation></semantics></math>
-    :
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>t</mi></msub><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>z</mi></msub><msub><mi>x</mi><mi>t</mi></msub><mo>+</mo><msub><mi>U</mi><mi>z</mi></msub><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>b</mi><mi>z</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">z_t=\sigma(W_zx_t+U_zh_{t-1}+b_z),</annotation></semantics></math>
-   </div>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>t</mi></msub><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>r</mi></msub><msub><mi>x</mi><mi>t</mi></msub><mo>+</mo><msub><mi>U</mi><mi>r</mi></msub><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>b</mi><mi>r</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">r_t=\sigma(W_rx_t+U_rh_{t-1}+b_r),</annotation></semantics></math>
-   </div>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>h</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>=</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>h</mi></msub><msub><mi>x</mi><mi>t</mi></msub><mo>+</mo><msub><mi>U</mi><mi>h</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>r</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>b</mi><mi>h</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\tilde h_t=\tanh(W_hx_t+U_h(r_t\odot h_{t-1})+b_h),</annotation></semantics></math>
-   </div>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>z</mi><mi>t</mi></msub><mo>⊙</mo><msub><mover><mi>h</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">h_t=(1-z_t)\odot h_{t-1}+z_t\odot\tilde h_t.</annotation></semantics></math>
-   </div>
-   <p>
-    In
-    <strong>
-     this PDF convention
-    </strong>
-    , a larger update gate moves the state more strongly toward the candidate. The reset gate controls how previous-state information enters the candidate computation.
-   </p>
-   <p>
+<p>The GRU combines the roles of the LSTM’s cell and hidden state into one principal recurrent state. It uses an update gate <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mi>t</mi></msub><annotation encoding="application/x-tex">z_t</annotation></semantics></math> and a reset gate <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>r</mi><mi>t</mi></msub><annotation encoding="application/x-tex">r_t</annotation></semantics></math>:</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>t</mi></msub><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>z</mi></msub><msub><mi>x</mi><mi>t</mi></msub><mo>+</mo><msub><mi>U</mi><mi>z</mi></msub><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>b</mi><mi>z</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">z_t=\sigma(W_zx_t+U_zh_{t-1}+b_z),</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>r</mi><mi>t</mi></msub><mo>=</mo><mi>σ</mi><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>r</mi></msub><msub><mi>x</mi><mi>t</mi></msub><mo>+</mo><msub><mi>U</mi><mi>r</mi></msub><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>b</mi><mi>r</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">r_t=\sigma(W_rx_t+U_rh_{t-1}+b_r),</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>h</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>=</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mi>h</mi></msub><msub><mi>x</mi><mi>t</mi></msub><mo>+</mo><msub><mi>U</mi><mi>h</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>r</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><msub><mi>b</mi><mi>h</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo></mrow><annotation encoding="application/x-tex">\tilde h_t=\tanh(W_hx_t+U_h(r_t\odot h_{t-1})+b_h),</annotation></semantics></math>
+</div>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>z</mi><mi>t</mi></msub><mo>⊙</mo><msub><mover><mi>h</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">h_t=(1-z_t)\odot h_{t-1}+z_t\odot\tilde h_t.</annotation></semantics></math>
+</div>
+<p>In this <strong>candidate-weighted convention</strong>, a larger update gate moves the state more strongly toward the candidate. The reset gate controls how previous-state information enters the candidate computation.</p>
+<p>
     The final interpolation creates an additive route between old and new information. That is the connection to LSTM memory-path reasoning, despite the different state organization.
    </p>
-   <h2 data-section="work-the-sources-interpolation" id="gru--work-the-sources-interpolation">
-    Work the source’s interpolation
-   </h2>
-   <p>
+<h2 data-section="work-the-sources-interpolation" id="gru--work-the-sources-interpolation">A scalar state update</h2>
+<p>
     Let
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><mn>0.6</mn></mrow><annotation encoding="application/x-tex">h_{t-1}=0.6</annotation></semantics></math>
     ,
@@ -92,169 +56,147 @@
     <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>h</mi><mo accent="true">̃</mo></mover><mi>t</mi></msub><mo>=</mo><mi>−</mi><mn>0.2</mn></mrow><annotation encoding="application/x-tex">\tilde h_t=-0.2</annotation></semantics></math>
     . Then
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>t</mi></msub><mo>=</mo><mn>0.75</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.6</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0.25</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.40</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">h_t=0.75(0.6)+0.25(-0.2)=0.40.</annotation></semantics></math>
-   </div>
-   <p>
-    The old state dominates because the source’s update gate is small. The example also lists a reset-gate value, but once the candidate has already been supplied, the reset value does not enter this final arithmetic again.
-   </p>
-   <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>t</mi></msub><mo>=</mo><mn>0.75</mn><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.6</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>+</mo><mn>0.25</mn><mrow><mo form="prefix" stretchy="true">(</mo><mi>−</mi><mn>0.2</mn><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mn>0.40</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">h_t=0.75(0.6)+0.25(-0.2)=0.40.</annotation></semantics></math>
+</div>
+<p>The small candidate weight keeps most of the old state. The reset gate was used to construct the candidate; once that candidate is known, the reset value does not enter the final interpolation again.</p>
+<p>
     This separates two questions: how to construct the candidate, and how strongly to replace the state with it.
    </p>
-   <h2 data-section="compare-gru-with-lstm-by-mechanism" id="gru--compare-gru-with-lstm-by-mechanism">
+<h2 data-section="compare-gru-with-lstm-by-mechanism" id="gru--compare-gru-with-lstm-by-mechanism">
     Compare GRU with LSTM by mechanism
    </h2>
-   <div aria-label="Scrollable calculation table" class="table-scroll" role="region" tabindex="0">
-    <table>
-     <colgroup>
-      <col style="width: 33%"/>
-      <col style="width: 33%"/>
-      <col style="width: 33%"/>
-     </colgroup>
-     <thead>
-      <tr class="header">
-       <th>
+<div aria-label="Scrollable calculation table" class="table-scroll" role="region" tabindex="0">
+<table>
+<colgroup>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+<col style="width: 33%"/>
+</colgroup>
+<thead>
+<tr class="header">
+<th>
         Aspect
        </th>
-       <th>
+<th>
         LSTM
        </th>
-       <th>
+<th>
         GRU
        </th>
-      </tr>
-     </thead>
-     <tbody>
-      <tr class="odd">
-       <td>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>
         Main state
        </td>
-       <td>
+<td>
         Cell plus hidden state
        </td>
-       <td>
+<td>
         One hidden state
        </td>
-      </tr>
-      <tr class="even">
-       <td>
+</tr>
+<tr class="even">
+<td>
         Gates
        </td>
-       <td>
+<td>
         Forget, input, output
        </td>
-       <td>
+<td>
         Reset, update
        </td>
-      </tr>
-      <tr class="odd">
-       <td>
+</tr>
+<tr class="odd">
+<td>
         Direct-path intuition
        </td>
-       <td>
+<td>
         Gated cell retention and addition
        </td>
-       <td>
+<td>
         Old/new state interpolation
        </td>
-      </tr>
-      <tr class="even">
-       <td>
+</tr>
+<tr class="even">
+<td>
         Parameter cost
        </td>
-       <td>
+<td>
         Four affine gate/candidate maps
        </td>
-       <td>
+<td>
         Three affine gate/candidate maps
        </td>
-      </tr>
-      <tr class="odd">
-       <td>
+</tr>
+<tr class="odd">
+<td>
         Predictive accuracy
        </td>
-       <td>
+<td>
         Task dependent
        </td>
-       <td>
+<td>
         Task dependent
        </td>
-      </tr>
-     </tbody>
-    </table>
-   </div>
-   <p>
-    The source does not claim that either must dominate. Fewer gates can reduce cost, but a smaller architecture is not automatically more accurate or easier for every task. Compare them under the same data split and prediction constraints.
-   </p>
-   <h2 data-section="pytorchs-documented-convention" id="gru--pytorchs-documented-convention">
+</tr>
+</tbody>
+</table>
+</div>
+<p>Fewer gates can reduce computational cost, but this does not guarantee better accuracy. Compare GRU and LSTM models under the same split, training conditions, and constraints on prediction-time information.</p>
+<h2 data-section="pytorchs-documented-convention" id="gru--pytorchs-documented-convention">
     PyTorch’s documented convention
    </h2>
-   <p>
-    This section is an
-    <strong>
-     implementation supplement
-    </strong>
-    , not a replacement of the source equations. PyTorch writes the final interpolation as
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><msub><mi>n</mi><mi>t</mi></msub><mo>+</mo><msub><mi>z</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">h_t=(1-z_t)\odot n_t+z_t\odot h_{t-1}.</annotation></semantics></math>
-   </div>
-   <p>
-    Here a large
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mi>t</mi></msub><annotation encoding="application/x-tex">z_t</annotation></semantics></math>
-    preserves the old state. The label “update gate” therefore has the opposite intuitive direction from the PDF’s displayed interpolation.
-   </p>
-   <p>
+<p>PyTorch weights the previous hidden state with the update gate:</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>t</mi></msub><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>t</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><msub><mi>n</mi><mi>t</mi></msub><mo>+</mo><msub><mi>z</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">h_t=(1-z_t)\odot n_t+z_t\odot h_{t-1}.</annotation></semantics></math>
+</div>
+<p>Here a large <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>z</mi><mi>t</mi></msub><annotation encoding="application/x-tex">z_t</annotation></semantics></math> preserves the old state. The label “update gate” therefore has the opposite intuitive direction from the candidate-weighted interpolation above.</p>
+<p>
     PyTorch also places the reset multiplication after the hidden affine map in the candidate:
    </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>t</mi></msub><mo>=</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub><msub><mi>x</mi><mi>t</mi></msub><mo>+</mo><msub><mi>b</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub><mo>+</mo><msub><mi>r</mi><mi>t</mi></msub><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mrow><mi>h</mi><mi>n</mi></mrow></msub><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>b</mi><mrow><mi>h</mi><mi>n</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">n_t=\tanh(W_{in}x_t+b_{in}+r_t\odot(W_{hn}h_{t-1}+b_{hn})).</annotation></semantics></math>
-   </div>
-   <p>
-    The PDF instead places the reset inside the recurrent multiplication,
-    <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>U</mi><mi>h</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>r</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">U_h(r_t\odot h_{t-1})</annotation></semantics></math>
-    . In general,
-   </p>
-   <div class="math-display" tabindex="0">
-    <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>U</mi><mi>h</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>r</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>≠</mo><msub><mi>r</mi><mi>t</mi></msub><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>U</mi><mi>h</mi></msub><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">U_h(r_t\odot h_{t-1})\ne r_t\odot(U_hh_{t-1}).</annotation></semantics></math>
-   </div>
-   <p>
-    These are not repaired by simply renaming the gate. The official GRU reference explicitly documents this implementation distinction. It matters when comparing a hand-written cell or paper equation with framework outputs.
-   </p>
-   <details class="derivation" data-derivation="gate-conventions" id="gru--derivation-gate-conventions">
-    <summary>
-     <span class="derivation-summary">
-      <small>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>n</mi><mi>t</mi></msub><mo>=</mo><mo>tanh</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub><msub><mi>x</mi><mi>t</mi></msub><mo>+</mo><msub><mi>b</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub><mo>+</mo><msub><mi>r</mi><mi>t</mi></msub><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>W</mi><mrow><mi>h</mi><mi>n</mi></mrow></msub><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>+</mo><msub><mi>b</mi><mrow><mi>h</mi><mi>n</mi></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">n_t=\tanh(W_{in}x_t+b_{in}+r_t\odot(W_{hn}h_{t-1}+b_{hn})).</annotation></semantics></math>
+</div>
+<p>The first formulation places the reset inside the recurrent multiplication, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>U</mi><mi>h</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>r</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">U_h(r_t\odot h_{t-1})</annotation></semantics></math>. In general,</p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>U</mi><mi>h</mi></msub><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>r</mi><mi>t</mi></msub><mo>⊙</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>≠</mo><msub><mi>r</mi><mi>t</mi></msub><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>U</mi><mi>h</mi></msub><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">U_h(r_t\odot h_{t-1})\ne r_t\odot(U_hh_{t-1}).</annotation></semantics></math>
+</div>
+<p>The reset placement changes the calculation and cannot generally be corrected by renaming a gate. A hand-written cell must match both the interpolation convention and the candidate equation to reproduce framework outputs.</p>
+<details class="derivation" data-derivation="gate-conventions" id="gru--derivation-gate-conventions">
+<summary>
+<span class="derivation-summary">
+<small>
        Step by step
       </small>
       Work through GRU interpolation and the noncommuting reset operations
      </span>
-    </summary>
-    <div class="derivation-body">
-     <p>
-      <strong>
+</summary>
+<div class="derivation-body">
+<p>
+<strong>
        Setting.
-      </strong>
-      The source writes
-      <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mi>′</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>s</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><mi>h</mi><mo>+</mo><msub><mi>z</mi><mi>s</mi></msub><mo>⊙</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">h'=(1-z_s)\odot h+z_s\odot n</annotation></semantics></math>
+      </strong> The candidate-weighted formulation is <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mi>′</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>s</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><mi>h</mi><mo>+</mo><msub><mi>z</mi><mi>s</mi></msub><mo>⊙</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">h'=(1-z_s)\odot h+z_s\odot n</annotation></semantics></math>
       . PyTorch writes
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mi>′</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>p</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>⊙</mo><mi>n</mi><mo>+</mo><msub><mi>z</mi><mi>p</mi></msub><mo>⊙</mo><mi>h</mi></mrow><annotation encoding="application/x-tex">h'=(1-z_p)\odot n+z_p\odot h</annotation></semantics></math>
       . The subscripts explicitly distinguish the gate conventions.
      </p>
-     <h4>
+<h4>
       1 · Match the interpolation coefficients
      </h4>
-     <p>
+<p>
       The formulas agree for fixed
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>,</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">h,n</annotation></semantics></math>
       if
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>p</mi></msub><mo>=</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>s</mi></msub></mrow><annotation encoding="application/x-tex">z_p=1-z_s</annotation></semantics></math>
       , because
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>p</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>n</mi><mo>+</mo><msub><mi>z</mi><mi>p</mi></msub><mi>h</mi><mo>=</mo><msub><mi>z</mi><mi>s</mi></msub><mi>n</mi><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>s</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>h</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">(1-z_p)n+z_ph=z_sn+(1-z_s)h.</annotation></semantics></math>
-     </div>
-     <p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>p</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>n</mi><mo>+</mo><msub><mi>z</mi><mi>p</mi></msub><mi>h</mi><mo>=</mo><msub><mi>z</mi><mi>s</mi></msub><mi>n</mi><mo>+</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>s</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mi>h</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">(1-z_p)n+z_ph=z_sn+(1-z_s)h.</annotation></semantics></math>
+</div>
+<p>
       For
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi><mo>=</mo><mn>0.6</mn><mo>,</mo><mi>n</mi><mo>=</mo><mi>−</mi><mn>0.2</mn><mo>,</mo><msub><mi>z</mi><mi>s</mi></msub><mo>=</mo><mn>0.25</mn></mrow><annotation encoding="application/x-tex">h=0.6,n=-0.2,z_s=0.25</annotation></semantics></math>
       , this gives
@@ -265,18 +207,16 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>0.25</mn><annotation encoding="application/x-tex">0.25</annotation></semantics></math>
       . Equal gate numbers with swapped semantics describe different updates.
      </p>
-     <h4>
+<h4>
       2 · Differentiate the interpolation locally
      </h4>
-     <p>
-      In the source convention, holding the other inputs fixed gives
-     </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>h</mi><mi>′</mi></mrow><mrow><mi>∂</mi><mi>h</mi></mrow></mfrac><mo>=</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>s</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>h</mi><mi>′</mi></mrow><mrow><mi>∂</mi><mi>n</mi></mrow></mfrac><mo>=</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>s</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>h</mi><mi>′</mi></mrow><mrow><mi>∂</mi><msub><mi>z</mi><mi>s</mi></msub></mrow></mfrac><mo>=</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>n</mi><mo>−</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial h'}{\partial h}=\operatorname{diag}(1-z_s),\quad
+<p> In the candidate-weighted convention, holding the other inputs fixed gives </p>
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>∂</mi><mi>h</mi><mi>′</mi></mrow><mrow><mi>∂</mi><mi>h</mi></mrow></mfrac><mo>=</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mn>1</mn><mo>−</mo><msub><mi>z</mi><mi>s</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>h</mi><mi>′</mi></mrow><mrow><mi>∂</mi><mi>n</mi></mrow></mfrac><mo>=</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><msub><mi>z</mi><mi>s</mi></msub><mo form="postfix" stretchy="true">)</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mfrac><mrow><mi>∂</mi><mi>h</mi><mi>′</mi></mrow><mrow><mi>∂</mi><msub><mi>z</mi><mi>s</mi></msub></mrow></mfrac><mo>=</mo><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>n</mi><mo>−</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{\partial h'}{\partial h}=\operatorname{diag}(1-z_s),\quad
 \frac{\partial h'}{\partial n}=\operatorname{diag}(z_s),\quad
 \frac{\partial h'}{\partial z_s}=\operatorname{diag}(n-h).</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       These are partial blocks. Since
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
       and
@@ -285,10 +225,10 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>h</mi><annotation encoding="application/x-tex">h</annotation></semantics></math>
       , the total state Jacobian contains additional chain-rule terms.
      </p>
-     <h4>
+<h4>
       3 · Compare the reset placement
      </h4>
-     <p>
+<p>
       A common textbook candidate uses
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>r</mi><mo>⊙</mo><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><mi>U</mi><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>r</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">U(r\odot h)=U\operatorname{diag}(r)h</annotation></semantics></math>
       . PyTorch’s candidate uses
@@ -299,18 +239,18 @@
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>diag</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>r</mi><mo form="postfix" stretchy="true">)</mo></mrow><mi>U</mi></mrow><annotation encoding="application/x-tex">\operatorname{diag}(r)U</annotation></semantics></math>
       are generally different matrices.
      </p>
-     <h4>
+<h4>
       4 · Calculate a concrete counterexample
      </h4>
-     <p>
+<p>
       Let
      </p>
-     <div class="math-display" tabindex="0">
-      <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>3</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>4</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mi>h</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mi>r</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.8</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">U=\begin{bmatrix}1&amp;2\\3&amp;4\end{bmatrix},\quad
+<div class="math-display" tabindex="0">
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>U</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>3</mn></mtd><mtd columnalign="center" style="text-align: center"><mn>4</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mi>h</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>1</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>2</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mo>,</mo><mspace width="1.0em"></mspace><mi>r</mi><mo>=</mo><mrow><mo form="prefix" stretchy="true">[</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0.2</mn></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mn>0.8</mn></mtd></mtr></mtable><mo form="postfix" stretchy="true">]</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">U=\begin{bmatrix}1&amp;2\\3&amp;4\end{bmatrix},\quad
 h=\begin{bmatrix}1\\2\end{bmatrix},\quad
 r=\begin{bmatrix}0.2\\0.8\end{bmatrix}.</annotation></semantics></math>
-     </div>
-     <p>
+</div>
+<p>
       Reset first:
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>⊙</mo><mi>h</mi><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>0.2</mn><mo>,</mo><mn>1.6</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">r\odot h=(0.2,1.6)^\top</annotation></semantics></math>
       , so
@@ -321,134 +261,103 @@ r=\begin{bmatrix}0.2\\0.8\end{bmatrix}.</annotation></semantics></math>
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>⊙</mo><mrow><mo form="prefix" stretchy="true">(</mo><mi>U</mi><mi>h</mi><mo form="postfix" stretchy="true">)</mo></mrow><mo>=</mo><msup><mrow><mo form="prefix" stretchy="true">(</mo><mn>1.0</mn><mo>,</mo><mn>8.8</mn><mo form="postfix" stretchy="true">)</mo></mrow><mi>⊤</mi></msup></mrow><annotation encoding="application/x-tex">r\odot(Uh)=(1.0,8.8)^\top</annotation></semantics></math>
       . Subsequent tanh does not remove this difference.
      </p>
-     <h4>
+<h4>
       5 · Connect the formulas to implementation comparisons
      </h4>
-     <p>
+<p>
       Changing gate names is enough to reconcile opposite interpolation conventions for given gates and candidates. It does not reconcile different candidate computations. The PyTorch GRU documentation explicitly describes its reset placement. Its single-layer, unidirectional bias-enabled parameter count is
       <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mi>h</mi><mrow><mo form="prefix" stretchy="true">(</mo><mi>d</mi><mo>+</mo><mi>h</mi><mo>+</mo><mn>2</mn><mo form="postfix" stretchy="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">3h(d+h+2)</annotation></semantics></math>
       , because it stores three input/recurrent affine blocks and two bias vectors per block.
      </p>
-     <div class="derivation-footer">
-      <span>
-       Expanded derivation
-      </span>
-      <button data-page="12" data-pdf="arch" type="button">
-       Chapter source · PDF p. 12
-      </button>
-      <a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.GRU.html" rel="noopener noreferrer" target="_blank">
+<div class="derivation-footer">
+<button data-page="12" data-pdf="arch" type="button">Reference · PDF p. 12</button>
+<a href="https://docs.pytorch.org/docs/stable/generated/torch.nn.GRU.html" rel="noopener noreferrer" target="_blank">
        Library reference
       </a>
-      <a class="calculation-link" href="#gru?derivation=gate-conventions">
+<a class="calculation-link" href="#gru?derivation=gate-conventions">
        Link to this calculation ↗
       </a>
-     </div>
-    </div>
-   </details>
-   <h2 data-section="a-practical-sequence-to-sequence-use" id="gru--a-practical-sequence-to-sequence-use">
-    A practical sequence-to-sequence use
-   </h2>
-   <p>
-    The official translation tutorial uses GRUs in its encoder and decoder, with additive attention and attention visualizations. It is a complete example of the model’s role: recurrent updates build and consume sequence representations, while attention retrieves from source states.
-   </p>
-   <p>
-    When reading the code, follow state shapes, initialization, whether state is reset for independent sequences, and the source of decoder inputs during training versus inference. Those choices determine the actual prediction behavior more than memorizing the number of gates.
-   </p>
-   <p>
-    The portable understanding is the mechanism—candidate construction plus gated interpolation—together with the discipline of checking the exact convention before translating an equation into code.
-   </p>
-  </div>
-  <section class="implementation">
-   <h2 data-section="implementation" id="gru--implementation">
-    See it implemented
-   </h2>
-   <p class="section-intro">
-    Practical support for the ideas above. The labels distinguish complete examples from API references.
-   </p>
-   <div class="resource-list">
-    <div class="resource" data-resource="seq2seq">
-     <span class="resource-meta">
+</div>
+</div>
+</details>
+<h2 data-section="a-practical-sequence-to-sequence-use" id="gru--a-practical-sequence-to-sequence-use">GRUs in sequence-to-sequence models</h2>
+<p>A GRU encoder builds representations of the input sequence. A GRU decoder updates its own state while producing outputs, optionally using attention to retrieve encoder states. The translation example below combines these components and visualizes the learned attention weights.</p>
+<p>State shape and initialization, resets between independent sequences, and decoder inputs determine how the sequence model behaves. Teacher-forced training supplies different decoder histories from free-running inference.</p>
+<p>Candidate construction and state interpolation are separate steps. Keeping their equations explicit avoids confusing the reset gate with the coefficient that retains or replaces the previous state.</p>
+</div>
+<section class="implementation">
+<h2 data-section="implementation" id="gru--implementation">Implementation examples</h2>
+<div class="resource-list">
+<div class="resource" data-resource="seq2seq">
+<span class="resource-meta">
       PyTorch · Training example + attention map
      </span>
-     <a href="https://docs.pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html" rel="noopener noreferrer" target="_blank">
+<span>
        Translation with a Sequence-to-Sequence Network and Attention
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Inspect the GRU encoder/decoder, teacher forcing, attention and generated translations. Its attention plots show alignments; its additive attention is distinct from scaled dot-product attention.
-     </p>
-    </div>
-    <div class="resource" data-resource="gru-api">
-     <span class="resource-meta">
+</a>
+<p>GRU translation with teacher forcing, additive attention, generated outputs, and alignment plots. The scoring rule differs from scaled dot-product attention.</p>
+</div>
+<div class="resource" data-resource="gru-api">
+<span class="resource-meta">
       PyTorch · API + shape example
      </span>
-     <a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.GRU.html" rel="noopener noreferrer" target="_blank">
-      <span>
+<a href="https://docs.pytorch.org/docs/2.13/generated/torch.nn.GRU.html" rel="noopener noreferrer" target="_blank">
+<span>
        GRU: exact implemented gate convention
       </span>
-      <span aria-hidden="true">
+<span aria-hidden="true">
        ↗
       </span>
-     </a>
-     <p>
-      Compare the candidate equation and final interpolation with the PDF. The reset-gate placement and meaning of the update gate are implementation conventions, not interchangeable typography.
-     </p>
-    </div>
-   </div>
-  </section>
-  <details class="recall">
-   <summary>
-    <strong>
+</a>
+<p>The candidate equation and state interpolation used by PyTorch, including reset-gate placement and the role of the update gate.</p>
+</div>
+</div>
+</section>
+<details class="recall">
+<summary>
+<strong>
      Check your understanding
     </strong>
     Can the meaning of the GRU update gate be inferred from its name alone?
    </summary>
-   <p>
-    No. In the PDF, z weights the new candidate; in PyTorch’s documented convention, z weights the previous hidden state. The reset-gate placement also differs from some textbook formulas. Read the actual interpolation and candidate equations.
-   </p>
-  </details>
-  <nav aria-label="Chapter navigation" class="prev-next">
-   <a href="#lstm">
-    <small>
+<p>No. In the first formulation, z weights the new candidate; in PyTorch, z weights the previous hidden state. Reset-gate placement also differs. Both equations must match before two implementations can be compared numerically.</p>
+</details>
+<details class="chapter-references"><summary>References</summary><div class="source-bar">
+<button aria-label="Open source: Architectures · PDF p. 12 · §4" data-page="12" data-pdf="arch" type="button">
+     Architectures · PDF p. 12 · §4
+    </button>
+</div></details><nav aria-label="Chapter navigation" class="prev-next">
+<a href="#lstm">
+<small>
      ← Previous
     </small>
-    LSTM gates and memory timescales
-   </a>
-   <a href="#encoder-decoder">
-    <small>
+LSTM gates and memory timescales
+</a>
+<a href="#encoder-decoder">
+<small>
      Next →
     </small>
-    Encoders, decoders, and teacher forcing
-   </a>
-  </nav>
- </article>
- <aside aria-label="On this page" class="onpage">
-  <p>
+Encoders, decoders, and teacher forcing
+</a>
+</nav>
+</article>
+<aside aria-label="On this page" class="onpage">
+<p>
    In this chapter
   </p>
-  <nav>
-   <a data-section="a-compact-gated-state" href="#gru?section=a-compact-gated-state">
-    A compact gated state
-   </a>
-   <a data-section="work-the-sources-interpolation" href="#gru?section=work-the-sources-interpolation">
-    Work the source’s interpolation
-   </a>
-   <a data-section="compare-gru-with-lstm-by-mechanism" href="#gru?section=compare-gru-with-lstm-by-mechanism">
-    Compare GRU with LSTM by mechanism
-   </a>
-   <a data-section="pytorchs-documented-convention" href="#gru?section=pytorchs-documented-convention">
-    PyTorch’s documented convention
-   </a>
-   <a data-section="a-practical-sequence-to-sequence-use" href="#gru?section=a-practical-sequence-to-sequence-use">
-    A practical sequence-to-sequence use
-   </a>
-   <a data-section="implementation" href="#gru?section=implementation">
-    See it implemented
-   </a>
-  </nav>
- </aside>
+<nav>
+<a data-section="a-compact-gated-state" href="#gru?section=a-compact-gated-state">A compact gated state</a>
+<a data-section="work-the-sources-interpolation" href="#gru?section=work-the-sources-interpolation">A scalar state update</a>
+<a data-section="compare-gru-with-lstm-by-mechanism" href="#gru?section=compare-gru-with-lstm-by-mechanism">Compare GRU with LSTM by mechanism</a>
+<a data-section="pytorchs-documented-convention" href="#gru?section=pytorchs-documented-convention">PyTorch’s documented convention</a>
+<a data-section="a-practical-sequence-to-sequence-use" href="#gru?section=a-practical-sequence-to-sequence-use">GRUs in sequence-to-sequence models</a>
+<a data-section="implementation" href="#gru?section=implementation">Implementation examples</a>
+</nav>
+</aside>
 </section>
+

@@ -1,389 +1,387 @@
 <article class="article method-page" id="m-pd-isin">
- <div class="breadcrumb">
-  <a href="#methods">
+<div class="breadcrumb">
+<a href="#methods">
    Method explorer
   </a>
-  <span class="separator">
+<span class="separator">
    /
   </span>
-  <a href="#methods?lang=pd&amp;cat=Filtering">
+<a href="#methods?lang=pd&amp;cat=Filtering">
    pandas · Filtering
   </a>
- </div>
- <h1>
+</div>
+<h1>
   Membership
  </h1>
- <p class="lead">
+<p class="lead">
   Match set
  </p>
- <h2>
+<h2>
   Quick syntax
  </h2>
- <div class="codebox">
-  <div class="codehead">
-   <span>
+<div class="codebox">
+<div class="codehead">
+<span>
     pandas
    </span>
-   <button data-copy="" type="button">
+<button data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <pre tabindex="0"><code class="language-python" data-origin="reference-pd-isin"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">city</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">'HK'</span><span class="p">,</span><span class="s1">'SG'</span><span class="p">])]</span></code></pre>
- </div>
- <div class="counterparts">
-  <span>
+</div>
+<pre tabindex="0"><code class="language-python" data-origin="reference-pd-isin"><span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">city</span><span class="o">.</span><span class="n">isin</span><span class="p">([</span><span class="s1">'HK'</span><span class="p">,</span><span class="s1">'SG'</span><span class="p">])]</span></code></pre>
+</div>
+<div class="counterparts">
+<span>
    Compare with
   </span>
-  <a href="#m-sql-in">
+<a href="#m-sql-in">
    SQL · IN
   </a>
- </div>
- <p class="small">
+</div>
+<p class="small">
   Related operations; row order, missing values and tie handling can differ.
  </p>
- <h2>
+<h2>
   See it in a solution
  </h2>
- <p class="small">
+<p class="small">
   Open a link to reveal the matching language and code block.
  </p>
- <div class="usage-list">
-  <a class="usage-link" href="#C15?code=code-C15-1&amp;method=pd-isin&amp;line=6">
-   <div>
-    <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C15?code=code-C15-1&amp;method=pd-isin&amp;line=6">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1141 · User activity in a 30-day window
     </strong>
-    <small>
+<small>
      Study solution · line 6
     </small>
-   </div>
-   <pre aria-hidden="true">    kinds = ['open_session', 'end_session', 'scroll_down', 'send_message']
+</div>
+<pre aria-hidden="true">    kinds = ['open_session', 'end_session', 'scroll_down', 'send_message']
     mask = a['activity_date'].between('2019-06-28', '2019-07-27') &amp; a['activity_type'].isin(kinds)
     return a.loc[mask].groupby('activity_date', as_index=False).agg(active_users=('user_id', 'nunique')).rename(columns={'activity_date': 'day'})</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#murder-03?code=code-murder-03-1&amp;method=pd-isin&amp;line=5">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-03?code=code-murder-03-1&amp;method=pd-isin&amp;line=5">
+<div>
+<span class="usage-label">
      Murder City · pandas
     </span>
-    <strong>
+<strong>
      Read the witness interviews
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 5
     </small>
-   </div>
-   <pre aria-hidden="true">                         left_on='person_id', right_on='id')
+</div>
+<pre aria-hidden="true">                         left_on='person_id', right_on='id')
 result = joined.loc[joined['id'].isin([14887, 16371]),
                     ['id', 'name', 'transcript']].copy()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-isin&amp;line=22">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#squid-09?code=code-squid-09-1&amp;method=pd-isin&amp;line=22">
+<div>
+<span class="usage-label">
      Squid Game · pandas
     </span>
-    <strong>
+<strong>
      Reconstruct access-log overlaps
     </strong>
-    <small>
+<small>
      Saved walkthrough · line 22
     </small>
-   </div>
-   <pre aria-hidden="true">    access = pd.to_timedelta(logs['access_time'].astype('string'))
+</div>
+<pre aria-hidden="true">    access = pd.to_timedelta(logs['access_time'].astype('string'))
     keep = access.between(start, end) &amp; logs['door_location'].isin(locations)
     result = logs.loc[keep, ['guard_id', 'access_time']].rename(columns={'guard_id': 'id'})</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#B08?code=code-B08-3&amp;method=pd-isin&amp;line=2">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#B08?code=code-B08-3&amp;method=pd-isin&amp;line=2">
+<div>
+<span class="usage-label">
      SQLBolt · pandas
     </span>
-    <strong>
+<strong>
      NULL and unmatched rows
     </strong>
-    <small>
+<small>
      Study solution · line 2
     </small>
-   </div>
-   <pre aria-hidden="true">occupied = employees['building'].dropna()
+</div>
+<pre aria-hidden="true">occupied = employees['building'].dropna()
 result = buildings.loc[~buildings['building_name'].isin(occupied), ['building_name']]</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C20?code=code-C20-1&amp;method=pd-isin&amp;line=5">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-1&amp;method=pd-isin&amp;line=5">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1045 · Customers who bought every product
     </strong>
-    <small>
+<small>
      Study solution · line 5
     </small>
-   </div>
-   <pre aria-hidden="true">    keys = product['product_key'].dropna().drop_duplicates()
+</div>
+<pre aria-hidden="true">    keys = product['product_key'].dropna().drop_duplicates()
     eligible = customer.loc[customer['product_key'].isin(keys)]
     counts = eligible.groupby('customer_id')['product_key'].nunique()
     ids = customer[['customer_id']].drop_duplicates()</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
-  <a class="usage-link" href="#C28?code=code-C28-1&amp;method=pd-isin&amp;line=4">
-   <div>
-    <span class="usage-label">
+</a>
+<a class="usage-link" href="#C28?code=code-C28-1&amp;method=pd-isin&amp;line=4">
+<div>
+<span class="usage-label">
      Leetcode · pandas
     </span>
-    <strong>
+<strong>
      1978 · Low-salary employees whose manager left
     </strong>
-    <small>
+<small>
      Study solution · line 4
     </small>
-   </div>
-   <pre aria-hidden="true">def find_employees(employees: pd.DataFrame) -&gt; pd.DataFrame:
+</div>
+<pre aria-hidden="true">def find_employees(employees: pd.DataFrame) -&gt; pd.DataFrame:
     mask = employees['salary'].lt(30000) &amp; employees['manager_id'].notna() &amp; ~employees['manager_id'].isin(employees['employee_id'])
     return employees.loc[mask, ['employee_id']].sort_values('employee_id')</pre>
-   <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
     ↗
    </span>
-  </a>
- </div>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+<details class="more-uses">
+<summary>
    4 more matching notes
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#LC262?code=code-LC262-1&amp;method=pd-isin&amp;line=7">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#LC262?code=code-LC262-1&amp;method=pd-isin&amp;line=7">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       262 · Trips and users
      </strong>
-     <small>
+<small>
       Uploaded submission · line 7
      </small>
-    </div>
-    <pre aria-hidden="true">    trips = trips[
+</div>
+<pre aria-hidden="true">    trips = trips[
         ~trips['client_id'].isin(banned_ids) &amp;
         ~trips['driver_id'].isin(banned_ids)
     ]</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#LC607?code=code-LC607-1&amp;method=pd-isin&amp;line=8">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#LC607?code=code-LC607-1&amp;method=pd-isin&amp;line=8">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       607 · Sales person
      </strong>
-     <small>
+<small>
       Uploaded submission · line 8
      </small>
-    </div>
-    <pre aria-hidden="true">
+</div>
+<pre aria-hidden="true">
     flag = ~sales_person['sales_id'].isin(idexlude)
     return sales_person[flag][['name']]
     </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#murder-09?code=code-murder-09-1&amp;method=pd-isin&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#murder-09?code=code-murder-09-1&amp;method=pd-isin&amp;line=6">
+<div>
+<span class="usage-label">
       Murder City · pandas
      </span>
-     <strong>
+<strong>
       Inspect December event check-ins
      </strong>
-     <small>
+<small>
       Saved walkthrough · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">dates = pd.to_numeric(joined['date'], errors='coerce')
+</div>
+<pre aria-hidden="true">dates = pd.to_numeric(joined['date'], errors='coerce')
 mask = (joined['person_id'].isin([78881, 90700, 99716])
         &amp; dates.gt(20171130) &amp; dates.lt(20180101))
 result = joined.loc[mask, ['id', 'name', 'event_name', 'date']].copy()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#B20?code=code-B20-7&amp;method=pd-isin&amp;line=1">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#B20?code=code-B20-7&amp;method=pd-isin&amp;line=1">
+<div>
+<span class="usage-label">
       SQLBolt · pandas
      </span>
-     <strong>
+<strong>
       Additional topic · Set operations
      </strong>
-     <small>
+<small>
       Study solution · line 1
      </small>
-    </div>
-    <pre aria-hidden="true">result = a.loc[~a['id'].isin(b['id']), ['id']].drop_duplicates()</pre>
-    <span aria-hidden="true" class="usage-arrow">
+</div>
+<pre aria-hidden="true">result = a.loc[~a['id'].isin(b['id']), ['id']].drop_duplicates()</pre>
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="more-uses">
-  <summary>
+</a>
+</div>
+</details>
+<details class="more-uses">
+<summary>
    Other saved implementations (5)
   </summary>
-  <div class="usage-list">
-   <a class="usage-link" href="#C15?code=code-C15-3&amp;method=pd-isin&amp;line=5">
-    <div>
-     <span class="usage-label">
+<div class="usage-list">
+<a class="usage-link" href="#C15?code=code-C15-3&amp;method=pd-isin&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1141 · User activity in a 30-day window
      </strong>
-     <small>
+<small>
       My approach · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    good_activity   = ['open_session', 'end_session', 'scroll_down', 'send_message']
+</div>
+<pre aria-hidden="true">    good_activity   = ['open_session', 'end_session', 'scroll_down', 'send_message']
     bool_activity_type = activity['activity_type'].isin(good_activity)
 
     activity['activity_date'] =   pd.to_datetime(activity['activity_date'])</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C15?code=code-C15-5&amp;method=pd-isin&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C15?code=code-C15-5&amp;method=pd-isin&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1141 · User activity in a 30-day window
      </strong>
-     <small>
+<small>
       Uploaded submission · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    good_activity = ['open_session', 'end_session', 'scroll_down', 'send_message']
+</div>
+<pre aria-hidden="true">    good_activity = ['open_session', 'end_session', 'scroll_down', 'send_message']
     bool_activity_type = activity['activity_type'].isin(good_activity)
 
     activity['activity_date'] = pd.to_datetime(activity['activity_date'])</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C20?code=code-C20-3&amp;method=pd-isin&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C20?code=code-C20-3&amp;method=pd-isin&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1045 · Customers who bought every product
      </strong>
-     <small>
+<small>
       My approach · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    customer_ids = customer[['customer_id']].drop_duplicates()
+</div>
+<pre aria-hidden="true">    customer_ids = customer[['customer_id']].drop_duplicates()
     customer = customer[customer['product_key'].isin(product['product_key'])]
     df = customer.groupby(by='customer_id').agg(
         nSold = ('product_key', 'nunique')</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C28?code=code-C28-3&amp;method=pd-isin&amp;line=5">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C28?code=code-C28-3&amp;method=pd-isin&amp;line=5">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1978 · Low-salary employees whose manager left
      </strong>
-     <small>
+<small>
       My approach · line 5
      </small>
-    </div>
-    <pre aria-hidden="true">    flag_hasManager = ~employees.manager_id.isna()
+</div>
+<pre aria-hidden="true">    flag_hasManager = ~employees.manager_id.isna()
     flag_managerLeft = ~employees['manager_id'].isin(employees['employee_id'])
     flag_ = flag_lowSalary &amp;   flag_hasManager &amp; flag_managerLeft
     return   employees[flag_][['employee_id']].sort_values(by='employee_id', ascending=True)</pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-   <a class="usage-link" href="#C28?code=code-C28-5&amp;method=pd-isin&amp;line=6">
-    <div>
-     <span class="usage-label">
+</a>
+<a class="usage-link" href="#C28?code=code-C28-5&amp;method=pd-isin&amp;line=6">
+<div>
+<span class="usage-label">
       Leetcode · pandas
      </span>
-     <strong>
+<strong>
       1978 · Low-salary employees whose manager left
      </strong>
-     <small>
+<small>
       Uploaded submission · line 6
      </small>
-    </div>
-    <pre aria-hidden="true">    flag_hasManager = ~employees.manager_id.isna()
+</div>
+<pre aria-hidden="true">    flag_hasManager = ~employees.manager_id.isna()
     flag_managerLeft = ~employees['manager_id'].isin(employees['employee_id'])
     flag_ = flag_lowSalary &amp; flag_hasManager &amp; flag_managerLeft
 </pre>
-    <span aria-hidden="true" class="usage-arrow">
+<span aria-hidden="true" class="usage-arrow">
      ↗
     </span>
-   </a>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
-   Source and scope
-  </summary>
-  <div class="sources-content">
-   <p>
+</a>
+</div>
+</details>
+<details class="reference-details">
+<summary> References </summary>
+<div class="sources-content">
+<p>
     pandas cheat-sheet image · Filtering. The quick syntax and description follow that source. Implementation notes and counterpart links are reference additions.
    </p>
-   <p>
+<p>
     Solution links come from a conservative syntax scan of saved code, excluding comments. Named pandas aggregations such as total=("x", "sum") also count. A link demonstrates usage, not that the solution has passed an online judge.
    </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://pandas.pydata.org/docs/reference/index.html" rel="noopener noreferrer" target="_blank">
      Language documentation ↗
     </a>
-   </p>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#methods?lang=pd&amp;cat=Filtering">
-   <small>
+</p>
+</div>
+</details>
+<div class="prev-next">
+<a href="#methods?lang=pd&amp;cat=Filtering">
+<small>
     ← Browse
    </small>
    pandas · Filtering
   </a>
-  <a href="#A01">
-   <small>
+<a href="#A01">
+<small>
     Compare
    </small>
    SQL ↔ pandas
   </a>
- </div>
+</div>
 </article>

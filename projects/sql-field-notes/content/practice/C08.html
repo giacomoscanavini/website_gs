@@ -1,60 +1,60 @@
 <article class="article" id="C08">
- <div class="breadcrumb">
-  <a href="#practice">
+<div class="breadcrumb">
+<a href="#practice">
    Leetcode problems
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Problem 1075
   </span>
- </div>
- <h1>
+</div>
+<h1>
   1075 · Project employees I
  </h1>
- <p>
+<p>
   Return the rounded average experience per project.
  </p>
- <p class="pattern">
+<p class="pattern">
   Pattern: Join / average
  </p>
- <h2>
+<h2>
   Example
  </h2>
- <p>
+<p>
   Experiences 2, 4 and 6 in one project → 4.00.
  </p>
- <h2>
+<h2>
   Study solution
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-67-panel-0" aria-selected="true" id="example-67-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-67-panel-0" aria-selected="true" id="example-67-tab-0" role="tab" tabindex="0" type="button">
      MySQL
     </button>
-    <button aria-controls="example-67-panel-1" aria-selected="false" id="example-67-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-67-panel-1" aria-selected="false" id="example-67-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-67-tab-0" class="code-panel" id="example-67-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-67-tab-0" class="code-panel" id="example-67-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-C08-0" tabindex="0"><code class="language-sql" data-origin="legacy-C08-0"><span class="k">SELECT</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">project_id</span><span class="p">,</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="k">AVG</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">experience_years</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">average_years</span>
+<pre id="code-C08-0" tabindex="0"><code class="language-sql" data-origin="legacy-C08-0"><span class="k">SELECT</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">project_id</span><span class="p">,</span><span class="w"> </span><span class="n">ROUND</span><span class="p">(</span><span class="k">AVG</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">experience_years</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">average_years</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Project</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Employee</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">employee_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">employee_id</span>
 <span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">project_id</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-67-tab-1" class="code-panel" id="example-67-panel-1" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-67-tab-1" class="code-panel" id="example-67-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-C08-1" tabindex="0"><code class="language-python" data-origin="legacy-C08-1"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
+<pre id="code-C08-1" tabindex="0"><code class="language-python" data-origin="legacy-C08-1"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">round_half_up</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">digits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
@@ -66,54 +66,54 @@
     <span class="n">g</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'project_id'</span><span class="p">,</span> <span class="n">as_index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span><span class="n">average_years</span><span class="o">=</span><span class="p">(</span><span class="s1">'experience_years'</span><span class="p">,</span> <span class="s1">'mean'</span><span class="p">))</span>
     <span class="n">g</span><span class="p">[</span><span class="s1">'average_years'</span><span class="p">]</span> <span class="o">=</span> <span class="n">g</span><span class="p">[</span><span class="s1">'average_years'</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">round_half_up</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">g</span></code></pre>
-  </div>
- </div>
- <h2>
+</div>
+</div>
+<h2>
   Why it works
  </h2>
- <p>
+<p>
   AVG and pandas mean both exclude missing experience values. The join attaches each employee’s experience to each project membership.
  </p>
- <h2>
+<h2>
   Notes
  </h2>
- <p>
+<p>
   Average experience is computed over nonmissing experience values.
  </p>
- <details class="original-details">
-  <summary>
+<details class="original-details">
+<summary>
    My approach
   </summary>
-  <div class="code-pair">
-   <div class="pair-head">
-    <div aria-label="Solution language" class="code-tabs" role="tablist">
-     <button aria-controls="approach-C08-panel-0" aria-selected="true" id="approach-C08-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="approach-C08-panel-0" aria-selected="true" id="approach-C08-tab-0" role="tab" tabindex="0" type="button">
       MySQL
      </button>
-     <button aria-controls="approach-C08-panel-1" aria-selected="false" id="approach-C08-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="approach-C08-panel-1" aria-selected="false" id="approach-C08-tab-1" role="tab" tabindex="-1" type="button">
       pandas
      </button>
-    </div>
-    <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
      Copy
     </button>
-   </div>
-   <div aria-labelledby="approach-C08-tab-0" class="code-panel" id="approach-C08-panel-0" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="approach-C08-tab-0" class="code-panel" id="approach-C08-panel-0" role="tabpanel">
+<div class="no-script-label">
      SQL
     </div>
-    <pre id="code-C08-2" tabindex="0"><code class="language-sql" data-origin="approach-C08-sql"><span class="k">SELECT</span>
+<pre id="code-C08-2" tabindex="0"><code class="language-sql" data-origin="approach-C08-sql"><span class="k">SELECT</span>
 <span class="w">    </span><span class="n">p</span><span class="p">.</span><span class="n">project_id</span><span class="p">,</span>
 <span class="w">    </span><span class="n">ROUND</span><span class="p">(</span><span class="k">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">experience_years</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">experience_years</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">average_years</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Project</span><span class="w"> </span><span class="n">p</span>
 <span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Employee</span><span class="w"> </span><span class="n">e</span><span class="w">   </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">employee_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">employee_id</span>
 <span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">project_id</span><span class="p">;</span></code></pre>
-   </div>
-   <div aria-labelledby="approach-C08-tab-1" class="code-panel" id="approach-C08-panel-1" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="approach-C08-tab-1" class="code-panel" id="approach-C08-panel-1" role="tabpanel">
+<div class="no-script-label">
      pandas
     </div>
-    <pre id="code-C08-3" tabindex="0"><code class="language-python" data-origin="approach-C08-python"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
+<pre id="code-C08-3" tabindex="0"><code class="language-python" data-origin="approach-C08-python"><span class="kn">from</span><span class="w"> </span><span class="nn">decimal</span><span class="w"> </span><span class="kn">import</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">ROUND_HALF_UP</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">round_half_up</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">digits</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span><span class="p">):</span>
@@ -128,69 +128,63 @@
     <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
     <span class="n">df</span><span class="p">[</span><span class="s1">'average_years'</span><span class="p">]</span> <span class="o">=</span>   <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'total_years'</span><span class="p">]</span> <span class="o">/</span> <span class="n">df</span><span class="p">[</span><span class="s1">'n_employees'</span><span class="p">])</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">round_half_up</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'project_id'</span><span class="p">,</span> <span class="s1">'average_years'</span><span class="p">]]</span></code></pre>
-   </div>
-  </div>
- </details>
- <details class="reference-details">
-  <summary>
+</div>
+</div>
+</details>
+<details class="reference-details">
+<summary>
    Sources
   </summary>
-  <div class="sources-content">
-   <p>
-    Primary exercise basis: your uploaded Pasted markdown(3).md, exercise 1075, line 6. The exercise heading may be abbreviated in the upload; full official problem statements and schemas were not supplied.
-   </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+<div class="sources-content">
+<p> Exercise source: Pasted markdown(3).md, problem 1075, line 6. </p>
+<p>
+<a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
      pandas SQL comparison
     </a>
     — Projection, filtering, grouping, joins and operations.
    </p>
-   <p>
-    <a href="https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://dev.mysql.com/doc/refman/8.4/en/mathematical-functions.html" rel="noopener noreferrer" target="_blank">
      MySQL rounding
     </a>
     — Exact versus approximate numeric rounding.
    </p>
-  </div>
- </details>
- <details class="original-details archive-submission">
-  <summary>
-   Uploaded submission · SQL.zip
-  </summary>
-  <p class="small">
-   Exact files from the uploaded archive. The reference implementation above may include earlier corrections.
-  </p>
-  <div class="code-pair">
-   <div class="pair-head">
-    <div aria-label="Solution language" class="code-tabs" role="tablist">
-     <button aria-controls="archive-1075-panel-0" aria-selected="true" id="archive-1075-tab-0" role="tab" tabindex="0" type="button">
+</div>
+</details>
+<details class="original-details archive-submission">
+<summary> Original submission </summary>
+<p class="small"> Archived submissions. These may differ from the reference implementation above. </p>
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="archive-1075-panel-0" aria-selected="true" id="archive-1075-tab-0" role="tab" tabindex="0" type="button">
       MySQL
      </button>
-     <button aria-controls="archive-1075-panel-1" aria-selected="false" id="archive-1075-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="archive-1075-panel-1" aria-selected="false" id="archive-1075-tab-1" role="tab" tabindex="-1" type="button">
       pandas
      </button>
-    </div>
-    <button class="copy-button" data-copy="" type="button">
+</div>
+<button class="copy-button" data-copy="" type="button">
      Copy
     </button>
-   </div>
-   <div aria-labelledby="archive-1075-tab-0" class="code-panel" id="archive-1075-panel-0" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-1075-tab-0" class="code-panel" id="archive-1075-panel-0" role="tabpanel">
+<div class="no-script-label">
      MySQL
     </div>
-    <pre id="code-C08-4" tabindex="0"><code class="language-sql" data-origin="archive-1075-sql"><span class="c1"># Write your MySQL query statement below</span>
+<pre id="code-C08-4" tabindex="0"><code class="language-sql" data-origin="archive-1075-sql"><span class="c1"># Write your MySQL query statement below</span>
 <span class="k">SELECT</span><span class="w"> </span>
 <span class="w">    </span><span class="n">p</span><span class="p">.</span><span class="n">project_id</span><span class="p">,</span><span class="w"> </span>
 <span class="w">    </span><span class="nf">ROUND</span><span class="p">(</span><span class="nf">SUM</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">experience_years</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="nf">COUNT</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">experience_years</span><span class="p">),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">average_years</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Project</span><span class="w"> </span><span class="n">p</span>
 <span class="k">LEFT</span><span class="w"> </span><span class="k">JOIN</span><span class="w"> </span><span class="n">Employee</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">employee_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">employee_id</span>
 <span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">project_id</span></code></pre>
-   </div>
-   <div aria-labelledby="archive-1075-tab-1" class="code-panel" id="archive-1075-panel-1" role="tabpanel">
-    <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-1075-tab-1" class="code-panel" id="archive-1075-panel-1" role="tabpanel">
+<div class="no-script-label">
      pandas
     </div>
-    <pre id="code-C08-5" tabindex="0"><code class="language-python" data-origin="archive-1075-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-C08-5" tabindex="0"><code class="language-python" data-origin="archive-1075-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">project_employees_i</span><span class="p">(</span><span class="n">project</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">employee</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="n">df</span> <span class="o">=</span> <span class="n">project</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">employee</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s1">'employee_id'</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s1">'left'</span><span class="p">)[[</span><span class="s1">'project_id'</span><span class="p">,</span> <span class="s1">'experience_years'</span><span class="p">]]</span>
@@ -203,112 +197,112 @@
 
     <span class="k">return</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'project_id'</span><span class="p">,</span> <span class="s1">'average_years'</span><span class="p">]]</span>
     </code></pre>
-   </div>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</div>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-count">
+<div>
+<a href="#m-sql-count">
      COUNT()
     </a>
-    <a href="#m-sql-sum">
+<a href="#m-sql-sum">
      SUM()
     </a>
-    <a href="#m-sql-avg">
+<a href="#m-sql-avg">
      AVG()
     </a>
-    <a href="#m-sql-group-by">
+<a href="#m-sql-group-by">
      GROUP BY
     </a>
-    <a href="#m-sql-left-join">
+<a href="#m-sql-left-join">
      LEFT JOIN
     </a>
-    <a href="#m-sql-round">
+<a href="#m-sql-round">
      ROUND()
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-select-columns">
+<a href="#m-pd-select-columns">
      Select columns
     </a>
-    <a href="#m-pd-filter-null">
+<a href="#m-pd-filter-null">
      Missing
     </a>
-    <a href="#m-pd-new-column">
+<a href="#m-pd-new-column">
      New column
     </a>
-    <a href="#m-pd-map">
+<a href="#m-pd-map">
      map()
     </a>
-    <a href="#m-pd-reset-index">
+<a href="#m-pd-reset-index">
      Reset index
     </a>
-    <a href="#m-pd-isna">
+<a href="#m-pd-isna">
      Check null
     </a>
-    <a href="#m-pd-merge-left">
+<a href="#m-pd-merge-left">
      Left merge
     </a>
-    <a href="#m-pd-sum">
+<a href="#m-pd-sum">
      sum()
     </a>
-    <a href="#m-pd-mean">
+<a href="#m-pd-mean">
      mean()
     </a>
-    <a href="#m-pd-count">
+<a href="#m-pd-count">
      count()
     </a>
-    <a href="#m-pd-size">
+<a href="#m-pd-size">
      size
     </a>
-    <a href="#m-pd-groupby">
+<a href="#m-pd-groupby">
      Basic group
     </a>
-    <a href="#m-pd-agg-named">
+<a href="#m-pd-agg-named">
      Named aggregation
     </a>
-    <a href="#m-pd-group-size">
+<a href="#m-pd-group-size">
      Group size
     </a>
-    <a href="#m-pd-group-count">
+<a href="#m-pd-group-count">
      Group count
     </a>
-    <a href="#m-pd-round">
+<a href="#m-pd-round">
      round()
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#C07">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#C07">
+<small>
     ← Previous
    </small>
    1251 · Average selling price
   </a>
-  <a href="#C09">
-   <small>
+<a href="#C09">
+<small>
     Next →
    </small>
    1633 · Users registered in a contest
   </a>
- </div>
+</div>
 </article>

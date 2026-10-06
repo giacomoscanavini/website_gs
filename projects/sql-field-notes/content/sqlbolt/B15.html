@@ -1,175 +1,173 @@
 <article class="article" id="B15">
- <div class="breadcrumb">
-  <a href="#sqlbolt">
+<div class="breadcrumb">
+<a href="#sqlbolt">
    SQLBolt
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Lesson 15
   </span>
- </div>
- <h1>
+</div>
+<h1>
   DELETE rows
  </h1>
- <p>
+<p>
   DELETE removes matching rows but leaves the table schema. A statement without WHERE removes all rows.
  </p>
- <p>
-  <b>
+<p>
+<b>
    Note.
   </b>
   Use a disposable exercise database. When foreign keys exist, deletion may be blocked or have configured cascading effects; pandas has no equivalent built-in relational enforcement.
  </p>
- <h2>
+<h2>
   01 · Remove pre-2005 releases
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-47-panel-0" aria-selected="true" id="example-47-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-47-panel-0" aria-selected="true" id="example-47-tab-0" role="tab" tabindex="0" type="button">
      SQL
     </button>
-    <button aria-controls="example-47-panel-1" aria-selected="false" id="example-47-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-47-panel-1" aria-selected="false" id="example-47-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-47-tab-0" class="code-panel" id="example-47-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-47-tab-0" class="code-panel" id="example-47-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-B15-0" tabindex="0"><code class="language-sql" data-origin="legacy-B15-0"><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">year</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2005</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-47-tab-1" class="code-panel" id="example-47-panel-1" role="tabpanel">
-   <div class="no-script-label">
+<pre id="code-B15-0" tabindex="0"><code class="language-sql" data-origin="legacy-B15-0"><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="k">year</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">2005</span><span class="p">;</span></code></pre>
+</div>
+<div aria-labelledby="example-47-tab-1" class="code-panel" id="example-47-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-B15-1" tabindex="0"><code class="language-python" data-origin="legacy-B15-1"><span class="n">movies</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">movies</span><span class="p">[</span><span class="s1">'year'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span> <span class="o">|</span> <span class="n">movies</span><span class="p">[</span><span class="s1">'year'</span><span class="p">]</span><span class="o">.</span><span class="n">ge</span><span class="p">(</span><span class="mi">2005</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
-  </div>
- </div>
- <h2>
+<pre id="code-B15-1" tabindex="0"><code class="language-python" data-origin="legacy-B15-1"><span class="n">movies</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">movies</span><span class="p">[</span><span class="s1">'year'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span> <span class="o">|</span> <span class="n">movies</span><span class="p">[</span><span class="s1">'year'</span><span class="p">]</span><span class="o">.</span><span class="n">ge</span><span class="p">(</span><span class="mi">2005</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+</div>
+</div>
+<h2>
   02 · Remove Andrew Stanton films
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="example-48-panel-0" aria-selected="true" id="example-48-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="example-48-panel-0" aria-selected="true" id="example-48-tab-0" role="tab" tabindex="0" type="button">
      SQL
     </button>
-    <button aria-controls="example-48-panel-1" aria-selected="false" id="example-48-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="example-48-panel-1" aria-selected="false" id="example-48-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
+</div>
+<button aria-label="Copy visible code" class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="example-48-tab-0" class="code-panel" id="example-48-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="example-48-tab-0" class="code-panel" id="example-48-panel-0" role="tabpanel">
+<div class="no-script-label">
     SQL
    </div>
-   <pre id="code-B15-2" tabindex="0"><code class="language-sql" data-origin="legacy-B15-2"><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">director</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Andrew Stanton'</span><span class="p">;</span></code></pre>
-  </div>
-  <div aria-labelledby="example-48-tab-1" class="code-panel" id="example-48-panel-1" role="tabpanel">
-   <div class="no-script-label">
+<pre id="code-B15-2" tabindex="0"><code class="language-sql" data-origin="legacy-B15-2"><span class="k">DELETE</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">movies</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">director</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">'Andrew Stanton'</span><span class="p">;</span></code></pre>
+</div>
+<div aria-labelledby="example-48-tab-1" class="code-panel" id="example-48-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-B15-3" tabindex="0"><code class="language-python" data-origin="legacy-B15-3"><span class="n">movies</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">movies</span><span class="p">[</span><span class="s1">'director'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span> <span class="o">|</span> <span class="n">movies</span><span class="p">[</span><span class="s1">'director'</span><span class="p">]</span><span class="o">.</span><span class="n">ne</span><span class="p">(</span><span class="s1">'Andrew Stanton'</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
-  </div>
- </div>
- <details class="reference-details">
-  <summary>
+<pre id="code-B15-3" tabindex="0"><code class="language-python" data-origin="legacy-B15-3"><span class="n">movies</span> <span class="o">=</span> <span class="n">movies</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">movies</span><span class="p">[</span><span class="s1">'director'</span><span class="p">]</span><span class="o">.</span><span class="n">isna</span><span class="p">()</span> <span class="o">|</span> <span class="n">movies</span><span class="p">[</span><span class="s1">'director'</span><span class="p">]</span><span class="o">.</span><span class="n">ne</span><span class="p">(</span><span class="s1">'Andrew Stanton'</span><span class="p">)]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></code></pre>
+</div>
+</div>
+<details class="reference-details">
+<summary>
    Sources
   </summary>
-  <div class="sources-content">
-   <p>
-    The worked examples and pandas translations are study alternatives, not an official answer key. Shared DataFrame setup is listed under Reference.
-   </p>
-   <p>
-    <a href="https://sqlbolt.com/lesson/deleting_rows" rel="noopener noreferrer" target="_blank">
+<div class="sources-content">
+<p>SQLBolt exercises with SQL and pandas examples. Shared DataFrame assumptions are listed under Setup and conventions.</p>
+<p>
+<a href="https://sqlbolt.com/lesson/deleting_rows" rel="noopener noreferrer" target="_blank">
      SQLBolt — DELETE rows
     </a>
-   </p>
-   <p>
-    <a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
+</p>
+<p>
+<a href="https://pandas.pydata.org/docs/getting_started/comparison/comparison_with_sql.html" rel="noopener noreferrer" target="_blank">
      pandas SQL comparison
     </a>
     — Projection, filtering, grouping, joins and operations.
    </p>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-delete">
+<a href="#m-sql-delete">
      DELETE
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-loc">
+<a href="#m-pd-loc">
      Rows by label
     </a>
-    <a href="#m-pd-filter">
+<a href="#m-pd-filter">
      Condition
     </a>
-    <a href="#m-pd-or">
+<a href="#m-pd-or">
      OR
     </a>
-    <a href="#m-pd-filter-null">
+<a href="#m-pd-filter-null">
      Missing
     </a>
-    <a href="#m-pd-loc-label">
+<a href="#m-pd-loc-label">
      Access label
     </a>
-    <a href="#m-pd-isna">
+<a href="#m-pd-isna">
      Check null
     </a>
-    <a href="#m-pd-eq">
+<a href="#m-pd-eq">
      eq() / ne()
     </a>
-    <a href="#m-pd-compare">
+<a href="#m-pd-compare">
      gt() / ge() / lt() / le()
     </a>
-    <a href="#m-pd-copy">
+<a href="#m-pd-copy">
      copy()
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#B14">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#B14">
+<small>
     ← Previous
    </small>
    UPDATE rows
   </a>
-  <a href="#B16">
-   <small>
+<a href="#B16">
+<small>
     Next →
    </small>
    CREATE TABLE and schemas
   </a>
- </div>
+</div>
 </article>

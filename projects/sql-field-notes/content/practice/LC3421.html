@@ -1,43 +1,43 @@
 <article class="article" id="LC3421">
- <div class="breadcrumb">
-  <a href="#practice">
+<div class="breadcrumb">
+<a href="#practice">
    Leetcode problems
   </a>
-  <span aria-hidden="true" class="separator">
+<span aria-hidden="true" class="separator">
    /
   </span>
-  <span>
+<span>
    Additional problems
   </span>
- </div>
- <h1>
+</div>
+<h1>
   3421 · Find students who improved
  </h1>
- <p>
+<p>
   Compare first and latest scores within each student–subject pair, keeping increases.
  </p>
- <h2>
+<h2>
   My submission
  </h2>
- <div class="code-pair">
-  <div class="pair-head">
-   <div aria-label="Solution language" class="code-tabs" role="tablist">
-    <button aria-controls="archive-3421-panel-0" aria-selected="true" id="archive-3421-tab-0" role="tab" tabindex="0" type="button">
+<div class="code-pair">
+<div class="pair-head">
+<div aria-label="Solution language" class="code-tabs" role="tablist">
+<button aria-controls="archive-3421-panel-0" aria-selected="true" id="archive-3421-tab-0" role="tab" tabindex="0" type="button">
      MySQL
     </button>
-    <button aria-controls="archive-3421-panel-1" aria-selected="false" id="archive-3421-tab-1" role="tab" tabindex="-1" type="button">
+<button aria-controls="archive-3421-panel-1" aria-selected="false" id="archive-3421-tab-1" role="tab" tabindex="-1" type="button">
      pandas
     </button>
-   </div>
-   <button class="copy-button" data-copy="" type="button">
+</div>
+<button class="copy-button" data-copy="" type="button">
     Copy
    </button>
-  </div>
-  <div aria-labelledby="archive-3421-tab-0" class="code-panel" id="archive-3421-panel-0" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-3421-tab-0" class="code-panel" id="archive-3421-panel-0" role="tabpanel">
+<div class="no-script-label">
     MySQL
    </div>
-   <pre id="code-LC3421-0" tabindex="0"><code class="language-sql" data-origin="archive-3421-sql"><span class="c1"># Write your MySQL query statement below</span>
+<pre id="code-LC3421-0" tabindex="0"><code class="language-sql" data-origin="archive-3421-sql"><span class="c1"># Write your MySQL query statement below</span>
 <span class="k">WITH</span><span class="w"> </span><span class="n">Comparison</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="p">(</span>
 <span class="w">    </span><span class="k">SELECT</span><span class="w"> </span>
 <span class="w">        </span><span class="n">student_id</span><span class="p">,</span>
@@ -56,12 +56,12 @@
 <span class="k">SELECT</span><span class="w"> </span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">student_id</span><span class="p">,</span><span class="w"> </span><span class="k">subject</span><span class="p">,</span><span class="w"> </span><span class="n">first_score</span><span class="p">,</span><span class="w"> </span><span class="n">latest_score</span>
 <span class="k">FROM</span><span class="w"> </span><span class="n">Comparison</span>
 <span class="k">WHERE</span><span class="w"> </span><span class="n">first_score</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">latest_score</span></code></pre>
-  </div>
-  <div aria-labelledby="archive-3421-tab-1" class="code-panel" id="archive-3421-panel-1" role="tabpanel">
-   <div class="no-script-label">
+</div>
+<div aria-labelledby="archive-3421-tab-1" class="code-panel" id="archive-3421-panel-1" role="tabpanel">
+<div class="no-script-label">
     pandas
    </div>
-   <pre id="code-LC3421-1" tabindex="0"><code class="language-python" data-origin="archive-3421-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<pre id="code-LC3421-1" tabindex="0"><code class="language-python" data-origin="archive-3421-python"><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">find_students_who_improved</span><span class="p">(</span><span class="n">scores</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">custom_func</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
@@ -88,123 +88,121 @@
 <span class="sd">    df = df.groupby(['student_id','subject'])['score'].agg(first_score='first',latest_score='last').reset_index()</span>
 <span class="sd">    return df[df.first_score &lt; df.latest_score]</span>
 <span class="sd">'''</span></code></pre>
-  </div>
- </div>
- <h2>
+</div>
+</div>
+<h2>
   How the submitted approach works
  </h2>
- <p>
+<p>
   The SQL uses NTH_VALUE in ascending and descending exam-date order. The pandas function uses argmin/argmax to locate endpoint scores inside each group.
  </p>
- <div class="note warning">
-  <b>
+<div class="note warning">
+<b>
    Implementation note.
-  </b>
-  The source does not specify a tie-break for duplicate exam dates. Grouped first/last alternatives also have different behavior when endpoint scores are missing.
- </div>
- <details class="reference-details">
-  <summary>
+  </b> No tie-break is specified for duplicate exam dates. Grouped first/last alternatives also have different behavior when endpoint scores are missing. </div>
+<details class="reference-details">
+<summary>
    Source
   </summary>
-  <div class="sources-content">
-   <p>
+<div class="sources-content">
+<p>
     SQL.zip / 3421-find-students-who-improved / submission-1.sql and submission-1.py. These are the submitted files; the summary and implementation notes describe the code, not a replacement official problem statement.
    </p>
-   <p>
-    <a href="https://leetcode.com/problems/find-students-who-improved/" rel="noopener noreferrer" target="_blank">
+<p>
+<a href="https://leetcode.com/problems/find-students-who-improved/" rel="noopener noreferrer" target="_blank">
      Original problem
     </a>
-   </p>
-  </div>
- </details>
- <details class="used-methods">
-  <summary>
+</p>
+</div>
+</details>
+<details class="used-methods">
+<summary>
    Explore methods in these solutions
   </summary>
-  <div class="method-chip-group">
-   <span>
+<div class="method-chip-group">
+<span>
     SQL
    </span>
-   <div>
-    <a href="#m-sql-where">
+<div>
+<a href="#m-sql-where">
      WHERE
     </a>
-    <a href="#m-sql-partition-by">
+<a href="#m-sql-partition-by">
      PARTITION BY
     </a>
-    <a href="#m-sql-window-order">
+<a href="#m-sql-window-order">
      ORDER BY
     </a>
-    <a href="#m-sql-subquery">
+<a href="#m-sql-subquery">
      Subquery
     </a>
-    <a href="#m-sql-with">
+<a href="#m-sql-with">
      WITH
     </a>
-    <a href="#m-sql-select">
+<a href="#m-sql-select">
      SELECT
     </a>
-    <a href="#m-sql-distinct">
+<a href="#m-sql-distinct">
      DISTINCT
     </a>
-    <a href="#m-sql-nth-value">
+<a href="#m-sql-nth-value">
      NTH_VALUE()
     </a>
-   </div>
-  </div>
-  <div class="method-chip-group">
-   <span>
+</div>
+</div>
+<div class="method-chip-group">
+<span>
     pandas
    </span>
-   <div>
-    <a href="#m-pd-select-column">
+<div>
+<a href="#m-pd-select-column">
      Select column
     </a>
-    <a href="#m-pd-select-columns">
+<a href="#m-pd-select-columns">
      Select columns
     </a>
-    <a href="#m-pd-iloc">
+<a href="#m-pd-iloc">
      Rows by position
     </a>
-    <a href="#m-pd-filter">
+<a href="#m-pd-filter">
      Condition
     </a>
-    <a href="#m-pd-apply">
+<a href="#m-pd-apply">
      apply()
     </a>
-    <a href="#m-pd-reset-index">
+<a href="#m-pd-reset-index">
      Reset index
     </a>
-    <a href="#m-pd-groupby">
+<a href="#m-pd-groupby">
      Basic group
     </a>
-    <a href="#m-pd-groupby-multi">
+<a href="#m-pd-groupby-multi">
      Multiple groups
     </a>
-    <a href="#m-pd-group-apply">
+<a href="#m-pd-group-apply">
      Group apply
     </a>
-    <a href="#m-pd-argmin">
+<a href="#m-pd-argmin">
      argmin()
     </a>
-    <a href="#m-pd-argmax">
+<a href="#m-pd-argmax">
      argmax()
     </a>
-   </div>
-  </div>
- </details>
- <div class="prev-next">
-  <a href="#LC3220">
-   <small>
+</div>
+</div>
+</details>
+<div class="prev-next">
+<a href="#LC3220">
+<small>
     ← Previous
    </small>
    3220 · Odd and even transactions
   </a>
-  <a href="#LC3475">
-   <small>
+<a href="#LC3475">
+<small>
     Next →
    </small>
    3475 · DNA pattern recognition
   </a>
- </div>
+</div>
 </article>
