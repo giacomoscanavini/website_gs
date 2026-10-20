@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sorting · Python DSA</title>
+<meta name="description" content="Python DSA: algorithm patterns, short implementations, complexity and step-by-step index traces">
+<meta name="theme-color" content="#E4E6E8">
+<link rel="stylesheet" href="../styles/reader.css">
+</head>
+<body data-portable="false">
+<a class="skip" href="#main">Skip to notes</a>
+<header class="mobilebar"><a href="../index.html">Python DSA</a><button type="button" id="menu-toggle" aria-controls="sidebar" aria-expanded="false">Topics</button></header>
+<aside class="sidebar" id="sidebar" aria-label="Study navigation"><a class="brand" href="../index.html">Python DSA<small>Patterns &amp; algorithms</small></a><button type="button" class="close-menu" aria-label="Close topics">×</button>
+<div class="search"><label class="sr-only" for="search">Search the notes</label><input id="search" type="search" placeholder="Search a concept…" autocomplete="off"><kbd aria-hidden="true">/</kbd></div>
+<div class="search-results" aria-live="polite" hidden></div><nav class="topic-nav"><a href="two-pointers.html" data-topic-link="two-pointers"><span class="topic-no">01</span>Two pointers</a>
+<a href="sliding-window.html" data-topic-link="sliding-window"><span class="topic-no">02</span>Sliding window</a>
+<a href="hash-table.html" data-topic-link="hash-table"><span class="topic-no">03</span>Hash table</a>
+<a href="prefix-sum.html" data-topic-link="prefix-sum"><span class="topic-no">04</span>Prefix sum</a>
+<a href="stack.html" data-topic-link="stack"><span class="topic-no">05</span>Stack</a>
+<a href="queue.html" data-topic-link="queue"><span class="topic-no">06</span>Queue</a>
+<a href="binary-search.html" data-topic-link="binary-search"><span class="topic-no">07</span>Binary search</a>
+<a href="dynamic-programming.html" data-topic-link="dynamic-programming"><span class="topic-no">08</span>Dynamic programming</a>
+<a href="sorting.html" data-topic-link="sorting" aria-current="page"><span class="topic-no">09</span>Sorting</a>
+</nav>
+<div class="side-footer"><a href="../../../projects.html#dsa-field-notes">Side projects</a><p>Zero-based indices<br>Python 3.10+</p></div></aside>
+<button type="button" class="scrim" aria-label="Close topics" tabindex="-1"></button>
+<div class="app"><div class="topbar"><a href="../index.html">Data structures &amp; algorithms</a><button type="button" data-print>Print this topic</button></div><main class="main" id="main"><section class="topic-layout" data-topic-view="sorting" id="sorting">
+<article class="article"><header class="chapter-header"><p class="eyebrow">09 / Python DSA</p><h1 tabindex="-1">Sorting</h1><p class="summary">Build order by inserting, selecting, merging, exchanging, distributing, or partitioning.</p></header>
+<details class="mobile-outline"><summary>In this topic</summary><nav><a href="#sorting--what-to-compare">What to compare</a><a href="#sorting--common-uses-of-sorted-order">Common uses of sorted order</a><a href="#sorting--insertion-sort">Insertion sort</a><a href="#sorting--selection-sort">Selection sort</a><a href="#sorting--merge-sort">Merge sort</a><a href="#sorting--bubble-sort">Bubble sort</a><a href="#sorting--bucket-sort">Bucket sort</a><a href="#sorting--quicksort">Quicksort</a></nav></details>
+<div class="article-body"><h2 id="sorting--what-to-compare">What to compare</h2>
+<p><strong>Stable</strong> means equal-key records keep their original order. <strong>In place</strong> means the main array is rearranged rather than replaced; recursion can still use extra memory. Here <code>n</code> is the number of values and <code>b</code> is the number of buckets.</p>
+<div aria-label="Comparison table" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Algorithm shown</th>
+<th>Best time</th>
+<th>Typical / expected time</th>
+<th>Worst time</th>
+<th>Extra memory</th>
+<th>Stable?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Insertion</td>
+<td><code>O(n)</code></td>
+<td><code>O(n²)</code></td>
+<td><code>O(n²)</code></td>
+<td><code>O(1)</code></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Selection</td>
+<td><code>O(n²)</code></td>
+<td><code>O(n²)</code></td>
+<td><code>O(n²)</code></td>
+<td><code>O(1)</code></td>
+<td>No</td>
+</tr>
+<tr>
+<td>Merge</td>
+<td><code>O(n log n)</code></td>
+<td><code>O(n log n)</code></td>
+<td><code>O(n log n)</code></td>
+<td><code>O(n)</code> peak</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Bubble, early stop</td>
+<td><code>O(n)</code></td>
+<td><code>O(n²)</code></td>
+<td><code>O(n²)</code></td>
+<td><code>O(1)</code></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Bucket, insertion inside</td>
+<td><code>O(n + b)</code></td>
+<td><code>O(n + b + n²/b)</code> under uniform independent inputs</td>
+<td><code>O(n² + b)</code></td>
+<td><code>O(n + b)</code></td>
+<td>Yes in this version</td>
+</tr>
+<tr>
+<td>Quicksort, final pivot</td>
+<td><code>O(n log n)</code></td>
+<td><code>O(n log n)</code> for random distinct input order</td>
+<td><code>O(n²)</code></td>
+<td><code>O(log n)</code> balanced; <code>O(n)</code> worst</td>
+<td>No</td>
+</tr>
+</tbody>
+</table></div>
+<p>Insertion, selection, bubble, and quicksort below change the input and return <code>None</code>. Merge and bucket sort return a new list. In ordinary Python code, <code>nums.sort()</code> changes the list, while <code>sorted(nums)</code> returns a new one; both are stable.</p>
+<h2 id="sorting--common-uses-of-sorted-order">Common uses of sorted order</h2>
+<div aria-label="Comparison table" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Task</th>
+<th>What sorting enables</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Find a pair with a target sum</td>
+<td>Move two pointers using value order</td>
+</tr>
+<tr>
+<td>Group equal items</td>
+<td>Equal keys become adjacent</td>
+</tr>
+<tr>
+<td>Merge overlapping intervals</td>
+<td>Sort by start, then scan while extending the current end</td>
+</tr>
+<tr>
+<td>Answer repeated ordered lookups</td>
+<td>Build the order once, then use binary search</td>
+</tr>
+</tbody>
+</table></div>
+<p>Sorting is preprocessing: include its cost in the full algorithm. Sorting by one key can also destroy the original order needed by another part of the task.</p>
+<h2 id="sorting--insertion-sort">Insertion sort</h2>
+<p><strong>Pattern:</strong> maintain a sorted prefix. Save the next value as <code>key</code>, shift larger prefix values one position right, and insert <code>key</code> into the gap.</p>
+<p><strong>Pros:</strong> simple, stable, and efficient on small or nearly sorted inputs. <strong>Cons:</strong> many shifts on reversed input. With <code>I</code> inversions, its work is <code>O(n + I)</code>; in the worst case <code>I</code> is quadratic.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy insertion code" data-copy="code-insertion" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-insertion"><span class="c1"># Time O(n^2) worst case, O(n) for already sorted input</span>
+<span class="c1"># Extra space O(1)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">insertion_sort</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="k">while</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">key</span><span class="p">:</span>
+            <span class="n">nums</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">j</span> <span class="o">-=</span> <span class="mi">1</span>
+        <span class="n">nums</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+</code></pre></div>
+<p>Use <code>&gt;</code> rather than <code>&gt;=</code> to avoid moving equal values past one another. The prefix is sorted after each insertion, but those values are not necessarily in their final global positions yet.</p>
+<section aria-label="Shift larger values, then insert the saved key" class="trace" data-trace="insertion">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Shift larger values, then insert the saved key</h3><p class="trace-intro">nums = [4, 1, 3, 2]</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 11</output></div>
+<input aria-label="Step through Shift larger values, then insert the saved key" class="scrubber" max="10" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Index 0 is a sorted prefix of length 1.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell done"><span class="cell-index">0</span><span class="cell-value">4</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">3</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">2</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Index 0 is a sorted prefix of length 1.</li>
+<li>i = 1: save key = 1 outside the array. Scan the sorted prefix backward from j = 0.<span class="step-state">i = 1 · j = 0 · key = 1</span></li>
+<li>4 &gt; key 1: shift nums[0] to index 1, then j becomes -1. The repeated array value is temporary; key is still saved.<span class="step-state">i = 1 · j = -1 · key = 1</span></li>
+<li>Place key 1 at j + 1 = 0. The prefix through index 1 is sorted.<span class="step-state">i = 1 · key = 1</span></li>
+<li>i = 2: save key = 3 outside the array. Scan the sorted prefix backward from j = 1.<span class="step-state">i = 2 · j = 1 · key = 3</span></li>
+<li>4 &gt; key 3: shift nums[1] to index 2, then j becomes 0. The repeated array value is temporary; key is still saved.<span class="step-state">i = 2 · j = 0 · key = 3</span></li>
+<li>Place key 3 at j + 1 = 1. The prefix through index 2 is sorted.<span class="step-state">i = 2 · key = 3</span></li>
+<li>i = 3: save key = 2 outside the array. Scan the sorted prefix backward from j = 2.<span class="step-state">i = 3 · j = 2 · key = 2</span></li>
+<li>4 &gt; key 2: shift nums[2] to index 3, then j becomes 1. The repeated array value is temporary; key is still saved.<span class="step-state">i = 3 · j = 1 · key = 2</span></li>
+<li>3 &gt; key 2: shift nums[1] to index 2, then j becomes 0. The repeated array value is temporary; key is still saved.<span class="step-state">i = 3 · j = 0 · key = 2</span></li>
+<li>Place key 2 at j + 1 = 1. The prefix through index 3 is sorted.<span class="step-state">i = 3 · key = 2</span></li>
+</ol></details>
+</section>
+<h2 id="sorting--selection-sort">Selection sort</h2>
+<p><strong>Pattern:</strong> find the smallest remaining value and swap it into the next final position. Before pass <code>i</code>, positions before <code>i</code> are final.</p>
+<p><strong>Pros:</strong> at most <code>n - 1</code> placement swaps. <strong>Cons:</strong> the remaining suffix must still be scanned on sorted input; ordinary swapping is not stable. For equal-key records <code>[2a, 2b, 1]</code>, moving <code>1</code> to the front yields <code>[1, 2b, 2a]</code>.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy selection code" data-copy="code-selection" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-selection"><span class="c1"># Time O(n^2) for every input order</span>
+<span class="c1"># Extra space O(1)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">selection_sort</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">smallest</span> <span class="o">=</span> <span class="n">i</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">smallest</span><span class="p">]:</span>
+                <span class="n">smallest</span> <span class="o">=</span> <span class="n">j</span>
+        <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">smallest</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">smallest</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+</code></pre></div>
+<p><strong>Cost:</strong> the comparisons add up to <code>(n - 1) + (n - 2) + ... + 1 = n(n - 1)/2</code>.</p>
+<section aria-label="Select one final position per pass" class="trace" data-trace="selection">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Select one final position per pass</h3><p class="trace-intro">nums = [4, 1, 3, 2]</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 14</output></div>
+<input aria-label="Step through Select one final position per pass" class="scrubber" max="13" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">No positions are fixed yet. Each pass selects the smallest remaining value.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">4</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">3</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">2</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>No positions are fixed yet. Each pass selects the smallest remaining value.</li>
+<li>i = 0: start with smallest = 0. Scan the remaining suffix.<span class="step-state">i = 0 · smallest = 0</span></li>
+<li>j = 1: compare 1 with candidate 4. Update smallest to 1.<span class="step-state">i = 0 · j = 1 · smallest = 1</span></li>
+<li>j = 2: compare 3 with candidate 1. Keep smallest = 1.<span class="step-state">i = 0 · j = 2 · smallest = 1</span></li>
+<li>j = 3: compare 2 with candidate 1. Keep smallest = 1.<span class="step-state">i = 0 · j = 3 · smallest = 1</span></li>
+<li>Swap indices 0 and 1. Position 0 is now final.<span class="step-state">i = 0</span></li>
+<li>i = 1: start with smallest = 1. Scan the remaining suffix.<span class="step-state">i = 1 · smallest = 1</span></li>
+<li>j = 2: compare 3 with candidate 4. Update smallest to 2.<span class="step-state">i = 1 · j = 2 · smallest = 2</span></li>
+<li>j = 3: compare 2 with candidate 3. Update smallest to 3.<span class="step-state">i = 1 · j = 3 · smallest = 3</span></li>
+<li>Swap indices 1 and 3. Position 1 is now final.<span class="step-state">i = 1</span></li>
+<li>i = 2: start with smallest = 2. Scan the remaining suffix.<span class="step-state">i = 2 · smallest = 2</span></li>
+<li>j = 3: compare 4 with candidate 3. Keep smallest = 2.<span class="step-state">i = 2 · j = 3 · smallest = 2</span></li>
+<li>Swap indices 2 and 2. Position 2 is now final.<span class="step-state">i = 2</span></li>
+<li>The last remaining value is also in its final position.<span class="step-state">result = [1, 2, 3, 4]</span></li>
+</ol></details>
+</section>
+<h2 id="sorting--merge-sort">Merge sort</h2>
+<p><strong>Pattern:</strong> divide into halves, sort each half, then merge with one index per half. Append the smaller available value. Once one half is exhausted, append the rest of the other.</p>
+<p><strong>Pros:</strong> predictable <code>O(n log n)</code> time and stable ordering. <strong>Cons:</strong> this array version allocates slices and merged lists. The merge itself is linear; roughly <code>log n</code> split levels give the total time.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy merge code" data-copy="code-merge" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-merge"><span class="c1"># Time O(n log n): linear merging at each split level</span>
+<span class="c1"># Extra space O(n) peak including slices and output, plus O(log n) frames</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">merge_sort</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">nums</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">mid</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="n">merge_sort</span><span class="p">(</span><span class="n">nums</span><span class="p">[:</span><span class="n">mid</span><span class="p">])</span>
+    <span class="n">right</span> <span class="o">=</span> <span class="n">merge_sort</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">mid</span><span class="p">:])</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">i</span> <span class="o">=</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">left</span><span class="p">)</span> <span class="ow">and</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">right</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">right</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">right</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">left</span><span class="p">):</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">left</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+        <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">right</span><span class="p">):</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">right</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+        <span class="n">j</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div>
+<p>Taking from the <strong>left on equality</strong> preserves stability. Slices across a single recursive path have geometrically decreasing lengths, so peak live storage is <code>O(n)</code>, not <code>O(n log n)</code>. The total amount allocated over the whole run can still be <code>O(n log n)</code>.</p>
+<section aria-label="Split the list, then merge sorted halves" class="trace" data-trace="merge">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Split the list, then merge sorted halves</h3><p class="trace-intro">nums = [4, 1, 3, 2]; indices reset within each subproblem</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 21</output></div>
+<input aria-label="Step through Split the list, then merge sorted halves" class="scrubber" max="20" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Depth 0: sort [4, 1, 3, 2]. Split at mid = 2.</p><div class="array-row"><p class="array-label">current subproblem</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">4</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">3</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">2</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"><span>depth = <b>0</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Depth 0: sort [4, 1, 3, 2]. Split at mid = 2.<span class="step-state">depth = 0</span></li>
+<li>Depth 1: sort [4, 1]. Split at mid = 1.<span class="step-state">depth = 1</span></li>
+<li>Depth 2: sort [4]. A list of length 0 or 1 is already sorted.<span class="step-state">depth = 2</span></li>
+<li>Depth 2: sort [1]. A list of length 0 or 1 is already sorted.<span class="step-state">depth = 2</span></li>
+<li>Depth 1: both halves are sorted. Merge them with i = j = 0. Indices are local to each half.<span class="step-state">depth = 1 · i = 0 · j = 0</span></li>
+<li>right[0] = 1 &lt; left[0] = 4. Append 1; advance j to 1.<span class="step-state">depth = 1 · i = 0 · j = 1</span></li>
+<li>The right half is exhausted. Append left[0] = 4; i becomes 1.<span class="step-state">depth = 1 · i = 1 · j = 1</span></li>
+<li>Depth 1: return the merged list [1, 4].<span class="step-state">depth = 1</span></li>
+<li>Depth 1: sort [3, 2]. Split at mid = 1.<span class="step-state">depth = 1</span></li>
+<li>Depth 2: sort [3]. A list of length 0 or 1 is already sorted.<span class="step-state">depth = 2</span></li>
+<li>Depth 2: sort [2]. A list of length 0 or 1 is already sorted.<span class="step-state">depth = 2</span></li>
+<li>Depth 1: both halves are sorted. Merge them with i = j = 0. Indices are local to each half.<span class="step-state">depth = 1 · i = 0 · j = 0</span></li>
+<li>right[0] = 2 &lt; left[0] = 3. Append 2; advance j to 1.<span class="step-state">depth = 1 · i = 0 · j = 1</span></li>
+<li>The right half is exhausted. Append left[0] = 3; i becomes 1.<span class="step-state">depth = 1 · i = 1 · j = 1</span></li>
+<li>Depth 1: return the merged list [2, 3].<span class="step-state">depth = 1</span></li>
+<li>Depth 0: both halves are sorted. Merge them with i = j = 0. Indices are local to each half.<span class="step-state">depth = 0 · i = 0 · j = 0</span></li>
+<li>left[0] = 1 &lt;= right[0] = 2. Append 1; advance i to 1.<span class="step-state">depth = 0 · i = 1 · j = 0</span></li>
+<li>right[0] = 2 &lt; left[1] = 4. Append 2; advance j to 1.<span class="step-state">depth = 0 · i = 1 · j = 1</span></li>
+<li>right[1] = 3 &lt; left[1] = 4. Append 3; advance j to 2.<span class="step-state">depth = 0 · i = 1 · j = 2</span></li>
+<li>The right half is exhausted. Append left[1] = 4; i becomes 2.<span class="step-state">depth = 0 · i = 2 · j = 2</span></li>
+<li>Depth 0: return the merged list [1, 2, 3, 4].<span class="step-state">depth = 0</span></li>
+</ol></details>
+</section>
+<h2 id="sorting--bubble-sort">Bubble sort</h2>
+<p><strong>Pattern:</strong> exchange adjacent out-of-order values. After a left-to-right pass, the largest remaining value is at <code>end</code>, so shorten the next pass.</p>
+<p><strong>Pros:</strong> simple, stable, and stops early when a full pass makes no swaps. <strong>Cons:</strong> usually many comparisons and swaps; little reason to choose it over insertion sort for small inputs.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy bubble code" data-copy="code-bubble" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-bubble"><span class="c1"># Time O(n^2) worst case, O(n) for already sorted input</span>
+<span class="c1"># Extra space O(1)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bubble_sort</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">end</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">swapped</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">end</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]:</span>
+                <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">swapped</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">swapped</span><span class="p">:</span>
+            <span class="k">break</span>
+</code></pre></div>
+<p>The no-swap test belongs <strong>after a complete pass</strong>, not after a single ordered pair. Only strict inversions are swapped, preserving equal-key order.</p>
+<section aria-label="Move the largest remaining value to the right" class="trace" data-trace="bubble">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Move the largest remaining value to the right</h3><p class="trace-intro">nums = [4, 1, 3, 2]</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 14</output></div>
+<input aria-label="Step through Move the largest remaining value to the right" class="scrubber" max="13" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Compare neighbors from left to right. Each pass fixes the largest remaining value at end.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">4</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">3</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">2</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Compare neighbors from left to right. Each pass fixes the largest remaining value at end.</li>
+<li>Start a pass with end = 3 and swapped = False.<span class="step-state">end = 3</span></li>
+<li>j = 0: 4 &gt; 1, so swap positions 0 and 1.<span class="step-state">end = 3 · j = 0 · swapped = True</span></li>
+<li>j = 1: 4 &gt; 3, so swap positions 1 and 2.<span class="step-state">end = 3 · j = 1 · swapped = True</span></li>
+<li>j = 2: 4 &gt; 2, so swap positions 2 and 3.<span class="step-state">end = 3 · j = 2 · swapped = True</span></li>
+<li>Position 3 is final. Shorten the next pass by one position.<span class="step-state">end = 3 · swapped = True</span></li>
+<li>Start a pass with end = 2 and swapped = False.<span class="step-state">end = 2</span></li>
+<li>j = 0: 1 &lt;= 3, so keep this pair unchanged.<span class="step-state">end = 2 · j = 0 · swapped = False</span></li>
+<li>j = 1: 3 &gt; 2, so swap positions 1 and 2.<span class="step-state">end = 2 · j = 1 · swapped = True</span></li>
+<li>Position 2 is final. Shorten the next pass by one position.<span class="step-state">end = 2 · swapped = True</span></li>
+<li>Start a pass with end = 1 and swapped = False.<span class="step-state">end = 1</span></li>
+<li>j = 0: 1 &lt;= 2, so keep this pair unchanged.<span class="step-state">end = 1 · j = 0 · swapped = False</span></li>
+<li>Position 1 is final. No swaps occurred: the whole array is sorted, so stop.<span class="step-state">end = 1 · swapped = False</span></li>
+<li>Return with the original list sorted.<span class="step-state">result = [1, 2, 3, 4]</span></li>
+</ol></details>
+</section>
+<h2 id="sorting--bucket-sort">Bucket sort</h2>
+<p><strong>Pattern:</strong> map values into ordered ranges, sort inside each bucket, then concatenate buckets in range order. This version accepts values in <code>[0, 1)</code> and maps a value to <code>int(value * b)</code>.</p>
+<p><strong>Pros:</strong> expected linear work when independent, roughly uniform inputs spread across <code>b</code> proportional to <code>n</code> buckets. <strong>Cons:</strong> the range and distribution matter; clustered values can put almost everything in one bucket. A value of <code>1</code> would map outside these buckets and is rejected.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy bucket code" data-copy="code-bucket" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-bucket"><span class="c1"># Expected time O(n + b + n^2 / b) for independent uniform values</span>
+<span class="c1"># Worst time O(n^2 + b), extra space O(n + b), b is the bucket count</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bucket_sort</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">],</span> <span class="n">bucket_count</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">float</span><span class="p">]:</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">))</span> <span class="k">if</span> <span class="n">bucket_count</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">bucket_count</span>
+    <span class="k">if</span> <span class="n">b</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"The bucket count must be positive"</span><span class="p">)</span>
+    <span class="n">buckets</span> <span class="o">=</span> <span class="p">[[]</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">b</span><span class="p">)]</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">value</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Values must lie in [0, 1)"</span><span class="p">)</span>
+        <span class="n">buckets</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">value</span> <span class="o">*</span> <span class="n">b</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">bucket</span> <span class="ow">in</span> <span class="n">buckets</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">bucket</span><span class="p">)):</span>
+            <span class="n">key</span> <span class="o">=</span> <span class="n">bucket</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">while</span> <span class="n">j</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">bucket</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">key</span><span class="p">:</span>
+                <span class="n">bucket</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">bucket</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+                <span class="n">j</span> <span class="o">-=</span> <span class="mi">1</span>
+            <span class="n">bucket</span><span class="p">[</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">key</span>
+        <span class="n">result</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">bucket</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div>
+<p>With bucket sizes <code>m₀, m₁, ...</code>, insertion sorting contributes <code>O(Σ mᵢ²)</code>. Uniform independent inputs give expected time <code>O(n + b + n²/b)</code>; setting <code>b</code> proportional to <code>n</code> makes this <code>O(n)</code>. A fixed small bucket count does <strong>not</strong> guarantee linear scaling. This is bucket sort, not counting sort: a bucket can contain different values that still need sorting.</p>
+<section aria-label="Distribute, sort locally, concatenate" class="trace" data-trace="bucket">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Distribute, sort locally, concatenate</h3><p class="trace-intro">nums = [0.42, 0.12, 0.37, 0.09, 0.81], b = 5</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 18</output></div>
+<input aria-label="Step through Distribute, sort locally, concatenate" class="scrubber" max="17" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Create 5 ordered buckets covering [0, 1). Each has width 0.2.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">0.42</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">0.12</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">0.37</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">0.09</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">4</span><span class="cell-value">0.81</span><span class="cell-marks"></span></div></div></div></div><div class="array-row"><p class="array-label">bucket 0 [0, 0.2)</p><div class="cells-scroll"><div class="cells"><span class="empty-array">[ ] empty</span></div></div></div><div class="array-row"><p class="array-label">bucket 1 [0.2, 0.4)</p><div class="cells-scroll"><div class="cells"><span class="empty-array">[ ] empty</span></div></div></div><div class="array-row"><p class="array-label">bucket 2 [0.4, 0.6)</p><div class="cells-scroll"><div class="cells"><span class="empty-array">[ ] empty</span></div></div></div><div class="array-row"><p class="array-label">bucket 3 [0.6, 0.8)</p><div class="cells-scroll"><div class="cells"><span class="empty-array">[ ] empty</span></div></div></div><div class="array-row"><p class="array-label">bucket 4 [0.8, 1)</p><div class="cells-scroll"><div class="cells"><span class="empty-array">[ ] empty</span></div></div></div><div class="state-grid"><span>b = <b>5</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Create 5 ordered buckets covering [0, 1). Each has width 0.2.<span class="step-state">b = 5</span></li>
+<li>Index 0: floor(0.42 × 5) = 2. Append 0.42 to bucket 2.<span class="step-state">bucket = 2</span></li>
+<li>Index 1: floor(0.12 × 5) = 0. Append 0.12 to bucket 0.<span class="step-state">bucket = 0</span></li>
+<li>Index 2: floor(0.37 × 5) = 1. Append 0.37 to bucket 1.<span class="step-state">bucket = 1</span></li>
+<li>Index 3: floor(0.09 × 5) = 0. Append 0.09 to bucket 0.<span class="step-state">bucket = 0</span></li>
+<li>Index 4: floor(0.81 × 5) = 4. Append 0.81 to bucket 4.<span class="step-state">bucket = 4</span></li>
+<li>Sort bucket 0 using insertion sort. Current values: [0.12, 0.09].<span class="step-state">bucket = 0</span></li>
+<li>Bucket 0: key = 0.09; shift 0.12 right and decrement j to -1.<span class="step-state">bucket = 0 · key = 0.09 · i = 1 · j = -1</span></li>
+<li>Bucket 0: place key 0.09 at local index 0.<span class="step-state">bucket = 0 · key = 0.09</span></li>
+<li>Append sorted bucket 0 to the output. Bucket order already guarantees the order between buckets.<span class="step-state">bucket = 0</span></li>
+<li>Sort bucket 1 using insertion sort. Current values: [0.37].<span class="step-state">bucket = 1</span></li>
+<li>Append sorted bucket 1 to the output. Bucket order already guarantees the order between buckets.<span class="step-state">bucket = 1</span></li>
+<li>Sort bucket 2 using insertion sort. Current values: [0.42].<span class="step-state">bucket = 2</span></li>
+<li>Append sorted bucket 2 to the output. Bucket order already guarantees the order between buckets.<span class="step-state">bucket = 2</span></li>
+<li>Sort bucket 3 using insertion sort. Current values: [].<span class="step-state">bucket = 3</span></li>
+<li>Append sorted bucket 3 to the output. Bucket order already guarantees the order between buckets.<span class="step-state">bucket = 3</span></li>
+<li>Sort bucket 4 using insertion sort. Current values: [0.81].<span class="step-state">bucket = 4</span></li>
+<li>Append sorted bucket 4 to the output. Bucket order already guarantees the order between buckets.<span class="step-state">bucket = 4</span></li>
+</ol></details>
+</section>
+<h2 id="sorting--quicksort">Quicksort</h2>
+<p><strong>Pattern:</strong> partition around a pivot, put the pivot in its final position, and sort the two remaining intervals. This version chooses the last value as the pivot and uses inclusive bounds <code>[lo, hi]</code> inside its recursive calls.</p>
+<p>During partition, <code>nums[lo:i]</code> contains values below the pivot. <code>j</code> scans the remaining non-pivot values. Swap a smaller value to <code>i</code> and advance <code>i</code>. Finally swap the pivot into <code>i</code>.</p>
+<p><strong>Pros:</strong> partitions the original array with little work per comparison and can be efficient with balanced splits. <strong>Cons:</strong> unstable; choosing the last value gives quadratic work on sorted, reversed, or all-equal inputs. Deep recursion can also exceed Python's recursion limit.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy quick code" data-copy="code-quick" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-quick"><span class="c1"># Time O(n log n) for balanced partitions, O(n^2) worst case</span>
+<span class="c1"># Extra space O(log n) for balanced recursion, O(n) worst case</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">quicksort</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">partition</span><span class="p">(</span><span class="n">lo</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hi</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">pivot</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">hi</span><span class="p">]</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">lo</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">pivot</span><span class="p">:</span>
+                <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">hi</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">hi</span><span class="p">],</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">i</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">sort</span><span class="p">(</span><span class="n">lo</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hi</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">lo</span> <span class="o">&gt;=</span> <span class="n">hi</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">partition</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">)</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">lo</span><span class="p">,</span> <span class="n">p</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">sort</span><span class="p">(</span><span class="n">p</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">hi</span><span class="p">)</span>
+
+    <span class="n">sort</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
+<p>A balanced split gives <code>T(n) ≈ 2T(n/2) + O(n)</code>. Repeated splits of sizes <code>0</code> and <code>n - 1</code> give <code>T(n) = T(n - 1) + O(n) = O(n²)</code>. Random pivots reduce dependence on input order; three-way partitioning handles many equal keys more directly. Neither change is included in the simple implementation above.</p>
+<section aria-label="Partition around the final value" class="trace" data-trace="quick">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Partition around the final value</h3><p class="trace-intro">nums = [4, 1, 3, 2]</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 12</output></div>
+<input aria-label="Step through Partition around the final value" class="scrubber" max="11" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Use the final value of each active interval as its pivot. Quicksort intervals here include both lo and hi.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">4</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">3</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">2</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Use the final value of each active interval as its pivot. Quicksort intervals here include both lo and hi.</li>
+<li>Partition [0, 3] around pivot = nums[3] = 2. i = 0 starts the region for values below the pivot.<span class="step-state">lo = 0 · hi = 3 · pivot = 2 · i = 0 · depth = 0</span></li>
+<li>j = 0: 4 &gt;= 2. Leave it in the right-side region; i remains 0.<span class="step-state">lo = 0 · hi = 3 · i = 0 · j = 0 · pivot = 2 · depth = 0</span></li>
+<li>j = 1: 1 &lt; 2. Swap indices 0 and 1, then move i to 1. The region [lo, i) contains values below the pivot.<span class="step-state">lo = 0 · hi = 3 · i = 1 · j = 1 · pivot = 2 · depth = 0</span></li>
+<li>j = 2: 3 &gt;= 2. Leave it in the right-side region; i remains 1.<span class="step-state">lo = 0 · hi = 3 · i = 1 · j = 2 · pivot = 2 · depth = 0</span></li>
+<li>Swap the pivot at 3 into index 1. This pivot position is final. Recurse on [0, 0] and [2, 3], excluding the pivot.<span class="step-state">p = 1 · lo = 0 · hi = 3 · depth = 0</span></li>
+<li>Interval [0, 0] has one element. It is already placed.<span class="step-state">lo = 0 · hi = 0 · depth = 1</span></li>
+<li>Partition [2, 3] around pivot = nums[3] = 4. i = 2 starts the region for values below the pivot.<span class="step-state">lo = 2 · hi = 3 · pivot = 4 · i = 2 · depth = 1</span></li>
+<li>j = 2: 3 &lt; 4. Swap indices 2 and 2, then move i to 3. The region [lo, i) contains values below the pivot.<span class="step-state">lo = 2 · hi = 3 · i = 3 · j = 2 · pivot = 4 · depth = 1</span></li>
+<li>Swap the pivot at 3 into index 3. This pivot position is final. Recurse on [2, 2] and [4, 3], excluding the pivot.<span class="step-state">p = 3 · lo = 2 · hi = 3 · depth = 1</span></li>
+<li>Interval [2, 2] has one element. It is already placed.<span class="step-state">lo = 2 · hi = 2 · depth = 2</span></li>
+<li>Every partition is complete. The original list is sorted.<span class="step-state">result = [1, 2, 3, 4]</span></li>
+</ol></details>
+</section>
+</div><details class="costs"><summary>Reading the complexity comments</summary><p><code>n</code> is the input length unless another size is defined. Extra space excludes the input and counts stored results when they are constructed. Recursion frames count as extra space. Costs assume bounded-size values and constant-time comparisons; dictionary and set costs are expected under ordinary hashing. The step viewer stores snapshots for illustration; that storage is not part of the displayed algorithm.</p></details><nav class="end-nav" aria-label="Adjacent topics"><a href="dynamic-programming.html"><small>Previous</small>Dynamic programming</a><span></span></nav></article>
+<aside class="onpage"><p>In this topic</p><nav><a href="#sorting--what-to-compare">What to compare</a><a href="#sorting--common-uses-of-sorted-order">Common uses of sorted order</a><a href="#sorting--insertion-sort">Insertion sort</a><a href="#sorting--selection-sort">Selection sort</a><a href="#sorting--merge-sort">Merge sort</a><a href="#sorting--bubble-sort">Bubble sort</a><a href="#sorting--bucket-sort">Bucket sort</a><a href="#sorting--quicksort">Quicksort</a></nav></aside></section></main></div>
+<div class="notice" role="status" hidden></div>
+<script src="../scripts/search-index.js"></script>
+<script src="../scripts/traces/sorting.js"></script>
+<script src="../scripts/reader.js"></script>
+</body></html>

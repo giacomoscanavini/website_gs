@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Queue · Python DSA</title>
+<meta name="description" content="Python DSA: algorithm patterns, short implementations, complexity and step-by-step index traces">
+<meta name="theme-color" content="#E4E6E8">
+<link rel="stylesheet" href="../styles/reader.css">
+</head>
+<body data-portable="false">
+<a class="skip" href="#main">Skip to notes</a>
+<header class="mobilebar"><a href="../index.html">Python DSA</a><button type="button" id="menu-toggle" aria-controls="sidebar" aria-expanded="false">Topics</button></header>
+<aside class="sidebar" id="sidebar" aria-label="Study navigation"><a class="brand" href="../index.html">Python DSA<small>Patterns &amp; algorithms</small></a><button type="button" class="close-menu" aria-label="Close topics">×</button>
+<div class="search"><label class="sr-only" for="search">Search the notes</label><input id="search" type="search" placeholder="Search a concept…" autocomplete="off"><kbd aria-hidden="true">/</kbd></div>
+<div class="search-results" aria-live="polite" hidden></div><nav class="topic-nav"><a href="two-pointers.html" data-topic-link="two-pointers"><span class="topic-no">01</span>Two pointers</a>
+<a href="sliding-window.html" data-topic-link="sliding-window"><span class="topic-no">02</span>Sliding window</a>
+<a href="hash-table.html" data-topic-link="hash-table"><span class="topic-no">03</span>Hash table</a>
+<a href="prefix-sum.html" data-topic-link="prefix-sum"><span class="topic-no">04</span>Prefix sum</a>
+<a href="stack.html" data-topic-link="stack"><span class="topic-no">05</span>Stack</a>
+<a href="queue.html" data-topic-link="queue" aria-current="page"><span class="topic-no">06</span>Queue</a>
+<a href="binary-search.html" data-topic-link="binary-search"><span class="topic-no">07</span>Binary search</a>
+<a href="dynamic-programming.html" data-topic-link="dynamic-programming"><span class="topic-no">08</span>Dynamic programming</a>
+<a href="sorting.html" data-topic-link="sorting"><span class="topic-no">09</span>Sorting</a>
+</nav>
+<div class="side-footer"><a href="../../../projects.html#dsa-field-notes">Side projects</a><p>Zero-based indices<br>Python 3.10+</p></div></aside>
+<button type="button" class="scrim" aria-label="Close topics" tabindex="-1"></button>
+<div class="app"><div class="topbar"><a href="../index.html">Data structures &amp; algorithms</a><button type="button" data-print>Print this topic</button></div><main class="main" id="main"><section class="topic-layout" data-topic-view="queue" id="queue">
+<article class="article"><header class="chapter-header"><p class="eyebrow">06 / Python DSA</p><h1 tabindex="-1">Queue</h1><p class="summary">Process the earliest pending item first; use a deque when both ends matter.</p></header>
+<details class="mobile-outline"><summary>In this topic</summary><nav><a href="#queue--first-in-first-out">First in, first out</a><a href="#queue--breadth-first-distances">Breadth-first distances</a><a href="#queue--monotonic-deque-a-maximum-in-each-window">Monotonic deque: a maximum in each window</a></nav></details>
+<div class="article-body"><h2 id="queue--first-in-first-out">First in, first out</h2>
+<p>Use <code>collections.deque</code>. <code>queue.append(x)</code> adds at the back; <code>queue.popleft()</code> removes from the front. Both end operations are <code>O(1)</code>. A list's <code>pop(0)</code> shifts all later elements and costs <code>O(n)</code>.</p>
+<div aria-label="Comparison table" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>What is queued</th>
+<th>Main rule</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Work in arrival order</td>
+<td>Tasks or events</td>
+<td>Append at the back, remove from the front</td>
+</tr>
+<tr>
+<td>Breadth-first search</td>
+<td>Discovered, unprocessed vertices</td>
+<td>Mark discovered when enqueuing</td>
+</tr>
+<tr>
+<td>Level-by-level traversal</td>
+<td>Nodes in the current frontier</td>
+<td>Process the queue length captured at the level's start</td>
+</tr>
+<tr>
+<td>Monotonic deque</td>
+<td>Candidate indices for a window extremum</td>
+<td>Expire from the front, remove dominated values from the back</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Advantage:</strong> FIFO order gives fair arrival-order processing and breadth-first traversal. <strong>Limitations:</strong> a wide frontier can consume substantial memory; a FIFO queue does not prioritize a cheaper path in a weighted graph. Access near the middle of a deque is linear.</p>
+<h2 id="queue--breadth-first-distances">Breadth-first distances</h2>
+<p>Start with the source at distance zero. Remove one vertex, discover its unseen neighbors at distance <code>distance[node] + 1</code>, and enqueue them. With unweighted edges, every layer is one edge farther from the start.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy bfs code" data-copy="code-bfs" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-bfs"><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
+
+<span class="c1"># Expected time O(V + E): reachable vertices and their adjacency entries</span>
+<span class="c1"># Extra space O(V): the queue and distance table</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">bfs_distances</span><span class="p">(</span><span class="n">graph</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]],</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">deque</span><span class="p">([</span><span class="n">start</span><span class="p">])</span>
+    <span class="n">distance</span> <span class="o">=</span> <span class="p">{</span><span class="n">start</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
+    <span class="k">while</span> <span class="n">queue</span><span class="p">:</span>
+        <span class="n">node</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">neighbor</span> <span class="ow">in</span> <span class="n">graph</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="p">[]):</span>
+            <span class="k">if</span> <span class="n">neighbor</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">distance</span><span class="p">:</span>
+                <span class="n">distance</span><span class="p">[</span><span class="n">neighbor</span><span class="p">]</span> <span class="o">=</span> <span class="n">distance</span><span class="p">[</span><span class="n">node</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">neighbor</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">distance</span>
+</code></pre></div>
+<p>Mark a vertex when <strong>enqueuing</strong>, not when removing it: otherwise two parents may enqueue the same vertex. <code>V</code> and <code>E</code> here refer to the reachable vertices and adjacency entries examined. Unreachable vertices do not appear in the result. A missing adjacency list means that vertex has no outgoing edges.</p>
+<section aria-label="Discover each vertex when it enters the queue" class="trace" data-trace="bfs">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Discover each vertex when it enters the queue</h3><p class="trace-intro">Edges: 0 → 1, 2; 1 → 3; 2 → 3</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 10</output></div>
+<input aria-label="Step through Discover each vertex when it enters the queue" class="scrubber" max="9" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Enqueue vertex 0 and mark it discovered with distance 0.</p><div class="array-row"><p class="array-label">queue</p><div class="cells-scroll"><div class="cells"><div class="cell marked"><span class="cell-index">0</span><span class="cell-value">0</span><span class="cell-marks"><span>front</span></span></div></div></div></div><div class="array-row"><p class="array-label">vertex → distance</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index"> </span><span class="cell-value">0 → 0</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"><span>graph = <b>0 → 1, 2; 1 → 3; 2 → 3</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Enqueue vertex 0 and mark it discovered with distance 0.<span class="step-state">graph = 0 → 1, 2; 1 → 3; 2 → 3</span></li>
+<li>Dequeue vertex 0 from the front. Its distance is 0.<span class="step-state">node = 0</span></li>
+<li>Neighbor 1 is new. Set distance[1] = 0 + 1 = 1, then enqueue it at the back.<span class="step-state">node = 0 · neighbor = 1</span></li>
+<li>Neighbor 2 is new. Set distance[2] = 0 + 1 = 1, then enqueue it at the back.<span class="step-state">node = 0 · neighbor = 2</span></li>
+<li>Dequeue vertex 1 from the front. Its distance is 1.<span class="step-state">node = 1</span></li>
+<li>Neighbor 3 is new. Set distance[3] = 1 + 1 = 2, then enqueue it at the back.<span class="step-state">node = 1 · neighbor = 3</span></li>
+<li>Dequeue vertex 2 from the front. Its distance is 1.<span class="step-state">node = 2</span></li>
+<li>Neighbor 3 is already discovered. Do not enqueue it again.<span class="step-state">node = 2 · neighbor = 3</span></li>
+<li>Dequeue vertex 3 from the front. Its distance is 2.<span class="step-state">node = 3</span></li>
+<li>The queue is empty. Each distance is the minimum number of edges from vertex 0.<span class="step-state">result = {0: 0, 1: 1, 2: 1, 3: 2}</span></li>
+</ol></details>
+</section>
+<h2 id="queue--monotonic-deque-a-maximum-in-each-window">Monotonic deque: a maximum in each window</h2>
+<p>Keep candidate indices in increasing index order and decreasing value order. The front is the maximum candidate.</p>
+<ol>
+<li>Remove front indices that have left the window.</li>
+<li>Remove back indices whose values are no larger than the new value. The new value is at least as useful and expires later.</li>
+<li>Append the new index. Read the front once a complete window exists.</li>
+</ol>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy deque max code" data-copy="code-deque_max" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-deque_max"><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">deque</span>
+
+<span class="c1"># Time O(n): every index enters and leaves the deque at most once</span>
+<span class="c1"># Extra space O(k) working memory plus O(n - k + 1) output</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">window_max</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"k must be between 1 and len(nums)"</span><span class="p">)</span>
+    <span class="n">queue</span> <span class="o">=</span> <span class="n">deque</span><span class="p">()</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">right</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+        <span class="k">while</span> <span class="n">queue</span> <span class="ow">and</span> <span class="n">queue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="o">-</span> <span class="n">k</span><span class="p">:</span>
+            <span class="n">queue</span><span class="o">.</span><span class="n">popleft</span><span class="p">()</span>
+        <span class="k">while</span> <span class="n">queue</span> <span class="ow">and</span> <span class="n">nums</span><span class="p">[</span><span class="n">queue</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">&lt;=</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">queue</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+        <span class="n">queue</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">right</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">right</span> <span class="o">&gt;=</span> <span class="n">k</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">answer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">queue</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="k">return</span> <span class="n">answer</span>
+</code></pre></div>
+<p>Both ends are necessary: a stack alone cannot efficiently remove expired indices from the oldest end. Every index is inserted once and removed at most once, so total deque work is <code>O(n)</code>.</p>
+<section aria-label="Remove expired and dominated candidates" class="trace" data-trace="deque_max">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Remove expired and dominated candidates</h3><p class="trace-intro">nums = [1, 3, 2, 5, 4], k = 3</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 12</output></div>
+<input aria-label="Step through Remove expired and dominated candidates" class="scrubber" max="11" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">The deque stores candidate indices in decreasing value order. Its front will hold the window maximum.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">3</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">2</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">5</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">4</span><span class="cell-value">4</span><span class="cell-marks"></span></div></div></div></div><div class="array-row"><p class="array-label">candidate indices</p><div class="cells-scroll"><div class="cells"><span class="empty-array">[ ] empty</span></div></div></div><div class="array-row"><p class="array-label">maxima</p><div class="cells-scroll"><div class="cells"><span class="empty-array">[ ] empty</span></div></div></div><div class="state-grid"><span>k = <b>3</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>The deque stores candidate indices in decreasing value order. Its front will hold the window maximum.<span class="step-state">k = 3</span></li>
+<li>Append index 0. Candidates from front to back now have values [1].<span class="step-state">right = 0</span></li>
+<li>right = 1: 3 is at least as large as nums[0] = 1 and expires later. Remove index 0 from the back.<span class="step-state">right = 1</span></li>
+<li>Append index 1. Candidates from front to back now have values [3].<span class="step-state">right = 1</span></li>
+<li>Append index 2. Candidates from front to back now have values [3, 2].<span class="step-state">right = 2</span></li>
+<li>Window [0, 2] is complete. Its maximum is nums[1] = 3; append it to the output.<span class="step-state">right = 2 · result = [3]</span></li>
+<li>right = 3: 5 is at least as large as nums[2] = 2 and expires later. Remove index 2 from the back.<span class="step-state">right = 3</span></li>
+<li>right = 3: 5 is at least as large as nums[1] = 3 and expires later. Remove index 1 from the back.<span class="step-state">right = 3</span></li>
+<li>Append index 3. Candidates from front to back now have values [5].<span class="step-state">right = 3</span></li>
+<li>Window [1, 3] is complete. Its maximum is nums[3] = 5; append it to the output.<span class="step-state">right = 3 · result = [3, 5]</span></li>
+<li>Append index 4. Candidates from front to back now have values [5, 4].<span class="step-state">right = 4</span></li>
+<li>Window [2, 4] is complete. Its maximum is nums[3] = 5; append it to the output.<span class="step-state">right = 4 · result = [3, 5, 5]</span></li>
+</ol></details>
+</section>
+</div><details class="costs"><summary>Reading the complexity comments</summary><p><code>n</code> is the input length unless another size is defined. Extra space excludes the input and counts stored results when they are constructed. Recursion frames count as extra space. Costs assume bounded-size values and constant-time comparisons; dictionary and set costs are expected under ordinary hashing. The step viewer stores snapshots for illustration; that storage is not part of the displayed algorithm.</p></details><nav class="end-nav" aria-label="Adjacent topics"><a href="stack.html"><small>Previous</small>Stack</a><a href="binary-search.html"><small>Next</small>Binary search</a></nav></article>
+<aside class="onpage"><p>In this topic</p><nav><a href="#queue--first-in-first-out">First in, first out</a><a href="#queue--breadth-first-distances">Breadth-first distances</a><a href="#queue--monotonic-deque-a-maximum-in-each-window">Monotonic deque: a maximum in each window</a></nav></aside></section></main></div>
+<div class="notice" role="status" hidden></div>
+<script src="../scripts/search-index.js"></script>
+<script src="../scripts/traces/queue.js"></script>
+<script src="../scripts/reader.js"></script>
+</body></html>

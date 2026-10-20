@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dynamic programming · Python DSA</title>
+<meta name="description" content="Python DSA: algorithm patterns, short implementations, complexity and step-by-step index traces">
+<meta name="theme-color" content="#E4E6E8">
+<link rel="stylesheet" href="../styles/reader.css">
+</head>
+<body data-portable="false">
+<a class="skip" href="#main">Skip to notes</a>
+<header class="mobilebar"><a href="../index.html">Python DSA</a><button type="button" id="menu-toggle" aria-controls="sidebar" aria-expanded="false">Topics</button></header>
+<aside class="sidebar" id="sidebar" aria-label="Study navigation"><a class="brand" href="../index.html">Python DSA<small>Patterns &amp; algorithms</small></a><button type="button" class="close-menu" aria-label="Close topics">×</button>
+<div class="search"><label class="sr-only" for="search">Search the notes</label><input id="search" type="search" placeholder="Search a concept…" autocomplete="off"><kbd aria-hidden="true">/</kbd></div>
+<div class="search-results" aria-live="polite" hidden></div><nav class="topic-nav"><a href="two-pointers.html" data-topic-link="two-pointers"><span class="topic-no">01</span>Two pointers</a>
+<a href="sliding-window.html" data-topic-link="sliding-window"><span class="topic-no">02</span>Sliding window</a>
+<a href="hash-table.html" data-topic-link="hash-table"><span class="topic-no">03</span>Hash table</a>
+<a href="prefix-sum.html" data-topic-link="prefix-sum"><span class="topic-no">04</span>Prefix sum</a>
+<a href="stack.html" data-topic-link="stack"><span class="topic-no">05</span>Stack</a>
+<a href="queue.html" data-topic-link="queue"><span class="topic-no">06</span>Queue</a>
+<a href="binary-search.html" data-topic-link="binary-search"><span class="topic-no">07</span>Binary search</a>
+<a href="dynamic-programming.html" data-topic-link="dynamic-programming" aria-current="page"><span class="topic-no">08</span>Dynamic programming</a>
+<a href="sorting.html" data-topic-link="sorting"><span class="topic-no">09</span>Sorting</a>
+</nav>
+<div class="side-footer"><a href="../../../projects.html#dsa-field-notes">Side projects</a><p>Zero-based indices<br>Python 3.10+</p></div></aside>
+<button type="button" class="scrim" aria-label="Close topics" tabindex="-1"></button>
+<div class="app"><div class="topbar"><a href="../index.html">Data structures &amp; algorithms</a><button type="button" data-print>Print this topic</button></div><main class="main" id="main"><section class="topic-layout" data-topic-view="dynamic-programming" id="dynamic-programming">
+<article class="article"><header class="chapter-header"><p class="eyebrow">08 / Python DSA</p><h1 tabindex="-1">Dynamic programming</h1><p class="summary">Define smaller subproblems, reuse their answers, and evaluate them in dependency order.</p></header>
+<details class="mobile-outline"><summary>In this topic</summary><nav><a href="#dynamic-programming--start-with-the-recurrence">Start with the recurrence</a><a href="#dynamic-programming--a-recurrence-with-two-predecessors">A recurrence with two predecessors</a><a href="#dynamic-programming--top-down-and-memoization">Top-down and memoization</a><a href="#dynamic-programming--bottom-up-tabulation">Bottom-up tabulation</a><a href="#dynamic-programming--optimize-the-stored-state">Optimize the stored state</a><a href="#dynamic-programming--common-state-patterns">Common state patterns</a><a href="#dynamic-programming--minimize-the-final-coin">Minimize: the final coin</a><a href="#dynamic-programming--choose-or-skip-one-item-at-most-once">Choose or skip: one item at most once</a><a href="#dynamic-programming--compare-the-approaches">Compare the approaches</a></nav></details>
+<div class="article-body"><h2 id="dynamic-programming--start-with-the-recurrence">Start with the recurrence</h2>
+<p>Dynamic programming is useful when different choices lead to the <strong>same subproblem</strong>. A state must contain enough information to determine that subproblem's answer; otherwise two different situations may be incorrectly treated as the same one.</p>
+<ol>
+<li><strong>State:</strong> write one sentence defining <code>dp[state]</code>.</li>
+<li><strong>Transition:</strong> express that answer using smaller states and the allowed choices.</li>
+<li><strong>Base cases:</strong> give the smallest answers directly.</li>
+<li><strong>Evaluation order:</strong> compute dependencies before using them.</li>
+<li><strong>Final answer:</strong> identify the requested state, which is not always the last array entry.</li>
+</ol>
+<p><strong>Advantage:</strong> replaces repeated work with one computation per state. <strong>Limitations:</strong> a poor state definition gives wrong answers; too many states require too much time or memory. Recursion alone is not DP: reuse is what avoids repeated work.</p>
+<h2 id="dynamic-programming--a-recurrence-with-two-predecessors">A recurrence with two predecessors</h2>
+<p>Let <code>f(i)</code> count paths to step <code>i</code> using jumps of size 1 or 2. The final jump comes from <code>i - 1</code> or <code>i - 2</code>. These cases do not overlap, so their counts add.</p>
+<div class="formula">f(0) = 1   ·   f(1) = 1<br/>f(i) = f(i − 1) + f(i − 2), for i ≥ 2</div>
+<p><code>f(0) = 1</code> counts one empty path. For <code>i = 2</code>, the two paths are <code>1 + 1</code> and <code>2</code>; thus <code>f(2) = 2</code>. Continue: <code>f(3) = 3</code>, <code>f(4) = 5</code>, <code>f(5) = 8</code>.</p>
+<h3>Direct recursion</h3>
+<p>The recurrence translates directly into code, but repeated calls compute the same answers again. For example, both <code>f(4)</code> and <code>f(3)</code> request <code>f(2)</code>.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy dp recursive code" data-copy="code-dp_recursive" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-dp_recursive"><span class="c1"># Time O(2^n): repeated calls, an exponential upper bound</span>
+<span class="c1"># Extra space O(n): maximum recursion depth</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ways_recursive</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"n must be nonnegative"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">ways_recursive</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">ways_recursive</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div>
+<section aria-label="See the repeated recursive calls" class="trace" data-trace="dp_recursive">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">See the repeated recursive calls</h3><p class="trace-intro">n = 4; steps may have size 1 or 2</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 19</output></div>
+<input aria-label="Step through See the repeated recursive calls" class="scrubber" max="18" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Enter solve(4). First evaluate solve(3), then solve(2).</p><div class="array-row"><p class="array-label">active calls</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">4</span><span class="cell-marks"></span></div></div></div></div><div class="array-row"><p class="array-label">i → saved result</p><div class="cells-scroll"><div class="cells"><span class="empty-array">[ ] empty</span></div></div></div><div class="state-grid"><span>i = <b>4</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Enter solve(4). First evaluate solve(3), then solve(2).<span class="step-state">i = 4</span></li>
+<li>Enter solve(3). First evaluate solve(2), then solve(1).<span class="step-state">i = 3</span></li>
+<li>Enter solve(2). First evaluate solve(1), then solve(0).<span class="step-state">i = 2</span></li>
+<li>Enter solve(1). This is a base case.<span class="step-state">i = 1</span></li>
+<li>solve(1) returns 1. This state has now been computed 1 time(s).<span class="step-state">i = 1 · result = 1</span></li>
+<li>Enter solve(0). This is a base case.<span class="step-state">i = 0</span></li>
+<li>solve(0) returns 1. This state has now been computed 1 time(s).<span class="step-state">i = 0 · result = 1</span></li>
+<li>solve(2) returns 2. This state has now been computed 1 time(s).<span class="step-state">i = 2 · result = 2</span></li>
+<li>Enter solve(1). This is a base case.<span class="step-state">i = 1</span></li>
+<li>solve(1) returns 1. This state has now been computed 2 time(s).<span class="step-state">i = 1 · result = 1</span></li>
+<li>solve(3) returns 3. This state has now been computed 1 time(s).<span class="step-state">i = 3 · result = 3</span></li>
+<li>Enter solve(2). First evaluate solve(1), then solve(0).<span class="step-state">i = 2</span></li>
+<li>Enter solve(1). This is a base case.<span class="step-state">i = 1</span></li>
+<li>solve(1) returns 1. This state has now been computed 3 time(s).<span class="step-state">i = 1 · result = 1</span></li>
+<li>Enter solve(0). This is a base case.<span class="step-state">i = 0</span></li>
+<li>solve(0) returns 1. This state has now been computed 2 time(s).<span class="step-state">i = 0 · result = 1</span></li>
+<li>solve(2) returns 2. This state has now been computed 2 time(s).<span class="step-state">i = 2 · result = 2</span></li>
+<li>solve(4) returns 5. This state has now been computed 1 time(s).<span class="step-state">i = 4 · result = 5</span></li>
+<li>Return 5 ways. Repeated states generated repeated work.<span class="step-state">result = 5</span></li>
+</ol></details>
+</section>
+<h2 id="dynamic-programming--top-down-and-memoization">Top-down and memoization</h2>
+<p><strong>Top-down</strong> starts from the requested state and recursively asks for its dependencies. <strong>Memoization</strong> saves a state's answer so later calls return it immediately. <code>@cache</code> uses the function arguments as the key.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy dp memo code" data-copy="code-dp_memo" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-dp_memo"><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cache</span>
+
+<span class="c1"># Time O(n): each state is computed once</span>
+<span class="c1"># Extra space O(n): cached answers and recursion depth</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ways_top_down</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"n must be nonnegative"</span><span class="p">)</span>
+
+    <span class="nd">@cache</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="n">i</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">solve</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">solve</span><span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">solve</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+</code></pre></div>
+<p>The cache is local to each outer call. Every state from <code>0</code> through <code>n</code> is computed at most once, but the recursion can still be <code>O(n)</code> deep. Large <code>n</code> can exceed Python's recursion limit. A memoization key must include every changing input that affects the answer.</p>
+<section aria-label="Reuse a computed state" class="trace" data-trace="dp_memo">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Reuse a computed state</h3><p class="trace-intro">n = 5; steps may have size 1 or 2</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 16</output></div>
+<input aria-label="Step through Reuse a computed state" class="scrubber" max="15" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Enter solve(5). First evaluate solve(4), then solve(3).</p><div class="array-row"><p class="array-label">active calls</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">5</span><span class="cell-marks"></span></div></div></div></div><div class="array-row"><p class="array-label">i → saved result</p><div class="cells-scroll"><div class="cells"><span class="empty-array">[ ] empty</span></div></div></div><div class="state-grid"><span>i = <b>5</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Enter solve(5). First evaluate solve(4), then solve(3).<span class="step-state">i = 5</span></li>
+<li>Enter solve(4). First evaluate solve(3), then solve(2).<span class="step-state">i = 4</span></li>
+<li>Enter solve(3). First evaluate solve(2), then solve(1).<span class="step-state">i = 3</span></li>
+<li>Enter solve(2). First evaluate solve(1), then solve(0).<span class="step-state">i = 2</span></li>
+<li>Enter solve(1). This is a base case.<span class="step-state">i = 1</span></li>
+<li>solve(1) returns 1. Save this result in the cache.<span class="step-state">i = 1 · result = 1</span></li>
+<li>Enter solve(0). This is a base case.<span class="step-state">i = 0</span></li>
+<li>solve(0) returns 1. Save this result in the cache.<span class="step-state">i = 0 · result = 1</span></li>
+<li>solve(2) returns 2. Save this result in the cache.<span class="step-state">i = 2 · result = 2</span></li>
+<li>solve(1) is already cached as 1. Return it without expanding another call.<span class="step-state">i = 1</span></li>
+<li>solve(3) returns 3. Save this result in the cache.<span class="step-state">i = 3 · result = 3</span></li>
+<li>solve(2) is already cached as 2. Return it without expanding another call.<span class="step-state">i = 2</span></li>
+<li>solve(4) returns 5. Save this result in the cache.<span class="step-state">i = 4 · result = 5</span></li>
+<li>solve(3) is already cached as 3. Return it without expanding another call.<span class="step-state">i = 3</span></li>
+<li>solve(5) returns 8. Save this result in the cache.<span class="step-state">i = 5 · result = 8</span></li>
+<li>Return 8 ways. Each state was computed once.<span class="step-state">result = 8</span></li>
+</ol></details>
+</section>
+<h2 id="dynamic-programming--bottom-up-tabulation">Bottom-up tabulation</h2>
+<p><strong>Bottom-up</strong> starts with base cases and fills states in an order that respects their dependencies. Here <code>dp[i]</code> depends on smaller indices, so increase <code>i</code> from <code>2</code> to <code>n</code>.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy dp bottom code" data-copy="code-dp_bottom" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-dp_bottom"><span class="c1"># Time O(n): fill n + 1 states once</span>
+<span class="c1"># Extra space O(n): the table</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ways_bottom_up</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"n must be nonnegative"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">1</span>
+    <span class="n">dp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">dp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dp</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+</code></pre></div>
+<p>This avoids recursion overhead and recursion-depth limits, but computes every state in the chosen table. Keeping the table is useful when later queries or path reconstruction need older answers.</p>
+<section aria-label="Fill states in dependency order" class="trace" data-trace="dp_bottom">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Fill states in dependency order</h3><p class="trace-intro">n = 5; dp[i] counts ways to reach step i</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 6</output></div>
+<input aria-label="Step through Fill states in dependency order" class="scrubber" max="5" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Set dp[0] = 1 for the empty path and dp[1] = 1 for one single step. Other entries are not computed yet.</p><div class="array-row"><p class="array-label">dp</p><div class="cells-scroll"><div class="cells"><div class="cell done"><span class="cell-index">0</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell done"><span class="cell-index">1</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">0</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">0</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">4</span><span class="cell-value">0</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">5</span><span class="cell-value">0</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"><span>n = <b>5</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Set dp[0] = 1 for the empty path and dp[1] = 1 for one single step. Other entries are not computed yet.<span class="step-state">n = 5</span></li>
+<li>i = 2: dp[2] = dp[1] + dp[0] = 1 + 1 = 2.<span class="step-state">i = 2</span></li>
+<li>i = 3: dp[3] = dp[2] + dp[1] = 2 + 1 = 3.<span class="step-state">i = 3</span></li>
+<li>i = 4: dp[4] = dp[3] + dp[2] = 3 + 2 = 5.<span class="step-state">i = 4</span></li>
+<li>i = 5: dp[5] = dp[4] + dp[3] = 5 + 3 = 8.<span class="step-state">i = 5</span></li>
+<li>Return dp[5] = 8.<span class="step-state">result = 8</span></li>
+</ol></details>
+</section>
+<h2 id="dynamic-programming--optimize-the-stored-state">Optimize the stored state</h2>
+<p>Only the previous two values are needed for the next value. Before processing <code>i</code>, let <code>older = f(i - 2)</code> and <code>previous = f(i - 1)</code>. Calculate <code>current</code>, then shift the two saved values forward.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy dp rolling code" data-copy="code-dp_rolling" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-dp_rolling"><span class="c1"># Time O(n): one update per state</span>
+<span class="c1"># Extra space O(1): a constant number of integer slots</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ways_rolling</span><span class="p">(</span><span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"n must be nonnegative"</span><span class="p">)</span>
+    <span class="n">older</span><span class="p">,</span> <span class="n">previous</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">current</span> <span class="o">=</span> <span class="n">older</span> <span class="o">+</span> <span class="n">previous</span>
+        <span class="n">older</span><span class="p">,</span> <span class="n">previous</span> <span class="o">=</span> <span class="n">previous</span><span class="p">,</span> <span class="n">current</span>
+    <span class="k">return</span> <span class="n">previous</span>
+</code></pre></div>
+<p>This uses a constant number of integer <strong>slots</strong>, but no longer retains the full history. Costs assume constant-time arithmetic on bounded-size values. Exact path counts grow with <code>n</code>; Python's arbitrary-precision integers make the arithmetic and bit storage grow too.</p>
+<section aria-label="Keep only the states needed next" class="trace" data-trace="dp_rolling">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Keep only the states needed next</h3><p class="trace-intro">n = 5; the answer ends in previous</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 9</output></div>
+<input aria-label="Step through Keep only the states needed next" class="scrubber" max="8" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Before i = 2, older = f(0) = 1 and previous = f(1) = 1. Store only these two states.</p><div class="array-row"><p class="array-label">state slots</p><div class="cells-scroll"><div class="cells"><div class="cell marked"><span class="cell-index">0</span><span class="cell-value">1</span><span class="cell-marks"><span>older</span></span></div><div class="cell marked"><span class="cell-index">1</span><span class="cell-value">1</span><span class="cell-marks"><span>previous</span></span></div></div></div></div><div class="state-grid"><span>older = <b>1</b></span><span>previous = <b>1</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Before i = 2, older = f(0) = 1 and previous = f(1) = 1. Store only these two states.<span class="step-state">older = 1 · previous = 1</span></li>
+<li>i = 2: current = older + previous = 1 + 1 = 2.<span class="step-state">i = 2</span></li>
+<li>Shift the stored states: older becomes 1; previous becomes 2. The old value 1 is no longer needed.<span class="step-state">i = 2 · older = 1 · previous = 2</span></li>
+<li>i = 3: current = older + previous = 1 + 2 = 3.<span class="step-state">i = 3</span></li>
+<li>Shift the stored states: older becomes 2; previous becomes 3. The old value 1 is no longer needed.<span class="step-state">i = 3 · older = 2 · previous = 3</span></li>
+<li>i = 4: current = older + previous = 2 + 3 = 5.<span class="step-state">i = 4</span></li>
+<li>Shift the stored states: older becomes 3; previous becomes 5. The old value 2 is no longer needed.<span class="step-state">i = 4 · older = 3 · previous = 5</span></li>
+<li>i = 5: current = older + previous = 3 + 5 = 8.<span class="step-state">i = 5</span></li>
+<li>Shift the stored states: older becomes 5; previous becomes 8. The old value 3 is no longer needed.<span class="step-state">i = 5 · older = 5 · previous = 8</span></li>
+</ol></details>
+</section>
+<h2 id="dynamic-programming--common-state-patterns">Common state patterns</h2>
+<div aria-label="Comparison table" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Problem structure</th>
+<th>State and transition</th>
+<th>Typical cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Count paths</td>
+<td>Add counts from disjoint predecessor cases</td>
+<td>Number of states × choices per state</td>
+</tr>
+<tr>
+<td>Minimum cost</td>
+<td>Take the minimum of predecessor cost + current cost</td>
+<td>Number of states × choices per state</td>
+</tr>
+<tr>
+<td>Choose or skip</td>
+<td>Compare the answer with and without an item</td>
+<td>Often <code>O(nC)</code> for capacity <code>C</code></td>
+</tr>
+<tr>
+<td>Grid paths</td>
+<td><code>dp[r][c] = dp[r-1][c] + dp[r][c-1]</code>, with valid boundaries</td>
+<td><code>O(rows × columns)</code></td>
+</tr>
+<tr>
+<td>Two sequences</td>
+<td><code>dp[i][j]</code> describes their prefixes</td>
+<td>Often <code>O(nm)</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>For longest common subsequence, <code>dp[i][j]</code> is the best length in the first <code>i</code> and <code>j</code> elements. If the last elements match, use <code>1 + dp[i-1][j-1]</code>; otherwise use <code>max(dp[i-1][j], dp[i][j-1])</code>. Empty prefixes have value zero.</p>
+<h2 id="dynamic-programming--minimize-the-final-coin">Minimize: the final coin</h2>
+<p>Let <code>dp[total]</code> be the fewest coins needed to make exactly <code>total</code>. For every coin that fits, try one coin plus the best answer for the remainder. Denominations may be reused.</p>
+<div class="formula">dp[0] = 0<br/>dp[t] = min(1 + dp[t − coin]) over coins ≤ t</div>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy coin change code" data-copy="code-coin_change" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-coin_change"><span class="c1"># Time O(A * c): A is the amount, c is the number of denominations</span>
+<span class="c1"># Extra space O(A): one entry per subtotal</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">min_coins</span><span class="p">(</span><span class="n">coins</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">amount</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">amount</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">coin</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">coin</span> <span class="ow">in</span> <span class="n">coins</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Use a nonnegative amount and positive coins"</span><span class="p">)</span>
+    <span class="n">dp</span> <span class="o">=</span> <span class="p">[</span><span class="n">amount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">amount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">dp</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">total</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">amount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">coin</span> <span class="ow">in</span> <span class="n">coins</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">coin</span> <span class="o">&lt;=</span> <span class="n">total</span><span class="p">:</span>
+                <span class="n">dp</span><span class="p">[</span><span class="n">total</span><span class="p">]</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">total</span><span class="p">],</span> <span class="mi">1</span> <span class="o">+</span> <span class="n">dp</span><span class="p">[</span><span class="n">total</span> <span class="o">-</span> <span class="n">coin</span><span class="p">])</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span> <span class="k">if</span> <span class="n">dp</span><span class="p">[</span><span class="n">amount</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">amount</span> <span class="k">else</span> <span class="n">dp</span><span class="p">[</span><span class="n">amount</span><span class="p">]</span>
+</code></pre></div>
+<p>The unreachable sentinel is <code>amount + 1</code>: positive integer denominations cannot require more than <code>amount</code> coins for a feasible solution. An amount of zero returns zero; an unreachable positive amount returns <code>-1</code>. The algorithm is <strong>pseudo-polynomial</strong>: its cost depends on the numeric amount, not only on the digits needed to represent it.</p>
+<section aria-label="Choose the best final coin" class="trace" data-trace="coin_change">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Choose the best final coin</h3><p class="trace-intro">coins = [1, 3, 4], amount = 6</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 15</output></div>
+<input aria-label="Step through Choose the best final coin" class="scrubber" max="14" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">dp[0] = 0. The value 7 means unreachable so far, since no valid answer for amount 6 needs more than 6 positive coins.</p><div class="array-row"><p class="array-label">dp</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">0</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">7</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">7</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">7</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">4</span><span class="cell-value">7</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">5</span><span class="cell-value">7</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">6</span><span class="cell-value">7</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"><span>coins = <b>[1, 3, 4]</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>dp[0] = 0. The value 7 means unreachable so far, since no valid answer for amount 6 needs more than 6 positive coins.<span class="step-state">coins = [1, 3, 4]</span></li>
+<li>total = 1, coin = 1: try 1 + dp[0] = 1. Set dp[1] = min(7, 1) = 1.<span class="step-state">total = 1 · coin = 1</span></li>
+<li>total = 2, coin = 1: try 1 + dp[1] = 2. Set dp[2] = min(7, 2) = 2.<span class="step-state">total = 2 · coin = 1</span></li>
+<li>total = 3, coin = 1: try 1 + dp[2] = 3. Set dp[3] = min(7, 3) = 3.<span class="step-state">total = 3 · coin = 1</span></li>
+<li>total = 3, coin = 3: try 1 + dp[0] = 1. Set dp[3] = min(3, 1) = 1.<span class="step-state">total = 3 · coin = 3</span></li>
+<li>total = 4, coin = 1: try 1 + dp[3] = 2. Set dp[4] = min(7, 2) = 2.<span class="step-state">total = 4 · coin = 1</span></li>
+<li>total = 4, coin = 3: try 1 + dp[1] = 2. Set dp[4] = min(2, 2) = 2.<span class="step-state">total = 4 · coin = 3</span></li>
+<li>total = 4, coin = 4: try 1 + dp[0] = 1. Set dp[4] = min(2, 1) = 1.<span class="step-state">total = 4 · coin = 4</span></li>
+<li>total = 5, coin = 1: try 1 + dp[4] = 2. Set dp[5] = min(7, 2) = 2.<span class="step-state">total = 5 · coin = 1</span></li>
+<li>total = 5, coin = 3: try 1 + dp[2] = 3. Set dp[5] = min(2, 3) = 2.<span class="step-state">total = 5 · coin = 3</span></li>
+<li>total = 5, coin = 4: try 1 + dp[1] = 2. Set dp[5] = min(2, 2) = 2.<span class="step-state">total = 5 · coin = 4</span></li>
+<li>total = 6, coin = 1: try 1 + dp[5] = 3. Set dp[6] = min(7, 3) = 3.<span class="step-state">total = 6 · coin = 1</span></li>
+<li>total = 6, coin = 3: try 1 + dp[3] = 2. Set dp[6] = min(3, 2) = 2.<span class="step-state">total = 6 · coin = 3</span></li>
+<li>total = 6, coin = 4: try 1 + dp[2] = 3. Set dp[6] = min(2, 3) = 2.<span class="step-state">total = 6 · coin = 4</span></li>
+<li>Return dp[6] = 2: use coins 3 + 3. Choosing the largest coin first would give 4 + 1 + 1 instead.<span class="step-state">result = 2</span></li>
+</ol></details>
+</section>
+<h2 id="dynamic-programming--choose-or-skip-one-item-at-most-once">Choose or skip: one item at most once</h2>
+<p>For 0/1 knapsack, let <code>D(i, cap)</code> be the best value using the first <code>i</code> items within capacity <code>cap</code>. Skip the new item, or take it and use the preceding item row at the remaining capacity.</p>
+<div class="formula">D(i, cap) = max(D(i − 1, cap), value + D(i − 1, cap − weight))</div>
+<p>The take branch exists only when the item fits. Compressing rows into one array requires capacities to run <strong>backward</strong>, so <code>dp[cap - weight]</code> still describes the previous item row.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy knapsack code" data-copy="code-knapsack" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-knapsack"><span class="c1"># Time O(n * C): n items and capacity C</span>
+<span class="c1"># Extra space O(C): keep only one row</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">knapsack</span><span class="p">(</span><span class="n">weights</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">values</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">capacity</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="ow">or</span> <span class="n">capacity</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Check lengths and capacity"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">weight</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">weight</span> <span class="ow">in</span> <span class="n">weights</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Weights must be positive integers"</span><span class="p">)</span>
+    <span class="n">dp</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">capacity</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">weight</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">values</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">cap</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">capacity</span><span class="p">,</span> <span class="n">weight</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">dp</span><span class="p">[</span><span class="n">cap</span><span class="p">]</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">dp</span><span class="p">[</span><span class="n">cap</span><span class="p">],</span> <span class="n">dp</span><span class="p">[</span><span class="n">cap</span> <span class="o">-</span> <span class="n">weight</span><span class="p">]</span> <span class="o">+</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">dp</span><span class="p">[</span><span class="n">capacity</span><span class="p">]</span>
+</code></pre></div>
+<p><strong>Backward capacity:</strong> each item can be used once. <strong>Forward capacity:</strong> newly updated entries can reuse the same item, giving the unbounded variant. For weight <code>2</code>, value <code>3</code>, and capacity <code>4</code>, a forward pass can incorrectly use that single item twice and report <code>6</code>.</p>
+<section aria-label="Update capacities backward to use an item once" class="trace" data-trace="knapsack">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Update capacities backward to use an item once</h3><p class="trace-intro">weights = [2, 3], values = [3, 4], capacity = 4</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 9</output></div>
+<input aria-label="Step through Update capacities backward to use an item once" class="scrubber" max="8" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">dp[cap] is the best value with capacity at most cap. Initially no items are available.</p><div class="array-row"><p class="array-label">dp</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">0</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">0</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">0</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">0</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">4</span><span class="cell-value">0</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"><span>capacity = <b>4</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>dp[cap] is the best value with capacity at most cap. Initially no items are available.<span class="step-state">capacity = 4</span></li>
+<li>Consider one item with weight 2 and value 3. Visit capacities from 4 down to 2.<span class="step-state">weight = 2 · value = 3</span></li>
+<li>cap = 4: max(skip = 0, take = dp[2] + 3 = 3) gives 3. The smaller source capacity still belongs to the previous item row.<span class="step-state">cap = 4 · weight = 2 · value = 3</span></li>
+<li>cap = 3: max(skip = 0, take = dp[1] + 3 = 3) gives 3. The smaller source capacity still belongs to the previous item row.<span class="step-state">cap = 3 · weight = 2 · value = 3</span></li>
+<li>cap = 2: max(skip = 0, take = dp[0] + 3 = 3) gives 3. The smaller source capacity still belongs to the previous item row.<span class="step-state">cap = 2 · weight = 2 · value = 3</span></li>
+<li>Consider one item with weight 3 and value 4. Visit capacities from 4 down to 3.<span class="step-state">weight = 3 · value = 4</span></li>
+<li>cap = 4: max(skip = 3, take = dp[1] + 4 = 4) gives 4. The smaller source capacity still belongs to the previous item row.<span class="step-state">cap = 4 · weight = 3 · value = 4</span></li>
+<li>cap = 3: max(skip = 3, take = dp[0] + 4 = 4) gives 4. The smaller source capacity still belongs to the previous item row.<span class="step-state">cap = 3 · weight = 3 · value = 4</span></li>
+<li>Return dp[4] = 4. The weight-2 item was not reused to produce an invalid value of 6.<span class="step-state">result = 4</span></li>
+</ol></details>
+</section>
+<h2 id="dynamic-programming--compare-the-approaches">Compare the approaches</h2>
+<div aria-label="Comparison table" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Strength</th>
+<th>Cost or limitation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Direct recursion</td>
+<td>Closely follows the recurrence</td>
+<td>May recompute states exponentially often</td>
+</tr>
+<tr>
+<td>Top-down + memoization</td>
+<td>Computes only reached states</td>
+<td>Cache memory and recursive call stack</td>
+</tr>
+<tr>
+<td>Bottom-up table</td>
+<td>Explicit order, no recursive calls</td>
+<td>Stores a table and may fill unused states</td>
+</tr>
+<tr>
+<td>Rolling state</td>
+<td>Keeps only live dependencies</td>
+<td>Usually loses easy reconstruction of earlier choices</td>
+</tr>
+</tbody>
+</table></div>
+<p>For a grid stored in one row, an old <code>dp[c]</code> can mean "above" while updated <code>dp[c-1]</code> means "left". For a recurrence that also needs the old diagonal, save it before overwriting. Space optimization is safe only after checking which version of each state is required.</p>
+</div><details class="costs"><summary>Reading the complexity comments</summary><p><code>n</code> is the input length unless another size is defined. Extra space excludes the input and counts stored results when they are constructed. Recursion frames count as extra space. Costs assume bounded-size values and constant-time comparisons; dictionary and set costs are expected under ordinary hashing. The step viewer stores snapshots for illustration; that storage is not part of the displayed algorithm.</p></details><nav class="end-nav" aria-label="Adjacent topics"><a href="binary-search.html"><small>Previous</small>Binary search</a><a href="sorting.html"><small>Next</small>Sorting</a></nav></article>
+<aside class="onpage"><p>In this topic</p><nav><a href="#dynamic-programming--start-with-the-recurrence">Start with the recurrence</a><a href="#dynamic-programming--a-recurrence-with-two-predecessors">A recurrence with two predecessors</a><a href="#dynamic-programming--top-down-and-memoization">Top-down and memoization</a><a href="#dynamic-programming--bottom-up-tabulation">Bottom-up tabulation</a><a href="#dynamic-programming--optimize-the-stored-state">Optimize the stored state</a><a href="#dynamic-programming--common-state-patterns">Common state patterns</a><a href="#dynamic-programming--minimize-the-final-coin">Minimize: the final coin</a><a href="#dynamic-programming--choose-or-skip-one-item-at-most-once">Choose or skip: one item at most once</a><a href="#dynamic-programming--compare-the-approaches">Compare the approaches</a></nav></aside></section></main></div>
+<div class="notice" role="status" hidden></div>
+<script src="../scripts/search-index.js"></script>
+<script src="../scripts/traces/dynamic-programming.js"></script>
+<script src="../scripts/reader.js"></script>
+</body></html>

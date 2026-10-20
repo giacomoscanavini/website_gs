@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Prefix sum · Python DSA</title>
+<meta name="description" content="Python DSA: algorithm patterns, short implementations, complexity and step-by-step index traces">
+<meta name="theme-color" content="#E4E6E8">
+<link rel="stylesheet" href="../styles/reader.css">
+</head>
+<body data-portable="false">
+<a class="skip" href="#main">Skip to notes</a>
+<header class="mobilebar"><a href="../index.html">Python DSA</a><button type="button" id="menu-toggle" aria-controls="sidebar" aria-expanded="false">Topics</button></header>
+<aside class="sidebar" id="sidebar" aria-label="Study navigation"><a class="brand" href="../index.html">Python DSA<small>Patterns &amp; algorithms</small></a><button type="button" class="close-menu" aria-label="Close topics">×</button>
+<div class="search"><label class="sr-only" for="search">Search the notes</label><input id="search" type="search" placeholder="Search a concept…" autocomplete="off"><kbd aria-hidden="true">/</kbd></div>
+<div class="search-results" aria-live="polite" hidden></div><nav class="topic-nav"><a href="two-pointers.html" data-topic-link="two-pointers"><span class="topic-no">01</span>Two pointers</a>
+<a href="sliding-window.html" data-topic-link="sliding-window"><span class="topic-no">02</span>Sliding window</a>
+<a href="hash-table.html" data-topic-link="hash-table"><span class="topic-no">03</span>Hash table</a>
+<a href="prefix-sum.html" data-topic-link="prefix-sum" aria-current="page"><span class="topic-no">04</span>Prefix sum</a>
+<a href="stack.html" data-topic-link="stack"><span class="topic-no">05</span>Stack</a>
+<a href="queue.html" data-topic-link="queue"><span class="topic-no">06</span>Queue</a>
+<a href="binary-search.html" data-topic-link="binary-search"><span class="topic-no">07</span>Binary search</a>
+<a href="dynamic-programming.html" data-topic-link="dynamic-programming"><span class="topic-no">08</span>Dynamic programming</a>
+<a href="sorting.html" data-topic-link="sorting"><span class="topic-no">09</span>Sorting</a>
+</nav>
+<div class="side-footer"><a href="../../../projects.html#dsa-field-notes">Side projects</a><p>Zero-based indices<br>Python 3.10+</p></div></aside>
+<button type="button" class="scrim" aria-label="Close topics" tabindex="-1"></button>
+<div class="app"><div class="topbar"><a href="../index.html">Data structures &amp; algorithms</a><button type="button" data-print>Print this topic</button></div><main class="main" id="main"><section class="topic-layout" data-topic-view="prefix-sum" id="prefix-sum">
+<article class="article"><header class="chapter-header"><p class="eyebrow">04 / Python DSA</p><h1 tabindex="-1">Prefix sum</h1><p class="summary">Store cumulative totals so a range can be evaluated by subtraction.</p></header>
+<details class="mobile-outline"><summary>In this topic</summary><nav><a href="#prefix-sum--one-boundary-convention">One boundary convention</a><a href="#prefix-sum--common-patterns">Common patterns</a><a href="#prefix-sum--build-and-query">Build and query</a><a href="#prefix-sum--count-subarrays-with-a-target-sum">Count subarrays with a target sum</a></nav></details>
+<div class="article-body"><h2 id="prefix-sum--one-boundary-convention">One boundary convention</h2>
+<p>Let <code>prefix[i]</code> be the sum of values <strong>before index <code>i</code></strong>. Then <code>prefix[0] = 0</code>, and a list of <code>n</code> values has <code>n + 1</code> prefix entries.</p>
+<div class="formula">prefix[i + 1] = prefix[i] + nums[i]<br/>sum over [left, right) = prefix[right] − prefix[left]</div>
+<p>The left endpoint is included; the right endpoint is excluded. For an inclusive range <code>[left, right]</code>, use <code>prefix[right + 1] - prefix[left]</code>.</p>
+<p><strong>Advantage:</strong> <code>O(1)</code> sum queries after an <code>O(n)</code> build; negative values are allowed. <strong>Limitations:</strong> <code>O(n)</code> storage, and changing one input value can invalidate all later prefixes. A minimum or maximum cannot generally be recovered by subtracting two prefix values.</p>
+<h2 id="prefix-sum--common-patterns">Common patterns</h2>
+<div aria-label="Comparison table" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Stored information</th>
+<th>Main operation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Many range sums</td>
+<td>All prefix sums</td>
+<td>Subtract two endpoints</td>
+</tr>
+<tr>
+<td>Count ranges with sum <code>k</code></td>
+<td>Frequencies of earlier prefix sums</td>
+<td>Look up <code>current_sum - k</code></td>
+</tr>
+<tr>
+<td>Longest range with sum <code>k</code></td>
+<td>Earliest index of each prefix sum</td>
+<td>Subtract index positions</td>
+</tr>
+<tr>
+<td>Count sums divisible by <code>k</code></td>
+<td>Frequencies of remainders, for <code>k &gt; 0</code></td>
+<td>Match equal remainders</td>
+</tr>
+<tr>
+<td>Batch range additions</td>
+<td>Difference array of length <code>n + 1</code></td>
+<td>Add at <code>left</code>, subtract at excluded <code>right</code>; prefix-sum once</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="prefix-sum--build-and-query">Build and query</h2>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy prefix code" data-copy="code-prefix" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-prefix"><span class="c1"># Build: time O(n), extra space O(n)</span>
+<span class="c1"># Each range query: time O(1), extra space O(1)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">build_prefix</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]:</span>
+    <span class="n">prefix</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+        <span class="n">prefix</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">prefix</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">value</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">prefix</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">range_sum</span><span class="p">(</span><span class="n">prefix</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">left</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">right</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">left</span> <span class="o">&lt;=</span> <span class="n">right</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">prefix</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Require 0 &lt;= left &lt;= right &lt;= n"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">prefix</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">-</span> <span class="n">prefix</span><span class="p">[</span><span class="n">left</span><span class="p">]</span>
+</code></pre></div>
+<p>The leading zero handles a range starting at index <code>0</code> without a special case. An empty range <code>[i, i)</code> has sum zero. A range query is subtraction; creating <code>nums[left:right]</code> would instead copy and scan the range.</p>
+<section aria-label="Build once, subtract for each query" class="trace" data-trace="prefix">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Build once, subtract for each query</h3><p class="trace-intro">nums = [2, -1, 3, 4], query [1, 4)</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 6</output></div>
+<input aria-label="Step through Build once, subtract for each query" class="scrubber" max="5" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">prefix[0] = 0 represents the empty prefix.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">2</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">-1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">3</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">4</span><span class="cell-marks"></span></div></div></div></div><div class="array-row"><p class="array-label">prefix</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">0</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"><span>built = <b>0</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>prefix[0] = 0 represents the empty prefix.<span class="step-state">built = 0</span></li>
+<li>Read nums[0] = 2. Set prefix[1] = prefix[0] + nums[0] = 0 + (2) = 2.<span class="step-state">i = 0</span></li>
+<li>Read nums[1] = -1. Set prefix[2] = prefix[1] + nums[1] = 2 + (-1) = 1.<span class="step-state">i = 1</span></li>
+<li>Read nums[2] = 3. Set prefix[3] = prefix[2] + nums[2] = 1 + (3) = 4.<span class="step-state">i = 2</span></li>
+<li>Read nums[3] = 4. Set prefix[4] = prefix[3] + nums[3] = 4 + (4) = 8.<span class="step-state">i = 3</span></li>
+<li>Query [1, 4): subtract the sum before index 1 from the sum before index 4. prefix[4] - prefix[1] = 8 - 2 = 6.<span class="step-state">left = 1 · right = 4 · result = 6</span></li>
+</ol></details>
+</section>
+<h2 id="prefix-sum--count-subarrays-with-a-target-sum">Count subarrays with a target sum</h2>
+<p>If the current prefix is <code>total</code>, an earlier prefix must equal <code>total - target</code> because their difference is the subarray sum. Count all such earlier prefixes, then record the current one.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy prefix count code" data-copy="code-prefix_count" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-prefix_count"><span class="c1"># Expected time O(n): one prefix lookup per element</span>
+<span class="c1"># Extra space O(n): counts of earlier prefix sums</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">count_target_sums</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">:</span> <span class="mi">1</span><span class="p">}</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="n">answer</span> <span class="o">+=</span> <span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">total</span> <span class="o">-</span> <span class="n">target</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">counts</span><span class="p">[</span><span class="n">total</span><span class="p">]</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">total</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">answer</span>
+</code></pre></div>
+<p><code>{0: 1}</code> counts the empty prefix. A frequency is needed because several earlier prefixes can have the same value. Query <strong>before</strong> inserting the current prefix so a target of zero does not count an empty subarray at every position.</p>
+<section aria-label="Count earlier prefixes with the needed value" class="trace" data-trace="prefix_count">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Count earlier prefixes with the needed value</h3><p class="trace-intro">nums = [1, -1, 1, 1], target = 1</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 10</output></div>
+<input aria-label="Step through Count earlier prefixes with the needed value" class="scrubber" max="9" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Record the empty prefix once: counts = {0: 1}. This allows a subarray to start at index 0.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">-1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">1</span><span class="cell-marks"></span></div></div></div></div><div class="array-row"><p class="array-label">prefix sum → frequency</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index"> </span><span class="cell-value">0 → 1</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"><span>total = <b>0</b></span><span>answer = <b>0</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Record the empty prefix once: counts = {0: 1}. This allows a subarray to start at index 0.<span class="step-state">total = 0 · answer = 0</span></li>
+<li>i = 0: total becomes 1. Need an earlier prefix 1 - 1 = 0. There are 1; answer increases to 1.<span class="step-state">i = 0 · total = 1 · need = 0 · answer = 1</span></li>
+<li>Only after counting matches, record this prefix: counts[1] = 1.<span class="step-state">total = 1 · answer = 1</span></li>
+<li>i = 1: total becomes 0. Need an earlier prefix 0 - 1 = -1. There are 0; answer increases to 1.<span class="step-state">i = 1 · total = 0 · need = -1 · answer = 1</span></li>
+<li>Only after counting matches, record this prefix: counts[0] = 2.<span class="step-state">total = 0 · answer = 1</span></li>
+<li>i = 2: total becomes 1. Need an earlier prefix 1 - 1 = 0. There are 2; answer increases to 3.<span class="step-state">i = 2 · total = 1 · need = 0 · answer = 3</span></li>
+<li>Only after counting matches, record this prefix: counts[1] = 2.<span class="step-state">total = 1 · answer = 3</span></li>
+<li>i = 3: total becomes 2. Need an earlier prefix 2 - 1 = 1. There are 2; answer increases to 5.<span class="step-state">i = 3 · total = 2 · need = 1 · answer = 5</span></li>
+<li>Only after counting matches, record this prefix: counts[2] = 1.<span class="step-state">total = 2 · answer = 5</span></li>
+<li>Return 5. Negative values did not require any special window rule.<span class="step-state">result = 5</span></li>
+</ol></details>
+</section>
+</div><details class="costs"><summary>Reading the complexity comments</summary><p><code>n</code> is the input length unless another size is defined. Extra space excludes the input and counts stored results when they are constructed. Recursion frames count as extra space. Costs assume bounded-size values and constant-time comparisons; dictionary and set costs are expected under ordinary hashing. The step viewer stores snapshots for illustration; that storage is not part of the displayed algorithm.</p></details><nav class="end-nav" aria-label="Adjacent topics"><a href="hash-table.html"><small>Previous</small>Hash table</a><a href="stack.html"><small>Next</small>Stack</a></nav></article>
+<aside class="onpage"><p>In this topic</p><nav><a href="#prefix-sum--one-boundary-convention">One boundary convention</a><a href="#prefix-sum--common-patterns">Common patterns</a><a href="#prefix-sum--build-and-query">Build and query</a><a href="#prefix-sum--count-subarrays-with-a-target-sum">Count subarrays with a target sum</a></nav></aside></section></main></div>
+<div class="notice" role="status" hidden></div>
+<script src="../scripts/search-index.js"></script>
+<script src="../scripts/traces/prefix-sum.js"></script>
+<script src="../scripts/reader.js"></script>
+</body></html>

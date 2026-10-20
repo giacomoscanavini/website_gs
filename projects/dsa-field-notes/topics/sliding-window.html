@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sliding window · Python DSA</title>
+<meta name="description" content="Python DSA: algorithm patterns, short implementations, complexity and step-by-step index traces">
+<meta name="theme-color" content="#E4E6E8">
+<link rel="stylesheet" href="../styles/reader.css">
+</head>
+<body data-portable="false">
+<a class="skip" href="#main">Skip to notes</a>
+<header class="mobilebar"><a href="../index.html">Python DSA</a><button type="button" id="menu-toggle" aria-controls="sidebar" aria-expanded="false">Topics</button></header>
+<aside class="sidebar" id="sidebar" aria-label="Study navigation"><a class="brand" href="../index.html">Python DSA<small>Patterns &amp; algorithms</small></a><button type="button" class="close-menu" aria-label="Close topics">×</button>
+<div class="search"><label class="sr-only" for="search">Search the notes</label><input id="search" type="search" placeholder="Search a concept…" autocomplete="off"><kbd aria-hidden="true">/</kbd></div>
+<div class="search-results" aria-live="polite" hidden></div><nav class="topic-nav"><a href="two-pointers.html" data-topic-link="two-pointers"><span class="topic-no">01</span>Two pointers</a>
+<a href="sliding-window.html" data-topic-link="sliding-window" aria-current="page"><span class="topic-no">02</span>Sliding window</a>
+<a href="hash-table.html" data-topic-link="hash-table"><span class="topic-no">03</span>Hash table</a>
+<a href="prefix-sum.html" data-topic-link="prefix-sum"><span class="topic-no">04</span>Prefix sum</a>
+<a href="stack.html" data-topic-link="stack"><span class="topic-no">05</span>Stack</a>
+<a href="queue.html" data-topic-link="queue"><span class="topic-no">06</span>Queue</a>
+<a href="binary-search.html" data-topic-link="binary-search"><span class="topic-no">07</span>Binary search</a>
+<a href="dynamic-programming.html" data-topic-link="dynamic-programming"><span class="topic-no">08</span>Dynamic programming</a>
+<a href="sorting.html" data-topic-link="sorting"><span class="topic-no">09</span>Sorting</a>
+</nav>
+<div class="side-footer"><a href="../../../projects.html#dsa-field-notes">Side projects</a><p>Zero-based indices<br>Python 3.10+</p></div></aside>
+<button type="button" class="scrim" aria-label="Close topics" tabindex="-1"></button>
+<div class="app"><div class="topbar"><a href="../index.html">Data structures &amp; algorithms</a><button type="button" data-print>Print this topic</button></div><main class="main" id="main"><section class="topic-layout" data-topic-view="sliding-window" id="sliding-window">
+<article class="article"><header class="chapter-header"><p class="eyebrow">02 / Python DSA</p><h1 tabindex="-1">Sliding window</h1><p class="summary">Maintain information about a contiguous range while its boundaries move forward.</p></header>
+<details class="mobile-outline"><summary>In this topic</summary><nav><a href="#sliding-window--common-patterns">Common patterns</a><a href="#sliding-window--fixed-size-add-one-remove-one">Fixed size: add one, remove one</a><a href="#sliding-window--longest-valid-window-remove-the-violation">Longest valid window: remove the violation</a><a href="#sliding-window--shortest-valid-window-keep-shrinking">Shortest valid window: keep shrinking</a></nav></details>
+<div class="article-body"><h2 id="sliding-window--common-patterns">Common patterns</h2>
+<p>A window is a <strong>contiguous</strong> part of a sequence. In these examples, <code>left</code> and <code>right</code> are included, so its length is <code>right - left + 1</code>.</p>
+<div aria-label="Comparison table" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Task</th>
+<th>What to maintain</th>
+<th>When to update the answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fixed-size sum or average</td>
+<td>A running total</td>
+<td>After the window reaches size <code>k</code></td>
+</tr>
+<tr>
+<td>Longest valid range</td>
+<td>Counts, a set, or another validity condition</td>
+<td>After shrinking away any violation</td>
+</tr>
+<tr>
+<td>Shortest range meeting a threshold</td>
+<td>A running total</td>
+<td>While valid, before removing the leftmost item</td>
+</tr>
+<tr>
+<td>Fixed-size maximum or minimum</td>
+<td>A deque of useful candidate indices</td>
+<td>Once the window is complete</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Advantage:</strong> reuse the old window instead of recomputing its contents. <strong>Limitation:</strong> a variable window needs a condition that supports safe, one-directional boundary movement. It is not a general solution for every subarray problem.</p>
+<h2 id="sliding-window--fixed-size-add-one-remove-one">Fixed size: add one, remove one</h2>
+<p>Build the first total. Each following move adds <code>nums[right]</code> and subtracts <code>nums[right - k]</code>. The outgoing index is <code>right - k</code>, not the new left boundary <code>right - k + 1</code>.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy fixed window code" data-copy="code-fixed_window" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-fixed_window"><span class="c1"># Time O(n): add and subtract each element at most once</span>
+<span class="c1"># Extra space O(1)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">max_window_sum</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">k</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="mi">1</span> <span class="o">&lt;=</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"k must be between 1 and len(nums)"</span><span class="p">)</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">):</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">nums</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">best</span> <span class="o">=</span> <span class="n">total</span>
+    <span class="k">for</span> <span class="n">right</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span> <span class="o">-</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span> <span class="o">-</span> <span class="n">k</span><span class="p">]</span>
+        <span class="n">best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">best</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">best</span>
+</code></pre></div>
+<p>Negative values are fine here: the size is fixed. Initializing <code>best</code> from the first real window also handles an array whose window sums are all negative.</p>
+<section aria-label="Slide a window of length 3" class="trace" data-trace="fixed_window">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Slide a window of length 3</h3><p class="trace-intro">nums = [2, 1, 5, 1, 3], k = 3</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 8</output></div>
+<input aria-label="Step through Slide a window of length 3" class="scrubber" max="7" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Build the first window without making a slice.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">2</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">5</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">4</span><span class="cell-value">3</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"><span>k = <b>3</b></span><span>total = <b>0</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Build the first window without making a slice.<span class="step-state">k = 3 · total = 0</span></li>
+<li>i = 0: add nums[0] = 2. The running total becomes 2.<span class="step-state">i = 0 · total = 2</span></li>
+<li>i = 1: add nums[1] = 1. The running total becomes 3.<span class="step-state">i = 1 · total = 3</span></li>
+<li>i = 2: add nums[2] = 5. The running total becomes 8.<span class="step-state">i = 2 · total = 8</span></li>
+<li>The first complete window is [0, 2]. Set best = 8.<span class="step-state">total = 8 · best = 8</span></li>
+<li>right = 3: add nums[3] = 1 and remove nums[0] = 2. total = 8 + 1 - 2 = 7; best = 8.<span class="step-state">right = 3 · total = 7 · best = 8</span></li>
+<li>right = 4: add nums[4] = 3 and remove nums[1] = 1. total = 7 + 3 - 1 = 9; best = 9.<span class="step-state">right = 4 · total = 9 · best = 9</span></li>
+<li>All length-3 windows are checked. Return 9.<span class="step-state">result = 9</span></li>
+</ol></details>
+</section>
+<h2 id="sliding-window--longest-valid-window-remove-the-violation">Longest valid window: remove the violation</h2>
+<p>Keep a set of characters in the current window. Before adding a character already in the set, remove characters from the left until its previous occurrence is gone. Then add the new character and measure the window.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy unique window code" data-copy="code-unique_window" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-unique_window"><span class="c1"># Expected time O(n): each character enters and leaves once</span>
+<span class="c1"># Extra space O(min(n, u)): u is the number of possible characters</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">longest_unique</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">best</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">right</span><span class="p">,</span> <span class="n">char</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+        <span class="k">while</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+            <span class="n">seen</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="n">left</span><span class="p">])</span>
+            <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">seen</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+        <span class="n">best</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">best</span><span class="p">,</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">best</span>
+</code></pre></div>
+<p>Use <strong><code>while</code>, not <code>if</code></strong>: removing one character may not remove the duplicate. The nested loop is still expected <code>O(n)</code> because each character enters and leaves the set at most once; <code>left</code> never resets.</p>
+<section aria-label="Shrink until a duplicate is gone" class="trace" data-trace="unique_window">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Shrink until a duplicate is gone</h3><p class="trace-intro">text = 'abba'</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 12</output></div>
+<input aria-label="Step through Shrink until a duplicate is gone" class="scrubber" max="11" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">The current window is empty. seen stores its characters.</p><div class="array-row"><p class="array-label">text</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">a</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">b</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">b</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">a</span><span class="cell-marks"></span></div></div></div></div><div class="array-row"><p class="array-label">seen</p><div class="cells-scroll"><div class="cells"><span class="empty-array">[ ] empty</span></div></div></div><div class="state-grid"><span>left = <b>0</b></span><span>best = <b>0</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>The current window is empty. seen stores its characters.<span class="step-state">left = 0 · best = 0</span></li>
+<li>right = 0: the next character is 'a'. Check it against the current window before adding it.<span class="step-state">left = 0 · right = 0 · best = 0</span></li>
+<li>Add 'a'. Window [0, 0] is 'a', length 1; best = 1.<span class="step-state">left = 0 · right = 0 · best = 1</span></li>
+<li>right = 1: the next character is 'b'. Check it against the current window before adding it.<span class="step-state">left = 0 · right = 1 · best = 1</span></li>
+<li>Add 'b'. Window [0, 1] is 'ab', length 2; best = 2.<span class="step-state">left = 0 · right = 1 · best = 2</span></li>
+<li>right = 2: the next character is 'b'. Check it against the current window before adding it.<span class="step-state">left = 0 · right = 2 · best = 2</span></li>
+<li>'b' is already present. Remove text[0] = 'a'; move left from 0 to 1. Check again before adding the new character.<span class="step-state">left = 1 · right = 2 · best = 2</span></li>
+<li>'b' is already present. Remove text[1] = 'b'; move left from 1 to 2. Check again before adding the new character.<span class="step-state">left = 2 · right = 2 · best = 2</span></li>
+<li>Add 'b'. Window [2, 2] is 'b', length 1; best = 2.<span class="step-state">left = 2 · right = 2 · best = 2</span></li>
+<li>right = 3: the next character is 'a'. Check it against the current window before adding it.<span class="step-state">left = 2 · right = 3 · best = 2</span></li>
+<li>Add 'a'. Window [2, 3] is 'ba', length 2; best = 2.<span class="step-state">left = 2 · right = 3 · best = 2</span></li>
+<li>Return 2. The left boundary never moved backward.<span class="step-state">result = 2</span></li>
+</ol></details>
+</section>
+<h2 id="sliding-window--shortest-valid-window-keep-shrinking">Shortest valid window: keep shrinking</h2>
+<p>For nonnegative numbers and a positive target, extending a window cannot reduce its sum. Once the sum reaches the target, record its length and remove leftmost values while the condition remains true.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy shortest window code" data-copy="code-shortest_window" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-shortest_window"><span class="c1"># Time O(n): the two boundaries only move forward</span>
+<span class="c1"># Extra space O(1)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">shortest_sum_at_least</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">target</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">any</span><span class="p">(</span><span class="n">value</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Use a positive target and nonnegative values"</span><span class="p">)</span>
+    <span class="n">left</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">best</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">right</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">value</span>
+        <span class="k">while</span> <span class="n">total</span> <span class="o">&gt;=</span> <span class="n">target</span><span class="p">:</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">best</span><span class="p">,</span> <span class="n">right</span> <span class="o">-</span> <span class="n">left</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">total</span> <span class="o">-=</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span>
+            <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">best</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="k">else</span> <span class="n">best</span>
+</code></pre></div>
+<p><strong>Why the restriction matters:</strong> with <code>[1, -1, 5]</code> and target <code>5</code>, this rule records length <code>3</code>, then removing <code>1</code> lowers the sum to <code>4</code> and stops shrinking. It misses the one-element range <code>[5]</code>. Negative numbers break this sum-based rule, not the fixed-window method above.</p>
+<section aria-label="Record a valid window, then shrink" class="trace" data-trace="shortest_window">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Record a valid window, then shrink</h3><p class="trace-intro">nums = [2, 3, 1, 2, 4, 3], target = 7</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 18</output></div>
+<input aria-label="Step through Record a valid window, then shrink" class="scrubber" max="17" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Start with an empty window. best = 7 is a sentinel larger than this six-element array.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">2</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">3</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">2</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">4</span><span class="cell-value">4</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">5</span><span class="cell-value">3</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"><span>left = <b>0</b></span><span>total = <b>0</b></span><span>best = <b>7</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Start with an empty window. best = 7 is a sentinel larger than this six-element array.<span class="step-state">left = 0 · total = 0 · best = 7</span></li>
+<li>right = 0: add 2. The window [0, 0] now sums to 2.<span class="step-state">left = 0 · right = 0 · total = 2 · best = 7</span></li>
+<li>right = 1: add 3. The window [0, 1] now sums to 5.<span class="step-state">left = 0 · right = 1 · total = 5 · best = 7</span></li>
+<li>right = 2: add 1. The window [0, 2] now sums to 6.<span class="step-state">left = 0 · right = 2 · total = 6 · best = 7</span></li>
+<li>right = 3: add 2. The window [0, 3] now sums to 8.<span class="step-state">left = 0 · right = 3 · total = 8 · best = 7</span></li>
+<li>8 &gt;= 7: record length 4; best = 4. Try a shorter window by removing its left end next.<span class="step-state">left = 0 · right = 3 · total = 8 · best = 4</span></li>
+<li>Remove nums[0] = 2, then left becomes 1. The sum becomes 6.<span class="step-state">left = 1 · right = 3 · total = 6 · best = 4</span></li>
+<li>right = 4: add 4. The window [1, 4] now sums to 10.<span class="step-state">left = 1 · right = 4 · total = 10 · best = 4</span></li>
+<li>10 &gt;= 7: record length 4; best = 4. Try a shorter window by removing its left end next.<span class="step-state">left = 1 · right = 4 · total = 10 · best = 4</span></li>
+<li>Remove nums[1] = 3, then left becomes 2. The sum becomes 7.<span class="step-state">left = 2 · right = 4 · total = 7 · best = 4</span></li>
+<li>7 &gt;= 7: record length 3; best = 3. Try a shorter window by removing its left end next.<span class="step-state">left = 2 · right = 4 · total = 7 · best = 3</span></li>
+<li>Remove nums[2] = 1, then left becomes 3. The sum becomes 6.<span class="step-state">left = 3 · right = 4 · total = 6 · best = 3</span></li>
+<li>right = 5: add 3. The window [3, 5] now sums to 9.<span class="step-state">left = 3 · right = 5 · total = 9 · best = 3</span></li>
+<li>9 &gt;= 7: record length 3; best = 3. Try a shorter window by removing its left end next.<span class="step-state">left = 3 · right = 5 · total = 9 · best = 3</span></li>
+<li>Remove nums[3] = 2, then left becomes 4. The sum becomes 7.<span class="step-state">left = 4 · right = 5 · total = 7 · best = 3</span></li>
+<li>7 &gt;= 7: record length 2; best = 2. Try a shorter window by removing its left end next.<span class="step-state">left = 4 · right = 5 · total = 7 · best = 2</span></li>
+<li>Remove nums[4] = 4, then left becomes 5. The sum becomes 3.<span class="step-state">left = 5 · right = 5 · total = 3 · best = 2</span></li>
+<li>The shortest valid length is 2, achieved by [4, 3].<span class="step-state">result = 2</span></li>
+</ol></details>
+</section>
+</div><details class="costs"><summary>Reading the complexity comments</summary><p><code>n</code> is the input length unless another size is defined. Extra space excludes the input and counts stored results when they are constructed. Recursion frames count as extra space. Costs assume bounded-size values and constant-time comparisons; dictionary and set costs are expected under ordinary hashing. The step viewer stores snapshots for illustration; that storage is not part of the displayed algorithm.</p></details><nav class="end-nav" aria-label="Adjacent topics"><a href="two-pointers.html"><small>Previous</small>Two pointers</a><a href="hash-table.html"><small>Next</small>Hash table</a></nav></article>
+<aside class="onpage"><p>In this topic</p><nav><a href="#sliding-window--common-patterns">Common patterns</a><a href="#sliding-window--fixed-size-add-one-remove-one">Fixed size: add one, remove one</a><a href="#sliding-window--longest-valid-window-remove-the-violation">Longest valid window: remove the violation</a><a href="#sliding-window--shortest-valid-window-keep-shrinking">Shortest valid window: keep shrinking</a></nav></aside></section></main></div>
+<div class="notice" role="status" hidden></div>
+<script src="../scripts/search-index.js"></script>
+<script src="../scripts/traces/sliding-window.js"></script>
+<script src="../scripts/reader.js"></script>
+</body></html>

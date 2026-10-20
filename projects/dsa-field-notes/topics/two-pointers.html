@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Two pointers · Python DSA</title>
+<meta name="description" content="Python DSA: algorithm patterns, short implementations, complexity and step-by-step index traces">
+<meta name="theme-color" content="#E4E6E8">
+<link rel="stylesheet" href="../styles/reader.css">
+</head>
+<body data-portable="false">
+<a class="skip" href="#main">Skip to notes</a>
+<header class="mobilebar"><a href="../index.html">Python DSA</a><button type="button" id="menu-toggle" aria-controls="sidebar" aria-expanded="false">Topics</button></header>
+<aside class="sidebar" id="sidebar" aria-label="Study navigation"><a class="brand" href="../index.html">Python DSA<small>Patterns &amp; algorithms</small></a><button type="button" class="close-menu" aria-label="Close topics">×</button>
+<div class="search"><label class="sr-only" for="search">Search the notes</label><input id="search" type="search" placeholder="Search a concept…" autocomplete="off"><kbd aria-hidden="true">/</kbd></div>
+<div class="search-results" aria-live="polite" hidden></div><nav class="topic-nav"><a href="two-pointers.html" data-topic-link="two-pointers" aria-current="page"><span class="topic-no">01</span>Two pointers</a>
+<a href="sliding-window.html" data-topic-link="sliding-window"><span class="topic-no">02</span>Sliding window</a>
+<a href="hash-table.html" data-topic-link="hash-table"><span class="topic-no">03</span>Hash table</a>
+<a href="prefix-sum.html" data-topic-link="prefix-sum"><span class="topic-no">04</span>Prefix sum</a>
+<a href="stack.html" data-topic-link="stack"><span class="topic-no">05</span>Stack</a>
+<a href="queue.html" data-topic-link="queue"><span class="topic-no">06</span>Queue</a>
+<a href="binary-search.html" data-topic-link="binary-search"><span class="topic-no">07</span>Binary search</a>
+<a href="dynamic-programming.html" data-topic-link="dynamic-programming"><span class="topic-no">08</span>Dynamic programming</a>
+<a href="sorting.html" data-topic-link="sorting"><span class="topic-no">09</span>Sorting</a>
+</nav>
+<div class="side-footer"><a href="../../../projects.html#dsa-field-notes">Side projects</a><p>Zero-based indices<br>Python 3.10+</p></div></aside>
+<button type="button" class="scrim" aria-label="Close topics" tabindex="-1"></button>
+<div class="app"><div class="topbar"><a href="../index.html">Data structures &amp; algorithms</a><button type="button" data-print>Print this topic</button></div><main class="main" id="main"><section class="topic-layout" data-topic-view="two-pointers" id="two-pointers">
+<article class="article"><header class="chapter-header"><p class="eyebrow">01 / Python DSA</p><h1 tabindex="-1">Two pointers</h1><p class="summary">Use two indices to scan, compare, or rewrite a sequence without restarting the search.</p></header>
+<details class="mobile-outline"><summary>In this topic</summary><nav><a href="#two-pointers--common-patterns">Common patterns</a><a href="#two-pointers--opposite-ends-a-pair-in-sorted-data">Opposite ends: a pair in sorted data</a><a href="#two-pointers--read-and-write-keep-a-compact-prefix">Read and write: keep a compact prefix</a><a href="#two-pointers--common-mistakes">Common mistakes</a></nav></details>
+<div class="article-body"><h2 id="two-pointers--common-patterns">Common patterns</h2>
+<p>A pointer here is an <strong>index</strong>, not a special Python object. Decide what each index means before writing the loop.</p>
+<div aria-label="Comparison table" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Meaning of the indices</th>
+<th>Typical use</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Opposite ends</td>
+<td><code>left</code> and <code>right</code> bound the remaining choices</td>
+<td>Sorted pair sums, palindrome checks, reversing</td>
+</tr>
+<tr>
+<td>Read and write</td>
+<td><code>read</code> examines input; <code>write</code> marks the next output slot</td>
+<td>Remove values, move zeros, keep unique values</td>
+</tr>
+<tr>
+<td>One index per sequence</td>
+<td><code>i</code> and <code>j</code> track progress in different sequences</td>
+<td>Merge sorted data, check a subsequence</td>
+</tr>
+<tr>
+<td>Slow and fast</td>
+<td>One advances once; the other advances twice</td>
+<td>Middle of a linked list, cycle detection</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Advantage:</strong> often one pass and constant extra space. <strong>Limitation:</strong> every move needs a reason why discarded positions cannot help. Two indices alone do not make an algorithm linear.</p>
+<h2 id="two-pointers--opposite-ends-a-pair-in-sorted-data">Opposite ends: a pair in sorted data</h2>
+<p>For an ascending list, compare <code>nums[left] + nums[right]</code> with the target.</p>
+<ol>
+<li>If the sum is too small, increase <code>left</code>. Even the largest remaining partner was not enough for the old left value.</li>
+<li>If the sum is too large, decrease <code>right</code>. Even the smallest remaining partner was too much for the old right value.</li>
+<li>Return on equality. Stop when the indices meet: the pair must use different positions.</li>
+</ol>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy pair sorted code" data-copy="code-pair_sorted" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-pair_sorted"><span class="c1"># Time O(n): each pointer moves at most n times</span>
+<span class="c1"># Extra space O(1)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">pair_sorted</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">left</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">while</span> <span class="n">left</span> <span class="o">&lt;</span> <span class="n">right</span><span class="p">:</span>
+        <span class="n">total</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">left</span><span class="p">]</span> <span class="o">+</span> <span class="n">nums</span><span class="p">[</span><span class="n">right</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">total</span> <span class="o">==</span> <span class="n">target</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span>
+        <span class="k">if</span> <span class="n">total</span> <span class="o">&lt;</span> <span class="n">target</span><span class="p">:</span>
+            <span class="n">left</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">right</span> <span class="o">-=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div>
+<p><strong>Cost:</strong> at least one boundary moves on each unsuccessful iteration; neither reverses direction. Sorting an unsorted input first adds <code>O(n log n)</code> time and changes its index positions. This function assumes the input is already sorted.</p>
+<section aria-label="Move one boundary at a time" class="trace" data-trace="pair_sorted">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Move one boundary at a time</h3><p class="trace-intro">nums = [1, 2, 4, 6, 9], target = 8</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 7</output></div>
+<input aria-label="Step through Move one boundary at a time" class="scrubber" max="6" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Set left = 0 and right = 4. The array is already sorted.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell marked"><span class="cell-index">0</span><span class="cell-value">1</span><span class="cell-marks"><span>left</span></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">2</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">4</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">6</span><span class="cell-marks"></span></div><div class="cell marked"><span class="cell-index">4</span><span class="cell-value">9</span><span class="cell-marks"><span>right</span></span></div></div></div></div><div class="state-grid"><span>left = <b>0</b></span><span>right = <b>4</b></span><span>target = <b>8</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Set left = 0 and right = 4. The array is already sorted.<span class="step-state">left = 0 · right = 4 · target = 8</span></li>
+<li>Compare nums[0] + nums[4] = 1 + 9 = 10.<span class="step-state">left = 0 · right = 4 · total = 10 · target = 8</span></li>
+<li>10 &gt; 8: move right from 4 to 3. With the smallest remaining partner, 9 was still too large.<span class="step-state">left = 0 · right = 3</span></li>
+<li>Compare nums[0] + nums[3] = 1 + 6 = 7.<span class="step-state">left = 0 · right = 3 · total = 7 · target = 8</span></li>
+<li>7 &lt; 8: move left from 0 to 1. With the largest remaining partner, 1 was still too small.<span class="step-state">left = 1 · right = 3</span></li>
+<li>Compare nums[1] + nums[3] = 2 + 6 = 8.<span class="step-state">left = 1 · right = 3 · total = 8 · target = 8</span></li>
+<li>8 equals the target. Return indices (1, 3), whose values are 2 and 6.<span class="step-state">result = (1, 3)</span></li>
+</ol></details>
+</section>
+<h2 id="two-pointers--read-and-write-keep-a-compact-prefix">Read and write: keep a compact prefix</h2>
+<p><code>nums[:write]</code> contains the values kept so far, in their original order. Read every element once. Copy a kept value to <code>write</code>, then advance <code>write</code>. A rejected value advances only <code>read</code>.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy compact code" data-copy="code-compact" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-compact"><span class="c1"># Time O(n): one read per element</span>
+<span class="c1"># Extra space O(1): overwrite the original list</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">compact</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">remove</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="n">write</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">read</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">nums</span><span class="p">[</span><span class="n">read</span><span class="p">]</span> <span class="o">!=</span> <span class="n">remove</span><span class="p">:</span>
+            <span class="n">nums</span><span class="p">[</span><span class="n">write</span><span class="p">]</span> <span class="o">=</span> <span class="n">nums</span><span class="p">[</span><span class="n">read</span><span class="p">]</span>
+            <span class="n">write</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">write</span>
+</code></pre></div>
+<p>The return value is a <strong>length</strong>, not a new list. Only the prefix up to that length is meaningful. Overwriting is safe because <code>write</code> never passes <code>read</code>. Taking <code>nums[:length]</code> afterward creates a new list and costs <code>O(length)</code> time and space.</p>
+<section aria-label="Separate the read and write positions" class="trace" data-trace="compact">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Separate the read and write positions</h3><p class="trace-intro">nums = [3, 2, 2, 3, 4], remove = 3</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 7</output></div>
+<input aria-label="Step through Separate the read and write positions" class="scrubber" max="6" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">write = 0: no kept values have been written yet. Remove the value 3.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell marked"><span class="cell-index">0</span><span class="cell-value">3</span><span class="cell-marks"><span>write</span></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">2</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">2</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">3</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">4</span><span class="cell-value">4</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"><span>write = <b>0</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>write = 0: no kept values have been written yet. Remove the value 3.<span class="step-state">write = 0</span></li>
+<li>read = 0: nums[0] is 3, so skip it. write stays 0.<span class="step-state">read = 0 · write = 0</span></li>
+<li>read = 1: keep 2. Write it at index 0, then move write from 0 to 1.<span class="step-state">read = 1 · write = 1</span></li>
+<li>read = 2: keep 2. Write it at index 1, then move write from 1 to 2.<span class="step-state">read = 2 · write = 2</span></li>
+<li>read = 3: nums[3] is 3, so skip it. write stays 2.<span class="step-state">read = 3 · write = 2</span></li>
+<li>read = 4: keep 4. Write it at index 2, then move write from 2 to 3.<span class="step-state">read = 4 · write = 3</span></li>
+<li>Return 3. Only nums[:3] is the result; the values after that prefix are irrelevant.<span class="step-state">length = 3 · kept = [2, 2, 4]</span></li>
+</ol></details>
+</section>
+<h2 id="two-pointers--common-mistakes">Common mistakes</h2>
+<p>Moving both ends when only one is justified can skip a solution. Sorting can destroy original indices. Repeated <code>pop(i)</code> or <code>insert(i, value)</code> in the middle shifts later values and can turn a one-pass idea into quadratic work.</p>
+</div><details class="costs"><summary>Reading the complexity comments</summary><p><code>n</code> is the input length unless another size is defined. Extra space excludes the input and counts stored results when they are constructed. Recursion frames count as extra space. Costs assume bounded-size values and constant-time comparisons; dictionary and set costs are expected under ordinary hashing. The step viewer stores snapshots for illustration; that storage is not part of the displayed algorithm.</p></details><nav class="end-nav" aria-label="Adjacent topics"><span></span><a href="sliding-window.html"><small>Next</small>Sliding window</a></nav></article>
+<aside class="onpage"><p>In this topic</p><nav><a href="#two-pointers--common-patterns">Common patterns</a><a href="#two-pointers--opposite-ends-a-pair-in-sorted-data">Opposite ends: a pair in sorted data</a><a href="#two-pointers--read-and-write-keep-a-compact-prefix">Read and write: keep a compact prefix</a><a href="#two-pointers--common-mistakes">Common mistakes</a></nav></aside></section></main></div>
+<div class="notice" role="status" hidden></div>
+<script src="../scripts/search-index.js"></script>
+<script src="../scripts/traces/two-pointers.js"></script>
+<script src="../scripts/reader.js"></script>
+</body></html>

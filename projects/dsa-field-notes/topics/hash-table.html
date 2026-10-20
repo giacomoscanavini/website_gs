@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Hash table · Python DSA</title>
+<meta name="description" content="Python DSA: algorithm patterns, short implementations, complexity and step-by-step index traces">
+<meta name="theme-color" content="#E4E6E8">
+<link rel="stylesheet" href="../styles/reader.css">
+</head>
+<body data-portable="false">
+<a class="skip" href="#main">Skip to notes</a>
+<header class="mobilebar"><a href="../index.html">Python DSA</a><button type="button" id="menu-toggle" aria-controls="sidebar" aria-expanded="false">Topics</button></header>
+<aside class="sidebar" id="sidebar" aria-label="Study navigation"><a class="brand" href="../index.html">Python DSA<small>Patterns &amp; algorithms</small></a><button type="button" class="close-menu" aria-label="Close topics">×</button>
+<div class="search"><label class="sr-only" for="search">Search the notes</label><input id="search" type="search" placeholder="Search a concept…" autocomplete="off"><kbd aria-hidden="true">/</kbd></div>
+<div class="search-results" aria-live="polite" hidden></div><nav class="topic-nav"><a href="two-pointers.html" data-topic-link="two-pointers"><span class="topic-no">01</span>Two pointers</a>
+<a href="sliding-window.html" data-topic-link="sliding-window"><span class="topic-no">02</span>Sliding window</a>
+<a href="hash-table.html" data-topic-link="hash-table" aria-current="page"><span class="topic-no">03</span>Hash table</a>
+<a href="prefix-sum.html" data-topic-link="prefix-sum"><span class="topic-no">04</span>Prefix sum</a>
+<a href="stack.html" data-topic-link="stack"><span class="topic-no">05</span>Stack</a>
+<a href="queue.html" data-topic-link="queue"><span class="topic-no">06</span>Queue</a>
+<a href="binary-search.html" data-topic-link="binary-search"><span class="topic-no">07</span>Binary search</a>
+<a href="dynamic-programming.html" data-topic-link="dynamic-programming"><span class="topic-no">08</span>Dynamic programming</a>
+<a href="sorting.html" data-topic-link="sorting"><span class="topic-no">09</span>Sorting</a>
+</nav>
+<div class="side-footer"><a href="../../../projects.html#dsa-field-notes">Side projects</a><p>Zero-based indices<br>Python 3.10+</p></div></aside>
+<button type="button" class="scrim" aria-label="Close topics" tabindex="-1"></button>
+<div class="app"><div class="topbar"><a href="../index.html">Data structures &amp; algorithms</a><button type="button" data-print>Print this topic</button></div><main class="main" id="main"><section class="topic-layout" data-topic-view="hash-table" id="hash-table">
+<article class="article"><header class="chapter-header"><p class="eyebrow">03 / Python DSA</p><h1 tabindex="-1">Hash table</h1><p class="summary">Use keys to remember membership, counts, positions, or previous results.</p></header>
+<details class="mobile-outline"><summary>In this topic</summary><nav><a href="#hash-table--dictionary-or-set">Dictionary or set?</a><a href="#hash-table--frequency-counting">Frequency counting</a><a href="#hash-table--complement-lookup">Complement lookup</a><a href="#hash-table--choose-what-a-key-should-store">Choose what a key should store</a></nav></details>
+<div class="article-body"><h2 id="hash-table--dictionary-or-set">Dictionary or set?</h2>
+<p>A <strong>dictionary</strong> maps each key to a value. A <strong>set</strong> records whether a value is present. Hashing narrows where a key is stored; equality checks distinguish keys when hashes collide.</p>
+<div aria-label="Comparison table" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Need</th>
+<th>Python structure</th>
+<th>Common update</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Membership only</td>
+<td><code>set()</code></td>
+<td><code>seen.add(value)</code></td>
+</tr>
+<tr>
+<td>Frequency</td>
+<td><code>dict</code> or <code>Counter</code></td>
+<td><code>counts[value] = counts.get(value, 0) + 1</code></td>
+</tr>
+<tr>
+<td>Earlier position</td>
+<td><code>dict</code></td>
+<td><code>seen[value] = index</code></td>
+</tr>
+<tr>
+<td>Group equivalent items</td>
+<td><code>dict</code> of lists</td>
+<td>Map a canonical key to its group</td>
+</tr>
+<tr>
+<td>Reuse a subproblem result</td>
+<td><code>dict</code> or <code>@cache</code></td>
+<td>Map the full state to its answer</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Advantage:</strong> expected constant-time lookup, insertion, and deletion with ordinary fixed-size keys. <strong>Limitations:</strong> extra memory, no sorted-key search, and worst-case linear operations under severe collisions. Hashing a new long string or tuple also takes work proportional to its size.</p>
+<p>Python <code>dict</code> preserves insertion order, not sorted order. A set has no guaranteed iteration order. <code>{}</code> is an empty dictionary; an empty set is <code>set()</code>. Keys must be <strong>hashable</strong>: a tuple of integers works; a list does not.</p>
+<h2 id="hash-table--frequency-counting">Frequency counting</h2>
+<p>For each value, read its current count, using zero when absent, then add one. The number of dictionary entries is the number of distinct values, not the input length unless all values differ.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy frequency code" data-copy="code-frequency" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-frequency"><span class="c1"># Expected time O(n): one hash-table update per value</span>
+<span class="c1"># Extra space O(u): one entry per distinct value</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">frequencies</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]:</span>
+    <span class="n">counts</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">nums</span><span class="p">:</span>
+        <span class="n">counts</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">counts</span>
+</code></pre></div>
+<section aria-label="Update a frequency table" class="trace" data-trace="frequency">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Update a frequency table</h3><p class="trace-intro">nums = [4, 2, 4, 4, 2]</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 6</output></div>
+<input aria-label="Step through Update a frequency table" class="scrubber" max="5" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Start with an empty dictionary. An absent value has frequency zero.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">4</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">2</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">4</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">4</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">4</span><span class="cell-value">2</span><span class="cell-marks"></span></div></div></div></div><div class="array-row"><p class="array-label">counts</p><div class="cells-scroll"><div class="cells"><span class="empty-array">[ ] empty</span></div></div></div><div class="state-grid"></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Start with an empty dictionary. An absent value has frequency zero.</li>
+<li>At index 0, value = 4. Read count 0, add one, and store counts[4] = 1.<span class="step-state">value = 4</span></li>
+<li>At index 1, value = 2. Read count 0, add one, and store counts[2] = 1.<span class="step-state">value = 2</span></li>
+<li>At index 2, value = 4. Read count 1, add one, and store counts[4] = 2.<span class="step-state">value = 4</span></li>
+<li>At index 3, value = 4. Read count 2, add one, and store counts[4] = 3.<span class="step-state">value = 4</span></li>
+<li>At index 4, value = 2. Read count 1, add one, and store counts[2] = 2.<span class="step-state">value = 2</span></li>
+</ol></details>
+</section>
+<h2 id="hash-table--complement-lookup">Complement lookup</h2>
+<p>To find two values summing to a target, the partner needed for <code>value</code> is <code>target - value</code>. Check earlier values before storing the current one.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy hash pair code" data-copy="code-hash_pair" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-hash_pair"><span class="c1"># Expected time O(n): one lookup and at most one insert per value</span>
+<span class="c1"># Extra space O(n): remember earlier values and their indices</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">pair_unsorted</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">target</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">seen</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+        <span class="n">need</span> <span class="o">=</span> <span class="n">target</span> <span class="o">-</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="n">need</span> <span class="ow">in</span> <span class="n">seen</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">seen</span><span class="p">[</span><span class="n">need</span><span class="p">],</span> <span class="n">i</span>
+        <span class="n">seen</span><span class="p">[</span><span class="n">value</span><span class="p">]</span> <span class="o">=</span> <span class="n">i</span>
+    <span class="k">return</span> <span class="kc">None</span>
+</code></pre></div>
+<p>The input need not be sorted, and the returned positions are original indices. For <code>[3, 3]</code> with target <code>6</code>, the first <code>3</code> is stored at index <code>0</code>; the second finds it and returns <code>(0, 1)</code>. Inserting before checking could reuse the same element.</p>
+<section aria-label="Look up the complement before inserting" class="trace" data-trace="hash_pair">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Look up the complement before inserting</h3><p class="trace-intro">nums = [4, 1, 6, 3], target = 9</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 9</output></div>
+<input aria-label="Step through Look up the complement before inserting" class="scrubber" max="8" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Store only earlier values, so an index cannot pair with itself.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">4</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">6</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">3</span><span class="cell-marks"></span></div></div></div></div><div class="array-row"><p class="array-label">seen</p><div class="cells-scroll"><div class="cells"><span class="empty-array">[ ] empty</span></div></div></div><div class="state-grid"><span>target = <b>9</b></span></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Store only earlier values, so an index cannot pair with itself.<span class="step-state">target = 9</span></li>
+<li>i = 0: value = 4, so need = 9 - 4 = 5. Look for 5 among earlier values.<span class="step-state">i = 0 · value = 4 · need = 5</span></li>
+<li>No match yet. Store seen[4] = 0 for later iterations.<span class="step-state">i = 0</span></li>
+<li>i = 1: value = 1, so need = 9 - 1 = 8. Look for 8 among earlier values.<span class="step-state">i = 1 · value = 1 · need = 8</span></li>
+<li>No match yet. Store seen[1] = 1 for later iterations.<span class="step-state">i = 1</span></li>
+<li>i = 2: value = 6, so need = 9 - 6 = 3. Look for 3 among earlier values.<span class="step-state">i = 2 · value = 6 · need = 3</span></li>
+<li>No match yet. Store seen[6] = 2 for later iterations.<span class="step-state">i = 2</span></li>
+<li>i = 3: value = 3, so need = 9 - 3 = 6. Look for 6 among earlier values.<span class="step-state">i = 3 · value = 3 · need = 6</span></li>
+<li>6 is stored at index 2. Return (2, 3); 6 + 3 = 9.<span class="step-state">result = (2, 3)</span></li>
+</ol></details>
+</section>
+<h2 id="hash-table--choose-what-a-key-should-store">Choose what a key should store</h2>
+<p>Store a <strong>count</strong> to count matches, the <strong>earliest index</strong> to maximize a distance, or the <strong>latest index</strong> to enforce a recent boundary. Overwriting a value is correct only when the older information is no longer needed. For grouping anagrams, a sorted-character tuple or a fixed-alphabet count tuple can identify the group; constructing that key is part of the cost.</p>
+</div><details class="costs"><summary>Reading the complexity comments</summary><p><code>n</code> is the input length unless another size is defined. Extra space excludes the input and counts stored results when they are constructed. Recursion frames count as extra space. Costs assume bounded-size values and constant-time comparisons; dictionary and set costs are expected under ordinary hashing. The step viewer stores snapshots for illustration; that storage is not part of the displayed algorithm.</p></details><nav class="end-nav" aria-label="Adjacent topics"><a href="sliding-window.html"><small>Previous</small>Sliding window</a><a href="prefix-sum.html"><small>Next</small>Prefix sum</a></nav></article>
+<aside class="onpage"><p>In this topic</p><nav><a href="#hash-table--dictionary-or-set">Dictionary or set?</a><a href="#hash-table--frequency-counting">Frequency counting</a><a href="#hash-table--complement-lookup">Complement lookup</a><a href="#hash-table--choose-what-a-key-should-store">Choose what a key should store</a></nav></aside></section></main></div>
+<div class="notice" role="status" hidden></div>
+<script src="../scripts/search-index.js"></script>
+<script src="../scripts/traces/hash-table.js"></script>
+<script src="../scripts/reader.js"></script>
+</body></html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Stack · Python DSA</title>
+<meta name="description" content="Python DSA: algorithm patterns, short implementations, complexity and step-by-step index traces">
+<meta name="theme-color" content="#E4E6E8">
+<link rel="stylesheet" href="../styles/reader.css">
+</head>
+<body data-portable="false">
+<a class="skip" href="#main">Skip to notes</a>
+<header class="mobilebar"><a href="../index.html">Python DSA</a><button type="button" id="menu-toggle" aria-controls="sidebar" aria-expanded="false">Topics</button></header>
+<aside class="sidebar" id="sidebar" aria-label="Study navigation"><a class="brand" href="../index.html">Python DSA<small>Patterns &amp; algorithms</small></a><button type="button" class="close-menu" aria-label="Close topics">×</button>
+<div class="search"><label class="sr-only" for="search">Search the notes</label><input id="search" type="search" placeholder="Search a concept…" autocomplete="off"><kbd aria-hidden="true">/</kbd></div>
+<div class="search-results" aria-live="polite" hidden></div><nav class="topic-nav"><a href="two-pointers.html" data-topic-link="two-pointers"><span class="topic-no">01</span>Two pointers</a>
+<a href="sliding-window.html" data-topic-link="sliding-window"><span class="topic-no">02</span>Sliding window</a>
+<a href="hash-table.html" data-topic-link="hash-table"><span class="topic-no">03</span>Hash table</a>
+<a href="prefix-sum.html" data-topic-link="prefix-sum"><span class="topic-no">04</span>Prefix sum</a>
+<a href="stack.html" data-topic-link="stack" aria-current="page"><span class="topic-no">05</span>Stack</a>
+<a href="queue.html" data-topic-link="queue"><span class="topic-no">06</span>Queue</a>
+<a href="binary-search.html" data-topic-link="binary-search"><span class="topic-no">07</span>Binary search</a>
+<a href="dynamic-programming.html" data-topic-link="dynamic-programming"><span class="topic-no">08</span>Dynamic programming</a>
+<a href="sorting.html" data-topic-link="sorting"><span class="topic-no">09</span>Sorting</a>
+</nav>
+<div class="side-footer"><a href="../../../projects.html#dsa-field-notes">Side projects</a><p>Zero-based indices<br>Python 3.10+</p></div></aside>
+<button type="button" class="scrim" aria-label="Close topics" tabindex="-1"></button>
+<div class="app"><div class="topbar"><a href="../index.html">Data structures &amp; algorithms</a><button type="button" data-print>Print this topic</button></div><main class="main" id="main"><section class="topic-layout" data-topic-view="stack" id="stack">
+<article class="article"><header class="chapter-header"><p class="eyebrow">05 / Python DSA</p><h1 tabindex="-1">Stack</h1><p class="summary">Resolve the most recently added unfinished item first.</p></header>
+<details class="mobile-outline"><summary>In this topic</summary><nav><a href="#stack--last-in-first-out">Last in, first out</a><a href="#stack--match-nested-brackets">Match nested brackets</a><a href="#stack--monotonic-stack-next-greater-value">Monotonic stack: next greater value</a></nav></details>
+<div class="article-body"><h2 id="stack--last-in-first-out">Last in, first out</h2>
+<p>Use a Python list. <code>stack.append(x)</code> pushes; <code>stack.pop()</code> removes the top; <code>stack[-1]</code> reads it. Check <code>if stack</code> before reading or removing from an empty stack. Pushing and popping at the end are amortized <code>O(1)</code>.</p>
+<div aria-label="Comparison table" class="table-scroll" role="region" tabindex="0"><table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>What the stack stores</th>
+<th>What removes an item</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nested brackets or expressions</td>
+<td>Unmatched opening symbols or partial values</td>
+<td>A matching close or completed expression</td>
+</tr>
+<tr>
+<td>Undo</td>
+<td>Previous actions or states</td>
+<td>An undo request</td>
+</tr>
+<tr>
+<td>Depth-first traversal</td>
+<td>Nodes still to explore</td>
+<td>Visiting the latest pending node</td>
+</tr>
+<tr>
+<td>Monotonic stack</td>
+<td>Unresolved indices in value order</td>
+<td>A new value that resolves or dominates the top</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>Advantage:</strong> direct support for nesting and reversing the order of unfinished work. <strong>Limitation:</strong> only the top is immediately accessible; searching inside is linear, and the pending stack can grow to <code>O(n)</code>.</p>
+<h2 id="stack--match-nested-brackets">Match nested brackets</h2>
+<p>An opening bracket is pushed. A closing bracket must match the most recent opening bracket. A closing bracket with an empty stack, a mismatch, or a nonempty final stack makes the string invalid.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy brackets code" data-copy="code-brackets" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-brackets"><span class="c1"># Time O(n): each bracket is pushed or popped at most once</span>
+<span class="c1"># Extra space O(n): unmatched opening brackets</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">balanced</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="n">opening</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"("</span><span class="p">,</span> <span class="s2">"["</span><span class="p">,</span> <span class="s2">"{"</span><span class="p">}</span>
+    <span class="n">matching</span> <span class="o">=</span> <span class="p">{</span><span class="s2">")"</span><span class="p">:</span> <span class="s2">"("</span><span class="p">,</span> <span class="s2">"]"</span><span class="p">:</span> <span class="s2">"["</span><span class="p">,</span> <span class="s2">"}"</span><span class="p">:</span> <span class="s2">"{"</span><span class="p">}</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">text</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">opening</span><span class="p">:</span>
+            <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">matching</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">stack</span> <span class="ow">or</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span> <span class="o">!=</span> <span class="n">matching</span><span class="p">[</span><span class="n">char</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Only brackets are accepted"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="ow">not</span> <span class="n">stack</span>
+</code></pre></div>
+<p>The empty string is balanced. This function accepts bracket characters only; it rejects other characters rather than silently interpreting them as brackets.</p>
+<section aria-label="Close the most recent open group" class="trace" data-trace="brackets">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Close the most recent open group</h3><p class="trace-intro">text = '([])'</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 6</output></div>
+<input aria-label="Step through Close the most recent open group" class="scrubber" max="5" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">The stack holds opening brackets that have not yet been closed. The top is on the right.</p><div class="array-row"><p class="array-label">text</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">(</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">[</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">]</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">3</span><span class="cell-value">)</span><span class="cell-marks"></span></div></div></div></div><div class="array-row"><p class="array-label">stack</p><div class="cells-scroll"><div class="cells"><span class="empty-array">[ ] empty</span></div></div></div><div class="state-grid"></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>The stack holds opening brackets that have not yet been closed. The top is on the right.</li>
+<li>i = 0: '(' opens a group. Push it onto the stack.</li>
+<li>i = 1: '[' opens a group. Push it onto the stack.</li>
+<li>i = 2: ']' closes a group. Pop '['; it matches the required '['.</li>
+<li>i = 3: ')' closes a group. Pop '('; it matches the required '('.</li>
+<li>No unmatched opening brackets remain. Return True.<span class="step-state">result = True</span></li>
+</ol></details>
+</section>
+<h2 id="stack--monotonic-stack-next-greater-value">Monotonic stack: next greater value</h2>
+<p>Scan left to right. The stack stores indices whose next greater value is unknown. Its values are <strong>non-increasing</strong> from bottom to top. A new larger value resolves smaller values at the top; pop and record their answers before pushing the new index.</p>
+<div class="code-box"><div class="code-head"><span>Python</span><button aria-label="Copy next greater code" data-copy="code-next_greater" type="button">Copy</button></div><pre tabindex="0"><code class="language-python" id="code-next_greater"><span class="c1"># Time O(n): each index is pushed once and popped at most once</span>
+<span class="c1"># Extra space O(n): stack and output</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">next_greater</span><span class="p">(</span><span class="n">nums</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]:</span>
+    <span class="n">answer</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+    <span class="n">stack</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nums</span><span class="p">):</span>
+        <span class="k">while</span> <span class="n">stack</span> <span class="ow">and</span> <span class="n">nums</span><span class="p">[</span><span class="n">stack</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">&lt;</span> <span class="n">value</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+            <span class="n">answer</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">answer</span>
+</code></pre></div>
+<p>Each popped index is finished permanently, so total pushes plus pops are linear. The comparison is <code>&lt;</code> because the answer must be <strong>strictly greater</strong>. Equal values remain pending. Indices allow writing the answer back to the correct position; use <code>i - j</code> instead when the task asks for a distance.</p>
+<section aria-label="Resolve pending answers with a monotonic stack" class="trace" data-trace="next_greater">
+<header class="trace-header"><span class="trace-kicker">Step through</span><h3 class="trace-title">Resolve pending answers with a monotonic stack</h3><p class="trace-intro">nums = [2, 1, 3]</p></header>
+<div class="trace-controls"><button data-action="previous" disabled="" type="button">Previous</button><button aria-pressed="false" data-action="play" type="button">Play</button><button data-action="next" type="button">Next</button><button class="reset" data-action="reset" type="button">Reset</button><output aria-label="Current step" data-step="">1 / 10</output></div>
+<input aria-label="Step through Resolve pending answers with a monotonic stack" class="scrubber" max="9" min="0" type="range" value="0"/>
+<div aria-atomic="true" aria-live="polite" class="trace-frame"><p class="trace-text">Store unresolved indices, not just their values. None means that no greater value has been found.</p><div class="array-row"><p class="array-label">nums</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">2</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">1</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">3</span><span class="cell-marks"></span></div></div></div></div><div class="array-row"><p class="array-label">stack indices</p><div class="cells-scroll"><div class="cells"><span class="empty-array">[ ] empty</span></div></div></div><div class="array-row"><p class="array-label">answer</p><div class="cells-scroll"><div class="cells"><div class="cell"><span class="cell-index">0</span><span class="cell-value">None</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">1</span><span class="cell-value">None</span><span class="cell-marks"></span></div><div class="cell"><span class="cell-index">2</span><span class="cell-value">None</span><span class="cell-marks"></span></div></div></div></div><div class="state-grid"></div></div>
+<div class="trace-legend"><span><i></i>Current range or comparison</span><span><i class="settled"></i>Completed result or sorted region</span><span>Indices appear above values</span></div>
+<details class="all-steps"><summary>Read every step</summary><ol><li>Store unresolved indices, not just their values. None means that no greater value has been found.</li>
+<li>i = 0: value = 2. Resolve smaller values on top of the stack first.<span class="step-state">i = 0 · value = 2</span></li>
+<li>Push index 0. Its next greater value is still unknown.<span class="step-state">i = 0</span></li>
+<li>i = 1: value = 1. Resolve smaller values on top of the stack first.<span class="step-state">i = 1 · value = 1</span></li>
+<li>Push index 1. Its next greater value is still unknown.<span class="step-state">i = 1</span></li>
+<li>i = 2: value = 3. Resolve smaller values on top of the stack first.<span class="step-state">i = 2 · value = 3</span></li>
+<li>Pop index 1, whose value is 1. The first greater value to its right is 3; write answer[1] = 3.<span class="step-state">i = 2 · j = 1</span></li>
+<li>Pop index 0, whose value is 2. The first greater value to its right is 3; write answer[0] = 3.<span class="step-state">i = 2 · j = 0</span></li>
+<li>Push index 2. Its next greater value is still unknown.<span class="step-state">i = 2</span></li>
+<li>The remaining index has no greater value to its right. Leave its answer as None.<span class="step-state">result = [3, 3, None]</span></li>
+</ol></details>
+</section>
+</div><details class="costs"><summary>Reading the complexity comments</summary><p><code>n</code> is the input length unless another size is defined. Extra space excludes the input and counts stored results when they are constructed. Recursion frames count as extra space. Costs assume bounded-size values and constant-time comparisons; dictionary and set costs are expected under ordinary hashing. The step viewer stores snapshots for illustration; that storage is not part of the displayed algorithm.</p></details><nav class="end-nav" aria-label="Adjacent topics"><a href="prefix-sum.html"><small>Previous</small>Prefix sum</a><a href="queue.html"><small>Next</small>Queue</a></nav></article>
+<aside class="onpage"><p>In this topic</p><nav><a href="#stack--last-in-first-out">Last in, first out</a><a href="#stack--match-nested-brackets">Match nested brackets</a><a href="#stack--monotonic-stack-next-greater-value">Monotonic stack: next greater value</a></nav></aside></section></main></div>
+<div class="notice" role="status" hidden></div>
+<script src="../scripts/search-index.js"></script>
+<script src="../scripts/traces/stack.js"></script>
+<script src="../scripts/reader.js"></script>
+</body></html>
