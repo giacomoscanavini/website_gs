@@ -8,12 +8,13 @@ Static HTML, CSS, and JavaScript website with three main pages:
 
 ## Reference guides
 
-All six reference guides are self-contained HTML files, linked directly from Side projects.
+All seven reference guides are self-contained HTML files, linked directly from Side projects.
 The latest uploaded version of each file has replaced the earlier version.
 
 - `projects/linear-algebra.html` — Linear Algebra
 - `projects/numerical-methods.html` — Numerical Methods
 - `projects/statistics.html` — Statistics
+- `projects/hypothesis_testing.html` — Hypothesis Testing
 - `projects/linear-regression.html` — Linear Regression
 - `projects/time-series-analysis.html` — Time Series Analysis
 - `projects/sql-field-notes.html` — SQL Field Notes, including Squid Game solutions
@@ -24,9 +25,10 @@ The latest uploaded version of each file has replaced the earlier version.
 - SQL Squid Game — original DataLemur challenge and repository linked from the portfolio
   - The “My solutions” link points to `projects/sql-field-notes.html#squid-game`
 
-The earlier modular SQL reader is excluded because the supplied SQL Field Notes HTML
-contains its notes and solutions without requiring separate content files.
-Older unused DSA/ML notes and unused legacy assets remain excluded.
+The earlier modular SQL reader is excluded because SQL Field Notes contains the
+same notes and solutions in one self-contained HTML file. The distribution also
+excludes Git history, macOS metadata, an unused loader and reader stylesheet,
+and the duplicate Linear Regression HTML file.
 
 ## Preview and publish
 
